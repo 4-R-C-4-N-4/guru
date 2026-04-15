@@ -1,0 +1,239 @@
+# Guru Corpus v1 — Source Manifest
+# Generated: 2026-04-15
+# All sources are public domain / open license
+
+# ============================================
+# GNOSTICISM (gnosis.org)
+# ============================================
+
+[[source]]
+id = "gospel-of-thomas"
+tradition = "gnosticism"
+label = "Gospel of Thomas (Lambdin translation)"
+url = "http://gnosis.org/naghamm/gthlamb.html"
+format = "html"
+license = "public_domain"
+translator = "Thomas O. Lambdin"
+notes = "Full Coptic-to-English translation. Extract main content div with logia."
+
+[[source]]
+id = "gospel-of-philip"
+tradition = "gnosticism"
+label = "Gospel of Philip (Lambdin translation)"
+url = "http://gnosis.org/naghamm/gphlamb.html"
+format = "html"
+license = "public_domain"
+translator = "Thomas O. Lambdin"
+notes = "Full Coptic-to-English translation. Extract main content div."
+
+# ============================================
+# HERMETICISM (sacred-texts.com)
+# ============================================
+
+[[source]]
+id = "corpus-hermeticum-01"
+tradition = "hermeticism"
+label = "Corpus Hermeticum I: Poimandres"
+url = "https://www.sacred-texts.com/chr/herm/her01.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "First tractate of Corpus Hermeticum. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-02"
+tradition = "hermeticism"
+label = "Corpus Hermeticum II: The Serapeum"
+url = "https://www.sacred-texts.com/chr/herm/her02.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Second tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-03"
+tradition = "hermeticism"
+label = "Corpus Hermeticum III: The Sacred Sermon"
+url = "https://www.sacred-texts.com/chr/herm/her03.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Third tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-04"
+tradition = "hermeticism"
+label = "Corpus Hermeticum IV: The Epistles"
+url = "https://www.sacred-texts.com/chr/herm/her04.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Fourth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-05"
+tradition = "hermeticism"
+label = "Corpus Hermeticum V: The Discourse of Hermes to Asclepius"
+url = "https://www.sacred-texts.com/chr/herm/her05.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Fifth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-06"
+tradition = "hermeticism"
+label = "Corpus Hermeticum VI: The All-Father"
+url = "https://www.sacred-texts.com/chr/herm/her06.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Sixth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-07"
+tradition = "hermeticism"
+label = "Corpus Hermeticum VII: The Seven Powers"
+url = "https://www.sacred-texts.com/chr/herm/her07.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Seventh tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-08"
+tradition = "hermeticism"
+label = "Corpus Hermeticum VIII: The Eight Sphere"
+url = "https://www.sacred-texts.com/chr/herm/her08.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Eighth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-09"
+tradition = "hermeticism"
+label = "Corpus Hermeticum IX: The Decalogue"
+url = "https://www.sacred-texts.com/chr/herm/her09.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Ninth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-10"
+tradition = "hermeticism"
+label = "Corpus Hermeticum X: The Sermon on the Mount"
+url = "https://www.sacred-texts.com/chr/herm/her10.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Tenth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-11"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XI: The Hymn"
+url = "https://www.sacred-texts.com/chr/herm/her11.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Eleventh tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-12"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XII: The Prayer"
+url = "https://www.sacred-texts.com/chr/herm/her12.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Twelfth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-13"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XIII: The Discourse of Hermes to Tat"
+url = "https://www.sacred-texts.com/chr/herm/her13.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Thirteenth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-14"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XIV: The Discourse of Hermes to Ammon"
+url = "https://www.sacred-texts.com/chr/herm/her14.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Fourteenth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-15"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XV: The Hymn of Hermes"
+url = "https://www.sacred-texts.com/chr/herm/her15.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Fifteenth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-16"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XVI: The Secret Sermon on the Mountain"
+url = "https://www.sacred-texts.com/chr/herm/her16.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Sixteenth tractate. Extract text between navigation."
+
+[[source]]
+id = "corpus-hermeticum-17"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XVII: The Discourse of Hermes to Asclepius"
+url = "https://www.sacred-texts.com/chr/herm/her17.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Seventeenth tractate. Extract text between navigation."
+
+# ============================================
+# BUDDHISM (sacred-texts.com)
+# ============================================
+
+[[source]]
+id = "heart-sutra"
+tradition = "buddhism"
+label = "The Heart Sutra (Conze translation)"
+url = "https://www.sacred-texts.com/bud/hs/hs01.htm"
+format = "html"
+license = "public_domain"
+translator = "Edward Conze"
+notes = "Core Mahayana sutra. Extract text between navigation and header."
+
+# ============================================
+# JEWISH MYSTICISM (Sefaria API)
+# ============================================
+
+[[source]]
+id = "sefer-yetirah"
+tradition = "jewish_mysticism"
+label = "Sefer Yetirah (Book of Creation)"
+url = "https://www.sefaria.org/Sefer_Yetirah"
+format = "sefaria_api"
+license = "public_domain"
+translator = "Various translations"
+notes = "Use Sefaria API. Fetch text with English translation. Key Kabbalistic text."
+
+[[source]]
+id = "zohar-leid"
+tradition = "jewish_mysticism"
+label = "Zohar — Selections (Leid translation)"
+url = "https://www.sefaria.org/Zohar"
+format = "sefaria_api"
+license = "public_domain"
+translator = "W. G. Braude & I. Tishby"
+notes = "Use Sefaria API. Fetch selected chapters from Zohar. Primary Kabbalistic text."
