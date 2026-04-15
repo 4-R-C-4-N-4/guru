@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:06:52.773Z",
-  "updated_at": "2026-04-15T18:06:52.773Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "348dcce9"
+  },
+  "description": "## Goal\n\nBuild a small validation script that confirms the vector store and corpus are in sync before Stage 5 work depends on them.\n\n## File Location\n\n`scripts/validate_index.py` (or extend `embed_corpus.py` with a `--validate` flag)\n\n## Checks\n\n1. Vector count == chunk count (from `corpus/`).\n2. For every chunk ID in `corpus/`, a vector with that ID exists in the store.\n3. Spot-check similarities: a hard-coded query like \"divine light within all things\" returns at least one expected chunk (Gospel of Thomas Logion 77 or Corpus Hermeticum tractate I).\n4. Filtered query honours an exclusion (e.g. `tradition != gnosticism`).\n\n## Acceptance Criteria\n\n- Exits non-zero on mismatch\n- Prints a useful diff when counts differ (which IDs are missing/extra)\n- Spot-check assertions documented inline so they can evolve with the corpus\n"
 }

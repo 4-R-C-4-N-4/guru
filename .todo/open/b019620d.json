@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:03:00.695Z",
-  "updated_at": "2026-04-15T18:03:00.695Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nProvide a token-counting utility used by the chunker to enforce the 200-800 token budget per chunk.\n\n## Interface\n\n```python\ndef count_tokens(text: str, model: str = \"cl100k_base\") -> int\n```\n\nDefault to `tiktoken` with `cl100k_base` encoding. Fall back to a whitespace-word-count heuristic if `tiktoken` is unavailable, with a warning at import time.\n\n## Acceptance Criteria\n\n- Returns deterministic counts for identical input\n- Used by `chunk.py` to detect when a section needs sub-splitting\n- Works offline (encoding cached locally)\n"
 }

@@ -7,9 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:00:21.550Z",
-  "updated_at": "2026-04-15T19:06:56.757Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
+    "parent": "192bbe6a"
   },
-  "description": "## Goal\n\nQA pass: manually verify 1 text per tradition against source.\n\n## Responsibilities\n\n- For each tradition in the corpus, select 1 representative text\n- Compare raw/{tradition}/{text_id}.txt against the original source URL\n- Verify:\n  - Content accuracy (no missing sections)\n  - HTML artifacts stripped (no navigation, scripts, styles)\n  - Translator attribution correct\n  - Metadata complete\n\n## Acceptance Criteria\n\n- [ ] All selected texts verified against sources\n- [ ] Any discrepancies documented and fixed\n- [ ] Verification notes added to ticket comments\n\n## See Also\n\ndocs/guru-implementation.md Stage 1: Corpus Acquisition - Acceptance Criteria"
+  "description": "## Goal\n\nQA pass: manually verify 1 text per tradition against source.\n\n## File Location\n\nManual verification (no code)\n\n## Procedure\n\nFor each tradition in v1 corpus:\n\n1. Select 1 representative text\n2. Compare raw output to source URL\n3. Verify:\n   - No HTML artifacts (nav, scripts, styles)\n   - Text is complete\n   - Encoding is correct (no mojibake)\n   - Metadata is accurate\n\n## Traditions to Verify\n\n- Gnosticism (gospel-of-thomas)\n- Hermeticism (corpus-hermeticum-01)\n- Buddhism (heart-sutra)\n- Jewish Mysticism (sefer-yetirah)\n\n## Acceptance Criteria\n\n- All 4 texts verified against sources\n- No extraction errors found\n- Documentation of any issues\n"
 }

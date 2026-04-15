@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:05:23.339Z",
-  "updated_at": "2026-04-15T18:05:23.339Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nBuild `tag_concepts.py` \u2014 Pass B of Stage 3. For each chunk, ask an LLM to score it against the concept taxonomy and write proposals to `staged_tags`.\n\n## File Location\n\n`scripts/tag_concepts.py`\n\n## CLI\n\n```\ntag_concepts.py --provider {ollama|anthropic|openai} --model <name> [--batch-size N] [--resume] [--tradition X] [--text Y]\n```\n\n## Responsibilities\n\n1. Load taxonomy from `concepts/taxonomy.toml`.\n2. For each chunk (filtered by tradition/text if given), build the structured scoring prompt (see arch doc \u00a74.6.1 + ticket subtask 3.4.4).\n3. Send to the configured provider (ticket subtask 3.4.1 \u2014 provider abstraction).\n4. Parse the structured response and upsert into `staged_tags`. Concepts not in the taxonomy go in with `is_new_concept=true` and a `new_concept_def`.\n5. Track progress in `tagging_progress` so `--resume` skips completed chunks.\n6. Honor `--batch-size` for rate-limit pacing.\n\n## Subtasks (from doc)\n\n- Provider abstraction (ollama / anthropic / openai)\n- Progress tracking + `--resume`\n- Batch-size rate limiting\n- Structured scoring prompt template\n\n## Acceptance Criteria\n\n- Every chunk has at least one `staged_tags` row after a full run\n- `--resume` correctly skips completed chunks\n- Provider can be swapped via flag\n- Scoring output is structured (parseable score 0-3 + justification)\n"
 }

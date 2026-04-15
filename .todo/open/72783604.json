@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:09:16.246Z",
-  "updated_at": "2026-04-15T18:09:16.246Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nCitation accuracy test: verify 20 agent responses cite real chunks with correct metadata.\n\n## File Location\n\n`tests/test_citations.py`\n\n## Procedure\n\n1. Define 20 representative queries spanning multiple traditions and difficulty levels (factual, comparative, hedged).\n2. For each query, run the full pipeline against a real (small) model \u2014 Ollama is fine.\n3. Parse `[Tradition | Text | Section]` citations out of the response.\n4. For each citation, look it up in `corpus/` and assert:\n   - The cited chunk exists\n   - Tradition / text_name / section all match the chunk's metadata exactly\n   - The chunk was actually present in the retrieved context for that query\n\n## Acceptance Criteria\n\n- 20/20 queries produce parseable citations\n- 0 fabricated citations (every citation resolves to a real chunk)\n- 0 out-of-context citations (every citation came from the retrieved context for that query)\n- Failures print which citation failed and why\n"
 }

@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:09:16.022Z",
-  "updated_at": "2026-04-15T18:09:16.022Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nBuild `guru/retriever.py` \u2014 the `HybridRetriever` that combines vector similarity, concept-graph traversal, and tradition-diversity-aware re-ranking.\n\n## File Location\n\n`guru/retriever.py`\n\n## Interface\n\n```python\nclass HybridRetriever:\n    def __init__(self, vector_store, graph_db, config): ...\n    def retrieve(self, query: str, user_prefs: UserPreferences, top_k: int = 15) -> list[RetrievedChunk]: ...\n```\n\n## Sub-paths (from doc subtasks)\n\n1. **Vector search** with preference filters from `prefs.to_vector_filters()` \u2014 pull `top_k * 2`.\n2. **Concept extraction** from query (keyword match against concept labels; optional LLM extraction for fallback).\n3. **Graph walk** \u2014 from matched concepts, follow PARALLELS/CONTRASTS edges, then EXPRESSES edges to chunks; filter by user prefs.\n4. **Merge & re-rank** \u2014 deduplicate then score by:\n   - Tradition diversity boost (`config.diversity_boost` for chunks adding a new tradition to the result set)\n   - Edge tier weight (verified 1.0\u00d7 / proposed 0.7\u00d7 / inferred 0.4\u00d7)\n   - Vector similarity (weighted by `vector_weight` vs. `graph_weight`)\n\n## Acceptance Criteria\n\n- Cross-tradition queries return chunks from multiple traditions (verified by integration test)\n- All chunks in the result satisfy `prefs.is_chunk_allowed`\n- Re-rank weights respect `config/model.toml [retrieval]` settings\n- Returns exactly `top_k` chunks (or fewer if pool exhausted)\n"
 }

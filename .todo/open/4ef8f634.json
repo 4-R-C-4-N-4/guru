@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:00:21.519Z",
-  "updated_at": "2026-04-15T18:00:21.519Z",
+  "updated_at": "2026-04-15T22:13:32.832Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "192bbe6a"
+  },
+  "description": "## Goal\n\nBuild the acquire.py orchestrator that reads the manifest, dispatches to appropriate downloaders, and writes output files.\n\n## File Location\n\nscripts/acquire.py\n\n## Responsibilities\n\n1. Read sources/manifest.toml\n2. For each source, dispatch to appropriate downloader based on format\n3. Write output files to raw/{tradition}/{text_id}.txt\n4. Write metadata to raw/{tradition}/{text_id}.meta.toml\n5. Skip already-downloaded files (idempotent via hash comparison)\n\n## Downloader Interface\n\nAll downloaders must implement:\ndef download(source: dict) -> tuple[str, dict] | list[tuple[str, dict]]\n\n## Format Dispatch Table\n\n| format | Downloader |\n|--------|------------|\n| html | generic_html.py |\n| html_multi | sacred_texts.py |\n| sefaria_api | sefaria.py |\n\n## Acceptance Criteria\n\n- Reads sources/manifest.toml correctly\n- Dispatches to correct downloader based on format\n- Writes output to raw/{tradition}/{text_id}.txt\n- Skips already-downloaded files (idempotent)\n- Handles errors gracefully with logging\n"
 }

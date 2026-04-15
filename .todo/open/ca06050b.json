@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:03:00.499Z",
-  "updated_at": "2026-04-15T18:03:00.499Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nDefine the schema for `chunking/{tradition}/{text_id}.toml` configs that drive the chunker. Every text in the corpus needs one of these, so the schema must cover every splitter strategy used in v1.\n\n## Schema Sections\n\n- `[chunking]` \u2014 `strategy` (one of `regex`, `heading`, `paragraph`), `pattern` / `heading_pattern`, `section_label_format` (e.g. `\"Logion {n}\"`), `max_tokens` (default 800), `group_size` (verses/sections to bundle per chunk).\n- `[metadata]` \u2014 `tradition`, `text_name`, `translator`, `sections_format` (e.g. `\"logion\"`, `\"tractate.section\"`).\n\n## Deliverable\n\nA documented schema (in-repo doc or example file) that the splitter implementations and `chunk.py` orchestrator can rely on. Should match the sample configs in docs/guru-implementation.md \u00a7\"Stage 2\".\n\n## Acceptance Criteria\n\n- Schema covers all three v1 splitter strategies (regex, heading, paragraph-grouping)\n- Schema captures every field needed to build `[Tradition | Text | Section]` citations\n- Example config validates against the schema\n"
 }

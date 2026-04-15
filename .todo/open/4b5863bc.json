@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:05:23.262Z",
-  "updated_at": "2026-04-15T18:05:23.262Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nDefine the SQLite schema for `data/guru.db` covering live graph tables and Stage 3 staging tables.\n\n## Tables\n\n**Live graph:**\n- `nodes (id, type, tradition_id?, label, definition?, metadata_json)` \u2014 type \u2208 {tradition, concept, chunk}\n- `edges (id, source_id, target_id, type, tier, justification, created_at)` \u2014 type \u2208 {BELONGS_TO, EXPRESSES, PARALLELS, CONTRASTS, DERIVES_FROM}; tier \u2208 {verified, proposed, inferred}\n\n**Staging (per docs/guru-implementation.md \u00a7\"Stage 3\"):**\n- `staged_tags (id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status, reviewed_by, reviewed_at)`\n- `staged_edges (id, source_concept, target_concept, edge_type, confidence, justification, source_chunk, target_chunk, status, tier, reviewed_by, reviewed_at)`\n- `staged_concepts (id, proposed_id, definition, motivating_chunk, status, reviewed_by, reviewed_at)`\n\n**Bookkeeping:**\n- `tagging_progress (chunk_id, completed_at)` \u2014 supports `--resume` on `tag_concepts.py`\n\n## Acceptance Criteria\n\n- Schema is checked into the repo as a `.sql` file or Python module\n- All foreign keys and indexes for hot lookups (chunk_id, concept_id, status) are declared\n- Compatible with downstream scripts (`graph_bootstrap.py`, `tag_concepts.py`, `review_*.py`, `propose_edges.py`)\n"
 }

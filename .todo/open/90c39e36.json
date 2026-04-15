@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:06:52.808Z",
-  "updated_at": "2026-04-15T18:06:52.808Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "348dcce9"
+  },
+  "description": "## Goal\n\nBenchmark embedding throughput and retrieval latency to set realistic expectations for Stage 5's <10s end-to-end target.\n\n## Procedure\n\n1. **Embedding throughput:** time `embed_corpus.py` over a fixed sample (e.g. 500 chunks) per provider/model combination of interest. Record chunks/sec.\n2. **Retrieval latency:** for a fixed set of 20 queries, time the vector-only path and the planned hybrid path (once Stage 5 retriever is wired). Record p50 / p95.\n\n## Deliverable\n\nA short results table committed to `docs/` (or attached to this ticket) covering at least the configured Stage 4 provider plus one fallback.\n\n## Acceptance Criteria\n\n- Numbers exist for embedding throughput per configured provider\n- Retrieval p50/p95 measured for current vector store\n- Results inform any tuning needed to hit the Stage 5 latency budget\n"
 }

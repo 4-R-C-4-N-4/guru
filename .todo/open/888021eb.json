@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:05:23.228Z",
-  "updated_at": "2026-04-15T18:05:23.228Z",
+  "updated_at": "2026-04-15T22:03:31.000Z",
   "relationships": {
-    "parent": "0be14787"
-  }
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nAuthor the hand-curated starter concept vocabulary that seeds the Stage 3 graph and bounds the LLM tagging pass.\n\n## File Location\n\n`concepts/taxonomy.toml`\n\n## Structure\n\nConcepts grouped by category (cosmology, soteriology, theology, praxis). Each concept has a stable ID and a one-sentence definition that is shown to the LLM during tagging.\n\n```toml\n[concepts.cosmology]\nemanation_hierarchy = \"A chain of divine beings or principles flowing from a single transcendent source\"\ndemiurge = \"A secondary creator deity, often ignorant or malevolent, responsible for the material world\"\n# ...\n\n[concepts.soteriology]\ngnosis_direct_knowledge = \"Salvation through direct experiential knowledge of the divine, not faith or works\"\n# ...\n```\n\n## Source\n\nUse the seed list in docs/guru-implementation.md \u00a7\"Stage 3 Pass A\". Expand only if a clearly-missing concept is needed for v1 coverage.\n\n## Acceptance Criteria\n\n- All concepts from the doc's Pass A example are present\n- IDs are stable, snake_case, and unique\n- Every concept has a precise one-sentence definition\n"
 }
