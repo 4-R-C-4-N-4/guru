@@ -143,4 +143,4 @@ Gnosticism (Nag Hammadi), Kabbalah (Sefer Yetzirah, Zohar), Hermeticism (Corpus 
 
 ## License
 
-TBD
+MIT
