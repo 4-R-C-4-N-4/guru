@@ -1,0 +1,14 @@
+{
+  "id": "ecb9819e",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build guru/prompt.py (chunk formatting + system prompt template)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.082Z",
+  "updated_at": "2026-04-15T18:09:16.082Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

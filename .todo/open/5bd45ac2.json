@@ -1,0 +1,14 @@
+{
+  "id": "5bd45ac2",
+  "type": "chore",
+  "state": "open",
+  "summary": "Create sources/manifest.toml with all v1 sources",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.342Z",
+  "updated_at": "2026-04-15T18:00:21.342Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

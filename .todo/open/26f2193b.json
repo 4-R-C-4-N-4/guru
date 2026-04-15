@@ -1,0 +1,14 @@
+{
+  "id": "26f2193b",
+  "type": "chore",
+  "state": "open",
+  "summary": "Validation script: verify vector count == chunk count, spot-check similarities",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:06:52.773Z",
+  "updated_at": "2026-04-15T18:06:52.773Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

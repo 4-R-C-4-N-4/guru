@@ -1,0 +1,14 @@
+{
+  "id": "bebb170d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build access_to_insight.py downloader",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.491Z",
+  "updated_at": "2026-04-15T18:00:21.491Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "3cd86aee",
+  "type": "chore",
+  "state": "open",
+  "summary": "Write chunking configs for all v1 texts (one per text)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.533Z",
+  "updated_at": "2026-04-15T18:03:00.533Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

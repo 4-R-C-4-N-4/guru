@@ -1,0 +1,14 @@
+{
+  "id": "ffb7433c",
+  "type": "chore",
+  "state": "open",
+  "summary": "QA pass: spot-check 10 EXPRESSES edges and 10 PARALLELS edges for correctness",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.467Z",
+  "updated_at": "2026-04-15T18:05:23.467Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "bb03dcb9",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build guru/cli.py (interactive query interface)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.152Z",
+  "updated_at": "2026-04-15T18:09:16.152Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

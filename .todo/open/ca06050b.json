@@ -1,0 +1,14 @@
+{
+  "id": "ca06050b",
+  "type": "chore",
+  "state": "open",
+  "summary": "Define chunking config schema (chunking/*.toml)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.499Z",
+  "updated_at": "2026-04-15T18:03:00.499Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

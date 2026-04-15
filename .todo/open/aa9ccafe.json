@@ -1,0 +1,14 @@
+{
+  "id": "aa9ccafe",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build sefaria.py downloader (API client for Jewish texts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.460Z",
+  "updated_at": "2026-04-15T18:00:21.460Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

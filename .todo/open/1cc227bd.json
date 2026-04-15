@@ -1,0 +1,14 @@
+{
+  "id": "1cc227bd",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build sacred_texts.py downloader (handles their specific HTML layout)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.402Z",
+  "updated_at": "2026-04-15T18:00:21.402Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

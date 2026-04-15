@@ -1,0 +1,14 @@
+{
+  "id": "0d2b85a6",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build backfill_concepts.py (sync concept tags from guru.db to vector metadata)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:06:52.740Z",
+  "updated_at": "2026-04-15T18:06:52.740Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

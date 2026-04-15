@@ -1,0 +1,14 @@
+{
+  "id": "df608410",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build graph_bootstrap.py (create DB, insert tradition/concept/chunk nodes, BELONGS_TO edges)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.303Z",
+  "updated_at": "2026-04-15T18:05:23.303Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

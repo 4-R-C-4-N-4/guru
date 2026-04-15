@@ -1,0 +1,14 @@
+{
+  "id": "5fb8ddf5",
+  "type": "chore",
+  "state": "open",
+  "summary": "Preference filtering test: verify excluded traditions never leak into responses",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.278Z",
+  "updated_at": "2026-04-15T18:09:16.278Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

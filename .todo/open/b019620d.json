@@ -1,0 +1,14 @@
+{
+  "id": "b019620d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build token counter (tiktoken or equivalent, used to enforce 800-token budget)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.695Z",
+  "updated_at": "2026-04-15T18:03:00.695Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

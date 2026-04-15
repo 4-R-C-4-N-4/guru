@@ -1,0 +1,14 @@
+{
+  "id": "72783604",
+  "type": "chore",
+  "state": "open",
+  "summary": "Citation accuracy test: verify 20 agent responses cite real chunks with correct metadata",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.246Z",
+  "updated_at": "2026-04-15T18:09:16.246Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

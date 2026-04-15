@@ -1,0 +1,14 @@
+{
+  "id": "4ef8f634",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build acquire.py orchestrator (reads manifest, dispatches, writes raw/)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.519Z",
+  "updated_at": "2026-04-15T18:00:21.519Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

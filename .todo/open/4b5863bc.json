@@ -1,0 +1,14 @@
+{
+  "id": "4b5863bc",
+  "type": "chore",
+  "state": "open",
+  "summary": "Write guru.db schema (nodes, edges, staged_tags, staged_edges, staged_concepts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.262Z",
+  "updated_at": "2026-04-15T18:05:23.262Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

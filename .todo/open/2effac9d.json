@@ -1,0 +1,14 @@
+{
+  "id": "2effac9d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build generic_html.py downloader (BeautifulSoup extraction)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.372Z",
+  "updated_at": "2026-04-15T18:00:21.372Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

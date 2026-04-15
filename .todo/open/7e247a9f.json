@@ -1,0 +1,14 @@
+{
+  "id": "7e247a9f",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build heading-based splitter (for tractate/section texts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.596Z",
+  "updated_at": "2026-04-15T18:03:00.596Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

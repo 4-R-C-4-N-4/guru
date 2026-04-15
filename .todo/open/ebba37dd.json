@@ -1,0 +1,14 @@
+{
+  "id": "ebba37dd",
+  "type": "chore",
+  "state": "open",
+  "summary": "Build tag_concepts.py (LLM-assisted tagging with structured scoring prompt)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.339Z",
+  "updated_at": "2026-04-15T18:05:23.339Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}

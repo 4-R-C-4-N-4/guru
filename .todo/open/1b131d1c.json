@@ -1,0 +1,14 @@
+{
+  "id": "1b131d1c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Write corpus/traditions.toml registry from chunking configs",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.725Z",
+  "updated_at": "2026-04-15T18:03:00.725Z",
+  "relationships": {
+    "parent": "0be14787"
+  }
+}
