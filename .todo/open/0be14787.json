@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-15T17:47:06.592Z",
-  "updated_at": "2026-04-15T18:09:16.278Z",
+  "updated_at": "2026-04-15T18:30:40.453Z",
   "relationships": {
     "children": [
       "5bd45ac2",
@@ -51,5 +51,6 @@
       "72783604",
       "5fb8ddf5"
     ]
-  }
+  },
+  "description": "## Overview\n\nBuild a RAG-powered agent for comparative study of esoteric and religious traditions. The system retrieves primary texts across traditions, identifies conceptual parallels, and generates citations-grounded responses.\n\n## Pipeline Architecture\n\nFive-stage pipeline:\n1. **Stage 1 - Acquire**: Download source texts to raw/ with provenance metadata\n2. **Stage 2 - Chunk**: Segment into citation-addressable chunks (200-800 tokens)\n3. **Stage 3 - Graph**: Build SQLite concept graph with EXPRESSES/PARALLELS/CONTRASTS edges\n4. **Stage 4 - Index**: Embed chunks into vector store with metadata filtering\n5. **Stage 5 - Serve**: Hybrid retrieval + model integration with citation enforcement\n\n## Key Requirements\n\n- Every claim must include citation: [Tradition | Text | Section]\n- User preference filtering (whitelist/blacklist traditions)\n- Hedging language for ◇ Proposed edges\n- Never fabricate sources\n\n## See Also\n\ndocs/guru-implementation.md for full implementation details."
 }

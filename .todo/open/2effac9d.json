@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:00:21.372Z",
-  "updated_at": "2026-04-15T18:00:21.372Z",
+  "updated_at": "2026-04-15T19:06:55.226Z",
   "relationships": {
     "parent": "0be14787"
-  }
+  },
+  "description": "## Goal\n\nBuild the generic HTML downloader using BeautifulSoup for single-page text extraction. This is the fallback downloader for simple HTML sources.\n\n## Responsibilities\n\n- Fetch single HTML page\n- Extract main content (strip navigation, scripts, styles, ads)\n- Normalize to UTF-8 plaintext\n- Handle mojibake/encoding issues\n\n## Output\n\n- raw/{tradition}/{text_id}.txt — clean plaintext\n- raw/{tradition}/{text_id}.meta.toml — provenance metadata\n\n## Meta.toml Fields\n\nsource_url, downloaded_at, content_sha256, format, extractor, license, translator\n\n## Implementation Details\n\n- Use BeautifulSoup for HTML parsing\n- Extract text from main content containers (div, article, main)\n- Strip script, style, nav, footer, header elements\n- Normalize whitespace and line endings\n- Calculate SHA256 of content for idempotency\n\n## See Also\n\ndocs/guru-implementation.md Stage 1: Corpus Acquisition"
 }

@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:00:21.342Z",
-  "updated_at": "2026-04-15T18:00:21.342Z",
+  "updated_at": "2026-04-15T19:06:54.968Z",
   "relationships": {
     "parent": "0be14787"
-  }
+  },
+  "description": "## Goal\n\nCreate the source registry manifest that tracks all v1 corpus sources with their download URLs, license status, and extraction instructions.\n\n## Output Format\n\nFile: sources/manifest.toml\n\nEach source entry includes:\n- id: unique identifier (lowercase, hyphenated)\n- tradition: tradition category (gnosticism, hermeticism, buddhism, etc.)\n- label: human-readable title\n- url: source URL\n- format: html, html_multi, text, sefaria_api\n- license: public_domain (for v1)\n- translator: translator name\n- notes: extraction instructions\n\n## v1 Sources to Include\n\nSee docs/guru-implementation.md Stage 1 for the complete list of v1 sources across traditions:\n- Gnosticism: Gospel of Thomas, Gospel of Philip\n- Hermeticism: Corpus Hermeticum tractates\n- Buddhism: Heart Sutra\n\n## Acceptance Criteria\n\n- [ ] All v1 sources listed in guru-implementation.md are in manifest.toml\n- [ ] Each entry has complete fields\n- [ ] Format field matches actual source type\n- [ ] Notes field includes extraction hints"
 }

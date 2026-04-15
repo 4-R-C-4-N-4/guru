@@ -7,8 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-04-15T18:00:21.430Z",
-  "updated_at": "2026-04-15T18:00:21.430Z",
+  "updated_at": "2026-04-15T19:06:55.724Z",
   "relationships": {
     "parent": "0be14787"
-  }
+  },
+  "description": "## Goal\n\nBuild the gnosis.org downloader for Nag Hammadi texts (Gospel of Thomas, etc.).\n\n## Responsibilities\n\n- Handle gnosis.org HTML structure\n- Extract main content div\n- Handle Coptic-to-English translations\n- Extract translator metadata\n\n## Output\n\n- raw/{tradition}/{text_id}.txt — clean plaintext\n- raw/{tradition}/{text_id}.meta.toml — provenance metadata\n\n## Implementation Details\n\n- gnosis.org uses specific HTML structure for Nag Hammadi texts\n- Content is in main content div\n- Need to extract translator information from page\n\n## See Also\n\ndocs/guru-implementation.md Stage 1: Corpus Acquisition"
 }
