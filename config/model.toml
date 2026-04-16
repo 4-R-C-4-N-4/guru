@@ -1,0 +1,37 @@
+# Guru Model Configuration
+# Consumed by: guru/model.py, guru/retriever.py
+
+[provider]
+# Backend: "llamacpp" | "ollama" | "anthropic" | "openai"
+name = "llamacpp"
+model = "Carnice-27b-Q4_K_M.gguf"
+
+# llamacpp server base URL
+llamacpp_url = "http://127.0.0.1:8080"
+
+# Ollama base URL (used when name = "ollama")
+# ollama_url = "http://localhost:11434"
+
+# Max tokens to generate per response.
+# Set high enough for thinking models to complete reasoning before answering.
+max_tokens = 2048
+
+[retrieval]
+# Number of chunks to retrieve via vector search
+top_k = 10
+
+# Minimum similarity threshold for vector results (0-1, cosine)
+min_similarity = 0.50
+
+# Tradition diversity: max chunks per tradition in the merged result set.
+# 0 = no cap
+max_per_tradition = 3
+
+[ranking]
+# Edge tier weights for re-ranking retrieved chunks
+tier_verified  = 1.0
+tier_proposed  = 0.7
+tier_inferred  = 0.4
+
+# Diversity bonus applied to chunks from under-represented traditions
+diversity_boost = 0.1
