@@ -1,0 +1,30 @@
+# Guru Corpus — Tradition Registry
+# Auto-derived from chunking/{tradition}/*.toml configs
+# Consumed by graph_bootstrap.py to insert tradition nodes into guru.db
+
+[[tradition]]
+id = "buddhism"
+name = "Buddhism"
+texts = ["heart-sutra"]
+
+[[tradition]]
+id = "gnosticism"
+name = "Gnosticism"
+texts = ["gospel-of-philip", "gospel-of-thomas"]
+
+[[tradition]]
+id = "hermeticism"
+name = "Hermeticism"
+texts = [
+  "corpus-hermeticum-01", "corpus-hermeticum-02", "corpus-hermeticum-03",
+  "corpus-hermeticum-04", "corpus-hermeticum-05", "corpus-hermeticum-06",
+  "corpus-hermeticum-07", "corpus-hermeticum-08", "corpus-hermeticum-09",
+  "corpus-hermeticum-10", "corpus-hermeticum-11", "corpus-hermeticum-12",
+  "corpus-hermeticum-13", "corpus-hermeticum-14", "corpus-hermeticum-15",
+  "corpus-hermeticum-16", "corpus-hermeticum-17",
+]
+
+[[tradition]]
+id = "jewish_mysticism"
+name = "Jewish Mysticism"
+texts = ["sefer-yetirah", "zohar-leid"]
