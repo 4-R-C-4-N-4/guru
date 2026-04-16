@@ -1,0 +1,27 @@
+{
+  "id": "50f6f866",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build gnosis_org.py downloader",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.430Z",
+  "updated_at": "2026-04-16T00:12:38.083Z",
+  "relationships": {
+    "parent": "192bbe6a"
+  },
+  "description": "## Goal\n\nBuild the gnosis.org downloader for Nag Hammadi texts.\n\n## File Location\n\n**scripts/downloaders/gnosis_org.py**\n\n## Source Characteristics\n\n**gnosis.org** hosts Nag Hammadi texts:\n- Single-page format for most texts\n- Content in main div with class or id\n- Clean HTML structure\n- Examples:\n  - Gospel of Thomas: `http://gnosis.org/naghamm/gthlamb.html`\n  - Gospel of Philip: `http://gnosis.org/naghamm/gphlamb.html`\n\n## Implementation Strategy\n\n```python\ndef download(source: dict) -> tuple[str, dict]:\n    \"\"\"\n    Download and extract text from gnosis.org.\n    \n    Args:\n        source: Dict with id, url, tradition, format, translator, license, notes\n        \n    Returns:\n        Tuple of (clean_text, metadata_dict)\n    \"\"\"\n    # Fetch page\n    response = requests.get(source[\"url\"], timeout=30)\n    response.encoding = response.apparent_encoding\n    \n    soup = BeautifulSoup(response.text, \"html.parser\")\n    \n    # Find main content container\n    # gnosis.org typically uses div with class \"content\" or similar\n    main = soup.find(\"div\", class_=\"content\")\n    if not main:\n        main = soup.find(\"main\")\n    if not main:\n        # Fallback: remove header/footer\n        for element in soup.find_all([\"header\", \"footer\", \"nav\"]):\n            element.decompose()\n        main = soup.body\n    \n    # Extract text\n    text = main.get_text(separator=\"\\n\")\n    text = normalize_whitespace(text)\n    \n    # Build metadata\n    metadata = {\n        \"source_url\": source[\"url\"],\n        \"downloaded_at\": datetime.utcnow().isoformat() + \"Z\",\n        \"content_sha256\": content_hash(text),\n        \"format\": \"html\",\n        \"extractor\": \"gnosis_org\",\n        \"license\": source.get(\"license\", \"public_domain\"),\n        \"translator\": source.get(\"translator\", \"\")\n    }\n    \n    return text, metadata\n```\n\n## Function Signature\n\n```python\ndef download(source: dict) -> tuple[str, dict]:\n    \"\"\"\n    Download and extract text from gnosis.org source.\n    \n    Args:\n        source: Dict with id, url, tradition, format, translator, license, notes\n        \n    Returns:\n        Tuple of (clean_text, metadata_dict)\n    \"\"\"\n    pass\n```\n\n## Acceptance Criteria\n\n- [ ] Downloads Gospel of Thomas correctly\n- [ ] Downloads Gospel of Philip correctly\n- [ ] No navigation/sidebar content in output\n- [ ] Output is clean plaintext\n- [ ] Metadata includes correct translator name",
+  "work": {
+    "branch": "todo/192bbe6a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T00:03:14.610Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "c1e000ab4f9528c8c4406e081e3c9eb63d1aa9e8",
+    "resolved_at": "2026-04-16T00:12:38.083Z",
+    "resolved_by": "unknown",
+    "note": "Built gnosis_org.py downloader for Nag Hammadi texts. Tested with Gospel of Thomas: extracted 28560 characters. Handles clean HTML structure with proper content extraction."
+  }
+}
