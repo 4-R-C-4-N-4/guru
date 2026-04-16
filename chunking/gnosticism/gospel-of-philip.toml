@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+
+[metadata]
+tradition = "gnosticism"
+text_name = "Gospel of Philip"
+translator = "Thomas O. Lambdin"
+sections_format = "paragraph"

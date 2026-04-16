@@ -77,7 +77,11 @@ def split(text: str, config: dict) -> list[Chunk]:
 
 def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
     """
-    Split an oversized chunk at paragraph boundaries, suffixing labels with a/b/c...
+    Split an oversized chunk at paragraph or sentence boundaries,
+    suffixing labels with a/b/c...
+
+    Tries paragraph boundaries first (\n\n), then falls back to sentence
+    boundaries ('. ') for single-line / collapsed prose.
 
     Args:
         chunk: The oversized Chunk.
@@ -88,6 +92,11 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
         List of sub-chunks replacing the original.
     """
     paragraphs = [p.strip() for p in chunk.body.split("\n\n") if p.strip()]
+    if len(paragraphs) <= 1:
+        # Fall back to sentence-level splitting for collapsed single-line prose
+        import re
+        sentences = re.split(r'(?<=[.!?])\s+', chunk.body.strip())
+        paragraphs = [s.strip() for s in sentences if s.strip()]
     if len(paragraphs) <= 1:
         # Can't sub-split further — return as-is
         return [chunk]

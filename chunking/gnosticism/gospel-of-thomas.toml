@@ -1,0 +1,14 @@
+[chunking]
+strategy = "regex"
+# Matches "(N)" logion markers — e.g. "(1)", "(42)", "(114)"
+# Single-quoted TOML literal string — no backslash escaping needed
+pattern = '\((\d+)\)\s+'
+section_label_format = "Logion {n}"
+max_tokens = 800
+group_size = 1
+
+[metadata]
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+translator = "Thomas O. Lambdin"
+sections_format = "logion"

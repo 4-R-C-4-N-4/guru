@@ -66,7 +66,7 @@ paragraph boundary and appends a letter suffix to the section label:
 ```toml
 [chunking]
 strategy = "regex"
-pattern = '\\((\\d+)\\)\\s+'
+pattern = '\((\d+)\)\s+'  # TOML literal string (single-quoted) — no double-escaping
 section_label_format = "Logion {n}"
 max_tokens = 800
 group_size = 1
