@@ -28,6 +28,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
+sys.path.insert(0, str(Path(__file__).parent))
+from llm import call_llm, parse_json_response, PROVIDERS
+
 
 # ── prompt ───────────────────────────────────────────────────────────────────
 
@@ -74,83 +77,13 @@ Return [] if nothing scores >= 1.
 """
 
 
-# ── providers ────────────────────────────────────────────────────────────────
-
-def call_ollama(model: str, system: str, prompt: str) -> str:
-    import urllib.request
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        "stream": False,
-    }).encode()
-    req = urllib.request.Request(
-        "http://localhost:11434/api/chat",
-        data=payload,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        data = json.loads(resp.read())
-    return data["message"]["content"]
-
-
-def call_anthropic(model: str, system: str, prompt: str) -> str:
-    import anthropic
-    client = anthropic.Anthropic()
-    msg = client.messages.create(
-        model=model,
-        max_tokens=2048,
-        system=system,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return msg.content[0].text
-
-
-def call_openai(model: str, system: str, prompt: str) -> str:
-    from openai import OpenAI
-    client = OpenAI()
-    resp = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        max_tokens=2048,
-        response_format={"type": "json_object"},
-    )
-    return resp.choices[0].message.content
-
-
-PROVIDERS = {
-    "ollama": call_ollama,
-    "anthropic": call_anthropic,
-    "openai": call_openai,
-}
-
-
 # ── parsing ───────────────────────────────────────────────────────────────────
 
 def parse_tags(raw: str) -> list[dict]:
-    """Parse LLM JSON response into list of tag dicts. Tolerant of wrapped objects."""
-    raw = raw.strip()
-    # Unwrap {"tags": [...]} if necessary
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
-        # Try to extract JSON array from the response
-        import re
-        m = re.search(r'\[.*\]', raw, re.DOTALL)
-        if m:
-            parsed = json.loads(m.group())
-        else:
-            logger.warning("Could not parse LLM response as JSON")
-            return []
+    """Parse LLM JSON response into list of tag dicts."""
+    parsed = parse_json_response(raw)
 
     if isinstance(parsed, dict):
-        # Unwrap common wrapper keys
         for key in ("tags", "results", "concepts", "items"):
             if key in parsed:
                 parsed = parsed[key]
@@ -255,7 +188,10 @@ def run_tagging(
     text_id: str | None,
     delay: float,
 ) -> None:
-    call_fn = PROVIDERS[provider_name]
+    call_fn = PROVIDERS.get(provider_name)
+    if not call_fn:
+        logger.error(f"Unknown provider: {provider_name}")
+        sys.exit(1)
     concepts = load_taxonomy()
     conn = sqlite3.connect(str(db_path))
     conn.execute("PRAGMA foreign_keys=ON")
@@ -292,7 +228,7 @@ def run_tagging(
         prompt = build_prompt(body, citation, concepts)
 
         try:
-            raw = call_fn(model, SYSTEM_PROMPT, prompt)
+            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=1500)
             tags = parse_tags(raw)
 
             for tag in tags:
@@ -319,8 +255,8 @@ def run_tagging(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="LLM-assisted concept tagging")
-    parser.add_argument("--provider", choices=list(PROVIDERS), default="ollama")
-    parser.add_argument("--model", default="llama3")
+    parser.add_argument("--provider", choices=list(PROVIDERS), default="llamacpp")
+    parser.add_argument("--model", default="Carnice-27b-Q4_K_M.gguf")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--batch-size", type=int, default=0)
     parser.add_argument("--resume", action="store_true")

@@ -1,0 +1,32 @@
+# Guru Embedding Configuration
+# Consumed by: scripts/embed_corpus.py, scripts/backfill_concepts.py
+
+[model]
+# Provider: "ollama" | "sentence_transformers" | "api"
+provider = "ollama"
+model_name = "nomic-embed-text"
+dimensions = 768
+
+# sentence_transformers fallback (used when provider = "sentence_transformers")
+# model_name = "all-MiniLM-L6-v2"
+# dimensions = 384
+
+[backend]
+# Vector store: "chromadb" | "qdrant"
+type = "chromadb"
+
+# ChromaDB: persistent local directory
+chroma_path = "data/vectordb"
+collection_name = "guru_corpus"
+
+# Qdrant (uncomment to switch):
+# type = "qdrant"
+# qdrant_url = "http://localhost:6333"
+# collection_name = "guru_corpus"
+
+[processing]
+# Batch size for embedding calls
+batch_size = 32
+
+# Seconds to wait between API calls (rate limiting)
+delay = 0.0
