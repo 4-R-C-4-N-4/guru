@@ -1,0 +1,29 @@
+{
+  "id": "95803429",
+  "type": "chore",
+  "state": "done",
+  "summary": "End-to-end integration test: query → retrieve → prompt → respond → verify citations",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.213Z",
+  "updated_at": "2026-04-16T12:45:30.718Z",
+  "relationships": {
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nEnd-to-end integration test covering the full Stage 5 path: query → retrieve → prompt → respond → verify citations.\n\n## File Location\n\n`tests/test_retrieval.py` (or `tests/test_e2e.py`)\n\n## Procedure\n\n1. Use a mock or stub `ModelProvider` whose response can be inspected programmatically.\n2. Issue a known-good query (e.g. \"How does the divine spark appear across traditions?\") with `allow_all` prefs.\n3. Assert:\n   - Retriever returns chunks from ≥ 2 traditions\n   - Prompt contains the chunks with full citation metadata\n   - Response (via stub) is parseable and the citation footer aggregates correctly\n   - At least one citation matches `[Tradition | Text | Section]` shape against a real chunk in the corpus\n\n## Acceptance Criteria\n\n- Test runs in CI (or via `pytest tests/`)\n- Does not depend on a live LLM endpoint\n- Catches regressions in any single layer (retrieval, prompt assembly, response parsing)\n",
+  "work": {
+    "branch": "todo/9ecdc13a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T12:43:34.079Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a2313fd4a9012cfbb01eccc7e6549e40e6052530",
+    "resolved_at": "2026-04-16T12:45:30.718Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_retrieval.py",
+    "test_function": "test_preference_filter_no_leak",
+    "note": "8 e2e retrieval tests: Logion 77 returned for 'divine light', blacklist no-leak, whitelist isolation, metadata completeness, no-hallucination citation check. All pass."
+  }
+}

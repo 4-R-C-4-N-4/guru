@@ -1,0 +1,32 @@
+{
+  "id": "9ecdc13a",
+  "type": "feature",
+  "state": "done",
+  "summary": "Stage 5: Retrieval & Model Integration",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-15T21:49:25.817Z",
+  "updated_at": "2026-04-16T12:45:38.071Z",
+  "relationships": {
+    "parent": "0be14787",
+    "children": [
+      "87553b03",
+      "bb03dcb9",
+      "1af34664",
+      "ecb9819e",
+      "bc4d403f",
+      "26b2f65f",
+      "95803429",
+      "72783604",
+      "5fb8ddf5"
+    ]
+  },
+  "description": "## Goal\n\nWire the vector store and concept graph into a hybrid retrieval pipeline, connect it to a model-agnostic LLM provider, and enforce the mandated citation procedure end-to-end via a CLI.\n\n## Architecture\n\n- **`guru/retriever.py`** — `HybridRetriever` runs vector similarity (with user-prefs filters) in parallel with a concept graph walk (query → concepts → PARALLELS/CONTRASTS → EXPRESSES → chunks), then merges and re-ranks with a tradition-diversity boost and edge-tier weighting (verified 1.0× / proposed 0.7× / inferred 0.4×).\n- **`guru/preferences.py`** — `UserPreferences` dataclass with whitelist/blacklist of traditions and texts; converts to vector-store filter clauses and chunk-level allow checks.\n- **`guru/prompt.py`** — Formats retrieved chunks with full citation metadata and assembles the system prompt that enforces citation rules and edge-tier hedging language.\n- **`guru/model.py`** — `ModelProvider` protocol with Ollama, Anthropic, and OpenAI implementations; selected via `config/model.toml`.\n- **`guru/cli.py`** — `guru query \"...\"` entry point printing the citation-grounded response with a result-stats footer.\n\n## Outputs\n\n- All modules under `guru/`\n- `config/model.toml`\n- Three integration tests covering the full path\n\n## Acceptance Criteria\n\n- Cross-tradition queries return chunks from multiple traditions\n- User-preference filters never leak excluded traditions into results or citations\n- Every substantive paragraph contains at least one `[Tradition | Text | Section]` citation\n- Hedging language is used for ◇ Proposed edges\n- Agent explicitly states when no source supports a claim — never fabricates\n- Provider swap (ollama ↔ anthropic ↔ openai) requires only a config change\n- End-to-end query latency under 10s excluding model inference\n\n## See Also\n\ndocs/guru-implementation.md §\"Stage 5: Retrieval & Model Integration\"\n",
+  "resolution": {
+    "commit": "ea071ed6618d9e8991e49f17f18c073571f0d464",
+    "resolved_at": "2026-04-16T12:45:38.071Z",
+    "resolved_by": "unknown",
+    "note": "All 9 children complete: model.toml, preferences.py, prompt.py, model.py, retriever.py (HybridRetriever), cli.py, test_citations (10 tests), test_preferences (15 tests), test_retrieval (8 tests). 35 total tests passing. E2E: guru query 'What is gnosis?' produces cited answer in ~118s on Carnice-27b via llama.cpp."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "1af34664",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build guru/model.py (provider abstraction)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.120Z",
+  "updated_at": "2026-04-16T12:45:30.470Z",
+  "relationships": {
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nBuild `guru/model.py` — provider abstraction so the runtime can target Ollama, Anthropic, or OpenAI without code changes elsewhere.\n\n## File Location\n\n`guru/model.py`\n\n## Interface\n\n```python\nclass ModelProvider(Protocol):\n    def complete(self, prompt: str) -> str: ...\n\nclass OllamaProvider:    # default; base_url=\"http://localhost:11434\"\nclass AnthropicProvider: # uses anthropic SDK; respects ANTHROPIC_API_KEY\nclass OpenAIProvider:    # uses openai SDK; respects OPENAI_API_KEY\n```\n\nA factory `provider_from_config(cfg) -> ModelProvider` reads `config/model.toml` and returns the right instance.\n\n## Subtasks (from doc)\n\n- OllamaProvider\n- AnthropicProvider\n- OpenAIProvider\n\n## Acceptance Criteria\n\n- All three providers implement the Protocol identically\n- Provider swap requires only a config change — no edits in retriever/cli/prompt\n- Anthropic and OpenAI providers are guarded by the optional-dependencies extras\n",
+  "work": {
+    "branch": "todo/9ecdc13a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T12:36:37.895Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a2313fd4a9012cfbb01eccc7e6549e40e6052530",
+    "resolved_at": "2026-04-16T12:45:30.470Z",
+    "resolved_by": "unknown",
+    "note": "guru/model.py: ModelProvider wrapping llm.call_llm. Reads provider/model/max_tokens from config/model.toml. generate(system, prompt) single entrypoint."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "5fb8ddf5",
+  "type": "chore",
+  "state": "done",
+  "summary": "Preference filtering test: verify excluded traditions never leak into responses",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.278Z",
+  "updated_at": "2026-04-16T12:45:30.669Z",
+  "relationships": {
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nPreference filtering test: verify excluded traditions never leak into responses.\n\n## File Location\n\n`tests/test_preferences.py`\n\n## Procedure\n\n1. Build a `UserPreferences` with one tradition explicitly blacklisted (e.g. exclude Gnosticism).\n2. Issue 5-10 queries that would naturally pull Gnostic chunks given allow-all prefs.\n3. For each response:\n   - Inspect the retrieved chunk list — assert no chunk from the blacklisted tradition.\n   - Parse citations from the response — assert no citation references the blacklisted tradition.\n4. Repeat with a `whitelist` preference covering only 2 traditions; assert citations only ever reference those two.\n\n## Acceptance Criteria\n\n- 0 blacklisted-tradition chunks in retrieval results across all test queries\n- 0 blacklisted-tradition citations in responses\n- Whitelist mode is similarly tight\n- `prefs.active_tradition_summary()` ends up reflected in the system prompt for each test\n",
+  "work": {
+    "branch": "todo/9ecdc13a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T12:43:34.041Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a2313fd4a9012cfbb01eccc7e6549e40e6052530",
+    "resolved_at": "2026-04-16T12:45:30.669Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_preferences.py",
+    "test_function": "test_vector_store_respects_blacklist",
+    "note": "15 preference filter tests. Blacklist/whitelist logic, to_vector_filters() ChromaDB clause, no-leak integration test. All pass."
+  }
+}
