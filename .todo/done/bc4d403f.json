@@ -1,0 +1,27 @@
+{
+  "id": "bc4d403f",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build guru/preferences.py (UserPreferences dataclass + filtering logic)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.052Z",
+  "updated_at": "2026-04-16T12:36:32.311Z",
+  "relationships": {
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nBuild `guru/preferences.py` — the `UserPreferences` dataclass plus filtering logic shared between vector search and post-retrieval gating.\n\n## File Location\n\n`guru/preferences.py`\n\n## Interface\n\n```python\n@dataclass\nclass UserPreferences:\n    mode: str                            # \"all\" | \"whitelist\" | \"blacklist\"\n    blacklisted_traditions: list[str]\n    blacklisted_texts: list[str]\n    whitelisted_traditions: list[str]\n    whitelisted_texts: list[str]\n\n    def is_chunk_allowed(self, chunk: RetrievedChunk) -> bool: ...\n    def to_vector_filters(self) -> dict: ...\n    def active_tradition_summary(self) -> str: ...\n\n    @classmethod\n    def allow_all(cls) -> \"UserPreferences\": ...\n    @classmethod\n    def from_toml(cls, path: str) -> \"UserPreferences\": ...\n```\n\n## Modes\n\n- `all` — every chunk allowed; vector filter is empty\n- `whitelist` — only chunks whose tradition or text is whitelisted\n- `blacklist` — every chunk except blacklisted traditions/texts\n\n## Acceptance Criteria\n\n- `to_vector_filters()` produces a clause that the configured vector backend accepts\n- `is_chunk_allowed()` agrees with the vector filter (no chunk slips through one but not the other)\n- `from_toml` round-trips with a hand-authored `user_preferences.toml`\n- `active_tradition_summary()` returns a string suitable for the system prompt's `ACTIVE TRADITIONS:` line\n",
+  "work": {
+    "branch": "todo/9ecdc13a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T12:28:05.193Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "327fa7caf0f5d7a89a62aab06b627af440cbd8e2",
+    "resolved_at": "2026-04-16T12:36:32.311Z",
+    "resolved_by": "unknown",
+    "note": "guru/preferences.py: UserPreferences dataclass with mode=all/whitelist/blacklist, is_chunk_allowed(), to_vector_filters() (ChromaDB where-clause), from_toml(), allow_all(), active_tradition_summary()."
+  }
+}
