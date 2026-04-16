@@ -1,0 +1,27 @@
+{
+  "id": "bb03dcb9",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build guru/cli.py (interactive query interface)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:09:16.152Z",
+  "updated_at": "2026-04-16T12:45:30.553Z",
+  "relationships": {
+    "parent": "9ecdc13a"
+  },
+  "description": "## Goal\n\nBuild `guru/cli.py` — the user-facing entry point that wires preferences, retriever, prompt builder, and model into one command.\n\n## File Location\n\n`guru/cli.py`\n\n## CLI\n\n```\nguru query \"<question>\" [--prefs path/to/user_preferences.toml] [--top-k N] [--provider X] [--model Y]\n```\n\nRegistered as the `guru` console script in `pyproject.toml`.\n\n## Responsibilities\n\n1. Load `config/model.toml` and `config/embedding.toml`.\n2. Load user preferences (default: allow-all) — see ticket bc4d403f.\n3. Construct `HybridRetriever`, embed the query, retrieve top-k chunks.\n4. Build the prompt via `guru.prompt.build_prompt`.\n5. Send to the configured `ModelProvider` and stream/print the response.\n6. Print the result-stats footer:\n   `Citations: N | Traditions: M | Chunks used: X/Y | Edge tiers: ◆ A, ◇ B, ○ C`\n\n## Acceptance Criteria\n\n- `guru query \"...\"` runs end-to-end against the populated corpus\n- Provider and prefs swappable via flags\n- Footer numbers correctly reflect the response\n",
+  "work": {
+    "branch": "todo/9ecdc13a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T12:37:37.348Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a2313fd4a9012cfbb01eccc7e6549e40e6052530",
+    "resolved_at": "2026-04-16T12:45:30.553Z",
+    "resolved_by": "unknown",
+    "note": "guru/cli.py + __main__.py: 'guru query' and 'guru interactive' subcommands. --tradition whitelist, --exclude-tradition blacklist. Stats footer. E2E tested: 'What is gnosis?' returns correct cited answer."
+  }
+}
