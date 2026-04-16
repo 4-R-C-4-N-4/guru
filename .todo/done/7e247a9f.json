@@ -1,0 +1,27 @@
+{
+  "id": "7e247a9f",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build heading-based splitter (for tractate/section texts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.596Z",
+  "updated_at": "2026-04-16T02:59:38.222Z",
+  "relationships": {
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nImplement the heading-based splitter for texts segmented by numbered or named headings (e.g. Corpus Hermeticum tractate sections, Eckhart sermons).\n\n## Interface\n\n```python\ndef split(text: str, config: dict) -> list[Chunk]\n```\n\nReads `heading_pattern` from config; treats every line matching the pattern as a section boundary, grouping the lines that follow into the section's body.\n\n## Behaviour\n\n- Detect headings via `heading_pattern`.\n- Each section becomes one chunk (or split into `Xa`/`Xb` if >`max_tokens`).\n- Preserve heading text in `section_label` via `section_label_format`.\n\n## Acceptance Criteria\n\n- All headings detected; no section bodies leak across chunk boundaries\n- Section labels match the configured format\n- No chunk exceeds `max_tokens`\n",
+  "work": {
+    "branch": "todo/f9a6def7",
+    "base_branch": "main",
+    "started_at": "2026-04-16T02:58:37.192Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "51d07f07b4cd2193ea2ffd41e461b6f1865f6a53",
+    "resolved_at": "2026-04-16T02:59:38.222Z",
+    "resolved_by": "unknown",
+    "note": "scripts/chunkers/heading_splitter.py — split(). Heading-line detection via heading_pattern. group_size bundling."
+  }
+}

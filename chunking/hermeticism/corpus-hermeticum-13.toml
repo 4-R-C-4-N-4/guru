@@ -1,0 +1,12 @@
+[chunking]
+strategy = "paragraph"
+# Corpus Hermeticum prose tractates — group 2 paragraphs per chunk
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+
+[metadata]
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 13: The Discourse of Hermes to Tat"
+translator = "G.R.S. Mead"
+sections_format = "paragraph"

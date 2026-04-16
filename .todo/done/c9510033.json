@@ -1,0 +1,27 @@
+{
+  "id": "c9510033",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build regex-based splitter (for logion/verse/numbered texts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.564Z",
+  "updated_at": "2026-04-16T02:59:38.185Z",
+  "relationships": {
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nImplement the regex-based splitter used for texts whose sections begin with a structural marker (logions, numbered verses, tractate sections).\n\n## Interface\n\n```python\ndef split(text: str, config: dict) -> list[Chunk]\n```\n\nWhere `config` carries `pattern`, `section_label_format`, `max_tokens`, `group_size`. Returns `Chunk` objects with `section_label`, `body`, and a placeholder for `token_count` (filled by the orchestrator).\n\n## Behaviour\n\n- Match `pattern` against the raw text to find section boundaries.\n- Group `group_size` consecutive sections per chunk (default 1).\n- If a chunk exceeds `max_tokens`, split at the nearest paragraph boundary and suffix the section label (`013a`, `013b`).\n- Never split mid-sentence.\n\n## Acceptance Criteria\n\n- Round-trip: concatenating splitter output reconstructs original content (modulo whitespace).\n- Section labels match `section_label_format` exactly.\n- No chunk exceeds `max_tokens`.\n",
+  "work": {
+    "branch": "todo/f9a6def7",
+    "base_branch": "main",
+    "started_at": "2026-04-16T02:58:15.494Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "51d07f07b4cd2193ea2ffd41e461b6f1865f6a53",
+    "resolved_at": "2026-04-16T02:59:38.185Z",
+    "resolved_by": "unknown",
+    "note": "scripts/chunkers/regex_splitter.py — split() + subsplit(). Handles logion/verse markers. group_size bundling, a/b/c sub-splitting."
+  }
+}

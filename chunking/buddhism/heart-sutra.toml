@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 3
+
+[metadata]
+tradition = "buddhism"
+text_name = "The Heart Sutra"
+translator = "Edward Conze"
+sections_format = "paragraph"

@@ -1,0 +1,27 @@
+{
+  "id": "1b131d1c",
+  "type": "chore",
+  "state": "done",
+  "summary": "Write corpus/traditions.toml registry from chunking configs",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.725Z",
+  "updated_at": "2026-04-16T03:11:27.932Z",
+  "relationships": {
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nGenerate `corpus/traditions.toml` — the registry of traditions and texts derived from the chunking configs. Used downstream by `graph_bootstrap.py` to insert tradition nodes.\n\n## Format\n\n```toml\n[[tradition]]\nid = \"gnosticism\"\nname = \"Gnosticism\"\ntexts = [\"gospel-of-thomas\", \"gospel-of-philip\"]\n\n[[tradition]]\nid = \"hermeticism\"\nname = \"Hermeticism\"\ntexts = [\"corpus-hermeticum\"]\n```\n\n## Procedure\n\nEither author by hand from the chunking configs, or build a small helper that scans `chunking/` and emits the file. If automated, the output should be committed to the repo.\n\n## Acceptance Criteria\n\n- Every tradition with at least one chunked text appears once\n- Every text in `chunking/` is listed under its tradition\n- File is consumable by `graph_bootstrap.py`\n",
+  "work": {
+    "branch": "todo/f9a6def7",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:11:11.010Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "766a7b5d6aac92d5dd62136a43f98037c98a28ad",
+    "resolved_at": "2026-04-16T03:11:27.932Z",
+    "resolved_by": "unknown",
+    "note": "corpus/traditions.toml: 4 traditions (buddhism, gnosticism, hermeticism, jewish_mysticism), 22 texts total. Derived from chunking/ config tree."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "3cd86aee",
+  "type": "chore",
+  "state": "done",
+  "summary": "Write chunking configs for all v1 texts (one per text)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:03:00.533Z",
+  "updated_at": "2026-04-16T03:11:07.499Z",
+  "relationships": {
+    "parent": "f9a6def7"
+  },
+  "description": "## Goal\n\nAuthor one `chunking/{tradition}/{text_id}.toml` per v1 text, conforming to the chunking config schema (see ticket ca06050b).\n\n## Procedure\n\nFor each text in `sources/manifest.toml`:\n1. Skim the raw output to identify the natural division (logion / tractate-section / verse / paragraph).\n2. Pick the matching strategy (`regex` / `heading` / `paragraph`) and write the splitter pattern.\n3. Set `section_label_format`, `max_tokens` (≤800), and `group_size`.\n4. Fill `[metadata]` with tradition, text_name, translator, sections_format.\n\n## Reference Patterns\n\n| Text type | Strategy | Pattern example |\n|-----------|----------|-----------------|\n| Sayings gospel | regex | `(?:^\\|\\n)\\(?(\\d+)\\)\\s+` |\n| Tractate / sermon-numbered | heading | `^\\d+\\.\\s+` |\n| Sutra / verse | regex on verse marker | varies |\n| Prose sermons | paragraph | n/a — group_size=2-4 |\n\n## Acceptance Criteria\n\n- Every v1 source has a corresponding chunking config\n- Each config validates against the schema\n- A dry run of `chunk.py` for each text produces sensibly-bounded chunks\n",
+  "work": {
+    "branch": "todo/f9a6def7",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:08:48.975Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "589dd2027a6ad3a940fce372b238f4bcd63a797d",
+    "resolved_at": "2026-04-16T03:11:07.499Z",
+    "resolved_by": "unknown",
+    "note": "All 22 v1 texts have chunking configs in chunking/{tradition}/{text_id}.toml. Key lesson: TOML regex patterns must use single-quoted literal strings to avoid double-escaping. Corpus hermeticum: paragraph/2; gospel texts: regex or paragraph; Sefaria texts: paragraph/3."
+  }
+}
