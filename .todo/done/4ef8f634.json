@@ -1,0 +1,27 @@
+{
+  "id": "4ef8f634",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build acquire.py orchestrator (reads manifest, dispatches, writes raw/)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.519Z",
+  "updated_at": "2026-04-16T02:38:54.484Z",
+  "relationships": {
+    "parent": "192bbe6a"
+  },
+  "description": "## Goal\n\nBuild the acquire.py orchestrator that reads the manifest, dispatches to appropriate downloaders, and writes output files.\n\n## File Location\n\nscripts/acquire.py\n\n## Responsibilities\n\n1. Read sources/manifest.toml\n2. For each source, dispatch to appropriate downloader based on format\n3. Write output files to raw/{tradition}/{text_id}.txt\n4. Write metadata to raw/{tradition}/{text_id}.meta.toml\n5. Skip already-downloaded files (idempotent via hash comparison)\n\n## Downloader Interface\n\nAll downloaders must implement:\ndef download(source: dict) -> tuple[str, dict] | list[tuple[str, dict]]\n\n## Format Dispatch Table\n\n| format | Downloader |\n|--------|------------|\n| html | generic_html.py |\n| html_multi | sacred_texts.py |\n| sefaria_api | sefaria.py |\n\n## Acceptance Criteria\n\n- Reads sources/manifest.toml correctly\n- Dispatches to correct downloader based on format\n- Writes output to raw/{tradition}/{text_id}.txt\n- Skips already-downloaded files (idempotent)\n- Handles errors gracefully with logging\n",
+  "work": {
+    "branch": "todo/192bbe6a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T02:25:30.366Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9c6dd824dd9eef7d49ab03bc914989a408294d88",
+    "resolved_at": "2026-04-16T02:38:54.484Z",
+    "resolved_by": "unknown",
+    "note": "acquire.py reads sources/manifest.toml, dispatches html/html_multi/sefaria_api/access_to_insight formats. Writes raw/{tradition}/{id}.txt + .meta.toml. Idempotent via hash + existence check. Tested: gospel-of-thomas (28560 chars), sefer-yetirah (16275 chars), skip on re-run confirmed. raw/ added to .gitignore."
+  }
+}

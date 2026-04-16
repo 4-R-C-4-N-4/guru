@@ -1,0 +1,27 @@
+{
+  "id": "aa9ccafe",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build sefaria.py downloader (API client for Jewish texts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:00:21.460Z",
+  "updated_at": "2026-04-16T01:12:09.404Z",
+  "relationships": {
+    "parent": "192bbe6a"
+  },
+  "description": "## Goal\n\nBuild the Sefaria API client for Jewish texts (Sefer Yetzirah, Zohar selections).\n\n## File Location\n\n**scripts/downloaders/sefaria.py**\n\n## Source Characteristics\n\n**Sefaria API** (https://www.sefaria.org/) provides:\n- Public API for Jewish texts\n- JSON responses with text content\n- No authentication required for public texts\n- Endpoint: `https://www.sefaria.org/api/text/{text_key}`\n\n## API Usage\n\n### Get Text\n\n```python\nimport requests\n\ndef get_text(text_key: str, version: str = None) -> dict:\n    \"\"\"\n    Fetch text from Sefaria API.\n    \n    Args:\n        text_key: Text identifier (e.g., \"Sefer_Yetzirah\", \"Zohar/1/1\")\n        version: Version identifier (optional)\n        \n    Returns:\n        Dict with text, title, language, etc.\n    \"\"\"\n    url = f\"https://www.sefaria.org/api/text/{text_key}\"\n    if version:\n        url += f\"/{version}\"\n    \n    response = requests.get(url, timeout=30)\n    response.raise_for_status()\n    return response.json()\n```\n\n### Example Response\n\n```json\n{\n  \"text\": \"In thirty-two paths of wisdom...\",\n  \"title\": \"Sefer Yetzirah\",\n  \"language\": \"en\",\n  \"source\": \"Sefaria\",\n  \"sections\": [\n    {\n      \"text\": \"In thirty-two paths of wisdom...\",\n      \"title\": \"Chapter 1\"\n    }\n  ]\n}\n```\n\n## Implementation Strategy\n\n```python\ndef download(source: dict) -> tuple[str, dict]:\n    \"\"\"\n    Download and extract text from Sefaria API.\n    \n    Args:\n        source: Dict with id, text_key, tradition, format, translator, license, notes\n        \n    Returns:\n        Tuple of (clean_text, metadata_dict)\n    \"\"\"\n    text_key = source.get(\"text_key\", source[\"id\"])\n    \n    # Fetch from API\n    api_response = get_text(text_key)\n    \n    # Extract text content\n    if \"sections\" in api_response:\n        # Multi-section text\n        text_parts = []\n        for section in api_response[\"sections\"]:\n            text_parts.append(section.get(\"text\", \"\"))\n        text = \"\\n\\n\".join(text_parts)\n    else:\n        # Single text\n        text = api_response.get(\"text\", \"\")\n    \n    # Build metadata\n    metadata = {\n        \"source_url\": f\"https://www.sefaria.org/{text_key}\",\n        \"downloaded_at\": datetime.utcnow().isoformat() + \"Z\",\n        \"content_sha256\": content_hash(text),\n        \"format\": \"sefaria_api\",\n        \"extractor\": \"sefaria\",\n        \"license\": source.get(\"license\", \"public_domain\"),\n        \"translator\": source.get(\"translator\", \"\")\n    }\n    \n    return text, metadata\n```\n\n## Function Signature\n\n```python\ndef download(source: dict) -> tuple[str, dict]:\n    \"\"\"\n    Download and extract text from Sefaria API.\n    \n    Args:\n        source: Dict with id, text_key, tradition, format, translator, license, notes\n        \n    Returns:\n        Tuple of (clean_text, metadata_dict)\n    \"\"\"\n    pass\n```\n\n## v1 Texts to Support\n\n| Text | text_key | Notes |\n|------|----------|-------|\n| Sefer Yetzirah | Sefer_Yetirah | Complete text |\n| Zohar (selections) | Zohar/1/1 | Specific chapters |\n\n## Error Handling\n\n- Handle API rate limiting (429 responses)\n- Retry with exponential backoff\n- Log errors with text_key\n\n## Acceptance Criteria\n\n- [ ] Downloads Sefer Yetzirah correctly\n- [ ] Downloads Zohar selections correctly\n- [ ] Handles multi-section texts\n- [ ] Output is clean plaintext\n- [ ] Metadata includes correct source URL",
+  "work": {
+    "branch": "todo/192bbe6a",
+    "base_branch": "main",
+    "started_at": "2026-04-16T00:13:28.164Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9357141a21f6c4fa90be211f487488af4bc54629",
+    "resolved_at": "2026-04-16T01:12:09.404Z",
+    "resolved_by": "unknown",
+    "note": "Implemented using Sefaria v3 API (/api/v3/texts/ + /api/v2/raw/index/). CANONICAL_KEYS map corrects manifest typo (sefer-yetirah -> Sefer_Yetzirah). Fetches full books chapter-by-chapter. Tested: 16275 chars extracted for Sefer Yetzirah."
+  }
+}
