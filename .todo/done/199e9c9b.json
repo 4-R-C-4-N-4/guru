@@ -1,0 +1,27 @@
+{
+  "id": "199e9c9b",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build embed_corpus.py",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:06:52.703Z",
+  "updated_at": "2026-04-16T12:24:09.228Z",
+  "relationships": {
+    "parent": "348dcce9"
+  },
+  "description": "## Goal\n\nBuild `embed_corpus.py` — embeds every chunk in `corpus/` and upserts into the configured vector store with full metadata.\n\n## File Location\n\n`scripts/embed_corpus.py`\n\n## CLI\n\n```\nembed_corpus.py [--resume] [--reindex] [--tradition X] [--text Y]\n```\n\n## Responsibilities\n\n1. Load `config/embedding.toml`; instantiate the configured embedding provider and vector backend.\n2. Walk `corpus/**/chunks/*.toml`; for each chunk, build the metadata dict (id, tradition, text_id, text_name, section, translator, token_count, concepts).\n3. If `guru.db` is reachable, populate `concepts` from accepted EXPRESSES edges; otherwise leave `concepts=[]` for later backfill.\n4. Embed `content.body` and upsert (id, vector, metadata).\n5. Track which chunk IDs are already indexed; `--resume` skips them; `--reindex` ignores the cache and re-embeds everything.\n\n## Subtasks (from doc)\n\n- Embedding model abstraction (ollama / sentence_transformers / API)\n- Vector store abstraction (ChromaDB / Qdrant)\n- Progress tracking + `--resume`\n- Metadata construction from chunk TOML + guru.db\n\n## Acceptance Criteria\n\n- Vector count == chunk count after a full run\n- All metadata fields present and correctly typed\n- `--resume` and `--reindex` both behave as documented\n- Provider/backend swappable via config alone\n",
+  "work": {
+    "branch": "todo/348dcce9",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:40:14.566Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "bd358a9f67d362d52324df4ddddfbb331e59c068",
+    "resolved_at": "2026-04-16T12:24:09.228Z",
+    "resolved_by": "unknown",
+    "note": "scripts/embed_corpus.py + vector_store.py: 120 chunks embedded into ChromaDB via nomic-embed-text in ~4s. scripts/llm.py: shared provider abstraction — llamacpp (raw urllib, no openai SDK, handles thinking models via reasoning_content fallback), ollama (native API), anthropic, openai. tag_concepts.py and propose_edges.py both updated to use llm.py. Default provider=llamacpp/Carnice-27b-Q4_K_M.gguf at 127.0.0.1:8080. Tested: ~11s/chunk on 27B Q4."
+  }
+}
