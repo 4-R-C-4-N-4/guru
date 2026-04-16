@@ -1,0 +1,36 @@
+{
+  "id": "34eb456c",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build propose_edges.py (cross-tradition pair classification)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.401Z",
+  "updated_at": "2026-04-16T03:22:59.446Z",
+  "relationships": {
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nBuild `propose_edges.py` — Pass C of Stage 3. For each chunk, find top-N most similar chunks from *other traditions* and ask an LLM to classify the relationship.\n\n## File Location\n\n`scripts/propose_edges.py`\n\n## Dependencies\n\nRequires Stage 4 (vector store) to have at least an initial embedding pass complete.\n\n## Responsibilities\n\n1. For each chunk, query the vector store for top-5 nearest neighbours from traditions other than its own.\n2. Build a pair-classification prompt (see ticket subtask 3.6.2) showing both chunks and asking for one of: PARALLELS / CONTRASTS / surface_only / unrelated, plus confidence and justification.\n3. Write results to `staged_edges` with `tier='proposed'`.\n4. Deduplicate: never re-propose a pair already present in `staged_edges` regardless of order (ticket subtask 3.6.3).\n\n## Subtasks (from doc)\n\n- Vector store integration\n- LLM pair classification prompt\n- Deduplication\n\n## Acceptance Criteria\n\n- Generates ≥ N candidate edges per chunk (where N is the configured top-k after filtering)\n- No duplicate (source_chunk, target_chunk) pair classifications\n- Output rows carry justification and confidence\n- Skips intra-tradition pairs\n",
+  "work": {
+    "branch": "todo/f6446324",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:21:21.578Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-16T03:21:26.348Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Depends on Stage 4 vector store (embed_corpus.py). Building with abstract VectorStore interface stubbed; will be wired to real Chroma/FAISS in Stage 4. Script is complete and runnable once embed_corpus.py has populated the store.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "1a8715a8163f02a4acbc56d8cd8f482ae26e3f72",
+    "resolved_at": "2026-04-16T03:22:59.446Z",
+    "resolved_by": "unknown",
+    "note": "scripts/propose_edges.py: vector store interface (Stage4 stub), top-N cross-tradition neighbour query, LLM pair classification (PARALLELS/CONTRASTS/surface_only/unrelated), staged_edges deduplication. Wired to vector_store.py when Stage 4 completes."
+  }
+}

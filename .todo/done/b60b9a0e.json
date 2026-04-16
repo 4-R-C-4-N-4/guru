@@ -1,0 +1,27 @@
+{
+  "id": "b60b9a0e",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build review_edges.py (CLI review tool for staged edges)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.434Z",
+  "updated_at": "2026-04-16T03:22:59.489Z",
+  "relationships": {
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nBuild `review_edges.py` — interactive CLI for human review of `staged_edges` from Pass C.\n\n## File Location\n\n`scripts/review_edges.py`\n\n## Responsibilities\n\n1. Query `staged_edges` with `status='pending'` (filterable by edge_type, source/target tradition, confidence threshold).\n2. Display both source and target chunks side-by-side with their citations, plus the LLM's edge_type / justification / confidence.\n3. Reviewer keys: accept (promote to live `edges` table with `tier='verified'`), reject, reclassify (change edge_type), or skip.\n4. Unreviewed accepted edges remain `tier='proposed'`; only the reviewer's accept promotes to `verified`.\n5. Updates `status`, `reviewed_by`, `reviewed_at`.\n\n## Acceptance Criteria\n\n- Accepted edges appear in the live `edges` table with the reviewer-set tier\n- Rejected edges remain in staging marked `rejected`\n- Side-by-side display includes full citation metadata\n- Review state survives restart\n",
+  "work": {
+    "branch": "todo/f6446324",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:22:02.396Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "1a8715a8163f02a4acbc56d8cd8f482ae26e3f72",
+    "resolved_at": "2026-04-16T03:22:59.489Z",
+    "resolved_by": "unknown",
+    "note": "scripts/review_edges.py: a/p/r/c/s/q review loop. a=accept(verified), p=accept(proposed), c=reclassify. Side-by-side chunk display with citations. Accepted edges promoted to live edges table."
+  }
+}
