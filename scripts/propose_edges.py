@@ -32,6 +32,9 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
+sys.path.insert(0, str(Path(__file__).parent))
+from llm import call_llm, parse_json_response
+
 
 # ── vector store interface (wired in Stage 4) ─────────────────────────────────
 
@@ -88,57 +91,10 @@ Respond with:
 
 # ── providers ─────────────────────────────────────────────────────────────────
 
-def call_llm(provider: str, model: str, prompt: str) -> dict:
-    import urllib.request
-
-    if provider == "ollama":
-        payload = json.dumps({
-            "model": model,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-            "stream": False,
-        }).encode()
-        req = urllib.request.Request(
-            "http://localhost:11434/api/chat",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            raw = json.loads(resp.read())["message"]["content"]
-
-    elif provider == "anthropic":
-        import anthropic
-        client = anthropic.Anthropic()
-        msg = client.messages.create(
-            model=model, max_tokens=512,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        raw = msg.content[0].text
-
-    elif provider == "openai":
-        from openai import OpenAI
-        resp = OpenAI().chat.completions.create(
-            model=model, max_tokens=512,
-            response_format={"type": "json_object"},
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-        )
-        raw = resp.choices[0].message.content
-
-    else:
-        raise ValueError(f"Unknown provider: {provider}")
-
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        import re
-        m = re.search(r'\{.*\}', raw, re.DOTALL)
-        return json.loads(m.group()) if m else {}
+def call_llm_pair(provider: str, model: str, prompt: str) -> dict:
+    raw = call_llm(provider, model, SYSTEM_PROMPT, prompt, max_tokens=800)
+    result = parse_json_response(raw)
+    return result if isinstance(result, dict) else {}
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -243,7 +199,7 @@ def run_proposals(
             prompt = build_pair_prompt(chunk_a, chunk_b)
 
             try:
-                result = call_llm(provider, model, prompt)
+                result = call_llm_pair(provider, model, prompt)
                 edge_type = result.get("edge_type", "unrelated")
                 confidence = float(result.get("confidence", 0.0))
                 justification = result.get("justification", "")
@@ -269,8 +225,8 @@ def run_proposals(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Propose cross-tradition edges")
-    parser.add_argument("--provider", default="ollama")
-    parser.add_argument("--model", default="llama3")
+    parser.add_argument("--provider", default="llamacpp")
+    parser.add_argument("--model", default="Carnice-27b-Q4_K_M.gguf")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--top-n", type=int, default=5)
     parser.add_argument("--min-similarity", type=float, default=0.75)
