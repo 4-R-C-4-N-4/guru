@@ -1,0 +1,7 @@
+tradition = "jewish_mysticism"
+text_id = "sefer-yetirah"
+text_name = "Sefer Yetzirah"
+translator = "Sefaria Community Translation"
+source_url = "https://www.sefaria.org/Sefer_Yetirah"
+sections_format = "paragraph"
+chunk_count = 6

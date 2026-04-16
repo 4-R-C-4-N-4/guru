@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.105"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 105"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 22
+
+[content]
+body = "Jesus said, \"He who knows the father and the mother will be called the son of a harlot.\""
+
+[annotations]
+concepts = []
+related_chunks = []

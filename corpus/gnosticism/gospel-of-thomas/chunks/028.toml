@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.028"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 28"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 99
+
+[content]
+body = "Jesus said, \"I took my place in the midst of the world, and I appeared to them in flesh. I found all of them intoxicated; I found none of them thirsty. And my soul became afflicted for the sons of men, because they are blind in their hearts and do not have sight; for empty they came into the world, and empty too they seek to leave the world. But for the moment they are intoxicated. When they shake off their wine, then they will repent.\""
+
+[annotations]
+concepts = []
+related_chunks = []

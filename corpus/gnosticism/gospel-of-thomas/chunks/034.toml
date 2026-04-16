@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.034"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 34"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 21
+
+[content]
+body = "Jesus said, \"If a blind man leads a blind man, they will both fall into a pit.\""
+
+[annotations]
+concepts = []
+related_chunks = []

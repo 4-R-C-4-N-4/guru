@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.067"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 67"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 21
+
+[content]
+body = "Jesus said, \"If one who knows the all still feels a personal deficiency, he is completely deficient.\""
+
+[annotations]
+concepts = []
+related_chunks = []

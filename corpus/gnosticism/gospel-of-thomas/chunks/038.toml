@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.038"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 38"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 47
+
+[content]
+body = "Jesus said, \"Many times have you desired to hear these words which I am saying to you, and you have no one else to hear them from. There will be days when you will look for me and will not find me.\""
+
+[annotations]
+concepts = []
+related_chunks = []

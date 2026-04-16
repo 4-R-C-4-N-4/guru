@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.014"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 14"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 106
+
+[content]
+body = "Jesus said to them, \"If you fast, you will give rise to sin for yourselves; and if you pray, you will be condemned; and if you give alms, you will do harm to your spirits. When you go into any land and walk about in the districts, if they receive you, eat what they will set before you, and heal the sick among them. For what goes into your mouth will not defile you, but that which issues from your mouth - it is that which will defile you.\""
+
+[annotations]
+concepts = []
+related_chunks = []

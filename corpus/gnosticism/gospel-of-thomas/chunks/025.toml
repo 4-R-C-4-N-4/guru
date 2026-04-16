@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.025"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 25"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 20
+
+[content]
+body = "Jesus said, \"Love your brother like your soul, guard him like the pupil of your eye.\""
+
+[annotations]
+concepts = []
+related_chunks = []

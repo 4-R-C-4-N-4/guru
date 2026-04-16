@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.061"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 61"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 118
+
+[content]
+body = "Jesus said, \"Two will rest on a bed: the one will die, and the other will live.\" Salome said, \"Who are you, man, that you ... have come up on my couch and eaten from my table?\" Jesus said to her, \"I am he who exists from the undivided. I was given some of the things of my father.\" <...> \"I am your disciple.\" <...> \"Therefore I say, if he is destroyed, he will be filled with light, but if he is divided, he will be filled with darkness.\""
+
+[annotations]
+concepts = []
+related_chunks = []

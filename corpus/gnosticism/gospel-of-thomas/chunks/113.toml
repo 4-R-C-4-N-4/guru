@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.113"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 113"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 68
+
+[content]
+body = "His disciples said to him, \"When will the kingdom come?\" <Jesus said,> \"It will not come by waiting for it. It will not be a matter of saying 'here it is' or 'there it is.' Rather, the kingdom of the father is spread out upon the earth, and men do not see it.\""
+
+[annotations]
+concepts = []
+related_chunks = []

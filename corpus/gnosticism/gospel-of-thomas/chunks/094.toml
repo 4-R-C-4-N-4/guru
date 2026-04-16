@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.094"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 94"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 19
+
+[content]
+body = "Jesus said, \"He who seeks will find, and he who knocks will be let in.\""
+
+[annotations]
+concepts = []
+related_chunks = []

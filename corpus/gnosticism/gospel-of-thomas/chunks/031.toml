@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.031"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 31"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 21
+
+[content]
+body = "Jesus said, \"No prophet is accepted in his own village; no physician heals those who know him.\""
+
+[annotations]
+concepts = []
+related_chunks = []

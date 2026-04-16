@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.097"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 97"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 82
+
+[content]
+body = "Jesus said, \"The kingdom of the father is like a certain woman who was carrying a jar full of meal. While she was walking on the road, still some distance from home, the handle of the jar broke and the meal emptied out behind her on the road. She did not realize it; she had noticed no accident. When she reached her house, she set the jar down and found it empty.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.010"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 10"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 24
+
+[content]
+body = "Jesus said, \"I have cast fire upon the world, and see, I am guarding it until it blazes.\""
+
+[annotations]
+concepts = []
+related_chunks = []

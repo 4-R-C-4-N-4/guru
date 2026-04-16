@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.sefer-yetirah.006"
+tradition = "jewish_mysticism"
+text_name = "Sefer Yetzirah"
+section = "Section 1f"
+translator = "Sefaria Community Translation"
+source_url = "https://www.sefaria.org/Sefer_Yetirah"
+token_count = 222
+
+[content]
+body = "And EL, the faithful king, rules over them all: One over Three, Three over Seven, Seven over Twelve, and all of them fastened this one to that one.\n\nAnd as soon as our father Abraham, peace be upon him, had viewed and witnessed and seen and searched and understood and carved and hewn and exchanged and formed, he raised up his hand.\n\nThe Lord of All, Blessed Is He, revealed Himself to him.\n\nHe returned him to his bosom and kissed him upon the head, and called him, “My beloved,” and cut a covenant for him and his seed.\n\nAnd they believed in Hashem, and He reckoned righteousness to him.\n\nHe cut for him a covenant between his ten toes, and this is the covenant of circumcision; and his ten fingers, [the covenant of] the tongue.\n\nHe bound to him the Twenty-Two Letters with His tongue and revealed to him their foundation.\n\nHe dragged them in Water and lit them in Fire and shook them in Wind, and burned them in the Seven [Stars] and drove them in the Twelve Constellations."
+
+[annotations]
+concepts = []
+related_chunks = []

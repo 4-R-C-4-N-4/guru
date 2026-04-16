@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.093"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 93"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 40
+
+[content]
+body = "<Jesus said,> \"Do not give what is holy to dogs, lest they throw them on the dung-heap. Do not throw the pearls to swine, lest they [...] it [...].\""
+
+[annotations]
+concepts = []
+related_chunks = []

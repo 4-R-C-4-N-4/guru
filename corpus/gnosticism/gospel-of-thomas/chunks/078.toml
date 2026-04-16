@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.078"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 78"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 57
+
+[content]
+body = "Jesus said, \"Why have you come out into the desert? To see a reed shaken by the wind? And to see a man clothed in fine garments like your kings and your great men? Upon them are the fine garments, and they are unable to discern the truth.\""
+
+[annotations]
+concepts = []
+related_chunks = []

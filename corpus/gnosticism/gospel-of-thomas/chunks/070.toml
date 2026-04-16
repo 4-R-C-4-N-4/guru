@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.070"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 70"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 39
+
+[content]
+body = "Jesus said, \"That which you have will save you if you bring it forth from yourselves. That which you do not have within you will kill you if you do not have it within you.\""
+
+[annotations]
+concepts = []
+related_chunks = []

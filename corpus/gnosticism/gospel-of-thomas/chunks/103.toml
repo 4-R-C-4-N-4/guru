@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.103"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 103"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 36
+
+[content]
+body = "Jesus said, \"Fortunate is the man who knows where the brigands will enter, so that he may get up, muster his domain, and arm himself before they invade.\""
+
+[annotations]
+concepts = []
+related_chunks = []

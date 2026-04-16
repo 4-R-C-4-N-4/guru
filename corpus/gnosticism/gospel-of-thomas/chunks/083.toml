@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.083"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 83"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 43
+
+[content]
+body = "Jesus said, \"The images are manifest to man, but the light in them remains concealed in the image of the light of the father. He will become manifest, but his image will remain concealed by his light.\""
+
+[annotations]
+concepts = []
+related_chunks = []

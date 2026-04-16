@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.033"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 33"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 66
+
+[content]
+body = "Jesus said, \"Preach from your housetops that which you will hear in your ear. For no one lights a lamp and puts it under a bushel, nor does he put it in a hidden place, but rather he sets it on a lampstand so that everyone who enters and leaves will see its light.\""
+
+[annotations]
+concepts = []
+related_chunks = []

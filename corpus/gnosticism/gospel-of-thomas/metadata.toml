@@ -1,0 +1,7 @@
+tradition = "gnosticism"
+text_id = "gospel-of-thomas"
+text_name = "Gospel of Thomas"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+sections_format = "logion"
+chunk_count = 114

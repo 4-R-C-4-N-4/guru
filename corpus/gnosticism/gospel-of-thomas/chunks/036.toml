@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.036"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 36"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 23
+
+[content]
+body = "Jesus said, \"Do not be concerned from morning until evening and from evening until morning about what you will wear.\""
+
+[annotations]
+concepts = []
+related_chunks = []

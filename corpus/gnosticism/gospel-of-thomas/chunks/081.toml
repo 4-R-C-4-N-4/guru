@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.081"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 81"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 23
+
+[content]
+body = "Jesus said, \"Let him who has grown rich be king, and let him who possesses power renounce it.\""
+
+[annotations]
+concepts = []
+related_chunks = []

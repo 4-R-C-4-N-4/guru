@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.008"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 8"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 72
+
+[content]
+body = "And he said, \"The man is like a wise fisherman who cast his net into the sea and drew it up from the sea full of small fish. Among them the wise fisherman found a fine large fish. He threw all the small fish back into the sea and chose the large fish without difficulty. Whoever has ears to hear, let him hear.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.009"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 9"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 100
+
+[content]
+body = "Jesus said, \"Now the sower went out, took a handful (of seeds), and scattered them. Some fell on the road; the birds came and gathered them up. Others fell on the rock, did not take root in the soil, and did not produce ears. And others fell on thorns; they choked the seed(s) and worms ate them. And others fell on the good soil and it produced good fruit: it bore sixty per measure and a hundred and twenty per measure.\""
+
+[annotations]
+concepts = []
+related_chunks = []

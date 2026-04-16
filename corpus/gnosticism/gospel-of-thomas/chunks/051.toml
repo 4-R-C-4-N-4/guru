@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.051"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 51"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 48
+
+[content]
+body = "His disciples said to him, \"When will the repose of the dead come about, and when will the new world come?\" He said to them, \"What you look forward to has already come, but you do not recognize it.\""
+
+[annotations]
+concepts = []
+related_chunks = []

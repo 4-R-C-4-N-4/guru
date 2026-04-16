@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.062"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 62"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 38
+
+[content]
+body = "Jesus said, \"It is to those who are worthy of my mysteries that I tell my mysteries. Do not let your left (hand) know what your right (hand) is doing.\""
+
+[annotations]
+concepts = []
+related_chunks = []

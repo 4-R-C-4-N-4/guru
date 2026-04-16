@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.088"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 88"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 54
+
+[content]
+body = "Jesus said, \"The angels and the prophets will come to you and give to you those things you (already) have. And you too, give them those things which you have, and say to yourselves, 'When will they come and take what is theirs?'\""
+
+[annotations]
+concepts = []
+related_chunks = []

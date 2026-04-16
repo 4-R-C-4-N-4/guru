@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.101"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 101"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 59
+
+[content]
+body = "<Jesus said,> \"Whoever does not hate his father and his mother as I do cannot become a disciple to me. And whoever does not love his father and his mother as I do cannot become a disciple to me. For my mother [...], but my true mother gave me life.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.054"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 54"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 19
+
+[content]
+body = "Jesus said, \"Blessed are the poor, for yours is the kingdom of heaven.\""
+
+[annotations]
+concepts = []
+related_chunks = []

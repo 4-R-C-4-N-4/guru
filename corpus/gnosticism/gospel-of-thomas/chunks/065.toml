@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.065"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 65"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 151
+
+[content]
+body = "He said, \"There was a good man who owned a vineyard. He leased it to tenant farmers so that they might work it and he might collect the produce from them. He sent his servant so that the tenants might give him the produce of the vineyard. They seized his servant and beat him, all but killing him. The servant went back and told his master. The master said, 'Perhaps he did not recognize them.' He sent another servant. The tenants beat this one as well. Then the owner sent his son and said, 'Perhaps they will show respect to my son.' Because the tenants knew that it was he who was the heir to the vineyard, they seized him and killed him. Let him who has ears hear.\""
+
+[annotations]
+concepts = []
+related_chunks = []

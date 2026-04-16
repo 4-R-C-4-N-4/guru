@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.060"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 60"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 119
+
+[content]
+body = "<They saw> a Samaritan carrying a lamb on his way to Judea. He said to his disciples, \"That man is round about the lamb.\" They said to him, \"So that he may kill it and eat it.\" He said to them, \"While it is alive, he will not eat it, but only when he has killed it and it has become a corpse.\" They said to him, \"He cannot do so otherwise.\" He said to them, \"You too, look for a place for yourself within repose, lest you become a corpse and be eaten.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.071"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 71"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 21
+
+[content]
+body = "Jesus said, \"I shall destroy this house, and no one will be able to build it [...].\""
+
+[annotations]
+concepts = []
+related_chunks = []

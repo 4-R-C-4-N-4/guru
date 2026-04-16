@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.006"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 6"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 79
+
+[content]
+body = "His disciples questioned him and said to him, \"Do you want us to fast? How shall we pray? Shall we give alms? What diet shall we observe?\" Jesus said, \"Do not tell lies, and do not do what you hate, for all things are plain in the sight of heaven. For nothing hidden will not become manifest, and nothing covered will remain without being uncovered.\""
+
+[annotations]
+concepts = []
+related_chunks = []

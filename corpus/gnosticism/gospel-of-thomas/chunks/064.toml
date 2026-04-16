@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.064"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 64"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 300
+
+[content]
+body = "Jesus said, \"A man had received visitors. And when he had prepared the dinner, he sent his servant to invite the guests. He went to the first one and said to him, 'My master invites you.' He said, 'I have claims against some merchants. They are coming to me this evening. I must go and give them my orders. I ask to be excused from the dinner.' He went to another and said to him, 'My master has invited you.' He said to him, 'I have just bought a house and am required for the day. I shall not have any spare time.' He went to another and said to him, 'My master invites you.' He said to him, 'My friend is going to get married, and I am to prepare the banquet. I shall not be able to come. I ask to be excused from the dinner.' He went to another and said to him, 'My master invites you.' He said to him, 'I have just bought a farm, and I am on my way to collect the rent. I shall not be able to come. I ask to be excused.' The servant returned and said to his master, 'Those whom you invited to the dinner have asked to be excused.' The master said to his servant, 'Go outside to the streets and bring back those whom you happen to meet, so that they may dine.' Businessmen and merchants will not enter the places of my father.\""
+
+[annotations]
+concepts = []
+related_chunks = []

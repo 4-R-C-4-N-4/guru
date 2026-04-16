@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.107"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 107"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 68
+
+[content]
+body = "Jesus said, \"The kingdom is like a shepherd who had a hundred sheep. One of them, the largest, went astray. He left the ninety-nine sheep and looked for that one until he found it. When he had gone to such trouble, he said to the sheep, 'I care for you more than the ninety-nine.'\""
+
+[annotations]
+concepts = []
+related_chunks = []

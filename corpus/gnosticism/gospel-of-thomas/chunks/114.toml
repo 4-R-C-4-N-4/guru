@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.114"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 114"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 193
+
+[content]
+body = "Simon Peter said to him, \"Let Mary leave us, for women are not worthy of life.\" Jesus said, \"I myself shall lead her in order to make her male, so that she too may become a living spirit resembling you males. For every woman who will make herself male will enter the kingdom of heaven.\" The Gospel According to Thomas Original translation of this text was prepared by members of the Coptic Gnostic Library Project of the Institute for Antiquity and Christianity, Claremont Graduate School. The Coptic Gnostic Library Project was funded by UNESCO, the National Endowment for the Humanities, and other Institutions. E. J. Brill has asserted copyright on texts published by the Coptic Gnostic Library Project. The translation presented here has been edited, modified and formatted for use in the Gnostic Society Library. For academic citation, please refer to published editions of this text. | Nag Hammadi Library | Gnostic Society Library | Gnosis Archive |"
+
+[annotations]
+concepts = []
+related_chunks = []

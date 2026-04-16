@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.072"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 72"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 55
+
+[content]
+body = "A man said to him, \"Tell my brothers to divide my father's possessions with me.\" He said to him, \"O man, who has made me a divider?\" He turned to his disciples and said to them, \"I am not a divider, am I?\""
+
+[annotations]
+concepts = []
+related_chunks = []

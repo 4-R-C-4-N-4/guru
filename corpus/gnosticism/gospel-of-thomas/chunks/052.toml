@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.052"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 52"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 47
+
+[content]
+body = "His disciples said to him, \"Twenty-four prophets spoke in Israel, and all of them spoke in you.\" He said to them, \"You have omitted the one living in your presence and have spoken (only) of the dead.\""
+
+[annotations]
+concepts = []
+related_chunks = []

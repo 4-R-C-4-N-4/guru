@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.084"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 84"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 42
+
+[content]
+body = "Jesus said, \"When you see your likeness, you rejoice. But when you see your images which came into being before you, and which neither die not become manifest, how much you will have to bear!\""
+
+[annotations]
+concepts = []
+related_chunks = []

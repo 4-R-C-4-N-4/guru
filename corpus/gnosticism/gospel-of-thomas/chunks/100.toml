@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.100"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 100"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 48
+
+[content]
+body = "They showed Jesus a gold coin and said to him, \"Caesar's men demand taxes from us.\" He said to them, \"Give Caesar what belongs to Caesar, give God what belongs to God, and give me what is mine.\""
+
+[annotations]
+concepts = []
+related_chunks = []

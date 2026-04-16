@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.003"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 3"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 122
+
+[content]
+body = "Jesus said, \"If those who lead you say to you, 'See, the kingdom is in the sky,' then the birds of the sky will precede you. If they say to you, 'It is in the sea,' then the fish will precede you. Rather, the kingdom is inside of you, and it is outside of you. When you come to know yourselves, then you will become known, and you will realize that it is you who are the sons of the living father. But if you will not know yourselves, you dwell in poverty and it is you who are that poverty.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.058"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 58"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 17
+
+[content]
+body = "Jesus said, \"Blessed is the man who has suffered and found life.\""
+
+[annotations]
+concepts = []
+related_chunks = []
