@@ -1,0 +1,27 @@
+{
+  "id": "4b5863bc",
+  "type": "chore",
+  "state": "done",
+  "summary": "Write guru.db schema (nodes, edges, staged_tags, staged_edges, staged_concepts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.262Z",
+  "updated_at": "2026-04-16T03:19:13.323Z",
+  "relationships": {
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nDefine the SQLite schema for `data/guru.db` covering live graph tables and Stage 3 staging tables.\n\n## Tables\n\n**Live graph:**\n- `nodes (id, type, tradition_id?, label, definition?, metadata_json)` — type ∈ {tradition, concept, chunk}\n- `edges (id, source_id, target_id, type, tier, justification, created_at)` — type ∈ {BELONGS_TO, EXPRESSES, PARALLELS, CONTRASTS, DERIVES_FROM}; tier ∈ {verified, proposed, inferred}\n\n**Staging (per docs/guru-implementation.md §\"Stage 3\"):**\n- `staged_tags (id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status, reviewed_by, reviewed_at)`\n- `staged_edges (id, source_concept, target_concept, edge_type, confidence, justification, source_chunk, target_chunk, status, tier, reviewed_by, reviewed_at)`\n- `staged_concepts (id, proposed_id, definition, motivating_chunk, status, reviewed_by, reviewed_at)`\n\n**Bookkeeping:**\n- `tagging_progress (chunk_id, completed_at)` — supports `--resume` on `tag_concepts.py`\n\n## Acceptance Criteria\n\n- Schema is checked into the repo as a `.sql` file or Python module\n- All foreign keys and indexes for hot lookups (chunk_id, concept_id, status) are declared\n- Compatible with downstream scripts (`graph_bootstrap.py`, `tag_concepts.py`, `review_*.py`, `propose_edges.py`)\n",
+  "work": {
+    "branch": "todo/f6446324",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:18:48.423Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "aa314dfea1a9089ad273edaaee99095094666443",
+    "resolved_at": "2026-04-16T03:19:13.323Z",
+    "resolved_by": "unknown",
+    "note": "scripts/schema.sql: nodes, edges, staged_tags, staged_edges, staged_concepts, tagging_progress. All indexes, FK constraints, CHECK constraints. Applied to fresh data/guru.db — 6 tables confirmed."
+  }
+}
