@@ -1,0 +1,27 @@
+{
+  "id": "ebba37dd",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build tag_concepts.py (LLM-assisted tagging with structured scoring prompt)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.339Z",
+  "updated_at": "2026-04-16T03:20:42.167Z",
+  "relationships": {
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nBuild `tag_concepts.py` — Pass B of Stage 3. For each chunk, ask an LLM to score it against the concept taxonomy and write proposals to `staged_tags`.\n\n## File Location\n\n`scripts/tag_concepts.py`\n\n## CLI\n\n```\ntag_concepts.py --provider {ollama|anthropic|openai} --model <name> [--batch-size N] [--resume] [--tradition X] [--text Y]\n```\n\n## Responsibilities\n\n1. Load taxonomy from `concepts/taxonomy.toml`.\n2. For each chunk (filtered by tradition/text if given), build the structured scoring prompt (see arch doc §4.6.1 + ticket subtask 3.4.4).\n3. Send to the configured provider (ticket subtask 3.4.1 — provider abstraction).\n4. Parse the structured response and upsert into `staged_tags`. Concepts not in the taxonomy go in with `is_new_concept=true` and a `new_concept_def`.\n5. Track progress in `tagging_progress` so `--resume` skips completed chunks.\n6. Honor `--batch-size` for rate-limit pacing.\n\n## Subtasks (from doc)\n\n- Provider abstraction (ollama / anthropic / openai)\n- Progress tracking + `--resume`\n- Batch-size rate limiting\n- Structured scoring prompt template\n\n## Acceptance Criteria\n\n- Every chunk has at least one `staged_tags` row after a full run\n- `--resume` correctly skips completed chunks\n- Provider can be swapped via flag\n- Scoring output is structured (parseable score 0-3 + justification)\n",
+  "work": {
+    "branch": "todo/f6446324",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:19:55.839Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "bdb24cb67b9eb9027cf87781fb9112ff3e8538e6",
+    "resolved_at": "2026-04-16T03:20:42.167Z",
+    "resolved_by": "unknown",
+    "note": "scripts/tag_concepts.py: structured scoring prompt, 3 provider backends (ollama/anthropic/openai), JSON response parsing, staged_tags upsert, tagging_progress for --resume, --batch-size rate limiting."
+  }
+}

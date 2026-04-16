@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.024"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 24"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 67
+
+[content]
+body = "His disciples said to him, \"Show us the place where you are, since it is necessary for us to seek it.\" He said to them, \"Whoever has ears, let him hear. There is light within a man of light, and he lights up the whole world. If he does not shine, he is darkness.\""
+
+[annotations]
+concepts = []
+related_chunks = []

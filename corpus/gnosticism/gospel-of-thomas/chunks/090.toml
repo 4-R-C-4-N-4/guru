@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.090"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 90"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 30
+
+[content]
+body = "Jesus said, \"Come unto me, for my yoke is easy and my lordship is mild, and you will find repose for yourselves.\""
+
+[annotations]
+concepts = []
+related_chunks = []

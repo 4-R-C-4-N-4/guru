@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.106"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 106"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 35
+
+[content]
+body = "Jesus said, \"When you make the two one, you will become the sons of man, and when you say, 'Mountain, move away,' it will move away.\""
+
+[annotations]
+concepts = []
+related_chunks = []

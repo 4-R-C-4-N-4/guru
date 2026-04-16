@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.037"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 37"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 67
+
+[content]
+body = "His disciples said, \"When will you become revealed to us and when shall we see you?\" Jesus said, \"When you disrobe without being ashamed and take up your garments and place them under your feet like little children and tread on them, then will you see the son of the living one, and you will not be afraid\""
+
+[annotations]
+concepts = []
+related_chunks = []

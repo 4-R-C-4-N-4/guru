@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.095"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 95"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 30
+
+[content]
+body = "Jesus said, \"If you have money, do not lend it at interest, but give it to one from whom you will not get it back.\""
+
+[annotations]
+concepts = []
+related_chunks = []

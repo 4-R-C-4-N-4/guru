@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.076"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 76"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 67
+
+[content]
+body = "Jesus said, \"The kingdom of the father is like a merchant who had a consignment of merchandise and who discovered a pearl. That merchant was shrewd. He sold the merchandise and bought the pearl alone for himself. You too, seek his unfailing and enduring treasure where no moth comes near to devour and no worm destroys.\""
+
+[annotations]
+concepts = []
+related_chunks = []

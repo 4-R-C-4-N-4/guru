@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.040"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 40"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 31
+
+[content]
+body = "Jesus said, \"A grapevine has been planted outside of the father, but being unsound, it will be pulled up by its roots and destroyed.\""
+
+[annotations]
+concepts = []
+related_chunks = []

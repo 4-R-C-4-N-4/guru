@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.046"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 46"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 65
+
+[content]
+body = "Jesus said, \"Among those born of women, from Adam until John the Baptist, there is no one so superior to John the Baptist that his eyes should not be lowered (before him). Yet I have said, whichever one of you comes to be a child will be acquainted with the kingdom and will become superior to John.\""
+
+[annotations]
+concepts = []
+related_chunks = []

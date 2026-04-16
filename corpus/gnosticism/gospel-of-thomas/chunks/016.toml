@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.016"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 16"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 88
+
+[content]
+body = "Jesus said, \"Men think, perhaps, that it is peace which I have come to cast upon the world. They do not know that it is dissension which I have come to cast upon the earth: fire, sword, and war. For there will be five in a house: three will be against two, and two against three, the father against the son, and the son against the father. And they will stand solitary.\""
+
+[annotations]
+concepts = []
+related_chunks = []

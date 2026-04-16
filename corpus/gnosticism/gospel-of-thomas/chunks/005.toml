@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.005"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 5"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 36
+
+[content]
+body = "Jesus said, \"Recognize what is in your sight, and that which is hidden from you will become plain to you . For there is nothing hidden which will not become manifest.\""
+
+[annotations]
+concepts = []
+related_chunks = []

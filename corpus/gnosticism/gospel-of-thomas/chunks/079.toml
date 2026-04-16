@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.079"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 79"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 82
+
+[content]
+body = "A woman from the crowd said to him, \"Blessed are the womb which bore you and the breasts which nourished you.\" He said to her, \"Blessed are those who have heard the word of the father and have truly kept it. For there will be days when you will say, 'Blessed are the womb which has not conceived and the breasts which have not given milk.'\""
+
+[annotations]
+concepts = []
+related_chunks = []

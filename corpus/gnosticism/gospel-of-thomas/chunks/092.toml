@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.092"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 92"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 44
+
+[content]
+body = "Jesus said, \"Seek and you will find. Yet, what you asked me about in former times and which I did not tell you then, now I do desire to tell, but you do not inquire after it.\""
+
+[annotations]
+concepts = []
+related_chunks = []

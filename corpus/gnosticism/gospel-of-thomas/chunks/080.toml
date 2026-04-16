@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.080"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 80"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 28
+
+[content]
+body = "Jesus said, \"He who has recognized the world has found the body, but he who has found the body is superior to the world.\""
+
+[annotations]
+concepts = []
+related_chunks = []

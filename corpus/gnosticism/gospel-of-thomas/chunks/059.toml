@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.059"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 59"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 30
+
+[content]
+body = "Jesus said, \"Take heed of the living one while you are alive, lest you die and seek to see him and be unable to do so.\""
+
+[annotations]
+concepts = []
+related_chunks = []

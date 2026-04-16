@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.030"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 30"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 26
+
+[content]
+body = "Jesus said, \"Where there are three gods, they are gods. Where there are two or one, I am with him.\""
+
+[annotations]
+concepts = []
+related_chunks = []

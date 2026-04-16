@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.013"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 13"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 170
+
+[content]
+body = "Jesus said to his disciples, \"Compare me to someone and tell me whom I am like.\" Simon Peter said to him, \"You are like a righteous angel.\" Matthew said to him, \"You are like a wise philosopher.\" Thomas said to him, \"Master, my mouth is wholly incapable of saying whom you are like.\" Jesus said, \"I am not your master. Because you have drunk, you have become intoxicated from the bubbling spring which I have measured out.\" And he took him and withdrew and told him three things. When Thomas returned to his companions, they asked him, \"What did Jesus say to you?\" Thomas said to them, \"If I tell you one of the things which he told me, you will pick up stones and throw them at me; a fire will come out of the stones and burn you up.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.099"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 99"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 50
+
+[content]
+body = "The disciples said to him, \"Your brothers and your mother are standing outside.\" He said to them, \"Those here who do the will of my father are my brothers and my mother. It is they who will enter the kingdom of my father.\""
+
+[annotations]
+concepts = []
+related_chunks = []

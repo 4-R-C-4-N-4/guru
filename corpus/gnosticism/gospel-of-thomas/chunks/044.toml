@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.044"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 44"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 45
+
+[content]
+body = "Jesus said, \"Whoever blasphemes against the father will be forgiven, and whoever blasphemes against the son will be forgiven, but whoever blasphemes against the holy spirit will not be forgiven either on earth or in heaven.\""
+
+[annotations]
+concepts = []
+related_chunks = []

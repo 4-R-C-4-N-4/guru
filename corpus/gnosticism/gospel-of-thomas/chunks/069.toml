@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.069"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 69"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 44
+
+[content]
+body = "Jesus said, \"Blessed are they who have been persecuted within themselves. It is they who have truly come to know the father. Blessed are the hungry, for the belly of him who desires will be filled.\""
+
+[annotations]
+concepts = []
+related_chunks = []

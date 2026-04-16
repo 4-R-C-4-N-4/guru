@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.073"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 73"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 32
+
+[content]
+body = "Jesus said, \"The harvest is great but the laborers are few. Beseech the Lord, therefore, to send out laborers to the harvest.\""
+
+[annotations]
+concepts = []
+related_chunks = []

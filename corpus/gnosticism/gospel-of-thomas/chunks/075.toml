@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.075"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 75"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 23
+
+[content]
+body = "Jesus said, \"Many are standing at the door, but it is the solitary who will enter the bridal chamber.\""
+
+[annotations]
+concepts = []
+related_chunks = []

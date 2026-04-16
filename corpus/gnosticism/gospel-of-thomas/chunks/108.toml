@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.108"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 108"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 34
+
+[content]
+body = "Jesus said, \"He who will drink from my mouth will become like me. I myself shall become he, and the things that are hidden will be revealed to him.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.053"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 53"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 50
+
+[content]
+body = "His disciples said to him, \"Is circumcision beneficial or not?\" He said to them, \"If it were beneficial, their father would beget them already circumcised from their mother. Rather, the true circumcision in spirit has become completely profitable.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.111"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 111"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 47
+
+[content]
+body = "Jesus said, \"The heavens and the earth will be rolled up in your presence. And the one who lives from the living one will not see death.\" Does not Jesus say, \"Whoever finds himself is superior to the world?\""
+
+[annotations]
+concepts = []
+related_chunks = []

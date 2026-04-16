@@ -1,0 +1,27 @@
+{
+  "id": "083a1785",
+  "type": "chore",
+  "state": "done",
+  "summary": "Build review_tags.py (CLI review tool for staged tags)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-15T18:05:23.370Z",
+  "updated_at": "2026-04-16T03:21:17.469Z",
+  "relationships": {
+    "parent": "f6446324"
+  },
+  "description": "## Goal\n\nBuild `review_tags.py` — interactive CLI for human review of LLM-staged concept tags.\n\n## File Location\n\n`scripts/review_tags.py`\n\n## Responsibilities\n\n1. Query `staged_tags` (with filters: by tradition, by text, by concept, by score).\n2. Present each row: chunk body, proposed concept (with definition), score, LLM justification.\n3. Reviewer keys: accept / reject / reassign-to-different-concept / skip.\n4. Accepted rows with score ≥ 2 promote to live `EXPRESSES` edges (chunk → concept).\n5. New-concept proposals (`is_new_concept=true`) flow through `staged_concepts` — review tool offers a promote path that creates a real concept node and re-uses it for the originating chunk.\n6. Updates `status`, `reviewed_by`, `reviewed_at` on every row touched.\n\n## Subtasks (from doc)\n\n- Filter modes (tradition/text/concept/score)\n- Accept/reject/reassign workflow\n- New concept promotion flow\n\n## Acceptance Criteria\n\n- All staged tags reachable through filters\n- Promoted accepts actually create EXPRESSES edges\n- Promoted new concepts appear as concept nodes and are usable in subsequent runs\n- Review state survives restart\n",
+  "work": {
+    "branch": "todo/f6446324",
+    "base_branch": "main",
+    "started_at": "2026-04-16T03:20:45.510Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "851ca455a72e989ffeb4e149d7b885d56639c03a",
+    "resolved_at": "2026-04-16T03:21:17.469Z",
+    "resolved_by": "unknown",
+    "note": "scripts/review_tags.py: interactive a/r/s/c/q review loop. Accepted tags (score>=2) promoted to live EXPRESSES edges with tier=verified. Reassign flow creates new pending staged_tag. Filter by tradition/text/concept/min-score."
+  }
+}

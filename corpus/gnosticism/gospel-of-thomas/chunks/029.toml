@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.029"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 29"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 55
+
+[content]
+body = "Jesus said, \"If the flesh came into being because of spirit, it is a wonder. But if spirit came into being because of the body, it is a wonder of wonders. Indeed, I am amazed at how this great wealth has made its home in this poverty.\""
+
+[annotations]
+concepts = []
+related_chunks = []

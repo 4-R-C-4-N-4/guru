@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.002"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 2"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 41
+
+[content]
+body = "Jesus said, \"Let him who seeks continue seeking until he finds. When he finds, he will become troubled. When he becomes troubled, he will be astonished, and he will rule over the All.\""
+
+[annotations]
+concepts = []
+related_chunks = []

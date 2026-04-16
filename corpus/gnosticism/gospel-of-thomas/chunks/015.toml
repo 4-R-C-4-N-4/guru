@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.015"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 15"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 31
+
+[content]
+body = "Jesus said, \"When you see one who was not born of woman, prostrate yourselves on your faces and worship him. That one is your father.\""
+
+[annotations]
+concepts = []
+related_chunks = []

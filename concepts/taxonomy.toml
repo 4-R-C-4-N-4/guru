@@ -1,0 +1,87 @@
+# Guru Concept Taxonomy v1
+# Hand-curated starter vocabulary for LLM-assisted tagging (Stage 3).
+# Each concept has a stable snake_case ID and a one-sentence definition
+# shown verbatim to the LLM during tag_concepts.py scoring.
+#
+# Structure: [concepts.{category}]
+#   concept_id = "definition"
+
+# ============================================================
+# COSMOLOGY — origin and structure of the universe
+# ============================================================
+[concepts.cosmology]
+
+emanation_hierarchy = "A chain of divine beings or principles flowing downward from a single transcendent source (the One or the Father), each level less perfect than the one above."
+demiurge = "A secondary creator deity—often ignorant or malevolent—responsible for fashioning the material world, distinct from the supreme transcendent God."
+pleroma = "The divine fullness or totality of the highest realm, populated by aeons and divine attributes, contrasted with the deficient material world."
+kenoma = "The void or emptiness outside the pleroma; the realm of matter, ignorance, and deficiency."
+divine_sparks = "Fragments of divine light or spirit trapped inside material bodies, awaiting liberation and return to their source."
+sephirot = "The ten attributes or emanations through which the Ein Sof (Infinite) reveals itself and creates the universe in Kabbalistic theology."
+sefirot_tree = "The diagrammatic arrangement of the ten Sephirot as a structured 'Tree of Life' mapping divine and cosmic forces."
+logos = "The divine reason, word, or ordering principle through which the universe was created; mediates between the transcendent God and the material world."
+aeons = "Divine archetypal beings or eternal attributes dwelling within the Pleroma, often arranged in male-female syzygies."
+monad = "The absolutely simple, undivided first principle from which all multiplicity and existence flows."
+archons = "Malevolent planetary rulers or demiurgic powers that govern the material world and obstruct the soul's ascent."
+letters_of_creation = "The twenty-two Hebrew letters as the building blocks through which God creates and sustains all existence."
+
+# ============================================================
+# SOTERIOLOGY — salvation, liberation, and the return
+# ============================================================
+[concepts.soteriology]
+
+gnosis_direct_knowledge = "Salvation through direct experiential knowledge of the divine nature, not through faith, ritual, or moral works alone."
+return_to_source = "The soul's journey back to its divine origin, reversing the fall into matter through stages of purification or illumination."
+divine_marriage = "The reunification of complementary divine principles (male-female, spirit-matter) as a symbol of wholeness and salvation."
+pneumatic_elect = "A spiritual elite who possess the divine spark and are predestined for salvation, contrasted with psychic (faithful) and hylic (material) persons."
+hidden_sayings = "Esoteric teachings reserved for those ready to receive them; outer meaning conceals an inner liberating truth."
+mystical_union = "The merging of the individual soul or self with the divine, transcending personal identity."
+self_knowledge = "The recognition of one's own true divine nature as the primary path to liberation; 'know thyself' as soteriology."
+
+# ============================================================
+# THEOLOGY — nature of the divine and divine attributes
+# ============================================================
+[concepts.theology]
+
+apophatic_theology = "Describing the divine only by negation—God transcends all positive categories and concepts; the via negativa."
+divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
+divine_hiddenness = "The supreme God's radical concealment beyond ordinary knowledge or perception; the Hidden Father."
+sacred_names = "Divine names or formulas that carry ontological power, used in prayer, liturgy, or magical practice."
+covenant = "A binding agreement or relationship between the divine and a people or individual, establishing mutual obligations."
+divine_light = "The uncreated luminous quality of the divine, sometimes experienced directly in mystical states; illumination as revelation."
+living_god = "The divine conceived as active, present, and dynamic—not an abstract principle but a personal responsive reality."
+anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
+
+# ============================================================
+# PRAXIS — practice, ritual, and spiritual method
+# ============================================================
+[concepts.praxis]
+
+letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
+permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
+inner_silence = "The practice of stilling the mind and speech to open receptivity to divine knowledge or presence."
+spiritual_ascent = "A staged journey of the soul upward through heavenly realms or levels of being toward the divine source."
+fasting_and_prayer = "Ascetic disciplines that prepare the body and mind for spiritual receptivity or purification."
+ritual_purity = "The maintenance of a state of cleanliness—physical, moral, or spiritual—required for encounter with the divine."
+active_contemplation = "A form of meditation that uses imagery, imagination, or symbolic thought rather than purely empty stillness."
+
+# ============================================================
+# ANTHROPOLOGY — nature of the human being
+# ============================================================
+[concepts.anthropology]
+
+tripartite_soul = "Division of the human being into three principles: spirit (pneuma), soul (psyche), and body/matter (hyle or soma)."
+inner_light = "The divine spark or luminous quality residing within the human person, potentially recognisable through introspection."
+kingdom_within = "The claim that the divine realm is present inside the individual, accessible without external mediation."
+opposites_transcended = "The dissolution of binary oppositions (male/female, inner/outer, above/below) as a mark of spiritual completion."
+childlike_innocence = "The infant or child as symbol of the unfallen, undivided spiritual state; return to primordial simplicity."
+body_as_obstacle = "The material body viewed as a prison, tomb, or source of error that hinders spiritual knowledge and return."
+
+# ============================================================
+# ETHICS — moral teaching and conduct
+# ============================================================
+[concepts.ethics]
+
+renunciation_of_wealth = "The spiritual danger of attachment to material possessions; wealth as a spiritual obstacle."
+love_of_neighbour = "Active compassionate care for others as a central spiritual obligation or expression of divine love."
+rejection_of_hypocrisy = "Critique of outward religious observance that lacks inner transformation; form without substance."
+paradox_as_teaching = "Using apparent contradiction, reversal, or riddle to destabilise ordinary understanding and induce insight."

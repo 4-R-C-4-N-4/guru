@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.045"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 45"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 79
+
+[content]
+body = "Jesus said, \"Grapes are not harvested from thorns, nor are figs gathered from thistles, for they do not produce fruit. A good man brings forth good from his storehouse; an evil man brings forth evil things from his evil storehouse, which is in his heart, and says evil things. For out of the abundance of the heart he brings forth evil things.\""
+
+[annotations]
+concepts = []
+related_chunks = []

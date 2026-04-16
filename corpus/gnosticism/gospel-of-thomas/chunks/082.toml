@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.082"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 82"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 27
+
+[content]
+body = "Jesus said, \"He who is near me is near the fire, and he who is far from me is far from the kingdom.\""
+
+[annotations]
+concepts = []
+related_chunks = []

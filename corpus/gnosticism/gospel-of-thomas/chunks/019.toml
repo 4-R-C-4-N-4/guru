@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.019"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 19"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 71
+
+[content]
+body = "Jesus said, \"Blessed is he who came into being before he came into being. If you become my disciples and listen to my words, these stones will minister to you. For there are five trees for you in Paradise which remain undisturbed summer and winter and whose leaves do not fall. Whoever becomes acquainted with them will not experience death.\""
+
+[annotations]
+concepts = []
+related_chunks = []

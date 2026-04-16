@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.085"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 85"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 39
+
+[content]
+body = "Jesus said, \"Adam came into being from a great power and a great wealth, but he did not become worthy of you. For had he been worthy, he would not have experienced death.\""
+
+[annotations]
+concepts = []
+related_chunks = []

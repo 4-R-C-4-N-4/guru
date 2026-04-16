@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.091"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 91"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 60
+
+[content]
+body = "They said to him, \"Tell us who you are so that we may believe in you.\" He said to them, \"You read the face of the sky and of the earth, but you have not recognized the one who is before you, and you do not know how to read this moment.\""
+
+[annotations]
+concepts = []
+related_chunks = []

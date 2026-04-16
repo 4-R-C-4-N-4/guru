@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.066"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 66"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 20
+
+[content]
+body = "Jesus said, \"Show me the stone which the builders have rejected. That one is the cornerstone.\""
+
+[annotations]
+concepts = []
+related_chunks = []

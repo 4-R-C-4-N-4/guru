@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.112"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 112"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 26
+
+[content]
+body = "Jesus said, \"Woe to the flesh that depends on the soul; woe to the soul that depends on the flesh.\""
+
+[annotations]
+concepts = []
+related_chunks = []

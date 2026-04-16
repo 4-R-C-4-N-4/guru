@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.039"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 39"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 62
+
+[content]
+body = "Jesus said, \"The pharisees and the scribes have taken the keys of knowledge (gnosis) and hidden them. They themselves have not entered, nor have they allowed to enter those who wish to. You, however, be as wise as serpents and as innocent as doves.\""
+
+[annotations]
+concepts = []
+related_chunks = []

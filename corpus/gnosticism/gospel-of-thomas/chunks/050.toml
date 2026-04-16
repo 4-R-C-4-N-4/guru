@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.050"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 50"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 106
+
+[content]
+body = "Jesus said, \"If they say to you, 'Where did you come from?', say to them, 'We came from the light, the place where the light came into being on its own accord and established itself and became manifest through their image.' If they say to you, 'Is it you?', say, 'We are its children, we are the elect of the living father.' If they ask you, 'What is the sign of your father in you?', say to them, 'It is movement and repose.'\""
+
+[annotations]
+concepts = []
+related_chunks = []

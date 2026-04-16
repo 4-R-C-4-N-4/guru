@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.048"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 48"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 33
+
+[content]
+body = "Jesus said, \"If two make peace with each other in this one house, they will say to the mountain, 'Move Away,' and it will move away.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.020"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 20"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 62
+
+[content]
+body = "The disciples said to Jesus, \"Tell us what the kingdom of heaven is like.\" He said to them, \"It is like a mustard seed. It is the smallest of all seeds. But when it falls on tilled soil, it produces a great plant and becomes a shelter for birds of the sky.\""
+
+[annotations]
+concepts = []
+related_chunks = []

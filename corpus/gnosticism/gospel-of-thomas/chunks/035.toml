@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.035"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 35"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 43
+
+[content]
+body = "Jesus said, \"It is not possible for anyone to enter the house of a strong man and take it by force unless he binds his hands; then he will (be able to) ransack his house.\""
+
+[annotations]
+concepts = []
+related_chunks = []

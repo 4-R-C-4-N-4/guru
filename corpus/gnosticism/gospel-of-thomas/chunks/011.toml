@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.011"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 11"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 85
+
+[content]
+body = "Jesus said, \"This heaven will pass away, and the one above it will pass away. The dead are not alive, and the living will not die. In the days when you consumed what is dead, you made it what is alive. When you come to dwell in the light, what will you do? On the day when you were one you became two. But when you become two, what will you do?\""
+
+[annotations]
+concepts = []
+related_chunks = []

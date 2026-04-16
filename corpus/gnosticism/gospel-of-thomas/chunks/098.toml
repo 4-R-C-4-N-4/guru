@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.098"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 98"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 55
+
+[content]
+body = "Jesus said, \"The kingdom of the father is like a certain man who wanted to kill a powerful man. In his own house he drew his sword and stuck it into the wall in order to find out whether his hand could carry through. Then he slew the powerful man.\""
+
+[annotations]
+concepts = []
+related_chunks = []

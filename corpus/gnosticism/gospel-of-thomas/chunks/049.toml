@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.049"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 49"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 33
+
+[content]
+body = "Jesus said, \"Blessed are the solitary and elect, for you will find the kingdom. For you are from it, and to it you will return.\""
+
+[annotations]
+concepts = []
+related_chunks = []

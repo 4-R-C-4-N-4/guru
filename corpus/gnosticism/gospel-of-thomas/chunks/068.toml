@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.068"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 68"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 28
+
+[content]
+body = "Jesus said, \"Blessed are you when you are hated and persecuted. Wherever you have been persecuted they will find no place.\""
+
+[annotations]
+concepts = []
+related_chunks = []

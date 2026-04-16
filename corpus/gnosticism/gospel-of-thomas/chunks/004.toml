@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.004"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 4"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 49
+
+[content]
+body = "Jesus said, \"The man old in days will not hesitate to ask a small child seven days old about the place of life, and he will live. For many who are first will become last, and they will become one and the same.\""
+
+[annotations]
+concepts = []
+related_chunks = []

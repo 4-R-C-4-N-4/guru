@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.021"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 21"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 206
+
+[content]
+body = "Mary said to Jesus, \"Whom are your disciples like?\" He said, \"They are like children who have settled in a field which is not theirs. When the owners of the field come, they will say, 'Let us have back our field.' They (will) undress in their presence in order to let them have back their field and to give it back to them. Therefore I say, if the owner of a house knows that the thief is coming, he will begin his vigil before he comes and will not let him dig through into his house of his domain to carry away his goods. You, then, be on your guard against the world. Arm yourselves with great strength lest the robbers find a way to come to you, for the difficulty which you expect will (surely) materialize. Let there be among you a man of understanding. When the grain ripened, he came quickly with his sickle in his hand and reaped it. Whoever has ears to hear, let him hear.\""
+
+[annotations]
+concepts = []
+related_chunks = []

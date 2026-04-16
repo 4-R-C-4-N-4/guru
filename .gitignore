@@ -72,3 +72,4 @@ dmypy.json
 
 # Corpus raw output (large, regenerable)
 raw/
+data/

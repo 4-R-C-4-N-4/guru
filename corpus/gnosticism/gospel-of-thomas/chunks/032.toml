@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.032"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 32"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 23
+
+[content]
+body = "Jesus said, \"A city being built on a high mountain and fortified cannot fall, nor can it be hidden.\""
+
+[annotations]
+concepts = []
+related_chunks = []

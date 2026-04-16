@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.104"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 104"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 55
+
+[content]
+body = "They said to Jesus, \"Come, let us pray today and let us fast.\" Jesus said, \"What is the sin that I have committed, or wherein have I been defeated? But when the bridegroom leaves the bridal chamber, then let them fast and pray.\""
+
+[annotations]
+concepts = []
+related_chunks = []

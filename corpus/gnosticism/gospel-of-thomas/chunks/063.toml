@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.063"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 63"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 71
+
+[content]
+body = "Jesus said, \"There was a rich man who had much money. He said, 'I shall put my money to use so that I may sow, reap, plant, and fill my storehouse with produce, with the result that I shall lack nothing.' Such were his intentions, but that same night he died. Let him who has ears hear.\""
+
+[annotations]
+concepts = []
+related_chunks = []

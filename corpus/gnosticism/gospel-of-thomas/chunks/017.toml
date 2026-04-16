@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.017"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 17"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 35
+
+[content]
+body = "Jesus said, \"I shall give you what no eye has seen and what no ear has heard and what no hand has touched and what has never occurred to the human mind.\""
+
+[annotations]
+concepts = []
+related_chunks = []

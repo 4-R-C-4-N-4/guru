@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.056"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 56"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 32
+
+[content]
+body = "Jesus said, \"Whoever has come to understand the world has found (only) a corpse, and whoever has found a corpse is superior to the world.\""
+
+[annotations]
+concepts = []
+related_chunks = []

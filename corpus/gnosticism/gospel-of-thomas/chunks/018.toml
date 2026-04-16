@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-thomas.018"
+tradition = "gnosticism"
+text_name = "Gospel of Thomas"
+section = "Logion 18"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/gthlamb.html"
+token_count = 70
+
+[content]
+body = "The disciples said to Jesus, \"Tell us how our end will be.\" Jesus said, \"Have you discovered, then, the beginning, that you look for the end? For where the beginning is, there will the end be. Blessed is he who will take his place in the beginning; he will know the end and will not experience death.\""
+
+[annotations]
+concepts = []
+related_chunks = []
