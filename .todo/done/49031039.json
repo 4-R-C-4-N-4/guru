@@ -1,0 +1,28 @@
+{
+  "id": "49031039",
+  "type": "chore",
+  "state": "done",
+  "summary": "Phase 7: End-to-end round-trip test against real Postgres 17 + pgvector",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.693Z",
+  "updated_at": "2026-04-17T18:00:53.446Z",
+  "tags": [
+    "v2",
+    "phase-7"
+  ],
+  "relationships": {
+    "children": [
+      "91b08008",
+      "d52bd36b",
+      "94167d50"
+    ]
+  },
+  "resolution": {
+    "commit": "8bfb16f9b5ced66cc8fb631ec9d7eb96a7a2815f",
+    "resolved_at": "2026-04-17T18:00:53.446Z",
+    "resolved_by": "unknown",
+    "note": "Phase 7 complete. End-to-end round-trip verified against pgvector/pgvector:pg17 docker container: load in 0.9s, 6 tables populated, all row counts match SQLite source (11/58/58/2531/2548/6), corpus_metadata pinned to expected values, self-similarity smoke test returns distance=0 for exact match. Runbook corrections captured on 94167d50 (DATABASE_URL prereq, richer verification, HNSW emission, artifact archival)."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d52bd36b",
+  "type": "chore",
+  "state": "done",
+  "summary": "Run verification queries: SELECT corpus_metadata, tradition counts, edge count, self-similarity smoke test (<=> distance 0 for a known chunk against itself)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.793Z",
+  "updated_at": "2026-04-17T18:00:13.016Z",
+  "tags": [
+    "v2",
+    "phase-7"
+  ],
+  "relationships": {
+    "parent": "49031039"
+  },
+  "resolution": {
+    "commit": "7d9080d5fecfb3cf33e3dd961fbbd8b8471e3ea4",
+    "resolved_at": "2026-04-17T18:00:13.016Z",
+    "resolved_by": "unknown",
+    "note": "All verification queries pass. corpus_metadata matches expected pinned values; per-tradition chunk counts sum to 2531; self-similarity = 0 with nearest-other at 0.227 cosine distance (vectors round-tripped correctly via the ::vector cast). Full-scan performance is fine at this corpus size; HNSW index emission in export.py is a follow-up for future ticket."
+  }
+}
