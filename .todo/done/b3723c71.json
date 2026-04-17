@@ -1,0 +1,27 @@
+{
+  "id": "b3723c71",
+  "type": "chore",
+  "state": "done",
+  "summary": "Phase 3: Re-embed full corpus against ollama/nomic-embed-text (pinned v2 model)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.905Z",
+  "updated_at": "2026-04-17T17:47:15.980Z",
+  "tags": [
+    "v2",
+    "phase-3"
+  ],
+  "relationships": {
+    "children": [
+      "ef86ed76",
+      "8649127f"
+    ]
+  },
+  "resolution": {
+    "commit": "57607258ae305b812416e886c11780d1939069f3",
+    "resolved_at": "2026-04-17T17:47:15.980Z",
+    "resolved_by": "unknown",
+    "note": "Phase 3 complete. Pivoted from Google text-embedding-005 to ollama/nomic-embed-text (keeps pipeline fully local). Full 2531-chunk corpus re-embedded; chunk_embeddings now the uniform source of truth. Phase 4 (remove ChromaDB) can proceed safely — SQLite is authoritative."
+  }
+}

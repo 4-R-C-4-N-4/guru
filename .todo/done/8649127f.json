@@ -1,0 +1,33 @@
+{
+  "id": "8649127f",
+  "type": "chore",
+  "state": "done",
+  "summary": "Run full corpus re-embed; sample random chunks and verify chunk_embeddings.model='ollama/nomic-embed-text' and dim=768",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.999Z",
+  "updated_at": "2026-04-17T17:47:15.930Z",
+  "tags": [
+    "v2",
+    "phase-3"
+  ],
+  "relationships": {
+    "parent": "b3723c71"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T17:30:58.180Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Pivoted from Google text-embedding-005 to ollama/nomic-embed-text (768d). Reason: user wants to avoid external API + bill; Carnice-27b is not usable for embeddings (decoder-only, 4608d, ~500x slower). nomic-embed-text was already the de-facto local embedder via ollama and produced the existing 120 chunk_embeddings rows. This ticket will (a) remove the Google-specific code from previous Phase 2 tickets 8882a4a1/3800c933, (b) run --reindex against ollama for all 2531 chunks to pin the provider-prefixed model tag on every row.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "57607258ae305b812416e886c11780d1939069f3",
+    "resolved_at": "2026-04-17T17:47:15.930Z",
+    "resolved_by": "unknown",
+    "note": "Full re-embed complete: 2531/2531 chunks through ollama/nomic-embed-text in ~15 min on GPU, 0 errors. Verification: all 2531 rows tagged 'ollama/nomic-embed-text' at dim=768, unit-norm, 3072B blobs, 0 FK orphans against nodes(type='chunk'). Google provider code reverted in the same commit."
+  }
+}
