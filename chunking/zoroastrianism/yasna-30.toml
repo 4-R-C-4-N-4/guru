@@ -1,9 +1,7 @@
-# Auto-generated chunking config for Yasna XXX
-# Source: sacred-texts.com SBE Vol. 31 (Mills, 1886)
-
 [chunking]
-strategy = "page-as-chunk"
-section_label_format = "Yasna XXX (Ahunavaiti Gatha)"
+strategy = "paragraph-group"
+section_label_format = "Ahunavaiti Gatha, Yasna XXX, Section {n}"
+paragraphs_per_chunk = 3
 max_tokens = 800
 
 [metadata]

@@ -1,0 +1,15 @@
+[chunk]
+id = "Zoroastrianism.yasna-30.009"
+tradition = "Zoroastrianism"
+text_name = "Avesta (Gathas)"
+section = "Ahunavaiti Gatha, Yasna XXX, Section 1i"
+translator = "L.H. Mills"
+source_url = "https://sacred-texts.com/zor/sbe31/sbe31008.htm"
+token_count = 193
+
+[content]
+body = "It is generally considered now as = hu + iti; but the letter = seems doubtful.\n\n35:5 Read anitî = 'with impeded progress.' 'In prosperity or adversity.' But these are conjectures.\n\n35:6 The Pahlavi: Aêtûnŏ akhar valman s ân aîtŏ nadûkîh.\n\nI do not think that we ought to regard the words of the original as expressing universal restoration.\n\nBut they may well have given the first indication toward this later view.\n\nLiterally, they state it, but not when correctly understood.\n\n(SUPPLEMENTARY NOTE.\n\nThe Pahlavi word yômâî which transcribes y e snâ in verse 4 cannot mean 'by day.' Its imperfect form induced the translators to translate rûzhâ and bhûmandale, but these scholars, as in many other instances, hinted at a correction.) Next: Yasna XXXI"
+
+[annotations]
+concepts = []
+related_chunks = []

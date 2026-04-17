@@ -1,12 +1,11 @@
-# Auto-generated chunking config for Mills' introduction to the Gathas
-
 [chunking]
-strategy = "page-as-chunk"
-section_label_format = "Introduction to the Gathas"
+strategy = "paragraph-group"
+section_label_format = "Gathas Introduction, Section {n}"
+paragraphs_per_chunk = 3
 max_tokens = 800
 
 [metadata]
 tradition = "Zoroastrianism"
 text_name = "Avesta (Gathas)"
 translator = "L.H. Mills"
-sections_format = "introduction"
+sections_format = "section"

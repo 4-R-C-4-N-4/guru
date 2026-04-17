@@ -1,9 +1,7 @@
-# Auto-generated chunking config for Yasna LIII
-# Source: sacred-texts.com SBE Vol. 31 (Mills, 1886)
-
 [chunking]
-strategy = "page-as-chunk"
-section_label_format = "Yasna LIII (Vahishtoishti Gatha)"
+strategy = "paragraph-group"
+section_label_format = "Vahishtoishti Gatha, Yasna LIII, Section {n}"
+paragraphs_per_chunk = 3
 max_tokens = 800
 
 [metadata]

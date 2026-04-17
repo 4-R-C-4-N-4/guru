@@ -1,0 +1,15 @@
+[chunk]
+id = "Zoroastrianism.yasna-33.010"
+tradition = "Zoroastrianism"
+text_name = "Avesta (Gathas)"
+section = "Ahunavaiti Gatha, Yasna XXXIII, Section 1j"
+translator = "L.H. Mills"
+source_url = "https://sacred-texts.com/zor/sbe31/sbe31011.htm"
+token_count = 139
+
+[content]
+body = "79:2 The Pahlavi translation may be rendered as follows: Thus, as a gift of generosity, I who am Zartû s t (so freely, and with no error from ignorance (!)) give the life of my own body, as the advance [as the chieftainship] to Vohûman and to Aûharmazd, and to Ashavahi s t, in actions [that is, I would do the deeds which Aharâyîh desires], and would give obedient attention to the word (literally the hearing of the word) to (i.e.\n\nof) Khshatraver.\n\nNext: Yasna XXXIV"
+
+[annotations]
+concepts = []
+related_chunks = []

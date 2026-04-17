@@ -1,9 +1,7 @@
-# Auto-generated chunking config for Yasna L
-# Source: sacred-texts.com SBE Vol. 31 (Mills, 1886)
-
 [chunking]
-strategy = "page-as-chunk"
-section_label_format = "Yasna L (Spenta Mainyu Gatha)"
+strategy = "paragraph-group"
+section_label_format = "Spenta Mainyu Gatha, Yasna L, Section {n}"
+paragraphs_per_chunk = 3
 max_tokens = 800
 
 [metadata]

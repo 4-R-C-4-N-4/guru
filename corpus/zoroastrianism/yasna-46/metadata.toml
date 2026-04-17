@@ -1,0 +1,7 @@
+tradition = "Zoroastrianism"
+text_id = "yasna-46"
+text_name = "Avesta (Gathas)"
+translator = "L.H. Mills"
+source_url = "https://sacred-texts.com/zor/sbe31/sbe31016.htm"
+sections_format = "yasna_chapter"
+chunk_count = 11
