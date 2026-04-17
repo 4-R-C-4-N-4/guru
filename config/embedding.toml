@@ -1,11 +1,15 @@
 # Guru Embedding Configuration
-# Consumed by: scripts/embed_corpus.py, scripts/backfill_concepts.py
+# Consumed by: scripts/embed_corpus.py
+#
+# Vectors are stored in data/guru.db::chunk_embeddings (float32 BLOBs,
+# cosine-similarity queries via scripts/vector_store.py). There is no
+# separate vector store to configure — this file only pins the model.
 
 [model]
 # Provider: "ollama" | "sentence_transformers" | "api"
 # ollama/nomic-embed-text is the pinned canonical embedding model for v2
-# corpus exports. Switching this requires a full re-embed (Phase 3) and
-# bumps the model tag recorded in corpus_metadata.embedding_model.
+# corpus exports. Switching this requires a full re-embed (embed_corpus.py
+# --reindex) and bumps the model tag in corpus_metadata.embedding_model.
 provider = "ollama"
 model_name = "nomic-embed-text"
 dimensions = 768
@@ -13,19 +17,6 @@ dimensions = 768
 # sentence_transformers fallback (used when provider = "sentence_transformers")
 # model_name = "all-MiniLM-L6-v2"
 # dimensions = 384
-
-[backend]
-# Vector store: "chromadb" | "qdrant"
-type = "chromadb"
-
-# ChromaDB: persistent local directory
-chroma_path = "data/vectordb"
-collection_name = "guru_corpus"
-
-# Qdrant (uncomment to switch):
-# type = "qdrant"
-# qdrant_url = "http://localhost:6333"
-# collection_name = "guru_corpus"
 
 [processing]
 # Batch size for embedding calls

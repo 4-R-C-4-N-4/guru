@@ -1,0 +1,28 @@
+{
+  "id": "b86edc60",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Phase 4: Remove ChromaDB from pipeline",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.051Z",
+  "updated_at": "2026-04-17T18:12:18.424Z",
+  "tags": [
+    "v2",
+    "phase-4"
+  ],
+  "relationships": {
+    "children": [
+      "f6fe87b0",
+      "8f5c7e76",
+      "bb6eae20"
+    ]
+  },
+  "resolution": {
+    "commit": "a2892b9ee821931f029df7775eedc0e7845f332a",
+    "resolved_at": "2026-04-17T18:12:18.424Z",
+    "resolved_by": "unknown",
+    "note": "Phase 4 complete. ChromaDB replaced by scripts/vector_store.py (SQLite-backed, in-process numpy cosine over chunk_embeddings). backfill_concepts.py and migrate_to_sqlite_embeddings.py deleted as obsolete one-shots. Latent retriever bug (Title Case tradition paths) fixed as collateral. data/vectordb/ deleted (1.1 MB), chromadb dropped from README pip line, config/embedding.toml simplified. 37 tests pass, end-to-end export still produces clean 10 MB artifact."
+  }
+}

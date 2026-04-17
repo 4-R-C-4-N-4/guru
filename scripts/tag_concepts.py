@@ -73,7 +73,7 @@ Return a JSON array of objects for every concept with score >= 1:
   }}
 ]
 
-Return [] if nothing scores >= 1.
+Return [] if nothing scores >= 1. Output only the JSON array. No preamble, no explanation, no markdown fences. Start your response with [ and end with ]. Return [] if nothing scores >= 1.
 """
 
 
@@ -204,14 +204,11 @@ def run_tagging(
     for i, chunk in enumerate(chunks):
         chunk_id = chunk["id"]
         meta = chunk["meta"]
-        body_path = (
-            PROJECT_ROOT / "corpus"
-            / meta.get("text_id", "").split(".")[0] if "." in meta.get("text_id","") else ""
-        )
+
         # Load body from corpus chunk file
         parts = chunk_id.split(".")
         if len(parts) >= 3:
-            trad = parts[0]
+            trad = parts[0].lower().replace(" ", "_")
             tid = parts[1]
             idx = parts[2]
             chunk_file = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
@@ -228,7 +225,9 @@ def run_tagging(
         prompt = build_prompt(body, citation, concepts)
 
         try:
-            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=1500)
+            print(f"\n[DEBUG prompt]\n{prompt}\n{"="*60}\n", flush=True)
+            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=4000)
+            print(f"\n[DEBUG raw response]\n{raw!r}\n{"="*60}\n", flush=True)
             tags = parse_tags(raw)
 
             for tag in tags:

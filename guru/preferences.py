@@ -83,9 +83,11 @@ class UserPreferences:
 
     def to_vector_filters(self) -> dict | None:
         """
-        Produce a ChromaDB-compatible where-clause dict, or None if no filter.
+        Produce a where-clause dict for VectorStore.query, or None if no
+        filter. The format is the minimal Mongo/Chroma-style subset the
+        SQLite-backed VectorStore implements ($eq/$ne/$in/$nin/$and/$or
+        on the "tradition" and "text_id" fields):
 
-        ChromaDB filter syntax:
           {"tradition": {"$ne": "gnosticism"}}           — single exclusion
           {"$and": [{"tradition": {"$ne": "A"}}, ...]}   — multiple exclusions
           {"tradition": {"$in": ["A", "B"]}}             — whitelist

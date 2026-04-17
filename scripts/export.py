@@ -120,7 +120,7 @@ def validate(conn: sqlite3.Connection) -> None:
         raise SystemExit(
             f"{orphan} chunk_embeddings rows reference chunk_ids "
             f"that are not present in nodes(type='chunk'). "
-            f"Run scripts/migrate_to_sqlite_embeddings.py or re-embed."
+            f"Re-run scripts/embed_corpus.py to rebuild."
         )
 
     bad = conn.execute(

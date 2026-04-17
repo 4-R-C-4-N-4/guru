@@ -104,7 +104,7 @@ def collect_chunks(tradition_filter=None, text_filter=None) -> list[dict]:
                         "translator": meta.get("translator", ""),
                         "source_url": meta.get("source_url", ""),
                         "token_count": meta.get("token_count", 0),
-                        "concepts": [],  # filled by backfill_concepts.py
+                        "concepts": [],  # derived from EXPRESSES edges at query time
                     },
                 })
     return chunks

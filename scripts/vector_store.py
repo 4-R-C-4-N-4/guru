@@ -1,118 +1,137 @@
 """
-vector_store.py — Abstract vector store wrapper.
+vector_store.py — SQLite-backed vector store.
 
-Backed by ChromaDB (default) or Qdrant, configured via config/embedding.toml.
-Used by embed_corpus.py, propose_edges.py, backfill_concepts.py, and retriever.py.
+Reads float32 little-endian blobs from data/guru.db::chunk_embeddings and
+computes cosine similarity in-process with numpy. At ~2.5K chunks × 768
+dims this fits in <10 MB of RAM and a single query takes ≤ 1 ms; the
+class is intentionally simple with no external service.
+
+Metadata (tradition, text_id, section, concepts, etc.) is reconstructed
+on demand from the live SQLite graph:
+  - tradition ← nodes.tradition_id
+  - section / text_name / translator / source_url / token_count
+    ← corpus/<tradition>/<text_id>/chunks/<NNN>.toml
+  - concepts ← edges(source=chunk, type='EXPRESSES').target_id
+
+The API matches the previous ChromaDB-backed implementation so callers
+(HybridRetriever, propose_edges.py) don't change.
 """
 
-import json
-import logging
-from pathlib import Path
-from typing import Any
+from __future__ import annotations
 
+import logging
+import sqlite3
 import tomllib
+from pathlib import Path
+from typing import Any, Iterable
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = PROJECT_ROOT / "config" / "embedding.toml"
+DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
+CORPUS_DIR = PROJECT_ROOT / "corpus"
 
 
 class VectorStore:
-    """
-    Thin wrapper around ChromaDB (or Qdrant) with a stable interface
-    for upsert, query, get_metadata, and update_metadata.
-    """
+    """SQLite-backed vector store. One instance per process; vectors
+    and the chunk→metadata map are cached after the first access."""
 
-    def __init__(self, config_path: Path = CONFIG_PATH):
-        with open(config_path, "rb") as f:
-            cfg = tomllib.load(f)
+    def __init__(self, db_path: str | Path = DEFAULT_DB):
+        self._db_path = Path(db_path)
+        # Lazy-loaded on first query
+        self._ids: list[str] | None = None
+        self._vectors: np.ndarray | None = None  # (N, dim), unit-norm
+        self._idx: dict[str, int] = {}
+        self._tradition: dict[str, str] = {}
+        self._label: dict[str, str] = {}
 
-        backend = cfg.get("backend", {})
-        self._backend_type = backend.get("type", "chromadb")
-        self._collection_name = backend.get("collection_name", "guru_corpus")
-        self._cfg = cfg
+    # ── loading ─────────────────────────────────────────────────────────
 
-        if self._backend_type == "chromadb":
-            self._init_chroma(backend)
-        elif self._backend_type == "qdrant":
-            self._init_qdrant(backend)
-        else:
-            raise ValueError(f"Unknown backend: {self._backend_type}")
+    def _ensure_loaded(self) -> None:
+        if self._vectors is not None:
+            return
+        with sqlite3.connect(self._db_path) as conn:
+            rows = conn.execute(
+                "SELECT e.chunk_id, e.dim, e.vector, n.tradition_id, n.label "
+                "FROM chunk_embeddings e "
+                "LEFT JOIN nodes n ON n.id = e.chunk_id "
+                "ORDER BY e.chunk_id"
+            ).fetchall()
+        if not rows:
+            self._ids = []
+            self._vectors = np.zeros((0, 0), dtype=np.float32)
+            return
 
-    # ── ChromaDB ────────────────────────────────────────────────────────────
+        dim = rows[0][1]
+        mat = np.empty((len(rows), dim), dtype=np.float32)
+        ids: list[str] = []
+        for i, (cid, _dim, vec, tradition_id, label) in enumerate(rows):
+            ids.append(cid)
+            mat[i] = np.frombuffer(vec, dtype=np.float32)
+            self._tradition[cid] = tradition_id or ""
+            self._label[cid] = label or cid
+        self._ids = ids
+        self._vectors = mat
+        self._idx = {cid: i for i, cid in enumerate(ids)}
+        logger.debug("VectorStore: loaded %d vectors (dim=%d)", len(ids), dim)
 
-    def _init_chroma(self, backend: dict) -> None:
-        import chromadb
-        chroma_path = PROJECT_ROOT / backend.get("chroma_path", "data/vectordb")
-        chroma_path.mkdir(parents=True, exist_ok=True)
-        self._client = chromadb.PersistentClient(path=str(chroma_path))
-        self._collection = self._client.get_or_create_collection(
-            name=self._collection_name,
-            metadata={"hnsw:space": "cosine"},
-        )
-        logger.debug(f"ChromaDB collection '{self._collection_name}' at {chroma_path}")
+    def _invalidate(self) -> None:
+        self._ids = None
+        self._vectors = None
+        self._idx = {}
+        self._tradition = {}
+        self._label = {}
 
-    # ── Qdrant ───────────────────────────────────────────────────────────────
+    # ── writes ──────────────────────────────────────────────────────────
 
-    def _init_qdrant(self, backend: dict) -> None:
-        from qdrant_client import QdrantClient
-        from qdrant_client.models import Distance, VectorParams
-        url = backend.get("qdrant_url", "http://localhost:6333")
-        dims = self._cfg.get("model", {}).get("dimensions", 768)
-        self._client = QdrantClient(url=url)
-        # Create collection if not exists
-        existing = [c.name for c in self._client.get_collections().collections]
-        if self._collection_name not in existing:
-            self._client.create_collection(
-                self._collection_name,
-                vectors_config=VectorParams(size=dims, distance=Distance.COSINE),
-            )
-        logger.debug(f"Qdrant collection '{self._collection_name}' at {url}")
-
-    # ── Public interface ─────────────────────────────────────────────────────
+    def _model_tag(self, metadata: dict | None) -> str:
+        """Model string stored in chunk_embeddings.model. Callers may
+        pass it explicitly via metadata['_model']; otherwise we tag the
+        row with an unknown sentinel so validate() can flag it later."""
+        if metadata and "_model" in metadata:
+            return str(metadata["_model"])
+        return "unknown/unknown"
 
     def upsert(self, chunk_id: str, embedding: list[float], metadata: dict) -> None:
-        """Upsert a single vector with metadata."""
-        if self._backend_type == "chromadb":
-            self._collection.upsert(
-                ids=[chunk_id],
-                embeddings=[embedding],
-                metadatas=[{k: (json.dumps(v) if isinstance(v, list) else v)
-                            for k, v in metadata.items()}],
+        """Write one (chunk_id, vector) row. Metadata arg is retained for
+        API compatibility — everything except `_model` is ignored here
+        because nodes+edges carry the canonical metadata."""
+        arr = np.asarray(embedding, dtype=np.float32)
+        with sqlite3.connect(self._db_path) as conn:
+            conn.execute(
+                "INSERT OR REPLACE INTO chunk_embeddings "
+                "(chunk_id, dim, model, vector) VALUES (?, ?, ?, ?)",
+                (chunk_id, int(arr.shape[0]), self._model_tag(metadata), arr.tobytes()),
             )
-        else:
-            from qdrant_client.models import PointStruct
-            self._client.upsert(
-                self._collection_name,
-                points=[PointStruct(id=self._id_to_int(chunk_id),
-                                    vector=embedding,
-                                    payload={**metadata, "_chunk_id": chunk_id})],
-            )
+            conn.commit()
+        self._invalidate()
 
     def upsert_batch(self, items: list[dict]) -> None:
-        """Upsert a batch: each item has keys chunk_id, embedding, metadata."""
-        if self._backend_type == "chromadb":
-            self._collection.upsert(
-                ids=[x["chunk_id"] for x in items],
-                embeddings=[x["embedding"] for x in items],
-                metadatas=[
-                    {k: (json.dumps(v) if isinstance(v, list) else v)
-                     for k, v in x["metadata"].items()}
-                    for x in items
-                ],
+        """Each item = {chunk_id, embedding, metadata}. metadata['_model']
+        (if present) tags the row."""
+        if not items:
+            return
+        rows: list[tuple] = []
+        for it in items:
+            arr = np.asarray(it["embedding"], dtype=np.float32)
+            rows.append((
+                it["chunk_id"],
+                int(arr.shape[0]),
+                self._model_tag(it.get("metadata")),
+                arr.tobytes(),
+            ))
+        with sqlite3.connect(self._db_path) as conn:
+            conn.executemany(
+                "INSERT OR REPLACE INTO chunk_embeddings "
+                "(chunk_id, dim, model, vector) VALUES (?, ?, ?, ?)",
+                rows,
             )
-        else:
-            from qdrant_client.models import PointStruct
-            points = [
-                PointStruct(
-                    id=self._id_to_int(x["chunk_id"]),
-                    vector=x["embedding"],
-                    payload={**x["metadata"], "_chunk_id": x["chunk_id"]},
-                )
-                for x in items
-            ]
-            self._client.upsert(self._collection_name, points=points)
+            conn.commit()
+        self._invalidate()
+
+    # ── queries ─────────────────────────────────────────────────────────
 
     def query(
         self,
@@ -123,108 +142,213 @@ class VectorStore:
         exclude_tradition: str | None = None,
         min_similarity: float = 0.0,
     ) -> list[dict]:
-        """
-        Query for nearest neighbours.
-        Returns list of {chunk_id, similarity, metadata}.
-        """
-        if embedding is None and chunk_id is not None:
-            # Look up the stored embedding for this chunk
-            result = self._collection.get(ids=[chunk_id], include=["embeddings"])
-            if result["embeddings"]:
-                embedding = result["embeddings"][0]
-            else:
+        """Cosine-similarity search. Returns [{chunk_id, similarity,
+        metadata, label}] sorted descending."""
+        self._ensure_loaded()
+        if self._vectors is None or len(self._ids or []) == 0:
+            return []
+
+        # Resolve query vector
+        if embedding is not None:
+            q = np.asarray(embedding, dtype=np.float32)
+        elif chunk_id is not None:
+            i = self._idx.get(chunk_id)
+            if i is None:
                 return []
-
-        if self._backend_type == "chromadb":
-            kw: dict[str, Any] = {}
-            conditions = []
-            if exclude_tradition:
-                conditions.append({"tradition": {"$ne": exclude_tradition}})
-            if where:
-                conditions.append(where)
-            if conditions:
-                kw["where"] = {"$and": conditions} if len(conditions) > 1 else conditions[0]
-
-            results = self._collection.query(
-                query_embeddings=[embedding],
-                n_results=top_n,
-                include=["metadatas", "distances"],
-                **kw,
-            )
-            out = []
-            for cid, dist, meta in zip(
-                results["ids"][0],
-                results["distances"][0],
-                results["metadatas"][0],
-            ):
-                similarity = 1.0 - dist  # cosine distance → similarity
-                if similarity < min_similarity:
-                    continue
-                out.append({"chunk_id": cid, "similarity": similarity,
-                            "metadata": meta, "label": meta.get("section", cid)})
-            return out
+            q = self._vectors[i]
         else:
-            from qdrant_client.models import Filter, FieldCondition, MatchValue
-            filt = None
-            if exclude_tradition:
-                filt = Filter(must_not=[
-                    FieldCondition(key="tradition", match=MatchValue(value=exclude_tradition))
-                ])
-            hits = self._client.search(
-                self._collection_name,
-                query_vector=embedding,
-                limit=top_n,
-                query_filter=filt,
-                with_payload=True,
+            raise ValueError("query() needs embedding or chunk_id")
+
+        norm = float(np.linalg.norm(q))
+        if norm == 0.0:
+            return []
+        q = q / norm
+
+        # Dense cosine sim against all rows; stored vectors are unit-norm
+        # from ollama/nomic-embed-text, so dot product == cosine.
+        sims = self._vectors @ q
+
+        # Apply filters: produce a boolean mask over rows
+        mask = sims >= min_similarity
+        if chunk_id is not None:
+            # exclude self from neighbour search
+            mask &= np.arange(len(self._ids)) != self._idx[chunk_id]
+        if exclude_tradition:
+            for i, cid in enumerate(self._ids):
+                if self._tradition.get(cid) == exclude_tradition:
+                    mask[i] = False
+        if where is not None:
+            _apply_where_mask(
+                mask,
+                ids=self._ids,
+                tradition_by_id=self._tradition,
+                where=where,
+                db_path=self._db_path,
             )
-            return [
-                {"chunk_id": h.payload["_chunk_id"], "similarity": h.score,
-                 "metadata": h.payload, "label": h.payload.get("section", "")}
-                for h in hits if h.score >= min_similarity
-            ]
+
+        if not mask.any():
+            return []
+
+        # Top-N over the surviving mask
+        valid = np.flatnonzero(mask)
+        order = np.argsort(-sims[valid])[:top_n]
+        picks = valid[order]
+
+        out: list[dict] = []
+        for i in picks:
+            cid = self._ids[i]
+            meta = self.get_metadata(cid)
+            out.append({
+                "chunk_id": cid,
+                "similarity": float(sims[i]),
+                "metadata": meta,
+                "label": meta.get("section") or self._label.get(cid, cid),
+            })
+        return out
 
     def count(self) -> int:
-        if self._backend_type == "chromadb":
-            return self._collection.count()
-        else:
-            return self._client.get_collection(self._collection_name).vectors_count or 0
-
-    def get_metadata(self, chunk_id: str) -> dict:
-        if self._backend_type == "chromadb":
-            result = self._collection.get(ids=[chunk_id], include=["metadatas"])
-            metas = result.get("metadatas") or []
-            if metas:
-                meta = dict(metas[0])
-                # Deserialise JSON-encoded lists
-                for k, v in meta.items():
-                    if isinstance(v, str) and v.startswith("["):
-                        try:
-                            meta[k] = json.loads(v)
-                        except Exception:
-                            pass
-                return meta
-        return {}
-
-    def update_metadata(self, chunk_id: str, updates: dict) -> None:
-        if self._backend_type == "chromadb":
-            existing = self.get_metadata(chunk_id)
-            existing.update({k: (json.dumps(v) if isinstance(v, list) else v)
-                              for k, v in updates.items()})
-            self._collection.update(ids=[chunk_id], metadatas=[existing])
-        else:
-            self._client.set_payload(
-                self._collection_name,
-                payload=updates,
-                points=[self._id_to_int(chunk_id)],
-            )
+        with sqlite3.connect(self._db_path) as conn:
+            return conn.execute(
+                "SELECT COUNT(*) FROM chunk_embeddings"
+            ).fetchone()[0]
 
     def exists(self, chunk_id: str) -> bool:
-        if self._backend_type == "chromadb":
-            result = self._collection.get(ids=[chunk_id])
-            return bool(result["ids"])
-        return False
+        with sqlite3.connect(self._db_path) as conn:
+            return conn.execute(
+                "SELECT 1 FROM chunk_embeddings WHERE chunk_id = ? LIMIT 1",
+                (chunk_id,),
+            ).fetchone() is not None
 
-    @staticmethod
-    def _id_to_int(chunk_id: str) -> int:
-        """Convert dotted chunk ID to stable integer for Qdrant."""
-        return abs(hash(chunk_id)) % (2**63)
+    # ── metadata reconstruction ─────────────────────────────────────────
+
+    def get_metadata(self, chunk_id: str) -> dict:
+        """Reconstruct a chunk's display metadata from SQLite + TOML.
+        Keys: tradition, text_id, text_name, section, translator,
+        source_url, token_count, concepts[]."""
+        self._ensure_loaded()
+        meta: dict[str, Any] = {
+            "tradition": self._tradition.get(chunk_id, ""),
+        }
+        parts = chunk_id.split(".")
+        if len(parts) >= 3:
+            meta["text_id"] = parts[1]
+            toml_path = _chunk_toml_for(chunk_id)
+            if toml_path and toml_path.exists():
+                with open(toml_path, "rb") as f:
+                    d = tomllib.load(f)
+                chunk = d.get("chunk", {})
+                meta["text_name"] = chunk.get("text_name", "")
+                meta["section"] = chunk.get("section", "")
+                meta["translator"] = chunk.get("translator", "")
+                meta["source_url"] = chunk.get("source_url", "")
+                meta["token_count"] = chunk.get("token_count", 0)
+
+        meta["concepts"] = _concepts_for(self._db_path, chunk_id)
+        return meta
+
+    def update_metadata(self, chunk_id: str, updates: dict) -> None:
+        """No-op: metadata lives in SQLite nodes/edges and corpus TOMLs,
+        not in chunk_embeddings. Retained for API compatibility.
+        Concepts are sourced live from EXPRESSES edges."""
+        logger.debug(
+            "update_metadata(%s) ignored; metadata is derived from "
+            "nodes+edges, not stored alongside vectors.", chunk_id,
+        )
+
+
+# ── helpers ───────────────────────────────────────────────────────────
+
+
+def _chunk_toml_for(chunk_id: str) -> Path | None:
+    """chunk_id format: <raw_tradition>.<text_id>.<seq>. Map to
+    corpus/<dir>/<text_id>/chunks/<seq>.toml, trying both the raw
+    tradition string as-is and its canonical lowercase_snake form."""
+    parts = chunk_id.split(".")
+    if len(parts) < 3:
+        return None
+    raw_trad, text_id, seq = parts[0], parts[1], parts[2]
+    candidates = [
+        raw_trad,
+        raw_trad.lower().replace(" ", "_"),
+    ]
+    for t in candidates:
+        p = CORPUS_DIR / t / text_id / "chunks" / f"{seq}.toml"
+        if p.exists():
+            return p
+    return None
+
+
+def _concepts_for(db_path: Path, chunk_id: str) -> list[str]:
+    """List of concept IDs this chunk expresses, via EXPRESSES edges."""
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute(
+            "SELECT target_id FROM edges "
+            "WHERE source_id = ? AND type = 'EXPRESSES'",
+            (chunk_id,),
+        ).fetchall()
+    return [r[0] for r in rows]
+
+
+def _apply_where_mask(
+    mask: np.ndarray,
+    *,
+    ids: list[str],
+    tradition_by_id: dict[str, str],
+    where: dict,
+    db_path: Path,
+) -> None:
+    """Interpret a ChromaDB-style where-clause against already-loaded
+    tradition and on-demand text_id. Mutates `mask` in place."""
+    text_id_by_id: dict[str, str] | None = None
+
+    def ensure_text_ids() -> dict[str, str]:
+        nonlocal text_id_by_id
+        if text_id_by_id is None:
+            text_id_by_id = {}
+            for cid in ids:
+                parts = cid.split(".")
+                text_id_by_id[cid] = parts[1] if len(parts) >= 3 else ""
+        return text_id_by_id
+
+    def eval_clause(clause: dict) -> Iterable[bool]:
+        if "$and" in clause:
+            sub_masks = [list(eval_clause(c)) for c in clause["$and"]]
+            return [all(col) for col in zip(*sub_masks)] if sub_masks else [True] * len(ids)
+        if "$or" in clause:
+            sub_masks = [list(eval_clause(c)) for c in clause["$or"]]
+            return [any(col) for col in zip(*sub_masks)] if sub_masks else [True] * len(ids)
+
+        # Single field condition: {"tradition": {"$ne": "X"}} or
+        # {"text_id": {"$in": [...]}} etc.
+        assert len(clause) == 1, f"expected one field per clause, got {clause!r}"
+        field, cond = next(iter(clause.items()))
+        if field == "tradition":
+            values = [tradition_by_id.get(cid, "") for cid in ids]
+        elif field == "text_id":
+            values = [ensure_text_ids()[cid] for cid in ids]
+        else:
+            logger.warning("VectorStore where: unsupported field %r — skipped", field)
+            return [True] * len(ids)
+
+        if isinstance(cond, dict):
+            if "$ne" in cond:
+                target = cond["$ne"]
+                return [v != target for v in values]
+            if "$eq" in cond:
+                target = cond["$eq"]
+                return [v == target for v in values]
+            if "$in" in cond:
+                targets = set(cond["$in"])
+                return [v in targets for v in values]
+            if "$nin" in cond:
+                targets = set(cond["$nin"])
+                return [v not in targets for v in values]
+            logger.warning("VectorStore where: unsupported op in %r — skipped", cond)
+            return [True] * len(ids)
+        # Bare scalar -> equality
+        return [v == cond for v in values]
+
+    result = list(eval_clause(where))
+    for i, keep in enumerate(result):
+        if not keep:
+            mask[i] = False
