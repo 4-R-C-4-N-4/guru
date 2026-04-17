@@ -2,7 +2,10 @@
 # Consumed by: scripts/embed_corpus.py, scripts/backfill_concepts.py
 
 [model]
-# Provider: "ollama" | "sentence_transformers" | "api" | "google"
+# Provider: "ollama" | "sentence_transformers" | "api"
+# ollama/nomic-embed-text is the pinned canonical embedding model for v2
+# corpus exports. Switching this requires a full re-embed (Phase 3) and
+# bumps the model tag recorded in corpus_metadata.embedding_model.
 provider = "ollama"
 model_name = "nomic-embed-text"
 dimensions = 768
@@ -10,13 +13,6 @@ dimensions = 768
 # sentence_transformers fallback (used when provider = "sentence_transformers")
 # model_name = "all-MiniLM-L6-v2"
 # dimensions = 384
-
-# Google Gemini (used when provider = "google"):
-# Canonical pipeline model for the v2 export artifact.
-# Requires GEMINI_API_KEY in the environment.
-# provider = "google"
-# model_name = "text-embedding-005"
-# dimensions = 768
 
 [backend]
 # Vector store: "chromadb" | "qdrant"

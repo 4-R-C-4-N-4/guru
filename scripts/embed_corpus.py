@@ -63,39 +63,10 @@ def embed_api(texts: list[str], model: str) -> list[list[float]]:
     return [item.embedding for item in resp.data]
 
 
-def embed_google(texts: list[str], model: str) -> list[list[float]]:
-    """Google Gemini embedding API. Requires GEMINI_API_KEY in environment."""
-    import os
-
-    import google.generativeai as genai
-
-    api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        raise RuntimeError(
-            "GEMINI_API_KEY (or GOOGLE_API_KEY) is not set. "
-            "Create a key at https://aistudio.google.com/apikey."
-        )
-    genai.configure(api_key=api_key)
-
-    api_model = model if model.startswith("models/") else f"models/{model}"
-    result = genai.embed_content(
-        model=api_model,
-        content=texts,
-        task_type="retrieval_document",
-    )
-    # genai returns {"embedding": [...]} for a single string and
-    # {"embedding": [[...], [...]]} for a list. Normalize to list-of-lists.
-    emb = result["embedding"]
-    if emb and isinstance(emb[0], float):
-        return [emb]
-    return emb
-
-
 EMBED_FNS = {
     "ollama": embed_ollama,
     "sentence_transformers": embed_sentence_transformers,
     "api": embed_api,
-    "google": embed_google,
 }
 
 
