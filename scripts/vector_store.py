@@ -248,9 +248,8 @@ class VectorStore:
 
     def update_metadata(self, chunk_id: str, updates: dict) -> None:
         """No-op: metadata lives in SQLite nodes/edges and corpus TOMLs,
-        not in chunk_embeddings. Retained for API compatibility; the
-        previous backfill_concepts.py workflow is obsolete now that
-        concepts are sourced live from EXPRESSES edges."""
+        not in chunk_embeddings. Retained for API compatibility.
+        Concepts are sourced live from EXPRESSES edges."""
         logger.debug(
             "update_metadata(%s) ignored; metadata is derived from "
             "nodes+edges, not stored alongside vectors.", chunk_id,

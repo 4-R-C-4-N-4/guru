@@ -86,7 +86,7 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500) 
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=300) as resp:
+    with urllib.request.urlopen(req, timeout=1200) as resp:
         data = json.loads(resp.read())
 
     msg = data["choices"][0]["message"]
@@ -120,7 +120,7 @@ def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048) ->
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=300) as resp:
+    with urllib.request.urlopen(req, timeout=1200) as resp:
         data = json.loads(resp.read())
     return data["message"]["content"]
 
@@ -186,24 +186,52 @@ def parse_json_response(raw: str) -> list | dict:
     if not raw:
         return []
 
+    raw = raw.strip()
     # Strip markdown fences
-    raw = re.sub(r"```(?:json)?\s*", "", raw)
-    raw = re.sub(r"```", "", raw)
-
-    # Try direct parse first
+    raw = re.sub(r'^```(?:json)?\s*', '', raw)
+    raw = re.sub(r'\s*```$', '', raw)
+    # Handle two-stage responses if you add the ===JSON=== marker later
+    if "===JSON===" in raw:
+        raw = raw.split("===JSON===", 1)[1].strip()
+    # Try to find a JSON array
+    match = re.search(r'\[.*', raw, re.DOTALL)
+    if match:
+        raw = match.group(0)
+    # First attempt: parse as-is
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         pass
-
-    # Extract first JSON array or object
-    for pattern in (r'\[.*\]', r'\{.*\}'):
-        m = re.search(pattern, raw, re.DOTALL)
-        if m:
-            try:
-                return json.loads(m.group())
-            except json.JSONDecodeError:
-                pass
-
-    logger.warning("Could not parse JSON from response: %r", raw[:200])
+    # Repair attempt: truncate to the last complete object, close the array
+    # Walk back from the end to find the last complete object
+    depth = 0
+    last_complete = -1
+    in_string = False
+    escape_next = False
+    for i, c in enumerate(raw):
+        if escape_next:
+            escape_next = False
+            continue
+        if c == '\\':
+            escape_next = True
+            continue
+        if c == '"' and not escape_next:
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if c == '{':
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0:
+                last_complete = i
+    if last_complete > 0:
+        # Take everything up to and including the last complete object, then close the array
+        repaired = raw[:last_complete + 1] + "]"
+        try:
+            return json.loads(repaired)
+        except json.JSONDecodeError:
+            pass
+    # Give up, return empty
     return []

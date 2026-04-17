@@ -85,9 +85,6 @@ python scripts/embed_corpus.py
 
 # Stage 3 (cont.) — Cross-tradition edge proposals (requires embeddings)
 python scripts/propose_edges.py --provider llamacpp --model Carnice-27b-Q4_K_M.gguf
-
-# Stage 3 (cont.) — Backfill accepted concept tags into vector metadata
-python scripts/backfill_concepts.py
 ```
 
 ---

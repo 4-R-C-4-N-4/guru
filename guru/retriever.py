@@ -285,7 +285,7 @@ class HybridRetriever:
             source_url = chunk_meta.get("source_url", meta.get("source_url", ""))
             token_count = chunk_meta.get("token_count", meta.get("token_count", 0))
 
-            # Load concept tags from metadata (backfilled by backfill_concepts.py)
+            # Concept tags come from live EXPRESSES edges (VectorStore.get_metadata)
             raw_concepts = meta.get("concepts", [])
             if isinstance(raw_concepts, str):
                 import json as _json
