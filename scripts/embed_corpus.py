@@ -1,20 +1,25 @@
 """
-embed_corpus.py — Stage 4: Embed every chunk into the vector store.
+embed_corpus.py — Stage 4: Embed every chunk into data/guru.db.
 
 Reads corpus/**/chunks/*.toml, embeds each body via the configured provider,
-and upserts into the vector store (ChromaDB or Qdrant) with full metadata.
+and writes (chunk_id, dim, model, vector BLOB) rows into chunk_embeddings.
+Vectors are stored as float32 little-endian blobs; `model` is tagged
+`{provider}/{model_name}` so mixed-model rows stay self-describing.
 
 Usage:
     python3 scripts/embed_corpus.py [--resume] [--reindex]
-        [--tradition X] [--text Y] [--config config/embedding.toml]
+        [--tradition X] [--text Y] [--db data/guru.db]
+        [--config config/embedding.toml]
 """
 
 import argparse
 import logging
+import sqlite3
 import sys
 import time
 from pathlib import Path
 
+import numpy as np
 import tomllib
 
 logger = logging.getLogger(__name__)
@@ -22,6 +27,7 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).parent.parent
 CORPUS_DIR = PROJECT_ROOT / "corpus"
 CONFIG_PATH = PROJECT_ROOT / "config" / "embedding.toml"
+DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
 
 # ── embedding providers ───────────────────────────────────────────────────────
@@ -135,15 +141,38 @@ def collect_chunks(tradition_filter=None, text_filter=None) -> list[dict]:
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
+def existing_chunk_ids(conn: sqlite3.Connection) -> set[str]:
+    return {r[0] for r in conn.execute("SELECT chunk_id FROM chunk_embeddings")}
+
+
+def upsert_embeddings(
+    conn: sqlite3.Connection,
+    items: list[tuple[str, list[float]]],
+    model_tag: str,
+) -> None:
+    """items = [(chunk_id, vector), ...]. Writes float32 little-endian blobs."""
+    rows = []
+    for chunk_id, vec in items:
+        arr = np.asarray(vec, dtype=np.float32)
+        rows.append((chunk_id, int(arr.shape[0]), model_tag, arr.tobytes()))
+    conn.executemany(
+        "INSERT OR REPLACE INTO chunk_embeddings "
+        "(chunk_id, dim, model, vector) VALUES (?, ?, ?, ?)",
+        rows,
+    )
+    conn.commit()
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Embed corpus into vector store")
+    parser = argparse.ArgumentParser(description="Embed corpus into SQLite chunk_embeddings")
     parser.add_argument("--resume", action="store_true",
-                        help="Skip chunks already in the store")
+                        help="Skip chunks already embedded")
     parser.add_argument("--reindex", action="store_true",
                         help="Re-embed even if already present")
     parser.add_argument("--tradition")
     parser.add_argument("--text")
     parser.add_argument("--config", default=str(CONFIG_PATH))
+    parser.add_argument("--db", default=str(DEFAULT_DB), type=Path)
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -163,26 +192,30 @@ def main() -> None:
     model_name = model_cfg.get("model_name", "nomic-embed-text")
     batch_size = int(proc_cfg.get("batch_size", 32))
     delay = float(proc_cfg.get("delay", 0.0))
+    model_tag = f"{provider}/{model_name}"
 
     embed_fn = EMBED_FNS.get(provider)
     if not embed_fn:
         logger.error(f"Unknown embedding provider: {provider}")
         sys.exit(1)
 
-    sys.path.insert(0, str(Path(__file__).parent))
-    from vector_store import VectorStore
-    vs = VectorStore(cfg_path)
+    if not args.db.exists():
+        logger.error(f"Database not found: {args.db}")
+        sys.exit(1)
+
+    conn = sqlite3.connect(args.db)
+    conn.execute("PRAGMA foreign_keys=ON")
 
     chunks = collect_chunks(args.tradition, args.text)
     if not chunks:
         logger.warning("No chunks found. Run scripts/chunk.py first.")
         sys.exit(0)
 
-    logger.info(f"Embedding {len(chunks)} chunks with {provider}/{model_name} ...")
+    logger.info(f"Embedding {len(chunks)} chunks with {model_tag} ...")
 
-    # Filter already-embedded if --resume
     if args.resume and not args.reindex:
-        chunks = [c for c in chunks if not vs.exists(c["chunk_id"])]
+        have = existing_chunk_ids(conn)
+        chunks = [c for c in chunks if c["chunk_id"] not in have]
         logger.info(f"  {len(chunks)} to embed after --resume filter")
 
     embedded = errors = 0
@@ -198,18 +231,20 @@ def main() -> None:
             errors += len(batch)
             continue
 
-        items = [
-            {"chunk_id": c["chunk_id"], "embedding": emb, "metadata": c["metadata"]}
-            for c, emb in zip(batch, embeddings)
-        ]
-        vs.upsert_batch(items)
+        upsert_embeddings(
+            conn,
+            [(c["chunk_id"], emb) for c, emb in zip(batch, embeddings)],
+            model_tag,
+        )
         embedded += len(batch)
         logger.info(f"  [{i+len(batch)}/{len(chunks)}] embedded batch")
 
         if delay > 0:
             time.sleep(delay)
 
-    print(f"\nDone: {embedded} embedded, {errors} errors. Store count: {vs.count()}")
+    total = conn.execute("SELECT COUNT(*) FROM chunk_embeddings").fetchone()[0]
+    conn.close()
+    print(f"\nDone: {embedded} embedded, {errors} errors. chunk_embeddings rows: {total}")
 
 
 if __name__ == "__main__":
