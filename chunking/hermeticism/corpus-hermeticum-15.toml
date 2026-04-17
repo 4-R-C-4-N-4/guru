@@ -1,5 +1,5 @@
 [chunking]
-strategy = "paragraph"
+strategy = "paragraph-group"
 # Corpus Hermeticum prose tractates — group 2 paragraphs per chunk
 section_label_format = "Section {n}"
 max_tokens = 800

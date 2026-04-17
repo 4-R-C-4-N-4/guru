@@ -1,5 +1,5 @@
 [chunking]
-strategy = "paragraph"
+strategy = "paragraph-group"
 # Sefer Yetzirah is dense mystical prose; group 3 paragraphs per chunk
 # to stay within token budget while keeping semantic coherence
 section_label_format = "Section {n}"

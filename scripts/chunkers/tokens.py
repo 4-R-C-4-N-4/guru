@@ -45,5 +45,5 @@ def count_tokens(text: str, model: str = "cl100k_base") -> int:
     """
     _load_encoder()
     if _using_fallback:
-        return len(text.split())
+        return len(text) // 4
     return len(_encoder.encode(text))

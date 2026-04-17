@@ -2,6 +2,9 @@
 Regex-based splitter for texts with explicit section markers.
 
 Used for: sayings gospels (logion numbers), numbered verse texts, tractate sections.
+Supports section_enrichment: override labels for specific number ranges.
+
+Strategy name: regex-section-split (legacy: regex)
 """
 
 import re
@@ -16,6 +19,39 @@ class Chunk:
     metadata: dict = field(default_factory=dict)
 
 
+def _parse_enrichment(enrichment: dict) -> list[tuple[range, str]]:
+    """Parse section_enrichment dict into (range, format_string) pairs.
+
+    Keys are range strings like "28-34" or single numbers like "51".
+    Values are format strings like "Ahunavaiti Gatha, Yasna {n}".
+    """
+    ranges = []
+    for key, fmt in enrichment.items():
+        key = key.strip()
+        if "-" in key:
+            parts = key.split("-", 1)
+            lo, hi = int(parts[0].strip()), int(parts[1].strip())
+            ranges.append((range(lo, hi + 1), fmt))
+        else:
+            n = int(key)
+            ranges.append((range(n, n + 1), fmt))
+    return ranges
+
+
+def _apply_enrichment(raw_label: str, label_fmt: str, enrichment_ranges: list) -> str:
+    """Apply section_enrichment if the captured number falls in a range."""
+    try:
+        n = int(raw_label)
+    except (ValueError, TypeError):
+        return label_fmt.format(n=raw_label, heading=raw_label)
+
+    for rng, fmt in enrichment_ranges:
+        if n in rng:
+            return fmt.format(n=raw_label)
+
+    return label_fmt.format(n=raw_label, heading=raw_label)
+
+
 def split(text: str, config: dict) -> list[Chunk]:
     """
     Split text into chunks using a regex pattern to find section boundaries.
@@ -26,7 +62,8 @@ def split(text: str, config: dict) -> list[Chunk]:
                 Required keys: pattern
                 Optional keys: section_label_format (default "{n}"),
                                max_tokens (default 800),
-                               group_size (default 1)
+                               group_size (default 1),
+                               section_enrichment (dict mapping ranges to labels)
 
     Returns:
         List of Chunk objects (token_count=0; fill with tokens.count_tokens() after).
@@ -34,6 +71,8 @@ def split(text: str, config: dict) -> list[Chunk]:
     pattern = config["pattern"]
     label_fmt = config.get("section_label_format", "{n}")
     group_size = int(config.get("group_size", 1))
+    enrichment = config.get("section_enrichment", {})
+    enrichment_ranges = _parse_enrichment(enrichment) if enrichment else []
 
     # Find all section boundaries: (start_pos, capture_group)
     matches = list(re.finditer(pattern, text, re.MULTILINE))
@@ -67,7 +106,11 @@ def split(text: str, config: dict) -> list[Chunk]:
         else:
             raw_label = first_label
 
-        formatted_label = label_fmt.format(n=raw_label, heading=raw_label)
+        if enrichment_ranges:
+            formatted_label = _apply_enrichment(raw_label, label_fmt, enrichment_ranges)
+        else:
+            formatted_label = label_fmt.format(n=raw_label, heading=raw_label)
+
         body = "\n\n".join(b for _, b in group)
 
         chunks.append(Chunk(section_label=formatted_label, body=body))
@@ -80,7 +123,7 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
     Split an oversized chunk at paragraph or sentence boundaries,
     suffixing labels with a/b/c...
 
-    Tries paragraph boundaries first (\n\n), then falls back to sentence
+    Tries paragraph boundaries first (\\n\\n), then falls back to sentence
     boundaries ('. ') for single-line / collapsed prose.
 
     Args:
@@ -94,12 +137,48 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
     paragraphs = [p.strip() for p in chunk.body.split("\n\n") if p.strip()]
     if len(paragraphs) <= 1:
         # Fall back to sentence-level splitting for collapsed single-line prose
-        import re
         sentences = re.split(r'(?<=[.!?])\s+', chunk.body.strip())
         paragraphs = [s.strip() for s in sentences if s.strip()]
     if len(paragraphs) <= 1:
-        # Can't sub-split further — return as-is
-        return [chunk]
+        # Final fallback: split on word boundaries by approximating token positions
+        words = chunk.body.split()
+        if len(words) > 1:
+            paragraphs = []
+            current_words: list[str] = []
+            for w in words:
+                current_words.append(w)
+                if count_fn(" ".join(current_words)) >= max_tokens:
+                    # Back off one word and flush
+                    if len(current_words) > 1:
+                        current_words.pop()
+                        paragraphs.append(" ".join(current_words))
+                        current_words = [w]
+                    else:
+                        paragraphs.append(" ".join(current_words))
+                        current_words = []
+            if current_words:
+                paragraphs.append(" ".join(current_words))
+        else:
+            return [chunk]
+
+    # Ensure no individual paragraph exceeds the budget by word-splitting
+    final_paras = []
+    for para in paragraphs:
+        if count_fn(para) <= max_tokens:
+            final_paras.append(para)
+        else:
+            # Word-boundary split for oversized individual paragraphs
+            words = para.split()
+            current_words: list[str] = []
+            for w in words:
+                trial = " ".join(current_words + [w])
+                if current_words and count_fn(trial) > max_tokens:
+                    final_paras.append(" ".join(current_words))
+                    current_words = [w]
+                else:
+                    current_words.append(w)
+            if current_words:
+                final_paras.append(" ".join(current_words))
 
     sub_chunks = []
     current_paras: list[str] = []
@@ -116,7 +195,7 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
         current_paras = []
         suffix_idx += 1
 
-    for para in paragraphs:
+    for para in final_paras:
         candidate = "\n\n".join(current_paras + [para])
         if current_paras and count_fn(candidate) > max_tokens:
             flush()

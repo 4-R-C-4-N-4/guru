@@ -1,5 +1,5 @@
 [chunking]
-strategy = "regex"
+strategy = "regex-section-split"
 # Matches "(N)" logion markers — e.g. "(1)", "(42)", "(114)"
 # Single-quoted TOML literal string — no backslash escaping needed
 pattern = '\((\d+)\)\s+'

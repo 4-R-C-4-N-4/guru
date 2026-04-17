@@ -1,5 +1,5 @@
 [chunking]
-strategy = "paragraph"
+strategy = "paragraph-group"
 section_label_format = "Section {n}"
 max_tokens = 800
 group_size = 3
