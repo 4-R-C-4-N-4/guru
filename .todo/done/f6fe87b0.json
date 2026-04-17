@@ -1,0 +1,24 @@
+{
+  "id": "f6fe87b0",
+  "type": "chore",
+  "state": "done",
+  "summary": "Delete data/vectordb/ and remove chromadb from requirements.txt / pyproject.toml; uninstall locally",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.086Z",
+  "updated_at": "2026-04-17T18:12:11.054Z",
+  "tags": [
+    "v2",
+    "phase-4"
+  ],
+  "relationships": {
+    "parent": "b86edc60"
+  },
+  "resolution": {
+    "commit": "d763b9974820d49dfb95ec4da63f3a25fb69e700",
+    "resolved_at": "2026-04-17T18:12:11.054Z",
+    "resolved_by": "unknown",
+    "note": "data/vectordb/ removed (1.1 MB). README pip install no longer lists chromadb; the config section no longer mentions it. config/embedding.toml [backend] block dropped — storage is implicit (data/guru.db::chunk_embeddings). Code-side no imports of chromadb remain. 37 tests pass end-to-end."
+  }
+}
