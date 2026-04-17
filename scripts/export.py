@@ -363,12 +363,23 @@ def emit_inserts(conn: sqlite3.Connection, f) -> None:
 
 
 def emit_metadata(f, version: int, commit: str, exported_at: str) -> None:
-    """Final corpus_metadata INSERT block (schema_version, embedding_model,
-    embedding_dim, corpus_version, exported_at, source_commit_sha).
-
-    Filled in by todo:b6ce9e3c.
-    """
-    pass
+    """Final corpus_metadata block. Written LAST so a mid-load failure
+    leaves the table unset, and the web app's schema-version check then
+    refuses to serve a half-loaded corpus."""
+    f.write("-- corpus_metadata (written last — mid-load failure leaves it unset)\n")
+    f.write("INSERT INTO corpus_metadata (key, value) VALUES\n")
+    rows = [
+        ("schema_version",    str(SCHEMA_VERSION)),
+        ("embedding_model",   EMBEDDING_MODEL),
+        ("embedding_dim",     str(EMBEDDING_DIM)),
+        ("corpus_version",    str(version)),
+        ("exported_at",       exported_at),
+        ("source_commit_sha", commit),
+    ]
+    for i, (k, v) in enumerate(rows):
+        comma = "," if i < len(rows) - 1 else ";"
+        f.write(f"  ({esc(k)}, {esc(v)}){comma}\n")
+    f.write("\n")
 
 
 def main() -> None:
