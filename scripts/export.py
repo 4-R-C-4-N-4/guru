@@ -26,6 +26,7 @@ import logging
 import sqlite3
 import subprocess
 import sys
+import tomllib
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -37,6 +38,8 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 SCHEMA_FILE = PROJECT_ROOT / "schema" / "corpus-schema.sql"
 OUTPUT = PROJECT_ROOT / "export" / "guru-corpus.sql.gz"
+CORPUS_DIR = PROJECT_ROOT / "corpus"
+TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
@@ -162,12 +165,201 @@ def next_corpus_version(conn: sqlite3.Connection) -> int:
     return nxt
 
 
-def emit_inserts(conn: sqlite3.Connection, f) -> None:
-    """Write INSERTs for traditions, texts, concepts, chunks, edges.
+# ── data loaders ──────────────────────────────────────────────────────
+# Each loader returns rows already sorted by primary key so the emitter
+# layer stays deterministic without re-sorting.
 
-    Filled in by todo:f23d63a4.
-    """
-    pass
+def load_traditions(conn: sqlite3.Connection) -> list[dict]:
+    """From nodes WHERE type='tradition'. traditions.toml is stale
+    (auto-derived once, never refreshed) — SQLite is the live source of
+    truth for which traditions actually exist in the graph."""
+    rows = []
+    for node_id, label in conn.execute(
+        "SELECT id, label FROM nodes WHERE type='tradition' ORDER BY id"
+    ):
+        rows.append({"id": node_id, "label": label})
+    return rows
+
+
+def load_texts() -> list[dict]:
+    """From corpus/{tradition_dir}/{text_id}/metadata.toml. Uses the
+    parent-parent directory name as the canonical tradition id — the
+    'tradition' field in metadata.toml is unreliable (mixed case)."""
+    rows = []
+    for p in sorted(CORPUS_DIR.rglob("metadata.toml")):
+        with open(p, "rb") as fp:
+            d = tomllib.load(fp)
+        tradition_dir = p.parts[-3]  # .../corpus/<dir>/<text_id>/metadata.toml
+        rows.append({
+            "id": d["text_id"],
+            "tradition": tradition_dir,
+            "label": d["text_name"],
+            "translator": d.get("translator"),
+            "source_url": d.get("source_url"),
+            "sections_format": d.get("sections_format"),
+        })
+    rows.sort(key=lambda r: r["id"])
+    return rows
+
+
+def load_concepts(conn: sqlite3.Connection) -> list[dict]:
+    """Merge SQLite node rows (id, label) with concepts/taxonomy.toml
+    (domain, definition). Taxonomy is the canonical source for the two
+    descriptive fields; SQLite is canonical for which concepts actually
+    exist in the live graph."""
+    with open(TAXONOMY_TOML, "rb") as fp:
+        tax = tomllib.load(fp)
+    # taxonomy.toml shape: { concepts: { domain: { concept_id: definition }}}
+    lookup: dict[str, tuple[str, str]] = {}
+    for domain, members in tax["concepts"].items():
+        for cid, definition in members.items():
+            lookup[cid] = (domain, definition)
+
+    rows = []
+    for node_id, label in conn.execute(
+        "SELECT id, label FROM nodes WHERE type='concept' ORDER BY id"
+    ):
+        # SQLite ids are "concept.<short_id>"; taxonomy uses <short_id>
+        short = node_id.removeprefix("concept.")
+        domain, definition = lookup.get(short, (None, None))
+        rows.append({
+            "id": node_id,
+            "label": label,
+            "domain": domain,
+            "definition": definition,
+        })
+    return rows
+
+
+def load_chunks(conn: sqlite3.Connection):
+    """Yield chunk rows joining corpus TOMLs with chunk_embeddings.
+    Streams one chunk at a time so the 2531-row corpus never fully
+    materializes in memory."""
+    # Pre-load all (chunk_id → vector) from SQLite into a dict keyed by
+    # chunk_id. 2531 rows × 3 KB ≈ 7.5 MB — fine to hold in memory.
+    emb = {
+        cid: vec for cid, vec in conn.execute(
+            "SELECT chunk_id, vector FROM chunk_embeddings"
+        )
+    }
+    # Walk TOMLs in a deterministic order; text_id comes from the
+    # dotted id's middle segment (always canonical kebab-case).
+    paths = sorted(CORPUS_DIR.rglob("chunks/*.toml"))
+    for p in paths:
+        with open(p, "rb") as fp:
+            d = tomllib.load(fp)
+        chunk = d["chunk"]
+        cid = chunk["id"]
+        if cid not in emb:
+            raise SystemExit(
+                f"chunk {cid} has a TOML but no chunk_embeddings row"
+            )
+        # corpus/<tradition_dir>/<text_id>/chunks/NNN.toml → tradition_dir
+        tradition_dir = p.parts[-4]
+        # id format is "<raw_tradition>.<text_id>.<seq>"; text_id =
+        # middle segment. Split on dots from the LEFT then take [1].
+        parts = cid.split(".")
+        text_id = parts[1] if len(parts) >= 3 else chunk.get("text_id")
+        yield {
+            "id": cid,
+            "text_id": text_id,
+            "tradition": tradition_dir,
+            "text_name": chunk["text_name"],
+            "section": chunk.get("section"),
+            "section_path": None,  # not populated in v1 TOMLs
+            "translator": chunk.get("translator"),
+            "body": d["content"]["body"],
+            "token_count": int(chunk.get("token_count", 0)),
+            "vector": emb[cid],
+        }
+    # Sort order: sorted(rglob(...)) gives lexicographic path order,
+    # which for this layout matches chunk.id primary-key order closely
+    # but not exactly (Title Case vs lowercase sorts differently). The
+    # emitter sorts explicitly, so this is just a streaming detail.
+
+
+def load_edges(conn: sqlite3.Connection) -> list[dict]:
+    """SQLite edges → Postgres column names. v1 schema has no `weight`
+    column, so the Postgres `weight` column is always NULL from this
+    pipeline (the column exists for downstream ranking hooks)."""
+    rows = []
+    for r in conn.execute(
+        "SELECT source_id, target_id, type, tier, justification "
+        "FROM edges ORDER BY source_id, target_id, type"
+    ):
+        rows.append({
+            "source": r[0],
+            "target": r[1],
+            "edge_type": r[2],
+            "tier": r[3],
+            "weight": None,
+            "annotation": r[4],
+        })
+    return rows
+
+
+# ── emitters ──────────────────────────────────────────────────────────
+
+def emit_inserts(conn: sqlite3.Connection, f) -> None:
+    """Write INSERTs for traditions, texts, concepts, chunks, edges in
+    FK-dependency order. Every row is deterministic (stable sort, fixed
+    float precision) so re-exports of unchanged data are byte-identical
+    except for the corpus_version counter."""
+    f.write("-- traditions\n")
+    for r in load_traditions(conn):
+        f.write(
+            f"INSERT INTO traditions (id, label, description, color) "
+            f"VALUES ({esc(r['id'])}, {esc(r['label'])}, NULL, NULL);\n"
+        )
+    f.write("\n")
+
+    f.write("-- texts\n")
+    for r in load_texts():
+        f.write(
+            f"INSERT INTO texts (id, tradition, label, translator, "
+            f"source_url, sections_format) VALUES ("
+            f"{esc(r['id'])}, {esc(r['tradition'])}, {esc(r['label'])}, "
+            f"{esc(r['translator'])}, {esc(r['source_url'])}, "
+            f"{esc(r['sections_format'])});\n"
+        )
+    f.write("\n")
+
+    f.write("-- concepts\n")
+    for r in load_concepts(conn):
+        f.write(
+            f"INSERT INTO concepts (id, label, domain, definition) "
+            f"VALUES ({esc(r['id'])}, {esc(r['label'])}, "
+            f"{esc(r['domain'])}, {esc(r['definition'])});\n"
+        )
+    f.write("\n")
+
+    f.write("-- chunks\n")
+    # Materialize + sort by id for byte-stable output
+    chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
+    for r in chunks:
+        f.write(
+            f"INSERT INTO chunks (id, text_id, tradition, text_name, "
+            f"section, section_path, translator, body, token_count, "
+            f"embedding) VALUES ("
+            f"{esc(r['id'])}, {esc(r['text_id'])}, {esc(r['tradition'])}, "
+            f"{esc(r['text_name'])}, {esc(r['section'])}, "
+            f"{esc_array(r['section_path'])}, {esc(r['translator'])}, "
+            f"{esc(r['body'])}, {r['token_count']}, "
+            f"{vec_to_pg(r['vector'], EMBEDDING_DIM)}::vector);\n"
+        )
+    f.write("\n")
+
+    f.write("-- edges\n")
+    for r in load_edges(conn):
+        weight = "NULL" if r["weight"] is None else f"{r['weight']}"
+        f.write(
+            f"INSERT INTO edges (source, target, edge_type, tier, "
+            f"weight, annotation) VALUES ("
+            f"{esc(r['source'])}, {esc(r['target'])}, "
+            f"{esc(r['edge_type'])}, {esc(r['tier'])}, {weight}, "
+            f"{esc(r['annotation'])});\n"
+        )
+    f.write("\n")
 
 
 def emit_metadata(f, version: int, commit: str, exported_at: str) -> None:
