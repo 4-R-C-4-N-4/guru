@@ -1,0 +1,30 @@
+{
+  "id": "e27b4b1d",
+  "type": "chore",
+  "state": "done",
+  "summary": "Author schema/corpus-schema.sql (CREATE EXTENSION, CREATE TABLE for traditions/texts/concepts/chunks/edges/corpus_metadata, no indexes yet — HNSW added post-load)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.281Z",
+  "updated_at": "2026-04-17T17:48:56.844Z",
+  "tags": [
+    "v2",
+    "phase-5"
+  ],
+  "relationships": {
+    "parent": "33822806"
+  },
+  "work": {
+    "branch": "todo/33822806",
+    "base_branch": "main",
+    "started_at": "2026-04-17T17:47:40.638Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9604998c48612010012c33334cb6e60537187c1b",
+    "resolved_at": "2026-04-17T17:48:56.844Z",
+    "resolved_by": "unknown",
+    "note": "schema/corpus-schema.sql written with traditions, texts, concepts, chunks, edges, corpus_metadata tables matching the column names in docs/v2.md §6.4's export.py INSERTs. No indexes yet (Phase 6 emits HNSW after bulk load). Live syntax verification deferred to Phase 7's pgvector round-trip test."
+  }
+}

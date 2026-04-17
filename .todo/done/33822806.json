@@ -1,0 +1,27 @@
+{
+  "id": "33822806",
+  "type": "feature",
+  "state": "done",
+  "summary": "Phase 5: Check in canonical schema/corpus-schema.sql + cross-repo drift CI",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.236Z",
+  "updated_at": "2026-04-17T17:49:56.944Z",
+  "tags": [
+    "v2",
+    "phase-5"
+  ],
+  "relationships": {
+    "children": [
+      "e27b4b1d",
+      "836dd283"
+    ]
+  },
+  "resolution": {
+    "commit": "2d40c5ef4b47df667553252150ec3b6ee9d37df4",
+    "resolved_at": "2026-04-17T17:49:56.944Z",
+    "resolved_by": "unknown",
+    "note": "Phase 5 complete. schema/corpus-schema.sql pins the Postgres contract (6 tables, no indexes — HNSW built post-load in export.py). schema-drift.yml compares sha256 against the guru-web copy via GURU_WEB_REPO repo variable. User action required: set GURU_WEB_REPO under repo Settings → Variables → Actions once guru-web exists."
+  }
+}

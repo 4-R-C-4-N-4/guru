@@ -1,0 +1,67 @@
+name: schema drift
+
+on:
+  push:
+    paths:
+      - "schema/corpus-schema.sql"
+      - ".github/workflows/schema-drift.yml"
+  pull_request:
+    paths:
+      - "schema/corpus-schema.sql"
+      - ".github/workflows/schema-drift.yml"
+  workflow_dispatch:
+
+jobs:
+  compare-schema-hash:
+    runs-on: ubuntu-latest
+    env:
+      # Set as a repository variable under Settings → Variables → Actions.
+      # Example: "4-R-C-4-N-4/guru-web". Override the default branch by
+      # setting GURU_WEB_REF.
+      GURU_WEB_REPO: ${{ vars.GURU_WEB_REPO }}
+      GURU_WEB_REF: ${{ vars.GURU_WEB_REF || 'main' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify GURU_WEB_REPO is configured
+        run: |
+          if [ -z "$GURU_WEB_REPO" ]; then
+            echo "::error::GURU_WEB_REPO repository variable is not set."
+            echo "Configure it under Settings → Variables → Actions (format: owner/repo)."
+            exit 1
+          fi
+
+      - name: Hash local schema
+        id: local
+        run: |
+          h=$(sha256sum schema/corpus-schema.sql | awk '{print $1}')
+          echo "hash=$h" >> "$GITHUB_OUTPUT"
+          echo "Local schema sha256: $h"
+
+      - name: Fetch and hash guru-web schema
+        id: remote
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          url="https://raw.githubusercontent.com/$GURU_WEB_REPO/$GURU_WEB_REF/schema/corpus-schema.sql"
+          echo "Fetching $url"
+          if ! curl -fsSL -H "Authorization: Bearer $GH_TOKEN" "$url" -o /tmp/remote-schema.sql; then
+            echo "::error::Failed to fetch $url. Check GURU_WEB_REPO/GURU_WEB_REF and that schema/corpus-schema.sql exists in the target repo."
+            exit 1
+          fi
+          h=$(sha256sum /tmp/remote-schema.sql | awk '{print $1}')
+          echo "hash=$h" >> "$GITHUB_OUTPUT"
+          echo "Remote schema sha256: $h"
+
+      - name: Compare hashes
+        run: |
+          if [ "${{ steps.local.outputs.hash }}" != "${{ steps.remote.outputs.hash }}" ]; then
+            echo "::error::schema/corpus-schema.sql drifted between this repo and $GURU_WEB_REPO@$GURU_WEB_REF."
+            echo "Local  : ${{ steps.local.outputs.hash }}"
+            echo "Remote : ${{ steps.remote.outputs.hash }}"
+            echo ""
+            echo "Resolve by updating both repos in the same change (v2 §7.1)."
+            diff -u /tmp/remote-schema.sql schema/corpus-schema.sql || true
+            exit 1
+          fi
+          echo "Schemas match (sha256=${{ steps.local.outputs.hash }})."
