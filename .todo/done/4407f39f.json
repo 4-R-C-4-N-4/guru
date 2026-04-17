@@ -1,0 +1,24 @@
+{
+  "id": "4407f39f",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Swap ChromaDB write for SQLite INSERT OR REPLACE into chunk_embeddings using float32 little-endian blob (np.asarray(...).tobytes())",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.813Z",
+  "updated_at": "2026-04-17T17:08:00.224Z",
+  "tags": [
+    "v2",
+    "phase-2"
+  ],
+  "relationships": {
+    "parent": "5dca13fc"
+  },
+  "resolution": {
+    "commit": "a0645103e9d7cbc2403bad2e3af00978894ef1f2",
+    "resolved_at": "2026-04-17T17:08:00.224Z",
+    "resolved_by": "unknown",
+    "note": "embed_corpus.py write path swapped from vs.upsert_batch → INSERT OR REPLACE on chunk_embeddings. Syntax + --help verified. Deferred imports (numpy is top-level since we need it unconditionally; google-generativeai stays inside embed_google). Single-chunk round-trip validation is ticket 099d07af."
+  }
+}
