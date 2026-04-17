@@ -1,0 +1,33 @@
+{
+  "id": "94167d50",
+  "type": "chore",
+  "state": "done",
+  "summary": "Execute the §8.1 operational runbook end-to-end once against a non-production Postgres and capture any corrections",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.847Z",
+  "updated_at": "2026-04-17T18:00:43.255Z",
+  "tags": [
+    "v2",
+    "phase-7"
+  ],
+  "relationships": {
+    "parent": "49031039"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T18:00:43.208Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Runbook §8.1 executed end-to-end against pgvector/pgvector:pg17 on port 5433 (standing in for guru-vps). Four corrections to capture:\n\n1. Step 3 assumes $DATABASE_URL is set on the remote; runbook should mention this prereq explicitly or use a concrete psql URI fallback.\n\n2. Step 4's verification is a single query. Real operational verification should include: per-tradition chunk counts sum to expected total, corpus_metadata keys present, spot-check a self-similarity query to confirm the vector column loaded (we proved chunk<=>self=0 and nearest-other~0.23 — mutate this into a smoke-test snippet for the runbook).\n\n3. No HNSW index is emitted by export.py today. Full scan is <10ms at 2531 chunks, but at ~100k+ the web app would need CREATE INDEX CONCURRENTLY post-load. Future ticket to add HNSW emission to export.py before the COMMIT.\n\n4. §8.2 (rollback) says to keep prior .sql.gz artifacts somewhere — git archive on tag or object storage. No enforcement mechanism exists yet; a post-export hook that writes to a versioned directory would close this loop.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "5b47c01e6aa2467ead5d3f1d82d35e01470171ae",
+    "resolved_at": "2026-04-17T18:00:43.255Z",
+    "resolved_by": "unknown",
+    "note": "Runbook §8.1 simulated locally end-to-end (export → docker pgvector load → corpus_metadata verify). Captured 4 follow-ups in the ticket's conclusion analysis: DATABASE_URL prereq, richer verification recipe, missing HNSW emission, artifact-archive gap. Container torn down cleanly."
+  }
+}
