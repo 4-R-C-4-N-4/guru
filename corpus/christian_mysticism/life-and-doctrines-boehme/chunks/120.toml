@@ -1,0 +1,15 @@
+[chunk]
+id = "Christian Mysticism.life-and-doctrines-boehme.120"
+tradition = "Christian Mysticism"
+text_name = "The Life and Doctrines of Jacob Boehme"
+section = "Chapter 11 (part 11)"
+translator = "Franz Hartmann"
+source_url = "https://www.sacred-texts.com/eso/ldjb/ldjb04.htm"
+token_count = 129
+
+[content]
+body = "421.) 239:1 It is universal and nevertheless individual, like that of a god.\n\n239:2 This would be like imagining that the trunk of a tree was dwelling within the leaves.\n\n240:1 The universal life and the individual life are only one principle.\n\n241:1 \"You must not seek for any historical knowledge in our writings.\n\nIt is not possible to see God with earthly eyes, and therefore it is impossible for an unillumined mind to comprehend heavenly thoughts and perceptions in its terrestrial vehicle.\n\nLike can be grasped only by like.\" ( Princ.\n\nAppendix , 30.) Next: Chapter XII.\n\nRedemption"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "Buddhism.diamond-sutra.020"
+tradition = "Buddhism"
+text_name = "Vajrakkhedika (Diamond Cutter)"
+section = "Section 1t"
+translator = "E.B. Cowell, F. Max Müller, and J. Kakakusu"
+source_url = "https://www.sacred-texts.com/bud/sbe49/sbe4929.htm"
+token_count = 167
+
+[content]
+body = "As in the sky: Stars, darkness, a lamp, a phantom, dew, a bubble.\n\nA dream, a flash of lightning, and a cloud--thus we should look upon the world (all that was made).\n\nThus he should explain; therefore it is said: He should explain.' Thus spoke the Bhagavat enraptured.\n\nThe elder Subhûti, and the friars, nuns, the faithful laymen and women, and the Bodhisattvas also, and the whole world of gods, men, evil spirits and fairies, praised the preaching of the Bhagavat.\n\n(32) Thus is finished the Diamond-cutter, the blessed Pra gñ âpâramitâ.\n\nNext: The Larger Pra gñ â-pâramitâ-h ri daya-sûtra"
+
+[annotations]
+concepts = []
+related_chunks = []

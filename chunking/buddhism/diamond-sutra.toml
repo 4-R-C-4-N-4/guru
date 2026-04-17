@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Buddhism"
+text_name = "Vajrakkhedika (Diamond Cutter)"
+translator = "E.B. Cowell, F. Max Müller, and J. Kakakusu"
+sections_format = "section"

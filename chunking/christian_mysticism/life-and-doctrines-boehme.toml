@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Christian Mysticism"
+text_name = "The Life and Doctrines of Jacob Boehme"
+translator = "Franz Hartmann"
+sections_format = "chapter"

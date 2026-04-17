@@ -1,0 +1,7 @@
+tradition = "Buddhism"
+text_id = "diamond-sutra"
+text_name = "Vajrakkhedika (Diamond Cutter)"
+translator = "E.B. Cowell, F. Max Müller, and J. Kakakusu"
+source_url = "https://www.sacred-texts.com/bud/sbe49/sbe4929.htm"
+sections_format = "section"
+chunk_count = 20

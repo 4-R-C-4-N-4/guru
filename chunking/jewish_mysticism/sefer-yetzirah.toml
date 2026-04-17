@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Jewish Mysticism"
+text_name = "Sefer Yetzirah (The Book of Formation)"
+translator = "Wynn Westcott"
+sections_format = "section"

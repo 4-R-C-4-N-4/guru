@@ -1,0 +1,7 @@
+tradition = "Jewish Mysticism"
+text_id = "sefer-yetzirah"
+text_name = "Sefer Yetzirah (The Book of Formation)"
+translator = "Wynn Westcott"
+source_url = "https://sacred-texts.com/jud/yetzirah.htm"
+sections_format = "section"
+chunk_count = 7
