@@ -1,0 +1,39 @@
+{
+  "id": "ef86ed76",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add force/re-embed flag to embed_corpus.py so all chunks are re-embedded regardless of existing vector",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.949Z",
+  "updated_at": "2026-04-17T17:09:26.338Z",
+  "tags": [
+    "v2",
+    "phase-3"
+  ],
+  "relationships": {
+    "parent": "b3723c71"
+  },
+  "work": {
+    "branch": "todo/b3723c71",
+    "base_branch": "main",
+    "started_at": "2026-04-17T17:09:10.318Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T17:09:26.282Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "--reindex already lands as part of todo:4407f39f's embed_corpus.py rewrite. Behavior matrix: no flags = full re-embed (default, INSERT OR REPLACE overwrites everything); --resume = skip already-embedded; --resume --reindex = overrides the resume skip (back to full re-embed); --reindex alone = identical to default. No additional code change needed.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "de85a569a5fe9de9b31e290480c30ba2a800afbb",
+    "resolved_at": "2026-04-17T17:09:26.338Z",
+    "resolved_by": "unknown",
+    "note": "Resolved by the 4407f39f rewrite: --reindex exists and the default (no flags) is already a full re-embed thanks to INSERT OR REPLACE semantics. Verified flag matrix above."
+  }
+}
