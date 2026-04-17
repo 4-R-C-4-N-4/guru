@@ -1,0 +1,33 @@
+{
+  "id": "3940b852",
+  "type": "chore",
+  "state": "done",
+  "summary": "Run migrate_to_sqlite_embeddings.py locally once; confirm reconciliation counts match",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.569Z",
+  "updated_at": "2026-04-17T17:04:34.711Z",
+  "tags": [
+    "v2",
+    "phase-1"
+  ],
+  "relationships": {
+    "parent": "1237b4fe"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T17:04:34.669Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Migration run on 2026-04-17: ChromaDB=120, chunk_embeddings=120, Chroma IDs missing from nodes=0. The Chroma→SQLite transfer itself is clean (script's actual job). ChromaDB in this local env was never fully populated — 2411 of 2531 chunk nodes have no vector at all, neither in Chroma nor (consequently) in chunk_embeddings. That gap is pre-existing, not migration loss, and will be resolved by Phase 3 re-embed against Google text-embedding-005.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "fbb6bd386dc703b28398d93b620c716bc2deea42",
+    "resolved_at": "2026-04-17T17:04:34.711Z",
+    "resolved_by": "unknown",
+    "note": "Reconciliation verified: Chroma vectors (120) == chunk_embeddings rows (120), 0 orphan IDs. The 2411-chunk gap to full nodes count is pre-existing ChromaDB incompleteness (not migration loss); Phase 3 (b3723c71) will re-embed the full corpus. Migration script's transfer semantics confirmed clean."
+  }
+}
