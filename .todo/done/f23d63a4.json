@@ -1,0 +1,33 @@
+{
+  "id": "f23d63a4",
+  "type": "chore",
+  "state": "done",
+  "summary": "Emit deterministic INSERTs for traditions, texts, concepts, chunks (JOIN chunk_embeddings, section_path->array, embedding::vector), edges — every query ORDER BY primary key",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.590Z",
+  "updated_at": "2026-04-17T17:57:50.829Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T17:55:36.748Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Corpus data integrity surfaces: chunk TOML 'tradition' fields are inconsistent — 'gnosticism', 'hermeticism', 'jewish_mysticism' are lowercase_snake while 'Neoplatonism', 'Jewish Mysticism', 'Greek Mystery' etc. are Title Case with spaces. There are BOTH 'jewish_mysticism' (1 text) and 'Jewish Mysticism' (5 texts) tradition labels in the corpus — true schism. Directory names are uniformly lowercase_snake (buddhism/, greek_mystery/, jewish_mysticism/). Traditions table has 11 canonical ids in lowercase_snake only. Export must normalize via directory basename to keep chunks.tradition / texts.tradition FK integrity with traditions.id; the chunk.id opaque string can stay as-is.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "f2c4beb87ef037a2ebcd225b0a12cac256b1465d",
+    "resolved_at": "2026-04-17T17:57:50.829Z",
+    "resolved_by": "unknown",
+    "note": "emit_inserts wired for all 5 tables. Live 2531-chunk export produces 10.05 MB gzip in 4.9s. Integrity: 11 traditions, 58 texts, 58 concepts, 2531 chunks, 2548 edges — 0 unknown text_id or tradition refs in chunks rows. Tradition normalization via directory basename documented inline; v1 corpus has real mixed-case inconsistencies that export.py hides from the Postgres contract."
+  }
+}
