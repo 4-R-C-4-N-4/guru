@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-15.005"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 15: The Hymn of Hermes"
+section = "Section 1e"
+translator = "G.R.S. Mead"
+source_url = "https://www.sacred-texts.com/gno/th2/th231.htm"
+token_count = 799
+
+[content]
+body = "bringing or drawing down; κατάγειν = deducere, elicere —used frequently of magic arts.\n\n269:8 νοητὴ οὐσία = intelligibilis essentia.\n\n269:9 ὄγκος = moles, mass, bulk, volume; in later philosophy it means “atom,” and may mean so here, of course in the philosophical and mystic and not in the physical sense.\n\n269:10 ὑποδοχή = receptaculum.\n\n270:1 The text is very corrupt.\n\nPatrizzi translates: “ Vel quia ipso loco, et natura prope se ipsum existens, non a nobis conspicitur cogit nos per conjecturas intelligere ”—which certainly does not represent the Greek.\n\nMénard conjectures brilliantly but in entire emancipation from the text: “ Pour comprendre par induction ce qui se dérobe à notre vue, il faudrait être près de lui et analogue à sa nature.\n\n” Reitzenstein discovers two lacunas in the text, but does not attempt to fill them.\n\nAs the text stands, then, all attempt at translation seems hopeless.\n\n270:2 Lit.\n\nhis very sight,—αὐτὴ ἡ ὄψις, that is, his rays, ὄψις being used of the visual rays which were supposed by the science of the time to proceed from the eyes.\n\nCf.\n\nEx.\n\nvii.\n\n4.\n\n270:3 Wearing the Cosmos as a wreath or crown; the visible sun being regarded as a “head.” See “The Perfect Sermon.” 270:4 Lit.\n\ncar or chariot—ἅρμα.\n\n270:5 Lit.\n\nbinds it to himself—ἀναδήσας εἰς ἑαυτόν.\n\n271:1 δημιουργεῖ.\n\n271:2 Lit.\n\npart.\n\n271:3 κύτος = a, hollow, vase, or vessel.\n\n271:4 That is, those lives subject to death, as opposed to the immortals.\n\n272:1 Compare “Sermon to Tat,” I.\n\n(Ménard).\n\nCf.\n\nStob., Ecl , i.\n\n61; 274, 24 W.\n\n272:2 Lit.\n\n“the land of these”—that is, of the immortals.\n\n272:3 Cf.\n\nEx.\n\nix.\n\n5.\n\n272:4 Or, to be pious.\n\nCf.\n\nP.\n\nS.\n\nA.\n\n, ix.\n\n1.\n\n273:1 εἱμαρμένην.\n\n273:2 σωτήρ.\n\n273:3 Or genus.\n\n273:4 Or Cosmos.\n\n273:5 ὑπὸ τὰς τῶν ἀστέρων πλινθίδας.\n\nπλινθίς = πλινθίον, and is used of any rectangular figure, and also of groups of stars as in Eratosth.\n\napud Strab., II.\n\ni.\n\n35; v.\n\n36 ( Lex.\n\nSophocles); compare αἱ τῶν πλινθίων ὑπογραφαί, the fields, or spaces, into which the Augurs divided the heavens, templa , or regiones coeli ( Lex.\n\nLiddell and Scott).\n\n274:1 Lit.\n\nviscera.\n\n274:2 Cf.\n\nP.\n\nS.\n\nA.\n\n, xxxv.\n\n2.\n\n274:3 Cf.\n\nC.\n\nH.\n\n, xiii."
+
+[annotations]
+concepts = []
+related_chunks = []

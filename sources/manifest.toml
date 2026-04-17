@@ -43,7 +43,7 @@ notes = "First tractate of Corpus Hermeticum. Extract text between navigation an
 [[source]]
 id = "corpus-hermeticum-02"
 tradition = "hermeticism"
-label = "Corpus Hermeticum II: The Serapeum"
+label = "Corpus Hermeticum II: To Asclepius"
 url = "https://sacred-texts.com/chr/herm/hermes2.htm"
 format = "html"
 license = "public_domain"
@@ -63,7 +63,7 @@ notes = "Third tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-04"
 tradition = "hermeticism"
-label = "Corpus Hermeticum IV: The Epistles"
+label = "Corpus Hermeticum IV: The Cup or Monad"
 url = "https://sacred-texts.com/chr/herm/hermes4.htm"
 format = "html"
 license = "public_domain"
@@ -73,7 +73,7 @@ notes = "Fourth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-05"
 tradition = "hermeticism"
-label = "Corpus Hermeticum V: The Discourse of Hermes to Asclepius"
+label = "Corpus Hermeticum V: Though Unmanifest God Is Most Manifest"
 url = "https://sacred-texts.com/chr/herm/hermes5.htm"
 format = "html"
 license = "public_domain"
@@ -83,7 +83,7 @@ notes = "Fifth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-06"
 tradition = "hermeticism"
-label = "Corpus Hermeticum VI: The All-Father"
+label = "Corpus Hermeticum VI: In God Alone Is Good And Elsewhere Nowhere"
 url = "https://sacred-texts.com/chr/herm/hermes6.htm"
 format = "html"
 license = "public_domain"
@@ -93,7 +93,7 @@ notes = "Sixth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-07"
 tradition = "hermeticism"
-label = "Corpus Hermeticum VII: The Seven Powers"
+label = "Corpus Hermeticum VII: The Greatest Ill Among Men is Ignorance of God"
 url = "https://sacred-texts.com/chr/herm/hermes7.htm"
 format = "html"
 license = "public_domain"
@@ -103,7 +103,7 @@ notes = "Seventh tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-08"
 tradition = "hermeticism"
-label = "Corpus Hermeticum VIII: The Eight Sphere"
+label = "Corpus Hermeticum VIII: That No One of Existing Things doth Perish, but Men in Error Speak of Their Changes as Destructions and as Deaths"
 url = "https://sacred-texts.com/chr/herm/hermes8.htm"
 format = "html"
 license = "public_domain"
@@ -113,7 +113,7 @@ notes = "Eighth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-09"
 tradition = "hermeticism"
-label = "Corpus Hermeticum IX: The Decalogue"
+label = "Corpus Hermeticum IX: On Thought and Sense"
 url = "https://sacred-texts.com/chr/herm/hermes9.htm"
 format = "html"
 license = "public_domain"
@@ -123,7 +123,7 @@ notes = "Ninth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-10"
 tradition = "hermeticism"
-label = "Corpus Hermeticum X: The Sermon on the Mount"
+label = "Corpus Hermeticum X: The Key"
 url = "https://sacred-texts.com/chr/herm/hermes10.htm"
 format = "html"
 license = "public_domain"
@@ -133,7 +133,7 @@ notes = "Tenth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-11"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XI: The Hymn"
+label = "Corpus Hermeticum XI: Mind Unto Hermes"
 url = "https://sacred-texts.com/chr/herm/hermes11.htm"
 format = "html"
 license = "public_domain"
@@ -143,7 +143,7 @@ notes = "Eleventh tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-12"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XII: The Prayer"
+label = "Corpus Hermeticum XII: About The Common Mind"
 url = "https://sacred-texts.com/chr/herm/hermes12.htm"
 format = "html"
 license = "public_domain"
@@ -153,7 +153,7 @@ notes = "Twelfth tractate. Extract text between navigation and header."
 [[source]]
 id = "corpus-hermeticum-13"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XIII: The Discourse of Hermes to Tat"
+label = "Corpus Hermeticum XIII: The Secret Sermon on the Mountain"
 url = "https://sacred-texts.com/chr/herm/hermes13.htm"
 format = "html"
 license = "public_domain"
@@ -161,52 +161,52 @@ translator = "G.R.S. Mead"
 notes = "Thirteenth tractate. Extract text between navigation and header."
 
 [[source]]
-id = "corpus-hermeticum-14-15"
+id = "corpus-hermeticum-14"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XIV-XV: A Letter of Thrice-Greatest Hermes to Asclepius"
-url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th229.html"
+label = "Corpus Hermeticum XIV: A Letter of Thrice-Greatest Hermes to Asclepius"
+url = "https://www.sacred-texts.com/gno/th2/th229.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Fourteenth/Fifteenth tractate. Raw html. Extract text between navigation and header."
+notes = "Fourteenth tractate. Raw html. Extract text between navigation and header."
 
 [[source]]
-id = "corpus-hermeticum-16"
+id = "corpus-hermeticum-15"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVI: The Definitions of Asclepius unto King Ammon"
-url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th231.html"
+label = "Corpus Hermeticum XV: The Definitions of Asclepius unto King Ammon"
+url = "https://www.sacred-texts.com/gno/th2/th231.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
 notes = "Sixteenth tractate. Raw html. Extract text between navigation and header."
 
 [[source]]
-id = "corpus-hermeticum-17"
+id = "corpus-hermeticum-16"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVII: Of Asclepius to the King"
-url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th233.html"
+label = "Corpus Hermeticum XVI: Of Asclepius to the King"
+url = "https://www.sacred-texts.com/gno/th2/th233.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
 notes = "Seventeenth tractate. Raw html. Extract text between navigation and header."
 
 [[source]]
-id = "corpus-hermeticum-18"
+id = "corpus-hermeticum-17"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVIII: The Encomium of Kings"
-url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th235.html"
+label = "Corpus Hermeticum XVII: The Encomium of Kings"
+url = "https://www.sacred-texts.com/gno/th2/th235.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
 notes = "Eighteenth tractate. Raw html. Extract text between navigation and header."
 
 # ============================================
-# ESOTERICA (sacred-texts.com)
+# Christian Mysticism (sacred-texts.com)
 # ============================================
 
 [[source]]
 id = "life-and-doctrines-boehme-01"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter I. Introduction"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb04.htm"
 format = "html"
@@ -216,7 +216,7 @@ notes = "Chapter I. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-02"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter II. The Unity of the All"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb05.htm"
 format = "html"
@@ -226,7 +226,7 @@ notes = "Chapter II. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-03"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter III. The Seven Properties or Qualities of Eternal Nature"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb06.htm"
 format = "html"
@@ -236,7 +236,7 @@ notes = "Chapter III. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-04"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter IV. Creation"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb07.htm"
 format = "html"
@@ -246,7 +246,7 @@ notes = "Chapter IV. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-05"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter V. The Angels"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb08.htm"
 format = "html"
@@ -256,7 +256,7 @@ notes = "Chapter V. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-06"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter VI. The Restoration of Nature and the Generation of Man"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb09.htm"
 format = "html"
@@ -266,7 +266,7 @@ notes = "Chapter VI. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-07"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter VII. Man"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb10.htm"
 format = "html"
@@ -276,7 +276,7 @@ notes = "Chapter VII. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-08"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter VIII. Nature, or the Third Principle"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb11.htm"
 format = "html"
@@ -286,7 +286,7 @@ notes = "Chapter VIII. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-09"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter IX. Generation"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb12.htm"
 format = "html"
@@ -296,7 +296,7 @@ notes = "Chapter IX. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-10"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter X. The Christ"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb13.htm"
 format = "html"
@@ -306,7 +306,7 @@ notes = "Chapter X. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-11"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter XI. Incarnation—The Celestial Virgin"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb14.htm"
 format = "html"
@@ -316,7 +316,7 @@ notes = "Chapter XI. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-12"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter XII. Redemption"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb15.htm"
 format = "html"
@@ -326,7 +326,7 @@ notes = "Chapter XII. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-13"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter XIII. Regeneration"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb16.htm"
 format = "html"
@@ -336,7 +336,7 @@ notes = "Chapter XIII. Extract text between CHAPTER and Footnotes."
 
 [[source]]
 id = "life-and-doctrines-boehme-14"
-tradition = "esoteric"
+tradition = "christian_mysticism"
 label = "Chapter XIV. Death and Eternal Life"
 url = "https://www.sacred-texts.com/eso/ldjb/ldjb17.htm"
 format = "html"
@@ -359,74 +359,197 @@ license = "public_domain"
 translator = "E.B. Cowell, F. Max Müller, and J. Kakakusu"
 notes = "Core Mahayana sutra. Extract text between navigation and header."
 
-
-# --------------------------------------------
-# ZOROASTRIANISM
-# --------------------------------------------
-# The single highest-value addition. Zarathustra's light/darkness
-# dualism is the direct ancestor of Gnostic pleroma/kenoma oppositions
-# and deeply influences Jewish apocalyptic and early Christian cosmology.
+# ============================================
+# ZOROASTRIANISM — Gathas of Zarathushtra
+# Mills translation (SBE Vol. 31, 1886)
+# https://sacred-texts.com/zor/sbe31/index.htm
+#
+# The Gathas are the oldest Zoroastrian scripture (~1200 BCE),
+# Zarathushtra's own hymns. They're organized by meter into five
+# groups (Ahunavaiti, Ushtavaiti, Spenta Mainyu, Vohu Khshathra,
+# Vahishtoishti) but sacred-texts presents them by Yasna chapter
+# number, which is the standard academic citation format.
+# ============================================
 
 [[source]]
-id = "gathas-ahunavaiti"
+id = "gathas-introduction"
 tradition = "zoroastrianism"
-label = "Gathas of Zarathustra: Ahunavaiti Gatha"
-url = "https://sacred-texts.com/zor/sbe31/sbe3104.htm"
+label = "The Gathas: Introduction (Mills)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31005.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Oldest layer of Zoroastrian scripture — Zarathustra's own hymns, ~1200 BCE. Extract text between navigation and footnotes."
+notes = "Mills' scholarly introduction to the Gathas. Historical and linguistic context. Extract main content between navigation elements."
 
 [[source]]
-id = "gathas-ushtavaiti"
+id = "yasna-28"
 tradition = "zoroastrianism"
-label = "Gathas of Zarathustra: Ushtavaiti Gatha"
-url = "https://sacred-texts.com/zor/sbe31/sbe3110.htm"
+label = "Yasna XXVIII (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31007.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Second Gatha. Extract text between navigation and footnotes."
+notes = "First chapter of the Ahunavaiti Gatha. Note: sacred-texts filename is sbe31007 (not 006) due to index ordering quirk. Extract main content between navigation elements."
 
 [[source]]
-id = "gathas-spenta-mainyu"
+id = "yasna-29"
 tradition = "zoroastrianism"
-label = "Gathas of Zarathustra: Spenta Mainyu Gatha"
-url = "https://sacred-texts.com/zor/sbe31/sbe3116.htm"
+label = "Yasna XXIX (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31006.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Third Gatha — 'Bountiful Spirit.' Cosmic dualism in its original formulation. Extract text between navigation and footnotes."
+notes = "The Lament of the Kine — soul of the ox appeals to Ahura Mazda. Filename is sbe31006. Extract main content between navigation elements."
 
 [[source]]
-id = "gathas-vohu-khshathra"
+id = "yasna-30"
 tradition = "zoroastrianism"
-label = "Gathas of Zarathustra: Vohu-Khshathra Gatha"
-url = "https://sacred-texts.com/zor/sbe31/sbe3121.htm"
+label = "Yasna XXX (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31008.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Fourth Gatha — 'Good Dominion.' Extract text between navigation and footnotes."
+notes = "The two primal spirits — foundational statement of Zoroastrian dualism. Arguably the single most important Gatha chapter for cross-tradition work. Extract main content between navigation elements."
 
 [[source]]
-id = "gathas-vahishtoishti"
+id = "yasna-31"
 tradition = "zoroastrianism"
-label = "Gathas of Zarathustra: Vahishtoishti Gatha"
-url = "https://sacred-texts.com/zor/sbe31/sbe3123.htm"
+label = "Yasna XXXI (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31009.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Fifth and final Gatha. Extract text between navigation and footnotes."
+notes = "Ahura Mazda's laws and the choice between truth and the lie. Extract main content between navigation elements."
 
 [[source]]
-id = "yasna-haptanghaiti"
+id = "yasna-32"
 tradition = "zoroastrianism"
-label = "Yasna Haptanghaiti (Worship of Seven Chapters)"
-url = "https://sacred-texts.com/zor/sbe31/sbe3108.htm"
+label = "Yasna XXXII (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31010.htm"
 format = "html"
 license = "public_domain"
 translator = "L.H. Mills"
-notes = "Ancient liturgy interpolated into the Gathas. Older than most Avestan material except the Gathas themselves. Extract text between navigation and footnotes."
+notes = "On the daevas (false gods) and their followers. Extract main content between navigation elements."
 
+[[source]]
+id = "yasna-33"
+tradition = "zoroastrianism"
+label = "Yasna XXXIII (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31011.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Prayers and invocations. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-34"
+tradition = "zoroastrianism"
+label = "Yasna XXXIV (Ahunavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31012.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Closing chapter of the Ahunavaiti Gatha. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-43"
+tradition = "zoroastrianism"
+label = "Yasna XLIII (Ushtavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31013.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Opens the Ushtavaiti Gatha ('Happiness'). Zarathushtra's vision — direct address to Ahura Mazda. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-44"
+tradition = "zoroastrianism"
+label = "Yasna XLIV (Ushtavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31014.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "The 'Tad Thwa Peresa' hymn — Zarathushtra's questions about cosmology: who sustains the earth, who made the sun, who fixed the course of the stars. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-45"
+tradition = "zoroastrianism"
+label = "Yasna XLV (Ushtavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31015.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Proclamation to the assembly. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-46"
+tradition = "zoroastrianism"
+label = "Yasna XLVI (Ushtavaiti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31016.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Personal lament and prayer for support. Closes the Ushtavaiti Gatha. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-47"
+tradition = "zoroastrianism"
+label = "Yasna XLVII (Spenta Mainyu Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31017.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Opens the Spenta Mainyu Gatha ('Bounteous Spirit'). On the nature of the Holy Spirit as emanation of Ahura Mazda. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-48"
+tradition = "zoroastrianism"
+label = "Yasna XLVIII (Spenta Mainyu Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31018.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "On the final victory of truth over the lie. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-49"
+tradition = "zoroastrianism"
+label = "Yasna XLIX (Spenta Mainyu Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31019.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Prayer against Bendva the deceiver — one of the few named historical opponents in the Gathas. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-50"
+tradition = "zoroastrianism"
+label = "Yasna L (Spenta Mainyu Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31020.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Closes the Spenta Mainyu Gatha. Prayer for strength and recompense. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-51"
+tradition = "zoroastrianism"
+label = "Yasna LI (Vohu Khshathra Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31021.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "The entire Vohu Khshathra Gatha ('Good Dominion') — only one chapter. On the righteous kingdom. Extract main content between navigation elements."
+
+[[source]]
+id = "yasna-53"
+tradition = "zoroastrianism"
+label = "Yasna LIII (Vahishtoishti Gatha)"
+url = "https://sacred-texts.com/zor/sbe31/sbe31022.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "The entire Vahishtoishti Gatha ('Best Wish') — only one chapter. Wedding hymn, likely composed late in Zarathushtra's life. Extract main content between navigation elements."
 [[source]]
 id = "bundahishn"
 tradition = "zoroastrianism"
@@ -464,17 +587,6 @@ format = "html_multi"
 license = "public_domain"
 translator = "Florence M. Firth"
 notes = "Ethical-mystical verses attributed to Pythagoras, with Hierocles' commentary. Source of soul-migration doctrine and daily self-examination practice. Index page links to sections."
-
-[[source]]
-id = "pythagorean-sentences-sextus"
-tradition = "greek_mystery"
-label = "Sentences of Sextus the Pythagorean"
-url = "https://sacred-texts.com/cla/sext/index.htm"
-format = "html"
-license = "public_domain"
-translator = "John Davies"
-notes = "Pythagorean-Christian aphorisms. Structural parallels with Gospel of Thomas logia — compressed wisdom sayings. Creates natural edges with Nag Hammadi material."
-
 
 # --------------------------------------------
 # JEWISH MYSTICISM — Sacred-Texts (replacing Sefaria)
@@ -648,10 +760,20 @@ notes = "Budge's translation of the Book of Am-Tuat (the Twelve Hours of the Nig
 # but it's the main PD access point to Mandaean material.
 
 [[source]]
-id = "gnostic-john-baptizer"
+id = "gnostic-john-baptizer-1"
 tradition = "mandaean"
-label = "Gnostic John the Baptizer: Selections from the Mandaean John-Book"
-url = "http://gnosis.org/library/grs-mead/gjb/index.htm"
+label = "Gnostic John the Baptizer I: PORTENTS AT JOHN'S BIRTH"
+url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-1.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+
+[[source]]
+id = "gnostic-john-baptizer-2"
+tradition = "mandaean"
+label = "Gnostic John the Baptizer II: THE STORY OF THE BREACH WITH JUDAISM"
+url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-2.htm"
 format = "html_multi"
 license = "public_domain"
 translator = "G.R.S. Mead"

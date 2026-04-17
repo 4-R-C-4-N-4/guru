@@ -1,0 +1,13 @@
+# Auto-generated chunking config for Yasna XXVIII
+# Source: sacred-texts.com SBE Vol. 31 (Mills, 1886)
+
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Yasna XXVIII (Ahunavaiti Gatha)"
+max_tokens = 800
+
+[metadata]
+tradition = "Zoroastrianism"
+text_name = "Avesta (Gathas)"
+translator = "L.H. Mills"
+sections_format = "yasna_chapter"
