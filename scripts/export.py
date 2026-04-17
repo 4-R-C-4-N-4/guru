@@ -29,6 +29,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import numpy as np
+
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -52,6 +54,37 @@ def git_sha() -> str:
     return subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT,
     ).decode().strip()
+
+
+# ── SQL value emitters ────────────────────────────────────────────────
+# All three return a bare SQL fragment suitable for splicing into an
+# INSERT VALUES list. None/empty inputs emit literal NULL.
+
+def esc(s: str | None) -> str:
+    """Escape a Python string to a Postgres single-quoted literal."""
+    if s is None:
+        return "NULL"
+    return "'" + s.replace("'", "''") + "'"
+
+
+def esc_array(xs: list[str] | None) -> str:
+    """Emit a Postgres text[] literal: '{"a","b"}' with embedded quotes
+    escaped. Empty list and None both collapse to NULL so export.py can
+    forward a missing section_path without special-casing upstream."""
+    if not xs:
+        return "NULL"
+    inner = ",".join('"' + x.replace("\\", "\\\\").replace('"', '\\"') + '"' for x in xs)
+    return f"'{{{inner}}}'"
+
+
+def vec_to_pg(blob: bytes, expected_dim: int) -> str:
+    """Render a float32 little-endian blob as pgvector's text format:
+    '[0.1234567,...]'. Callers wrap this in ::vector in the INSERT."""
+    arr = np.frombuffer(blob, dtype=np.float32)
+    if arr.shape[0] != expected_dim:
+        raise ValueError(f"vector dim mismatch: {arr.shape[0]} != {expected_dim}")
+    # 7 significant digits is within float32 precision; more wastes bytes.
+    return "'[" + ",".join(f"{x:.7f}" for x in arr) + "]'"
 
 
 def validate(conn: sqlite3.Connection) -> None:
