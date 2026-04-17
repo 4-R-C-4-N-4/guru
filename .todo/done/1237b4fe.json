@@ -1,13 +1,13 @@
 {
   "id": "1237b4fe",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Phase 1: Add chunk_embeddings table and backfill from ChromaDB",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-17T16:25:10.479Z",
-  "updated_at": "2026-04-17T16:32:59.896Z",
+  "updated_at": "2026-04-17T17:04:43.785Z",
   "tags": [
     "v2",
     "phase-1"
@@ -37,5 +37,11 @@
         0
       ]
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "730714198bd7fe08e04e0c276b7ceaf99c0eefb2",
+    "resolved_at": "2026-04-17T17:04:43.785Z",
+    "resolved_by": "unknown",
+    "note": "Phase 1 complete. scripts/migrate_to_sqlite_embeddings.py backfills ChromaDB→SQLite chunk_embeddings; DDL committed to scripts/schema.sql; reconciliation confirms clean transfer (120/120). Spec note: FK references nodes(id) because the live schema uses a unified nodes table, not the split tables docs/v2.md §5 assumes — Phase 6 (export.py) queries will need the same adjustment."
+  }
 }
