@@ -1,0 +1,24 @@
+{
+  "id": "3800c933",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Replace embedding model call in embed_corpus.py with Google text-embedding-005 (768d native)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.760Z",
+  "updated_at": "2026-04-17T17:06:43.698Z",
+  "tags": [
+    "v2",
+    "phase-2"
+  ],
+  "relationships": {
+    "parent": "5dca13fc"
+  },
+  "resolution": {
+    "commit": "8d203225702d647c662ff51ed81482329183dfba",
+    "resolved_at": "2026-04-17T17:06:43.698Z",
+    "resolved_by": "unknown",
+    "note": "embed_google() added to EMBED_FNS; import deferred inside the function so existing ollama/sentence_transformers/api callers still work without google-generativeai installed. Switching the live pipeline to Google happens by flipping provider='google' in config/embedding.toml (documented in commented stanza from 8882a4a1)."
+  }
+}
