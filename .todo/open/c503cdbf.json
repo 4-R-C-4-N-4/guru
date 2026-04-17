@@ -1,0 +1,265 @@
+{
+  "id": "c503cdbf",
+  "type": "chore",
+  "state": "open",
+  "summary": "Three tier chunking approach",
+  "source": {
+    "type": "human"
+  },
+  "description":"
+# Task: Implement Three-Tier Chunking System for Guru Corpus
+
+## Context
+
+You are working in the `guru-pipeline` Python repo. The corpus acquisition stage (`scripts/acquire.py` reading `sources/manifest.toml`) is already working and producing cleaned plaintext in `raw/{tradition}/{text_id}.txt`. The chunking stage (`scripts/chunk.py`) currently has per-text chunking configs that are becoming unwieldy as the corpus grows.
+
+The goal is to refactor chunking around **three reusable strategy templates** so that adding a new source becomes a small config file rather than bespoke code. Each source in `sources/manifest.toml` picks a strategy by name and supplies parameters.
+
+The strategy templates are:
+
+1. **`regex-section-split`** — single-page texts with consistent section markers (e.g. `^YASNA [IVXLCDM]+`, `^\s*\d+\.\s*$`, `(?:^|\n)\(?(\d+)\)\s+`). Splits one raw file into N chunks by regex boundary.
+
+2. **`page-as-chunk`** — multi-page books where each raw file represents one natural chunk. Each page becomes one chunk (with optional sub-splitting on paragraph boundaries if it exceeds the token budget).
+
+3. **`paragraph-group`** — prose without obvious section markers. Groups N consecutive paragraphs per chunk within the token budget, splitting on blank lines.
+
+All three strategies must enforce a maximum token count (default 800) and preserve citation metadata per chunk.
+
+---
+
+## What to Build
+
+### 1. Refactor `scripts/chunk.py`
+
+Replace whatever per-text dispatching exists today with a strategy registry:
+
+```python
+STRATEGIES = {
+    "regex-section-split": regex_section_split,
+    "page-as-chunk": page_as_chunk,
+    "paragraph-group": paragraph_group,
+}
+
+def chunk_source(source_entry, raw_dir, corpus_dir):
+    config = load_chunking_config(source_entry["id"])
+    strategy_fn = STRATEGIES[config["chunking"]["strategy"]]
+    chunks = strategy_fn(raw_dir, config)
+    write_chunks(chunks, corpus_dir, source_entry, config["metadata"])
+```
+
+The driver reads `sources/manifest.toml`, looks up the per-source chunking config in `chunking/{tradition}/{source_id}.toml`, dispatches to the named strategy, and writes TOML chunk files to `corpus/{tradition}/{text_id}/chunks/NNN.toml`.
+
+### 2. Implement the three strategies
+
+**`regex_section_split(raw_dir, config)`**
+
+Parameters:
+- `pattern` — regex matching section start (with optional capture group for section number)
+- `section_label_format` — format string like `"Yasna {n}"` or `"Chapter {n}"` or `"Logion {n}"`
+- `max_tokens` — default 800
+- `section_enrichment` — optional dict mapping number ranges to richer label formats (for cases where a text has nested divisions, e.g. the Yasna has Gathas inside it)
+
+Algorithm:
+1. Read the raw file as UTF-8
+2. Find all matches of `pattern` with their positions
+3. Slice the text between consecutive match positions; each slice is one section
+4. If a section exceeds `max_tokens`, sub-split on paragraph breaks (blank lines), preserving source order
+5. For each resulting chunk, compute the section label by applying `section_label_format` (and overriding from `section_enrichment` if the captured number falls into a specified range)
+
+**`page_as_chunk(raw_dir, config)`**
+
+Parameters:
+- `section_label_format` — format string applied per file, e.g. `"Hymn {n}. {title}"` or `"Tractate {n}"`
+- `number_source` — `"filename"` (extract integer from filename like `corpus-hermeticum-03.txt` → 3) or `"content"` (extract from a header in the file content via `number_pattern`)
+- `title_source` — optional, same options, extracts a title string
+- `max_tokens` — default 800
+
+Algorithm:
+1. For each file in `raw_dir` matching the source's ID pattern:
+   - Read content
+   - Extract number and optional title from filename or content
+   - If content fits within `max_tokens`, emit as single chunk
+   - Otherwise, sub-split on paragraph breaks, labeling as `"{base_label} (part {i})"`
+
+**`paragraph_group(raw_dir, config)`**
+
+Parameters:
+- `section_label_format` — e.g. `"Section {n}"` (here `{n}` is a synthetic sequence number since there's no natural section marker)
+- `paragraphs_per_chunk` — soft target; actual grouping respects `max_tokens`
+- `max_tokens` — default 800
+
+Algorithm:
+1. Read raw file
+2. Split on double-newline into paragraphs
+3. Greedily group paragraphs into chunks, starting a new chunk when adding the next paragraph would exceed `max_tokens`
+4. Assign sequential section numbers
+
+### 3. Token Counting
+
+Use `tiktoken` with a consistent encoding (recommend `cl100k_base`). If tiktoken is not available, fall back to `len(text) // 4` as a heuristic with a warning logged. The fallback should never silently take over — log clearly when it's used.
+
+### 4. Chunk Output Format
+
+Preserve the existing TOML chunk schema. Each chunk file contains:
+
+```toml
+[chunk]
+id = "{tradition}.{text_id}.{NNN}"
+tradition = "..."
+text_name = "..."
+section = "..."             # rendered from section_label_format
+translator = "..."
+source_url = "..."
+token_count = 0             # actual count from tiktoken
+
+[content]
+body = """
+..."""
+
+[annotations]
+concepts = []
+related_chunks = []
+```
+
+The chunk ID uses zero-padded 3-digit sequence within the text (`001`, `002`, ...).
+
+### 5. Chunking Configs for New Sources
+
+Create chunking configs for every new source in the manifest that doesn't have one yet. Organize by tradition:
+
+```
+chunking/
+├── zoroastrianism/
+│   ├── avesta-yasna-gathas.toml       # regex-section-split
+│   └── bundahishn.toml                 # page-as-chunk
+├── greek_mystery/
+│   ├── orphic-hymns.toml               # page-as-chunk
+│   ├── pythagorean-golden-verses.toml  # paragraph-group
+│   └── pythagorean-sentences-sextus.toml  # regex-section-split
+├── jewish_mysticism/
+│   ├── sefer-yetzirah.toml             # regex-section-split (by chapter/verse)
+│   ├── kabbalah-unveiled-intro.toml    # paragraph-group
+│   ├── book-of-concealed-mystery.toml  # regex-section-split
+│   ├── greater-holy-assembly.toml      # page-as-chunk
+│   └── lesser-holy-assembly.toml       # page-as-chunk
+├── neoplatonism/
+│   ├── plotinus-select-works-index.toml  # page-as-chunk
+│   ├── plotinus-on-the-beautiful.toml    # paragraph-group
+│   ├── plotinus-on-intelligible-beauty.toml  # paragraph-group
+│   └── plotinus-on-the-good-or-the-one.toml  # paragraph-group
+├── taoism/
+│   ├── tao-te-ching-legge.toml         # regex-section-split
+│   └── zhuangzi-inner-chapters-index.toml  # page-as-chunk
+├── egyptian/
+│   ├── egyptian-book-of-the-dead-index.toml  # page-as-chunk
+│   └── egyptian-heaven-and-hell.toml   # page-as-chunk
+├── mandaean/
+│   └── gnostic-john-baptizer.toml      # page-as-chunk
+└── mesopotamian/
+    ├── descent-of-inanna.toml          # paragraph-group
+    └── enuma-elish.toml                # regex-section-split (by tablet)
+```
+
+For each config, inspect the corresponding raw file in `raw/` to verify the strategy choice is correct before committing. If a text has clear section markers that a regex would catch, prefer `regex-section-split` over `paragraph-group`.
+
+### Example configs
+
+**`chunking/zoroastrianism/avesta-yasna-gathas.toml`** (regex-section-split):
+```toml
+[chunking]
+strategy = "regex-section-split"
+pattern = '^YASNA [IVXLCDM]+'
+section_label_format = "Yasna {n}"
+max_tokens = 800
+
+# When a Yasna chapter falls into a Gatha range, use the enriched label
+[chunking.section_enrichment]
+"28-34" = "Ahunavaiti Gatha, Yasna {n}"
+"35-42" = "Yasna Haptanghaiti, Yasna {n}"
+"43-46" = "Ushtavaiti Gatha, Yasna {n}"
+"47-50" = "Spenta Mainyu Gatha, Yasna {n}"
+"51"    = "Vohu Khshathra Gatha, Yasna 51"
+"53"    = "Vahishtoishti Gatha, Yasna 53"
+
+[metadata]
+tradition = "Zoroastrianism"
+text_name = "Avesta (Yasna)"
+translator = "L.H. Mills"
+sections_format = "yasna_chapter"
+```
+
+**`chunking/greek_mystery/orphic-hymns.toml`** (page-as-chunk):
+```toml
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Hymn {n}. {title}"
+number_source = "filename"
+title_source = "content"
+title_pattern = '^TO\s+(.+)'   # matches "TO APOLLO" etc. on first non-empty line
+max_tokens = 800
+
+[metadata]
+tradition = "Greek Mystery"
+text_name = "Orphic Hymns"
+translator = "Thomas Taylor"
+sections_format = "hymn_number"
+```
+
+**`chunking/neoplatonism/plotinus-on-the-beautiful.toml`** (paragraph-group):
+```toml
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Ennead I.6, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Neoplatonism"
+text_name = "Enneads"
+translator = "Thomas Taylor"
+sections_format = "ennead_section"
+```
+
+### 6. Tests
+
+Add lightweight tests in `tests/test_chunking.py`:
+
+1. **Round-trip test per strategy.** For one representative source per strategy, concatenating all chunks (with whitespace normalization) should reproduce the raw source's meaningful content. Small whitespace differences are fine; content loss is not.
+
+2. **Token budget enforcement.** No chunk in the output should exceed `max_tokens` as measured by tiktoken.
+
+3. **Chunk ID uniqueness.** All chunk IDs across the full corpus must be unique.
+
+4. **Metadata completeness.** Every chunk must have non-empty `tradition`, `text_name`, `section`, and `body` fields.
+
+Run the existing chunking behavior on the original corpus (Nag Hammadi, Corpus Hermeticum, Boehme, Diamond Sutra, Sefer Yetzirah) as a regression check — the strategy refactor should produce equivalent or better chunks, never worse.
+
+---
+
+## Constraints and Preferences
+
+- **Preserve existing chunk IDs and metadata schema.** Downstream stages (embedding, concept tagging, export) depend on the current format.
+- **Don't change the `sources/manifest.toml` format.** The source entries are already correct; only `chunking/*.toml` configs are new or refactored.
+- **The three strategies are the complete set.** If you encounter a text that seems to need a fourth strategy, stop and flag it rather than adding one — we want to resist strategy proliferation. Most "fourth strategy" cases turn out to be parameterization differences on one of the existing three.
+- **Idempotency.** Running `chunk.py` twice should produce byte-identical output. No timestamps, no random ordering.
+- **UTF-8 throughout.** Ancient texts have Greek, Coptic, Sanskrit transliterations, diacritics. Never fall back to ASCII or strip non-ASCII characters.
+- **Log chunk counts per source.** After processing, print a summary: `{source_id}: {n} chunks ({total_tokens} tokens total, avg {avg_tokens}/chunk)`.
+
+## Out of Scope
+
+Do not touch: `scripts/acquire.py`, `scripts/tag_concepts.py`, `scripts/embed_corpus.py`, `scripts/export.py`, or anything in the TypeScript `guru-web` repo. The chunking refactor is self-contained.
+
+## Definition of Done
+
+- Three strategy functions implemented and tested
+- Chunking configs written for all new Tier 1 and Tier 2 sources (per the directory listing above)
+- Regression test passes: re-chunking the existing corpus produces equivalent chunks
+- New sources chunk cleanly on first run without manual intervention
+- Token budget is enforced for every chunk
+- Summary log output at end of `chunk.py` run showing counts per source
+
+Report back with: the three strategy function signatures you landed on, any configs where you had to deviate from the strategy recommendations I gave (with reasoning), and any Tier 1/2 sources you couldn't chunk cleanly.
+  "
+  "created_at": "2026-04-17T01:29:00.898Z",
+  "updated_at": "2026-04-17T01:29:00.898Z"
+}
