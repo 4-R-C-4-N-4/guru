@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.095"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 51)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 589
+
+[content]
+body = "Αὐτίκα δ᾽ ἀντὶ πυρὸς τεῦξεν κακὸν ἀνθρώποισιν· 570 γαίης γὰρ σύμπλασσε περικλυτὸς Ἀμφιγυήεις παρθένῳ αἰδοίῃ ἴκελον Κρονίδεω διὰ βουλάς.\n\nΖῶσε δὲ καὶ κόσμησε θεὰ γλαυκῶπις Ἀθήνη ἀργυφέη ἐσθῆτι· κατὰ κρῆθεν δὲ καλύπτρην δαιδαλέην χείρεσσι κατέσχεθε, θαῦμα ἰδέσθαι· 575 [ἀμφὶ δέ οἱ στεφάνους, νεοθηλέος ἄνθεα ποίης, ἱμερτοὺς περίθηκε καρήατι Παλλὰς Ἀθήνη.\n\n] ἀμφὶ δέ οἱ στεφάνην χρυσέην κεφαλῆφιν ἔθηκε, τὴν αὐτὸς ποίησε περικλυτὸς Ἀμφιγυήεις ἀσκήσας παλάμῃσι, χαριζόμενος Διὶ πατρί."
+
+[annotations]
+concepts = []
+related_chunks = []

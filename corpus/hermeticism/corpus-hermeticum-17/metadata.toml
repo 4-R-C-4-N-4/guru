@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-17"
+text_name = "Corpus Hermeticum 17: The Discourse of Hermes to Asclepius"
+translator = "G.R.S. Mead"
+source_url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th233.html"
+sections_format = "paragraph"
+chunk_count = 1

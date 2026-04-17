@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-05.003"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 5: The Discourse of Hermes to Asclepius"
+section = "Section 1c"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes5.htm"
+token_count = 450
+
+[content]
+body = "The things that are He hath made manifest, He keepeth things that are not in Himself.\n\n10.\n\nHe is the God beyond all name; He the unmanifest, He the most manifest; He whom the mind [alone] can contemplate, He visible to the eyes [as well]; He is the one of no body, the one of many bodies, nay, rather He of every body.\n\nNaught is there which he is not.\n\nFor all are He and He is all.\n\nAnd for this cause hath He all names, in that they are one Father's.\n\nAnd for this cause hath He Himself no nome, in that He's Father of [them] all.\n\nWho, then, may sing Thee praise of Thee, or [praise] to Thee?\n\nWhither, again, am I to turn my eyes to sing Thy praise; above, below, within, without?\n\nThere is no way, no place [is there] about Thee, nor any other thing of things that are.\n\nAll [are] in Thee; all [are] from Thee, O Thou who givest all and takest naught, for Thou hast all and naught is there Thou hast not.\n\n11.\n\nAnd when, O Father, shall I hymn Thee?\n\nFor none can seize Thy hour or time.\n\nFor what, again, shall I sing hymn?\n\nFor things that Thou hast made, or things Thou hast not?\n\nFor things Thou hast made manifest, or things Thou hast concealed?\n\nHow, further, shall I hymn Thee?\n\nAs being of myself?\n\nAs having something of mine own?\n\nAs being other?\n\nFor that Thou art whatever I may be; Thou art whatever I may do; Thou art whatever I may speak.\n\nFor Thou art all, and there is nothing else which Thou art not.\n\nThou art all that which doth exist, and Thou art what doth not exist - Mind when Thou thinkest, and Father when Thou makest, and God when Thou dost energize, and Good and Maker of all things.\n\nFor that the subtler part of matter is the air, of air the soul, of soul the mind, and of mind God."
+
+[annotations]
+concepts = []
+related_chunks = []

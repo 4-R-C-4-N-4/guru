@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.059"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 15)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 609
+
+[content]
+body = "Τῶν ἑκατὸν μὲν χεῖρες ἀπ᾽ ὤμων ἀίσσοντο, 150 ἄπλαστοι, κεφαλαὶ δὲ ἑκάστῳ πεντήκοντα ἐξ ὤμων ἐπέφυκον ἐπὶ στιβαροῖσι μέλεσσιν· ἰσχὺς δ᾽ ἄπλητος κρατερὴ μεγάλῳ ἐπὶ εἴδει.\n\nὍσσοι γὰρ Γαίης τε καὶ Οὐρανοῦ ἐξεγένοντο, δεινότατοι παίδων, σφετέρῳ δ᾽ ἤχθοντο τοκῆι 155 ἐξ ἀρχῆς· καὶ τῶν μὲν ὅπως τις πρῶτα γένοιτο, πάντας ἀποκρύπτασκε, καὶ ἐς φάος οὐκ ἀνίεσκε, Γαίης ἐν κευθμῶνι, κακῷ δ᾽ ἐπετέρπετο ἔργῳ Οὐρανός.\n\nἣ δ᾽ ἐντὸς στοναχίζετο Γαῖα πελώρη στεινομένη· δολίην δὲ κακήν τ᾽ ἐφράσσατο τέχνην."
+
+[annotations]
+concepts = []
+related_chunks = []

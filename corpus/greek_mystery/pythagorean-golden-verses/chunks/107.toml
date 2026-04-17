@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.107"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 63)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 531
+
+[content]
+body = "725 Τὸν πέρι χάλκεον ἕρκος ἐλήλαται· ἀμφὶ δέ μιν νὺξ τριστοιχεὶ κέχυται περὶ δειρήν· αὐτὰρ ὕπερθεν γῆς ῥίζαι πεφύασι καὶ ἀτρυγέτοιο θαλάσσης.\n\nἜνθα θεοὶ Τιτῆνες ὑπὸ ζόφῳ ἠερόεντι κεκρύφαται βουλῇσι Διὸς νεφεληγερέταο 730 [χώρῳ ἐν εὐρώεντι, πελώρης ἔσχατα γαίης.] Τοῖς οὐκ ἐξιτόν ἐστι.\n\nθύρας δ᾽ ἐπέθηκε Ποσειδέων χαλκείας, τεῖχος δὲ περοίχεται ἀμφοτέρωθεν.\n\nἜνθα Γύης Κόττος τε καὶ Ὀβριάρεως μεγάθυμος ναίουσιν, φύλακες πιστοὶ Διὸς αἰγιόχοιο."
+
+[annotations]
+concepts = []
+related_chunks = []

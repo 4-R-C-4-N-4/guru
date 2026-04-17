@@ -1,0 +1,7 @@
+tradition = "Zoroastrianism"
+text_id = "bundahishn"
+text_name = "Bundahishn (Creation)"
+translator = "E.W. West"
+source_url = "https://sacred-texts.com/zor/sbe05/sbe0502.htm"
+sections_format = "chapter"
+chunk_count = 2

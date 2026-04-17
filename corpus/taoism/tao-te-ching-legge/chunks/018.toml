@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.018"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 18"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 72
+
+[content]
+body = "When the Great Tao (Way or Method) ceased to be observed, benevolence and righteousness came into vogue. (Then) appeared wisdom and shrewdness, and there ensued great hypocrisy. When harmony no longer prevailed throughout the six kinships, filial sons found their manifestation; when the states and clans fell into disorder, loyal ministers appeared."
+
+[annotations]
+concepts = []
+related_chunks = []

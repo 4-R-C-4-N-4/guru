@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.117"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 73)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 117
+
+[content]
+body = "Ποσσὶ δ᾽ ὕπ᾽ ἀθανάτοισι μέγας πελεμίζετ᾽ Ὄλυμπος ὀρνυμένοιο ἄνακτος· ἐπεστενάχιζε δὲ γαῖα."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.232"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 39 (part 3)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 304
+
+[content]
+body = "359} deceased] he shall be among those who follow Osiris Un-nefer, triumphant.\n\nThe gates of the underworld shall be opened unto him, and a homestead shall be given unto him, together with wheat and barley, in the Sekhet-Aaru; and the followers of Horus who reap therein shall proclaim his name as one of the gods who are therein.\n\nVignette: A heart.\n\nText: [CHAPTER XXIX B .].\n\n(1) THE CHAPTER OF A HEART OF CARNELIAN.\n\nSaith Osiris Ani, triumphant: \"I am the Bennu , the soul of Ra, and the guide of the gods into (2) the underworld.\n\nThe souls come forth upon earth to do the will of their ka's , and the soul of Osiris Ani cometh forth to do the will of his ka .\" Vignette: A head-rest.\n\nText: [CHAPTER CLXVI.] (I) THE CHAPTER OF THE PILLOW WHICH IS PLACED UNDER THE HEAD OF OSIRIS ANI, TRIUMPHANT, TO WARD OFF WOES FROM THE DEAD BODY OF OSIRIS.\n\n(2) [Ani saith]: \"Lift up thy head to the heavens, for I have knit thee together triumphantly.\n\nPtah hath overthrown his foes and thine; all his enemies have fallen, and they shall never more rise up again, O Osiris.\" Next: Plates XXXIII and XXXIV."
+
+[annotations]
+concepts = []
+related_chunks = []

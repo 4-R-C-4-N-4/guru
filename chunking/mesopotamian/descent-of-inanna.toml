@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Mesopotamian"
+text_name = "The Descent of the Goddess Ishtar into the Lower World"
+translator = "E.A. Speiser / M. Jastrow"
+sections_format = "section"

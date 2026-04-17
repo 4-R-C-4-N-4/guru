@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.129"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 85)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 638
+
+[content]
+body = "Τόν ῥα νέον τέρεν ἄνθος ἔχοντ᾽ ἐρικυδέος ἥβης παῖδ᾽ ἀταλὰ φρονέοντα φιλομμειδὴς Ἀφροδίτη ὦρτ᾽ ἀναρεψαμένη, καί μιν ζαθέοις ἐνὶ νηοῖς 990 νηοπόλον νύχιον ποιήσατο, δαίμονα δῖον.\n\nΚούρην δ᾽ Αἰήταο διοτρεφέος βασιλῆος Αἰσονίδης βουλῇσι θεῶν αἰειγενετάων ἦγε παρ᾽ Αἰήτεω, τελέσας στονόεντας ἀέθλους, τοὺς πολλοὺς ἐπέτελλε μέγας βασιλεὺς ὑπερήνωρ, 995 ὑβριστὴς Πελίης καὶ ἀτάσθαλος, ὀβριμοεργός.\n\nτοὺς τελέσας Ἰαωλκὸν ἀφίκετο, πολλὰ μογήσας, ὠκείης ἐπὶ νηὸς ἄγων ἑλικώπιδα κούρην Αἰσονίδης, καί μιν θαλερὴν ποιήσατ᾽ ἄκοιτιν."
+
+[annotations]
+concepts = []
+related_chunks = []

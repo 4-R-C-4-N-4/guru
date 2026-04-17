@@ -1,0 +1,15 @@
+[chunk]
+id = "Mesopotamian.enuma-elish.012"
+tradition = "Mesopotamian"
+text_name = "Enuma Elish: The Epic of Creation"
+section = "1l"
+translator = "L.W. King"
+source_url = "https://sacred-texts.com/ane/enuma.htm"
+token_count = 125
+
+[content]
+body = "[The rest of the Obverse and the upper part of the Reverse of the tablet are wanting.] REVERSE ................\n\nAnd opened his mouth and spake unto the god...\n\n\" Stir up cloud, and storm and tempest!\n\nThe seal of thy life shalt thou set before thy face, Thou shalt grasp it, and thou shalt slay the dragon.\" He stirred up cloud, and storm and tempest, He set the seal of his life before his face, He grasped it, and he slew the dragon.\n\nFor three years and three months, one day and one night The blood of the dragon flowed.\n\n..."
+
+[annotations]
+concepts = []
+related_chunks = []

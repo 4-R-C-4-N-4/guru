@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-08.002"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 8: The Eight Sphere"
+section = "Section 1b"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes8.htm"
+token_count = 183
+
+[content]
+body = "Privation, thus, of sense is brought about, not loss of bodies.\n\n5.\n\nNow the third life - Man, after the image of the Cosmos made, [and] having mind, after the Father's will, beyond all earthly lives - not only doth have feeling with the second God <i.e., the Cosmos>, but also hath conception of the first; for of the one 'tis sensible as of a body, while of the other it conceives as bodiless and the Good Mind.\n\nTat: Doth then this life not perish?\n\nHermes: Hush, son!\n\nand understand what God, what Cosmos [is], what is a life that cannot die, and what a life subject to dissolution.\n\nYea, understand the Cosmos is by God and in God; but Man by Cosmos and in Cosmos.\n\nThe source and limit and the constitution of all things is God."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.065"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 6 (part 21)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 72
+
+[content]
+body = "The Australian blacks kill a man, cut out his caul-fat, and rub themselves with it, \"the belief being that all the qualifications, both physical and mental of the previous owner of the fat, were communicated to him who used it\"; see Fraser, Golden Bough , vol.\n\nii., p.\n\n88.] Next: The Egyptians' Ideas Of God."
+
+[annotations]
+concepts = []
+related_chunks = []

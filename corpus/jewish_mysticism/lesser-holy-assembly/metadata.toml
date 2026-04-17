@@ -1,0 +1,7 @@
+tradition = "Jewish Mysticism"
+text_id = "lesser-holy-assembly"
+text_name = "The Lesser Holy Assembly (Idra Zuta Qadisha)"
+translator = "S.L. MacGregor Mathers"
+source_url = "https://sacred-texts.com/jud/tku/tku16.htm"
+sections_format = "chapter"
+chunk_count = 2

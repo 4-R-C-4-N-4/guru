@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Select Works, Section {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+translator = "Thomas Taylor"
+sections_format = "section"

@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.358"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 44"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 83
+
+[content]
+body = "Sacred Texts Egypt Index Next EGYPTIAN IDEAS OF THE FUTURE LIFE By Sir Wallis Budge London [1900] Scanned at sacred-text.com, April 2002. J. B. Hare, redactor. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact. Next: Preface"
+
+[annotations]
+concepts = []
+related_chunks = []

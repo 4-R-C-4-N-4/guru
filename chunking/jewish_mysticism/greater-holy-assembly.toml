@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Idra Rabba, Chapter {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Jewish Mysticism"
+text_name = "The Greater Holy Assembly (Idra Rabba Qadisha)"
+translator = "S.L. MacGregor Mathers"
+sections_format = "chapter"

@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-16.006"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 16: The Secret Sermon on the Mountain"
+section = "Section 1f"
+translator = "G.R.S. Mead"
+source_url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th231.html"
+token_count = 280
+
+[content]
+body = "(xiv.) 7.\n\n274:4 The two irrational parts, “passion” and “desire” (θυμὸς and ἐπιθυμία).\n\n274:5 The soul.\n\n275:1 This Erōs is the lower love ( cf.\n\nC.\n\nH.\n\n, i.\n\n18: “love, the cause of death”), not the Divine Love who inspires Hermes in “The Perfect Sermon” and who is mentioned C.\n\nH.\n\n, xviii.\n\n14.\n\n275:2 διοίκησιν.\n\n275:3 Or, Fate; cf.\n\nC.\n\nH.\n\n, i.\n\n9; and P.\n\nS.\n\nA.\n\n, xix.\n\n275:4 Or, Intelligible Cosmos.\n\n276:1 Cf.\n\nP.\n\nS.\n\nA.\n\n, iv.\n\n1 n.; and xix.\n\n276:2 Or army, or hierarchy.\n\nCompare the “soldier” degree of the Mithriaca.\n\n276:3 Cf.\n\nC.\n\nH.\n\n, x.\n\n(xi.) 22; and P.\n\nS.\n\nA.\n\n, v.\n\n1.\n\n276:4 Cf.\n\nC.\n\nH.\n\n, xiv.\n\n(xv.), 7 and 5.\n\n276:5 See Commentary to Frag.\n\niv.\n\n(Lact., D.\n\nI.\n\n, ii.\n\n15).\n\nNext: Commentary"
+
+[annotations]
+concepts = []
+related_chunks = []

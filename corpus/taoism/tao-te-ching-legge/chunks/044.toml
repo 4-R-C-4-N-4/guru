@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.044"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 44"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 100
+
+[content]
+body = "Or fame or life, Which do you hold more dear? Or life or wealth, To which would you adhere? Keep life and lose those other things; Keep them and lose your life:--which brings Sorrow and pain more near? Thus we may see, Who cleaves to fame Rejects what is more great; Who loves large stores Gives up the richer state. Who is content Needs fear no shame. Who knows to stop Incurs no blame. From danger free Long live shall he."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-12"
+text_name = "Corpus Hermeticum 12: The Prayer"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes12.htm"
+sections_format = "paragraph"
+chunk_count = 5

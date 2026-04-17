@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.052"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 8)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 342
+
+[content]
+body = "Ταῦτ᾽ ἄρα Μοῦσαι ἄειδον, Ὀλύμπια δώματ᾽ ἔχουσαι, 75 ἐννέα θυγατέρες μεγάλου Διὸς ἐκγεγαυῖαι, Κλειώ τ᾽ Εὐτέρπη τε Θάλειά τε Μελπομέενη τε Τερψιχόρη τ᾽ Ἐρατώ τε Πολύμνιά τ᾽ Οὐρανίη τε Καλλιόπη θ᾽· ἣ δὲ προφερεστάτη ἐστὶν ἁπασέων.\n\nἭ γὰρ καὶ βασιλεῦσιν ἅμ᾽ αἰδοίοισιν ὀπηδεῖ."
+
+[annotations]
+concepts = []
+related_chunks = []

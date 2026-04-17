@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.089"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 45)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 655
+
+[content]
+body = "Πρῶτον δ᾽ ἐξέμεσεν λίθον, πύματον καταπίνων· τὸν μὲν Ζεὺς στήριξε κατὰ χθονὸς εὐρυοδείης Πυθοῖ ἐν ἠγαθέῃ γυάλοις ὕπο Παρνησοῖο σῆμ᾽ ἔμεν ἐξοπίσω, θαῦμα θνητοῖσι βροτοῖσιν.\n\n500 [Λῦσε δὲ πατροκασιγνήτους ὀλοῶν ὑπὸ δεσμῶν Οὐρανίδας, οὓς δῆσε πατὴρ ἀεσιφροσύνῃσιν· οἳ οἱ ἀπεμνήσαντο χάριν εὐεργεσιάων, δῶκαν δὲ βροντὴν ἠδ᾽ αἰθαλόεντα κεραυνὸν καὶ στεροπήν· τὸ πρὶν δὲ πελώρη Γαῖα κεκεύθει· 505 τοῖς πίσυνος θνητοῖσι καὶ ἀθανάτοισιν ἀνάσσει.] Κούρην δ᾽ Ἰαπετὸς καλλίσφυρον Ὠκεανίνην ἠγάγετο Κλυμένην καὶ ὁμὸν λέχος εἰσανέβαινεν."
+
+[annotations]
+concepts = []
+related_chunks = []

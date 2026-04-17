@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-03"
+text_name = "Corpus Hermeticum 3: The Sacred Sermon"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes3.htm"
+sections_format = "paragraph"
+chunk_count = 1

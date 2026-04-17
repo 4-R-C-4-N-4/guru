@@ -1,0 +1,7 @@
+tradition = "Greek Mystery"
+text_id = "orphic-hymns"
+text_name = "Orphic Hymns"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
+sections_format = "hymn_number"
+chunk_count = 141

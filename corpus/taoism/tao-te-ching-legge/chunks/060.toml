@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.060"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 60"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 102
+
+[content]
+body = "Governing a great state is like cooking small fish. Let the kingdom be governed according to the Tao, and the manes of the departed will not manifest their spiritual energy. It is not that those manes have not that spiritual energy, but it will not be employed to hurt men. It is not that it could not hurt men, but neither does the ruling sage hurt them. When these two do not injuriously affect each other, their good influences converge in the virtue (of the Tao)."
+
+[annotations]
+concepts = []
+related_chunks = []

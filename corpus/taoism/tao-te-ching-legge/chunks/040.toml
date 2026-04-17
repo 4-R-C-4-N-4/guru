@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.040"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 40"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 49
+
+[content]
+body = "The movement of the Tao By contraries proceeds; And weakness marks the course Of Tao's mighty deeds. All things under heaven sprang from It as existing (and named); that existence sprang from It as non-existent (and not named)."
+
+[annotations]
+concepts = []
+related_chunks = []

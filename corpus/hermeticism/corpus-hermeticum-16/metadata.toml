@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-16"
+text_name = "Corpus Hermeticum 16: The Secret Sermon on the Mountain"
+translator = "G.R.S. Mead"
+source_url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th231.html"
+sections_format = "paragraph"
+chunk_count = 6

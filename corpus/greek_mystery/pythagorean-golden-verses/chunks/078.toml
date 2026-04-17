@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.078"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 34)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 451
+
+[content]
+body = "Κρίῳ δ᾽ Εὐρυβίη τέκεν ἐν φιλότητι μιγεῖσα 375 Ἀστραῖόν τε μέγαν Πάλλαντά τε δῖα θεάων Πέρσην θ᾽, ὃς καὶ πᾶσι μετέπρεπεν ἰδμοσύνῃσιν.\n\nἈστραίῳ δ᾽ Ἠὼς ἀνέμους τέκε καρτεροθύμους, ἀργέστην Ζέφυρον Βορέην τ᾽ αἰψηροκέλευθον καὶ Νότον, ἐν φιλότητι θεὰ θεῷ εὐνηθεῖσα.\n\n380 Τοὺς δὲ μέτ᾽ ἀστέρα τίκτ' Ἠοσφόρον Ἠριγένεια ἄστρα τε λαμπετόωντα, τά τ᾽ οὐρανὸς ἐστεφάνωται."
+
+[annotations]
+concepts = []
+related_chunks = []

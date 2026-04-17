@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.072"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 28)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 633
+
+[content]
+body = "Ἥ δ᾽ ἔτεκ᾽ ἄλλο πέλωρον ἀμήχανον, οὐδὲν ἐοικὸς 295 θνητοῖς ἀνθρώποις οὐδ᾽ ἀθανάτοισι θεοῖσιν, ἐν σπῆι ἔνι γλαφυρῷ θείην κρατερόφρον᾽ Ἔχιδναν, ἥμισυ μὲν νύμφην ἑλικώπιδα καλλιπάρῃον, ἥμισυ δ᾽ αὖτε πέλωρον ὄφιν δεινόν τε μέγαν τε αἰόλον ὠμηστὴν ζαθέης ὑπὸ κεύθεσι γαίης.\n\n300 Ἔνθα δέ οἱ σπέος ἐστὶ κάτω κοίλῃ ὑπὸ πέτρῃ τηλοῦ ἀπ᾽ ἀθανάτων τε θεῶν θνητῶν τ᾽ ἀνθρώπων· ἔνθ᾽ ἄρα οἱ δάσσαντο θεοὶ κλυτὰ δώματα ναίειν.\n\nἭ δ᾽ ἐρυτ᾽ εἰν Ἀρίμοισιν ὑπὸ χθόνα λυγρὴ Ἔχιδνα, ἀθάνατος νύμφη καὶ ἀγήραος ἤματα πάντα."
+
+[annotations]
+concepts = []
+related_chunks = []

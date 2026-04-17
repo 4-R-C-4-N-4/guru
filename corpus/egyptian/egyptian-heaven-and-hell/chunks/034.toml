@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-heaven-and-hell.034"
+tradition = "Egyptian"
+text_name = "The Egyptian Heaven and Hell"
+section = "Chapter 7 (part 6)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ehh.htm"
+token_count = 16
+
+[content]
+body = "Next: Chapter IV.\n\nThe Book Am-Tuat and the Book of Gates."
+
+[annotations]
+concepts = []
+related_chunks = []

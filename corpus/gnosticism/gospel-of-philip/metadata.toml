@@ -1,0 +1,7 @@
+tradition = "gnosticism"
+text_id = "gospel-of-philip"
+text_name = "Gospel of Philip"
+translator = "Thomas O. Lambdin"
+source_url = "http://gnosis.org/naghamm/GPhilip-Barnstone.html"
+sections_format = "paragraph"
+chunk_count = 13

@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.047"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 3)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 630
+
+[content]
+body = "Τόνδε δέ με πρώτιστα θεαὶ πρὸς μῦθον ἔειπον, Μοῦσαι Ὀλυμπιάδες, κοῦραι Διὸς αἰγιόχοιο· 25 «Ποιμένες ἄγραυλοι, κάκ᾽ ἐλέγχεα, γαστέρες οἶον, ἴδμεν ψεύδεα πολλὰ λέγειν ἐτύμοισιν ὁμοῖα, ἴδμεν δ᾽, εὖτ᾽ ἐθέλωμεν, ἀληθέα γηρύσασθαι.» Ὥς ἔφασαν κοῦραι μεγάλου Διὸς ἀρτιέπειαι· καί μοι σκῆπτρον ἔδον δάφνης ἐριθηλέος ὄζον 30 δρέψασαι, θηητόν· ἐνέπνευσαν δέ μοι ἀοιδὴν θέσπιν, ἵνα κλείοιμι τά τ᾽ ἐσσόμενα πρό τ᾽ ἐόντα.\n\nΚαί μ᾽ ἐκέλονθ᾽ ὑμνεῖν μακάρων γένος αἰὲν ἐόντων, σφᾶς δ᾽ αὐτὰς πρῶτόν τε καὶ ὕστατον αἰὲν ἀείδειν."
+
+[annotations]
+concepts = []
+related_chunks = []

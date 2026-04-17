@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.196"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 27 (part 3)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 46
+
+[content]
+body = "\"O grant thou unto me a path whereon I may pass in peace, for I am just and true; I have not spoken lies wittingly, nor have I done aught with deceit.\" Next: Plate XX."
+
+[annotations]
+concepts = []
+related_chunks = []

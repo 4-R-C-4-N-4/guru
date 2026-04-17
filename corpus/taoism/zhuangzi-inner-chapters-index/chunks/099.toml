@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.099"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 60 (part 2)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 89
+
+[content]
+body = "5 gives the gist of the chapter:--Man's always keeping before him the ideal of the Tâo, and, without purpose, simply doing whatever he finds to do; Tâo-like and powerful in all his sphere of action.\n\nI have followed the reading of the last character but one, which is given by Ziâo Hung instead of that found in Ho-shang Kung and Wang Pî.\n\nNext: Chapter 53"
+
+[annotations]
+concepts = []
+related_chunks = []

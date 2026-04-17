@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.122"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 13 (part 9)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 238
+
+[content]
+body = "225, 357, and pl.\n\n33.) Chapter CLVI.\n\n\"The Chapter of a Buckle of carnelian.\" (See pp.\n\n227, 359, and pl.\n\n33.) Chapter CLXVI.\n\n\"The Chapter of the Pillow which is placed under the head.\" (See pp.\n\n228, 359, and pl.\n\n33.) Chapter CLXXV.\n\n\" The Chapter of not dying a second time.\" (See pp.\n\n184, 341, and pl.\n\n29.) Only one other much mutilated copy of this most important Chapter is known.\n\nIn it it is declared that neither men nor gods can conceive what great glory has been laid up for Ani in his existence in the next world, and that his life therein shall be for \"millions of millions of years.\" Chapter CLXXXV.\n\n\"A Hymn of Praise to Osiris, the dweller in Amenta, Un-nefer within Abtu (Abydos).\" (See pp.\n\n241, 367, and pl.\n\n36.) Chapter CLXXXVI.\n\n\"A Hymn of praise to Hathor.\" (See pp.\n\n242, 368.\n\nand pl.\n\n37.)"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.092"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 48)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 601
+
+[content]
+body = "Καὶ γὰρ ὅτ᾽ ἐκρίνοντο θεοὶ θνητοί τ᾽ ἄνθρωποι 535 Μηκώνῃ, τότ᾽ ἔπειτα μέγαν βοῦν πρόφρονι θυμῷ δασσάμενος προέθηκε, Διὸς νόον ἐξαπαφίσκων.\n\nΤοῖς μὲν γὰρ σάρκας τε καὶ ἔγκατα πίονα δημῷ ἐν ῥινῷ κατέθηκε καλύψας γαστρὶ βοείῃ, τῷ δ᾽ αὖτ᾽ ὀστέα λευκὰ βοὸς δολίῃ ἐπὶ τέχνῃ 540 εὐθετίσας κατέθηκε καλύψας ἀργέτι δημῷ.\n\nΔὴ τότε μιν προσέειπε πατὴρ ἀνδρῶν τε θεῶν τε· Ἰαπετιονίδη, πάντων ἀριδείκετ᾽ ἀνάκτων, ὦ πέπον, ὡς ἑτεροζήλως διεδάσσαο μοίρας.\n\nὭς φάτο κερτομέων Ζεὺς ἄφθιτα μήδεα εἰδώς."
+
+[annotations]
+concepts = []
+related_chunks = []

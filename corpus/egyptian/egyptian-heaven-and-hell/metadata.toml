@@ -1,0 +1,7 @@
+tradition = "Egyptian"
+text_id = "egyptian-heaven-and-hell"
+text_name = "The Egyptian Heaven and Hell"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ehh.htm"
+sections_format = "chapter"
+chunk_count = 101

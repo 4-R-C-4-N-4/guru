@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.002"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 2"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 234
+
+[content]
+body = "Sacred Texts Classics Index Previous Next p. v PREFACE IN this small volume an attempt has been made to gather together the best and most reliable of the sets of Ethical Verses attributed to the Pythagoreans. Both Hall's translation from the Greek (1657), and Rowe's translation from the French of André Dacier (1707), have been used in reproducing the Golden Verses of Pythagoras, but Dacier's version has been almost exclusively followed, being clearer and more intelligible. p. vi The Golden Sentences of Democrates, the Similitudes of Demophilus, and Pythagorean Symbols are from Bridgman's translation, and are to be found in his little book, Translations from the Greek , published in 1804. The Pythagorean Sentences of Demophilus, translated by Taylor, are contained in that volume also. The remaining sets of verses, translated by Taylor, are appended by him to his Iamblichus' Life of Pythagoras , published in 1818. F. M. F. BRADFORD, November , 1904. Next: Introduction"
+
+[annotations]
+concepts = []
+related_chunks = []

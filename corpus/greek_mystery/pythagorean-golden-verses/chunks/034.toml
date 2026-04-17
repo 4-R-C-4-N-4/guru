@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.034"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 12 (part 10)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 41
+
+[content]
+body = "98:2 Thales was the founder of this sect, and the most illustrious professors of it were Anaximander, Anaximenes, Anaxagoras, and Archelaus."
+
+[annotations]
+concepts = []
+related_chunks = []

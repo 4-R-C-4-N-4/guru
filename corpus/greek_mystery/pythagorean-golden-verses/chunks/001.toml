@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.001"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 1"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 95
+
+[content]
+body = "Sacred Texts Classics Index Next The Golden Verses Of Pythagoras And Other Pythagorean Fragments Selected and Arranged by FLORENCE M. FIRTH With an Introduction by Annie Besant THEOSOPHICAL PUBLISHING HOUSE (American Branch) KROTONA, HOLLYWOOD, CAL. [1904] scanned at sacred-texts.com, October 2002. John B. Hare, redactor. Next: Preface"
+
+[annotations]
+concepts = []
+related_chunks = []

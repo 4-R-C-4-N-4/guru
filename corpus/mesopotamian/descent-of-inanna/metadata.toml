@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "descent-of-inanna"
+text_name = "The Descent of the Goddess Ishtar into the Lower World"
+translator = "E.A. Speiser / M. Jastrow"
+source_url = "https://sacred-texts.com/ane/ishtar.htm"
+sections_format = "section"
+chunk_count = 3

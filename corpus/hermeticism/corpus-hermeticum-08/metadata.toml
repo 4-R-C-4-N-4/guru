@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-08"
+text_name = "Corpus Hermeticum 8: The Eight Sphere"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes8.htm"
+sections_format = "paragraph"
+chunk_count = 2

@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.641"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 540 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 5
+
+[content]
+body = "Next: Section 3"
+
+[annotations]
+concepts = []
+related_chunks = []

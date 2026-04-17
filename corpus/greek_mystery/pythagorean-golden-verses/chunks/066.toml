@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.066"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 22)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 510
+
+[content]
+body = "Καὶ Μοίρας καὶ Κῆρας ἐγείνατο νηλεοποίνους, [Κλωθώ τε Λάχεσίν τε καὶ Ἄτροπον, αἵτε βροτοῖσι γεινομένοισι διδοῦσιν ἔχειν ἀγαθόν τε κακόν τε,] αἵτ᾽ ἀνδρῶν τε θεῶν τε παραιβασίας ἐφέπουσιν· 220 οὐδέ ποτε λήγουσι θεαὶ δεινοῖο χόλοιο, πρίν γ᾽ ἀπὸ τῷ δώωσι κακὴν ὄπιν, ὅς τις ἁμάρτῃ.\n\nΤίκτε δὲ καὶ Νέμεσιν, πῆμα θνητοῖσι βροτοῖσι, Νὺξ ὀλοή· μετὰ τὴν δ᾽ Ἀπάτην τέκε καὶ Φιλότητα Γῆράς τ᾽ οὐλόμενον, καὶ Ἔριν τέκε καρτερόθυμον."
+
+[annotations]
+concepts = []
+related_chunks = []

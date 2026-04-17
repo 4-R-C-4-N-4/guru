@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.026"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 26"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 105
+
+[content]
+body = "Gravity is the root of lightness; stillness, the ruler of movement. Therefore a wise prince, marching the whole day, does not go far from his baggage waggons. Although he may have brilliant prospects to look at, he quietly remains (in his proper place), indifferent to them. How should the lord of a myriad chariots carry himself lightly before the kingdom? If he do act lightly, he has lost his root (of gravity); if he proceed to active movement, he will lose his throne."
+
+[annotations]
+concepts = []
+related_chunks = []

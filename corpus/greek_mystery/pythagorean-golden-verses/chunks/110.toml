@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.110"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 66)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 520
+
+[content]
+body = "Ἔνθα δὲ Νυκτὸς παῖδες ἐρεμνῆς οἰκί᾽ ἔχουσιν, Ὕπνος καὶ Θάνατος, δεινοὶ θεοί· οὐδέ ποτ᾽ αὐτοὺς Ἠέλιος φαέθων ἐπιδέρκεται ἀκτίνεσσιν 760 οὐρανὸν εἰς ἀνιὼν οὐδ᾽ οὐρανόθεν καταβαίνων.\n\nΤῶν δ᾽ ἕτερος γαῖάν τε καὶ εὐρέα νῶτα θαλάσσης ἥσυχος ἀνστρέφεται καὶ μείλιχος ἀνθρώποισι, τοῦ δὲ σιδηρέη μὲν κραδίη, χάλκεον δέ οἱ ἦτορ νηλεὲς ἐν στήθεσσιν· ἔχει δ᾽ ὃν πρῶτα λάβῃσιν 765 ἀνθρώπων· ἐχθρὸς δὲ καὶ ἀθανάτοισι θεοῖσιν."
+
+[annotations]
+concepts = []
+related_chunks = []

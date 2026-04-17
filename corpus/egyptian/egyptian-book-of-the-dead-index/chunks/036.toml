@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.036"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 4 (part 33)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 505
+
+[content]
+body = "Many copies of this version were written by scribes who did not understand what they were copying, and omissions of signs, words, and even whole passages are very common; in papyri of the Ptolemaic period it is impossible to read many passages without the help of texts of earlier periods.\n\nThe papyri of this period vary in colour from a light to a dark brown, and consist usually of layers composed of strips of the plant measuring about 2 inches in width and 14Â½ to 16 inches in length.\n\nFine examples of Books of the Dead of this version vary in length from about 24Â½ feet (B.M.\n\nNo.\n\n10,479, written for the utcheb Heru, the son of the utcheb Tchehra) to 60 feet.\n\nHieroglyphic texts are written in black, in perpendicular rows between rules, and hieratic texts in horizontal lines; both the hieroglyphics and the hieratic characters lack the boldness of the writing of the Theban period, and exhibit the characteristics of a conventional hand.\n\nThe titles of the chapters, catchwords, the words ### which introduce a variant reading, etc.\n\n, are sometimes written in red.\n\nThe vignettes are usually traced in black outline, and form a kind of continuous border above the text.\n\nIn good papyri, however, the scene forming the XVIth Chapter, the scene of the Fields of Peace (Chapter CX.), the judgment scene (Chapter CXXV.), the vignette of Chapter CXLVIII., the scene forming Chapter CLI.\n\n(the sepulchral chamber), and the vignette of Chapter CLXI., fill the whole width of the inscribed portion of the papyrus, and are painted in somewhat crude colours.\n\nIn some papyri the disk on the head of the hawk of Horus is covered with gold leaf, instead of being painted red as is usual in older papyri.\n\nIn the Græco-Roman period both texts and vignettes are very carelessly executed, and it is evident that they were written and drawn by ignorant workmen in the quickest and most careless way possible.\n\nIn this period also certain passages of the text were copied in hieratic and Demotic upon small pieces of papyri which were buried with portions of the bodies of the dead, and upon narrow bandages of coarse linen in which they were swathed.\n\n{p.\n\nxlviii} Next: The Legend Of Osiris."
+
+[annotations]
+concepts = []
+related_chunks = []

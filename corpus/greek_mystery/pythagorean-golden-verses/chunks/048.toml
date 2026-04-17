@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.048"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 4)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 677
+
+[content]
+body = "Ἀλλὰ τί ἦ μοι ταῦτα περὶ δρῦν ἢ περὶ πέτρην; 35 Τύνη, Μουσάων ἀρχώμεθα, ταὶ Διὶ πατρὶ ὑμνεῦσαι τέρπουσι μέγαν νόον ἐντὸς Ὀλύμπου, εἰρεῦσαι τά τ᾽ ἐόντα τά τ᾽ ἐσσόμενα πρό τ᾽ ἐόντα, φωνῇ ὁμηρεῦσαι· τῶν δ᾽ ἀκάματος ῥέει αὐδὴ ἐκ στομάτων ἡδεῖα· γελᾷ δέ τε δώματα πατρὸς 40 Ζηνὸς ἐριγδούποιο θεᾶν ὀπὶ λειριοέσσῃ σκιδναμένῃ· ἠχεῖ δὲ κάρη νιφόεντος Ὀλύμπου δώματά τ᾽ ἀθανάτων.\n\nΑἳ δ᾽ ἄμβροτον ὄσσαν ἱεῖσαι θεῶν γένος αἰδοῖον πρῶτον κλείουσιν ἀοιδῇ ἐξ ἀρχῆς, οὓς Γαῖα καὶ Οὐρανὸς εὐρὺς ἔτικτεν, 45 οἵ τ᾽ ἐκ τῶν ἐγένοντο θεοί, δωτῆρες ἐάων."
+
+[annotations]
+concepts = []
+related_chunks = []

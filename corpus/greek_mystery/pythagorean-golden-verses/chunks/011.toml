@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.011"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 6 (part 3)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 192
+
+[content]
+body = "Men who delight to blame others are not naturally adapted to friendship.\n\n76.\n\nA woman should not be given to loquacity; for it is a dreadful thing.\n\n77.\n\nTo be governed by a woman is the extremity of insolence and unmanliness.\n\n78.\n\nIt is the property of a divine intellect p.\n\n27 to be always intently thinking about the beautiful.\n\n79.\n\nHe who believes that Divinity beholds all things, will not sin either secretly or openly.\n\n80.\n\nThose who praise the unwise do them a great injury.\n\n81.\n\nIt is better to be praised by another than by oneself.\n\n82.\n\nIf you cannot reconcile to yourself the praises you receive, think that you are flattered.\n\n83.\n\nThe world is a scene; life is a transition.\n\nYou came, you saw, you departed.\n\n84.\n\nThe world is a mutation: life a vain opinion.\n\nNext: The Pythagorean Sentences of Demophilus"
+
+[annotations]
+concepts = []
+related_chunks = []

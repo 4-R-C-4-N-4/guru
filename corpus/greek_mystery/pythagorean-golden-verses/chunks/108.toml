@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.108"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 64)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 465
+
+[content]
+body = "735 Ἔνθα δὲ γῆς δνοφερῆς καὶ Ταρτάρου ἠερόεντος πόντου τ᾽ ἀτρυγέτοιο καὶ οὐρανοῦ ἀστερόεντος ἑξείης πάντων πηγαὶ καὶ πείρατ᾽ ἔασιν ἀργαλέ᾽ εὐρώεντα, τά τε στυγέουσι θεοί περ, χάσμα μέγ᾽, οὐδέ κε πάντα τελεσφόρον εἰς ἐνιαυτὸν 740 οὖδας ἵκοιτ᾽, εἰ πρῶτα πυλέων ἔντοσθε γένοιτο.\n\n[Ἀλλά κεν ἔνθα καὶ ἔνθα φέροι πρὸ θύελλα θυέλλῃ ἀργαλέη· δεινὸν δὲ καὶ ἀθανάτοισι θεοῖσι τοῦτο τέρας."
+
+[annotations]
+concepts = []
+related_chunks = []

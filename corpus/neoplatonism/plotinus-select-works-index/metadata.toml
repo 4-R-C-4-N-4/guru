@@ -1,0 +1,7 @@
+tradition = "Neoplatonism"
+text_id = "plotinus-select-works-index"
+text_name = "Select Works of Plotinus"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+sections_format = "section"
+chunk_count = 838

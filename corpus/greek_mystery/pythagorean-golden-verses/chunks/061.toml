@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.061"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 17)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 167
+
+[content]
+body = "Ὥς φάτο· γήθησεν δὲ μέγα φρεσὶ Γαῖα πελώρη· Εἷσε δέ μιν κρύψασα λόχῳ· ἐνέθηκε δὲ χερσὶν ἅρπην καρχαρόδοντα· δόλον δ᾽ ὑπεθήκατο πάντα."
+
+[annotations]
+concepts = []
+related_chunks = []

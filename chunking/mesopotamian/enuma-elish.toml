@@ -1,0 +1,11 @@
+[chunking]
+strategy = "regex-section-split"
+pattern = '^THE (\w+) TABLET'
+section_label_format = "Tablet {n}"
+max_tokens = 800
+
+[metadata]
+tradition = "Mesopotamian"
+text_name = "Enuma Elish: The Epic of Creation"
+translator = "L.W. King"
+sections_format = "tablet"

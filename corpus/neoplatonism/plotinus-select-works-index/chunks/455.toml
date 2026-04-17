@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.455"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 374 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 80
+
+[content]
+body = "At one and the same moment it postulates and denies a soul, it tells of an All that is partial, of a something which is at once distinct and not distinct, of a nothingness which is no nothingness, of a complete thing that is incomplete: the hypothesis therefore must be dismissed; no deduction is possible where a thesis cancels its own propositions.\n\nNext: SIXTH TRACTATE"
+
+[annotations]
+concepts = []
+related_chunks = []

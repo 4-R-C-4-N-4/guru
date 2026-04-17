@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.094"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 50)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 648
+
+[content]
+body = "Τὸν δὲ μέγ᾽ ὀχθήσας προσέφη νεφεληγερέτα Ζεύς· Ἰαπετιονίδη, πάντων πέρι μήδεα εἰδώς, ὦ πέπον, οὐκ ἄρα πω δολίης ἐπιλήθεο τέχνης.\n\n560 Ὥς φάτο χωόμενος Ζεὺς ἄφθιτα μήδεα εἰδώς· ἐκ τούτου δὴ ἔπειτα δόλου μεμνημένος αἰεὶ οὐκ ἐδίδου μελίῃσι πυρὸς μένος ἀκαμάτοιο θνητοῖς ἀνθρώποις, οἳ ἐπὶ χθονὶ ναιετάουσιν.\n\nἈλλά μιν ἐξαπάτησεν ἐὺς πάις Ἰαπετοῖο 565 κλέψας ἀκαμάτοιο πυρὸς τηλέσκοπον αὐγὴν ἐν κοΐλῳ νάρθηκι· δάκεν δέ ἑ νειόθι θυμόν, Ζῆν᾽ ὑψιβρεμέτην, ἐχόλωσε δέ μιν φίλον ἦτορ, ὡς ἴδ᾽ ἐν ἀνθρώποισι πυρὸς τηλέσκοπον αὐγήν."
+
+[annotations]
+concepts = []
+related_chunks = []

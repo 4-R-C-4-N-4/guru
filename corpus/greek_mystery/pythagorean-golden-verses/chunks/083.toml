@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.083"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 39)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 645
+
+[content]
+body = "428 ᾮ δ᾽ ἐθέλει, μεγάλως παραγίγνεται ἠδ᾽ ὀνίνησιν· ἔν τε δίκῃ βασιλεῦσι παρ᾽ αἰδοίοισι καθίζει, 434 ἔν τ᾽ ἀγορῇ λαοῖσι μεταπρέπει, ὅν κ᾽ ἐθέλῃσιν· 430 ἠδ᾽ ὁπότ᾽ ἐς πόλεμον φθεισήνορα θωρήσσωνται ἀνέρες, ἔνθα θεὰ παραγίγνεται, οἷς κ᾽ ἐθέλῃσι νίκην προφρονέως ὀπάσαι καὶ κῦδος ὀρέξαι.\n\n433 Ἐσθλὴ δ᾽ αὖθ᾽ ὁπότ᾽ ἄνδρες ἀεθλεύωσιν ἀγῶνι, 435 ἔνθα θεὰ καὶ τοῖς παραγίγνεται ἠδ᾽ ὀνίνησιν· νικήσας δὲ βίῃ καὶ κάρτεϊ καλὸν ἄεθλον ῥεῖα φέρει χαίρων τε, τοκεῦσι δὲ κῦδος ὀπάζει.\n\nἘσθλὴ δ᾽ ἱππήεσσι παρεστάμεν, οἷς κ᾽ ἐθέλῃσιν."
+
+[annotations]
+concepts = []
+related_chunks = []

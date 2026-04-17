@@ -1,0 +1,11 @@
+[chunking]
+strategy = "regex-section-split"
+pattern = '(?:^|\n)(\d+)\.\s+'
+section_label_format = "Siphra Dtzenioutha, Section {n}"
+max_tokens = 800
+
+[metadata]
+tradition = "Jewish Mysticism"
+text_name = "The Book of Concealed Mystery (Siphra Dtzenioutha)"
+translator = "S.L. MacGregor Mathers"
+sections_format = "section"

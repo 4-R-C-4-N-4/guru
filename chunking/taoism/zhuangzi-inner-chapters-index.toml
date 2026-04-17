@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Book {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+translator = "James Legge"
+sections_format = "book"

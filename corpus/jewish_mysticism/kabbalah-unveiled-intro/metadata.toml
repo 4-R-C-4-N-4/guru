@@ -1,0 +1,7 @@
+tradition = "Jewish Mysticism"
+text_id = "kabbalah-unveiled-intro"
+text_name = "The Kabbalah Unveiled"
+translator = "S.L. MacGregor Mathers"
+source_url = "https://sacred-texts.com/jud/tku/tku04.htm"
+sections_format = "section"
+chunk_count = 16

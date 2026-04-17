@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.301"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 250 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 83
+
+[content]
+body = "No: for there is no first Idea except the Ideal Principle of the Universe- and, by this Idea, Matter is [the seat of] all things at once and of the particular thing in its parts- for the Matter of a living being is disparted according to the specific parts of the organism: if there were no such partition nothing would exist but the Reason-Principle.\n\nNext: Section 19"
+
+[annotations]
+concepts = []
+related_chunks = []

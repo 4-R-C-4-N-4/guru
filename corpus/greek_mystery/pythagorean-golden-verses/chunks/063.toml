@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.063"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 19)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 351
+
+[content]
+body = "Μήδεα δ᾽ ὡς τὸ πρῶτον ἀποτμήξας ἀδάμαντι κάββαλ᾽ ἀπ᾽ ἠπείροιο πολυκλύστῳ ἐνὶ πόντῳ, ὣς φέρετ᾽ ἂμ πέλαγος πουλὺν χρόνον, ἀμφὶ δὲ λευκὸς 190 ἀφρὸς ἀπ᾽ ἀθανάτου χροὸς ὤρνυτο· τῷ δ᾽ ἔνι κούρη ἐθρέφθη· πρῶτον δὲ Κυθήροισιν ζαθέοισιν ἔπλητ᾽, ἔνθεν ἔπειτα περίρρυτον ἵκετο Κύπρον."
+
+[annotations]
+concepts = []
+related_chunks = []

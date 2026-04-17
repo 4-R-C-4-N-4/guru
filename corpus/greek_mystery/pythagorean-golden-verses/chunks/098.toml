@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.098"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 54)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 708
+
+[content]
+body = "πραπίδεσσι, τῷ δέ τ᾽ ἀπ᾽ αἰῶνος κακὸν ἐσθλῷ ἀντιφερίζει ἐμμενές· ὃς δέ κε τέτμῃ ἀταρτηροῖο γενέθλης, 610 ζώει ἐνὶ στήθεσσιν ἔχων ἀλίαστον ἀνίην θυμῷ καὶ κραδίῃ, καὶ ἀνήκεστον κακόν ἐστιν.\n\nὭς οὐκ ἔστι Διὸς κλέψαι νόον οὐδὲ παρελθεῖν.\n\nΟὐδὲ γὰρ Ἰαπετιονίδης ἀκάκητα Προμηθεὺς τοῖό γ᾽ ὑπεξήλυξε βαρὺν χόλον, ἀλλ᾽ ὑπ᾽ ἀνάγκης 615 καὶ πολύιδριν ἐόντα μέγας κατὰ δεσμὸς ἐρύκει.\n\nΒριάρεῳ δ᾽ ὡς πρῶτα πατὴρ ὠδύσσατο θυμῷ Κόττῳ τ᾽ ἠδὲ Γύῃ, δῆσεν κρατερῷ ἐνὶ δεσμῷ ἠνορέην ὑπέροπλον ἀγώμενος ἠδὲ καὶ εἶδος καὶ μέγεθος· κατένασσε δ᾽ ὑπὸ χθονὸς εὐρυοδείης."
+
+[annotations]
+concepts = []
+related_chunks = []

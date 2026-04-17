@@ -1,0 +1,7 @@
+tradition = "Taoism"
+text_id = "tao-te-ching-legge"
+text_name = "Tao Te Ching"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+sections_format = "chapter"
+chunk_count = 81

@@ -1,0 +1,7 @@
+tradition = "Taoism"
+text_id = "zhuangzi-inner-chapters-index"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+sections_format = "book"
+chunk_count = 295

@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.654"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 549 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 123
+
+[content]
+body = "In the first place, the point is common to lines and yet is not their genus, and this unity we are considering may also be common to numbers and not be their genus- though, we need hardly say, the unity of Unity-Absolute is not that of the numbers, one, two and the rest.\n\nSecondly, in Being there is nothing to prevent the existence of prior and posterior, simple and composite: but unity, even if it be identical in all the manifestations of Being, having no differentiae can produce no species; but producing no species it cannot be a genus.\n\nNext: Section 12"
+
+[annotations]
+concepts = []
+related_chunks = []

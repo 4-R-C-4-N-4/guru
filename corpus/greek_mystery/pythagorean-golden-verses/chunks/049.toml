@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.049"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 5)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 487
+
+[content]
+body = "Δεύτερον αὖτε Ζῆνα, θεῶν πατέρ᾽ ἠδὲ καὶ ἀνδρῶν, ἀρχόμεναί θ᾽ ὑμνεῦσι θεαὶ λήγουσαί τ' ἀοιδῆς, ὅσσον φέρτατός ἐστι θεῶν κράτεΐ τε μέγιστος.\n\nΑὖτις δ᾽ ἀνθρώπων τε γένος κρατερῶν τε Γιγάντων 50 ὑμνεῦσαι τέρπουσι Διὸς νόον ἐντὸς Ὀλύμπου Μοῦσαι Ὀλυμπιάδες, κοῦραι Διὸς αἰγιόχοιο.\n\nΤὰς ἐν Πιερίῃ Κρονίδῃ τέκε πατρὶ μιγεῖσα Μνημοσύνη, γουνοῖσιν Ἐλευθῆρος μεδέουσα, λησμοσύνην τε κακῶν ἄμπαυμά τε μερμηράων."
+
+[annotations]
+concepts = []
+related_chunks = []

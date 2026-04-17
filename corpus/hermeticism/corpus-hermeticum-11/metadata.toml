@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-11"
+text_name = "Corpus Hermeticum 11: The Hymn"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes11.htm"
+sections_format = "paragraph"
+chunk_count = 6

@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.153"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 18 (part 12)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 37
+
+[content]
+body = "May I sail up and down through the fields of Aaru; may I come thither in peace; for I am the double Lion-god.\" Next: Plates VII.-X."
+
+[annotations]
+concepts = []
+related_chunks = []

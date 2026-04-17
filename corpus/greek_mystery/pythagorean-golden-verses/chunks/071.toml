@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.071"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 27)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 573
+
+[content]
+body = "Χὠ μὲν ἀποπτάμενος προλιπὼν χθόνα, μητέρα μήλων, ἵκετ᾽ ἐς ἀθανάτους· Ζηνὸς δ᾽ ἐν δώμασι ναίει 285 βροντήν τε στεροπήν τε φέρων Διὶ μητιόεντι.\n\nΧρυσάωρ δ᾽ ἔτεκεν τρικέφαλον Γηρυονῆα μιχθεὶς Καλλιρόῃ κούρῃ κλυτοῦ Ὠκεανοῖο.\n\nΤὸν μὲν ἄρ᾽ ἐξενάριξε βίη Ἡρακληείη βουσὶ παρ᾽ εἰλιπόδεσσι περιρρύτῳ εἰν Ἐρυθείῃ 290 ἤματι τῷ ὅτε περ βοῦς ἤλασεν εὐρυμετώπους Τίρυνθ᾽ εἰς ἱερὴν διαβὰς πόρον Ὠκεανοῖο Ὄρθον τε κτείνας καὶ βουκόλον Εὐρυτίωνα σταθμῷ ἐν ἠερόεντι πέρην κλυτοῦ Ὠκεανοῖο."
+
+[annotations]
+concepts = []
+related_chunks = []

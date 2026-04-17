@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.017"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 8 (part 3)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 95
+
+[content]
+body = "39:2 Long garments or robes, both by ancients and moderns, have always been worn as marks of distinction; consequently, like riches, they are among the objects of desire; and although not so extensively pernicious, yet the philosopher very properly places them among things that are by no means free from danger; and which are neither to be embraced by everyone, nor without the greatest caution.\n\nNext: Pythagorean Ethical Sentences from Stobæus"
+
+[annotations]
+concepts = []
+related_chunks = []

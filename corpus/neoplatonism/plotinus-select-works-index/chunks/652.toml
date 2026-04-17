@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.652"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 548 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 40
+
+[content]
+body = "If it produces the same species as we find in connection with Being, it must be identical with Being: only the name will differ, and the term Being may well suffice.\n\nNext: Section 11"
+
+[annotations]
+concepts = []
+related_chunks = []

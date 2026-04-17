@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-02.004"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 2: The Serapeum"
+section = "Section 1d"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes2.htm"
+token_count = 388
+
+[content]
+body = "Though, then, the Good is spoken of by all, it is not understood by all, what thing it is.\n\nNot only, then, is God not understood by all, but both unto the gods and some of the men they out of ignorance do give the name of Good, though they can never either be or become Good.\n\nFor they are very different from God, while Good can never be distinguished from Him, for that God is the same as Good.\n\nThe rest of the immortal ones are nonetheless honored with the name of God, and spoken of as gods; but God is Good not out of courtesy but out of nature.\n\nFor that God's nature and the Good is one; one os the kind of both, from which all other kinds [proceed].\n\nThe Good is he who gives all things and naught receives.\n\nGod, then, doth give all things and receive naught.\n\nGod, then, is Good, and Good is God.\n\n17.\n\nThe other name of God is Father, again because He is the that-which-maketh-all.\n\nThe part of father is to make.\n\nWherefore child-making is a very great and a most pious thing in life for them who think aright, and to leave life on earth without a child a very great misfortune and impiety; and he who hath no child is punished by the daimones after death.\n\nAnd this is the punishment: that that man's soul who hath no child, shall be condemned unto a body with neither man's nor woman's nature, a thing accursed beneath the sun.\n\nWherefore, Asclepius, let not your sympathies be with the man who hath no child, but rather pity his mishap, knowing what punishment abides for him.\n\nLet all that has been said then, be to thee, Asclepius, an introduction to the gnosis of the nature of all things."
+
+[annotations]
+concepts = []
+related_chunks = []

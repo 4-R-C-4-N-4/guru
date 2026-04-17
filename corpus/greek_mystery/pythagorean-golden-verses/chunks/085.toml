@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.085"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 41)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 556
+
+[content]
+body = "῾Ρείη δὲ δμηθεῖσα Κρόνῳ τέκε φαίδιμα τέκνα, Ἱστίην Δήμητρα καὶ Ἥρην χρυσοπέδιλον ἴφθιμόν τ᾽ Ἀίδην, ὃς ὑπὸ χθονὶ δώματα ναίει 455 νηλεὲς ἦτορ ἔχων, καὶ ἐρίκτυπον Ἐννοσίγαιον Ζῆνά τε μητιόεντα, θεῶν πατέρ᾽ ἠδὲ καὶ ἀνδρῶν, τοῦ καὶ ὑπὸ βροντῆς πελεμίζεται εὐρεῖα χθών.\n\nΚαὶ τοὺς μὲν κατέπινε μέγας Κρόνος, ὥς τις ἕκαστος νηδύος ἐξ ἱερῆς μητρὸς πρὸς γούναθ᾽ ἵκοιτο, 460 τὰ φρονέων, ἵνα μή τις ἀγαυῶν Οὐρανιώνων ἄλλος ἐν ἀθανάτοισιν ἔχοι βασιληίδα τιμήν."
+
+[annotations]
+concepts = []
+related_chunks = []

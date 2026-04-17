@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.133"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 89)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 342
+
+[content]
+body = "929m Μῆτις δ᾽ αὖτε Ζηνὸς ὑπὸ σπλάγχνοις λελαθυῖα 929n ἧστο, Ἀθηναίης μήτηρ, τέκταινα δικαίων 929o πλεῖστα θεῶν τε ἰδυῖα καταθνητῶν τ᾽ ἀνθρώπων, 929p ἔνθα θεὰ παρέδεκτο ὅθεν παλάμαις περὶ πάντων 929q ἀθανάτων ἐκέκασθ᾽ οἳ Ὀλύμπια δώματ᾽ ἔχουσιν, 929r [αἰγίδα ποιήσασα φοβέστρατον ἔντος Ἀθήνης·] \u0001"
+
+[annotations]
+concepts = []
+related_chunks = []

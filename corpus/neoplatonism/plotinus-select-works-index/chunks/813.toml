@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.813"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 695 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 61
+
+[content]
+body = "For if the act of will springs from God Himself and is as it were His operation and the same will is identical with His essence, He must be self-established.\n\nHe is not, therefore, \"what He has happened to be\" but what He has willed to be.\n\nNext: Section 14"
+
+[annotations]
+concepts = []
+related_chunks = []

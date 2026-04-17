@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.252"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 211 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 62
+
+[content]
+body = "Thus a patient following his treatment is himself an agent and yet is acting in accordance with the doctor's method inspired by the art concerned with the causes of health and sickness: what one does against the laws of health is one's act, but an act conflicting with the Providence of medicine.\n\nNext: Section 6"
+
+[annotations]
+concepts = []
+related_chunks = []

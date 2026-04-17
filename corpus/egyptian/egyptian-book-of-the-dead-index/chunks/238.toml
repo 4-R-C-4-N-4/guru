@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.238"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 41 (part 1)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 607
+
+[content]
+body = "Sacred Texts Egypt Index Previous Next PLATES XXXV.\n\nAND XXXVI.\n\nVignette: A hall, within which, on the left, Ani stands before two tables of offerings bearing libation water and lotus-flowers, with hands raised, adoring Ra, hawk-headed.[1] Next are ranged seven cows, each one couchant before a table of offerings, and each having a menat attached to the neck;[2] and a bull standing before a table of offerings.\n\nBehind them are four rudders; and on the extreme right are four triads of gods, each triad having a table of offerings bearing a libation vase and a lotus-flower (?).\n\nText: [CHAPTER CXLVIII.].\n\n(i) Saith Osiris Ani, triumphant: \"Homage to thee, (2) O thou lord, thou lord of right and truth, the One, the lord of eternity and creator (3) of everlastingness, I have come unto thee, O my lord Ra.\n\nI have made (4) meat offerings unto the seven kine and unto their bull.\n\nO ye who give (5) cakes and ale to the shining ones, grant ye to my soul to be with [1.\n\nIn the Turin papyrus, published by Lepsius, the god wears the triple or atef crown instead of a disk and serpent, and the text describes him as \"Osiris the lord of eternity, the prince, the lord of everlastingness, the great god, the governor of Akertet.\" Behind the god stands a female figure wearing upon her head, emblematic of \"the beautiful Amenta,\" with both her hands \"extended to receive\" the deceased.\n\nThe address to Osiris and Amenta by the deceased reads: \"Homage to thee, O thou Bull of Amentet, Prince, lord of everlastingness, the great god, the governor of Akertet, receive thou the Osiris into the beautiful Amentet in peace, and may it stretch forth its hands to receive me.\" 2 In other papyri the names of these animals are given as follows: het kau nebt tcher , \"the dwelling of the has of the lord of the universe\"; (2) sentet utheset , \"orbit, the raising of the god\"; (3) amenit xentet auset-s , \"the hidden one dwelling in her place\"; (4) hatet sahet , \"the divine noble one of the north (?)\"; (5) urt meru tesert , \"the greatly beloved, red of hair\"; (6) xnemt anxit , \"the consort of life\"; (7) sexem ren-s em abet-s , \"her name prevaileth in her dwelling\"; (8) ka t'ai kauit , \"Bull, making the kine to be fruitful.\"] {p.\n\n367} you."
+
+[annotations]
+concepts = []
+related_chunks = []

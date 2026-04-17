@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.650"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 547 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 78
+
+[content]
+body = "In sum, the unity exhibited in Being on the one hand approximates to Unity-Absolute and on the other tends to identify itself with Being: Being is a unity in relation to the Absolute, is Being by virtue of its sequence upon that Absolute: it is indeed potentially a plurality, and yet it remains a unity and rejecting division refuses thereby to become a genus.\n\nNext: Section 10"
+
+[annotations]
+concepts = []
+related_chunks = []

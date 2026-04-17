@@ -1,0 +1,13 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Hymn {n}. {title}"
+number_source = "filename"
+title_source = "content"
+title_pattern = '^(?:(?:[IVXLCDM]+|SECT)\.\s+)?(?:TO\s+)?(.+?)[\.\*]?\s*$'
+max_tokens = 800
+
+[metadata]
+tradition = "Greek Mystery"
+text_name = "Orphic Hymns"
+translator = "Thomas Taylor"
+sections_format = "hymn_number"

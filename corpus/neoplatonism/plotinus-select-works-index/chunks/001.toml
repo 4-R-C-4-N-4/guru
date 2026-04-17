@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.001"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 1"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 115
+
+[content]
+body = "Sacred Texts Classics Index Next THE SIX ENNEADS 250 AD by Plotinus translated by Stephen MacKenna and B. S. Page London, P.L. Warner, publisher to the Medici Society [1917-1930] HTML formatting at sacred-texts.com by J.B. Hare, December 2003. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact Next: Porphyry: On the Life of Plotinus and the Arrangement of his Work"
+
+[annotations]
+concepts = []
+related_chunks = []

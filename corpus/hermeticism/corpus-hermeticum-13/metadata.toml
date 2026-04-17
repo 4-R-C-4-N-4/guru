@@ -1,0 +1,7 @@
+tradition = "hermeticism"
+text_id = "corpus-hermeticum-13"
+text_name = "Corpus Hermeticum 13: The Discourse of Hermes to Tat"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes13.htm"
+sections_format = "paragraph"
+chunk_count = 5

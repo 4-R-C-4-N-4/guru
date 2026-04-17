@@ -1,0 +1,7 @@
+tradition = "Jewish Mysticism"
+text_id = "book-of-concealed-mystery"
+text_name = "The Book of Concealed Mystery (Siphra Dtzenioutha)"
+translator = "S.L. MacGregor Mathers"
+source_url = "https://sacred-texts.com/jud/tku/tku08.htm"
+sections_format = "section"
+chunk_count = 9

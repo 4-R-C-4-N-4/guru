@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.237"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 132 (part 6)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 25
+
+[content]
+body = "Next: Book XI: Zâi Yû, or 'Letting Be, and Exercising Forbearance.'"
+
+[annotations]
+concepts = []
+related_chunks = []

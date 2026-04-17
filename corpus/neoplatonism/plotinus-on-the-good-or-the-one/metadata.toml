@@ -1,0 +1,7 @@
+tradition = "Neoplatonism"
+text_id = "plotinus-on-the-good-or-the-one"
+text_name = "Enneads"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn088.htm"
+sections_format = "ennead_section"
+chunk_count = 1

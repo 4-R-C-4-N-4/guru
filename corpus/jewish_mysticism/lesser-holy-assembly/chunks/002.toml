@@ -1,0 +1,15 @@
+[chunk]
+id = "Jewish Mysticism.lesser-holy-assembly.002"
+tradition = "Jewish Mysticism"
+text_name = "The Lesser Holy Assembly (Idra Zuta Qadisha)"
+section = "Idra Zuta, Chapter 1 (part 2)"
+translator = "S.L. MacGregor Mathers"
+source_url = "https://sacred-texts.com/jud/tku/tku16.htm"
+token_count = 119
+
+[content]
+body = "Like as it is written, Job xxviii.\n\n23: \"God understandeth the way thereof, and He knoweth the place thereof.\" 111.\n\n\"The Elohim understand the way thereof: \"this is the inferior Eden, known unto Microprosopus.\n\n\"And He hath known the place thereof:\" this is the superior Eden, which the Ancient of Days hath known, the most abstruse of all.\n\nFootnotes 123:1 Macroprosopus.\n\n123:2 That of Macroprosopus.\n\nNext: Chapter IX: Concerning the Eyes of Macroprosopus"
+
+[annotations]
+concepts = []
+related_chunks = []

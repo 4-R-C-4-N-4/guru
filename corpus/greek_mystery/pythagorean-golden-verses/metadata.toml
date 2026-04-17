@@ -1,0 +1,7 @@
+tradition = "Greek Mystery"
+text_id = "pythagorean-golden-verses"
+text_name = "The Golden Verses of Pythagoras"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+sections_format = "section"
+chunk_count = 133

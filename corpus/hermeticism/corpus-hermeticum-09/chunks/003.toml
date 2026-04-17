@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-09.003"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 9: The Decalogue"
+section = "Section 1c"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes9.htm"
+token_count = 404
+
+[content]
+body = "For all the things that are, Asclepius, all are in God, are brought by God to be, and do depend on Him - both things that act through bodies, and things that through soul-substance make [other things] to move, and things that make things live by means of spirit, and things that take unto themselves the things that are worn out.\n\nAnd rightly so; nay, I would rather say, He doth not have these things; but I speak forth the truth, He is them all Himself.\n\nHe doth not get them from without, but gives them out [from Him].\n\nThis is God's sense-and-thought, ever to move all things.\n\nAnd never time shall be when e'en a whit of things that are shall cease; and when I say \"a whit of things that are\", I mean a whit of God.\n\nFor thigs that are, God hath; nor aught [is there] without Him, nor [is] He without aught.\n\n10.\n\nThese things should seem to thee, Asclepius, if thou dost understand them, true; but if thou dost not understand, things not to be believed.\n\nTo understand is to believe, to not believe is not to understand.\n\nMy word (logos) doth go before [thee] to the truth.\n\nBut mighty is the mind, and when it hath been led by word up to a certain point, it hath the power to come before [thee] to the truth.\n\nAnd having thought o'er all these things, and found them consonant with those which have already been translated by the reason, it hath [e'en now] believed, and found its rest in that Fair Faith.\n\nTo those, then, who by God['s good aid] do understand the things that have been said [by us] above, they're credible; but unto those who understand them not, incredible.\n\nLet so much, then, suffice on thought-and-sense."
+
+[annotations]
+concepts = []
+related_chunks = []

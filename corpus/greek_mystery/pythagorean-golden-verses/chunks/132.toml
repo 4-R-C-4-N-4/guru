@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.132"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 88)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 687
+
+[content]
+body = "929a ἐκ ταύτης δ᾽ ἔριδος ἣ μὲν τέκε φαίδιμον υἱὸν 929b Ἥφαιστον, φιλότητος ἄτερ Διὸς αἰγιόχοιο, 929c ἐκ πάντων παλάμῃσι κεκασμένον Οὐρανιώνων· 929d αὐτὰρ ὅ γ᾽ Ὠκεανοῦ καὶ Τηθύος ἠυκόμοιο 929e κούρῃ νόσφ᾽ Ἥρης παρελέξατο καλλιπαρήῳ, 929f ...\n\nἐξαπαφὼν Μῆτιν καίπερ πολυδήνε᾽ ἐοῦσαν.\n\n929g συμμάρψας δ᾽ ὅ γε χερσὶν ἑὴν ἐγκάτθετο νηδὺν 929h δείσας, μὴ τέξῃ κρατερώτερον ἄλλο κεραυνοῦ.\n\n929i τοὔνεκά μιν Κρονίδης ὑψίζυγος αἰθέρι ναίων 929j κάππιεν ἐξαπίνης· ἣ δ᾽ αὐτίκα Παλλάδ᾽ Ἀθήνην 929k κύσατο· τὴν μὲν ἔτικτε πατὴρ ἀνδρῶν τε θεῶν τε 929l πὰρ κορυφὴν Τρίτωνος ἐπ᾽ ὄχθῃσιν ποταμοῖο."
+
+[annotations]
+concepts = []
+related_chunks = []

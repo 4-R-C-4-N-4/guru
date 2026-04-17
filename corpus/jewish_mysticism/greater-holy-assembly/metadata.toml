@@ -1,0 +1,7 @@
+tradition = "Jewish Mysticism"
+text_id = "greater-holy-assembly"
+text_name = "The Greater Holy Assembly (Idra Rabba Qadisha)"
+translator = "S.L. MacGregor Mathers"
+source_url = "https://sacred-texts.com/jud/tku/tku09.htm"
+sections_format = "chapter"
+chunk_count = 3

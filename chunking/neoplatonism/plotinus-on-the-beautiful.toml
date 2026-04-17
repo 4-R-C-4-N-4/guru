@@ -1,0 +1,11 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Ennead I.6, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Neoplatonism"
+text_name = "Enneads"
+translator = "Thomas Taylor"
+sections_format = "ennead_section"

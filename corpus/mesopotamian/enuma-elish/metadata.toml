@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "enuma-elish"
+text_name = "Enuma Elish: The Epic of Creation"
+translator = "L.W. King"
+source_url = "https://sacred-texts.com/ane/enuma.htm"
+sections_format = "tablet"
+chunk_count = 12

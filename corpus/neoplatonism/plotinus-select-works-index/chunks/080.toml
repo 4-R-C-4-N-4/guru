@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.080"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 62 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 26
+
+[content]
+body = "Finally, how by this theory would there be beauty in the Intellectual-Principle, essentially the solitary?\n\nNext: Section 2"
+
+[annotations]
+concepts = []
+related_chunks = []

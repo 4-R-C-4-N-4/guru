@@ -1,0 +1,11 @@
+[chunking]
+strategy = "regex-section-split"
+pattern = "(?<=[.!?\\\"\\]\\u2019']) (\\d+) (?=[A-Z(])"
+section_label_format = "Chapter {n}"
+max_tokens = 800
+
+[metadata]
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+translator = "James Legge"
+sections_format = "chapter"

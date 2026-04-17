@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-heaven-and-hell.069"
+tradition = "Egyptian"
+text_name = "The Egyptian Heaven and Hell"
+section = "Chapter 17 (part 3)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ehh.htm"
+token_count = 12
+
+[content]
+body = "Kingdom of Osiris According to the Book Am-Tuat"
+
+[annotations]
+concepts = []
+related_chunks = []

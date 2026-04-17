@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.045"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 1)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 491
+
+[content]
+body = "Sacred-texts Classics Hesiod English The Theogony of Hesiod This is a Unicode version of the Theogony of Hesiod.\n\nTo view the polytonic Greek in this file, your browser needs to be set up to display Unicode correctly.\n\nFor more information, refer to this file .\n\nἩσίοδος Θεογονία Μουσάων Ἑλικωνιάδων ἀρχώμεθ᾽ ἀείδειν, αἵ θ᾽ Ἑλικῶνος ἔχουσιν ὄρος μέγα τε ζάθεόν τε καί τε περὶ κρήνην ἰοειδέα πόσσ᾽ ἁπαλοῖσιν ὀρχεῦνται καὶ βωμὸν ἐρισθενέος Κρονίωνος· καί τε λοεσσάμεναι τέρενα χρόα Περμησσοῖο 5 ἢ Ἵππου κρήνης ἢ Ὀλμειοῦ ζαθέοιο ἀκροτάτῳ Ἑλικῶνι χοροὺς ἐνεποιήσαντο καλούς, ἱμερόεντας· ἐπερρώσαντο δὲ ποσσίν."
+
+[annotations]
+concepts = []
+related_chunks = []

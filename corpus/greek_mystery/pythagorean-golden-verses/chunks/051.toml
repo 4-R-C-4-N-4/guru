@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.051"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 7)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 624
+
+[content]
+body = "Πὰρ δ᾽ αὐτῇς Χάριτές τε καὶ Ἵμερος οἰκί᾽ ἔχουσιν ἐν θαλίῃς· ἐρατὴν δὲ διὰ στόμα ὄσσαν ἱεῖσαι 65 μέλπονται πάντων τε νόμους καὶ ἤθεα κεδνὰ ἀθανάτων κλείουσιν, ἐπήρατον ὄσσαν ἱεῖσαι.] Αἳ τότ᾽ ἴσαν πρὸς Ὄλυμπον ἀγαλλόμεναι ὀπὶ καλῇ, ἀμβροσίῃ μολπῇ· περὶ δ᾽ ἴαχε γαῖα μέλαινα ὑμνεύσαις, ἐρατὸς δὲ ποδῶν ὕπο δοῦπος ὀρώρει 70 νισσομένων πατέρα ὅν· ὃ δ᾽ οὐρανῷ ἐμβασιλεύει, αὐτὸς ἔχων βροντὴν ἠδ᾽ αἰθαλόεντα κεραυνόν, κάρτεϊ νικήσας πατέρα Κρόνον· εὖ δὲ ἕκαστα ἀθανάτοις διέταξεν ὁμῶς καὶ ἐπέφραδε τιμάς."
+
+[annotations]
+concepts = []
+related_chunks = []

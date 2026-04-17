@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.047"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 47"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 80
+
+[content]
+body = "Without going outside his door, one understands (all that takes place) under the sky; without looking out from his window, one sees the Tao of Heaven. The farther that one goes out (from himself), the less he knows. Therefore the sages got their knowledge without travelling; gave their (right) names to things without seeing them; and accomplished their ends without any purpose of doing so."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.079"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 35)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 354
+
+[content]
+body = "Στὺξ δ᾽ ἔτεκ᾽ Ὠκεανοῦ θυγάτηρ Πάλλαντι μιγεῖσα Ζῆλον καὶ Νίκην καλλίσφυρον ἐν μεγάροισιν· καὶ Κράτος ἠδὲ Βίην ἀριδείκετα γείνατο τέκνα, 385 τῶν οὐκ ἔστ᾽ ἀπάνευθε Διὸς δόμος, οὐδέ τις ἕδρη, οὐδ᾽ ὁδός, ὅππη μὴ κείνοις θεὸς ἡγεμονεύῃ, ἀλλ᾽ αἰεὶ πὰρ Ζηνὶ βαρυκτύπῳ ἑδριόωνται."
+
+[annotations]
+concepts = []
+related_chunks = []

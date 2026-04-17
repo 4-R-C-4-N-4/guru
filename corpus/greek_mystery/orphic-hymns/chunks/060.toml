@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.orphic-hymns.060"
+tradition = "Greek Mystery"
+text_name = "Orphic Hymns"
+section = "Hymn 26. Sacred Texts Classics Index Previous Next XIX. To JOVE, as the AUTHOR of LIGHTNING. The FUMIGATION from FRANKINCENSE and MANNA. I Call the mighty, holy, splendid light, Aerial, dreadful-sounding, fiery-bright; Flaming, aerial-light, with angry voice, Lightning thro' lucid clouds with horrid noise. Untam'd, to whom resentments dire belong, Pure, holy pow'r, all-parent, great and strong: Come, and benevolent these rites attend, And grant my days a peaceful, blessed end. Next: XX: To the Clouds"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
+token_count = 128
+
+[content]
+body = "Sacred Texts Classics Index Previous Next XIX. To JOVE, as the AUTHOR of LIGHTNING. The FUMIGATION from FRANKINCENSE and MANNA. I Call the mighty, holy, splendid light, Aerial, dreadful-sounding, fiery-bright; Flaming, aerial-light, with angry voice, Lightning thro' lucid clouds with horrid noise. Untam'd, to whom resentments dire belong, Pure, holy pow'r, all-parent, great and strong: Come, and benevolent these rites attend, And grant my days a peaceful, blessed end. Next: XX: To the Clouds"
+
+[annotations]
+concepts = []
+related_chunks = []

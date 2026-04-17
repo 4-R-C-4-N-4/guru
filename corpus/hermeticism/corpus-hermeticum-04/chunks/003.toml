@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-04.003"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 4: The Epistles"
+section = "Section 1c"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes4.htm"
+token_count = 309
+
+[content]
+body = "The \"Like's\" superiority to the \"Unlike\" and the \"Unlike's\" inferiority unto the \"Like\" consists in this: The Oneness being Source and Root of all, is in all things as Root and Source.\n\nWithout [this] Source is naught; whereas the Source [Itself] is from naught but itself, since it is Source of all the rest.\n\nIt is Itself Its Source, since It may have no other Source.\n\nThe Oneness then being Source, containeth every number, but is contained by none; engendereth every number, but is engendered by no other one.\n\n11.\n\nNow all that is engendered is imperfect, it is divisible, to increase subject and to decrease; but with the Perfect [One] none of these things doth hold.\n\nNow that which is increasable increases from the Oneness, but succumbs through its own feebleness when it no longer can contain the One.\n\nAnd now, O Tat, God's Image hath been sketched for thee, as far as it can be; and if thou wilt attentively dwell on it and observe it with thine heart's eyes, believe me, son, thou'lt find the Path that leads above; nay, that Image shall become thy Guide itself, because the Sight [Divine] hath this peculiar [charm], it holdeth fast and draweth unto it those who succeed in opening their eyes, just as, they say, the magnet [draweth] iron."
+
+[annotations]
+concepts = []
+related_chunks = []

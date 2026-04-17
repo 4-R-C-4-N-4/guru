@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.tao-te-ching-legge.077"
+tradition = "Taoism"
+text_name = "Tao Te Ching"
+section = "Chapter 77"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/taote.htm"
+token_count = 176
+
+[content]
+body = "May not the Way (or Tao) of Heaven be compared to the (method of) bending a bow? The (part of the bow) which was high is brought low, and what was low is raised up. (So Heaven) diminishes where there is superabundance, and supplements where there is deficiency. It is the Way of Heaven to diminish superabundance, and to supplement deficiency. It is not so with the way of man. He takes away from those who have not enough to add to his own superabundance. Who can take his own superabundance and therewith serve all under heaven? Only he who is in possession of the Tao! Therefore the (ruling) sage acts without claiming the results as his; he achieves his merit and does not rest (arrogantly) in it:--he does not wish to display his superiority."
+
+[annotations]
+concepts = []
+related_chunks = []

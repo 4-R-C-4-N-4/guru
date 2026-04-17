@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Section {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+translator = "Florence M. Firth"
+sections_format = "section"

@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.058"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 14)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 639
+
+[content]
+body = "Γείνατο δ᾽ αὖ Κύκλωπας ὑπέρβιον ἦτορ ἔχοντας, Βρόντην τε Στερόπην τε καὶ Ἄργην ὀβριμόθυμον, 140 [οἳ Ζηνὶ βροντήν τε δόσαν τεῦξάν τε κεραυνόν.] Οἳ δή τοι τὰ μὲν ἄλλα θεοῖς ἐναλίγκιοι ἦσαν, μοῦνος δ᾽ ὀφθαλμὸς μέσσῳ ἐνέκειτο μετώπῳ.\n\n[Κύκλωπες δ᾽ ὄνομ᾽ ἦσαν ἐπώνυμον, οὕνεκ᾽ ἄρα σφέων κυκλοτερὴς ὀφθαλμὸς ἕεις ἐνέκειτο μετώπῳ·] 145 ἰσχὺς δ᾽ ἠδὲ βίη καὶ μηχαναὶ ἦσαν ἐπ᾽ ἔργοις.\n\nἌλλοι δ᾽ αὖ Γαίης τε καὶ Οὐρανοῦ ἐξεγένοντο τρεῖς παῖδες μεγάλοι τε καὶ ὄβριμοι, οὐκ ὀνομαστοί, Κόττος τε Βριάρεώς τε Γύης θ᾽, ὑπερήφανα τέκνα."
+
+[annotations]
+concepts = []
+related_chunks = []

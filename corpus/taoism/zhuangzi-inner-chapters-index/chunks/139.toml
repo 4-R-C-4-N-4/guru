@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.139"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 96 (part 2)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 99
+
+[content]
+body = "138 The last paragraph is an ingenious and interesting allegory relating how the gods of the southern and northern seas brought Chaos to an end by boring holes in him.\n\nThereby they destroyed the primal simplicity, and according to Tâoism did Chaos an injury!\n\nOn the whole I do not think that this Book, with which the more finished essays of Kwang-dze come to an end, is so successful as those that precede it.\n\nNext: Book VIII.\n\nPhien Mâu"
+
+[annotations]
+concepts = []
+related_chunks = []

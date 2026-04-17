@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.088"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 44)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 581
+
+[content]
+body = "Τὸν τόθ᾽ ἑλὼν χείρεσσιν ἑὴν ἐσκάτθετο νηδὺν σχέτλιος· οὐδ᾽ ἐνόησε μετὰ φρεσίν, ὥς οἱ ὀπίσσω ἀντὶ λίθου ἑὸς υἱὸς ἀνίκητος καὶ ἀκηδὴς λείπεθ᾽, ὅ μιν τάχ᾽ ἔμελλε βίῃ καὶ χερσὶ δαμάσσας 490 τιμῆς ἐξελάειν, ὃ δ᾽ ἐν ἀθανάτοισι ἀνάξειν.\n\nΚαρπαλίμως δ᾽ ἄρ᾽ ἔπειτα μένος καὶ φαίδιμα γυῖα ηὔξετο τοῖο ἄνακτος· ἐπιπλομένων δ᾽ ἐνιαυτῶν [Γαίης ἐννεσίῃσι πολυφραδέεσσι δολωθεὶς] ὃν γόνον ἄψ ἀνέηκε μέγας Κρόνος ἀγκυλομήτης 495 νικηθεὶς τέχνῃσι βίηφί τε παιδὸς ἑοῖο."
+
+[annotations]
+concepts = []
+related_chunks = []

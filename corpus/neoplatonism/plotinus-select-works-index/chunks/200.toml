@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.200"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 168 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 31
+
+[content]
+body = "The theory, therefore, refers the entire process to pre-existing compulsions: the guilt inheres in the Primal Beings.\n\nNext: Section 13"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-11.006"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum 11: The Hymn"
+section = "Section 1f"
+translator = "G.R.S. Mead"
+source_url = "https://sacred-texts.com/chr/herm/hermes11.htm"
+token_count = 64
+
+[content]
+body = "For naught's unseen, even of things that are without a body.\n\nMind sees itself in thinking, God in making.\n\nSo far these things have been made manifest to thee, Thrice-greatest one!\n\nReflect on all the rest in the same way with thyself, and thou shalt not be led astray."
+
+[annotations]
+concepts = []
+related_chunks = []

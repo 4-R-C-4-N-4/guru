@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.119"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 75)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 642
+
+[content]
+body = "Αὐτὰρ ἐπεὶ δή μιν δάμασεν πληγῇσιν ἱμάσσας, ἤριπε γυιωθείς, στενάχιζε δὲ γαῖα πελώρη.\n\nΦλὸξ δὲ κεραυνωθέντος ἀπέσσυτο τοῖο ἄνακτος οὔρεος ἐν βήσσῃσιν Ἀίτνης παιπαλοέσσῃς, 860 πληγέντος.\n\nΠολλὴ δὲ πελώρη καίετο γαῖα ἀτμῇ θεσπεσίῃ καὶ ἐτήκετο κασσίτερος ὣς τέχνῃ ὕπ᾽ αἰζηῶν ἐν ἐυτρήτοις χοάνοισι θαλφθείς, ἠὲ σίδηρος, ὅ περ κρατερώτατός ἐστιν, οὔρεος ἐν βήσσῃσι δαμαζόμενος πυρὶ κηλέῳ 865 τήκεται ἐν χθονὶ δίῃ ὑφ᾽ Ἡφαιστου παλάμῃσιν.\n\nὭς ἄρα τήκετο γαῖα σέλαι πυρὸς αἰθομένοιο.\n\nῬῖψε δέ μιν θυμῷ ἀκαχὼν ἐς Τάρταρον εὐρύν."
+
+[annotations]
+concepts = []
+related_chunks = []

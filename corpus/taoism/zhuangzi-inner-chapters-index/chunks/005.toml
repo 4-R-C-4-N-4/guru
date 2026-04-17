@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.005"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 2 (part 4)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 157
+
+[content]
+body = "In this chaos all forms were confounded as is the case with the Tâoist chaos.\n\nBel or Enu is the word which separates the elements of chaos.\n\nNuah or Hia is the light of God which penetrates the universe, and maintains the order established by the word.\n\nIt was this Trinity of God, in the language of some intermediate nation, which Lâo-tsze appears to have had in view in the various passages where he speaks of the original principle of the universe in a triple form.' This reading of our chapter is not more satisfactory to me than that of Rémusat; and I am content, in my interpretation of it, to abide by the aids of Chinese dictionaries and commentators of reputation who have made it their study.\n\nNext: Preface"
+
+[annotations]
+concepts = []
+related_chunks = []

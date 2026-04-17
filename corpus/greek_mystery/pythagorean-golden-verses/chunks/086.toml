@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.086"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 42)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 646
+
+[content]
+body = "Πεύθετο γὰρ Γαίης τε καὶ Οὐρανοῦ ἀστερόεντος, οὕνεκά οἱ πέπρωτο ἑῷ ὑπὸ παιδὶ δαμῆναι καὶ κρατερῷ περ ἐόντι — Διὸς μεγάλου διὰ βουλάς· — 465 τῷ ὅ γ᾽ ἄρ᾽ οὐκ ἀλαὸς σκοπιὴν ἔχεν, ἀλλὰ δοκεύων παῖδας ἑοὺς κατέπινε· ῾Ρέην δ᾽ ἔχε πένθος ἄλαστον.\n\nἈλλ᾽ ὅτε δὴ Δί᾽ ἔμελλε θεῶν πατέρ᾽ ἠδὲ καὶ ἀνδρῶν τέξεσθαι, τότ᾽ ἔπειτα φίλους λιτάνευε τοκῆας τοὺς αὐτῆς, Γαῖάν τε καὶ Οὐρανὸν ἀστερόεντα, 470 μῆτιν συμφράσσασθαι, ὅπως λελάθοιτο τεκοῦσα παῖδα φίλον, τείσαιτο δ᾽ ἐρινῦς πατρὸς ἑοῖο παίδων θ᾽, οὓς κατέπινε μέγας Κρόνος ἀγκυλομήτης."
+
+[annotations]
+concepts = []
+related_chunks = []

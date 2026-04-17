@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.065"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 21)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 566
+
+[content]
+body = "Τοὺς δὲ πατὴρ Τιτῆνας ἐπίκλησιν καλέεσκε παῖδας νεικείων μέγας Οὐρανός, οὓς τέκεν αὐτός· φάσκε δὲ τιταίνοντας ἀτασθαλίῃ μέγα ῥέξαι ἔργον, τοῖο δ᾽ ἔπειτα τίσιν μετόπισθεν ἔσεσθαι.\n\n210 Νὺξ δ᾽ ἔτεκεν στυγερόν τε Μόρον καὶ Κῆρα μέλαιναν καὶ Θάνατον, τέκε δ᾽ Ὕπνον, ἔτικτε δὲ φῦλον Ὀνείρων· — οὔ τινι κοιμηθεῖσα θεὰ τέκε Νὺξ ἐρεβεννή, — δεύτερον αὖ Μῶμον καὶ Ὀιζὺν ἀλγινόεσσαν Ἑσπερίδας θ᾽, ᾗς μῆλα πέρην κλυτοῦ Ὠκεανοῖο 215 χρύσεα καλὰ μέλουσι φέροντά τε δένδρεα καρπόν."
+
+[annotations]
+concepts = []
+related_chunks = []

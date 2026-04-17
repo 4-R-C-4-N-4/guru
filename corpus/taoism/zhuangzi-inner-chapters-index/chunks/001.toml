@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.001"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 1"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 161
+
+[content]
+body = "Sacred Texts Taoism Index Next The Texts of Taoism Translated by James Legge in two parts Part I The Tâo Teh King (Tâo Te Ching) of Lâo Dze (Lao Tsu) The Writings of Kwang-dze (Chuang-tse) (Books I-XVII) The Sacred Books of the East translated by various Oriental scholars and edited by F. Max Müller Vol. XXXIX Oxford University Press [1891] Scanned at sacred-texts 3/2001. J.B. Hare, redactor. Reformatted July 2003. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact. Next: Contents"
+
+[annotations]
+concepts = []
+related_chunks = []

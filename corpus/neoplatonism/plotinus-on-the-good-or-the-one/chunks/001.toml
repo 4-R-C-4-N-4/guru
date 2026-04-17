@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-on-the-good-or-the-one.001"
+tradition = "Neoplatonism"
+text_name = "Enneads"
+section = "Ennead VI.9, Section 1"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn088.htm"
+token_count = 19
+
+[content]
+body = "Sacred Texts Classics Index Previous Next THE SECOND ENNEAD Next: FIRST TRACTATE"
+
+[annotations]
+concepts = []
+related_chunks = []

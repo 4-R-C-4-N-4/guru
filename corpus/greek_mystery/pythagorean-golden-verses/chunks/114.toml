@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.114"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 70)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 422
+
+[content]
+body = "[Ἔνθα δὲ γῆς δνοφερῆς καὶ Ταρτάρου ἠερόεντος πόντου τ᾽ ἀτρυγέτοιο καὶ οὐρανοῦ ἀστερόεντος ἑξείης πάντων πηγαὶ καὶ πείρατ᾽ ἔασιν ἀργαλέ᾽ εὐρώεντα, τά τε στυγέουσι θεοί περ.\n\n810 Ἔνθα δὲ μαρμάρεαί τε πύλαι καὶ χάλκεος οὐδὸς ἀστεμφής, ῥίζῃσι διηνεκέεσσιν ἀρηρώς, αὐτοφυής· πρόσθεν δὲ θεῶν ἔκτοσθεν ἁπάντων Τιτῆνες ναίουσι, πέρην Χάεος ζοφεροῖο."
+
+[annotations]
+concepts = []
+related_chunks = []

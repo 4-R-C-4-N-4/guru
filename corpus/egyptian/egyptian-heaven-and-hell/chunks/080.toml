@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-heaven-and-hell.080"
+tradition = "Egyptian"
+text_name = "The Egyptian Heaven and Hell"
+section = "Chapter 23 (part 2)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ehh.htm"
+token_count = 63
+
+[content]
+body = "The gods who sit round the lake of fire receive their bodies and souls from the serpent NEHEP, and then they journey into SEKHET-AARU, which apparently has not yet been reached.\n\nNext: Eighth Division of the Tuat.\n\nII.\n\nKingdom of Osiris According to the Book of Gates"
+
+[annotations]
+concepts = []
+related_chunks = []

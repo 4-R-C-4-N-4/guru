@@ -1,0 +1,15 @@
+[chunk]
+id = "Greek Mystery.pythagorean-golden-verses.050"
+tradition = "Greek Mystery"
+text_name = "The Golden Verses of Pythagoras"
+section = "Section 14 (part 6)"
+translator = "Florence M. Firth"
+source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
+token_count = 469
+
+[content]
+body = "55 Ἐννέα γάρ οἱ νυκτὸς ἐμίσγετο μητίετα Ζεὺς νόσφιν ἀπ᾽ ἀθανάτων ἱερὸν λέχος εἰσαναβαίνων· ἀλλ᾽ ὅτε δή ῥ᾽ ἐνιαυτὸς ἔην, περὶ δ᾽ ἔτραπον ὧραι μηνῶν φθινόντων, περὶ δ᾽ ἤματα πόλλ᾽ ἐτελέσθη, ἣ δ᾽ ἔτεκ᾽ ἐννέα κούρας ὁμόφρονας, ᾗσιν ἀοιδὴ 60 μέμβλεται ἐν στήθεσσιν, ἀκηδέα θυμὸν ἐχούσαις, τυτθὸν ἀπ᾽ ἀκροτάτης κορυφῆς νιφόεντος Ὀλύμπου.\n\n[Ἔνθα σφιν λιπαροί τε χοροὶ καὶ δώματα καλά."
+
+[annotations]
+concepts = []
+related_chunks = []

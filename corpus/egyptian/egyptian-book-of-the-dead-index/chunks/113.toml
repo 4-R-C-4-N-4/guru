@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.113"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 12 (part 5)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 154
+
+[content]
+body = "8.\n\nHere [offer] a vase of black beer.\n\n9.\n\nHere [offer] a vase of beer of iron 10.\n\nHere [offer] a vase of beer.\n\n11.\n\nRepeat four times and [offer] unguent of the festival.\n\n12.\n\nHere [offer] heken oil.\n\n13.\n\nHere [offer] a pitcher of seft .\n\n14.\n\nHere [offer] nish-nem oil.\n\n15.\n\nHere [offer] a pitcher of tuat .\n\n16.\n\nHere [offer] ash unguent.\n\n17.\n\nHere [offer] unguent.\n\n18.\n\nHere [offer] stibium and copper.\n\n19.\n\nHere bring two garments.] {p.\n\ncxlii} Next: The Papyrus Of Ani."
+
+[annotations]
+concepts = []
+related_chunks = []

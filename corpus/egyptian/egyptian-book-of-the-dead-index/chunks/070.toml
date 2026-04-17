@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.070"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 7 (part 5)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 329
+
+[content]
+body = "141.\n\n2.\n\nIbid.\n\n, p.\n\n149.\n\n3 Ibid.\n\n, p.\n\n172.] {p.\n\nlxxxix} God and the gods.\n\nThe passages from the pyramid of Pepi show at once the difference between neter as God, and the \"gods\" neteru ; the other passages, which might be multiplied almost indefinitely, prove that the Being spoken of is God.\n\nThe neteru or \"gods\" whom Unas hunted, and snared, and killed, and roasted, and ate, are beings who could die; to them were attributed bodies, souls, ka's , spiritual bodies, etc .\n\nIn a remarkable passage from the CLIVth Chapter of the Book of the Dead (Naville, Todtenbuch , Bd.\n\nI., Bl.\n\n179, l.\n\n3) the deceased king Thothmes III.\n\nprays:-- seset-kua emxet-k Tem huau ma ennu ari-k Preserve me behind thee, O Tmu, from decay such as that which thou workest er meter neb netert nebt er aut neb er t'etfet neb for god every, and goddess every, for animals all, for reptiles all sebuit-f per ba-f emxet mit-f ha-f for each passeth away when hath gone forth his soul after his death, he perisheth emxet sebi-f after he hath passed away.\n\nThe gods mortal.\n\nOf these mortal gods some curious legends have come down to us; from which the following may be selected as illustrating their inferior position.\n\nNext: The Legend Of Ra And Isis."
+
+[annotations]
+concepts = []
+related_chunks = []

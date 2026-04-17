@@ -1,0 +1,11 @@
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+translator = "E.A. Wallis Budge"
+sections_format = "chapter"

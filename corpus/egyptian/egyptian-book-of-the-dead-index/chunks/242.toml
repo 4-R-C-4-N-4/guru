@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.242"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 43 (part 2)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 783
+
+[content]
+body = "THE history of the great body of religious compositions which form the Book of Dead of the ancient Egyptians may conveniently be divided into four[1] of the periods, which are represented by four versions:-- 1.\n\nThe version which was edited by the priests of the college of Annu (the On of the Bible, and the Heliopolis of the Greeks), and which was based upon a series of texts now lost, but which there is evidence to prove had passed through a series of revisions or editions as early as the period of the Vth dynasty.\n\nThis version was, so far as we know, always written in hieroglyphics, and may be called the Heliopolitan version.\n\nIt is known from five copies which are inscribed upon the walls of the chambers and passages in the pyramids[2] of kings of the Vth and VIth dynasties at Sakkâra;[3] and sections of it are found inscribed upon tombs, sarcophagi, coffins, stelæ and papyri from the XIth dynasty to about A.D.\n\n200.[4] [1.\n\nSee Naville, Todtenbuch (Einleitung), p.\n\n39.\n\n2.\n\nHence known as the \"pyramid texts.\" 3.\n\nI.e.\n\n, Unâs, Tetâ, Pepi I., Mentu-em-sa-f, and Pepi II.\n\nTheir pyramids were cleared out by MM.\n\nMariette and Maspero during the years 1890-84, and the hieroglyphic texts were published, with a French translation, in Recueil de Travaux , t.\n\niii-xiv., Paris, 1882-93.\n\n4.\n\nIn the XIth, XIIth, and XIIIth dynasties many monuments are inscribed with sections of the Unâs text.\n\nThus lines 206-69 are found in hieroglyphics upon the coffin of Amamu (British Museum, No.\n\n6654.\n\nSee Birch, Egyptian Texts of the Earliest Period from the Coffin of Amamu , 1886.\n\nPlates XVII.-XX.); Il.\n\n206-14 and 268-84 on the coffin of Apa-ankh, from Sakkâra (see Lepsius, Denkmäler , ii., Bl.\n\n99 b ; Maspero, Recueil , t.\n\niii., pp.\n\n200 and 214 ff.); Il.\n\n206-10 {footnote page x.} and 268-89 on the coffin of Antef (see Lepsius, Denkmäler , ii., Bl.\n\n145; Maspero, Recueil , t.\n\niii., pp.\n\n200, 214); line 206 on a coffin of Menthu-hetep at Berlin (see Lepsius, Aelteste Texte , Bl.\n\n5); lines 269-94 on the sarcophagus of Heru-hetep (see Maspero, Mémoires , t, i., p.\n\n144).\n\nA section is found on the walls of the tomb of Queen Neferu (see Maspero, Recueil , t.\n\niii., p.\n\n201 ff.; Mémoires , t.\n\ni., p.\n\n134); other sections are found on the sarcophagus of Taka (see Lepsius, Denkmäler , ii., Bll.\n\n147, 148; Maspero, Guide au Visiteur , p.\n\n224, No.\n\n1053; Mémoires , t.\n\ni., p.\n\n134); lines 5-8 occur on the stele of Apa (see Ledrain, Monuments Égyptiens de la Bibl.\n\nNationale , Paris, 1879, foll.\n\n14, 15); lines 166 ff."
+
+[annotations]
+concepts = []
+related_chunks = []

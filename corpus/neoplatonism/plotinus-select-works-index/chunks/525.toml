@@ -1,0 +1,15 @@
+[chunk]
+id = "Neoplatonism.plotinus-select-works-index.525"
+tradition = "Neoplatonism"
+text_name = "Select Works of Plotinus"
+section = "Select Works, Section 437 (part 2)"
+translator = "Thomas Taylor"
+source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
+token_count = 80
+
+[content]
+body = "Given its intellection identical with intellectual object and the object identical with the Principle itself, it cannot but have self-knowledge: its intellection operates by the intellectual act which is itself upon the intellectual object which similarly is itself.\n\nIt possesses self-knowing, thus, on every count; the act is itself; and the object seen in that act- self, is itself.\n\nNext: Section 6"
+
+[annotations]
+concepts = []
+related_chunks = []

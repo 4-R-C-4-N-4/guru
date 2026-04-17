@@ -1,0 +1,7 @@
+tradition = "Egyptian"
+text_id = "egyptian-book-of-the-dead-index"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+sections_format = "chapter"
+chunk_count = 358

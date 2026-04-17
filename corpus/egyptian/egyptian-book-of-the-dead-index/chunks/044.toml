@@ -1,0 +1,15 @@
+[chunk]
+id = "Egyptian.egyptian-book-of-the-dead-index.044"
+tradition = "Egyptian"
+text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
+section = "Chapter 5 (part 8)"
+translator = "E.A. Wallis Budge"
+source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
+token_count = 197
+
+[content]
+body = "A hieroglyphic transcript of these works, with an English translation, was given in Archælogia , vol.\n\niii., London, 1891.\n\n4.\n\nWhat Devéria says with reference to the Book of Respirations applies to the whole class: \"Toutefois, on remarque dans cet écrit une tendance à la doctrine de la résurrection du corps plus marquée que dans les compositions antérieures\" ( Catalogue , p.\n\n13).\n\n5.\n\n###.\n\nFestival Songs, iv., 33.\n\n6.\n\n###.\n\nIbid.\n\n, viii., 21, ix., 8.\n\n7.\n\nLitanies of Seker , col.\n\nxviii.\n\n8.\n\n###.\n\nFestival Songs , vi., 1.\n\n9.\n\n###.\n\nIbid.\n\n, iii., 18.\n\n10.\n\n###.\n\nIbid.\n\n, ix., 26.] {p.\n\nlv} Next: The Doctrine Of Eternal Life."
+
+[annotations]
+concepts = []
+related_chunks = []

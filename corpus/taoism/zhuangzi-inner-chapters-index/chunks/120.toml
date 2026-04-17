@@ -1,0 +1,15 @@
+[chunk]
+id = "Taoism.zhuangzi-inner-chapters-index.120"
+tradition = "Taoism"
+text_name = "The Writings of Chuang Tzu (Inner Chapters)"
+section = "Book 80 (part 2)"
+translator = "James Legge"
+source_url = "https://sacred-texts.com/tao/sbe39/sbe39000.htm"
+token_count = 166
+
+[content]
+body = "Vectigalibus terra si non opprimitur, suâ quisque contentus alias terras non quaeret, si se non vexari populus experitur.\n\n3.\n\nVitae si non taedet, nec patrii soli taedebit.\n\n4.\n\nQuare sanctus majestatis fastum non affectat, immo similem se caeteris ostendit.\n\np.\n\n116 5.\n\nSibi recte consulens, populorum amans, non se pretiosum et inaccessibilem facit.\n\n6.\n\nQuidquid ergo timorem incutere potest, hoc evitat; quod amorem conciliat et benignitatem, se demonstrat hoc eligi et ultro amplectitur.\n\nNext: Chapter 73"
+
+[annotations]
+concepts = []
+related_chunks = []
