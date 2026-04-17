@@ -1,0 +1,18 @@
+{
+  "id": "849f3e29",
+  "type": "chore",
+  "state": "open",
+  "summary": "Implement validate(conn): refuse export when chunks count != chunk_embeddings count, or any row has wrong model/dim",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.504Z",
+  "updated_at": "2026-04-17T16:25:11.504Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "4407f39f",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Swap ChromaDB write for SQLite INSERT OR REPLACE into chunk_embeddings using float32 little-endian blob (np.asarray(...).tobytes())",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.813Z",
+  "updated_at": "2026-04-17T16:25:10.813Z",
+  "tags": [
+    "v2",
+    "phase-2"
+  ],
+  "relationships": {
+    "parent": "5dca13fc"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "94167d50",
+  "type": "chore",
+  "state": "open",
+  "summary": "Execute the §8.1 operational runbook end-to-end once against a non-production Postgres and capture any corrections",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.847Z",
+  "updated_at": "2026-04-17T16:25:11.847Z",
+  "tags": [
+    "v2",
+    "phase-7"
+  ],
+  "relationships": {
+    "parent": "49031039"
+  }
+}

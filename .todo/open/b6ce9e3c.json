@@ -1,0 +1,18 @@
+{
+  "id": "b6ce9e3c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Emit corpus_metadata INSERTs last (schema_version, embedding_model, embedding_dim, corpus_version, exported_at, source_commit_sha); print summary; verify two consecutive exports of unchanged data are byte-identical gzips",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.639Z",
+  "updated_at": "2026-04-17T16:25:11.639Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "d52bd36b",
+  "type": "chore",
+  "state": "open",
+  "summary": "Run verification queries: SELECT corpus_metadata, tradition counts, edge count, self-similarity smoke test (<=> distance 0 for a known chunk against itself)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.793Z",
+  "updated_at": "2026-04-17T16:25:11.793Z",
+  "tags": [
+    "v2",
+    "phase-7"
+  ],
+  "relationships": {
+    "parent": "49031039"
+  }
+}

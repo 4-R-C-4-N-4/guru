@@ -1,0 +1,18 @@
+{
+  "id": "5572b77e",
+  "type": "chore",
+  "state": "open",
+  "summary": "Implement SQL-escape helpers: esc(str|None), esc_array(list[str]|None) for Postgres text arrays, vec_to_pg(blob, dim) emitting pgvector text form with fixed precision",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.457Z",
+  "updated_at": "2026-04-17T16:25:11.457Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  }
+}

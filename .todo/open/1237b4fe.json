@@ -1,0 +1,22 @@
+{
+  "id": "1237b4fe",
+  "type": "feature",
+  "state": "open",
+  "summary": "Phase 1: Add chunk_embeddings table and backfill from ChromaDB",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.479Z",
+  "updated_at": "2026-04-17T16:25:10.617Z",
+  "tags": [
+    "v2",
+    "phase-1"
+  ],
+  "relationships": {
+    "children": [
+      "602f39de",
+      "3940b852",
+      "7a480888"
+    ]
+  }
+}

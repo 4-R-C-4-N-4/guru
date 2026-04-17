@@ -1,0 +1,18 @@
+{
+  "id": "f23d63a4",
+  "type": "chore",
+  "state": "open",
+  "summary": "Emit deterministic INSERTs for traditions, texts, concepts, chunks (JOIN chunk_embeddings, section_path->array, embedding::vector), edges — every query ORDER BY primary key",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.590Z",
+  "updated_at": "2026-04-17T16:25:11.590Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  }
+}

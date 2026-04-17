@@ -1,0 +1,18 @@
+{
+  "id": "e27b4b1d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Author schema/corpus-schema.sql (CREATE EXTENSION, CREATE TABLE for traditions/texts/concepts/chunks/edges/corpus_metadata, no indexes yet — HNSW added post-load)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.281Z",
+  "updated_at": "2026-04-17T16:25:11.281Z",
+  "tags": [
+    "v2",
+    "phase-5"
+  ],
+  "relationships": {
+    "parent": "33822806"
+  }
+}

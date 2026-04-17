@@ -1,0 +1,18 @@
+{
+  "id": "f6fe87b0",
+  "type": "chore",
+  "state": "open",
+  "summary": "Delete data/vectordb/ and remove chromadb from requirements.txt / pyproject.toml; uninstall locally",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.086Z",
+  "updated_at": "2026-04-17T16:25:11.086Z",
+  "tags": [
+    "v2",
+    "phase-4"
+  ],
+  "relationships": {
+    "parent": "b86edc60"
+  }
+}
