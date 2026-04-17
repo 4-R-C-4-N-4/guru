@@ -37,6 +37,23 @@ CREATE INDEX IF NOT EXISTS idx_edges_type      ON edges(type);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_edges_unique ON edges(source_id, target_id, type);
 
 -- ============================================================
+-- EMBEDDINGS
+-- ============================================================
+-- Per-chunk dense vectors. Stored as float32 little-endian BLOBs so a
+-- 768-dim vector takes 3 KB instead of ~15 KB as JSON. `dim` and `model`
+-- are per-row so a partial re-embed (e.g. model change mid-migration) is
+-- self-describing.
+
+CREATE TABLE IF NOT EXISTS chunk_embeddings (
+    chunk_id TEXT PRIMARY KEY REFERENCES nodes(id) ON DELETE CASCADE,
+    dim      INTEGER NOT NULL,
+    model    TEXT NOT NULL,
+    vector   BLOB NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_chunk_embeddings_model ON chunk_embeddings(model);
+
+-- ============================================================
 -- STAGING — Pass B: LLM concept tagging
 -- ============================================================
 
