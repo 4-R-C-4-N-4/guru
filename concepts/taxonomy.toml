@@ -23,6 +23,12 @@ aeons = "Divine archetypal beings or eternal attributes dwelling within the Pler
 monad = "The absolutely simple, undivided first principle from which all multiplicity and existence flows."
 archons = "Malevolent planetary rulers or demiurgic powers that govern the material world and obstruct the soul's ascent."
 letters_of_creation = "The twenty-two Hebrew letters as the building blocks through which God creates and sustains all existence."
+ahura_mazda_principle  = "The divine ordering principle of truth and light."
+angra_mainyu_principle = "The principle of cosmic disorder and falsity."
+frashokereti           = "The final restoration/renovation of the cosmos."
+asha_cosmic_order      = "Truth as the fundamental structure of reality."
+soul_migration         = "The transmigration of the soul across lives."
+psychopomp_journey     = "Guided passage of the soul through afterlife realms."
 
 # ============================================================
 # SOTERIOLOGY — salvation, liberation, and the return
@@ -50,6 +56,10 @@ covenant = "A binding agreement or relationship between the divine and a people 
 divine_light = "The uncreated luminous quality of the divine, sometimes experienced directly in mystical states; illumination as revelation."
 living_god = "The divine conceived as active, present, and dynamic—not an abstract principle but a personal responsive reality."
 anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
+cosmic_dualism = "Ontological opposition between two primal principles (light/darkness, truth/lie, spirit/matter) as the fundamental structure of reality."
+numerical_mysticism = "Numbers, proportions, and mathematical relationships as the underlying structure of divine reality."
+ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
+unity_of_being = "The doctrine that all existence is ultimately one substance or one divine reality; non-duality as a theological claim."
 
 # ============================================================
 # PRAXIS — practice, ritual, and spiritual method
@@ -63,6 +73,9 @@ spiritual_ascent = "A staged journey of the soul upward through heavenly realms 
 fasting_and_prayer = "Ascetic disciplines that prepare the body and mind for spiritual receptivity or purification."
 ritual_purity = "The maintenance of a state of cleanliness—physical, moral, or spiritual—required for encounter with the divine."
 active_contemplation = "A form of meditation that uses imagery, imagination, or symbolic thought rather than purely empty stillness."
+self_examination       = "Daily review of thought and action as spiritual practice."
+ritual_fire            = "Fire as medium of divine presence."
+funerary_navigation    = "Texts and rituals guiding the soul through death."
 
 # ============================================================
 # ANTHROPOLOGY — nature of the human being
@@ -85,3 +98,4 @@ renunciation_of_wealth = "The spiritual danger of attachment to material possess
 love_of_neighbour = "Active compassionate care for others as a central spiritual obligation or expression of divine love."
 rejection_of_hypocrisy = "Critique of outward religious observance that lacks inner transformation; form without substance."
 paradox_as_teaching = "Using apparent contradiction, reversal, or riddle to destabilise ordinary understanding and induce insight."
+good_thought_word_deed = "The Zoroastrian triad of right thought, right speech, and right action as the foundation of ethical life; truth-in-living."

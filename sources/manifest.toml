@@ -19,221 +19,708 @@ notes = "Full Coptic-to-English translation. Extract main content div with logia
 [[source]]
 id = "gospel-of-philip"
 tradition = "gnosticism"
-label = "Gospel of Philip (Lambdin translation)"
-url = "http://gnosis.org/naghamm/gphlamb.html"
+label = "Gospel of Philip (Barnstone translation)"
+url = "http://gnosis.org/naghamm/GPhilip-Barnstone.html"
 format = "html"
 license = "public_domain"
-translator = "Thomas O. Lambdin"
+translator = "Willis Barnstone"
 notes = "Full Coptic-to-English translation. Extract main content div."
 
 # ============================================
-# HERMETICISM (sacred-texts.com)
+# HERMETICISM (sacred-texts.com + gnosis.org)
 # ============================================
 
 [[source]]
 id = "corpus-hermeticum-01"
 tradition = "hermeticism"
 label = "Corpus Hermeticum I: Poimandres"
-url = "https://www.sacred-texts.com/chr/herm/her01.htm"
+url = "https://sacred-texts.com/chr/herm/hermes1.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "First tractate of Corpus Hermeticum. Extract text between navigation."
+notes = "First tractate of Corpus Hermeticum. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-02"
 tradition = "hermeticism"
 label = "Corpus Hermeticum II: The Serapeum"
-url = "https://www.sacred-texts.com/chr/herm/her02.htm"
+url = "https://sacred-texts.com/chr/herm/hermes2.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Second tractate. Extract text between navigation."
+notes = "Second tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-03"
 tradition = "hermeticism"
 label = "Corpus Hermeticum III: The Sacred Sermon"
-url = "https://www.sacred-texts.com/chr/herm/her03.htm"
+url = "https://sacred-texts.com/chr/herm/hermes3.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Third tractate. Extract text between navigation."
+notes = "Third tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-04"
 tradition = "hermeticism"
 label = "Corpus Hermeticum IV: The Epistles"
-url = "https://www.sacred-texts.com/chr/herm/her04.htm"
+url = "https://sacred-texts.com/chr/herm/hermes4.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Fourth tractate. Extract text between navigation."
+notes = "Fourth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-05"
 tradition = "hermeticism"
 label = "Corpus Hermeticum V: The Discourse of Hermes to Asclepius"
-url = "https://www.sacred-texts.com/chr/herm/her05.htm"
+url = "https://sacred-texts.com/chr/herm/hermes5.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Fifth tractate. Extract text between navigation."
+notes = "Fifth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-06"
 tradition = "hermeticism"
 label = "Corpus Hermeticum VI: The All-Father"
-url = "https://www.sacred-texts.com/chr/herm/her06.htm"
+url = "https://sacred-texts.com/chr/herm/hermes6.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Sixth tractate. Extract text between navigation."
+notes = "Sixth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-07"
 tradition = "hermeticism"
 label = "Corpus Hermeticum VII: The Seven Powers"
-url = "https://www.sacred-texts.com/chr/herm/her07.htm"
+url = "https://sacred-texts.com/chr/herm/hermes7.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Seventh tractate. Extract text between navigation."
+notes = "Seventh tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-08"
 tradition = "hermeticism"
 label = "Corpus Hermeticum VIII: The Eight Sphere"
-url = "https://www.sacred-texts.com/chr/herm/her08.htm"
+url = "https://sacred-texts.com/chr/herm/hermes8.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Eighth tractate. Extract text between navigation."
+notes = "Eighth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-09"
 tradition = "hermeticism"
 label = "Corpus Hermeticum IX: The Decalogue"
-url = "https://www.sacred-texts.com/chr/herm/her09.htm"
+url = "https://sacred-texts.com/chr/herm/hermes9.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Ninth tractate. Extract text between navigation."
+notes = "Ninth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-10"
 tradition = "hermeticism"
 label = "Corpus Hermeticum X: The Sermon on the Mount"
-url = "https://www.sacred-texts.com/chr/herm/her10.htm"
+url = "https://sacred-texts.com/chr/herm/hermes10.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Tenth tractate. Extract text between navigation."
+notes = "Tenth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-11"
 tradition = "hermeticism"
 label = "Corpus Hermeticum XI: The Hymn"
-url = "https://www.sacred-texts.com/chr/herm/her11.htm"
+url = "https://sacred-texts.com/chr/herm/hermes11.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Eleventh tractate. Extract text between navigation."
+notes = "Eleventh tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-12"
 tradition = "hermeticism"
 label = "Corpus Hermeticum XII: The Prayer"
-url = "https://www.sacred-texts.com/chr/herm/her12.htm"
+url = "https://sacred-texts.com/chr/herm/hermes12.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Twelfth tractate. Extract text between navigation."
+notes = "Twelfth tractate. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-13"
 tradition = "hermeticism"
 label = "Corpus Hermeticum XIII: The Discourse of Hermes to Tat"
-url = "https://www.sacred-texts.com/chr/herm/her13.htm"
+url = "https://sacred-texts.com/chr/herm/hermes13.htm"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Thirteenth tractate. Extract text between navigation."
+notes = "Thirteenth tractate. Extract text between navigation and header."
 
 [[source]]
-id = "corpus-hermeticum-14"
+id = "corpus-hermeticum-14-15"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XIV: The Discourse of Hermes to Ammon"
-url = "https://www.sacred-texts.com/chr/herm/her14.htm"
+label = "Corpus Hermeticum XIV-XV: A Letter of Thrice-Greatest Hermes to Asclepius"
+url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th229.html"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Fourteenth tractate. Extract text between navigation."
-
-[[source]]
-id = "corpus-hermeticum-15"
-tradition = "hermeticism"
-label = "Corpus Hermeticum XV: The Hymn of Hermes"
-url = "https://www.sacred-texts.com/chr/herm/her15.htm"
-format = "html"
-license = "public_domain"
-translator = "G.R.S. Mead"
-notes = "Fifteenth tractate. Extract text between navigation."
+notes = "Fourteenth/Fifteenth tractate. Raw html. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-16"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVI: The Secret Sermon on the Mountain"
-url = "https://www.sacred-texts.com/chr/herm/her16.htm"
+label = "Corpus Hermeticum XVI: The Definitions of Asclepius unto King Ammon"
+url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th231.html"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Sixteenth tractate. Extract text between navigation."
+notes = "Sixteenth tractate. Raw html. Extract text between navigation and header."
 
 [[source]]
 id = "corpus-hermeticum-17"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVII: The Discourse of Hermes to Asclepius"
-url = "https://www.sacred-texts.com/chr/herm/her17.htm"
+label = "Corpus Hermeticum XVII: Of Asclepius to the King"
+url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th233.html"
 format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Seventeenth tractate. Extract text between navigation."
+notes = "Seventeenth tractate. Raw html. Extract text between navigation and header."
+
+[[source]]
+id = "corpus-hermeticum-18"
+tradition = "hermeticism"
+label = "Corpus Hermeticum XVIII: The Encomium of Kings"
+url = "http://www.gnosis.org/library/grs-mead/TGH-v2/th235.html"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Eighteenth tractate. Raw html. Extract text between navigation and header."
+
+# ============================================
+# ESOTERICA (sacred-texts.com)
+# ============================================
+
+[[source]]
+id = "life-and-doctrines-boehme-01"
+tradition = "esoteric"
+label = "Chapter I. Introduction"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb04.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter I. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-02"
+tradition = "esoteric"
+label = "Chapter II. The Unity of the All"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb05.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter II. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-03"
+tradition = "esoteric"
+label = "Chapter III. The Seven Properties or Qualities of Eternal Nature"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb06.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter III. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-04"
+tradition = "esoteric"
+label = "Chapter IV. Creation"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb07.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter IV. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-05"
+tradition = "esoteric"
+label = "Chapter V. The Angels"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb08.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter V. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-06"
+tradition = "esoteric"
+label = "Chapter VI. The Restoration of Nature and the Generation of Man"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb09.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter VI. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-07"
+tradition = "esoteric"
+label = "Chapter VII. Man"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb10.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter VII. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-08"
+tradition = "esoteric"
+label = "Chapter VIII. Nature, or the Third Principle"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb11.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter VIII. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-09"
+tradition = "esoteric"
+label = "Chapter IX. Generation"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb12.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter IX. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-10"
+tradition = "esoteric"
+label = "Chapter X. The Christ"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb13.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter X. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-11"
+tradition = "esoteric"
+label = "Chapter XI. Incarnation—The Celestial Virgin"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb14.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter XI. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-12"
+tradition = "esoteric"
+label = "Chapter XII. Redemption"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb15.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter XII. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-13"
+tradition = "esoteric"
+label = "Chapter XIII. Regeneration"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb16.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter XIII. Extract text between CHAPTER and Footnotes."
+
+[[source]]
+id = "life-and-doctrines-boehme-14"
+tradition = "esoteric"
+label = "Chapter XIV. Death and Eternal Life"
+url = "https://www.sacred-texts.com/eso/ldjb/ldjb17.htm"
+format = "html"
+license = "public_domain"
+translator = "Franz Hartmann"
+notes = "Chapter XIV. Extract text between CHAPTER and Footnotes."
+
 
 # ============================================
 # BUDDHISM (sacred-texts.com)
 # ============================================
 
 [[source]]
-id = "heart-sutra"
+id = "diamond-sutra"
 tradition = "buddhism"
-label = "The Heart Sutra (Conze translation)"
-url = "https://www.sacred-texts.com/bud/hs/hs01.htm"
+label = "Diamond Cutter (E.B. Cowell, F. Max Müller, and J. Kakakusu translation)"
+url = "https://www.sacred-texts.com/bud/sbe49/sbe4929.htm"
 format = "html"
 license = "public_domain"
-translator = "Edward Conze"
+translator = "E.B. Cowell, F. Max Müller, and J. Kakakusu"
 notes = "Core Mahayana sutra. Extract text between navigation and header."
 
-# ============================================
-# JEWISH MYSTICISM (Sefaria API)
-# ============================================
+
+# --------------------------------------------
+# ZOROASTRIANISM
+# --------------------------------------------
+# The single highest-value addition. Zarathustra's light/darkness
+# dualism is the direct ancestor of Gnostic pleroma/kenoma oppositions
+# and deeply influences Jewish apocalyptic and early Christian cosmology.
 
 [[source]]
-id = "sefer-yetirah"
-tradition = "jewish_mysticism"
-label = "Sefer Yetirah (Book of Creation)"
-url = "https://www.sefaria.org/Sefer_Yetirah"
-format = "sefaria_api"
+id = "gathas-ahunavaiti"
+tradition = "zoroastrianism"
+label = "Gathas of Zarathustra: Ahunavaiti Gatha"
+url = "https://sacred-texts.com/zor/sbe31/sbe3104.htm"
+format = "html"
 license = "public_domain"
-translator = "Various translations"
-notes = "Use Sefaria API. Fetch text with English translation. Key Kabbalistic text."
+translator = "L.H. Mills"
+notes = "Oldest layer of Zoroastrian scripture — Zarathustra's own hymns, ~1200 BCE. Extract text between navigation and footnotes."
 
 [[source]]
-id = "zohar-leid"
-tradition = "jewish_mysticism"
-label = "Zohar — Selections (Leid translation)"
-url = "https://www.sefaria.org/Zohar"
-format = "sefaria_api"
+id = "gathas-ushtavaiti"
+tradition = "zoroastrianism"
+label = "Gathas of Zarathustra: Ushtavaiti Gatha"
+url = "https://sacred-texts.com/zor/sbe31/sbe3110.htm"
+format = "html"
 license = "public_domain"
-translator = "W. G. Braude & I. Tishby"
-notes = "Use Sefaria API. Fetch selected chapters from Zohar. Primary Kabbalistic text."
+translator = "L.H. Mills"
+notes = "Second Gatha. Extract text between navigation and footnotes."
+
+[[source]]
+id = "gathas-spenta-mainyu"
+tradition = "zoroastrianism"
+label = "Gathas of Zarathustra: Spenta Mainyu Gatha"
+url = "https://sacred-texts.com/zor/sbe31/sbe3116.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Third Gatha — 'Bountiful Spirit.' Cosmic dualism in its original formulation. Extract text between navigation and footnotes."
+
+[[source]]
+id = "gathas-vohu-khshathra"
+tradition = "zoroastrianism"
+label = "Gathas of Zarathustra: Vohu-Khshathra Gatha"
+url = "https://sacred-texts.com/zor/sbe31/sbe3121.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Fourth Gatha — 'Good Dominion.' Extract text between navigation and footnotes."
+
+[[source]]
+id = "gathas-vahishtoishti"
+tradition = "zoroastrianism"
+label = "Gathas of Zarathustra: Vahishtoishti Gatha"
+url = "https://sacred-texts.com/zor/sbe31/sbe3123.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Fifth and final Gatha. Extract text between navigation and footnotes."
+
+[[source]]
+id = "yasna-haptanghaiti"
+tradition = "zoroastrianism"
+label = "Yasna Haptanghaiti (Worship of Seven Chapters)"
+url = "https://sacred-texts.com/zor/sbe31/sbe3108.htm"
+format = "html"
+license = "public_domain"
+translator = "L.H. Mills"
+notes = "Ancient liturgy interpolated into the Gathas. Older than most Avestan material except the Gathas themselves. Extract text between navigation and footnotes."
+
+[[source]]
+id = "bundahishn"
+tradition = "zoroastrianism"
+label = "Bundahishn (Creation)"
+url = "https://sacred-texts.com/zor/sbe05/sbe0502.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "E.W. West"
+notes = "Cosmological text — creation, cosmic order, final renovation (frashokereti). Multiple chapters, follow sequential next-links. Core Zoroastrian cosmology."
+
+
+# --------------------------------------------
+# GREEK MYSTERY RELIGIONS
+# --------------------------------------------
+# Mystery-religion bridge between Greek philosophy and Hermeticism.
+# Orphic soul-migration doctrine + Pythagorean number mysticism
+# are direct antecedents of Neoplatonic and Hermetic thought.
+
+[[source]]
+id = "orphic-hymns"
+tradition = "greek_mystery"
+label = "The Hymns of Orpheus"
+url = "https://sacred-texts.com/cla/hoo/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "Index page links to 87 individual hymns. Scrape each hymn page. Taylor's 1792 translation was foundational for Western esoteric reception of Orphic tradition — Blake, Yeats, and the Golden Dawn all read this version."
+
+[[source]]
+id = "pythagorean-golden-verses"
+tradition = "greek_mystery"
+label = "The Golden Verses of Pythagoras"
+url = "https://sacred-texts.com/cla/gvp/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "Florence M. Firth"
+notes = "Ethical-mystical verses attributed to Pythagoras, with Hierocles' commentary. Source of soul-migration doctrine and daily self-examination practice. Index page links to sections."
+
+[[source]]
+id = "pythagorean-sentences-sextus"
+tradition = "greek_mystery"
+label = "Sentences of Sextus the Pythagorean"
+url = "https://sacred-texts.com/cla/sext/index.htm"
+format = "html"
+license = "public_domain"
+translator = "John Davies"
+notes = "Pythagorean-Christian aphorisms. Structural parallels with Gospel of Thomas logia — compressed wisdom sayings. Creates natural edges with Nag Hammadi material."
+
+
+# --------------------------------------------
+# JEWISH MYSTICISM — Sacred-Texts (replacing Sefaria)
+# --------------------------------------------
+# Sefaria API is unreliable. Sacred-texts has stable Victorian-era
+# translations that are public domain. Less modern-scholarly than
+# Kaplan or Scholem but the conceptual content is accurate.
+#
+# REMOVE the existing sefer-yetirah sefaria_api entry in favor of:
+
+[[source]]
+id = "sefer-yetzirah"
+tradition = "jewish_mysticism"
+label = "Sefer Yetzirah (The Book of Formation)"
+url = "https://sacred-texts.com/jud/yetzirah.htm"
+format = "html"
+license = "public_domain"
+translator = "Wynn Westcott"
+notes = "Earliest Kabbalistic text, ~2nd-6th century CE. Describes creation through 32 paths of wisdom. Westcott was a Golden Dawn founder — his translation reflects that lineage's reading."
+
+[[source]]
+id = "kabbalah-unveiled-intro"
+tradition = "jewish_mysticism"
+label = "The Kabbalah Unveiled: Introduction"
+url = "https://sacred-texts.com/jud/tku/tku04.htm"
+format = "html"
+license = "public_domain"
+translator = "S.L. MacGregor Mathers"
+notes = "Mathers' introduction to Knorr von Rosenroth's Latin Zoharic extracts. Context for the translations that follow."
+
+[[source]]
+id = "book-of-concealed-mystery"
+tradition = "jewish_mysticism"
+label = "The Book of Concealed Mystery (Siphra Dtzenioutha)"
+url = "https://sacred-texts.com/jud/tku/tku08.htm"
+format = "html"
+license = "public_domain"
+translator = "S.L. MacGregor Mathers"
+notes = "Zoharic text on the hidden mysteries of the Godhead and the sefirot. Short but conceptually dense."
+
+[[source]]
+id = "greater-holy-assembly"
+tradition = "jewish_mysticism"
+label = "The Greater Holy Assembly (Idra Rabba Qadisha)"
+url = "https://sacred-texts.com/jud/tku/tku09.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "S.L. MacGregor Mathers"
+notes = "Zoharic text on the cosmic face of God and divine anatomy. Multiple sections — follow sequential page links."
+
+[[source]]
+id = "lesser-holy-assembly"
+tradition = "jewish_mysticism"
+label = "The Lesser Holy Assembly (Idra Zuta Qadisha)"
+url = "https://sacred-texts.com/jud/tku/tku16.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "S.L. MacGregor Mathers"
+notes = "Companion to the Greater Holy Assembly. Multiple sections."
+
+
+# --------------------------------------------
+# NEOPLATONISM
+# --------------------------------------------
+# Critical bridge between Greek philosophy and Western esoteric traditions.
+# Plotinus is cited by Hermeticists, Kabbalists, and Christian mystics alike.
+
+[[source]]
+id = "plotinus-select-works-index"
+tradition = "neoplatonism"
+label = "Select Works of Plotinus"
+url = "https://sacred-texts.com/cla/plotenn/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "Taylor's translations of selected Enneads. Index page links to individual tractates. Taylor's rendering is influential in the Western esoteric tradition (Blake, the Romantics, later Theosophists) but tends to be more expansive than literal. Consider each tractate as a separate source."
+
+[[source]]
+id = "plotinus-on-the-beautiful"
+tradition = "neoplatonism"
+label = "Plotinus: On the Beautiful (Ennead I.6)"
+url = "https://sacred-texts.com/cla/plotenn/enn011.htm"
+format = "html"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "The most influential single Ennead in Western esoteric reception. Beauty as ascent to the One."
+
+[[source]]
+id = "plotinus-on-intelligible-beauty"
+tradition = "neoplatonism"
+label = "Plotinus: On Intelligible Beauty (Ennead V.8)"
+url = "https://sacred-texts.com/cla/plotenn/enn076.htm"
+format = "html"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "The intelligible realm and the vision of the One. Direct source for later emanationist cosmologies."
+
+[[source]]
+id = "plotinus-on-the-good-or-the-one"
+tradition = "neoplatonism"
+label = "Plotinus: On the Good, or the One (Ennead VI.9)"
+url = "https://sacred-texts.com/cla/plotenn/enn088.htm"
+format = "html"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "The capstone Ennead on the nature of the One and the soul's return. Creates strong edges with Kabbalistic Ein Sof and Hermetic unity."
+
+
+# --------------------------------------------
+# TAOISM
+# --------------------------------------------
+# Opens East Asian category. Creates unexpected edges with Vedantic
+# non-dualism and Hermetic alchemy (the Taoist internal alchemy
+# lineage through the Cantong Qi, though we can't include that here
+# due to translation availability).
+
+[[source]]
+id = "tao-te-ching-legge"
+tradition = "taoism"
+label = "Tao Te Ching"
+url = "https://sacred-texts.com/tao/taote.htm"
+format = "html"
+license = "public_domain"
+translator = "James Legge"
+notes = "Foundational Taoist text, ~6th-4th century BCE. All 81 chapters on one page. Legge's 1891 translation is scholarly and stable."
+
+[[source]]
+id = "zhuangzi-inner-chapters-index"
+tradition = "taoism"
+label = "The Writings of Chuang Tzu (Inner Chapters)"
+url = "https://sacred-texts.com/tao/sbe39/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "James Legge"
+notes = "Index links to individual books. Focus on Inner Chapters (Books 1-7) — the core authentic Zhuangzi material. Outer and miscellaneous chapters are later additions and can be added separately."
+
+
+# --------------------------------------------
+# EGYPTIAN
+# --------------------------------------------
+# Ancient substrate. The language of soul-as-traveler and cosmic
+# justice that propagates through Hermeticism (Egyptian-Greek in origin)
+# and has clear structural parallels with Tibetan Bardo Thodol
+# (both are psychopomp/afterlife navigation texts).
+
+[[source]]
+id = "egyptian-book-of-the-dead-index"
+tradition = "egyptian"
+label = "The Egyptian Book of the Dead (Papyrus of Ani)"
+url = "https://sacred-texts.com/egy/ebod/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "E.A. Wallis Budge"
+notes = "Budge's translation of the Papyrus of Ani and related funerary texts. Index page links to chapters/hymns. Budge's scholarship is dated (he favored diffusionist readings that modern Egyptology rejects) but the translation itself remains the most accessible PD version."
+
+[[source]]
+id = "egyptian-heaven-and-hell"
+tradition = "egyptian"
+label = "The Egyptian Heaven and Hell"
+url = "https://sacred-texts.com/egy/ehh/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "E.A. Wallis Budge"
+notes = "Budge's translation of the Book of Am-Tuat (the Twelve Hours of the Night) and the Book of Gates. Cosmology of the underworld journey. Multi-volume; index links to individual chapters."
+
+
+# --------------------------------------------
+# MANDAEAN
+# --------------------------------------------
+# The only living Gnostic religion. Mead's translation is partial
+# but it's the main PD access point to Mandaean material.
+
+[[source]]
+id = "gnostic-john-baptizer"
+tradition = "mandaean"
+label = "Gnostic John the Baptizer: Selections from the Mandaean John-Book"
+url = "http://gnosis.org/library/grs-mead/gjb/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+
+
+# --------------------------------------------
+# ANCIENT MESOPOTAMIAN (OPTIONAL)
+# --------------------------------------------
+# The deepest ancient layer. Pre-dates everything else in the corpus.
+# Lower priority for initial expansion but worth including for the
+# substrate perspective on soul-as-traveler and cosmic combat myths.
+
+[[source]]
+id = "descent-of-inanna"
+tradition = "mesopotamian"
+label = "The Descent of the Goddess Ishtar into the Lower World"
+url = "https://sacred-texts.com/ane/ishtar.htm"
+format = "html"
+license = "public_domain"
+translator = "E.A. Speiser / M. Jastrow"
+notes = "Akkadian version of the Sumerian Descent of Inanna. Earliest attested 'harrowing of the underworld' narrative. Direct structural parallel with later Christian, Orphic, and Mithraic underworld journeys."
+
+[[source]]
+id = "enuma-elish"
+tradition = "mesopotamian"
+label = "Enuma Elish: The Epic of Creation"
+url = "https://sacred-texts.com/ane/enuma.htm"
+format = "html"
+license = "public_domain"
+translator = "L.W. King"
+notes = "Babylonian creation epic, ~1500 BCE. Tiamat/Marduk cosmic combat. Parallels with Tiamat-as-primordial-chaos in later cosmologies, and with the Gnostic Sophia/Demiurge narratives via shared ancient Near Eastern substrate."
+
+
+
+
+# ============================================
+# NOTES ON DEFERRED ADDITIONS
+# ============================================
+#
+# Not included here — flagged for future consideration:
+#
+# 1. Cantong Qi (Chinese internal alchemy foundation)
+#    — No reliable PD English translation. Fabrizio Pregadio's
+#      translations are the scholarly standard but copyrighted.
+#
+# 2. Bardo Thodol (Tibetan Book of the Dead)
+#    — Evans-Wentz edition is on sacred-texts but the translation
+#      quality is contested. Worth including but verify license.
+#      URL: https://sacred-texts.com/tib/tbd/index.htm
+#
+# 3. Bahir (Sepher ha-Bahir)
+#    — Aryeh Kaplan translation is standard but copyrighted.
+#      Older PD translations are less reliable. Hold for now.
+#
+# 4. Manichaean texts
+#    — Fragmentary; most material is in scholarly editions not PD.
+#      The Cologne Mani-Codex translations are copyrighted.
+#
+# 5. Jain Agamas (Jacobi translation is on sacred-texts, PD)
+#    URL: https://sacred-texts.com/jai/index.htm
+#    Lower cross-tradition edge density than other additions but
+#    unique epistemology (anekantavada) would be valuable eventually.
+#
+# 6. Pyramid Texts (Mercer translation)
+#    URL: https://sacred-texts.com/egy/pyt/index.htm
+#    Deep ancient layer. Add after Egyptian Book of the Dead is
+#    integrated to avoid Egyptian-category imbalance.
+#
+# 7. Orphic Argonautica (Taylor translation)
+#    Available on sacred-texts but narrative-heavy rather than
+#    conceptually dense. Defer unless corpus becomes narrative-focused.
