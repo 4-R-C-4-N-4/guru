@@ -1,0 +1,30 @@
+{
+  "id": "602f39de",
+  "type": "chore",
+  "state": "done",
+  "summary": "Write scripts/migrate_to_sqlite_embeddings.py: creates chunk_embeddings, iterates ChromaDB, inserts rows, reconciles counts (Chroma vs chunks vs chunk_embeddings), exits non-zero on mismatch",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.531Z",
+  "updated_at": "2026-04-17T16:34:20.722Z",
+  "tags": [
+    "v2",
+    "phase-1"
+  ],
+  "relationships": {
+    "parent": "1237b4fe"
+  },
+  "work": {
+    "branch": "todo/1237b4fe",
+    "base_branch": "main",
+    "started_at": "2026-04-17T16:26:05.358Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "e3e02ce03817ee2b5e4f5fb28b0ea7cd0a686254",
+    "resolved_at": "2026-04-17T16:34:20.722Z",
+    "resolved_by": "unknown",
+    "note": "scripts/migrate_to_sqlite_embeddings.py created; smoke-tested against live data/guru.db — 120 Chroma vectors migrated, blob round-trips (3072 bytes = 768×float32, norm=1.0), FK resolves 120/120 to nodes. Exits non-zero on the expected 2411-chunk gap so Phase 3 is prompted."
+  }
+}

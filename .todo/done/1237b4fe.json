@@ -1,0 +1,47 @@
+{
+  "id": "1237b4fe",
+  "type": "feature",
+  "state": "done",
+  "summary": "Phase 1: Add chunk_embeddings table and backfill from ChromaDB",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.479Z",
+  "updated_at": "2026-04-17T17:04:43.785Z",
+  "tags": [
+    "v2",
+    "phase-1"
+  ],
+  "relationships": {
+    "children": [
+      "602f39de",
+      "3940b852",
+      "7a480888"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T16:32:59.861Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Current SQLite schema (scripts/schema.sql) uses a UNIFIED nodes table: nodes(id, type IN ('tradition','concept','chunk'), tradition_id, label, definition, metadata_json) + edges(source_id, target_id, type, tier, justification). There are NO separate chunks/texts/traditions/concepts tables — docs/v2.md Section 3.1/5 assumes a split schema that does not exist. Chunk bodies live in corpus/**/chunks/*.toml, not in SQLite.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-17T16:32:59.896Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "For Phase 1 scope: create chunk_embeddings with FK REFERENCES nodes(id) ON DELETE CASCADE (not chunks(id)). Downstream impact for Phase 6 export.py is larger — its SELECT * FROM chunks/texts/traditions/concepts queries must be rewritten against nodes+edges, or a view layer introduced. Flagging here so Phase 6 tickets get updated before implementation.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    }
+  ],
+  "resolution": {
+    "commit": "730714198bd7fe08e04e0c276b7ceaf99c0eefb2",
+    "resolved_at": "2026-04-17T17:04:43.785Z",
+    "resolved_by": "unknown",
+    "note": "Phase 1 complete. scripts/migrate_to_sqlite_embeddings.py backfills ChromaDB→SQLite chunk_embeddings; DDL committed to scripts/schema.sql; reconciliation confirms clean transfer (120/120). Spec note: FK references nodes(id) because the live schema uses a unified nodes table, not the split tables docs/v2.md §5 assumes — Phase 6 (export.py) queries will need the same adjustment."
+  }
+}
