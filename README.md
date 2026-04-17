@@ -55,13 +55,14 @@ guru/
 
 ```bash
 git clone <repo-url> && cd guru
-pip install chromadb tiktoken requests beautifulsoup4 tomli-w numpy
+pip install tiktoken requests beautifulsoup4 tomli-w numpy
 ```
 
 Requires Python 3.11+. For LLM inference, point `config/model.toml` at whichever
 provider you have (see Configuration below). Embeddings default to
 `ollama/nomic-embed-text` at `localhost:11434` — run `ollama pull nomic-embed-text`
-once to have it available.
+once to have it available. All vector storage is SQLite (`data/guru.db`
+chunk_embeddings table); no separate vector DB is needed.
 
 ---
 
@@ -209,18 +210,15 @@ tier_inferred  = 0.4
 diversity_boost = 0.1
 ```
 
-**`config/embedding.toml`** — Embedding model and vector store:
+**`config/embedding.toml`** — Embedding model. Vectors land in the
+`chunk_embeddings` table inside `data/guru.db`; there is no separate
+vector store to configure.
 
 ```toml
 [model]
 provider = "ollama"                  # ollama | sentence_transformers | api
 model_name = "nomic-embed-text"
 dimensions = 768
-
-[backend]
-type = "chromadb"                    # chromadb | qdrant
-chroma_path = "data/vectordb"
-collection_name = "guru_corpus"
 ```
 
 ---
