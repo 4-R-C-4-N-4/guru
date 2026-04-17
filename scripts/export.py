@@ -88,11 +88,53 @@ def vec_to_pg(blob: bytes, expected_dim: int) -> str:
 
 
 def validate(conn: sqlite3.Connection) -> None:
-    """Pre-flight: refuse to export if the corpus is inconsistent.
+    """Refuse to export if the corpus is inconsistent.
 
-    Filled in by todo:849f3e29.
+    Three checks:
+      1. every chunk node has a chunk_embeddings row
+      2. every chunk_embeddings row references a real chunk node
+      3. every vector is at the pinned dim and model
     """
-    pass
+    n_chunks = conn.execute(
+        "SELECT COUNT(*) FROM nodes WHERE type='chunk'"
+    ).fetchone()[0]
+    n_embeddings = conn.execute(
+        "SELECT COUNT(*) FROM chunk_embeddings"
+    ).fetchone()[0]
+    if n_chunks != n_embeddings:
+        raise SystemExit(
+            f"Corpus inconsistent: {n_chunks} chunk nodes vs "
+            f"{n_embeddings} chunk_embeddings rows. "
+            f"Run scripts/embed_corpus.py."
+        )
+
+    orphan = conn.execute(
+        "SELECT COUNT(*) FROM chunk_embeddings e "
+        "LEFT JOIN nodes n ON n.id = e.chunk_id AND n.type = 'chunk' "
+        "WHERE n.id IS NULL"
+    ).fetchone()[0]
+    if orphan:
+        raise SystemExit(
+            f"{orphan} chunk_embeddings rows reference chunk_ids "
+            f"that are not present in nodes(type='chunk'). "
+            f"Run scripts/migrate_to_sqlite_embeddings.py or re-embed."
+        )
+
+    bad = conn.execute(
+        "SELECT COUNT(*) FROM chunk_embeddings "
+        "WHERE dim != ? OR model != ?",
+        (EMBEDDING_DIM, EMBEDDING_MODEL),
+    ).fetchone()[0]
+    if bad:
+        raise SystemExit(
+            f"{bad} chunk_embeddings rows do not match the pinned "
+            f"{EMBEDDING_MODEL} @ {EMBEDDING_DIM}d. Re-run embed_corpus.py."
+        )
+
+    logger.info(
+        "validate: %d chunks, all pinned to %s @ %dd",
+        n_chunks, EMBEDDING_MODEL, EMBEDDING_DIM,
+    )
 
 
 def next_corpus_version(conn: sqlite3.Connection) -> int:
