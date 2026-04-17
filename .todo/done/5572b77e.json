@@ -1,0 +1,24 @@
+{
+  "id": "5572b77e",
+  "type": "chore",
+  "state": "done",
+  "summary": "Implement SQL-escape helpers: esc(str|None), esc_array(list[str]|None) for Postgres text arrays, vec_to_pg(blob, dim) emitting pgvector text form with fixed precision",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.457Z",
+  "updated_at": "2026-04-17T17:52:34.127Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  },
+  "resolution": {
+    "commit": "33ceb2fae1891785cfe64c7936f716ea52231358",
+    "resolved_at": "2026-04-17T17:52:34.127Z",
+    "resolved_by": "unknown",
+    "note": "esc/esc_array/vec_to_pg added to scripts/export.py with a numpy-float32 round-trip. Unit asserts covering None, empty, quote/backslash edge cases, and dim-mismatch guard all pass. Precision fixed at 7 digits per value (float32 has ~7 significant decimal digits — more is wasted bytes)."
+  }
+}

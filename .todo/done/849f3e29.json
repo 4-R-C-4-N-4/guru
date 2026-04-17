@@ -1,0 +1,24 @@
+{
+  "id": "849f3e29",
+  "type": "chore",
+  "state": "done",
+  "summary": "Implement validate(conn): refuse export when chunks count != chunk_embeddings count, or any row has wrong model/dim",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:11.504Z",
+  "updated_at": "2026-04-17T17:53:10.925Z",
+  "tags": [
+    "v2",
+    "phase-6"
+  ],
+  "relationships": {
+    "parent": "b6c4b8d8"
+  },
+  "resolution": {
+    "commit": "da886080504137a878246e610281b5670d0e6cfd",
+    "resolved_at": "2026-04-17T17:53:10.925Z",
+    "resolved_by": "unknown",
+    "note": "validate() enforces (chunks==embeddings count), (no orphan chunk_ids), (dim/model pinned). Live-tested against live 2531-chunk DB; bad-model injection correctly halts with actionable recovery message."
+  }
+}
