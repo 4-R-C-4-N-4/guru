@@ -140,9 +140,26 @@ def validate(conn: sqlite3.Connection) -> None:
 def next_corpus_version(conn: sqlite3.Connection) -> int:
     """Monotonic counter persisted in data/guru.db::_export_state.
 
-    Filled in by todo:c4d42fb5.
+    Every call increments and returns the new value, so each export
+    carries a strictly higher corpus_version than the previous one even
+    across machine reboots or a moved checkout.
     """
-    return 0
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS _export_state ("
+        "  key TEXT PRIMARY KEY, value TEXT NOT NULL"
+        ")"
+    )
+    row = conn.execute(
+        "SELECT value FROM _export_state WHERE key = 'corpus_version'"
+    ).fetchone()
+    current = int(row[0]) if row else 0
+    nxt = current + 1
+    conn.execute(
+        "INSERT OR REPLACE INTO _export_state (key, value) VALUES (?, ?)",
+        ("corpus_version", str(nxt)),
+    )
+    conn.commit()
+    return nxt
 
 
 def emit_inserts(conn: sqlite3.Connection, f) -> None:
