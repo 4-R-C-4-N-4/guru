@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-17T16:25:10.479Z",
-  "updated_at": "2026-04-17T16:25:10.617Z",
+  "updated_at": "2026-04-17T16:32:59.896Z",
   "tags": [
     "v2",
     "phase-1"
@@ -18,5 +18,24 @@
       "3940b852",
       "7a480888"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-17T16:32:59.861Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Current SQLite schema (scripts/schema.sql) uses a UNIFIED nodes table: nodes(id, type IN ('tradition','concept','chunk'), tradition_id, label, definition, metadata_json) + edges(source_id, target_id, type, tier, justification). There are NO separate chunks/texts/traditions/concepts tables — docs/v2.md Section 3.1/5 assumes a split schema that does not exist. Chunk bodies live in corpus/**/chunks/*.toml, not in SQLite.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-17T16:32:59.896Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "For Phase 1 scope: create chunk_embeddings with FK REFERENCES nodes(id) ON DELETE CASCADE (not chunks(id)). Downstream impact for Phase 6 export.py is larger — its SELECT * FROM chunks/texts/traditions/concepts queries must be rewritten against nodes+edges, or a view layer introduced. Flagging here so Phase 6 tickets get updated before implementation.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    }
+  ]
 }
