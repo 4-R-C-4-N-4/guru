@@ -55,11 +55,17 @@ guru/
 
 ```bash
 git clone <repo-url> && cd guru
-pip install chromadb tiktoken requests beautifulsoup4 tomli-w
+pip install chromadb tiktoken requests beautifulsoup4 tomli-w \
+            google-generativeai numpy
 ```
 
 Requires Python 3.11+. For LLM inference, point `config/model.toml` at whichever
 provider you have (see Configuration below).
+
+For the corpus export pipeline (`scripts/embed_corpus.py` with
+`provider = "google"`), set `GEMINI_API_KEY` in your environment. You can obtain
+a key at https://aistudio.google.com/apikey — the embedding endpoint
+(`text-embedding-005`) is billed at ~$0.006 / 1M tokens.
 
 ---
 

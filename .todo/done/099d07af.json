@@ -1,0 +1,24 @@
+{
+  "id": "099d07af",
+  "type": "chore",
+  "state": "done",
+  "summary": "Single-chunk round-trip test: delete one chunk_embeddings row, re-run embed_corpus.py for that chunk, confirm row is rewritten correctly",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-17T16:25:10.867Z",
+  "updated_at": "2026-04-17T17:08:42.058Z",
+  "tags": [
+    "v2",
+    "phase-2"
+  ],
+  "relationships": {
+    "parent": "5dca13fc"
+  },
+  "resolution": {
+    "commit": "0daf4e3a97b1fc78fb6fb3a9ab9231b0c60832ad",
+    "resolved_at": "2026-04-17T17:08:42.058Z",
+    "resolved_by": "unknown",
+    "note": "Live round-trip against ollama/nomic-embed-text: deleted chunk_embeddings row for gnosticism.gospel-of-thomas.001, ran embed_corpus.py --resume --tradition gnosticism --text gospel-of-thomas, row correctly re-inserted (dim=768, blob=3072B, unit norm). New row is tagged ollama/nomic-embed-text (provider-prefixed), proving the rewritten SQLite path executed — old migration-inserted rows were tagged just 'nomic-embed-text'. Values within float32 rounding of the original."
+  }
+}
