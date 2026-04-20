@@ -4,7 +4,7 @@
 [provider]
 # Backend: "llamacpp" | "ollama" | "anthropic" | "openai"
 name = "llamacpp"
-model = "Carnice-27b-Q4_K_M.gguf"
+model = "Qwen3.5-27B-UD-Q4_K_XL.gguf"
 
 # llamacpp server base URL
 llamacpp_url = "http://127.0.0.1:8080"

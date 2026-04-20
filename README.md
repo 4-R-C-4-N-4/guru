@@ -14,7 +14,7 @@ Lift up a stone, and you will find me there."
 "He carved and created His World in Thirty-Two Wondrous Ways of Wisdom...
 Ten SEFIROT BELIMAH — their visage is as the look of lightning."
 
-Sources: 4 chunks from gnosticism, jewish_mysticism | Model: Carnice-27b-Q4_K_M.gguf | Elapsed: 118.3s
+Sources: 4 chunks from gnosticism, jewish_mysticism | Model: Qwen3.5-27B-UD-Q4_K_XL.gguf | Elapsed: 118.3s
 ```
 
 ---
@@ -79,13 +79,13 @@ python scripts/chunk.py
 
 # Stage 3 — Build concept graph (bootstrap + LLM tagging)
 python scripts/graph_bootstrap.py
-python scripts/tag_concepts.py --provider llamacpp --model Carnice-27b-Q4_K_M.gguf
+python scripts/tag_concepts.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf
 
 # Stage 4 — Embed chunks into vector store
 python scripts/embed_corpus.py
 
 # Stage 3 (cont.) — Cross-tradition edge proposals (requires embeddings)
-python scripts/propose_edges.py --provider llamacpp --model Carnice-27b-Q4_K_M.gguf
+python scripts/propose_edges.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf
 ```
 
 ---
@@ -194,7 +194,7 @@ python -m guru query "What is gnosis?" --verbose
 ```toml
 [provider]
 name = "llamacpp"                    # llamacpp | ollama | anthropic | openai
-model = "Carnice-27b-Q4_K_M.gguf"
+model = "Qwen3.5-27B-UD-Q4_K_XL.gguf"
 llamacpp_url = "http://127.0.0.1:8080"
 max_tokens = 2048
 
