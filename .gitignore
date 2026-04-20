@@ -74,3 +74,4 @@ dmypy.json
 raw/
 data/
 export/
+logs/
