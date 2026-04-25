@@ -1,0 +1,29 @@
+{
+  "id": "15c76cbe",
+  "type": "feature",
+  "state": "done",
+  "summary": "P4: read endpoints — /api/health /stats /traditions /texts /concepts /chunks (parent of P4a-h, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.651Z",
+  "updated_at": "2026-04-25T18:56:59.913Z",
+  "tags": [
+    "web-review",
+    "server",
+    "api",
+    "reads"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "7464aea8"
+    ]
+  },
+  "resolution": {
+    "commit": "b5a3974382c12c04051ba3cfed59cedb5a9c5fb0",
+    "resolved_at": "2026-04-25T18:56:59.913Z",
+    "resolved_by": "unknown",
+    "note": "All 6 read endpoints land. Cursor pagination contiguous; 30s count cache filter-keyed; chunkBody port mirrors guru.corpus.resolve_chunk_path. Smoke-tested against live DB — page 1/page 2 roundtrip, count caches stable, bogus filter returns empty. Sub-tickets P4a-h not pre-created (deferred per impl.md), implemented as cohesive commit."
+  }
+}
