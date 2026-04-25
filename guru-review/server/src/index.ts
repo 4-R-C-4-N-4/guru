@@ -4,14 +4,20 @@
 import { loadConfig } from './config.js';
 import { openDb } from './db.js';
 import { validateSchemaFingerprint } from './schema.js';
+import { takeStartupSnapshot } from './snapshot.js';
 
 async function main(): Promise<void> {
   const cfg = loadConfig();
+
+  // Snapshot BEFORE opening rw — if backup or integrity_check fails,
+  // we never touch the live DB.
+  const snap = await takeStartupSnapshot(cfg.db_path, cfg.backup_dir, cfg.keep_backups);
+  console.log(`[guru-review] snapshot: ${snap.target}`);
+  console.log(
+    `[guru-review] canary: staged_tags=${snap.staged_tags} pending=${snap.pending} accepted=${snap.accepted} edges=${snap.edges} nodes=${snap.nodes}`,
+  );
+
   const { ro, rw } = openDb(cfg);
-  // Post-schema-apply: confirms upstream tables still match what we expect
-  // AND that review_actions made it. A mismatch here means either upstream
-  // dropped/renamed a table (refuse-to-run, prompt update) or our schema
-  // apply silently failed.
   validateSchemaFingerprint(rw);
 
   console.log(`[guru-review] schema applied to ${cfg.db_path}`);
