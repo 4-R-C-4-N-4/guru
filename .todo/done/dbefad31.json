@@ -1,0 +1,28 @@
+{
+  "id": "dbefad31",
+  "type": "feature",
+  "state": "done",
+  "summary": "P12: PWA + service worker — manifest.webmanifest, sw.js (app-shell-only), install-to-home-screen on iOS+Android",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.999Z",
+  "updated_at": "2026-04-25T19:15:39.636Z",
+  "tags": [
+    "web-review",
+    "web",
+    "pwa"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "eacb158b"
+    ]
+  },
+  "resolution": {
+    "commit": "9f4494cdb772381ac6e38c5e72c7c2938f33934e",
+    "resolved_at": "2026-04-25T19:15:39.636Z",
+    "resolved_by": "unknown",
+    "note": "Manifest + service worker shipped. App-shell-only caching strategy (no API). Production SW registration via vite import.meta.env.PROD. ICON ASSETS (192/512 PNGs) need to be added by user before first phone install — flagged in commit message."
+  }
+}
