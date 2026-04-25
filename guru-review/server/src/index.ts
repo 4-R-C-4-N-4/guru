@@ -1,16 +1,19 @@
-// Boot harness — for P2 it just opens DB, applies schema, validates fingerprint, exits.
-// Later phases extend this to mount Express routes and listen.
-
+import express from 'express';
 import { loadConfig } from './config.js';
 import { openDb } from './db.js';
 import { validateSchemaFingerprint } from './schema.js';
 import { takeStartupSnapshot } from './snapshot.js';
+import { ChunkBodyCache } from './chunkBody.js';
+import { healthRouter } from './routes/health.js';
+import { statsRouter } from './routes/stats.js';
+import { traditionsRouter } from './routes/traditions.js';
+import { textsRouter } from './routes/texts.js';
+import { conceptsRouter } from './routes/concepts.js';
+import { chunksRouter } from './routes/chunks.js';
 
 async function main(): Promise<void> {
   const cfg = loadConfig();
 
-  // Snapshot BEFORE opening rw — if backup or integrity_check fails,
-  // we never touch the live DB.
   const snap = await takeStartupSnapshot(cfg.db_path, cfg.backup_dir, cfg.keep_backups);
   console.log(`[guru-review] snapshot: ${snap.target}`);
   console.log(
@@ -19,12 +22,35 @@ async function main(): Promise<void> {
 
   const { ro, rw } = openDb(cfg);
   validateSchemaFingerprint(rw);
-
   console.log(`[guru-review] schema applied to ${cfg.db_path}`);
-  console.log(`[guru-review] dry_run=${cfg.dry_run}, port=${cfg.port}`);
 
-  ro.close();
-  rw.close();
+  const corpusDir = `${cfg.guru_root}/corpus`;
+  const body = new ChunkBodyCache(corpusDir);
+
+  const app = express();
+  app.use(express.json());
+
+  app.use('/api', healthRouter());
+  app.use('/api', statsRouter(ro));
+  app.use('/api', traditionsRouter(ro));
+  app.use('/api', textsRouter(ro));
+  app.use('/api', conceptsRouter(ro));
+  app.use('/api', chunksRouter(ro, body));
+
+  app.listen(cfg.port, cfg.host, () => {
+    console.log(`[guru-review] listening on http://${cfg.host}:${cfg.port}`);
+    console.log(`[guru-review] dry_run=${cfg.dry_run}`);
+  });
+
+  // graceful shutdown closes both handles
+  const shutdown = (sig: string): void => {
+    console.log(`[guru-review] ${sig} received, closing`);
+    ro.close();
+    rw.close();
+    process.exit(0);
+  };
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
 main().catch((e) => {
