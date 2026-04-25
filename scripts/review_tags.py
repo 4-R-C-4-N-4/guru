@@ -123,7 +123,7 @@ def review_tags(
         conn.close()
         return
 
-    print(f"\n{len(rows)} tags to review. Keys: [a]ccept  [r]eject  [s]skip  [c]reassign  [q]uit\n")
+    print(f"\n{len(rows)} tags to review. Keys: [a]ccept  [r]eject  [s]kip  [c]reassign  [q]uit\n")
 
     accepted = rejected = skipped = 0
 
