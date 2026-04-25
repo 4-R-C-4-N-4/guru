@@ -1,13 +1,13 @@
 {
   "id": "4a845d27",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "P8: web shell — Vite+React+Tailwind, App.tsx routing, HeaderBar with stats, idb-keyval reviewer id, fetch wrapper with idempotency keys",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T18:45:24.819Z",
-  "updated_at": "2026-04-25T18:45:32.277Z",
+  "updated_at": "2026-04-25T19:08:50.155Z",
   "files": [
     {
       "path": "guru-review/web/src/App.tsx"
@@ -23,5 +23,11 @@
     "depends_on": [
       "15c76cbe"
     ]
+  },
+  "resolution": {
+    "commit": "8e5664a57631a02446355cb9014c31aab40b6dcb",
+    "resolved_at": "2026-04-25T19:08:50.155Z",
+    "resolved_by": "unknown",
+    "note": "Web shell builds clean (168kB / 55kB gzip). API client typed end-to-end. HeaderBar polls /api/stats every 10s. Vite dev proxy verified via curl. Phone-on-tailscale visual verification deferred to user."
   }
 }
