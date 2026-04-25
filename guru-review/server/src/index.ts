@@ -10,6 +10,7 @@ import { traditionsRouter } from './routes/traditions.js';
 import { textsRouter } from './routes/texts.js';
 import { conceptsRouter } from './routes/concepts.js';
 import { chunksRouter } from './routes/chunks.js';
+import { tagsRouter } from './routes/tags.js';
 
 async function main(): Promise<void> {
   const cfg = loadConfig();
@@ -20,7 +21,7 @@ async function main(): Promise<void> {
     `[guru-review] canary: staged_tags=${snap.staged_tags} pending=${snap.pending} accepted=${snap.accepted} edges=${snap.edges} nodes=${snap.nodes}`,
   );
 
-  const { ro, rw } = openDb(cfg);
+  const { ro, rw, stmts } = openDb(cfg);
   validateSchemaFingerprint(rw);
   console.log(`[guru-review] schema applied to ${cfg.db_path}`);
 
@@ -36,6 +37,7 @@ async function main(): Promise<void> {
   app.use('/api', textsRouter(ro));
   app.use('/api', conceptsRouter(ro));
   app.use('/api', chunksRouter(ro, body));
+  app.use('/api', tagsRouter(stmts));
 
   app.listen(cfg.port, cfg.host, () => {
     console.log(`[guru-review] listening on http://${cfg.host}:${cfg.port}`);
