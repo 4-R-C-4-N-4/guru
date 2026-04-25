@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import { api } from '../api/client';
 import type { Stats } from '../api/types';
 import { StatsDrawer } from './StatsDrawer';
+import { subscribe as subscribeRetry } from '../state/queue';
 
 export function HeaderBar(): React.ReactElement {
   const [stats, setStats] = useState<Stats | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => subscribeRetry(setRetryCount), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -30,7 +34,17 @@ export function HeaderBar(): React.ReactElement {
     <>
       <header className="sticky top-0 z-30 border-b border-zinc-800 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/70">
         <div className="flex items-center justify-between px-4 py-3 mono text-sm">
-          <Link to="/" className="font-bold text-accent">guru-review</Link>
+          <div className="flex items-baseline gap-2">
+            <Link to="/" className="font-bold text-accent">guru-review</Link>
+            {retryCount > 0 && (
+              <span
+                className="rounded border border-amber-500/40 bg-amber-500/10 px-1.5 text-xs text-amber-300"
+                title={`${retryCount} action(s) waiting to sync`}
+              >
+                {retryCount} offline
+              </span>
+            )}
+          </div>
           {stats ? (
             <div className="flex items-center gap-3 text-zinc-400">
               <button

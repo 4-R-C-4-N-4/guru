@@ -6,6 +6,7 @@ import { ChunkCard } from '../components/ChunkCard';
 import type { TagAction } from '../components/TagRow';
 import { getReviewerId, suggestDeviceName } from '../state/reviewer';
 import { getCursor, saveCursor } from '../state/cursor';
+import { enqueue as enqueueRetry } from '../state/queue';
 
 interface DeckState {
   current: Chunk | null;
@@ -131,21 +132,18 @@ export function Deck(): React.ReactElement {
         m.set(stagedTagId, { kind, reassign_to, client_action_id: cid });
         return { ...prev, [chunkId]: m };
       });
+      const payload = {
+        action: kind,
+        ...(reassign_to ? { reassign_to } : {}),
+        client_action_id: cid,
+        reviewer,
+      };
       try {
-        await api.postAction(stagedTagId, {
-          action: kind,
-          ...(reassign_to ? { reassign_to } : {}),
-          client_action_id: cid,
-          reviewer,
-        });
-      } catch (e) {
-        // Rollback optimistic state
-        setQueuedByChunk((prev) => {
-          const m = new Map(prev[chunkId] ?? []);
-          m.delete(stagedTagId);
-          return { ...prev, [chunkId]: m };
-        });
-        setState((s) => ({ ...s, error: `failed to queue: ${(e as Error).message}` }));
+        await api.postAction(stagedTagId, payload);
+      } catch {
+        // Push to local retry queue; optimistic state stays. Drain loop
+        // will retry with backoff when connectivity returns.
+        await enqueueRetry(stagedTagId, payload);
       }
     },
     [reviewer],
