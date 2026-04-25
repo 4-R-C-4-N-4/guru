@@ -1,13 +1,13 @@
 {
   "id": "6e91a76e",
   "type": "feature",
-  "state": "open",
+  "state": "active",
   "summary": "guru-review: phone-first PWA for Pass B tag review (15k staged_tags, parity-strict CLI port)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T18:45:24.507Z",
-  "updated_at": "2026-04-25T18:45:47.464Z",
+  "updated_at": "2026-04-25T18:49:12.329Z",
   "files": [
     {
       "path": "docs/web-review/impl.md"
@@ -51,5 +51,11 @@
       "content": "Branch strategy per impl.md: ALL 14 phases land on a single umbrella branch todo/6e91a76e (or its short prefix). Each phase commit stacks on the umbrella branch — do NOT open per-phase branches off main. Children share the parent's branch via 'todo work <child-id>'. Final merge to main is one --no-ff merge yielding one PR. Sub-phase tickets (P4a-h, P7a-b, P9a-h, P10a-d) are deferred to creation at implementation time so they don't bloat the store while the work is weeks out. Parity harness (P7b sub-ticket) is the load-bearing safety net; P14 (go-live) blocked until harness CI green for >=2 dry sessions.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/6e91a76e",
+    "base_branch": "main",
+    "started_at": "2026-04-25T18:49:12.329Z",
+    "started_by": "Hermes Agent"
+  }
 }
