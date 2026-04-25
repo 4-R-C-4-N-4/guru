@@ -25,6 +25,9 @@ import tomllib
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+from guru.corpus import resolve_chunk_path  # noqa: E402
+
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
@@ -206,18 +209,11 @@ def run_tagging(
         meta = chunk["meta"]
 
         # Load body from corpus chunk file
-        parts = chunk_id.split(".")
-        if len(parts) >= 3:
-            trad = parts[0].lower().replace(" ", "_")
-            tid = parts[1]
-            idx = parts[2]
-            chunk_file = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
-            if chunk_file.exists():
-                with open(chunk_file, "rb") as f:
-                    cd = tomllib.load(f)
-                body = cd["content"]["body"]
-            else:
-                body = chunk["label"]
+        chunk_file = resolve_chunk_path(chunk_id)
+        if chunk_file is not None:
+            with open(chunk_file, "rb") as f:
+                cd = tomllib.load(f)
+            body = cd["content"]["body"]
         else:
             body = chunk["label"]
 

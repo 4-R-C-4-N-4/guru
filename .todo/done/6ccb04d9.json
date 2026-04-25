@@ -1,13 +1,13 @@
 {
   "id": "6ccb04d9",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "Normalize chunk-id → corpus-path resolution at all read sites (defensive fallback for case/space mismatch in tradition prefix)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T15:27:41.850Z",
-  "updated_at": "2026-04-25T15:28:44.587Z",
+  "updated_at": "2026-04-25T15:33:01.942Z",
   "files": [
     {
       "path": "scripts/review_tags.py",
@@ -69,5 +69,19 @@
       "content": "Extract _resolve_chunk_path(chunk_id) -> Path|None helper that mirrors guru/retriever.py:186-200 (try raw, then .lower().replace(' ', '_')). Route 4 broken sites through it: scripts/review_tags.py:34, scripts/propose_edges.py:107, scripts/review_edges.py:34, scripts/seed_tags.py:25. Optionally fold the 3 already-normalizing sites (guru/retriever.py:194, scripts/vector_store.py:264, scripts/tag_concepts.py:211) into the same helper. No DB migration. Becomes dead code once 9ec1dcee lands.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/6ccb04d9",
+    "base_branch": "main",
+    "started_at": "2026-04-25T15:29:15.379Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "21c5541b0fbc35aef9c0c4d7d2cd702b419f959e",
+    "resolved_at": "2026-04-25T15:33:01.942Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunk_paths.py",
+    "test_function": "test_display_name_prefix_resolves_to_snake_case_dir",
+    "note": "Extracted resolve_chunk_path() into guru/corpus.py; routed 4 broken read sites (review_tags, propose_edges, review_edges, seed_tags) and folded 3 already-normalizing sites (retriever, vector_store, tag_concepts) through it. 5 new tests + full suite (42) green. Smoke-tested original repro: Buddhism.diamond-sutra.003 now returns 2657-char body. todo:9ec1dcee will obsolete the fallback branch."
+  }
 }
