@@ -75,3 +75,11 @@ raw/
 data/
 export/
 logs/
+
+# guru-review (TypeScript subproject)
+guru-review/**/node_modules/
+guru-review/**/dist/
+guru-review/**/.turbo/
+guru-review/**/coverage/
+guru-review/.pnpm-store/
+data/guru-shadow*
