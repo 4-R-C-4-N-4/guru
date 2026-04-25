@@ -32,7 +32,9 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
+sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(__file__).parent))
+from guru.corpus import resolve_chunk_path  # noqa: E402
 from llm import call_llm, parse_json_response
 
 
@@ -100,12 +102,8 @@ def call_llm_pair(provider: str, model: str, prompt: str) -> dict:
 # ── helpers ───────────────────────────────────────────────────────────────────
 
 def load_chunk_body(chunk_id: str) -> str:
-    parts = chunk_id.split(".")
-    if len(parts) < 3:
-        return ""
-    trad, tid, idx = parts[0], parts[1], parts[2]
-    f = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
-    if not f.exists():
+    f = resolve_chunk_path(chunk_id)
+    if f is None:
         return ""
     with open(f, "rb") as fp:
         d = tomllib.load(fp)

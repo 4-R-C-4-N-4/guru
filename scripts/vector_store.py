@@ -31,7 +31,10 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
-CORPUS_DIR = PROJECT_ROOT / "corpus"
+
+import sys
+sys.path.insert(0, str(PROJECT_ROOT))
+from guru.corpus import resolve_chunk_path  # noqa: E402
 
 
 class VectorStore:
@@ -260,22 +263,7 @@ class VectorStore:
 
 
 def _chunk_toml_for(chunk_id: str) -> Path | None:
-    """chunk_id format: <raw_tradition>.<text_id>.<seq>. Map to
-    corpus/<dir>/<text_id>/chunks/<seq>.toml, trying both the raw
-    tradition string as-is and its canonical lowercase_snake form."""
-    parts = chunk_id.split(".")
-    if len(parts) < 3:
-        return None
-    raw_trad, text_id, seq = parts[0], parts[1], parts[2]
-    candidates = [
-        raw_trad,
-        raw_trad.lower().replace(" ", "_"),
-    ]
-    for t in candidates:
-        p = CORPUS_DIR / t / text_id / "chunks" / f"{seq}.toml"
-        if p.exists():
-            return p
-    return None
+    return resolve_chunk_path(chunk_id)
 
 
 def _concepts_for(db_path: Path, chunk_id: str) -> list[str]:

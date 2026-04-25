@@ -17,6 +17,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+from guru.corpus import resolve_chunk_path  # noqa: E402
+
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 REVIEWER = "human"
 
@@ -27,12 +30,8 @@ def now_iso() -> str:
 
 def load_chunk_body(db_path: Path, chunk_id: str) -> str:
     """Load chunk body from corpus file given chunk node id."""
-    parts = chunk_id.split(".")
-    if len(parts) < 3:
-        return ""
-    trad, tid, idx = parts[0], parts[1], parts[2]
-    chunk_file = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
-    if not chunk_file.exists():
+    chunk_file = resolve_chunk_path(chunk_id)
+    if chunk_file is None:
         return ""
     import tomllib
     with open(chunk_file, "rb") as f:

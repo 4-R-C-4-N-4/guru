@@ -2,11 +2,13 @@
 import json, sqlite3, sys, tomllib
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "scripts"))
+from guru.corpus import resolve_chunk_path
 from tag_concepts import (load_taxonomy, build_prompt, SYSTEM_PROMPT,
                            parse_tags, upsert_staged_tag, mark_complete, call_ollama)
 
-ROOT = Path(__file__).parent.parent
 db = sqlite3.connect(str(ROOT / "data" / "guru.db"))
 db.execute("PRAGMA foreign_keys=ON")
 concepts = load_taxonomy()
@@ -21,9 +23,8 @@ for tradition in ("gnosticism", "jewish_mysticism"):
     ).fetchall()
 
     for chunk_id, label, meta_json in rows:
-        parts = chunk_id.split(".")
-        chunk_file = ROOT / "corpus" / parts[0] / parts[1] / "chunks" / f"{parts[2]}.toml"
-        body = tomllib.load(open(chunk_file, "rb"))["content"]["body"] if chunk_file.exists() else label
+        chunk_file = resolve_chunk_path(chunk_id)
+        body = tomllib.load(open(chunk_file, "rb"))["content"]["body"] if chunk_file else label
         prompt = build_prompt(body, label, concepts)
         try:
             raw = call_ollama("qwen3:8b", SYSTEM_PROMPT, prompt)

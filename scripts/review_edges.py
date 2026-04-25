@@ -17,6 +17,9 @@ from pathlib import Path
 import tomllib
 
 PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+from guru.corpus import resolve_chunk_path  # noqa: E402
+
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 REVIEWER = "human"
 
@@ -30,15 +33,15 @@ def load_chunk_info(chunk_id: str) -> tuple[str, str]:
     parts = chunk_id.split(".")
     if len(parts) < 3:
         return "", chunk_id
-    trad, tid, idx = parts[0], parts[1], parts[2]
-    f = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
-    if not f.exists():
+    raw_trad, tid = parts[0], parts[1]
+    f = resolve_chunk_path(chunk_id)
+    if f is None:
         return "", chunk_id
     with open(f, "rb") as fp:
         d = tomllib.load(fp)
     citation = d["chunk"].get("section", chunk_id)
     text_name = d["chunk"].get("text_name", tid)
-    tradition = d["chunk"].get("tradition", trad)
+    tradition = d["chunk"].get("tradition", raw_trad)
     return d["content"]["body"], f"{tradition} | {text_name} | {citation}"
 
 

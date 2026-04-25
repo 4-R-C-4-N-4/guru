@@ -26,6 +26,7 @@ DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 from vector_store import VectorStore  # noqa: E402
 
+from guru.corpus import resolve_chunk_path
 from guru.preferences import UserPreferences
 from guru.prompt import RetrievedChunk
 
@@ -184,20 +185,13 @@ class HybridRetriever:
         return results
 
     def _load_chunk_body(self, chunk_id: str) -> tuple[str, dict]:
-        """Load body and chunk metadata from corpus TOML. The chunk_id's
-        first segment is sometimes raw Title Case ('Christian Mysticism')
-        while directories are always lowercase_snake, so try both."""
-        parts = chunk_id.split(".")
-        if len(parts) < 3:
+        """Load body and chunk metadata from corpus TOML."""
+        path = resolve_chunk_path(chunk_id)
+        if path is None:
             return "", {}
-        raw_trad, tid, idx = parts[0], parts[1], parts[2]
-        for trad in (raw_trad, raw_trad.lower().replace(" ", "_")):
-            path = PROJECT_ROOT / "corpus" / trad / tid / "chunks" / f"{idx}.toml"
-            if path.exists():
-                with open(path, "rb") as f:
-                    d = tomllib.load(f)
-                return d["content"]["body"], d["chunk"]
-        return "", {}
+        with open(path, "rb") as f:
+            d = tomllib.load(f)
+        return d["content"]["body"], d["chunk"]
 
     def _merge_and_rank(
         self,
