@@ -1,0 +1,28 @@
+{
+  "id": "b1600849",
+  "type": "feature",
+  "state": "done",
+  "summary": "P13: local retry queue — IndexedDB-persisted offline queue with backoff retry, replay on relaunch, indicator",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:25.034Z",
+  "updated_at": "2026-04-25T19:17:02.581Z",
+  "tags": [
+    "web-review",
+    "web",
+    "offline"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "dbefad31"
+    ]
+  },
+  "resolution": {
+    "commit": "fce8e1f88a75190ba7ebafbc6bbc16b82ecf92a7",
+    "resolved_at": "2026-04-25T19:17:02.581Z",
+    "resolved_by": "unknown",
+    "note": "Offline IndexedDB-persisted retry queue with exponential backoff (2s-60s). Drain on app load + on window.online event. 4xx terminal, 5xx + network errors retried. Optimistic UI stays during offline. 'N offline' badge in header. Phone airplane-mode verification deferred to user."
+  }
+}

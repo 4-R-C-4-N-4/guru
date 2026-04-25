@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- maskable: the mark stays inside the inner 80% safe zone (256±204).
+       PWA installers may crop to a circle/squircle. -->
+  <rect width="512" height="512" fill="#000000"/>
+  <g font-family="JetBrains Mono, ui-monospace, monospace" font-weight="700" text-anchor="middle">
+    <text x="256" y="320" font-size="280" fill="#3b82f6" letter-spacing="-12">g</text>
+    <text x="256" y="395" font-size="48" fill="#3b82f6" opacity="0.65" letter-spacing="6">REVIEW</text>
+  </g>
+</svg>

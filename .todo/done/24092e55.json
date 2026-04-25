@@ -1,0 +1,24 @@
+{
+  "id": "24092e55",
+  "type": "chore",
+  "state": "done",
+  "summary": "P1: repo skeleton — pnpm workspace at guru-review/, server+web subpkgs, gitignore additions",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.547Z",
+  "updated_at": "2026-04-25T18:50:53.458Z",
+  "tags": [
+    "web-review",
+    "scaffolding"
+  ],
+  "relationships": {
+    "parent": "6e91a76e"
+  },
+  "resolution": {
+    "commit": "ab0c74b770526f2ede35d7f52dd01513b0602faa",
+    "resolved_at": "2026-04-25T18:50:53.458Z",
+    "resolved_by": "unknown",
+    "note": "Pnpm workspace at guru-review/ with server (express+better-sqlite3+zod+pino+smol-toml) and web (vite+react+tailwind+react-router+react-window+idb-keyval) subpackages. .gitignore additions verified — node_modules/ and dist/ correctly ignored. Pre-existing Python suite still 47-green."
+  }
+}

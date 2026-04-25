@@ -1,0 +1,10 @@
+{
+  "guru_root": "/home/ivy/Work/guru",
+  "db_path": "/home/ivy/Work/guru/data/guru.db",
+  "backup_dir": "~/guru-backups",
+  "keep_backups": 20,
+  "port": 7314,
+  "host": "0.0.0.0",
+  "default_reviewer": "human",
+  "dry_run": false
+}

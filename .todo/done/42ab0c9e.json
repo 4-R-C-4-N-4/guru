@@ -1,0 +1,28 @@
+{
+  "id": "42ab0c9e",
+  "type": "feature",
+  "state": "done",
+  "summary": "P10: filter / picker / settings — filter sheet, settings, per-device cursor, session stats drawer (parent of P10a-d, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.909Z",
+  "updated_at": "2026-04-25T19:13:35.859Z",
+  "tags": [
+    "web-review",
+    "web",
+    "filter"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "a365ce8d"
+    ]
+  },
+  "resolution": {
+    "commit": "701ccc2ce34d1836b15f3dd3aaa48db344229757",
+    "resolved_at": "2026-04-25T19:13:35.859Z",
+    "resolved_by": "unknown",
+    "note": "Filter sheet (tradition/text/concept/min_score URL-synced), per-device cursor persistence with resume banner + Start-from-top override, session stats drawer accessible from header tap."
+  }
+}

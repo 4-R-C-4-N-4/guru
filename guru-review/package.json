@@ -1,0 +1,13 @@
+{
+  "name": "guru-review-root",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev:server": "pnpm --filter guru-review-server dev",
+    "dev:web": "pnpm --filter guru-review-web dev",
+    "test": "pnpm -r test"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

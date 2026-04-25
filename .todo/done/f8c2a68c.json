@@ -1,0 +1,37 @@
+{
+  "id": "f8c2a68c",
+  "type": "chore",
+  "state": "done",
+  "summary": "P14: real run — config dry_run:false, pre-first-web-apply snapshot, parity harness green for >=2 sessions, ~20 tag batch, audit canary",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:25.072Z",
+  "updated_at": "2026-04-25T20:36:20.862Z",
+  "tags": [
+    "web-review",
+    "go-live",
+    "critical"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "b1600849"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-25T19:18:17.860Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Preflight script shipped at guru-review/scripts/preflight.sh. Ran cleanly: canary matches manifest, parity harness green, pre-first-web-apply snapshot at ~/guru-backups/guru-20260425T191748Z-pre-first-web-apply.db. Remaining operator steps: (1) flip dry_run:false, (2) review ~20 tags on phone over tailscale, (3) tap Apply, (4) audit via the queries the preflight prints, (5) take post-first-web-apply snapshot. Ticket stays OPEN until those steps complete; umbrella also stays open.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "a79950ef9b4e78ea50fad186f49173f77bde863d",
+    "resolved_at": "2026-04-25T20:36:20.862Z",
+    "resolved_by": "unknown",
+    "note": "Live spot-check from phone (ivy-android): 2 accepts applied to data/guru.db, 1 accept queued in review_actions. All canary deltas match expectations — staged_tags 15353→15351 pending and 18→20 accepted, edges 2548→2550 (both EXPRESSES, both proposed tier per score=1 rule), nodes unchanged at 2600 (concept targets pre-existing, COALESCE preserved their definitions). Reviewer attribution carried through to staged_tags.reviewed_by. Pre-first-web-apply snapshot taken at ~/guru-backups/guru-20260425T191748Z-pre-first-web-apply.db. Web tool produces CLI-equivalent rows on real data."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "2cd9f9b5",
+  "type": "feature",
+  "state": "done",
+  "summary": "P7: apply transaction + parity harness — apply.ts mirrors review_tags.py exactly; tests/parity/ asserts strict row-content equivalence (parent of P7a-b, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.773Z",
+  "updated_at": "2026-04-25T19:06:02.736Z",
+  "tags": [
+    "web-review",
+    "server",
+    "apply",
+    "parity",
+    "critical"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "c34e4dc3",
+      "c3fbee72"
+    ]
+  },
+  "resolution": {
+    "commit": "f10b32a47fda65d078b14b52de82f722fbef2d5a",
+    "resolved_at": "2026-04-25T19:06:02.736Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/parity/orchestrator.sh",
+    "note": "Apply transaction + parity harness green. CLI and web shadows produce identical row content per design §10 #1 across all 4 action branches plus is_new_concept=1, reassign-to-existing, reassign-to-free-text. Live DB still pristine (15371/2548/2600). /api/apply route smoke-tested with already_applied sentinel for empty-queue duplicate POST."
+  }
+}

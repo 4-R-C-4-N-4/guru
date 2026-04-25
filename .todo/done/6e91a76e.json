@@ -1,0 +1,67 @@
+{
+  "id": "6e91a76e",
+  "type": "feature",
+  "state": "done",
+  "summary": "guru-review: phone-first PWA for Pass B tag review (15k staged_tags, parity-strict CLI port)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.507Z",
+  "updated_at": "2026-04-25T20:36:20.895Z",
+  "files": [
+    {
+      "path": "docs/web-review/impl.md"
+    }
+  ],
+  "tags": [
+    "web-review",
+    "umbrella",
+    "multi-phase"
+  ],
+  "relationships": {
+    "children": [
+      "24092e55",
+      "7464aea8",
+      "dbeb22de",
+      "15c76cbe",
+      "c34e4dc3",
+      "c3fbee72",
+      "2cd9f9b5",
+      "4a845d27",
+      "a365ce8d",
+      "42ab0c9e",
+      "eacb158b",
+      "dbefad31",
+      "b1600849",
+      "f8c2a68c"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-25T18:45:47.424Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Source spec: docs/web-review/design.md (840 lines). Implementation plan: docs/web-review/impl.md (504 lines). Pre-flight done: backup at ~/guru-backups/guru-20260425-142226-pre-web-review.db, canary 15371 staged_tags / 2548 edges / 2600 nodes recorded in manifest. Prereq todo:bdbdccd5 already merged (CLI now populates nodes.definition on is_new_concept accept; web's apply.ts must mirror this; parity harness asserts strict equivalence on the column).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-25T18:45:47.464Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Branch strategy per impl.md: ALL 14 phases land on a single umbrella branch todo/6e91a76e (or its short prefix). Each phase commit stacks on the umbrella branch — do NOT open per-phase branches off main. Children share the parent's branch via 'todo work <child-id>'. Final merge to main is one --no-ff merge yielding one PR. Sub-phase tickets (P4a-h, P7a-b, P9a-h, P10a-d) are deferred to creation at implementation time so they don't bloat the store while the work is weeks out. Parity harness (P7b sub-ticket) is the load-bearing safety net; P14 (go-live) blocked until harness CI green for >=2 dry sessions.",
+      "confidence": "high"
+    }
+  ],
+  "work": {
+    "branch": "todo/6e91a76e",
+    "base_branch": "main",
+    "started_at": "2026-04-25T18:49:12.329Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a79950ef9b4e78ea50fad186f49173f77bde863d",
+    "resolved_at": "2026-04-25T20:36:20.895Z",
+    "resolved_by": "unknown",
+    "note": "All 14 phases shipped on a single umbrella branch per impl.md branch discipline. Backend: schema migration, snapshot/integrity/manifest discipline, 9 endpoints (health, stats, traditions, texts, concepts, chunks, queue, apply, apply/preview), apply transaction with parity harness asserting CLI/web row-content equivalence (green). Web: chunk-grouped review deck with stacked TagRows + ConceptDef inline expand + ChunkActions with dynamic-count buttons + ConceptPicker bottom sheet + filter sheet + per-device IndexedDB cursor + session stats drawer + virtualized apply queue + result screen + PWA manifest + service worker + offline retry queue. Live spot-check verified parity on real data (2 accepts → 2 EXPRESSES edges with correct tier and reviewer attribution). Live DB integrity preserved throughout."
+  }
+}
