@@ -1,0 +1,23 @@
+{
+  "id": "15c76cbe",
+  "type": "feature",
+  "state": "open",
+  "summary": "P4: read endpoints — /api/health /stats /traditions /texts /concepts /chunks (parent of P4a-h, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.651Z",
+  "updated_at": "2026-04-25T18:45:32.046Z",
+  "tags": [
+    "web-review",
+    "server",
+    "api",
+    "reads"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "7464aea8"
+    ]
+  }
+}

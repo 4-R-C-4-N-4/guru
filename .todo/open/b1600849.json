@@ -1,0 +1,22 @@
+{
+  "id": "b1600849",
+  "type": "feature",
+  "state": "open",
+  "summary": "P13: local retry queue — IndexedDB-persisted offline queue with backoff retry, replay on relaunch, indicator",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:25.034Z",
+  "updated_at": "2026-04-25T18:45:32.526Z",
+  "tags": [
+    "web-review",
+    "web",
+    "offline"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "dbefad31"
+    ]
+  }
+}

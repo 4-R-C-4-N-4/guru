@@ -1,0 +1,22 @@
+{
+  "id": "42ab0c9e",
+  "type": "feature",
+  "state": "open",
+  "summary": "P10: filter / picker / settings — filter sheet, settings, per-device cursor, session stats drawer (parent of P10a-d, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.909Z",
+  "updated_at": "2026-04-25T18:45:32.386Z",
+  "tags": [
+    "web-review",
+    "web",
+    "filter"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "a365ce8d"
+    ]
+  }
+}

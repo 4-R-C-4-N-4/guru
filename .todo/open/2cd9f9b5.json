@@ -1,0 +1,25 @@
+{
+  "id": "2cd9f9b5",
+  "type": "feature",
+  "state": "open",
+  "summary": "P7: apply transaction + parity harness — apply.ts mirrors review_tags.py exactly; tests/parity/ asserts strict row-content equivalence (parent of P7a-b, sub-tickets created at impl time)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.773Z",
+  "updated_at": "2026-04-25T18:45:32.240Z",
+  "tags": [
+    "web-review",
+    "server",
+    "apply",
+    "parity",
+    "critical"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "c34e4dc3",
+      "c3fbee72"
+    ]
+  }
+}

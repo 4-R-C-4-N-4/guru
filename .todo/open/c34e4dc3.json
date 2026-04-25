@@ -1,0 +1,29 @@
+{
+  "id": "c34e4dc3",
+  "type": "feature",
+  "state": "open",
+  "summary": "P5: write endpoint — POST /api/tags/:id/action with zod, idempotency on client_action_id, never touches staged_tags or edges",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:45:24.691Z",
+  "updated_at": "2026-04-25T18:45:32.119Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/tags.ts"
+    }
+  ],
+  "tags": [
+    "web-review",
+    "server",
+    "api",
+    "writes"
+  ],
+  "relationships": {
+    "parent": "6e91a76e",
+    "depends_on": [
+      "7464aea8",
+      "15c76cbe"
+    ]
+  }
+}
