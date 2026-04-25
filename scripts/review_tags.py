@@ -66,14 +66,21 @@ def get_concept_def(conn: sqlite3.Connection, concept_id: str) -> str:
 
 def promote_to_expresses(conn: sqlite3.Connection,
                          chunk_id: str, concept_id: str,
-                         justification: str, score: int) -> None:
-    """Insert EXPRESSES edge into live edges table."""
+                         justification: str, score: int,
+                         new_concept_def: str | None = None) -> None:
+    """Insert EXPRESSES edge into live edges table.
+
+    For is_new_concept=1 accepts, pass the staged_tags.new_concept_def value
+    so the LLM-proposed definition lands on the new concept node. COALESCE
+    preserves any pre-existing definition (taxonomy-seeded concepts safe).
+    """
     concept_node_id = f"concept.{concept_id}"
-    # Ensure concept node exists (may be a new concept just promoted)
     conn.execute(
-        """INSERT OR IGNORE INTO nodes(id, type, label)
-           VALUES(?, 'concept', ?)""",
-        (concept_node_id, concept_id.replace("_", " ").title()),
+        """INSERT INTO nodes(id, type, label, definition)
+           VALUES(?, 'concept', ?, ?)
+           ON CONFLICT(id) DO UPDATE SET
+             definition = COALESCE(nodes.definition, excluded.definition)""",
+        (concept_node_id, concept_id.replace("_", " ").title(), new_concept_def),
     )
     tier = "verified" if score >= 2 else "proposed"
     conn.execute(
@@ -150,7 +157,8 @@ def review_tags(
 
             elif key == "a":
                 promote_to_expresses(conn, row["chunk_id"], row["concept_id"],
-                                     row["justification"] or "", row["score"])
+                                     row["justification"] or "", row["score"],
+                                     new_concept_def=row["new_concept_def"])
                 conn.execute(
                     "UPDATE staged_tags SET status='accepted', reviewed_by=?, reviewed_at=? WHERE id=?",
                     (REVIEWER, now_iso(), row["id"]),
