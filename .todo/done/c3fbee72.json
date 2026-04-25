@@ -1,13 +1,13 @@
 {
   "id": "c3fbee72",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "P6: queue + undo — GET /api/queue, DELETE /api/queue/:client_action_id (only when applied_at IS NULL)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T18:45:24.738Z",
-  "updated_at": "2026-04-25T18:45:32.160Z",
+  "updated_at": "2026-04-25T18:59:09.929Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/queue.ts"
@@ -24,5 +24,11 @@
     "depends_on": [
       "c34e4dc3"
     ]
+  },
+  "resolution": {
+    "commit": "f5aaabd59f7f69a9b8ae0fb6837475b07ffe8c7f",
+    "resolved_at": "2026-04-25T18:59:09.929Z",
+    "resolved_by": "unknown",
+    "note": "GET /api/queue with chunk+concept context, DELETE /api/queue/:cid only when applied_at IS NULL. Smoke-tested live; audit-trail preservation verified (cannot DELETE applied rows)."
   }
 }
