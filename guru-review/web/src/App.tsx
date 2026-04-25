@@ -4,6 +4,7 @@ import { Deck } from './screens/Deck';
 import { Queue } from './screens/Queue';
 import { Settings } from './screens/Settings';
 import { ApplyResult } from './screens/ApplyResult';
+import { Filter } from './screens/Filter';
 
 export function App(): React.ReactElement {
   return (
@@ -14,6 +15,7 @@ export function App(): React.ReactElement {
           <Route path="/" element={<Deck />} />
           <Route path="/queue" element={<Queue />} />
           <Route path="/applied" element={<ApplyResult />} />
+          <Route path="/filter" element={<Filter />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>

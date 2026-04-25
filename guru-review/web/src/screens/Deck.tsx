@@ -5,6 +5,7 @@ import type { ActionKind, Chunk } from '../api/types';
 import { ChunkCard } from '../components/ChunkCard';
 import type { TagAction } from '../components/TagRow';
 import { getReviewerId, suggestDeviceName } from '../state/reviewer';
+import { getCursor, saveCursor } from '../state/cursor';
 
 interface DeckState {
   current: Chunk | null;
@@ -74,7 +75,9 @@ export function Deck(): React.ReactElement {
     [filters.tradition, filters.text, filters.concept, filters.min_score],
   );
 
-  // Initial load + reload on filter change
+  // Initial load + reload on filter change. Restore cursor from IndexedDB
+  // if the user has reviewed this filter before.
+  const [resumed, setResumed] = useState(false);
   useEffect(() => {
     setState({
       current: null,
@@ -85,8 +88,20 @@ export function Deck(): React.ReactElement {
       remainingInFilter: 0,
       tagsInFilter: 0,
     });
-    void fetchPage(null);
+    setResumed(false);
+    void (async () => {
+      const saved = await getCursor(filters);
+      if (saved) setResumed(true);
+      void fetchPage(saved);
+    })();
   }, [filters.tradition, filters.text, filters.concept, filters.min_score, fetchPage]);
+
+  // Persist cursor on every successful page load (after the first one).
+  useEffect(() => {
+    if (state.cursor !== null) {
+      void saveCursor(filters, state.cursor);
+    }
+  }, [state.cursor, filters.tradition, filters.text, filters.concept, filters.min_score]);
 
   const advance = useCallback((): void => {
     setState((s) => {
@@ -200,8 +215,28 @@ export function Deck(): React.ReactElement {
         <span>
           {state.remainingInFilter.toLocaleString()} chunks · {state.tagsInFilter.toLocaleString()} tags in filter
         </span>
-        <Link to="/settings" className="text-zinc-400 hover:text-zinc-200">⚙</Link>
+        <div className="flex gap-3">
+          <Link to="/filter" className="text-zinc-400 hover:text-zinc-200">filter</Link>
+          <Link to="/settings" className="text-zinc-400 hover:text-zinc-200">⚙</Link>
+        </div>
       </div>
+
+      {resumed && (
+        <div className="rounded border border-zinc-700 bg-zinc-900 p-2 mono text-xs text-zinc-400">
+          Resuming from your last position.
+          <button
+            className="ml-2 text-accent hover:underline"
+            onClick={async () => {
+              await saveCursor(filters, null);
+              setResumed(false);
+              setState((s) => ({ ...s, current: null, queue: [], cursor: null }));
+              void fetchPage(null);
+            }}
+          >
+            Start from top
+          </button>
+        </div>
+      )}
 
       {state.error && (
         <div className="rounded border border-rose-500/40 bg-rose-500/10 p-3 mono text-xs text-rose-300">
