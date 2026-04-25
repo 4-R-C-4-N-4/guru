@@ -14,3 +14,12 @@ ReactDOM.createRoot(rootEl).render(
     </BrowserRouter>
   </React.StrictMode>,
 );
+
+// Register service worker (production only — vite dev doesn't serve the SW path).
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((e) => {
+      console.warn('SW registration failed:', e);
+    });
+  });
+}
