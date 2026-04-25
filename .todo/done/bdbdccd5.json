@@ -1,0 +1,57 @@
+{
+  "id": "bdbdccd5",
+  "type": "bug",
+  "state": "done",
+  "summary": "Populate nodes.definition on is_new_concept accept (CLI + future web parity)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T18:37:48.490Z",
+  "updated_at": "2026-04-25T18:40:53.437Z",
+  "files": [
+    {
+      "path": "scripts/review_tags.py",
+      "lines": [
+        67,
+        86
+      ]
+    }
+  ],
+  "tags": [
+    "cli",
+    "review",
+    "nodes",
+    "definitions",
+    "parity-prereq"
+  ],
+  "work": {
+    "branch": "todo/bdbdccd5",
+    "base_branch": "main",
+    "started_at": "2026-04-25T18:37:48.526Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-25T18:38:03.237Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "review_tags.py:74-77 ensures the concept node exists via INSERT OR IGNORE INTO nodes(id, type, label) — definition column is never written. staged_tags.new_concept_def, the LLM-proposed definition the human read as 'NEW DEF: ...' on review, is silently discarded on accept. 14 is_new_concept=1 rows pending in the live DB, 0 accepted yet, so the path has never fired in production. All 44 existing concept nodes have populated definitions (seeded from concepts/taxonomy.toml). This is a prereq for the web-review parity harness (docs/web-review/impl.md P7b) — fixing in CLI keeps strict parity, avoiding a known divergence in the harness fixture for is_new_concept=1 accepts.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-25T18:38:03.285Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Switch from INSERT OR IGNORE to ON CONFLICT DO UPDATE with COALESCE on the definition column:\n\nINSERT INTO nodes(id, type, label, definition)\nVALUES(?, 'concept', ?, ?)\nON CONFLICT(id) DO UPDATE SET\n  definition = COALESCE(nodes.definition, excluded.definition)\n\nCOALESCE preserves any existing non-null definition (taxonomy-seeded concepts safe), only fills in NULL/missing. Caller passes row['new_concept_def'] which is None for is_new_concept=0 rows — harmless. Add unit tests in tests/test_promote_definition.py covering: (a) new is_new_concept=1 accept populates definition, (b) existing concept's definition not clobbered, (c) is_new_concept=0 accept with None def is a no-op on definition column. Update docs/web-review/impl.md §9.7 and design.md §9.7 to mark resolved.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "1aeca74b69bc7a727c862fa097494b1ec34b5604",
+    "resolved_at": "2026-04-25T18:40:53.437Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_promote_definition.py",
+    "test_function": "test_new_concept_accept_populates_definition",
+    "note": "promote_to_expresses now upserts with COALESCE(nodes.definition, excluded.definition); LLM-proposed new_concept_def lands on new concept nodes, pre-existing taxonomy definitions preserved. 5 regression tests (test_promote_definition.py) cover new accept, no-clobber, NULL backfill, is_new_concept=0 path, and edge-tier sanity. Design.md §9.7 marked resolved; impl.md open-questions row updated. Strict parity for the upcoming web-review harness."
+  }
+}
