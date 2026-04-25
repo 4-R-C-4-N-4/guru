@@ -82,4 +82,7 @@ guru-review/**/dist/
 guru-review/**/.turbo/
 guru-review/**/coverage/
 guru-review/.pnpm-store/
+guru-review/**/*.tsbuildinfo
+guru-review/server/config.json
+guru-review/config.json
 data/guru-shadow*

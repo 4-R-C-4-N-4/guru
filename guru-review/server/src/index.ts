@@ -1,4 +1,6 @@
 import express from 'express';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { loadConfig } from './config.js';
 import { openDb } from './db.js';
 import { validateSchemaFingerprint } from './schema.js';
@@ -42,6 +44,20 @@ async function main(): Promise<void> {
   app.use('/api', tagsRouter(stmts));
   app.use('/api', queueRouter(ro, stmts));
   app.use('/api', applyRouter(rw, ro, stmts));
+
+  // Serve the built web bundle. SPA fallback: anything that's not /api and
+  // not a real file maps to index.html so client-side routes (/queue,
+  // /filter, /settings, /applied) survive hard reloads.
+  const webDist = path.join(cfg.guru_root, 'guru-review', 'web', 'dist');
+  if (fs.existsSync(webDist)) {
+    app.use(express.static(webDist));
+    app.get(/^(?!\/api\/).*/, (_req, res) => {
+      res.sendFile(path.join(webDist, 'index.html'));
+    });
+    console.log(`[guru-review] serving web bundle from ${webDist}`);
+  } else {
+    console.log(`[guru-review] web/dist not built — only /api routes available`);
+  }
 
   app.listen(cfg.port, cfg.host, () => {
     console.log(`[guru-review] listening on http://${cfg.host}:${cfg.port}`);
