@@ -1,13 +1,13 @@
 {
   "id": "6e91a76e",
   "type": "feature",
-  "state": "active",
+  "state": "done",
   "summary": "guru-review: phone-first PWA for Pass B tag review (15k staged_tags, parity-strict CLI port)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T18:45:24.507Z",
-  "updated_at": "2026-04-25T18:49:12.329Z",
+  "updated_at": "2026-04-25T20:36:20.895Z",
   "files": [
     {
       "path": "docs/web-review/impl.md"
@@ -57,5 +57,11 @@
     "base_branch": "main",
     "started_at": "2026-04-25T18:49:12.329Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a79950ef9b4e78ea50fad186f49173f77bde863d",
+    "resolved_at": "2026-04-25T20:36:20.895Z",
+    "resolved_by": "unknown",
+    "note": "All 14 phases shipped on a single umbrella branch per impl.md branch discipline. Backend: schema migration, snapshot/integrity/manifest discipline, 9 endpoints (health, stats, traditions, texts, concepts, chunks, queue, apply, apply/preview), apply transaction with parity harness asserting CLI/web row-content equivalence (green). Web: chunk-grouped review deck with stacked TagRows + ConceptDef inline expand + ChunkActions with dynamic-count buttons + ConceptPicker bottom sheet + filter sheet + per-device IndexedDB cursor + session stats drawer + virtualized apply queue + result screen + PWA manifest + service worker + offline retry queue. Live spot-check verified parity on real data (2 accepts → 2 EXPRESSES edges with correct tier and reviewer attribution). Live DB integrity preserved throughout."
   }
 }
