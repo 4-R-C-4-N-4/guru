@@ -1,13 +1,13 @@
 {
   "id": "a365ce8d",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "P9: chunk card + deck — ChunkCard + stacked TagRows + ConceptDef inline expansion + ChunkActions (parent of P9a-h, sub-tickets created at impl time)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T18:45:24.866Z",
-  "updated_at": "2026-04-25T18:45:32.349Z",
+  "updated_at": "2026-04-25T19:11:27.888Z",
   "tags": [
     "web-review",
     "web",
@@ -20,5 +20,11 @@
       "c34e4dc3",
       "4a845d27"
     ]
+  },
+  "resolution": {
+    "commit": "38ff4da20f7b78a989702d33cba17c58c46391f1",
+    "resolved_at": "2026-04-25T19:11:27.888Z",
+    "resolved_by": "unknown",
+    "note": "Chunk card + deck end-to-end. Full chunk-grouped UX per design §5.3-§5.4. URL-synced filters, optimistic queue with undo, paginated prefetch. Phone visual verification deferred to user."
   }
 }
