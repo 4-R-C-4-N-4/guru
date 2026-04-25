@@ -1,0 +1,47 @@
+{
+  "id": "9ec1dcee",
+  "type": "chore",
+  "state": "open",
+  "summary": "Make chunk_ids and corpus directory names internally consistent (root cause: chunk.py uses display name, dirs are snake_case)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T15:27:45.922Z",
+  "updated_at": "2026-04-25T15:28:44.665Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py",
+      "lines": [
+        191,
+        191
+      ]
+    }
+  ],
+  "tags": [
+    "corpus",
+    "chunks",
+    "refactor",
+    "migration"
+  ],
+  "relationships": {
+    "depends_on": [
+      "6ccb04d9"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-25T15:28:44.626Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Root cause: scripts/chunk.py:191 builds chunk_id = f'{tradition_val}.{source_id}.{idx + 1:03d}' where tradition_val comes from meta.toml display name ('Christian Mysticism'), but the on-disk path is CORPUS_DIR / tradition (the snake_case dir name). They diverge for every multi-word or capitalized tradition. Already-lowercase traditions (gnosticism, hermeticism, jewish_mysticism) work by accident.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-25T15:28:44.664Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Pick one canonical form (recommend the directory name — already snake_case, URL-safe, machine-readable). Update chunk.py:191 to use the dir-name var. Backfill: rewrite chunk.id field in every corpus/*/*/chunks/*.toml, then re-run scripts/graph_bootstrap.py and re-embed (scripts/embed_corpus.py) to rebuild nodes/edges/staged_tags/staged_edges/vector_store with the new ids. Keep tradition display name as a separate field on chunk_data['chunk']['tradition'] (already there). After this lands, remove the fallback branch from the helper introduced by 6ccb04d9.",
+      "confidence": "medium"
+    }
+  ]
+}

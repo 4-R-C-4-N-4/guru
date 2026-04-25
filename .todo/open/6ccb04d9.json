@@ -1,0 +1,73 @@
+{
+  "id": "6ccb04d9",
+  "type": "bug",
+  "state": "open",
+  "summary": "Normalize chunk-id → corpus-path resolution at all read sites (defensive fallback for case/space mismatch in tradition prefix)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-25T15:27:41.850Z",
+  "updated_at": "2026-04-25T15:28:44.587Z",
+  "files": [
+    {
+      "path": "scripts/review_tags.py",
+      "lines": [
+        28,
+        40
+      ]
+    },
+    {
+      "path": "scripts/propose_edges.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "load_chunk_body:102 — same bug"
+    },
+    {
+      "path": "scripts/review_edges.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "load_chunk_info:28 — same bug"
+    },
+    {
+      "path": "scripts/seed_tags.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "inline lookup:25 — degrades to label, no body"
+    },
+    {
+      "path": "guru/retriever.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "_load_chunk_body:186 — already has fallback, fold into helper"
+    },
+    {
+      "path": "scripts/vector_store.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "line 264 — already has fallback, fold into helper"
+    },
+    {
+      "path": "scripts/tag_concepts.py",
+      "commit": "d9c6318449b3bb5562928a28109be21a6f56abf2",
+      "note": "line 211 — already normalizes, fold into helper"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "chunks",
+    "normalization",
+    "cli"
+  ],
+  "relationships": {},
+  "analysis": [
+    {
+      "timestamp": "2026-04-25T15:28:44.554Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "chunk_id format is '<TraditionVal>.<text_id>.<NNN>' but corpus dirs are lowercase snake_case. ~13,788 of 15,371 staged_tags rows (~90%) silently return empty body via 'if not chunk_file.exists(): return \"\"'. Only gnosticism (1055), hermeticism (474), jewish_mysticism (54) match.\n\nTradition prefix counts in staged_tags: Neoplatonism=4721, Egyptian=2561, Taoism=1765, Christian Mysticism=1745, Greek Mystery=1424, gnosticism=1055, Zoroastrianism=955, hermeticism=474, Jewish Mysticism=423, Buddhism=107, Mesopotamian=87, jewish_mysticism=54.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-25T15:28:44.587Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Extract _resolve_chunk_path(chunk_id) -> Path|None helper that mirrors guru/retriever.py:186-200 (try raw, then .lower().replace(' ', '_')). Route 4 broken sites through it: scripts/review_tags.py:34, scripts/propose_edges.py:107, scripts/review_edges.py:34, scripts/seed_tags.py:25. Optionally fold the 3 already-normalizing sites (guru/retriever.py:194, scripts/vector_store.py:264, scripts/tag_concepts.py:211) into the same helper. No DB migration. Becomes dead code once 9ec1dcee lands.",
+      "confidence": "high"
+    }
+  ]
+}
