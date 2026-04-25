@@ -36,7 +36,16 @@ The following CLI behaviors must be replicated exactly. They are listed here so 
    - Inserts a *new* pending `staged_tags` row for the new concept with the same chunk and score, justification = `"Reassigned from <old_concept_id>"`, `is_new_concept = 0`.
    The new row is itself reviewable in a future pass. Preserve. Note: this means one queued `reassign` action expands into two row writes at apply time, and the spawned row will appear in the *next* deck load (not the current one — the apply step is what creates it).
 5. Skip is non-destructive — no DB write, the row stays `pending`. Preserve. (Same observable effect as the CLI's session-local skip counter.)
-6. The CLI ensures the target concept node exists (`INSERT OR IGNORE INTO nodes(id, type, label) VALUES(?, 'concept', label)` with `label = concept_id.replace("_"," ").title()`). Preserve.
+6. The CLI ensures the target concept node exists via upsert with COALESCE on the definition column:
+
+   ```sql
+   INSERT INTO nodes(id, type, label, definition)
+     VALUES(?, 'concept', ?, ?)
+     ON CONFLICT(id) DO UPDATE SET
+       definition = COALESCE(nodes.definition, excluded.definition)
+   ```
+
+   `label = concept_id.replace("_"," ").title()`. Definition argument is `staged_tags.new_concept_def` (`None` for `is_new_concept=0` accepts). COALESCE preserves any pre-existing definition. Preserve. (Updated by `todo:bdbdccd5`; see §9.7 for history.)
 7. CLI default `--min-score` is 1; README example uses 2. Server defaults to 1.
 
 ### Explicit *deviations* from the CLI
@@ -403,7 +412,10 @@ const apply = rw.transaction((reviewerActionId: string) => {
               .toLowerCase()
               .replace(/_/g, ' ')
               .replace(/\b\w/g, c => c.toUpperCase());
-          stmts.ensureConceptNode.run(conceptNodeId, label);
+          // Pass new_concept_def through — COALESCE in the prepared stmt
+          // (see §1.3 #6) preserves pre-existing definitions. For
+          // is_new_concept=0 accepts tag.new_concept_def is null.
+          stmts.ensureConceptNode.run(conceptNodeId, label, tag.new_concept_def);
 
           // 2. Insert/update edge with CLI's tier rule
           const tier = tag.score >= 2 ? 'verified' : 'proposed';
@@ -452,7 +464,7 @@ const apply = rw.transaction((reviewerActionId: string) => {
 Key invariants:
 - **All-or-nothing.** `better-sqlite3`'s `db.transaction()` wrapper rolls back on any throw.
 - **Re-checks `staged_tags.status` per row.** If the CLI processed a row in parallel, the queued action becomes a no-op rather than a conflict.
-- **Same-shape SQL as the CLI's `promote_to_expresses`.** Use the literal queries from `review_tags.py:74-86`.
+- **Same-shape SQL as the CLI's `promote_to_expresses`.** Use the literal queries from `scripts/review_tags.py:promote_to_expresses` (the upsert + COALESCE node ensure, then the edge upsert).
 - **Reviewer attribution flows through.** `staged_tags.reviewed_by` is set to `'ivy-phone'` (or whatever the device reports) instead of the CLI's hard-coded `'human'`.
 
 After successful apply, the response has the full result object, which the UI shows on a confirmation screen.
@@ -822,7 +834,7 @@ These can be resolved during implementation; flagging now:
 4. **"Propose missing tag" affordance.** The chunk-grouped view makes it obvious when the LLM missed a concept the reviewer thinks belongs (§5.3 reading patterns). Should v1 have a "+ propose tag" button on the chunk card that creates a new pending `staged_tags` row with `score=null` and a reviewer-supplied justification? Default: no for v1 — adds a write path, requires its own review semantics. Note for v1.1.
 5. **Chunk-level Accept Remaining confirmation.** Currently spec'd as a 3-second undo toast. Should it require an explicit confirmation modal instead (matching the apply screen's modal)? Tradeoff: modal slows the common case, toast risks accidental accepts. Default: 3-second toast, no modal. Revisit if accidents happen.
 6. ~~**What about chunks where every pending tag is min_score=0?**~~ **Resolved.** `SELECT COUNT(*) FROM staged_tags WHERE score=0 AND status='pending'` returns 0 against the live DB. No score-0 pending tags exist; default `min_score=1` hides nothing. The slider is exposed for forward-compat with future tagging passes that might emit score-0 rows.
-7. **Populate `nodes.definition` on accept of `is_new_concept` rows?** Pre-existing CLI behavior: when accepting an `is_new_concept = 1` tag, `promote_to_expresses` runs `INSERT OR IGNORE INTO nodes(id, type, label) VALUES(?, 'concept', label)` — `staged_tags.new_concept_def` is **never** read. The new concept node ends up in `nodes` with no definition text. The web tool could deviate by also setting `definition = staged_tags.new_concept_def` on the new node (using `INSERT ... ON CONFLICT DO NOTHING` for the row, then a separate `UPDATE nodes SET definition = ? WHERE id = ? AND (definition IS NULL OR definition = '')` to avoid clobbering existing definitions). Strictly better outcome — the LLM-proposed definition isn't thrown away — but it's a behavioral deviation that affects the parity harness. Default: defer to v1.1, document as known limitation in v1. Decision blocker: do you want v1 to fix this or preserve the quirk?
+7. ~~**Populate `nodes.definition` on accept of `is_new_concept` rows?**~~ **Resolved** by `todo:bdbdccd5` (commit 35d448a). The CLI's `promote_to_expresses` was updated to upsert with `COALESCE(nodes.definition, excluded.definition)` — the LLM-proposed `staged_tags.new_concept_def` now lands on the new concept node, while pre-existing definitions (taxonomy-seeded concepts) are preserved. The web tool's `apply.ts` mirrors this exactly. Strict parity holds; no harness carve-out needed. Regression coverage at `tests/test_promote_definition.py` (5 tests).
 
 ---
 
