@@ -12,6 +12,7 @@ import { conceptsRouter } from './routes/concepts.js';
 import { chunksRouter } from './routes/chunks.js';
 import { tagsRouter } from './routes/tags.js';
 import { queueRouter } from './routes/queue.js';
+import { applyRouter } from './routes/apply.js';
 
 async function main(): Promise<void> {
   const cfg = loadConfig();
@@ -40,6 +41,7 @@ async function main(): Promise<void> {
   app.use('/api', chunksRouter(ro, body));
   app.use('/api', tagsRouter(stmts));
   app.use('/api', queueRouter(ro, stmts));
+  app.use('/api', applyRouter(rw, ro, stmts));
 
   app.listen(cfg.port, cfg.host, () => {
     console.log(`[guru-review] listening on http://${cfg.host}:${cfg.port}`);
