@@ -65,6 +65,12 @@ def print_edge_row(row: dict, body_a: str, cite_a: str,
 
 
 def promote_to_live(conn: sqlite3.Connection, row: dict, tier: str) -> None:
+    """Upsert an edge in the live edges table at the given tier.
+
+    Used internally by accept_edge and reclassify_edge. ON CONFLICT DO
+    UPDATE upgrades any prior auto-promote (future) row to verified
+    when the human path takes over.
+    """
     conn.execute(
         """INSERT INTO edges(source_id, target_id, type, tier, justification)
            VALUES(?,?,?,?,?)
@@ -73,6 +79,86 @@ def promote_to_live(conn: sqlite3.Connection, row: dict, tier: str) -> None:
         (row["source_chunk"], row["target_chunk"],
          row["edge_type"], tier, row["justification"]),
     )
+
+
+def delete_live_edge(conn: sqlite3.Connection,
+                     source: str, target: str, edge_type: str) -> None:
+    """DELETE the matching live edge if one exists. No-op if none.
+
+    The retraction primitive used by reject_edge and reclassify_edge.
+    Without DELETE on these branches, an auto-promoted edge (future
+    auto_promote_edges.py) for a row the curator rejects would stay
+    live in production — the editorial overlay rule from
+    docs/web-review/edges.md §4 requires retraction power.
+    """
+    conn.execute(
+        "DELETE FROM edges WHERE source_id=? AND target_id=? AND type=?",
+        (source, target, edge_type),
+    )
+
+
+# ── editorial-overlay action helpers ──────────────────────────────────────────
+# Mirror of scripts/review_tags.py:{reject_tag, reassign_tag, promote_to_expresses}.
+# Extract from the inline review loop so the parity harness and tests can call
+# them directly. Reviewer attribution (REVIEWER constant) is module-level for
+# the CLI; the web tool's apply.ts uses a per-action reviewer string.
+
+
+def accept_edge(conn: sqlite3.Connection, row: dict) -> None:
+    """Promote an edge to tier=verified. Upserts the live edge and marks
+    the staged_edge accepted."""
+    promote_to_live(conn, row, "verified")
+    conn.execute(
+        "UPDATE staged_edges SET status='accepted', tier='verified', "
+        "reviewed_by=?, reviewed_at=? WHERE id=?",
+        (REVIEWER, now_iso(), row["id"]),
+    )
+
+
+def reject_edge(conn: sqlite3.Connection, row: dict) -> None:
+    """Reject a staged_edge. Deletes any live edge for the (source, target,
+    edge_type) tuple — necessary for retracting auto-promoted edges
+    when the curator decides the relationship doesn't hold."""
+    delete_live_edge(conn, row["source_chunk"], row["target_chunk"], row["edge_type"])
+    conn.execute(
+        "UPDATE staged_edges SET status='rejected', reviewed_by=?, reviewed_at=? WHERE id=?",
+        (REVIEWER, now_iso(), row["id"]),
+    )
+
+
+def reclassify_edge(conn: sqlite3.Connection, row: dict, new_type: str) -> None:
+    """Reclassify a staged_edge to a different edge_type.
+
+    PARALLELS / CONTRASTS path: DELETE the old-type live edge if any,
+    upsert the new-type edge at tier=verified, set status='reclassified'.
+
+    surface_only / unrelated path: DELETE the old-type live edge,
+    set status='rejected'. (The edges.type CHECK constraint forbids
+    these values from appearing in the live edges table — treating
+    them as typed rejects per docs/web-review/edges.md §4.)
+    """
+    if new_type not in ("PARALLELS", "CONTRASTS", "surface_only", "unrelated"):
+        raise ValueError(f"unknown edge_type: {new_type}")
+
+    # In every reclassify branch, the OLD-type edge must be retracted.
+    delete_live_edge(conn, row["source_chunk"], row["target_chunk"], row["edge_type"])
+
+    if new_type in ("PARALLELS", "CONTRASTS"):
+        new_row = dict(row)
+        new_row["edge_type"] = new_type
+        promote_to_live(conn, new_row, "verified")
+        conn.execute(
+            "UPDATE staged_edges SET status='reclassified', edge_type=?, tier='verified', "
+            "reviewed_by=?, reviewed_at=? WHERE id=?",
+            (new_type, REVIEWER, now_iso(), row["id"]),
+        )
+    else:
+        # surface_only or unrelated → typed reject
+        conn.execute(
+            "UPDATE staged_edges SET status='rejected', edge_type=?, "
+            "reviewed_by=?, reviewed_at=? WHERE id=?",
+            (new_type, REVIEWER, now_iso(), row["id"]),
+        )
 
 
 def review_edges(
@@ -140,23 +226,13 @@ def review_edges(
                 return
 
             elif key == "a":
-                # Editorial overlay: any human Accept = verified, regardless
-                # of LLM confidence. The model's confidence float is a
-                # separate signal carried in staged_edges.confidence.
-                promote_to_live(conn, row, "verified")
-                conn.execute(
-                    "UPDATE staged_edges SET status='accepted', tier='verified', reviewed_by=?, reviewed_at=? WHERE id=?",
-                    (REVIEWER, now_iso(), row["id"]),
-                )
+                accept_edge(conn, row)
                 conn.commit()
                 accepted += 1
                 break
 
             elif key == "r":
-                conn.execute(
-                    "UPDATE staged_edges SET status='rejected', reviewed_by=?, reviewed_at=? WHERE id=?",
-                    (REVIEWER, now_iso(), row["id"]),
-                )
+                reject_edge(conn, row)
                 conn.commit()
                 rejected += 1
                 break
@@ -170,14 +246,12 @@ def review_edges(
                 print(f"  Edge types: {', '.join(choices)}")
                 new_type = input("  New type: ").strip()
                 if new_type in choices:
-                    row["edge_type"] = new_type
-                    promote_to_live(conn, row, "verified")
-                    conn.execute(
-                        "UPDATE staged_edges SET status='reclassified', edge_type=?, reviewed_by=?, reviewed_at=? WHERE id=?",
-                        (new_type, REVIEWER, now_iso(), row["id"]),
-                    )
+                    reclassify_edge(conn, row, new_type)
                     conn.commit()
-                    accepted += 1
+                    if new_type in ("PARALLELS", "CONTRASTS"):
+                        accepted += 1
+                    else:
+                        rejected += 1
                     break
             else:
                 print("  Unknown key. Use a/r/c/s/q.")
