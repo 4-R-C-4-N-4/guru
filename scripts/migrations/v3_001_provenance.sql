@@ -16,7 +16,7 @@
 --                without forensic work. (Initially backfilled as
 --                'Carnice-9b'; renamed to 'Carnice-9b' same day per
 --                operator confirmation.)
---   id >= 1000 → 'qwen3.5-27b'  — production tagger run. Uniform quality
+--   id >= 1000 → 'Qwen3.5-27B-UD-Q4_K_XL.gguf'  — production tagger run. Uniform quality
 --                post-dedupe.
 --
 -- Partial UNIQUE rationale: only enforce on status='pending'. Once a row
@@ -49,7 +49,7 @@ UPDATE staged_tags
  WHERE id < 1000 AND model IS NULL;
 
 UPDATE staged_tags
-   SET model = 'qwen3.5-27b', prompt_version = 'v1'
+   SET model = 'Qwen3.5-27B-UD-Q4_K_XL.gguf', prompt_version = 'v1'
  WHERE id >= 1000 AND model IS NULL;
 
 -- ----- partial UNIQUE index ------------------------------------------------

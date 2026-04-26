@@ -268,7 +268,7 @@ def run_tagging(
 def main() -> None:
     parser = argparse.ArgumentParser(description="LLM-assisted concept tagging")
     parser.add_argument("--provider", choices=list(PROVIDERS), default="llamacpp")
-    parser.add_argument("--model", default="Carnice-27b-Q4_K_M.gguf")
+    parser.add_argument("--model", default="Qwen3.5-27B-UD-Q4_K_XL.gguf")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--batch-size", type=int, default=0)
     parser.add_argument("--resume", action="store_true")
