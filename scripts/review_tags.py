@@ -66,13 +66,21 @@ def get_concept_def(conn: sqlite3.Connection, concept_id: str) -> str:
 
 def promote_to_expresses(conn: sqlite3.Connection,
                          chunk_id: str, concept_id: str,
-                         justification: str, score: int,
+                         justification: str,
                          new_concept_def: str | None = None) -> None:
-    """Insert EXPRESSES edge into live edges table.
+    """Promote a staged_tag to a live EXPRESSES edge at tier='verified'.
 
-    For is_new_concept=1 accepts, pass the staged_tags.new_concept_def value
-    so the LLM-proposed definition lands on the new concept node. COALESCE
-    preserves any pre-existing definition (taxonomy-seeded concepts safe).
+    Called only on human accept. Tier is *always* 'verified' — the load-
+    bearing distinction is "a human signed off," not "the model was
+    confident." Auto-promote (scripts/auto_promote.py) writes lower
+    tiers via its own SQL; this function is the human-review path's
+    upgrade-to-verified hook. ON CONFLICT DO UPDATE means a prior
+    auto-promoted 'proposed' or 'inferred' edge gets correctly upgraded
+    on the curator's accept.
+
+    For is_new_concept=1 accepts, pass new_concept_def so the LLM-proposed
+    definition lands on the new concept node. COALESCE preserves any
+    pre-existing definition (taxonomy-seeded concepts safe).
     """
     concept_node_id = f"concept.{concept_id}"
     conn.execute(
@@ -82,13 +90,64 @@ def promote_to_expresses(conn: sqlite3.Connection,
              definition = COALESCE(nodes.definition, excluded.definition)""",
         (concept_node_id, concept_id.replace("_", " ").title(), new_concept_def),
     )
-    tier = "verified" if score >= 2 else "proposed"
     conn.execute(
         """INSERT INTO edges(source_id, target_id, type, tier, justification)
-           VALUES(?, ?, 'EXPRESSES', ?, ?)
+           VALUES(?, ?, 'EXPRESSES', 'verified', ?)
            ON CONFLICT(source_id, target_id, type) DO UPDATE SET
              tier=excluded.tier, justification=excluded.justification""",
-        (chunk_id, concept_node_id, tier, justification),
+        (chunk_id, concept_node_id, justification),
+    )
+
+
+def reject_tag(conn: sqlite3.Connection, row: dict) -> None:
+    """Reject a staged_tag and retract any auto-promoted edge.
+
+    Without the DELETE the rejected row's auto-promoted edge would stay
+    live in production — the curator's reject would be silently ignored
+    by anything downstream of `edges`. The DELETE is a no-op if no edge
+    exists (e.g. the row wasn't auto-promoted), so this is safe to call
+    on any reject regardless of prior auto-promote state.
+    """
+    concept_node_id = f"concept.{row['concept_id']}"
+    conn.execute(
+        "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
+        (row["chunk_id"], concept_node_id),
+    )
+    conn.execute(
+        "UPDATE staged_tags SET status='rejected', reviewed_by=?, reviewed_at=? WHERE id=?",
+        (REVIEWER, now_iso(), row["id"]),
+    )
+
+
+def reassign_tag(conn: sqlite3.Connection, row: dict, new_concept_id: str) -> None:
+    """Reassign a staged_tag to a different concept_id.
+
+    Retracts any auto-promoted edge for the *original* (chunk, concept)
+    pair, mutates the staged_tag's concept_id, and spawns a new pending
+    staged_tag for the corrected concept (carrying provenance forward
+    so the partial UNIQUE on (chunk, concept, model, prompt_version)
+    works correctly and any future fine-tune export filter is clean).
+    The new concept's edge will materialize on the next auto-promote
+    run if the spawned row qualifies.
+    """
+    original_concept_node_id = f"concept.{row['concept_id']}"
+    conn.execute(
+        "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
+        (row["chunk_id"], original_concept_node_id),
+    )
+    conn.execute(
+        "UPDATE staged_tags SET status='reassigned', concept_id=?, "
+        "reviewed_by=?, reviewed_at=? WHERE id=?",
+        (new_concept_id, REVIEWER, now_iso(), row["id"]),
+    )
+    conn.execute(
+        """INSERT INTO staged_tags(chunk_id, concept_id, score,
+                                   justification, is_new_concept,
+                                   model, prompt_version)
+           VALUES(?,?,?,?,0,?,?)""",
+        (row["chunk_id"], new_concept_id, row["score"],
+         f"Reassigned from {row['concept_id']}",
+         row["model"], row["prompt_version"]),
     )
 
 
@@ -158,7 +217,7 @@ def review_tags(
 
             elif key == "a":
                 promote_to_expresses(conn, row["chunk_id"], row["concept_id"],
-                                     row["justification"] or "", row["score"],
+                                     row["justification"] or "",
                                      new_concept_def=row["new_concept_def"])
                 conn.execute(
                     "UPDATE staged_tags SET status='accepted', reviewed_by=?, reviewed_at=? WHERE id=?",
@@ -169,10 +228,7 @@ def review_tags(
                 break
 
             elif key == "r":
-                conn.execute(
-                    "UPDATE staged_tags SET status='rejected', reviewed_by=?, reviewed_at=? WHERE id=?",
-                    (REVIEWER, now_iso(), row["id"]),
-                )
+                reject_tag(conn, row)
                 conn.commit()
                 rejected += 1
                 break
@@ -184,22 +240,7 @@ def review_tags(
             elif key == "c":
                 new_id = input("  New concept ID: ").strip()
                 if new_id:
-                    conn.execute(
-                        "UPDATE staged_tags SET status='reassigned', concept_id=?, reviewed_by=?, reviewed_at=? WHERE id=?",
-                        (new_id, REVIEWER, now_iso(), row["id"]),
-                    )
-                    # Create a new pending tag for the reassigned concept,
-                    # carrying the parent row's model/prompt_version forward
-                    # so provenance is preserved through the reassign chain.
-                    conn.execute(
-                        """INSERT INTO staged_tags(chunk_id, concept_id, score,
-                                                   justification, is_new_concept,
-                                                   model, prompt_version)
-                           VALUES(?,?,?,?,0,?,?)""",
-                        (row["chunk_id"], new_id, row["score"],
-                         f"Reassigned from {row['concept_id']}",
-                         row["model"], row["prompt_version"]),
-                    )
+                    reassign_tag(conn, row, new_id)
                     conn.commit()
                 break
             else:

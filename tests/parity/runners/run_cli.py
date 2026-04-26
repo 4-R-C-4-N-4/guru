@@ -44,7 +44,7 @@ def apply_action(conn: sqlite3.Connection, action: dict) -> None:
 
     if kind == "accept":
         promote_to_expresses(
-            conn, chunk_id, concept_id, justification or "", score,
+            conn, chunk_id, concept_id, justification or "",
             new_concept_def=new_concept_def,
         )
         conn.execute(
