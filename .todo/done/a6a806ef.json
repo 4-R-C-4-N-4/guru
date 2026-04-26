@@ -1,0 +1,42 @@
+{
+  "id": "a6a806ef",
+  "type": "chore",
+  "state": "done",
+  "summary": "P1.2: extract PROMPT_VERSION constant in guru/prompt.py (single source of truth for prompt-template versioning)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T13:33:28.674Z",
+  "updated_at": "2026-04-26T13:41:49.459Z",
+  "files": [
+    {
+      "path": "guru/prompt.py"
+    }
+  ],
+  "tags": [
+    "v3",
+    "phase-1",
+    "provenance"
+  ],
+  "relationships": {
+    "parent": "1031299e",
+    "depends_on": [
+      "ec3abd8a"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T13:41:12.449Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "v3.md §4.1 + v3-impl.md Phase 1 step 4 say 'extract build_prompt() from tag_concepts.py to guru/prompt.py'. But guru/prompt.py already has a build_prompt() for the retrieval/chat side (RetrievedChunk → user-facing prompt) — totally different function from scripts/tag_concepts.py:build_prompt (chunk → LLM tagging request). Naming collision. The v3 author didn't anticipate this. Minimal-disruption interpretation: add PROMPT_VERSION constant to guru/prompt.py per spec, but keep the tagging build_prompt() in scripts/tag_concepts.py where its caller and SYSTEM_PROMPT live. Constant has a clear comment pointing to the function it governs. Future ticket can extract build_prompt to guru/tagging.py if cleaner module separation is wanted.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "0e50360163340798cc4b6527d56bb0c2849490f7",
+    "resolved_at": "2026-04-26T13:41:49.459Z",
+    "resolved_by": "unknown",
+    "note": "PROMPT_VERSION='v1' added to guru/prompt.py per v3.md §4.1. Comment notes the constant governs scripts/tag_concepts.py:build_prompt (tagging-time prompt), distinct from the retrieval-time build_prompt() in the same module. 47 tests still green."
+  }
+}
