@@ -40,11 +40,16 @@ CREATE TABLE staged_tags (
     status          TEXT NOT NULL DEFAULT 'pending'
                         CHECK(status IN ('pending','accepted','rejected','reassigned')),
     reviewed_by     TEXT,
-    reviewed_at     TEXT
+    reviewed_at     TEXT,
+    model           TEXT,
+    prompt_version  TEXT
 );
 CREATE INDEX idx_staged_tags_chunk   ON staged_tags(chunk_id);
 CREATE INDEX idx_staged_tags_concept ON staged_tags(concept_id);
 CREATE INDEX idx_staged_tags_status  ON staged_tags(status);
+CREATE UNIQUE INDEX idx_staged_tags_provenance_unique
+    ON staged_tags(chunk_id, concept_id, model, prompt_version)
+    WHERE status = 'pending';
 
 -- Tradition + chunk nodes (3 chunks for a small but representative slice).
 INSERT INTO nodes(id, type, label) VALUES ('gnosticism', 'tradition', 'Gnosticism');
@@ -61,11 +66,12 @@ INSERT INTO nodes(id, type, label, definition) VALUES
     ('concept.divine_emanation', 'concept', 'Divine Emanation', 'Pre-existing definition.');
 
 -- 7 staged_tags covering every action branch. Explicit ids for reproducibility.
-INSERT INTO staged_tags(id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def) VALUES
-    (1, 'gnosticism.gospel-of-thomas.001', 'gnosis',     3, 'verified-tier accept',           0, NULL),
-    (2, 'gnosticism.gospel-of-thomas.001', 'demiurge',   1, 'proposed-tier accept',           0, NULL),
-    (3, 'gnosticism.gospel-of-thomas.001', 'ineffable',  2, 'is_new_concept=1 accept',        1, 'Beyond all utterance.'),
-    (4, 'gnosticism.gospel-of-thomas.002', 'kenoma',     2, 'reject me',                      0, NULL),
-    (5, 'gnosticism.gospel-of-thomas.002', 'pleroma',    3, 'skip me — stays pending',         0, NULL),
-    (6, 'gnosticism.gospel-of-thomas.003', 'aeons',      2, 'reassign to existing concept',   0, NULL),
-    (7, 'gnosticism.gospel-of-thomas.003', 'archon',     1, 'reassign to free-text new',      0, NULL);
+-- model/prompt_version mimic the production v3 backfill (qwen3.5-27b / v1).
+INSERT INTO staged_tags(id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, model, prompt_version) VALUES
+    (1, 'gnosticism.gospel-of-thomas.001', 'gnosis',     3, 'verified-tier accept',           0, NULL,                     'qwen3.5-27b', 'v1'),
+    (2, 'gnosticism.gospel-of-thomas.001', 'demiurge',   1, 'proposed-tier accept',           0, NULL,                     'qwen3.5-27b', 'v1'),
+    (3, 'gnosticism.gospel-of-thomas.001', 'ineffable',  2, 'is_new_concept=1 accept',        1, 'Beyond all utterance.',  'qwen3.5-27b', 'v1'),
+    (4, 'gnosticism.gospel-of-thomas.002', 'kenoma',     2, 'reject me',                      0, NULL,                     'qwen3.5-27b', 'v1'),
+    (5, 'gnosticism.gospel-of-thomas.002', 'pleroma',    3, 'skip me — stays pending',         0, NULL,                     'qwen3.5-27b', 'v1'),
+    (6, 'gnosticism.gospel-of-thomas.003', 'aeons',      2, 'reassign to existing concept',   0, NULL,                     'qwen3.5-27b', 'v1'),
+    (7, 'gnosticism.gospel-of-thomas.003', 'archon',     1, 'reassign to free-text new',      0, NULL,                     'qwen3.5-27b', 'v1');

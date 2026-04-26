@@ -70,7 +70,8 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
 
     selectStagedTag: rw.prepare(`
       SELECT id, chunk_id, concept_id, score, justification,
-             is_new_concept, new_concept_def, status
+             is_new_concept, new_concept_def, status,
+             model, prompt_version
       FROM staged_tags
       WHERE id = ?
     `),
@@ -98,8 +99,9 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
     `),
 
     insertReassignedTag: rw.prepare(`
-      INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept)
-      VALUES(?, ?, ?, ?, 0)
+      INSERT INTO staged_tags(chunk_id, concept_id, score, justification,
+                              is_new_concept, model, prompt_version)
+      VALUES(?, ?, ?, ?, 0, ?, ?)
     `),
 
     markActionApplied: rw.prepare(`

@@ -24,6 +24,8 @@ interface StagedTag {
   is_new_concept: number;
   new_concept_def: string | null;
   status: string;
+  model: string | null;
+  prompt_version: string | null;
 }
 
 export interface ApplyResult {
@@ -96,11 +98,16 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
           }
           stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
           stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);
+          // Carry parent provenance forward — the spawned row inherits
+          // the same model + prompt_version so the partial UNIQUE works
+          // correctly and so future fine-tune exports can filter cleanly.
           stmts.insertReassignedTag.run(
             tag.chunk_id,
             q.reassign_to,
             tag.score,
             `Reassigned from ${tag.concept_id}`,
+            tag.model,
+            tag.prompt_version,
           );
           break;
         }
