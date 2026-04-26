@@ -1,18 +1,34 @@
 import type Database from 'better-sqlite3';
 
 const DDL = `
+-- Polymorphic review queue. target_id points at staged_tags.id when
+-- target_table='staged_tags' and at staged_edges.id when 'staged_edges';
+-- no FK because no single FK satisfies both. The CHECK enforces that
+-- action is consistent with target_table — reassign is staged_tags-only,
+-- reclassify is staged_edges-only.
 CREATE TABLE IF NOT EXISTS review_actions (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
-    target_id     INTEGER NOT NULL REFERENCES staged_tags(id),
-    action            TEXT NOT NULL CHECK(action IN ('accept','reject','skip','reassign')),
+    target_id         INTEGER NOT NULL,
+    target_table      TEXT NOT NULL DEFAULT 'staged_tags'
+                          CHECK(target_table IN ('staged_tags','staged_edges')),
+    action            TEXT NOT NULL
+                          CHECK(action IN ('accept','reject','skip','reassign','reclassify')),
     reassign_to       TEXT,
+    reclassify_to     TEXT,
     reviewer          TEXT NOT NULL,
     client_action_id  TEXT NOT NULL UNIQUE,
     applied_at        TEXT,
     error             TEXT,
     created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
-    CHECK ((action = 'reassign' AND reassign_to IS NOT NULL)
-        OR (action != 'reassign' AND reassign_to IS NULL))
+    CHECK (
+      (target_table = 'staged_tags'  AND action IN ('accept','reject','skip','reassign')
+                                     AND reclassify_to IS NULL
+                                     AND ((action='reassign') = (reassign_to IS NOT NULL)))
+      OR
+      (target_table = 'staged_edges' AND action IN ('accept','reject','skip','reclassify')
+                                     AND reassign_to IS NULL
+                                     AND ((action='reclassify') = (reclassify_to IS NOT NULL)))
+    )
 );
 
 CREATE INDEX IF NOT EXISTS idx_review_actions_unapplied

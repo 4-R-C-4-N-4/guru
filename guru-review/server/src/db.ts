@@ -13,16 +13,20 @@ export interface PreparedStmts {
   insertReviewAction: Database.Statement;
   deleteUnappliedAction: Database.Statement;
   selectStagedTagExists: Database.Statement;
+  selectStagedEdgeExists: Database.Statement;
 
-  // apply transaction (rw side — touch staged_tags + edges + nodes)
+  // apply transaction (rw side — touch staged_tags / staged_edges / edges / nodes)
   selectQueuedActions: Database.Statement;
   selectStagedTag: Database.Statement;
+  selectStagedEdge: Database.Statement;
   ensureConceptNode: Database.Statement;
-  insertOrUpdateEdge: Database.Statement;
-  deleteExpressesEdge: Database.Statement;
+  upsertEdge: Database.Statement;          // generic — type passed at runtime
+  deleteEdge: Database.Statement;          // generic — type passed at runtime
   updateStagedTagStatus: Database.Statement;
   updateStagedTagConcept: Database.Statement;
   insertReassignedTag: Database.Statement;
+  updateStagedEdgeStatus: Database.Statement;
+  updateStagedEdgeStatusType: Database.Statement;
   markActionApplied: Database.Statement;
 
   // reads (queue + apply preview)
@@ -49,8 +53,9 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
   return {
     insertReviewAction: rw.prepare(`
       INSERT INTO review_actions
-        (target_id, action, reassign_to, reviewer, client_action_id)
-      VALUES (?, ?, ?, ?, ?)
+        (target_id, target_table, action, reassign_to, reclassify_to,
+         reviewer, client_action_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `),
 
     deleteUnappliedAction: rw.prepare(`
@@ -62,8 +67,13 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       SELECT id FROM staged_tags WHERE id = ?
     `),
 
+    selectStagedEdgeExists: ro.prepare(`
+      SELECT id FROM staged_edges WHERE id = ?
+    `),
+
     selectQueuedActions: rw.prepare(`
-      SELECT id, target_id, action, reassign_to, reviewer, client_action_id, created_at
+      SELECT id, target_id, target_table, action, reassign_to, reclassify_to,
+             reviewer, client_action_id, created_at
       FROM review_actions
       WHERE applied_at IS NULL
       ORDER BY id ASC
@@ -77,6 +87,13 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       WHERE id = ?
     `),
 
+    selectStagedEdge: rw.prepare(`
+      SELECT id, source_chunk, target_chunk, edge_type, confidence,
+             justification, status, tier
+      FROM staged_edges
+      WHERE id = ?
+    `),
+
     ensureConceptNode: rw.prepare(`
       INSERT INTO nodes(id, type, label, definition)
       VALUES(?, 'concept', ?, ?)
@@ -84,19 +101,23 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         definition = COALESCE(nodes.definition, excluded.definition)
     `),
 
-    insertOrUpdateEdge: rw.prepare(`
+    // Generic upsert — type is passed at runtime so the same statement
+    // serves EXPRESSES (staged_tags accept) and PARALLELS/CONTRASTS
+    // (staged_edges accept + reclassify).
+    upsertEdge: rw.prepare(`
       INSERT INTO edges(source_id, target_id, type, tier, justification)
-      VALUES(?, ?, 'EXPRESSES', ?, ?)
+      VALUES(?, ?, ?, ?, ?)
       ON CONFLICT(source_id, target_id, type) DO UPDATE SET
         tier=excluded.tier, justification=excluded.justification
     `),
 
-    // Used by reject + reassign branches to retract auto-promoted edges
-    // before mutating staged_tag state. DELETE is safe on a non-existent
-    // row, so callers don't need to check.
-    deleteExpressesEdge: rw.prepare(`
+    // Generic delete — type passed at runtime. Used by reject/reassign
+    // (staged_tags) and reject/reclassify-old-type (staged_edges) to
+    // retract auto-promoted edges. DELETE on a non-existent row is a
+    // no-op, so callers don't need to check.
+    deleteEdge: rw.prepare(`
       DELETE FROM edges
-      WHERE source_id = ? AND target_id = ? AND type = 'EXPRESSES'
+      WHERE source_id = ? AND target_id = ? AND type = ?
     `),
 
     updateStagedTagStatus: rw.prepare(`
@@ -113,6 +134,16 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       VALUES(?, ?, ?, ?, 0, ?, ?)
     `),
 
+    updateStagedEdgeStatus: rw.prepare(`
+      UPDATE staged_edges SET status=?, tier=?, reviewed_by=?, reviewed_at=? WHERE id=?
+    `),
+
+    // Used by reclassify — sets new edge_type alongside status/tier.
+    updateStagedEdgeStatusType: rw.prepare(`
+      UPDATE staged_edges SET status=?, edge_type=?, tier=?,
+        reviewed_by=?, reviewed_at=? WHERE id=?
+    `),
+
     markActionApplied: rw.prepare(`
       UPDATE review_actions SET applied_at = strftime('%Y-%m-%dT%H:%M:%SZ','now'), error = ?
       WHERE id = ?
@@ -122,8 +153,10 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       SELECT
         ra.id              AS action_id,
         ra.client_action_id,
+        ra.target_table,
         ra.action,
         ra.reassign_to,
+        ra.reclassify_to,
         ra.reviewer,
         ra.created_at,
         st.id              AS target_id,
@@ -134,17 +167,17 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         n.label            AS section_label,
         n.tradition_id
       FROM review_actions ra
-      JOIN staged_tags st ON st.id = ra.target_id
+      JOIN staged_tags st ON st.id = ra.target_id AND ra.target_table = 'staged_tags'
       JOIN nodes n ON n.id = st.chunk_id
       WHERE ra.applied_at IS NULL
       ORDER BY ra.id DESC
     `),
 
     countQueuedByAction: ro.prepare(`
-      SELECT action, COUNT(*) AS n
+      SELECT target_table, action, COUNT(*) AS n
       FROM review_actions
       WHERE applied_at IS NULL
-      GROUP BY action
+      GROUP BY target_table, action
     `),
   };
 }

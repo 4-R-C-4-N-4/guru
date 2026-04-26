@@ -65,30 +65,66 @@ describe('schema', () => {
     expect(() => validateSchemaFingerprint(db)).toThrow(/chunk_embeddings/);
   });
 
-  it('CHECK constraint enforces reassign_to required iff action=reassign', () => {
+  it('polymorphic CHECK enforces action ↔ target_table consistency', () => {
     const db = new Database(':memory:');
     seedLiveTables(db);
     applySchema(db);
     db.exec("INSERT INTO staged_tags(id, status, chunk_id) VALUES (1, 'pending', 'x.y.001')");
-    // accept with reassign_to set → should fail
+
+    // staged_tags + accept with reassign_to set → CHECK fails
     expect(() =>
       db
         .prepare(
-          'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_tags', ?, ?, NULL, ?, ?)",
         )
         .run(1, 'accept', 'wrong', 'test', 'id-1'),
     ).toThrow();
-    // reassign without reassign_to → should fail
+
+    // staged_tags + reassign without reassign_to → CHECK fails
     expect(() =>
       db
         .prepare(
-          'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_tags', ?, ?, NULL, ?, ?)",
         )
         .run(1, 'reassign', null, 'test', 'id-2'),
     ).toThrow();
-    // accept with reassign_to=null → ok
+
+    // staged_edges + reassign (action invalid for edges bucket) → CHECK fails
+    expect(() =>
+      db
+        .prepare(
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_edges', ?, ?, NULL, ?, ?)",
+        )
+        .run(1, 'reassign', 'concept_x', 'test', 'id-3'),
+    ).toThrow();
+
+    // staged_edges + reclassify without reclassify_to → CHECK fails
+    expect(() =>
+      db
+        .prepare(
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_edges', ?, NULL, NULL, ?, ?)",
+        )
+        .run(1, 'reclassify', 'test', 'id-4'),
+    ).toThrow();
+
+    // valid: staged_tags + accept (no reassign_to) → ok
     db.prepare(
-      'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
-    ).run(1, 'accept', null, 'test', 'id-3');
+      "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_tags', 'accept', NULL, NULL, ?, ?)",
+    ).run(1, 'test', 'id-5');
+
+    // valid: staged_tags + reassign (with reassign_to) → ok
+    db.prepare(
+      "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_tags', 'reassign', 'gnosis', NULL, ?, ?)",
+    ).run(1, 'test', 'id-6');
+
+    // valid: staged_edges + reclassify (with reclassify_to) → ok
+    db.prepare(
+      "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_edges', 'reclassify', NULL, 'CONTRASTS', ?, ?)",
+    ).run(1, 'test', 'id-7');
+
+    // valid: target_table defaults to staged_tags when omitted (backwards-compat)
+    db.prepare(
+      'INSERT INTO review_actions(target_id, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, ?, NULL, NULL, ?, ?)',
+    ).run(1, 'skip', 'test', 'id-8');
   });
 });

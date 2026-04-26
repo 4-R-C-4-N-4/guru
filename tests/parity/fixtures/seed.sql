@@ -51,6 +51,27 @@ CREATE UNIQUE INDEX idx_staged_tags_provenance_unique
     ON staged_tags(chunk_id, concept_id, model, prompt_version)
     WHERE status = 'pending';
 
+-- Pass C — cross-tradition edge proposals. Required by the post-v3_003
+-- web-tool prepared statements (selectStagedEdge etc.) regardless of
+-- whether this fixture seeds any rows. Edge-action fixture decisions
+-- are added by C7.
+CREATE TABLE staged_edges (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_chunk    TEXT NOT NULL REFERENCES nodes(id),
+    target_chunk    TEXT NOT NULL REFERENCES nodes(id),
+    edge_type       TEXT NOT NULL CHECK(edge_type IN ('PARALLELS','CONTRASTS','surface_only','unrelated')),
+    confidence      REAL NOT NULL DEFAULT 0.0,
+    justification   TEXT,
+    status          TEXT NOT NULL DEFAULT 'pending'
+                        CHECK(status IN ('pending','accepted','rejected','reclassified')),
+    tier            TEXT NOT NULL DEFAULT 'proposed'
+                        CHECK(tier IN ('verified','proposed')),
+    reviewed_by     TEXT,
+    reviewed_at     TEXT,
+    UNIQUE(source_chunk, target_chunk)
+);
+CREATE INDEX idx_staged_edges_status ON staged_edges(status);
+
 -- Tradition + chunk nodes (3 chunks for a small but representative slice).
 INSERT INTO nodes(id, type, label) VALUES ('gnosticism', 'tradition', 'Gnosticism');
 INSERT INTO nodes(id, type, tradition_id, label) VALUES
