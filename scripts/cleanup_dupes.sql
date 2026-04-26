@@ -61,7 +61,7 @@ SELECT
   END AS safety
 FROM review_actions
 WHERE applied_at IS NULL
-  AND staged_tag_id IN (SELECT id FROM targets);
+  AND target_id IN (SELECT id FROM targets);
 
 -- ============================================================================
 -- BEFORE: counts

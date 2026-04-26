@@ -49,7 +49,7 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
   return {
     insertReviewAction: rw.prepare(`
       INSERT INTO review_actions
-        (staged_tag_id, action, reassign_to, reviewer, client_action_id)
+        (target_id, action, reassign_to, reviewer, client_action_id)
       VALUES (?, ?, ?, ?, ?)
     `),
 
@@ -63,7 +63,7 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
     `),
 
     selectQueuedActions: rw.prepare(`
-      SELECT id, staged_tag_id, action, reassign_to, reviewer, client_action_id, created_at
+      SELECT id, target_id, action, reassign_to, reviewer, client_action_id, created_at
       FROM review_actions
       WHERE applied_at IS NULL
       ORDER BY id ASC
@@ -126,7 +126,7 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         ra.reassign_to,
         ra.reviewer,
         ra.created_at,
-        st.id              AS staged_tag_id,
+        st.id              AS target_id,
         st.chunk_id,
         st.concept_id,
         st.score,
@@ -134,7 +134,7 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         n.label            AS section_label,
         n.tradition_id
       FROM review_actions ra
-      JOIN staged_tags st ON st.id = ra.staged_tag_id
+      JOIN staged_tags st ON st.id = ra.target_id
       JOIN nodes n ON n.id = st.chunk_id
       WHERE ra.applied_at IS NULL
       ORDER BY ra.id DESC

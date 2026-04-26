@@ -74,7 +74,7 @@ describe('schema', () => {
     expect(() =>
       db
         .prepare(
-          'INSERT INTO review_actions(staged_tag_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
         )
         .run(1, 'accept', 'wrong', 'test', 'id-1'),
     ).toThrow();
@@ -82,13 +82,13 @@ describe('schema', () => {
     expect(() =>
       db
         .prepare(
-          'INSERT INTO review_actions(staged_tag_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
         )
         .run(1, 'reassign', null, 'test', 'id-2'),
     ).toThrow();
     // accept with reassign_to=null → ok
     db.prepare(
-      'INSERT INTO review_actions(staged_tag_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
     ).run(1, 'accept', null, 'test', 'id-3');
   });
 });

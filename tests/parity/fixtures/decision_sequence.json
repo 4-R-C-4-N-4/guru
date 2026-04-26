@@ -1,12 +1,12 @@
 {
   "reviewer": "parity-harness",
   "actions": [
-    { "staged_tag_id": 1, "action": "accept",   "client_action_id": "decision-001", "_note": "verified tier (score=3); existing concept node, COALESCE preserves definition" },
-    { "staged_tag_id": 2, "action": "accept",   "client_action_id": "decision-002", "_note": "proposed tier (score=1); creates concept.demiurge with NULL definition (is_new_concept=0)" },
-    { "staged_tag_id": 3, "action": "accept",   "client_action_id": "decision-003", "_note": "is_new_concept=1; creates concept.ineffable WITH definition from new_concept_def" },
-    { "staged_tag_id": 4, "action": "reject",   "client_action_id": "decision-004" },
-    { "staged_tag_id": 5, "action": "skip",     "client_action_id": "decision-005", "_note": "no DB write; staged_tag stays pending" },
-    { "staged_tag_id": 6, "action": "reassign", "client_action_id": "decision-006", "reassign_to": "divine_emanation", "_note": "to existing concept; spawn pending row" },
-    { "staged_tag_id": 7, "action": "reassign", "client_action_id": "decision-007", "reassign_to": "free_text_new",    "_note": "to free-text new concept_id; spawn pending row" }
+    { "target_id": 1, "action": "accept",   "client_action_id": "decision-001", "_note": "verified tier (score=3); existing concept node, COALESCE preserves definition" },
+    { "target_id": 2, "action": "accept",   "client_action_id": "decision-002", "_note": "proposed tier (score=1); creates concept.demiurge with NULL definition (is_new_concept=0)" },
+    { "target_id": 3, "action": "accept",   "client_action_id": "decision-003", "_note": "is_new_concept=1; creates concept.ineffable WITH definition from new_concept_def" },
+    { "target_id": 4, "action": "reject",   "client_action_id": "decision-004" },
+    { "target_id": 5, "action": "skip",     "client_action_id": "decision-005", "_note": "no DB write; staged_tag stays pending" },
+    { "target_id": 6, "action": "reassign", "client_action_id": "decision-006", "reassign_to": "divine_emanation", "_note": "to existing concept; spawn pending row" },
+    { "target_id": 7, "action": "reassign", "client_action_id": "decision-007", "reassign_to": "free_text_new",    "_note": "to free-text new concept_id; spawn pending row" }
   ]
 }

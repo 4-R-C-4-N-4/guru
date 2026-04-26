@@ -12,7 +12,7 @@ import type { ActionPayload } from '../api/types';
 const KEY = 'guru-review:retry-queue';
 
 interface PendingPost {
-  staged_tag_id: number;
+  target_id: number;
   payload: ActionPayload;
   attempts: number;
   next_attempt_at: number; // ms epoch
@@ -52,7 +52,7 @@ export function subscribe(fn: (n: number) => void): () => void {
 export async function enqueue(stagedTagId: number, payload: ActionPayload): Promise<void> {
   const items = await load();
   items.push({
-    staged_tag_id: stagedTagId,
+    target_id: stagedTagId,
     payload,
     attempts: 0,
     next_attempt_at: Date.now(),
@@ -77,7 +77,7 @@ async function drainOnce(): Promise<void> {
 
   for (const item of due) {
     try {
-      const res = await fetch(`/api/tags/${item.staged_tag_id}/action`, {
+      const res = await fetch(`/api/tags/${item.target_id}/action`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(item.payload),

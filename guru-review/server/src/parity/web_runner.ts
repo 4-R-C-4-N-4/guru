@@ -12,7 +12,7 @@ import { buildApply } from '../apply.js';
 import { applySchema } from '../schema.js';
 
 interface Action {
-  staged_tag_id: number;
+  target_id: number;
   action: 'accept' | 'reject' | 'skip' | 'reassign';
   reassign_to?: string;
   client_action_id: string;
@@ -42,14 +42,14 @@ applySchema(rw);
 
 const stmts = {
   insertReviewAction: rw.prepare(
-    'INSERT INTO review_actions(staged_tag_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+    'INSERT INTO review_actions(target_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
   ),
   deleteUnappliedAction: rw.prepare(
     'DELETE FROM review_actions WHERE client_action_id = ? AND applied_at IS NULL',
   ),
   selectStagedTagExists: rw.prepare('SELECT id FROM staged_tags WHERE id = ?'),
   selectQueuedActions: rw.prepare(
-    'SELECT id, staged_tag_id, action, reassign_to, reviewer, client_action_id, created_at FROM review_actions WHERE applied_at IS NULL ORDER BY id ASC',
+    'SELECT id, target_id, action, reassign_to, reviewer, client_action_id, created_at FROM review_actions WHERE applied_at IS NULL ORDER BY id ASC',
   ),
   selectStagedTag: rw.prepare(
     'SELECT id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status, model, prompt_version FROM staged_tags WHERE id = ?',
@@ -79,7 +79,7 @@ const stmts = {
 
 for (const a of fixture.actions) {
   stmts.insertReviewAction.run(
-    a.staged_tag_id,
+    a.target_id,
     a.action,
     a.action === 'reassign' ? a.reassign_to ?? null : null,
     fixture.reviewer,

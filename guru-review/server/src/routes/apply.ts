@@ -18,7 +18,7 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
     const total = counts.reduce((acc, c) => acc + c.n, 0);
     const distinctChunks = ro
       .prepare(
-        `SELECT COUNT(DISTINCT staged_tag_id) AS n
+        `SELECT COUNT(DISTINCT target_id) AS n
          FROM review_actions WHERE applied_at IS NULL`,
       )
       .get() as { n: number };

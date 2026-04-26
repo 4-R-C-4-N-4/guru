@@ -7,7 +7,7 @@ import type { PreparedStmts } from './db.js';
 
 interface QueuedAction {
   id: number;
-  staged_tag_id: number;
+  target_id: number;
   action: 'accept' | 'reject' | 'skip' | 'reassign';
   reassign_to: string | null;
   reviewer: string;
@@ -57,7 +57,7 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
     };
 
     for (const q of queued) {
-      const tag = stmts.selectStagedTag.get(q.staged_tag_id) as StagedTag | undefined;
+      const tag = stmts.selectStagedTag.get(q.target_id) as StagedTag | undefined;
 
       // Re-check status — if CLI got there first, no-op (audit-trail preserved).
       if (!tag || tag.status !== 'pending') {
