@@ -1,0 +1,36 @@
+{
+  "id": "0238fe14",
+  "type": "chore",
+  "state": "done",
+  "summary": "P1.4: web apply.ts — copy model+prompt_version from parent row when spawning reassigned-tag; update parity harness fixture+compare to assert these columns",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T13:33:28.756Z",
+  "updated_at": "2026-04-26T13:48:29.234Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/apply.ts"
+    }
+  ],
+  "tags": [
+    "v3",
+    "phase-1",
+    "provenance",
+    "web-review",
+    "parity-harness"
+  ],
+  "relationships": {
+    "parent": "1031299e",
+    "depends_on": [
+      "ec3abd8a"
+    ]
+  },
+  "resolution": {
+    "commit": "6a35ae175160535ce5a8bcb780648e707969e7b8",
+    "resolved_at": "2026-04-26T13:48:29.234Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/parity/orchestrator.sh",
+    "note": "Web apply.ts + db.ts read+write provenance; reassign-spawn inherits parent's model/prompt_version. CLI review_tags.py reassign branch updated symmetrically. Parity harness fixture seeded with provenance, compare.py asserts equivalence on (model, prompt_version). Schema.ts gets the partial UNIQUE for fresh-boot/shadow case. 53 unit tests + parity harness green."
+  }
+}
