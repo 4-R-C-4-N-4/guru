@@ -1,13 +1,13 @@
 {
   "id": "709e9d02",
   "type": "feature",
-  "state": "open",
+  "state": "active",
   "summary": "Auto-promote LLM-tagged staged_tags + rework human review as editorial overlay (RAG signal pipeline)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T16:20:33.456Z",
-  "updated_at": "2026-04-26T16:20:52.789Z",
+  "updated_at": "2026-04-26T16:24:09.741Z",
   "files": [
     {
       "path": "docs/autopromote/design.md"
@@ -43,5 +43,11 @@
       "content": "Operator safety constraint (per user directive): NO --apply against data/guru.db until: (1) C1+C2 land and parity harness green, (2) tests/test_auto_promote.py green, (3) C5 confirms --dry-run output matches design's predicted ~2082 score=3 rows, (4) a separate snapshot is taken at ~/guru-backups/guru-<ts>-pre-autopromote.db before any production --apply. The auto_promote.sh wrapper's built-in snapshot is the second safety net, but the operator-initiated pre-test snapshot is the first. C5 is explicitly NOT 'apply to live'; it's 'sanity-check the script against a copy of live'. Production --apply is a separate operator-driven step after the parent ticket merges to main.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/709e9d02",
+    "base_branch": "main",
+    "started_at": "2026-04-26T16:24:09.741Z",
+    "started_by": "Hermes Agent"
+  }
 }
