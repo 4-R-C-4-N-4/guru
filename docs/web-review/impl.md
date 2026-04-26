@@ -114,7 +114,7 @@ pytest tests/
 ```sql
 CREATE TABLE IF NOT EXISTS review_actions (...full DDL from design.md §3...);
 CREATE INDEX IF NOT EXISTS idx_review_actions_unapplied
-  ON review_actions(staged_tag_id) WHERE applied_at IS NULL;
+  ON review_actions(target_id) WHERE applied_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_review_actions_client_id
   ON review_actions(client_action_id);
 CREATE INDEX IF NOT EXISTS idx_staged_tags_status_chunk
@@ -204,14 +204,14 @@ Port `guru/corpus.py:resolve_chunk_path` to TS with two-candidate fallback. LRU 
 - `db.ts` — add `insertReviewAction`, `selectStagedTagExists` to allowlist
 **Logic per design §4.7:**
 1. zod validate body
-2. existence check via ro (404 if `staged_tag_id` missing)
+2. existence check via ro (404 if `target_id` missing)
 3. insert via prepared stmt
 4. catch UNIQUE on `client_action_id` → return success (idempotent)
 5. **never touch `staged_tags` or `edges`**
 **Acceptance:**
 - POST writes a row to `review_actions`
 - Replay same `client_action_id` → 200, no second row
-- Bogus `staged_tag_id` → 404
+- Bogus `target_id` → 404
 - Live `staged_tags` / `edges` row counts unchanged across all the above
 **Verification:**
 ```bash

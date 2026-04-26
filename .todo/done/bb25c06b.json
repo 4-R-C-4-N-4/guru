@@ -1,13 +1,13 @@
 {
   "id": "bb25c06b",
   "type": "refactor",
-  "state": "open",
+  "state": "done",
   "summary": "Rename review_actions.staged_tag_id → target_id (prerequisite for edges-review polymorphism)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:33:30.351Z",
-  "updated_at": "2026-04-26T20:34:07.028Z",
+  "updated_at": "2026-04-26T20:51:50.134Z",
   "files": [
     {
       "path": "docs/web-review/edges.md",
@@ -121,5 +121,17 @@
       "content": "Scope per docs/web-review/edges.md §11 Ticket 0. Single-commit refactor + small migration.\n\nWORK ITEMS:\n\n1. scripts/migrations/v3_002_rename_target_id.sql (NEW): BEGIN; ALTER TABLE review_actions RENAME COLUMN staged_tag_id TO target_id; COMMIT;\n\n2. Take labeled snapshot at ~/guru-backups/guru-<ts>-pre-target-id-rename.db with integrity check before applying migration (use scripts/backup_db.sh pre-target-id-rename).\n\n3. Apply migration to live DB. Confirm canary: SELECT COUNT(*) FROM review_actions returns 104, integrity_check ok.\n\n4. Sed rename across the linked files in two groups:\n   a) True column references (mechanical SQL edits): schema.ts, db.ts, apply.ts route, chunks.ts NOT EXISTS subqueries, parity web_runner.ts, schema.test.ts INSERT strings, cleanup_dupes.sql.\n   b) Alias / response-field / URL-param references (renaming for full Option B consistency): db.ts SELECT alias, apply.ts StagedTag interface, chunks.ts TS types + alias + response, routes/tags.ts URL :staged_tag_id → :target_id, parity web_runner.ts TS interface + fixture access, web client api/types.ts + state/queue.ts.\n\n5. EXCLUDE auto_promote.py:50 — its 'st.id AS staged_tag_id' aliases staged_tags.id (not review_actions). Keep that alias name as-is (or cosmetic-rename to match — operator's call). Documented to prevent accidental sed inclusion.\n\n6. Update fixture: tests/parity/fixtures/decision_sequence.json keys flip from staged_tag_id to target_id in lockstep.\n\n7. Update test assertions: schema.test.ts INSERT strings + any test that grepped for the old name. The other test files (test_promote_definition, test_auto_promote, test_tag_provenance) have zero review_actions refs.\n\n8. Doc updates: design.md (5 sites), impl.md (3 sites), edges.md §12 question 1 already flipped.\n\nACCEPTANCE:\n  - pytest tests/ green (currently 92/92).\n  - vitest in guru-review/server/ green (currently 9/9).\n  - bash tests/parity/orchestrator.sh green (CLI ↔ web row-content equivalence).\n  - sqlite3 data/guru.db 'SELECT COUNT(*) FROM review_actions' returns 104 (unchanged).\n  - sqlite3 data/guru.db 'PRAGMA integrity_check' returns 'ok'.\n  - Pre-migration snapshot exists at ~/guru-backups/guru-<ts>-pre-target-id-rename.db with manifest.\n\nNON-GOALS for this ticket (covered by the edges-review ticket later):\n  - No FK drop. Column still REFERENCES staged_tags(id).\n  - No new target_table or reclassify_to columns.\n  - No polymorphic CHECK constraint.\n  - No edges-review API endpoints or UI.\n  These all live in scripts/migrations/v3_003_edge_review.sql (Ticket A-edges per edges.md §11).",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/bb25c06b",
+    "base_branch": "main",
+    "started_at": "2026-04-26T20:37:07.675Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "0b29032dd8d3e872fc5dd06fcd636cffe5726c12",
+    "resolved_at": "2026-04-26T20:51:50.134Z",
+    "resolved_by": "unknown",
+    "note": "Live migration applied + verified end-to-end. Column rename confirmed (target_id present, no staged_tag_id), integrity_check ok. Web review server rebuilt + restarted; phone session resumed and successfully wrote the renamed column via POST /api/tags/:target_id/action. Edge created at tier=verified per the editorial-overlay rule. Per-device reviewer attribution working (ivy-desktop alongside ivy-android in the audit trail)."
+  }
 }

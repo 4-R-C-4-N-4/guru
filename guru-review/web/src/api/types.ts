@@ -1,5 +1,5 @@
 export interface PendingTag {
-  staged_tag_id: number;
+  target_id: number;
   concept_id: string;
   concept_label: string;
   concept_def: string;
@@ -39,7 +39,7 @@ export interface QueueRow {
   reassign_to: string | null;
   reviewer: string;
   created_at: string;
-  staged_tag_id: number;
+  target_id: number;
   chunk_id: string;
   concept_id: string;
   score: number;

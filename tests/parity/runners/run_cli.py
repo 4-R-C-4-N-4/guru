@@ -29,7 +29,7 @@ def now_iso() -> str:
 
 
 def apply_action(conn: sqlite3.Connection, action: dict) -> None:
-    sid = action["staged_tag_id"]
+    sid = action["target_id"]
     kind = action["action"]
     # Use sqlite3.Row for kw-style access, mirroring review_tags.py's
     # in-loop row dict so the helpers receive the same shape they expect.

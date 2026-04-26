@@ -37,7 +37,7 @@ export function Deck(): React.ReactElement {
     remainingInFilter: 0,
     tagsInFilter: 0,
   });
-  // Per-chunk local action tracking. Map keyed by chunk_id, value is map of staged_tag_id → TagAction.
+  // Per-chunk local action tracking. Map keyed by chunk_id, value is map of target_id → TagAction.
   const [queuedByChunk, setQueuedByChunk] = useState<Record<string, Map<number, TagAction>>>({});
 
   useEffect(() => {
@@ -176,10 +176,10 @@ export function Deck(): React.ReactElement {
   const batchAction = useCallback(
     async (chunk: Chunk, kind: Exclude<ActionKind, 'reassign'>): Promise<void> => {
       const queued = queuedByChunk[chunk.chunk_id] ?? new Map();
-      const remaining = chunk.pending_tags.filter((t) => !queued.has(t.staged_tag_id));
+      const remaining = chunk.pending_tags.filter((t) => !queued.has(t.target_id));
       // Fire sequentially for predictable error handling; small N (1-7 typical).
       for (const t of remaining) {
-        await queueAction(chunk.chunk_id, t.staged_tag_id, kind);
+        await queueAction(chunk.chunk_id, t.target_id, kind);
       }
     },
     [queuedByChunk, queueAction],

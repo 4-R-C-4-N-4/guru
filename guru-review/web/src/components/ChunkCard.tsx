@@ -5,7 +5,7 @@ import { ChunkActions } from './ChunkActions';
 
 interface Props {
   chunk: Chunk;
-  /** map staged_tag_id → queued action (undefined = still pending) */
+  /** map target_id → queued action (undefined = still pending) */
   queued: Map<number, TagAction>;
   onTagAction: (stagedTagId: number, kind: ActionKind, reassign_to?: string) => void;
   onTagUndo: (stagedTagId: number) => void;
@@ -24,7 +24,7 @@ export function ChunkCard({
   onAdvance,
 }: Props): React.ReactElement {
   const [showFullBody, setShowFullBody] = useState(chunk.body.length <= BODY_PREVIEW_LEN);
-  const remaining = chunk.pending_tags.filter((t) => !queued.has(t.staged_tag_id)).length;
+  const remaining = chunk.pending_tags.filter((t) => !queued.has(t.target_id)).length;
   const allDone = remaining === 0;
 
   return (
@@ -60,13 +60,13 @@ export function ChunkCard({
       <div className="space-y-3">
         {chunk.pending_tags.map((tag, i) => (
           <TagRow
-            key={tag.staged_tag_id}
+            key={tag.target_id}
             tag={tag}
             index={i}
             total={chunk.pending_tags.length}
-            queued={queued.get(tag.staged_tag_id)}
-            onAction={(kind, ra) => onTagAction(tag.staged_tag_id, kind, ra)}
-            onUndo={() => onTagUndo(tag.staged_tag_id)}
+            queued={queued.get(tag.target_id)}
+            onAction={(kind, ra) => onTagAction(tag.target_id, kind, ra)}
+            onUndo={() => onTagUndo(tag.target_id)}
           />
         ))}
       </div>

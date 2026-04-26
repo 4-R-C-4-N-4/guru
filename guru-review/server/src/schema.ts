@@ -3,7 +3,7 @@ import type Database from 'better-sqlite3';
 const DDL = `
 CREATE TABLE IF NOT EXISTS review_actions (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
-    staged_tag_id     INTEGER NOT NULL REFERENCES staged_tags(id),
+    target_id     INTEGER NOT NULL REFERENCES staged_tags(id),
     action            TEXT NOT NULL CHECK(action IN ('accept','reject','skip','reassign')),
     reassign_to       TEXT,
     reviewer          TEXT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS review_actions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_review_actions_unapplied
-    ON review_actions(staged_tag_id) WHERE applied_at IS NULL;
+    ON review_actions(target_id) WHERE applied_at IS NULL;
 
 CREATE INDEX IF NOT EXISTS idx_review_actions_client_id
     ON review_actions(client_action_id);
