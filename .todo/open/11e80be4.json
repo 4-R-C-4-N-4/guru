@@ -1,0 +1,55 @@
+{
+  "id": "11e80be4",
+  "type": "bug",
+  "state": "open",
+  "summary": "Silent body truncation in LLM prompts (propose_edges:600 / tag_concepts:1200) degrades model judgments on 76-85% of chunks",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T19:54:57.597Z",
+  "updated_at": "2026-04-26T19:55:22.569Z",
+  "files": [
+    {
+      "path": "scripts/propose_edges.py",
+      "lines": [
+        67,
+        95
+      ]
+    },
+    {
+      "path": "scripts/tag_concepts.py",
+      "commit": "a218dd6f5e5caf52fe501665b6c8ac3c3eabd6ef",
+      "note": "build_prompt:55 — same pattern, body[:1200]"
+    },
+    {
+      "path": "scripts/review_tags.py",
+      "commit": "a218dd6f5e5caf52fe501665b6c8ac3c3eabd6ef",
+      "note": "BODY:    {body[:400]} — display-only, FINE, do not change"
+    }
+  ],
+  "tags": [
+    "bug",
+    "llm",
+    "prompt",
+    "truncation",
+    "quality",
+    "blocker-quality"
+  ],
+  "relationships": {},
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T19:55:22.530Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Empirical chunk distribution (n=2531):\n  mean=2263 chars, median=2660, p90=3534, p99=3825, max=4009.\n  85% of chunks > 600 chars  (truncated by propose_edges build_pair_prompt)\n  76% of chunks > 1200 chars (truncated by tag_concepts build_prompt)\n\nThe truncations are silent — the LLM receives a partial passage, makes its\nPARALLELS/CONTRASTS classification or concept scores on incomplete content,\nand the operator has no signal that information was withheld. propose_edges\nseeing the first 600 chars of a 2660-char passage means the model judges\nsimilarity on ~22% of the actual text — usually intro framing, not the\nsubstantive claim being compared.\n\nToken math under qwen 27B (32K context window):\n  propose_edges full prompt: ~1,900 tokens (2 × 3K-char passages + scaffold + response) → 6% utilization\n  tag_concepts full prompt:  ~1,800 tokens (1 × 3K-char + 44-concept list + response) → 5% utilization\nNo operational reason for the cap; the cost was paid in silently degraded\nmodel judgments on the majority of corpus chunks.\n\nreview_tags.py:48's body[:400] is terminal-display only (the 'BODY:' line in\nthe CLI review row). NOT LLM-facing, leave alone.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-26T19:55:22.569Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Two-part fix:\n\nCORE (must ship):\n  - scripts/propose_edges.py build_pair_prompt: drop both [:600] slices,\n    pass full chunk_a['body'] and chunk_b['body'].\n  - scripts/tag_concepts.py build_prompt: drop the [:1200] slice on\n    chunk_body. Pass it through unmodified.\n  The chunker (scripts/chunk.py + chunking/<tradition>.toml::max_tokens=800)\n  is the single point of truth for how big a passage is. Downstream prompts\n  trust the chunker. Silent caps in prompt builders are sanity guards that\n  rotted into quality regressions.\n\nOPTIONAL (configurability for future tightening):\n  - Add a module-level constant or CLI flag --max-body-chars (default 0 =\n    unlimited; positive = cap). Off by default. Operator can opt into a\n    cap if running against a smaller-context model in the future or if a\n    weird oversize chunk appears.\n\nRegression test: a unit test on each prompt builder that constructs a\nmock chunk of length 5000 chars and asserts the substring shows up in\nthe produced prompt verbatim — would have caught the original bug and\nwill catch any future regression to the slice-and-pray pattern.\n\nOut of scope for this ticket (split off if relevant): existing staged_edges\nrows produced under the [:600] regime were classified against truncated\ncontent. They're at tier='proposed' which already hedges them. Decision on\nwhether to invalidate-and-re-run is operationally heavy and worth its own\nticket if pursued.",
+      "confidence": "high"
+    }
+  ]
+}
