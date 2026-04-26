@@ -1,13 +1,13 @@
 {
   "id": "11e80be4",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "Silent body truncation in LLM prompts (propose_edges:600 / tag_concepts:1200) degrades model judgments on 76-85% of chunks",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T19:54:57.597Z",
-  "updated_at": "2026-04-26T19:55:22.569Z",
+  "updated_at": "2026-04-26T20:00:08.403Z",
   "files": [
     {
       "path": "scripts/propose_edges.py",
@@ -51,5 +51,19 @@
       "content": "Two-part fix:\n\nCORE (must ship):\n  - scripts/propose_edges.py build_pair_prompt: drop both [:600] slices,\n    pass full chunk_a['body'] and chunk_b['body'].\n  - scripts/tag_concepts.py build_prompt: drop the [:1200] slice on\n    chunk_body. Pass it through unmodified.\n  The chunker (scripts/chunk.py + chunking/<tradition>.toml::max_tokens=800)\n  is the single point of truth for how big a passage is. Downstream prompts\n  trust the chunker. Silent caps in prompt builders are sanity guards that\n  rotted into quality regressions.\n\nOPTIONAL (configurability for future tightening):\n  - Add a module-level constant or CLI flag --max-body-chars (default 0 =\n    unlimited; positive = cap). Off by default. Operator can opt into a\n    cap if running against a smaller-context model in the future or if a\n    weird oversize chunk appears.\n\nRegression test: a unit test on each prompt builder that constructs a\nmock chunk of length 5000 chars and asserts the substring shows up in\nthe produced prompt verbatim — would have caught the original bug and\nwill catch any future regression to the slice-and-pray pattern.\n\nOut of scope for this ticket (split off if relevant): existing staged_edges\nrows produced under the [:600] regime were classified against truncated\ncontent. They're at tier='proposed' which already hedges them. Decision on\nwhether to invalidate-and-re-run is operationally heavy and worth its own\nticket if pursued.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/11e80be4",
+    "base_branch": "main",
+    "started_at": "2026-04-26T19:56:45.161Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "0b503f75d8dbf8fcf163aca545b3912e385597d6",
+    "resolved_at": "2026-04-26T20:00:08.403Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_prompt_builders.py",
+    "test_function": "test_pair_prompt_passes_full_body_by_default",
+    "note": "Both prompt builders now pass full chunk bodies to the LLM by default. Optional --max-body-chars N flag exposed in both CLIs (0=unlimited, positive=cap) for future tightening. 8 unit tests guard against regression to the slice-and-pray pattern. 92/92 pytest + parity green."
+  }
 }
