@@ -75,39 +75,72 @@ Note the asymmetry with `staged_tags` review:
 
 Two questions: where do queued edge actions live, and where does the apply transaction live?
 
-**Decision:** extend the existing `review_actions` table with a target column, rather than create a new `review_edge_actions` table. Rationale:
-- Keeps the apply transaction single — one drain, one snapshot scope, one parity-harness fixture pattern, one offline-retry queue.
-- Keeps the audit trail unified: `WHERE reviewer='ivy-phone' AND created_at >= date('now')` answers "what did I review today?" across both surfaces.
-- The schema cost is minor (one nullable column + a CHECK).
+**Decision:** extend the existing `review_actions` table — same drain, same apply transaction, same offline-retry queue, unified audit trail. The schema cost is two new columns + a CHECK. **Plus a column rename** (covered as a prerequisite ticket — see §11) so the column that used to be `staged_tag_id` becomes `target_id`, since under polymorphism it points at either `staged_tags.id` *or* `staged_edges.id`.
 
-### Schema change (additive, idempotent)
+> `review_actions` is the web tool's local queue table — the staging buffer between phone tap and live `edges` write. It is **not** part of the corpus pipeline (chunk → embed → tag → propose_edges → export). Renaming its columns has zero impact on `scripts/propose_edges.py`, `scripts/embed_corpus.py`, `scripts/tag_concepts.py`, or `scripts/export.py`. Those scripts have zero references to `review_actions`. Verified via grep before this design.
+
+### Why the rename is its own ticket
+
+In SQLite, dropping a FK constraint requires the full table-recreate dance (SQLite has no `ALTER TABLE DROP CONSTRAINT`). The polymorphism we want for edges (`target_id` pointing at either staged_tags or staged_edges) means dropping the existing FK to `staged_tags(id)`. That's the table-recreate.
+
+But there are two separable changes in flight: **(a) cosmetic column rename**, **(b) drop FK + add target_table + add reclassify_to**. Doing them as one migration is harder to validate than doing them sequentially. The standalone rename is just `ALTER TABLE … RENAME COLUMN`, and SQLite 3.25+ updates the dependent partial index automatically — trivial to verify. The polymorphism migration then lands as a focused second step that adds columns + recreates the table without the FK + sets up the new CHECK.
+
+### Migration #1: column rename (prerequisite, see Ticket 0 in §11)
 
 ```sql
-ALTER TABLE review_actions ADD COLUMN target_table TEXT NOT NULL DEFAULT 'staged_tags';
--- NULL semantics: existing rows are all staged_tags actions; default
--- backfills them. New rows must declare 'staged_tags' or 'staged_edges'.
-
--- The existing CHECK already covers actions for the staged_tags case
--- (accept/reject/skip/reassign + reassign_to). Edge actions need a
--- different value set:
-ALTER TABLE review_actions ADD COLUMN reclassify_to TEXT;
--- Used iff target_table='staged_edges' AND action='reclassify'.
-
--- A combined CHECK keeps the table coherent without a forking schema.
--- (Conceptual; the actual DDL goes in scripts/migrations/v3_002_edge_review.sql:)
---
---   CHECK (
---     (target_table = 'staged_tags'  AND action IN ('accept','reject','skip','reassign')
---                                    AND reclassify_to IS NULL
---                                    AND ((action='reassign') = (reassign_to IS NOT NULL)))
---     OR
---     (target_table = 'staged_edges' AND action IN ('accept','reject','skip','reclassify')
---                                    AND reassign_to IS NULL
---                                    AND ((action='reclassify') = (reclassify_to IS NOT NULL)))
---   )
+BEGIN TRANSACTION;
+ALTER TABLE review_actions RENAME COLUMN staged_tag_id TO target_id;
+-- SQLite 3.25+ rewrites the partial index `idx_review_actions_unapplied`
+-- to reference the new column name automatically. The FK to
+-- staged_tags(id) is preserved (still a non-polymorphic FK at this
+-- point — polymorphism comes in Migration #2).
+COMMIT;
 ```
 
-`staged_tag_id` becomes a polymorphic FK (the column name stays for backwards compatibility with existing rows; in the staged_edges case the value points at `staged_edges.id`). Cleaner alternatives are nameable but cost more migration churn. The pragmatic call is to keep the column name and document the polymorphism in `db.ts` and the schema fingerprint comment.
+### Migration #2: polymorphism (lands with edge-review)
+
+```sql
+BEGIN TRANSACTION;
+
+-- SQLite has no DROP CONSTRAINT, so to drop the FK we recreate the table.
+CREATE TABLE review_actions_v2 (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    target_id         INTEGER NOT NULL,                 -- polymorphic, no FK
+    target_table      TEXT NOT NULL DEFAULT 'staged_tags'
+                          CHECK(target_table IN ('staged_tags','staged_edges')),
+    action            TEXT NOT NULL CHECK(action IN ('accept','reject','skip','reassign','reclassify')),
+    reassign_to       TEXT,                             -- iff staged_tags + reassign
+    reclassify_to     TEXT,                             -- iff staged_edges + reclassify
+    reviewer          TEXT NOT NULL,
+    client_action_id  TEXT NOT NULL UNIQUE,
+    applied_at        TEXT,
+    error             TEXT,
+    created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    CHECK (
+      (target_table = 'staged_tags'  AND action IN ('accept','reject','skip','reassign')
+                                     AND reclassify_to IS NULL
+                                     AND ((action='reassign') = (reassign_to IS NOT NULL)))
+      OR
+      (target_table = 'staged_edges' AND action IN ('accept','reject','skip','reclassify')
+                                     AND reassign_to IS NULL
+                                     AND ((action='reclassify') = (reclassify_to IS NOT NULL)))
+    )
+);
+INSERT INTO review_actions_v2(id, target_id, target_table, action, reassign_to,
+                              reviewer, client_action_id, applied_at, error, created_at)
+SELECT id, target_id, 'staged_tags', action, reassign_to,
+       reviewer, client_action_id, applied_at, error, created_at
+FROM review_actions;
+DROP TABLE review_actions;
+ALTER TABLE review_actions_v2 RENAME TO review_actions;
+CREATE INDEX idx_review_actions_unapplied
+    ON review_actions(target_id) WHERE applied_at IS NULL;
+CREATE INDEX idx_review_actions_client_id
+    ON review_actions(client_action_id);
+COMMIT;
+```
+
+The two-migration split lets each step be validated independently against a backup before moving on. Migration #1 is reversible by a second RENAME; Migration #2 takes a labeled snapshot first (matches the existing `~/guru-backups` discipline) and is recoverable from that.
 
 ### Apply transaction
 
@@ -238,11 +271,61 @@ So the editorial overlay is in place from day one even though auto-promote-edges
 
 ---
 
-## 11. Implementation plan (two tickets, B-edges before A-edges if A-edges ever ships)
+## 11. Implementation plan (three tickets — Ticket 0 is the rename prerequisite)
+
+### Ticket 0 — rename `review_actions.staged_tag_id` → `target_id` (prerequisite)
+
+Cosmetic column rename, lands before any edge-review code. Audit-trail-preserving (104 existing rows are renamed in place, no data movement). The FK to `staged_tags(id)` is unchanged at this stage; polymorphism comes in Ticket A-edges via the table-recreate dance described in §5 Migration #2.
+
+**Real edit sites (mapped from grep, not estimated):**
+
+- **DB migration:** `scripts/migrations/v3_002_rename_target_id.sql` (new) — `ALTER TABLE review_actions RENAME COLUMN staged_tag_id TO target_id` inside BEGIN/COMMIT. Take a labeled snapshot at `~/guru-backups/guru-<ts>-pre-target-id-rename.db` before running.
+
+- **Server-side TS column references** (must rename — true SQL column reads):
+  - `guru-review/server/src/schema.ts` lines 6, 19 (CREATE TABLE column + partial index column)
+  - `guru-review/server/src/db.ts` lines 52, 66, 137 (INSERT, SELECT, JOIN ON `ra.staged_tag_id = st.id`)
+  - `guru-review/server/src/routes/apply.ts` line 21 (`COUNT(DISTINCT staged_tag_id)`)
+  - `guru-review/server/src/routes/chunks.ts` lines 81, 130, 233 (NOT EXISTS subqueries on `ra.staged_tag_id`)
+  - `guru-review/server/src/parity/web_runner.ts` lines 45, 52 (mirror of the above prepared statements)
+  - `guru-review/server/src/schema.test.ts` lines 77, 85, 91 (INSERT statement strings)
+  - `scripts/cleanup_dupes.sql` line 64 (`AND staged_tag_id IN (…)`)
+
+- **Server-side TS field-name references** (rename for consistency under Option B — these are aliases in SELECT, fields in TS interfaces, and one URL route param):
+  - `guru-review/server/src/db.ts` line 129 (`st.id AS staged_tag_id` — alias for queue-with-context view)
+  - `guru-review/server/src/apply.ts` lines 10, 60 (`StagedTag` interface field + `q.staged_tag_id` after SELECT)
+  - `guru-review/server/src/routes/chunks.ts` lines 45, 122, 194, 213 (TS type field + alias + response field)
+  - `guru-review/server/src/routes/tags.ts` lines 35, 36, 38 (`POST /api/tags/:staged_tag_id/action` URL param + `req.params` access + error string)
+  - `guru-review/server/src/parity/web_runner.ts` lines 15, 82 (TS interface + fixture access)
+
+- **Web client TS references:**
+  - `guru-review/web/src/api/types.ts` lines 2, 42 (`PendingTag` and `QueueRow` interface fields)
+  - `guru-review/web/src/state/queue.ts` lines 15, 55, 80 (`PendingPost` interface, enqueue arg, retry-loop URL fetch path)
+
+- **Python references:**
+  - `tests/parity/runners/run_cli.py` line 32 (`action["staged_tag_id"]` fixture access — fixture JSON keys flip to `target_id` too)
+  - `tests/parity/fixtures/decision_sequence.json` (already has `staged_tag_id` keys per existing fixture; rename in lockstep)
+  - `scripts/auto_promote.py` line 50 — **NOT a rename target.** This is `st.id AS staged_tag_id` against the `staged_tags` table for the candidate dict shape. The table being aliased is `staged_tags` itself, not `review_actions`. Keep the alias name as-is (or rename for cosmetic consistency — call your taste). This site is *adjacent* to the rename, not part of it.
+
+- **Test expectations to update:**
+  - `tests/test_auto_promote.py` — does not reference `review_actions`, no change.
+  - `tests/test_promote_definition.py` — does not reference `review_actions`, no change.
+  - `guru-review/server/src/schema.test.ts` — INSERT statement strings change with the column rename.
+
+- **Doc updates:**
+  - `docs/web-review/design.md` lines 126, 137, 190, 268, plus the `staged_tag_id` mentions in §3.1 / §4 / §10 (≈5 sites).
+  - `docs/web-review/impl.md` lines 117, 207, 214 (≈3 sites).
+  - `docs/web-review/edges.md` — flip §12 question 1 from "keep, document" to "renamed in Ticket 0."
+
+**Acceptance criteria:**
+- `pytest tests/` green (53 → 53; no test count change since no review_actions tests existed at column granularity).
+- Vitest in `guru-review/server/` green (9 → 9).
+- Parity harness (`bash tests/parity/orchestrator.sh`) green; the fixture's `staged_tag_id` keys rename to `target_id` and both shadows still produce identical row content.
+- Live DB integrity check `ok` after the migration; `SELECT COUNT(*) FROM review_actions` returns the same count as before (104 today).
+- `~/guru-backups/guru-<ts>-pre-target-id-rename.db` snapshot exists with manifest before the live migration runs.
 
 ### Ticket A-edges — web edge review (this design)
 
-- [ ] **Schema migration** `scripts/migrations/v3_002_edge_review.sql`: add `target_table` (default 'staged_tags') and `reclassify_to` columns to `review_actions`, plus the polymorphic CHECK constraint. Idempotent.
+- [ ] **Schema migration** `scripts/migrations/v3_003_edge_review.sql`: implements §5 Migration #2 — table-recreate to drop the FK on `target_id` (now polymorphic), add `target_table` and `reclassify_to` columns, install the polymorphic CHECK constraint, recreate the two indexes. Wrapped in BEGIN/COMMIT; preceded by a labeled snapshot at `~/guru-backups/guru-<ts>-pre-edge-review.db`. Depends on Ticket 0 having renamed the column.
 - [ ] **`scripts/review_edges.py`** — extract reusable helpers: `accept_edge(conn, row)`, `reject_edge(conn, row)`, `reclassify_edge(conn, row, new_type)` matching the shape of `reject_tag`/`reassign_tag` introduced in `todo:f21b6baf`. The interactive loop calls them. Drop the `[p]` accept-at-proposed key per §3 — Accept always writes verified. The DELETE-on-reject and DELETE-on-reclassify discipline lands here and mirrors the staged_tags companion ticket.
 - [ ] **`guru-review/server/src/db.ts`** — add prepared statements for the edge dispatch (`insertReviewActionEdge`, `selectStagedEdge`, `deleteEdge` (generic, replaces `deleteExpressesEdge`), `upsertEdge` (generic for any type, replaces `insertOrUpdateEdge`), `updateStagedEdgeStatus`, `updateStagedEdgeType`). Update `web_runner.ts` mirror.
 - [ ] **`guru-review/server/src/apply.ts`** — dispatch on `target_table`. The existing tag branch stays untouched; new edge branch implements Accept / Reject / Reclassify / Skip per §4.
@@ -264,7 +347,7 @@ This is small enough to fold into Ticket A-edges as a sub-step rather than its o
 
 ## 12. Open questions (decide before implementation, not at planning)
 
-1. **Schema column naming.** Keep `staged_tag_id` as a polymorphic FK column (with comment) for migration cheapness, vs. rename to `target_id` (cleaner but invalidates 18+ months of existing review_actions rows). Recommendation: keep, document.
+1. ~~**Schema column naming.**~~ **Resolved — renamed in Ticket 0 (§11) before this design lands.** SQLite's `ALTER TABLE … RENAME COLUMN` is in-place since 3.25 (2018) and preserves all 104 existing audit-trail rows; the dependent partial index updates automatically. The earlier framing of "invalidates existing rows" was wrong — it's a name change, not a data migration. Full rename (column, JSON field, URL param, TS interfaces) lands as the standalone prerequisite ticket; this design assumes `target_id` everywhere.
 2. **`/api/apply/preview` shape.** Does the operator want a unified count (`{queued: 59}`) or a breakdown (`{tags: 47, edges: 12}`)? Recommendation: breakdown, since the apply screen already displays the queue list.
 3. **`surface_only` / `unrelated` reclassify path.** §4 routes them through reject (set status='rejected' + DELETE old edge, no new edge). Alternative: add a `discarded` status value that distinguishes "human classified as not-a-real-relation" from "human said no." More signal, more schema churn. Recommendation: route through reject for v1, lift to a discarded status only if downstream wants the distinction.
 4. **Auto-promote-edges interaction.** When that ticket ships, where does the seam between auto-promote-edges and the editorial overlay live? Same as for staged_tags: auto-promote writes `proposed`, human review writes `verified` and DELETE-retracts on reject. Editorial overlay is already designed for this; no change needed in this ticket.
