@@ -1,0 +1,29 @@
+{
+  "id": "7fd43fe4",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Ticket B/Web: apply.ts mirror of three review-action changes (Accept→verified, Reject DELETE, Reassign DELETE); db.ts deleteExpressesEdge prepared stmt; parity harness retraction-after-autopromote cases",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.523Z",
+  "updated_at": "2026-04-26T16:20:52.581Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/apply.ts"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "human-review",
+    "web-review",
+    "parity-harness",
+    "companion-b"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "f21b6baf"
+    ]
+  }
+}

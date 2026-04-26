@@ -1,0 +1,26 @@
+{
+  "id": "225546a1",
+  "type": "chore",
+  "state": "open",
+  "summary": "Ticket A tests: tests/test_auto_promote.py — score floor, per-row tier mapping, is_new_concept skip, model filter, NOT EXISTS guard, [auto] prefix, dry-run no-write",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.585Z",
+  "updated_at": "2026-04-26T16:20:52.648Z",
+  "files": [
+    {
+      "path": "tests/test_auto_promote.py"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "tests"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "7f3a96a7"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "709e9d02",
+  "type": "feature",
+  "state": "open",
+  "summary": "Auto-promote LLM-tagged staged_tags + rework human review as editorial overlay (RAG signal pipeline)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.456Z",
+  "updated_at": "2026-04-26T16:20:52.789Z",
+  "files": [
+    {
+      "path": "docs/autopromote/design.md"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "rag",
+    "human-review",
+    "editorial-overlay"
+  ],
+  "relationships": {
+    "children": [
+      "f21b6baf",
+      "7fd43fe4",
+      "7f3a96a7",
+      "225546a1",
+      "d272fc08"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T16:20:52.753Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Two coupled changes per docs/autopromote/design.md §11: Ticket A (auto_promote.py tool) ships RAG signal at tier=proposed/inferred without human review; Ticket B (companion) reworks the human review path so Accept always writes verified, and Reject/Reassign DELETE the auto-promoted edges they're correcting. Without B, A's edges can't be retracted by the operator; B-first is the safer landing order. Live DB post-dedupe baseline 2026-04-26: 14296 qwen-pass pending tags (2082 score=3, 7622 score=2, 4592 score=1), 751 Carnice-9b pending (excluded by default --model filter). Auto-promote at default --score 3 should write ~2082 EXPRESSES rows at tier=proposed.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-26T16:20:52.789Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Operator safety constraint (per user directive): NO --apply against data/guru.db until: (1) C1+C2 land and parity harness green, (2) tests/test_auto_promote.py green, (3) C5 confirms --dry-run output matches design's predicted ~2082 score=3 rows, (4) a separate snapshot is taken at ~/guru-backups/guru-<ts>-pre-autopromote.db before any production --apply. The auto_promote.sh wrapper's built-in snapshot is the second safety net, but the operator-initiated pre-test snapshot is the first. C5 is explicitly NOT 'apply to live'; it's 'sanity-check the script against a copy of live'. Production --apply is a separate operator-driven step after the parent ticket merges to main.",
+      "confidence": "high"
+    }
+  ]
+}

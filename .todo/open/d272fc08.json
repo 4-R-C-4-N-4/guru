@@ -1,0 +1,23 @@
+{
+  "id": "d272fc08",
+  "type": "chore",
+  "state": "open",
+  "summary": "Live --dry-run sanity + shadow-DB --apply verification (DO NOT --apply against data/guru.db; take fresh snapshot before any test)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.620Z",
+  "updated_at": "2026-04-26T16:20:52.723Z",
+  "tags": [
+    "autopromote",
+    "validation",
+    "operator"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "7f3a96a7",
+      "225546a1"
+    ]
+  }
+}
