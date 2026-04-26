@@ -19,6 +19,7 @@ export interface PreparedStmts {
   selectStagedTag: Database.Statement;
   ensureConceptNode: Database.Statement;
   insertOrUpdateEdge: Database.Statement;
+  deleteExpressesEdge: Database.Statement;
   updateStagedTagStatus: Database.Statement;
   updateStagedTagConcept: Database.Statement;
   insertReassignedTag: Database.Statement;
@@ -88,6 +89,14 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       VALUES(?, ?, 'EXPRESSES', ?, ?)
       ON CONFLICT(source_id, target_id, type) DO UPDATE SET
         tier=excluded.tier, justification=excluded.justification
+    `),
+
+    // Used by reject + reassign branches to retract auto-promoted edges
+    // before mutating staged_tag state. DELETE is safe on a non-existent
+    // row, so callers don't need to check.
+    deleteExpressesEdge: rw.prepare(`
+      DELETE FROM edges
+      WHERE source_id = ? AND target_id = ? AND type = 'EXPRESSES'
     `),
 
     updateStagedTagStatus: rw.prepare(`

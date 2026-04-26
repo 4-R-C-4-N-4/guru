@@ -77,11 +77,14 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
           // (taxonomy-seeded concepts safe). Pass new_concept_def regardless of
           // is_new_concept — for is_new_concept=0 it's null, harmless.
           stmts.ensureConceptNode.run(conceptNodeId, label, tag.new_concept_def);
-          const tier = tag.score >= 2 ? 'verified' : 'proposed';
+          // Editorial overlay: human accept = verified, full stop. Score
+          // is no longer consulted for tier — that's auto-promote's job.
+          // ON CONFLICT DO UPDATE on the prepared stmt upgrades any prior
+          // auto-promoted 'proposed' or 'inferred' edge to 'verified'.
           stmts.insertOrUpdateEdge.run(
             tag.chunk_id,
             conceptNodeId,
-            tier,
+            'verified',
             tag.justification ?? '',
           );
           stmts.updateStagedTagStatus.run('accepted', q.reviewer, nowIso(), tag.id);
@@ -89,6 +92,12 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
           break;
         }
         case 'reject': {
+          // Retract any auto-promoted edge for this (chunk, concept) pair
+          // before marking rejected. Without this, a rejected row's edge
+          // would stay live in production. DELETE on a non-existent row
+          // is a no-op so this is safe regardless of prior auto-promote
+          // state.
+          stmts.deleteExpressesEdge.run(tag.chunk_id, `concept.${tag.concept_id}`);
           stmts.updateStagedTagStatus.run('rejected', q.reviewer, nowIso(), tag.id);
           break;
         }
@@ -96,6 +105,10 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
           if (!q.reassign_to) {
             throw new Error(`reassign action ${q.id} missing reassign_to`);
           }
+          // Retract the original-concept edge before mutating concept_id.
+          // The new concept's edge will materialize on the next auto-
+          // promote run if the spawned row qualifies.
+          stmts.deleteExpressesEdge.run(tag.chunk_id, `concept.${tag.concept_id}`);
           stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
           stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);
           // Carry parent provenance forward — the spawned row inherits

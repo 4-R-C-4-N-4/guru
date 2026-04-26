@@ -61,9 +61,24 @@ INSERT INTO nodes(id, type, tradition_id, label) VALUES
 -- Pre-existing concept nodes:
 --   gnosis: has a definition → must be preserved by COALESCE on accept
 --   divine_emanation: target of a reassign; has a definition that survives
+--   kenoma / aeons / archon: pre-populated to back the auto-promoted edges
+--     that reject + reassign decisions must retract. Without these nodes,
+--     the FK on edges.target_id would block the seeded edges below.
 INSERT INTO nodes(id, type, label, definition) VALUES
-    ('concept.gnosis', 'concept', 'Gnosis', 'Direct experiential knowledge of the divine.'),
-    ('concept.divine_emanation', 'concept', 'Divine Emanation', 'Pre-existing definition.');
+    ('concept.gnosis',           'concept', 'Gnosis',           'Direct experiential knowledge of the divine.'),
+    ('concept.divine_emanation', 'concept', 'Divine Emanation', 'Pre-existing definition.'),
+    ('concept.kenoma',           'concept', 'Kenoma',           NULL),
+    ('concept.aeons',            'concept', 'Aeons',            NULL),
+    ('concept.archon',           'concept', 'Archon',           NULL);
+
+-- Auto-promoted edges that will be retracted by reject (decision-004) and
+-- reassign (decisions-006/007). Tier='proposed' mimics what auto_promote.py
+-- writes for score>=2 rows. The reject + reassign branches must DELETE these
+-- on both CLI and web sides; compare.py asserts both shadows agree.
+INSERT INTO edges(source_id, target_id, type, tier, justification) VALUES
+    ('gnosticism.gospel-of-thomas.002', 'concept.kenoma', 'EXPRESSES', 'proposed', '[auto] reject must retract'),
+    ('gnosticism.gospel-of-thomas.003', 'concept.aeons',  'EXPRESSES', 'proposed', '[auto] reassign must retract'),
+    ('gnosticism.gospel-of-thomas.003', 'concept.archon', 'EXPRESSES', 'proposed', '[auto] reassign must retract');
 
 -- 7 staged_tags covering every action branch. Explicit ids for reproducibility.
 -- model/prompt_version mimic the production v3 backfill (qwen3.5-27b / v1).
