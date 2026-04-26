@@ -1,0 +1,42 @@
+{
+  "id": "0633fb4a",
+  "type": "bug",
+  "state": "open",
+  "summary": "embed_ollama silently ignores batch_size — loops 1 HTTP request per chunk instead of batching",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T14:11:42.109Z",
+  "updated_at": "2026-04-26T14:11:58.760Z",
+  "files": [
+    {
+      "path": "scripts/embed_corpus.py",
+      "lines": [
+        35,
+        49
+      ]
+    }
+  ],
+  "tags": [
+    "embedding",
+    "performance",
+    "ollama",
+    "bottleneck"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T14:11:58.727Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "embed_corpus.py:194-211 outer loop slices chunks into batch_size groups (default 32 per config/embedding.toml), but embed_ollama (lines 35-49) ignores the array and does 'for text in texts: urlopen(...)' — one sequential HTTP round-trip per chunk. The response field is data['embeddings'] (plural) and the code only takes [0], suggesting the original author knew the API was batch-capable but didn't follow through. Current state: 2531 chunks took ~3-6 minutes when ~30 seconds is achievable with the same model on the same GPU.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-26T14:11:58.760Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Fix is minimal — pass texts (the array) as 'input' instead of looping single strings. Ollama's /api/embed already accepts string OR array; response is array of arrays. New embed_ollama:\n\ndef embed_ollama(texts: list[str], model: str) -> list[list[float]]:\n    payload = json.dumps({'model': model, 'input': texts}).encode()\n    req = urllib.request.Request(\n        'http://localhost:11434/api/embed', data=payload,\n        headers={'Content-Type': 'application/json'})\n    with urllib.request.urlopen(req, timeout=120) as resp:\n        return json.loads(resp.read())['embeddings']\n\nValidation step before relying on it: embed two chunks individually, embed the same two as a batch, assert vectors are float-equal (modulo floating-point tolerance). This avoids a silent correctness regression in case ollama's batching path produces slightly different output than the per-call path. If outputs diverge meaningfully, fall back to per-call but increase HTTP keep-alive / use a session — even that beats the current shape. No re-embed needed if outputs match (same model, same vectors). corpus_metadata.embedding_model tag stays 'ollama/nomic-embed-text'.",
+      "confidence": "high"
+    }
+  ]
+}
