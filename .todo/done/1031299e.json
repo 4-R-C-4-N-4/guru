@@ -1,13 +1,13 @@
 {
   "id": "1031299e",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Phase 1: provenance retrofit + dupe-prevention UNIQUE index (v3 §4.1, v3-impl Phase 1)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T13:33:28.605Z",
-  "updated_at": "2026-04-26T13:33:51.957Z",
+  "updated_at": "2026-04-26T13:49:42.391Z",
   "files": [
     {
       "path": "docs/v3-impl.md",
@@ -48,5 +48,17 @@
       "content": "Migration spec per v3.md §4.1 + v3-impl Phase 1, plus one addition not in the original v3 spec: a partial UNIQUE index on (chunk_id, concept_id, model, prompt_version) WHERE status='pending'. The partial WHERE matters — once a row transitions to accepted/rejected/reassigned it's frozen audit history; UNIQUE only enforced on pending so future re-tags can't dupe within same provenance. This is the structural prevention the v3 spec leaves to discipline. Under the index, re-running tag_concepts.py with the same model/prompt_version produces a SQL error rather than silent dupes. Bench harness, smart sampling, fine-tuning track all DEFERRED — Phase 1 only here. Bench harness build (3-4 days) waits until first actual model comparison. Fine-tune track gated on >=1500 accepted reviews (currently ~20).",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/1031299e",
+    "base_branch": "main",
+    "started_at": "2026-04-26T13:37:26.567Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "8a40a24c79a25f3ece67816d5f5674c354924088",
+    "resolved_at": "2026-04-26T13:49:42.391Z",
+    "resolved_by": "unknown",
+    "note": "Phase 1 of v3 complete. Provenance retrofit shipped: model+prompt_version columns + dual-bucket backfill (qwen3.5-27b for id>=1000, unknown-pre-v3 for id<1000). Partial UNIQUE index on (chunk_id, concept_id, model, prompt_version) WHERE status='pending' mechanically blocks the re-tag dupe class. PROMPT_VERSION constant in guru/prompt.py. tag_concepts/seed_tags/review_tags/web apply.ts all carry provenance through inserts and reassign-spawn. Parity harness asserts equivalence on (model, prompt_version). 53 pytest + parity green. Phase 2 (bench harness) deferred until first real model comparison; Phase 7 (fine-tuning) gated on >=1500 accepted tags."
+  }
 }

@@ -16,8 +16,14 @@ function seedLiveTables(db: Database.Database): void {
   ]) {
     db.exec(`CREATE TABLE ${t} (id INTEGER PRIMARY KEY)`);
   }
-  // staged_tags needs the columns review_actions FK references
-  db.exec("DROP TABLE staged_tags; CREATE TABLE staged_tags (id INTEGER PRIMARY KEY, status TEXT, chunk_id TEXT)");
+  // staged_tags needs the columns review_actions FK references AND the v3
+  // provenance columns the partial UNIQUE index targets.
+  db.exec(
+    "DROP TABLE staged_tags; " +
+    "CREATE TABLE staged_tags (" +
+      "id INTEGER PRIMARY KEY, status TEXT, chunk_id TEXT, " +
+      "concept_id TEXT, model TEXT, prompt_version TEXT)",
+  );
 }
 
 describe('schema', () => {

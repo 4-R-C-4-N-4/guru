@@ -32,13 +32,15 @@ def apply_action(conn: sqlite3.Connection, action: dict) -> None:
     sid = action["staged_tag_id"]
     kind = action["action"]
     row = conn.execute(
-        "SELECT chunk_id, concept_id, score, justification, is_new_concept, new_concept_def "
+        "SELECT chunk_id, concept_id, score, justification, is_new_concept, "
+        "new_concept_def, model, prompt_version "
         "FROM staged_tags WHERE id=?",
         (sid,),
     ).fetchone()
     if row is None:
         raise RuntimeError(f"seed missing staged_tag id={sid}")
-    chunk_id, concept_id, score, justification, _is_new, new_concept_def = row
+    (chunk_id, concept_id, score, justification, _is_new, new_concept_def,
+     model, prompt_version) = row
 
     if kind == "accept":
         promote_to_expresses(
@@ -64,9 +66,12 @@ def apply_action(conn: sqlite3.Connection, action: dict) -> None:
             (new_id, REVIEWER, now_iso(), sid),
         )
         conn.execute(
-            """INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept)
-               VALUES(?,?,?,?,0)""",
-            (chunk_id, new_id, score, f"Reassigned from {concept_id}"),
+            """INSERT INTO staged_tags(chunk_id, concept_id, score,
+                                       justification, is_new_concept,
+                                       model, prompt_version)
+               VALUES(?,?,?,?,0,?,?)""",
+            (chunk_id, new_id, score, f"Reassigned from {concept_id}",
+             model, prompt_version),
         )
     else:
         raise RuntimeError(f"unknown action: {kind}")

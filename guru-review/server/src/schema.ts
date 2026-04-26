@@ -23,6 +23,14 @@ CREATE INDEX IF NOT EXISTS idx_review_actions_client_id
 
 CREATE INDEX IF NOT EXISTS idx_staged_tags_status_chunk
     ON staged_tags(status, chunk_id);
+
+-- v3 Phase 1 partial UNIQUE index: structural prevention against re-tag
+-- duplication within same provenance. Idempotent. The migration script
+-- scripts/migrations/v3_001_provenance.sql adds this on the live DB; this
+-- repeated declaration is for shadow DBs and any future fresh boot.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_tags_provenance_unique
+    ON staged_tags(chunk_id, concept_id, model, prompt_version)
+    WHERE status='pending';
 `;
 
 // Live table fingerprint as of 2026-04-25. Update when upstream schema changes.

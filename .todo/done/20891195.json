@@ -1,13 +1,13 @@
 {
   "id": "20891195",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "P1.3: tag_concepts.py — write model+prompt_version on every staged_tags insert (model from CLI args, prompt_version from guru/prompt.py)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T13:33:28.720Z",
-  "updated_at": "2026-04-26T13:33:34.933Z",
+  "updated_at": "2026-04-26T13:44:05.301Z",
   "files": [
     {
       "path": "scripts/tag_concepts.py"
@@ -25,5 +25,12 @@
       "ec3abd8a",
       "a6a806ef"
     ]
+  },
+  "resolution": {
+    "commit": "a2011781e8e7ac9643edda495682856b18bc1af0",
+    "resolved_at": "2026-04-26T13:44:05.301Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_provenance.py",
+    "note": "upsert_staged_tag writes model+prompt_version. PROMPT_VERSION default from guru.prompt. seed_tags.py stamps qwen3-8b-seed. 6 unit tests cover write+UNIQUE+pending-only behavior. Full suite 53/53 green."
   }
 }

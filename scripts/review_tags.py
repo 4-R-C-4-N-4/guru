@@ -104,7 +104,8 @@ def review_tags(
 
     sql = """
         SELECT st.id, st.chunk_id, n.label, st.concept_id,
-               st.score, st.justification, st.is_new_concept, st.new_concept_def
+               st.score, st.justification, st.is_new_concept, st.new_concept_def,
+               st.model, st.prompt_version
         FROM staged_tags st
         JOIN nodes n ON n.id = st.chunk_id
         WHERE st.status = 'pending'
@@ -187,11 +188,17 @@ def review_tags(
                         "UPDATE staged_tags SET status='reassigned', concept_id=?, reviewed_by=?, reviewed_at=? WHERE id=?",
                         (new_id, REVIEWER, now_iso(), row["id"]),
                     )
-                    # Create a new pending tag for the reassigned concept
+                    # Create a new pending tag for the reassigned concept,
+                    # carrying the parent row's model/prompt_version forward
+                    # so provenance is preserved through the reassign chain.
                     conn.execute(
-                        """INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept)
-                           VALUES(?,?,?,?,0)""",
-                        (row["chunk_id"], new_id, row["score"], f"Reassigned from {row['concept_id']}"),
+                        """INSERT INTO staged_tags(chunk_id, concept_id, score,
+                                                   justification, is_new_concept,
+                                                   model, prompt_version)
+                           VALUES(?,?,?,?,0,?,?)""",
+                        (row["chunk_id"], new_id, row["score"],
+                         f"Reassigned from {row['concept_id']}",
+                         row["model"], row["prompt_version"]),
                     )
                     conn.commit()
                 break

@@ -17,7 +17,8 @@ import sys
 # Columns compared per table (everything else is intentionally excluded).
 COMPARE = {
     "staged_tags": (
-        "chunk_id, concept_id, status, score, justification, is_new_concept, new_concept_def"
+        "chunk_id, concept_id, status, score, justification, is_new_concept, "
+        "new_concept_def, model, prompt_version"
     ),
     "edges": "source_id, target_id, type, tier, justification",
     # nodes: include definition because todo:bdbdccd5 made the CLI populate it

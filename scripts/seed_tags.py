@@ -30,7 +30,7 @@ for tradition in ("gnosticism", "jewish_mysticism"):
             raw = call_ollama("qwen3:8b", SYSTEM_PROMPT, prompt)
             tags = parse_tags(raw)
             for t in tags:
-                upsert_staged_tag(db, chunk_id, t)
+                upsert_staged_tag(db, chunk_id, t, model="qwen3-8b-seed")
             mark_complete(db, chunk_id)
             db.commit()
             print(f"{chunk_id}: {len(tags)} tags")

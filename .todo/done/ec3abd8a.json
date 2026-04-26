@@ -1,0 +1,31 @@
+{
+  "id": "ec3abd8a",
+  "type": "feature",
+  "state": "done",
+  "summary": "P1.1: schema migration — add model+prompt_version cols, backfill, add partial UNIQUE index on (chunk_id, concept_id, model, prompt_version) WHERE status='pending'",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T13:33:28.638Z",
+  "updated_at": "2026-04-26T13:40:21.147Z",
+  "files": [
+    {
+      "path": "scripts/migrations/v3_001_provenance.sql"
+    }
+  ],
+  "tags": [
+    "v3",
+    "phase-1",
+    "migration",
+    "schema"
+  ],
+  "relationships": {
+    "parent": "1031299e"
+  },
+  "resolution": {
+    "commit": "78129f5f7669d3f2afa35208b78ff9a594aadcfa",
+    "resolved_at": "2026-04-26T13:40:21.147Z",
+    "resolved_by": "unknown",
+    "note": "Schema migration applied to data/guru.db. model+prompt_version backfilled split by id<1000 (unknown-pre-v3) vs id>=1000 (qwen3.5-27b). Partial UNIQUE index on (chunk_id, concept_id, model, prompt_version) WHERE status='pending' creates a SQL-level barrier against re-tag dupes within same provenance. Pre-migration snapshot + integrity check + 47/47 tests + parity harness green."
+  }
+}

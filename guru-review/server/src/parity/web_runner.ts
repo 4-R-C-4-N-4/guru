@@ -52,7 +52,7 @@ const stmts = {
     'SELECT id, staged_tag_id, action, reassign_to, reviewer, client_action_id, created_at FROM review_actions WHERE applied_at IS NULL ORDER BY id ASC',
   ),
   selectStagedTag: rw.prepare(
-    'SELECT id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status FROM staged_tags WHERE id = ?',
+    'SELECT id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status, model, prompt_version FROM staged_tags WHERE id = ?',
   ),
   ensureConceptNode: rw.prepare(
     "INSERT INTO nodes(id, type, label, definition) VALUES(?, 'concept', ?, ?) ON CONFLICT(id) DO UPDATE SET definition = COALESCE(nodes.definition, excluded.definition)",
@@ -65,7 +65,7 @@ const stmts = {
   ),
   updateStagedTagConcept: rw.prepare('UPDATE staged_tags SET concept_id=? WHERE id=?'),
   insertReassignedTag: rw.prepare(
-    'INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept) VALUES(?, ?, ?, ?, 0)',
+    'INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept, model, prompt_version) VALUES(?, ?, ?, ?, 0, ?, ?)',
   ),
   markActionApplied: rw.prepare(
     "UPDATE review_actions SET applied_at = strftime('%Y-%m-%dT%H:%M:%SZ','now'), error = ? WHERE id = ?",
