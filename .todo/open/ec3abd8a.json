@@ -1,0 +1,25 @@
+{
+  "id": "ec3abd8a",
+  "type": "feature",
+  "state": "open",
+  "summary": "P1.1: schema migration — add model+prompt_version cols, backfill, add partial UNIQUE index on (chunk_id, concept_id, model, prompt_version) WHERE status='pending'",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T13:33:28.638Z",
+  "updated_at": "2026-04-26T13:33:28.638Z",
+  "files": [
+    {
+      "path": "scripts/migrations/v3_001_provenance.sql"
+    }
+  ],
+  "tags": [
+    "v3",
+    "phase-1",
+    "migration",
+    "schema"
+  ],
+  "relationships": {
+    "parent": "1031299e"
+  }
+}
