@@ -22,6 +22,7 @@ from __future__ import annotations
 import logging
 import sqlite3
 import tomllib
+from contextlib import closing
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -55,7 +56,7 @@ class VectorStore:
     def _ensure_loaded(self) -> None:
         if self._vectors is not None:
             return
-        with sqlite3.connect(self._db_path) as conn:
+        with closing(sqlite3.connect(self._db_path)) as conn, conn:
             rows = conn.execute(
                 "SELECT e.chunk_id, e.dim, e.vector, n.tradition_id, n.label "
                 "FROM chunk_embeddings e "
@@ -102,7 +103,7 @@ class VectorStore:
         API compatibility — everything except `_model` is ignored here
         because nodes+edges carry the canonical metadata."""
         arr = np.asarray(embedding, dtype=np.float32)
-        with sqlite3.connect(self._db_path) as conn:
+        with closing(sqlite3.connect(self._db_path)) as conn, conn:
             conn.execute(
                 "INSERT OR REPLACE INTO chunk_embeddings "
                 "(chunk_id, dim, model, vector) VALUES (?, ?, ?, ?)",
@@ -125,7 +126,7 @@ class VectorStore:
                 self._model_tag(it.get("metadata")),
                 arr.tobytes(),
             ))
-        with sqlite3.connect(self._db_path) as conn:
+        with closing(sqlite3.connect(self._db_path)) as conn, conn:
             conn.executemany(
                 "INSERT OR REPLACE INTO chunk_embeddings "
                 "(chunk_id, dim, model, vector) VALUES (?, ?, ?, ?)",
@@ -210,13 +211,13 @@ class VectorStore:
         return out
 
     def count(self) -> int:
-        with sqlite3.connect(self._db_path) as conn:
+        with closing(sqlite3.connect(self._db_path)) as conn, conn:
             return conn.execute(
                 "SELECT COUNT(*) FROM chunk_embeddings"
             ).fetchone()[0]
 
     def exists(self, chunk_id: str) -> bool:
-        with sqlite3.connect(self._db_path) as conn:
+        with closing(sqlite3.connect(self._db_path)) as conn, conn:
             return conn.execute(
                 "SELECT 1 FROM chunk_embeddings WHERE chunk_id = ? LIMIT 1",
                 (chunk_id,),
@@ -268,7 +269,7 @@ def _chunk_toml_for(chunk_id: str) -> Path | None:
 
 def _concepts_for(db_path: Path, chunk_id: str) -> list[str]:
     """List of concept IDs this chunk expresses, via EXPRESSES edges."""
-    with sqlite3.connect(db_path) as conn:
+    with closing(sqlite3.connect(db_path)) as conn, conn:
         rows = conn.execute(
             "SELECT target_id FROM edges "
             "WHERE source_id = ? AND type = 'EXPRESSES'",
