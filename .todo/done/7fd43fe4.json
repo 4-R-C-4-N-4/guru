@@ -1,13 +1,13 @@
 {
   "id": "7fd43fe4",
   "type": "refactor",
-  "state": "open",
+  "state": "done",
   "summary": "Ticket B/Web: apply.ts mirror of three review-action changes (Accept→verified, Reject DELETE, Reassign DELETE); db.ts deleteExpressesEdge prepared stmt; parity harness retraction-after-autopromote cases",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T16:20:33.523Z",
-  "updated_at": "2026-04-26T16:20:52.581Z",
+  "updated_at": "2026-04-26T16:31:11.007Z",
   "files": [
     {
       "path": "guru-review/server/src/apply.ts"
@@ -25,5 +25,11 @@
     "depends_on": [
       "f21b6baf"
     ]
+  },
+  "resolution": {
+    "commit": "2576bb32516c324d1c4b4a456882244a27b2bb50",
+    "resolved_at": "2026-04-26T16:31:11.007Z",
+    "resolved_by": "unknown",
+    "note": "Editorial-overlay web side complete. apply.ts mirrors C1's three changes (Accept→verified, Reject DELETE, Reassign DELETE-original). db.ts deleteExpressesEdge prepared stmt + web_runner mirror. Parity fixture extended with 3 pre-populated auto-promoted edges that reject/reassign decisions must retract; both shadows agree. 64/64 pytest + parity green."
   }
 }

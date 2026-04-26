@@ -1,0 +1,32 @@
+{
+  "id": "7f3a96a7",
+  "type": "feature",
+  "state": "done",
+  "summary": "Ticket A: scripts/auto_promote.py + scripts/auto_promote.sh wrapper (--score floor, --model filter, dry-run default, --apply opt-in, snapshot+integrity_check before any write)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.555Z",
+  "updated_at": "2026-04-26T16:33:03.175Z",
+  "files": [
+    {
+      "path": "scripts/auto_promote.py"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "rag"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "7fd43fe4"
+    ]
+  },
+  "resolution": {
+    "commit": "95da750de59fad8d38174d50be5a8b0c32b1414c",
+    "resolved_at": "2026-04-26T16:33:03.175Z",
+    "resolved_by": "unknown",
+    "note": "Auto-promote tool ships. --score floor (default 3), --model filter (default Qwen3.5-27B-UD-Q4_K_XL.gguf), --apply opt-in. Tier per-row from score (proposed for 2/3, inferred for 1). NOT EXISTS guard makes re-runs safe and prevents downgrade of verified edges. Bash wrapper handles snapshot+integrity_check before --apply. Live dry-run shows 2,062 score=3 candidates across 10 traditions; no DB writes."
+  }
+}

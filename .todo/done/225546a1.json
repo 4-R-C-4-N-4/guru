@@ -1,0 +1,33 @@
+{
+  "id": "225546a1",
+  "type": "chore",
+  "state": "done",
+  "summary": "Ticket A tests: tests/test_auto_promote.py — score floor, per-row tier mapping, is_new_concept skip, model filter, NOT EXISTS guard, [auto] prefix, dry-run no-write",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.585Z",
+  "updated_at": "2026-04-26T16:34:53.587Z",
+  "files": [
+    {
+      "path": "tests/test_auto_promote.py"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "tests"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "7f3a96a7"
+    ]
+  },
+  "resolution": {
+    "commit": "634ad487f3d0997d3fc3e1ab5a133dc2fd2aa440",
+    "resolved_at": "2026-04-26T16:34:53.587Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_auto_promote.py",
+    "note": "19 unit tests cover the full design §5 contract: score floor, per-row tier mapping, is_new_concept skip, model filter, status filter, NOT EXISTS guard, [auto] prefix, idempotent re-run, staged_tags status untouched, verified tier never assigned. Full suite 83/83 + parity green."
+  }
+}

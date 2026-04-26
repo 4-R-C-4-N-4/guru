@@ -60,6 +60,9 @@ const stmts = {
   insertOrUpdateEdge: rw.prepare(
     "INSERT INTO edges(source_id, target_id, type, tier, justification) VALUES(?, ?, 'EXPRESSES', ?, ?) ON CONFLICT(source_id, target_id, type) DO UPDATE SET tier=excluded.tier, justification=excluded.justification",
   ),
+  deleteExpressesEdge: rw.prepare(
+    "DELETE FROM edges WHERE source_id = ? AND target_id = ? AND type = 'EXPRESSES'",
+  ),
   updateStagedTagStatus: rw.prepare(
     'UPDATE staged_tags SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?',
   ),
