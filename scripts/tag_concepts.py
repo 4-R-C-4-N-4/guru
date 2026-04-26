@@ -44,7 +44,16 @@ For each passage given, score it against every concept definition provided.
 Respond ONLY with a valid JSON array (no markdown, no commentary).
 """
 
-def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict]) -> str:
+def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
+                 max_body_chars: int | None = None) -> str:
+    """Build the per-chunk concept-scoring prompt.
+
+    chunk_body is passed through unmodified by default — the chunker
+    enforces the token budget at chunk creation time and downstream
+    prompts trust that contract. max_body_chars is an optional cap for
+    operators running against a smaller-context model; 0/None = unlimited.
+    """
+    body = chunk_body if not max_body_chars else chunk_body[:max_body_chars]
     concepts_block = "\n".join(
         f'  {{"id": "{c["id"]}", "definition": "{c["definition"]}"}}'
         for c in concepts
@@ -52,7 +61,7 @@ def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict]) -> 
     return f"""\
 Passage ({chunk_citation}):
 \"\"\"
-{chunk_body[:1200]}
+{body}
 \"\"\"
 
 Rate each concept 0-3 for how strongly this passage expresses it:
@@ -209,6 +218,7 @@ def run_tagging(
     tradition: str | None,
     text_id: str | None,
     delay: float,
+    max_body_chars: int | None = None,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
@@ -237,7 +247,7 @@ def run_tagging(
             body = chunk["label"]
 
         citation = chunk["label"]
-        prompt = build_prompt(body, citation, concepts)
+        prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
 
         try:
             raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=6000)
@@ -276,6 +286,11 @@ def main() -> None:
     parser.add_argument("--text")
     parser.add_argument("--delay", type=float, default=0.0,
                         help="Seconds between API calls (rate-limit pacing)")
+    parser.add_argument("--max-body-chars", type=int, default=0,
+                        help="optional cap on chunk body length sent to the LLM. "
+                             "0 (default) = unlimited; the chunker is the source "
+                             "of truth for chunk size. Set positive only if "
+                             "running against a small-context model.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -294,6 +309,7 @@ def main() -> None:
         tradition=args.tradition,
         text_id=args.text,
         delay=args.delay,
+        max_body_chars=args.max_body_chars or None,
     )
 
 

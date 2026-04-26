@@ -64,16 +64,28 @@ You are a comparative religion scholar. Given two passages from different mystic
 traditions, classify their relationship. Respond ONLY with valid JSON.
 """
 
-def build_pair_prompt(chunk_a: dict, chunk_b: dict) -> str:
+def _body_for_prompt(body: str, max_body_chars: int | None) -> str:
+    """Apply optional truncation. None or 0 means unlimited (the chunker
+    already enforces a token budget at chunk creation time, so downstream
+    prompts trust that contract)."""
+    if not max_body_chars:
+        return body
+    return body[:max_body_chars]
+
+
+def build_pair_prompt(chunk_a: dict, chunk_b: dict,
+                      max_body_chars: int | None = None) -> str:
+    body_a = _body_for_prompt(chunk_a["body"], max_body_chars)
+    body_b = _body_for_prompt(chunk_b["body"], max_body_chars)
     return f"""\
 Passage A ({chunk_a['citation']}):
 \"\"\"
-{chunk_a['body'][:600]}
+{body_a}
 \"\"\"
 
 Passage B ({chunk_b['citation']}):
 \"\"\"
-{chunk_b['body'][:600]}
+{body_b}
 \"\"\"
 
 Classify the relationship between these two passages:
@@ -146,6 +158,7 @@ def run_proposals(
     min_similarity: float,
     tradition_filter: str | None,
     delay: float,
+    max_body_chars: int | None = None,
 ) -> None:
     vs = get_vector_store()
     if vs is None:
@@ -194,7 +207,7 @@ def run_proposals(
             chunk_a = {"citation": label, "body": body_a}
             chunk_b = {"citation": nb.get("label", nb_id), "body": body_b}
 
-            prompt = build_pair_prompt(chunk_a, chunk_b)
+            prompt = build_pair_prompt(chunk_a, chunk_b, max_body_chars=max_body_chars)
 
             try:
                 result = call_llm_pair(provider, model, prompt)
@@ -230,6 +243,11 @@ def main() -> None:
     parser.add_argument("--min-similarity", type=float, default=0.75)
     parser.add_argument("--tradition")
     parser.add_argument("--delay", type=float, default=0.5)
+    parser.add_argument("--max-body-chars", type=int, default=0,
+                        help="optional cap on per-passage body length sent to "
+                             "the LLM. 0 (default) = unlimited; the chunker is "
+                             "the source of truth for chunk size. Set positive "
+                             "only if running against a small-context model.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -247,6 +265,7 @@ def main() -> None:
         min_similarity=args.min_similarity,
         tradition_filter=args.tradition,
         delay=args.delay,
+        max_body_chars=args.max_body_chars or None,
     )
 
 
