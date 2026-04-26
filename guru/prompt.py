@@ -11,6 +11,19 @@ if TYPE_CHECKING:
     from guru.preferences import UserPreferences
 
 
+# Provenance version for the tagging-time prompt (scripts/tag_concepts.py:
+# build_prompt and SYSTEM_PROMPT). Bump whenever the tagging prompt template,
+# the score scale, the JSON schema, or the system prompt changes — this is
+# what tells the bench harness and any future fine-tune export whether two
+# tagging runs are comparable.
+#
+# NOTE: this constant governs the tagging prompt in scripts/tag_concepts.py,
+# not the retrieval-side build_prompt() defined further down this module.
+# Those are different prompts for different sides of the pipeline. The
+# constant lives here per docs/v3.md §4.1.
+PROMPT_VERSION = "v1"
+
+
 TIER_LABELS = {
     "verified": "✓ Verified",
     "proposed": "◇ Proposed",
