@@ -7,6 +7,10 @@
     { "target_id": 4, "action": "reject",   "client_action_id": "decision-004" },
     { "target_id": 5, "action": "skip",     "client_action_id": "decision-005", "_note": "no DB write; staged_tag stays pending" },
     { "target_id": 6, "action": "reassign", "client_action_id": "decision-006", "reassign_to": "divine_emanation", "_note": "to existing concept; spawn pending row" },
-    { "target_id": 7, "action": "reassign", "client_action_id": "decision-007", "reassign_to": "free_text_new",    "_note": "to free-text new concept_id; spawn pending row" }
+    { "target_id": 7, "action": "reassign", "client_action_id": "decision-007", "reassign_to": "free_text_new",    "_note": "to free-text new concept_id; spawn pending row" },
+
+    { "target_id": 1, "target_table": "staged_edges", "action": "accept",     "client_action_id": "decision-edge-001", "_note": "PARALLELS upserted at tier=verified" },
+    { "target_id": 2, "target_table": "staged_edges", "action": "reject",     "client_action_id": "decision-edge-002", "_note": "Pre-seeded CONTRASTS edge must be DELETEd; status=rejected, tier preserved" },
+    { "target_id": 3, "target_table": "staged_edges", "action": "reclassify", "reclassify_to": "CONTRASTS", "client_action_id": "decision-edge-003", "_note": "DELETE old PARALLELS edge, upsert new CONTRASTS at verified" }
   ]
 }

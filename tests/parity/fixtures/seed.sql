@@ -111,3 +111,19 @@ INSERT INTO staged_tags(id, chunk_id, concept_id, score, justification, is_new_c
     (5, 'gnosticism.gospel-of-thomas.002', 'pleroma',    3, 'skip me — stays pending',         0, NULL,                     'Qwen3.5-27B-UD-Q4_K_XL.gguf', 'v1'),
     (6, 'gnosticism.gospel-of-thomas.003', 'aeons',      2, 'reassign to existing concept',   0, NULL,                     'Qwen3.5-27B-UD-Q4_K_XL.gguf', 'v1'),
     (7, 'gnosticism.gospel-of-thomas.003', 'archon',     1, 'reassign to free-text new',      0, NULL,                     'Qwen3.5-27B-UD-Q4_K_XL.gguf', 'v1');
+
+-- Pass C — 3 staged_edges covering each editorial-overlay action branch.
+-- (Pair source/target chunks differ across rows so the UNIQUE(source_chunk,
+-- target_chunk) constraint is satisfied.)
+INSERT INTO staged_edges(id, source_chunk, target_chunk, edge_type, confidence, justification) VALUES
+    (1, 'gnosticism.gospel-of-thomas.001', 'gnosticism.gospel-of-thomas.002', 'PARALLELS', 0.85, 'edge-accept verified'),
+    (2, 'gnosticism.gospel-of-thomas.001', 'gnosticism.gospel-of-thomas.003', 'CONTRASTS', 0.55, 'edge-reject must retract auto-promoted'),
+    (3, 'gnosticism.gospel-of-thomas.002', 'gnosticism.gospel-of-thomas.003', 'PARALLELS', 0.72, 'edge-reclassify PARALLELS→CONTRASTS');
+
+-- Pre-existing live edges that the reject + reclassify branches must DELETE.
+-- These mimic auto_promote_edges output (tier='proposed'). Without them, the
+-- DELETE-retraction branches would no-op and parity wouldn't differentiate
+-- between "deleted nothing" and "deleted correctly."
+INSERT INTO edges(source_id, target_id, type, tier, justification) VALUES
+    ('gnosticism.gospel-of-thomas.001', 'gnosticism.gospel-of-thomas.003', 'CONTRASTS', 'proposed', '[auto] edge-reject must retract'),
+    ('gnosticism.gospel-of-thomas.002', 'gnosticism.gospel-of-thomas.003', 'PARALLELS', 'proposed', '[auto] edge-reclassify must retract old type');
