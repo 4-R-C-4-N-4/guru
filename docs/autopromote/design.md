@@ -6,7 +6,7 @@
 
 ---
 
-## 1. Conceptual shift: tier as confidence, not review-provenance
+## 1. Tier semantics — `verified` stays behind the human gate
 
 Today's `edges.tier` semantics are mixed:
 
@@ -16,17 +16,21 @@ Today's `edges.tier` semantics are mixed:
 | `proposed` | human-reviewed AND model said score=1 |
 | `inferred` | auto-derived structural (e.g. `BELONGS_TO` from chunk metadata) |
 
-The tier field is consumed by the RAG layer and rendered to users via `guru/prompt.py:TIER_LABELS` (✓ Verified / ◇ Proposed / ~ Inferred) and `TIER_HEDGE`. **What the consumer cares about is association confidence, not who reviewed it.** Auto-promote leans on that: tier becomes the union of confidence signal regardless of review path.
+The tier field is consumed by the RAG layer and rendered to users via `guru/prompt.py:TIER_LABELS` (✓ Verified / ◇ Proposed / ~ Inferred) and `TIER_HEDGE`.
 
-The shift is small in code but worth naming explicitly:
+**Auto-promote will not write `verified`.** That tier is the load-bearing trust signal: a human curator staked their name on it. Even at score=3, the model alone hasn't earned that label — spot-checks aren't full review, and the UI's ✓ should mean what it says. Auto-promote stays one rung down regardless of how confident the model is.
 
-| tier | new meaning (after auto-promote ships) |
+The post-auto-promote tier picture:
+
+| tier | meaning |
 |---|---|
-| `verified` | high-confidence claim — score=3 from a trusted model **OR** human-accepted at score≥2 |
-| `proposed` | medium-confidence claim — score=2 from a trusted model **OR** human-accepted at score=1 |
-| `inferred` | low-confidence / structural — `BELONGS_TO` (auto-bootstrapped) **OR** score=1 if the operator explicitly opts in |
+| `verified` | **human-reviewed only.** A reviewer accepted the row through `review_tags.py` or the web review tool. Score doesn't matter — what matters is that a human signed off. |
+| `proposed` | model-asserted at score≥2 (not yet reviewed) **OR** human-accepted at score=1. "Solid signal, but not human-curated." |
+| `inferred` | auto-derived structural (`BELONGS_TO`) **OR** model-asserted at score=1 (only if the operator explicitly opts in). "Weakest signal, treat with most hedge." |
 
-This re-uses the existing tier set rather than adding a fourth ("auto-proposed", "machine-tagged"). Three tiers are already in the schema, the UI, and operator muscle memory; multiplying them solves nothing.
+This re-uses the existing tier set rather than adding a fourth. Three tiers are already in the schema, the UI, and operator muscle memory; multiplying them solves nothing — and the existing tier names already mean what we want them to mean *if* `verified` retains its human-gate semantics.
+
+A side benefit: if a future audit wants to know "what edges has a human looked at?", the answer is `WHERE tier = 'verified'`. That query stops being meaningful the moment auto-promote starts writing `verified`.
 
 ---
 
@@ -52,17 +56,22 @@ auto_promote.py [--score N] [--model M] [--dry-run | --apply] [--db PATH]
 
 ## 3. Score → tier mapping (per-row)
 
-When `--score N` is set, every row with `score >= N` is promoted, but the tier each row receives depends on **its own score**:
+`--score N` is the *floor* — only rows with `score >= N` are eligible for promotion. The tier each promoted row receives depends on **its own score**, not the floor:
 
 | row score | tier assigned on promotion |
 |---|---|
-| 3 | `verified` |
+| 3 | `proposed` |
 | 2 | `proposed` |
-| 1 | `inferred` (only if `--score 1` is passed) |
+| 1 | `inferred` (only reached if `--score 1` is passed) |
 
-So `--score 3` produces only `verified`-tier edges. `--score 2` produces a mix of `verified` (from score=3 rows) and `proposed` (from score=2 rows). The flag is the *floor*, not the *target tier* — the tier matches the row's evidence.
+`verified` is intentionally absent — auto-promote never writes that tier (see §1). To get a `verified` edge, a human has to accept the row through the normal review path, where `review_tags.promote_to_expresses` already has `ON CONFLICT DO UPDATE SET tier=excluded.tier` — so a human accept upgrades any prior auto-promoted `proposed` or `inferred` edge to `verified` automatically.
 
-This keeps the meaning of each tier coherent across the auto-promote and human-review paths: a `verified` edge means "the model said score 3 and either no human disagreed or a human upgraded it from a previous tier." A `proposed` edge means score=2-equivalent. A `inferred` edge means score=1 or structural. Same downstream consumer logic, regardless of how the edge got there.
+Concretely with the live qwen-pass pool:
+- `--score 3` (default) → 2,082 rows → 2,082 new `proposed` edges
+- `--score 2` → 9,704 rows → 9,704 new `proposed` edges
+- `--score 1` → 14,296 rows → 9,704 `proposed` + 4,592 `inferred` edges
+
+The operator picks the floor based on appetite. The tier rule stays fixed: model-only signal is at most `proposed`.
 
 ---
 
@@ -98,7 +107,7 @@ SELECT
     'concept.' || st.concept_id,
     'EXPRESSES',
     CASE st.score
-        WHEN 3 THEN 'verified'
+        WHEN 3 THEN 'proposed'
         WHEN 2 THEN 'proposed'
         WHEN 1 THEN 'inferred'
     END AS tier,
@@ -139,7 +148,10 @@ ON CONFLICT(id) DO UPDATE SET
 
 Auto-promote does **not** mark rows as `accepted`. `staged_tags.status` stays `pending`. Rationale:
 
-- A future human review pass can still upgrade an `inferred` or `proposed` edge to `verified` by accepting the staged_tag through the normal path. `review_tags.promote_to_expresses` uses `ON CONFLICT DO UPDATE`, so a human accept at score=3 will upgrade an `inferred` edge that auto-promote left at `proposed`.
+- A future human review pass can still upgrade an auto-promoted `proposed` (or `inferred`) edge by accepting the staged_tag through the normal path. `review_tags.promote_to_expresses` uses `ON CONFLICT DO UPDATE`, so a human accept overwrites the auto-promoted tier with whatever tier the human-review path computes.
+
+  ⚠ **Companion change worth considering:** today `review_tags.promote_to_expresses` writes `tier = 'verified' if score >= 2 else 'proposed'`. Under the new "`verified` = human-reviewed, full stop" semantic, that score check should drop — *any* human accept should write `verified`, because the load-bearing distinction is "did a human sign off?" not "did a human sign off AND was the model also confident?"
+  This is a small change (`review_tags.py` line 78 + the equivalent line in the web tool's `apply.ts`) but it's a separate behaviour change from auto-promote and should be its own ticket. Without it, the human-review path can write `proposed` for accepted score=1 rows, which then can't be distinguished from auto-promoted score≥2 rows by tier alone — defeating the audit query "what's been human-reviewed?".
 - The staged_tags pool remains the canonical "what's been generated" record. Reviewers can query `WHERE status='pending'` to see what's untouched by humans, regardless of what auto-promote did to `edges`.
 
 The downside: the web review tool will keep surfacing rows whose `(chunk, concept)` pair already has an auto-promoted edge. Two ways to handle this when it becomes annoying:
@@ -173,12 +185,13 @@ auto-promote dry run
   candidate rows:   2,082
   already in edges: 0
   would-promote:    2,082
-  by tier:          verified=2,082  proposed=0  inferred=0
+  by tier:          proposed=2,082  inferred=0
   by tradition:     gnosticism=N  Christian Mysticism=N  ...
-  sample row:       gnosticism.gospel-of-thomas.001 → concept.gnosis (score=3 → verified)
+  sample row:       gnosticism.gospel-of-thomas.001 → concept.gnosis (score=3 → proposed)
                     "[auto] The passage explicitly equates finding interpretation with..."
 
 (no DB writes — re-run with --apply to commit)
+(verified tier is reserved for human-reviewed edges; this run will not write any.)
 ```
 
 The "by tradition" breakdown helps catch obvious skew (e.g. one tradition contributes 80% of promotions — might be over-tagged).
@@ -226,5 +239,6 @@ When this lands as a ticket:
   - dry-run produces summary, no writes
 - [ ] One real-DB sanity run via `--dry-run` to confirm count matches the design's prediction (~2,082 score=3 rows post-cleanup)
 - [ ] No changes to `schema/corpus-schema.sql` — auto-promote is purely additive content into `edges`. Schema-drift CI stays green; export.py picks up the new edges automatically; `corpus_metadata.corpus_version` increments naturally on next export.
+- [ ] **Optional companion ticket** (separate, but should land before/with auto-promote to keep tier semantics clean): update `review_tags.promote_to_expresses` and the web tool's apply.ts so any human accept writes `tier='verified'` (drop the `score >= 2` predicate). Re-aligns `verified` with "human-reviewed, full stop." Parity harness fixture and `test_promote_definition.py` will need their tier-assertion updates in the same change.
 
-Acceptance: `--apply` writes ~2k EXPRESSES rows at tier='verified' to `data/guru.db::edges`, none of them downgrade pre-existing edges, and `pytest` + parity harness stay green.
+Acceptance: `--apply` writes ~2k EXPRESSES rows at tier='proposed' to `data/guru.db::edges`, no row downgrades a pre-existing edge, `--dry-run` is the default with a numeric summary, `pytest` + parity harness stay green.
