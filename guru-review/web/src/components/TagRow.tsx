@@ -20,11 +20,14 @@ interface Props {
   onUndo: () => void;
 }
 
+// reclassify never appears on staged_tags (CHECK constraint forbids it),
+// but the union covers it for completeness.
 const VERB: Record<ActionKind, string> = {
   accept: '✓ accepted',
   reject: '✗ rejected',
   skip: '↪ skipped',
   reassign: '⤳ reassigned',
+  reclassify: '⤳ reclassified',
 };
 
 const VERB_COLOR: Record<ActionKind, string> = {
@@ -32,6 +35,7 @@ const VERB_COLOR: Record<ActionKind, string> = {
   reject: 'text-rose-400',
   skip: 'text-zinc-500',
   reassign: 'text-amber-400',
+  reclassify: 'text-amber-400',
 };
 
 export function TagRow({ tag, index, total, queued, onAction, onUndo }: Props): React.ReactElement {
