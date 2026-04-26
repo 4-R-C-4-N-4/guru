@@ -1,13 +1,13 @@
 {
   "id": "0633fb4a",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "embed_ollama silently ignores batch_size — loops 1 HTTP request per chunk instead of batching",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T14:11:42.109Z",
-  "updated_at": "2026-04-26T14:11:58.760Z",
+  "updated_at": "2026-04-26T14:14:31.232Z",
   "files": [
     {
       "path": "scripts/embed_corpus.py",
@@ -38,5 +38,19 @@
       "content": "Fix is minimal — pass texts (the array) as 'input' instead of looping single strings. Ollama's /api/embed already accepts string OR array; response is array of arrays. New embed_ollama:\n\ndef embed_ollama(texts: list[str], model: str) -> list[list[float]]:\n    payload = json.dumps({'model': model, 'input': texts}).encode()\n    req = urllib.request.Request(\n        'http://localhost:11434/api/embed', data=payload,\n        headers={'Content-Type': 'application/json'})\n    with urllib.request.urlopen(req, timeout=120) as resp:\n        return json.loads(resp.read())['embeddings']\n\nValidation step before relying on it: embed two chunks individually, embed the same two as a batch, assert vectors are float-equal (modulo floating-point tolerance). This avoids a silent correctness regression in case ollama's batching path produces slightly different output than the per-call path. If outputs diverge meaningfully, fall back to per-call but increase HTTP keep-alive / use a session — even that beats the current shape. No re-embed needed if outputs match (same model, same vectors). corpus_metadata.embedding_model tag stays 'ollama/nomic-embed-text'.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/0633fb4a",
+    "base_branch": "main",
+    "started_at": "2026-04-26T14:12:39.734Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9f3886373b08257c9ac486a039825caf04749305",
+    "resolved_at": "2026-04-26T14:14:31.232Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_embed_corpus.py",
+    "test_function": "test_batched_embed_makes_one_http_call",
+    "note": "embed_ollama now batches /api/embed inputs in a single HTTP call. Bit-identical output vs per-call (verified live: max_abs_diff=0). 3.5x speedup measured on 32 real chunks. No re-embed needed. 4 regression tests in tests/test_embed_corpus.py guard the batched shape."
+  }
 }
