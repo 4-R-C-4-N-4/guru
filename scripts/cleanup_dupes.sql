@@ -14,19 +14,15 @@
 --   Net: pending pool 15,263 → ~15,035 (≈228 rows removed).
 --
 -- ----------------------------------------------------------------------------
--- DRY RUN BY DEFAULT — the script ends in ROLLBACK so it can be safely run
--- to preview impact. To actually apply the changes, change the final
--- ROLLBACK; line to COMMIT;.
+-- DRY RUN BY DEFAULT — the script ends in ROLLBACK so this file is always
+-- safe to run by hand. To commit, use the wrapper:
 --
--- Before committing for real:
---   1. Read the safety-check row at the top — if it reports any conflicts,
---      ABORT and resolve those review_actions first.
---   2. Take a snapshot per ~/guru-backups discipline:
---        sqlite3 data/guru.db ".backup ~/guru-backups/guru-$(date +%Y%m%dT%H%M%SZ)-pre-dedupe.db"
+--   scripts/cleanup_dupes.sh             # dry-run (this file unchanged)
+--   scripts/cleanup_dupes.sh --apply     # snapshot + sed ROLLBACK→COMMIT
 --
--- Usage:
---   sqlite3 data/guru.db < scripts/cleanup_dupes.sql        # dry-run
---   # … inspect output, satisfied? Edit the file, change ROLLBACK to COMMIT, re-run.
+-- Before --apply, read the safety-check row at the top. A non-zero
+-- queued_action_conflicts means: handle those queued review_actions first
+-- (apply or DELETE /api/queue) before re-running with --apply.
 -- ============================================================================
 
 PRAGMA foreign_keys = ON;
