@@ -1,0 +1,29 @@
+{
+  "id": "d272fc08",
+  "type": "chore",
+  "state": "done",
+  "summary": "Live --dry-run sanity + shadow-DB --apply verification (DO NOT --apply against data/guru.db; take fresh snapshot before any test)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T16:20:33.620Z",
+  "updated_at": "2026-04-26T16:35:55.002Z",
+  "tags": [
+    "autopromote",
+    "validation",
+    "operator"
+  ],
+  "relationships": {
+    "parent": "709e9d02",
+    "depends_on": [
+      "7f3a96a7",
+      "225546a1"
+    ]
+  },
+  "resolution": {
+    "commit": "4b015642a473326c82235d0c53b5246cde618ce1",
+    "resolved_at": "2026-04-26T16:35:55.002Z",
+    "resolved_by": "unknown",
+    "note": "Live --dry-run + shadow --apply validation green. Pre-test snapshot at ~/guru-backups/guru-20260426T163503Z-pre-autopromote-test.db (24M, integrity ok). Live --dry-run reports 2,062 score=3 candidates across 10 traditions. Shadow --apply inserts 2,062 proposed-tier EXPRESSES edges; second --apply on the same shadow inserts 0 (idempotent). Live DB state unchanged across the entire validation: 2,627 edges, 89 verified, 5 proposed, 0 inferred, 97 accepted staged_tags. Production --apply is the operator's separate decision; auto_promote.sh handles the snapshot + integrity_check before the live commit when they're ready."
+  }
+}
