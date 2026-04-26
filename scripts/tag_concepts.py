@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 from guru.corpus import resolve_chunk_path  # noqa: E402
+from guru.prompt import PROMPT_VERSION  # noqa: E402
 
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
@@ -157,11 +158,27 @@ def get_chunks(conn: sqlite3.Connection,
     return [{"id": r[0], "label": r[1], "meta": json.loads(r[2])} for r in rows]
 
 
-def upsert_staged_tag(conn: sqlite3.Connection, chunk_id: str, tag: dict) -> None:
+def upsert_staged_tag(
+    conn: sqlite3.Connection,
+    chunk_id: str,
+    tag: dict,
+    model: str,
+    prompt_version: str = PROMPT_VERSION,
+) -> None:
+    """Insert a staged_tag with provenance.
+
+    With the partial UNIQUE on (chunk_id, concept_id, model, prompt_version)
+    WHERE status='pending', re-running this for the same chunk under the
+    same provenance is a no-op via ON CONFLICT DO NOTHING. Re-tagging
+    under a *different* model/prompt_version produces a separate row,
+    distinguishable by provenance — that's intentional, the bench
+    harness/training-data export filters on these columns.
+    """
     conn.execute(
         """INSERT INTO staged_tags
-               (chunk_id, concept_id, score, justification, is_new_concept, new_concept_def)
-           VALUES (?, ?, ?, ?, ?, ?)
+               (chunk_id, concept_id, score, justification, is_new_concept,
+                new_concept_def, model, prompt_version)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)
            ON CONFLICT DO NOTHING""",
         (
             chunk_id,
@@ -170,6 +187,8 @@ def upsert_staged_tag(conn: sqlite3.Connection, chunk_id: str, tag: dict) -> Non
             tag["justification"],
             1 if tag["is_new_concept"] else 0,
             tag.get("new_concept_def"),
+            model,
+            prompt_version,
         ),
     )
 
@@ -225,7 +244,7 @@ def run_tagging(
             tags = parse_tags(raw)
 
             for tag in tags:
-                upsert_staged_tag(conn, chunk_id, tag)
+                upsert_staged_tag(conn, chunk_id, tag, model=model)
 
             mark_complete(conn, chunk_id)
             conn.commit()
