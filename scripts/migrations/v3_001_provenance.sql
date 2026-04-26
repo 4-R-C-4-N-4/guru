@@ -9,13 +9,15 @@
 -- failure aborts before COMMIT.
 --
 -- Backfill rationale (post-dedupe analysis 2026-04-26):
---   id  < 1000 → 'unknown-pre-v3' — the early less-tuned LLM era. Known
---                quality issues (had ~13 malformed rows; 216 dupes of newer
---                tags removed). Marking these explicitly so future fine-tune
---                training-data exports can filter them out without forensic
---                work.
---   id >= 1000 → 'qwen3.5-27b'   — the production tagger run. Uniform
---                quality post-dedupe.
+--   id  < 1000 → 'Carnice-9b'   — early Carnice 9b run (qwen 9b finetune).
+--                Known quality issues (~13 malformed rows; 216 dupes of
+--                newer tags removed in cleanup_dupes). Marking explicitly
+--                so future fine-tune training-data exports can filter out
+--                without forensic work. (Initially backfilled as
+--                'Carnice-9b'; renamed to 'Carnice-9b' same day per
+--                operator confirmation.)
+--   id >= 1000 → 'qwen3.5-27b'  — production tagger run. Uniform quality
+--                post-dedupe.
 --
 -- Partial UNIQUE rationale: only enforce on status='pending'. Once a row
 -- transitions to accepted/rejected/reassigned it is frozen audit history;
@@ -43,7 +45,7 @@ ALTER TABLE staged_tags ADD COLUMN prompt_version TEXT;
 -- ----- backfill, split by id range -----------------------------------------
 
 UPDATE staged_tags
-   SET model = 'unknown-pre-v3', prompt_version = 'v1'
+   SET model = 'Carnice-9b', prompt_version = 'v1'
  WHERE id < 1000 AND model IS NULL;
 
 UPDATE staged_tags
