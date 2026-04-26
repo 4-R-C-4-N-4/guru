@@ -1,0 +1,28 @@
+{
+  "id": "4794b5ad",
+  "type": "feature",
+  "state": "open",
+  "summary": "C5: server routes — new /api/edges*: GET /api/edges (paginated, filtered, two-chunk enriched), GET /api/edges/:id, POST /api/edges/:id/action. Extend /api/queue render for staged_edges rows.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.234Z",
+  "updated_at": "2026-04-26T20:54:08.312Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/edges.ts"
+    }
+  ],
+  "tags": [
+    "edges",
+    "server",
+    "api",
+    "routes"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "c37abee8"
+    ]
+  }
+}

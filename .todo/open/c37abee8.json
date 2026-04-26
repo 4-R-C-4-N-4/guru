@@ -1,0 +1,29 @@
+{
+  "id": "c37abee8",
+  "type": "feature",
+  "state": "open",
+  "summary": "C4: server db.ts + apply.ts — polymorphic prepared stmts (insertReviewActionEdge, selectStagedEdge, generic deleteEdge/upsertEdge, updateStagedEdgeStatus/Type) + apply transaction dispatch on target_table",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.199Z",
+  "updated_at": "2026-04-26T20:54:08.281Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/apply.ts"
+    }
+  ],
+  "tags": [
+    "edges",
+    "server",
+    "apply",
+    "db.ts"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "1426251a",
+      "90c79a3f"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "659b7664",
+  "type": "feature",
+  "state": "open",
+  "summary": "Edge review web extension (Pass C — staged_edges via the web tool, parallel to staged_tags)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.066Z",
+  "updated_at": "2026-04-26T20:54:08.548Z",
+  "files": [
+    {
+      "path": "docs/web-review/edges.md"
+    }
+  ],
+  "tags": [
+    "web-review",
+    "edges",
+    "edge-review",
+    "umbrella",
+    "multi-phase"
+  ],
+  "relationships": {
+    "children": [
+      "a8a1e876",
+      "1426251a",
+      "90c79a3f",
+      "c37abee8",
+      "4794b5ad",
+      "caf23a37",
+      "327c934f",
+      "f2d0ff77"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T20:54:08.515Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Source spec: docs/web-review/edges.md (354 lines, 12 sections). Prerequisite Ticket 0 (rename review_actions.staged_tag_id → target_id) merged 2026-04-26 in commit 99d9ccf — column is now target_id everywhere, polymorphism design is unblocked. Live state: review_actions has 100 rows (98 applied today, 0 queued), edges table has 2627+ rows of which 89 verified / 5 proposed / 0 inferred. The web review tool is operational on phone over tailscale; edge-review extension reuses its infrastructure (snapshot, prepared stmts, apply transaction, parity harness, retry queue, PWA shell). propose_edges runs are populating staged_edges; CLI review_edges.py is the only review path today. 2 PARALLELS edges accepted lifetime — operational gap that motivates this work.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-26T20:54:08.548Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "8 children with critical path C1 → C2 → C3 → C4 → C5 → C6 → C7 → C8. C1 first (CLI editorial-overlay alignment) decouples from rest. C2 (schema migration) is a single .sql, validates on shadow before live. C3 (CLI helpers + tests) mirrors review_tags.py editorial overlay (todo:f21b6baf). C4-C5 (server) extend apply transaction with target_table dispatch + new /api/edges* routes. C6 (web UI) reuses HeaderBar/StatsDrawer/retry-queue, adds EdgeCard's two-passage layout. C7 (parity) extends seed.sql + fixture decisions to cover the 3 edge action branches. C8 (operator) handles live migration + server restart + phone smoke-test, mirrors the bb25c06b operator handoff pattern: stop server → snapshot → migrate → rebuild → restart. NON-GOALS: auto-promote-edges (deferred to autopromote design.md §10 and edges.md §10). All 8 land on a single umbrella branch todo/659b7664 — single --no-ff merge to main when complete. Live --apply step is operator-driven; agent stops at C7 green and hands off C8.",
+      "confidence": "high"
+    }
+  ]
+}

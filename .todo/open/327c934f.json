@@ -1,0 +1,28 @@
+{
+  "id": "327c934f",
+  "type": "chore",
+  "state": "open",
+  "summary": "C7: parity harness extension — seed.sql gains 3 staged_edges rows (accept-verified / reject-with-pre-existing-edge-DELETE / reclassify-PARALLELS-to-CONTRASTS); decision_sequence.json gets edge actions; apply_edge_action in run_cli.py mirrored in web_runner.ts. compare.py already covers edges row-content.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.298Z",
+  "updated_at": "2026-04-26T20:54:08.414Z",
+  "files": [
+    {
+      "path": "tests/parity/fixtures/seed.sql"
+    }
+  ],
+  "tags": [
+    "edges",
+    "parity-harness",
+    "tests"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "90c79a3f",
+      "c37abee8"
+    ]
+  }
+}

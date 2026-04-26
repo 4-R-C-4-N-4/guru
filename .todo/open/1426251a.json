@@ -1,0 +1,28 @@
+{
+  "id": "1426251a",
+  "type": "feature",
+  "state": "open",
+  "summary": "C2: schema migration v3_003 — table-recreate review_actions: drop FK on target_id (now polymorphic), add target_table + reclassify_to + polymorphic CHECK. Recreate indexes.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.130Z",
+  "updated_at": "2026-04-26T20:54:08.179Z",
+  "files": [
+    {
+      "path": "scripts/migrations/v3_003_edge_review.sql"
+    }
+  ],
+  "tags": [
+    "edges",
+    "schema",
+    "migration",
+    "polymorphic-fk"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "a8a1e876"
+    ]
+  }
+}
