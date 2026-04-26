@@ -115,7 +115,7 @@ def review_edges(
         return
 
     print(f"\n{len(rows)} edge proposals to review.")
-    print("Keys: [a]ccept(verified)  [p]accept(proposed)  [r]eject  [c]lassify  [s]kip  [q]uit\n")
+    print("Keys: [a]ccept  [r]eject  [c]lassify  [s]kip  [q]uit\n")
 
     accepted = rejected = skipped = 0
 
@@ -126,7 +126,7 @@ def review_edges(
 
         while True:
             try:
-                key = input("Action [a/p/r/c/s/q]: ").strip().lower()
+                key = input("Action [a/r/c/s/q]: ").strip().lower()
             except (EOFError, KeyboardInterrupt):
                 print("\nInterrupted.")
                 conn.commit()
@@ -139,12 +139,14 @@ def review_edges(
                 print(f"\nDone: {accepted} accepted, {rejected} rejected, {skipped} skipped")
                 return
 
-            elif key in ("a", "p"):
-                tier = "verified" if key == "a" else "proposed"
-                promote_to_live(conn, row, tier)
+            elif key == "a":
+                # Editorial overlay: any human Accept = verified, regardless
+                # of LLM confidence. The model's confidence float is a
+                # separate signal carried in staged_edges.confidence.
+                promote_to_live(conn, row, "verified")
                 conn.execute(
-                    "UPDATE staged_edges SET status='accepted', tier=?, reviewed_by=?, reviewed_at=? WHERE id=?",
-                    (tier, REVIEWER, now_iso(), row["id"]),
+                    "UPDATE staged_edges SET status='accepted', tier='verified', reviewed_by=?, reviewed_at=? WHERE id=?",
+                    (REVIEWER, now_iso(), row["id"]),
                 )
                 conn.commit()
                 accepted += 1
@@ -178,7 +180,7 @@ def review_edges(
                     accepted += 1
                     break
             else:
-                print("  Unknown key. Use a/p/r/c/s/q.")
+                print("  Unknown key. Use a/r/c/s/q.")
 
     conn.close()
     print(f"\nDone: {accepted} accepted, {rejected} rejected, {skipped} skipped")

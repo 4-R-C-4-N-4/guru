@@ -1,13 +1,13 @@
 {
   "id": "659b7664",
   "type": "feature",
-  "state": "open",
+  "state": "active",
   "summary": "Edge review web extension (Pass C — staged_edges via the web tool, parallel to staged_tags)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.066Z",
-  "updated_at": "2026-04-26T20:54:08.548Z",
+  "updated_at": "2026-04-26T21:08:09.199Z",
   "files": [
     {
       "path": "docs/web-review/edges.md"
@@ -47,5 +47,11 @@
       "content": "8 children with critical path C1 → C2 → C3 → C4 → C5 → C6 → C7 → C8. C1 first (CLI editorial-overlay alignment) decouples from rest. C2 (schema migration) is a single .sql, validates on shadow before live. C3 (CLI helpers + tests) mirrors review_tags.py editorial overlay (todo:f21b6baf). C4-C5 (server) extend apply transaction with target_table dispatch + new /api/edges* routes. C6 (web UI) reuses HeaderBar/StatsDrawer/retry-queue, adds EdgeCard's two-passage layout. C7 (parity) extends seed.sql + fixture decisions to cover the 3 edge action branches. C8 (operator) handles live migration + server restart + phone smoke-test, mirrors the bb25c06b operator handoff pattern: stop server → snapshot → migrate → rebuild → restart. NON-GOALS: auto-promote-edges (deferred to autopromote design.md §10 and edges.md §10). All 8 land on a single umbrella branch todo/659b7664 — single --no-ff merge to main when complete. Live --apply step is operator-driven; agent stops at C7 green and hands off C8.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "todo/659b7664",
+    "base_branch": "main",
+    "started_at": "2026-04-26T21:08:09.199Z",
+    "started_by": "Hermes Agent"
+  }
 }

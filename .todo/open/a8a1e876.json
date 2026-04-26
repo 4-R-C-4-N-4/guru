@@ -1,13 +1,13 @@
 {
   "id": "a8a1e876",
   "type": "refactor",
-  "state": "open",
+  "state": "active",
   "summary": "C1: review_edges.py — drop [p] (accept-at-proposed) per editorial-overlay rule. Any human Accept = verified",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.098Z",
-  "updated_at": "2026-04-26T20:53:37.098Z",
+  "updated_at": "2026-04-26T21:08:09.246Z",
   "files": [
     {
       "path": "scripts/review_edges.py"
