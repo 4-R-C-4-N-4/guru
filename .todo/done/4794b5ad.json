@@ -1,13 +1,13 @@
 {
   "id": "4794b5ad",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "C5: server routes — new /api/edges*: GET /api/edges (paginated, filtered, two-chunk enriched), GET /api/edges/:id, POST /api/edges/:id/action. Extend /api/queue render for staged_edges rows.",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.234Z",
-  "updated_at": "2026-04-26T20:54:08.312Z",
+  "updated_at": "2026-04-26T21:28:34.882Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/edges.ts"
@@ -24,5 +24,11 @@
     "depends_on": [
       "c37abee8"
     ]
+  },
+  "resolution": {
+    "commit": "60ff0639e9e1c5fddfd5de1db544a3f9b9e13346",
+    "resolved_at": "2026-04-26T21:28:34.882Z",
+    "resolved_by": "unknown",
+    "note": "GET/POST /api/edges* live; queue render shapes context.kind discriminated union; chunks.ts EXISTS gains target_table filter; apply/preview surfaces by_target_table. Smoke-tested mixed-batch end-to-end against shadow DB."
   }
 }
