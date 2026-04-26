@@ -1,13 +1,13 @@
 {
   "id": "c37abee8",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "C4: server db.ts + apply.ts — polymorphic prepared stmts (insertReviewActionEdge, selectStagedEdge, generic deleteEdge/upsertEdge, updateStagedEdgeStatus/Type) + apply transaction dispatch on target_table",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.199Z",
-  "updated_at": "2026-04-26T20:54:08.281Z",
+  "updated_at": "2026-04-26T21:21:34.680Z",
   "files": [
     {
       "path": "guru-review/server/src/apply.ts"
@@ -25,5 +25,11 @@
       "1426251a",
       "90c79a3f"
     ]
+  },
+  "resolution": {
+    "commit": "f745cc5c6fe0090d643458b5c34eb8855d8af333",
+    "resolved_at": "2026-04-26T21:21:34.680Z",
+    "resolved_by": "unknown",
+    "note": "Server apply transaction dispatches on target_table; new applyEdgeAction implements accept/reject/reclassify/skip per edges.md §4 editorial overlay. Generic upsertEdge/deleteEdge replace EXPRESSES-hardcoded versions; staged_tags branch refactored to pass type explicitly. Polymorphic CHECK constraint validated by schema.test.ts. 102 pytest + 9 vitest + parity all green."
   }
 }
