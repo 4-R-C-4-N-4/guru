@@ -1,0 +1,43 @@
+{
+  "id": "898ee5f9",
+  "type": "bug",
+  "state": "open",
+  "summary": "vector_store.py leaks SQLite connections — 'with sqlite3.connect()' doesn't close per Python docs",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T19:45:34.972Z",
+  "updated_at": "2026-04-26T19:45:35.044Z",
+  "files": [
+    {
+      "path": "scripts/vector_store.py",
+      "lines": [
+        58,
+        271
+      ]
+    }
+  ],
+  "tags": [
+    "bug",
+    "fd-leak",
+    "vector-store",
+    "sqlite",
+    "blocker"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T19:45:35.009Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "User hit OSError: [Errno 24] Too many open files mid-run on propose_edges.py at scripts/propose_edges.py:108 (load_chunk_body opening a TOML). System ulimit -n was 524288 (high), so it took thousands of leaked fds to exhaust. propose_edges loops over ~2531 source chunks, each calling vs.query() which calls get_metadata() per neighbor (top_n=5 default), which calls _concepts_for() — that opens a sqlite3.connect via 'with sqlite3.connect(path) as conn:'. Per Python docs (https://docs.python.org/3/library/sqlite3.html#sqlite3-connection-context-manager): 'The context manager neither implicitly opens a new transaction nor closes the connection.' All 6 sites in vector_store.py use this leak-prone pattern. With 2531 × ~5 = 12,655 unclosed connections × 3 fds each (db+wal+shm) = ~38k fds in flight before GC catches up.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-26T19:45:35.044Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Wrap each 'with sqlite3.connect(path) as conn:' in contextlib.closing() so the connection is actually closed on context exit. Pattern:\n\n  from contextlib import closing\n  with closing(sqlite3.connect(path)) as conn, conn:\n      ...\n\nThe double-context is intentional: closing() handles the close, the inner 'conn' context handles the transaction commit/rollback (the existing semantic). All 6 sites at scripts/vector_store.py lines 58, 105, 128, 213, 219, 271 need the same treatment. No schema change, no API change, no test changes needed (the fix is internal to the helper). Verify with pytest + parity harness still green afterward; user re-runs propose_edges to confirm fd exhaustion gone.",
+      "confidence": "high"
+    }
+  ]
+}
