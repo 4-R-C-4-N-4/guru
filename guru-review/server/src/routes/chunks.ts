@@ -78,7 +78,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     const outerWhere: string[] = [
       "st.status = 'pending'",
       'st.score >= ?',
-      'NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.applied_at IS NULL)',
+      "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
     ];
     const outerParams: unknown[] = [min_score];
 
@@ -127,7 +127,9 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           AND score >= ?
           AND NOT EXISTS (
               SELECT 1 FROM review_actions ra
-              WHERE ra.target_id = staged_tags.id AND ra.applied_at IS NULL
+              WHERE ra.target_id = staged_tags.id
+                AND ra.target_table = 'staged_tags'
+                AND ra.applied_at IS NULL
           )
         ORDER BY chunk_id, score DESC, id ASC
       `;
@@ -230,7 +232,7 @@ function computeCounts(
   const where: string[] = [
     "st.status = 'pending'",
     'st.score >= ?',
-    'NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.applied_at IS NULL)',
+    "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
   ];
   const params: unknown[] = [filters.min_score];
 

@@ -14,21 +14,33 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
   const apply = buildApply(rw, stmts);
 
   r.get('/apply/preview', (_req, res) => {
-    const counts = stmts.countQueuedByAction.all() as { action: string; n: number }[];
+    const counts = stmts.countQueuedByAction.all() as {
+      target_table: 'staged_tags' | 'staged_edges';
+      action: string;
+      n: number;
+    }[];
     const total = counts.reduce((acc, c) => acc + c.n, 0);
-    const distinctChunks = ro
+    const by_action = counts.reduce<Record<string, number>>((acc, c) => {
+      acc[c.action] = (acc[c.action] ?? 0) + c.n;
+      return acc;
+    }, {});
+    const by_target_table = counts.reduce<Record<string, number>>((acc, c) => {
+      acc[c.target_table] = (acc[c.target_table] ?? 0) + c.n;
+      return acc;
+    }, {});
+    const affected = ro
       .prepare(
-        `SELECT COUNT(DISTINCT target_id) AS n
-         FROM review_actions WHERE applied_at IS NULL`,
+        `SELECT target_table, COUNT(DISTINCT target_id) AS n
+         FROM review_actions WHERE applied_at IS NULL
+         GROUP BY target_table`,
       )
-      .get() as { n: number };
+      .all() as { target_table: 'staged_tags' | 'staged_edges'; n: number }[];
     res.json({
       total_queued: total,
-      by_action: counts.reduce<Record<string, number>>((acc, c) => {
-        acc[c.action] = c.n;
-        return acc;
-      }, {}),
-      affected_staged_tags: distinctChunks.n,
+      by_action,
+      by_target_table,
+      affected_staged_tags: affected.find((a) => a.target_table === 'staged_tags')?.n ?? 0,
+      affected_staged_edges: affected.find((a) => a.target_table === 'staged_edges')?.n ?? 0,
     });
   });
 

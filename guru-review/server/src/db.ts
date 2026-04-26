@@ -149,6 +149,10 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       WHERE id = ?
     `),
 
+    // Polymorphic queue render. Each row carries the action header plus
+    // exactly one context block — tag_* (when target_table='staged_tags')
+    // or edge_* (when target_table='staged_edges'). The other block's
+    // columns are NULL. Routes/queue.ts shapes the discriminated union.
     selectQueueWithContext: ro.prepare(`
       SELECT
         ra.id              AS action_id,
@@ -159,16 +163,27 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         ra.reclassify_to,
         ra.reviewer,
         ra.created_at,
-        st.id              AS target_id,
-        st.chunk_id,
-        st.concept_id,
-        st.score,
-        st.is_new_concept,
-        n.label            AS section_label,
-        n.tradition_id
+        ra.target_id,
+        st.chunk_id        AS tag_chunk_id,
+        st.concept_id      AS tag_concept_id,
+        st.score           AS tag_score,
+        st.is_new_concept  AS tag_is_new_concept,
+        ntag.label         AS tag_section_label,
+        ntag.tradition_id  AS tag_tradition_id,
+        se.source_chunk    AS edge_source_chunk,
+        se.target_chunk    AS edge_target_chunk,
+        se.edge_type       AS edge_type,
+        se.confidence      AS edge_confidence,
+        na.label           AS edge_a_section_label,
+        na.tradition_id    AS edge_a_tradition_id,
+        nb.label           AS edge_b_section_label,
+        nb.tradition_id    AS edge_b_tradition_id
       FROM review_actions ra
-      JOIN staged_tags st ON st.id = ra.target_id AND ra.target_table = 'staged_tags'
-      JOIN nodes n ON n.id = st.chunk_id
+      LEFT JOIN staged_tags st  ON st.id = ra.target_id AND ra.target_table = 'staged_tags'
+      LEFT JOIN nodes ntag      ON ntag.id = st.chunk_id
+      LEFT JOIN staged_edges se ON se.id = ra.target_id AND ra.target_table = 'staged_edges'
+      LEFT JOIN nodes na        ON na.id = se.source_chunk
+      LEFT JOIN nodes nb        ON nb.id = se.target_chunk
       WHERE ra.applied_at IS NULL
       ORDER BY ra.id DESC
     `),

@@ -57,8 +57,10 @@ export function tagsRouter(stmts: PreparedStmts): Router {
     try {
       stmts.insertReviewAction.run(
         id,
+        'staged_tags',
         action,
         action === 'reassign' ? reassign_to : null,
+        null,                  // reclassify_to — staged_tags branch never sets this
         reviewer,
         client_action_id,
       );
