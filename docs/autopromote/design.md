@@ -144,22 +144,34 @@ ON CONFLICT(id) DO UPDATE SET
 
 ---
 
-## 6. staged_tags status — left untouched
+## 6. Human review under auto-promote — the editorial overlay
 
-Auto-promote does **not** mark rows as `accepted`. `staged_tags.status` stays `pending`. Rationale:
+Auto-promote shifts the role of the human review tools (`scripts/review_tags.py` and the web review UI) from **gatekeeper** ("nothing ships until I approve") to **curator** ("auto-promote ships RAG signal; I confirm, retract, or correct it").
 
-- A future human review pass can still upgrade an auto-promoted `proposed` (or `inferred`) edge by accepting the staged_tag through the normal path. `review_tags.promote_to_expresses` uses `ON CONFLICT DO UPDATE`, so a human accept overwrites the auto-promoted tier with whatever tier the human-review path computes.
+All four review actions stay, but two of them gain a new responsibility: cleaning up auto-promoted edges that the curator decides shouldn't have shipped. This is the **companion ticket** for auto-promote (§11); both should land together so the editorial gate is honest from day one.
 
-  ⚠ **Companion change worth considering:** today `review_tags.promote_to_expresses` writes `tier = 'verified' if score >= 2 else 'proposed'`. Under the new "`verified` = human-reviewed, full stop" semantic, that score check should drop — *any* human accept should write `verified`, because the load-bearing distinction is "did a human sign off?" not "did a human sign off AND was the model also confident?"
-  This is a small change (`review_tags.py` line 78 + the equivalent line in the web tool's `apply.ts`) but it's a separate behaviour change from auto-promote and should be its own ticket. Without it, the human-review path can write `proposed` for accepted score=1 rows, which then can't be distinguished from auto-promoted score≥2 rows by tier alone — defeating the audit query "what's been human-reviewed?".
-- The staged_tags pool remains the canonical "what's been generated" record. Reviewers can query `WHERE status='pending'` to see what's untouched by humans, regardless of what auto-promote did to `edges`.
+| action | new behaviour | why this changes |
+|---|---|---|
+| **Accept** | upsert edge at tier=`verified` regardless of score. ON CONFLICT DO UPDATE upgrades any prior auto-promoted `proposed` / `inferred` row. Status → `accepted`. | Today's `tier = 'verified' if score >= 2 else 'proposed'` rule conflates "human-reviewed" with "model-was-confident." Under auto-promote, those need to be separate axes. Any human accept = `verified`. |
+| **Reject** | DELETE the corresponding row from `edges` (if any), then set status='rejected'. | Without the DELETE, a row the curator explicitly rejected stays live in production via auto-promote's prior write. The whole point of `Reject` is retraction. |
+| **Reassign** | DELETE the auto-promoted edge for the original (chunk, old_concept) pair, mutate `staged_tags.concept_id`, spawn new pending row for new concept. The new concept's edge will materialize on the next auto-promote run if it qualifies. | Reassign is "wrong concept, here's the right one." Without retracting the wrong edge, the curator's correction leaves a stale association in the live graph. |
+| **Skip** | unchanged — no DB write, staged_tag stays pending, any auto-promoted edge stays live. | Skip means "punt for now." Leaving the edge in place is consistent with that. |
 
-The downside: the web review tool will keep surfacing rows whose `(chunk, concept)` pair already has an auto-promoted edge. Two ways to handle this when it becomes annoying:
+Without the DELETE on Reject and Reassign, the human review tool can never remove an edge that auto-promote shouldn't have written, and the curator role degenerates back to "rubber-stamp the auto-promotions you agree with." The whole point of keeping `verified` behind the human gate is so the curator stays load-bearing — that means giving them retraction power, not just upgrade power.
 
-- **Filter the review query** to exclude rows whose `(chunk, concept)` already has an EXPRESSES edge of any tier. Cheap, no schema change. This is the recommended follow-up if auto-promote ships and reviewer fatigue grows.
-- **Introduce `status='auto_promoted'`** as a fourth `staged_tags.status` value. Cleaner audit trail but requires a CHECK constraint update and migration. Defer unless the cleaner audit becomes worth the schema churn.
+### staged_tags status interactions
 
-Neither is required for v1 of auto-promote; both are downstream cleanup.
+Auto-promote does **not** mark rows as `accepted`. `staged_tags.status` stays `pending`. Two reasons:
+
+- The human review path uses `WHERE status='pending'` to find untouched rows. Auto-promote shouldn't move rows out of that queue — the curator might still want to review them (to upgrade `proposed` → `verified`, or to retract via Reject).
+- The staged_tags pool remains the canonical "what was generated" record. `WHERE status` queries answer questions about the curator's actions, not auto-promote's. Auto-promote's footprint lives in `edges` (visible via `tier='proposed'` and the `[auto]` justification prefix).
+
+The downside: the web review tool will keep surfacing rows whose `(chunk, concept)` pair already has an auto-promoted edge. The reviewer needs UI signal to know what's already live so they're not flying blind. Two ways to handle this — both downstream of the v1 auto-promote ticket:
+
+- **Filter or annotate the review query** to surface "this row is currently live at tier=X, accept upgrades it / reject retracts it." Cheap, no schema change. Recommended.
+- **Introduce `status='auto_promoted'`** as a fourth `staged_tags.status` value. Cleaner audit trail but requires a CHECK constraint update and migration. Defer unless the operator finds the audit worth the schema churn.
+
+Neither is required for v1; both are downstream UX work.
 
 ---
 
@@ -223,22 +235,41 @@ Out of scope for this design, but worth flagging the symmetric idea: `propose_ed
 
 ---
 
-## 11. Implementation checklist
+## 11. Implementation plan
 
-When this lands as a ticket:
+Two tickets, intentionally split. Both should land close together — auto-promote without the companion leaves the human gate unable to retract anything, which is the wrong shipping order.
+
+### Ticket A — auto-promote tool
 
 - [ ] `scripts/auto_promote.py` — Python with argparse (`--score`, `--model`, `--apply`, `--db`)
 - [ ] `scripts/auto_promote.sh` — bash wrapper for snapshot + apply (mirrors `cleanup_dupes.sh`)
 - [ ] `tests/test_auto_promote.py` — unit tests against in-memory DB:
   - default `--score 3` promotes only score=3
-  - `--score 2` promotes score=2+3 with correct tier mapping per row
+  - `--score 2` promotes score=2+3 with correct tier mapping per row (both land at `proposed`)
+  - `--score 1` includes score=1 rows at tier=`inferred`
   - `is_new_concept=1` rows are skipped
   - non-default model rows are skipped
-  - existing live edge is NOT downgraded (re-run safety)
+  - existing live edge is NOT downgraded (re-run safety via `ON CONFLICT DO NOTHING`)
   - `[auto]` prefix lands on the justification
   - dry-run produces summary, no writes
 - [ ] One real-DB sanity run via `--dry-run` to confirm count matches the design's prediction (~2,082 score=3 rows post-cleanup)
 - [ ] No changes to `schema/corpus-schema.sql` — auto-promote is purely additive content into `edges`. Schema-drift CI stays green; export.py picks up the new edges automatically; `corpus_metadata.corpus_version` increments naturally on next export.
-- [ ] **Optional companion ticket** (separate, but should land before/with auto-promote to keep tier semantics clean): update `review_tags.promote_to_expresses` and the web tool's apply.ts so any human accept writes `tier='verified'` (drop the `score >= 2` predicate). Re-aligns `verified` with "human-reviewed, full stop." Parity harness fixture and `test_promote_definition.py` will need their tier-assertion updates in the same change.
 
-Acceptance: `--apply` writes ~2k EXPRESSES rows at tier='proposed' to `data/guru.db::edges`, no row downgrades a pre-existing edge, `--dry-run` is the default with a numeric summary, `pytest` + parity harness stay green.
+**Acceptance:** `--apply` writes ~2k EXPRESSES rows at tier=`proposed` to `data/guru.db::edges`, no row downgrades a pre-existing edge, `--dry-run` is the default with a numeric summary, `pytest` + parity harness stay green.
+
+### Ticket B — human review path becomes the editorial overlay (companion to A)
+
+This is **Option B** scope: rework the review tools so Accept/Reject/Reassign honestly act on the live graph. Without this, the human gate degenerates to rubber-stamp.
+
+- [ ] **Accept path — drop the score predicate.** `scripts/review_tags.py:promote_to_expresses` currently writes `tier = 'verified' if score >= 2 else 'proposed'`. Change to unconditional `tier = 'verified'`. The whole point of the human gate is that *the human signed off*; the model's score is upstream signal that's already encoded elsewhere. Same change in the web tool's `guru-review/server/src/apply.ts` accept branch.
+- [ ] **Reject path — DELETE the auto-promoted edge.** `scripts/review_tags.py` reject branch currently only updates `staged_tags.status='rejected'`. Add: `DELETE FROM edges WHERE source_id=? AND target_id='concept.'||? AND type='EXPRESSES'` for the rejected row's (chunk_id, concept_id). Same change in `apply.ts` reject branch.
+- [ ] **Reassign path — DELETE the original-concept edge.** Before the existing `UPDATE staged_tags SET concept_id=...` and the spawn of the new pending row, run the same DELETE for the (chunk_id, *original* concept_id). The new concept's edge will materialize on the next auto-promote run if the spawned row qualifies. Same change in `apply.ts` reassign branch.
+- [ ] **db.ts prepared statements** — add `deleteExpressesEdge` to the rw allowlist in `guru-review/server/src/db.ts`. Wire into reject and reassign branches in `apply.ts`. Mirror in `web_runner.ts` so the parity harness covers it.
+- [ ] **Tests:**
+  - `tests/test_promote_definition.py`: update tier assertions for the score=1-accept case (was `proposed`, now `verified`).
+  - `tests/test_promote_definition.py` (or new file): add cases for "Reject removes a pre-existing edge", "Reassign removes the original-concept edge but not other edges on the same chunk".
+  - Web side: `guru-review/server/src/schema.test.ts` and `apply` integration coverage for the same scenarios.
+- [ ] **Parity harness:** extend `tests/parity/fixtures/decision_sequence.json` with two new cases: (1) reject-after-auto-promote (verifies CLI and web both DELETE the same edge), (2) reassign-after-auto-promote (verifies both DELETE the original-concept edge symmetrically). The seed.sql may need a pre-existing auto-promoted edge in the fixture to be retracted.
+- [ ] No `schema/corpus-schema.sql` change — this ticket is behaviour-only on existing tables.
+
+**Acceptance:** any human Accept writes `tier='verified'`. Reject + Reassign DELETE the corresponding edges in both CLI and web paths. Parity harness asserts equivalence on the new retraction cases. Existing tests continue to pass with updated tier assertions.
