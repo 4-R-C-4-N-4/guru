@@ -1,0 +1,43 @@
+{
+  "id": "98739204",
+  "type": "chore",
+  "state": "done",
+  "summary": "P1.5: verify review_tags.py + scripts/seed_tags.py + scripts/propose_edges.py do not drop provenance fields on transitions (read-only audit + small fix if needed)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T13:33:28.788Z",
+  "updated_at": "2026-04-26T13:49:30.621Z",
+  "files": [
+    {
+      "path": "scripts/review_tags.py"
+    }
+  ],
+  "tags": [
+    "v3",
+    "phase-1",
+    "provenance",
+    "audit"
+  ],
+  "relationships": {
+    "parent": "1031299e",
+    "depends_on": [
+      "ec3abd8a"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-04-26T13:49:30.571Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Audit complete. All staged_tags writers handled by P1.3/P1.4: tag_concepts.upsert_staged_tag, review_tags reassign-spawn, web db.ts insertReassignedTag, parity web_runner mirror, parity run_cli.py mirror, seed.sql fixture. UPDATE sites (status/reviewed_by/concept_id transitions in review_tags, db.ts, web_runner, run_cli) preserve provenance automatically — SQL UPDATE only touches named columns, so model+prompt_version are untouched on transitions. Live DB verified: 6 (status × model) buckets, 0 null-provenance rows. Out-of-scope: scripts/propose_edges.py writes to staged_edges (different table); v3 Phase 1 doesn't add provenance there — note for potential Phase 2 follow-up. Phase 1 is fully closed; no additional code changes needed for P1.5.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "8b9d46532ff54ab083d26d39ac62ab9c0cba69ed",
+    "resolved_at": "2026-04-26T13:49:30.621Z",
+    "resolved_by": "unknown",
+    "note": "Read-only audit. All INSERT INTO staged_tags writers handled by P1.3/P1.4. UPDATE sites preserve provenance by SQL semantics (only named cols touched). Live DB has zero null-provenance rows. propose_edges.py writes to a different table (staged_edges) — flagged as Phase 2 follow-up."
+  }
+}
