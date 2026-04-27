@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-27T22:54:58.397Z",
-  "updated_at": "2026-04-27T22:55:09.592Z",
+  "updated_at": "2026-04-27T22:55:56.764Z",
   "tags": [
     "autopromote",
     "edges",
@@ -21,5 +21,6 @@
       "5374225a",
       "3cd6e5a6"
     ]
-  }
+  },
+  "description": "Per docs/autopromote/design.md §10. Mirror of auto_promote.py for staged_tags, but for staged_edges.\n\n## Staging table state\n- 5,528 pending staged_edges, 3 accepted (manual review only)\n- staged_edges schema: confidence (real, 0..1), justification, status, edge_type, tier, source_chunk, target_chunk\n- Confidence is set by propose_edges.py per LLM scoring\n\n## Promotion rules (mirroring tags)\n- Only `confidence >= floor` (default 0.85 per design §10) AND `model = X` AND `status='pending'`\n- Only `edge_type IN ('PARALLELS','CONTRASTS')` — surface_only and unrelated are CHECK-rejected by live edges.type and would error on insert\n- Always tier='proposed' (verified is reserved for human review — already enforced by the recent web edge-review work)\n- Justification gets `[auto] ` prefix to distinguish from human-promoted rows\n- ON CONFLICT(source_id, target_id, type) DO NOTHING — re-run safe\n\n## What does NOT auto-promote\n- Low-confidence rows (below floor)\n- Other models (model filter)\n- surface_only / unrelated\n- Already-promoted edges (NOT EXISTS check + ON CONFLICT)\n\n## Editorial overlay (companion concern)\nOnce auto-promote runs, the human edge-review path must be able to retract:\n- Reject → DELETE the live edge row\n- Reclassify → DELETE the original-type edge; the new-type edge will materialize on next auto-promote IF it qualifies\nThe web edge-review work (PR #1, recently merged — see scripts/review_edges.py + guru-review/server/src/apply.ts edge branch) already implements this for human-only flow. Just needs verification it handles auto-promoted rows correctly. Child A5 covers that.\n\n## Out of scope\n- New schema (additive content into existing edges table only)\n- Changes to propose_edges.py\n- Changes to existing tag auto-promote"
 }
