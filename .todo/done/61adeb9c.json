@@ -1,13 +1,13 @@
 {
   "id": "61adeb9c",
-  "type": "bug",
-  "state": "open",
+  "type": "chore",
+  "state": "done",
   "summary": "Silent JSON parse swallow on chunk concepts — bare except, no logging",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:53:25.429Z",
-  "updated_at": "2026-04-27T13:53:25.429Z",
+  "updated_at": "2026-04-27T14:37:03.384Z",
   "files": [
     {
       "path": "guru/retriever.py",
@@ -23,5 +23,11 @@
   ],
   "relationships": {
     "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "466daeb5f68c2a327cef77a7f57911257f80d70b",
+    "resolved_at": "2026-04-27T14:37:03.384Z",
+    "resolved_by": "unknown",
+    "note": "Now logs chunk_id + truncated raw JSON via module logger; catches narrowed json.JSONDecodeError."
   }
 }

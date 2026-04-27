@@ -254,7 +254,7 @@ are in `sources/manifest.toml` — sources currently 404; URL updates pending.
 ## Testing
 
 ```bash
-# All tests (35)
+# All tests
 python -m pytest tests/ -v
 
 # Individual suites

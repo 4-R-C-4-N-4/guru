@@ -1,13 +1,13 @@
 {
   "id": "dfc35fed",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Redundant local 'import json as _json' inside _merge_and_rank — top-level import already in scope",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:53:31.489Z",
-  "updated_at": "2026-04-27T13:53:31.489Z",
+  "updated_at": "2026-04-27T14:37:03.418Z",
   "files": [
     {
       "path": "guru/retriever.py",
@@ -23,5 +23,11 @@
   ],
   "relationships": {
     "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "466daeb5f68c2a327cef77a7f57911257f80d70b",
+    "resolved_at": "2026-04-27T14:37:03.418Z",
+    "resolved_by": "unknown",
+    "note": "Top-level 'import json' was already in scope; the local 'import json as _json' was dead."
   }
 }
