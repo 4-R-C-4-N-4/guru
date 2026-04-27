@@ -1,0 +1,27 @@
+{
+  "id": "61adeb9c",
+  "type": "bug",
+  "state": "open",
+  "summary": "Silent JSON parse swallow on chunk concepts — bare except, no logging",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:25.429Z",
+  "updated_at": "2026-04-27T13:53:25.429Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        284,
+        289
+      ]
+    }
+  ],
+  "tags": [
+    "retriever",
+    "error-handling"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}

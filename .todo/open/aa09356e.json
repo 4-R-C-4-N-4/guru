@@ -1,0 +1,27 @@
+{
+  "id": "aa09356e",
+  "type": "bug",
+  "state": "open",
+  "summary": "File handle leak in seed_tags.py — tomllib.load(open(...)) never closed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:25.364Z",
+  "updated_at": "2026-04-27T13:53:25.364Z",
+  "files": [
+    {
+      "path": "scripts/seed_tags.py",
+      "lines": [
+        27,
+        27
+      ]
+    }
+  ],
+  "tags": [
+    "cleanup",
+    "resource-leak"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}

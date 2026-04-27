@@ -1,0 +1,27 @@
+{
+  "id": "7676537c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Remove dead 'and not escape_next' check in parse_json_response — escape_next always False at that point",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:31.422Z",
+  "updated_at": "2026-04-27T13:53:31.422Z",
+  "files": [
+    {
+      "path": "scripts/llm.py",
+      "lines": [
+        218,
+        218
+      ]
+    }
+  ],
+  "tags": [
+    "cleanup",
+    "dead-code"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}

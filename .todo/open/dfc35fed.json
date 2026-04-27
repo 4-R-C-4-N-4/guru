@@ -1,0 +1,27 @@
+{
+  "id": "dfc35fed",
+  "type": "chore",
+  "state": "open",
+  "summary": "Redundant local 'import json as _json' inside _merge_and_rank — top-level import already in scope",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:31.489Z",
+  "updated_at": "2026-04-27T13:53:31.489Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        285,
+        285
+      ]
+    }
+  ],
+  "tags": [
+    "cleanup",
+    "dead-code"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}
