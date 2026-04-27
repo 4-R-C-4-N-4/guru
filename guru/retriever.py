@@ -146,7 +146,9 @@ class HybridRetriever:
                        WHERE e.target_id = ? AND e.type = 'EXPRESSES'""",
                     (concept_id,),
                 ).fetchall()
+                anchor_ids: set[str] = set()
                 for row in rows:
+                    anchor_ids.add(row["chunk_id"])
                     trad = row["tradition"] or ""
                     if prefs.is_chunk_allowed(trad):
                         meta = json.loads(row["metadata_json"] or "{}")
@@ -158,7 +160,9 @@ class HybridRetriever:
                             "similarity": 0.0,  # no vector score for graph hits
                         })
 
-                # PARALLELS/CONTRASTS from this concept node's chunks to other traditions
+                # PARALLELS/CONTRASTS: emit only the cross-tradition partner of
+                # each anchor, not both endpoints. Re-emitting the anchor here
+                # used to double-boost its graph_score via max() in the merge.
                 rows2 = conn.execute(
                     """SELECT se.source_id, se.target_id, se.tier,
                               ns.tradition_id as s_trad, nt.tradition_id as t_trad
@@ -175,16 +179,24 @@ class HybridRetriever:
                     (concept_id, concept_id),
                 ).fetchall()
                 for row in rows2:
-                    for cid, trad in ((row["source_id"], row["s_trad"]),
-                                      (row["target_id"], row["t_trad"])):
-                        if prefs.is_chunk_allowed(trad or ""):
-                            results.append({
-                                "chunk_id": cid,
-                                "tier": row["tier"],
-                                "tradition": trad or "",
-                                "metadata": {},
-                                "similarity": 0.0,
-                            })
+                    src_anchor = row["source_id"] in anchor_ids
+                    tgt_anchor = row["target_id"] in anchor_ids
+                    if src_anchor and not tgt_anchor:
+                        partner_id, partner_trad = row["target_id"], row["t_trad"]
+                    elif tgt_anchor and not src_anchor:
+                        partner_id, partner_trad = row["source_id"], row["s_trad"]
+                    else:
+                        # both anchors (intra-tradition link of the same concept)
+                        # or neither — already covered by EXPRESSES, skip.
+                        continue
+                    if prefs.is_chunk_allowed(partner_trad or ""):
+                        results.append({
+                            "chunk_id": partner_id,
+                            "tier": row["tier"],
+                            "tradition": partner_trad or "",
+                            "metadata": {},
+                            "similarity": 0.0,
+                        })
         finally:
             conn.close()
 
