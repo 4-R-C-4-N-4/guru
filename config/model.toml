@@ -28,6 +28,13 @@ min_similarity = 0.50
 max_per_tradition = 3
 
 [ranking]
+# Final score = vector_weight * cosine_sim
+#             + graph_weight  * max(tier_weight, graph_score)
+#             + diversity_bonus_if_new_tradition
+# Weights should sum to ~1.0 but are not normalized.
+vector_weight = 0.7
+graph_weight  = 0.3
+
 # Edge tier weights for re-ranking retrieved chunks
 tier_verified  = 1.0
 tier_proposed  = 0.7

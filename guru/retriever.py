@@ -63,6 +63,8 @@ class HybridRetriever:
         self._min_sim = float(self._rcfg.get("min_similarity", 0.50))
         self._max_per_trad = int(self._rcfg.get("max_per_tradition", 3))
         self._diversity_boost = float(self._rkcfg.get("diversity_boost", 0.1))
+        self._vector_weight = float(self._rkcfg.get("vector_weight", 0.7))
+        self._graph_weight = float(self._rkcfg.get("graph_weight", 0.3))
         self._tier_w = {
             "verified": float(self._rkcfg.get("tier_verified", 1.0)),
             "proposed": float(self._rkcfg.get("tier_proposed", 0.7)),
@@ -249,7 +251,7 @@ class HybridRetriever:
             tier_w = self._tier_w.get(item["tier"], 0.4)
             graph_s = item.get("graph_score", 0.0)
             diversity = self._diversity_boost if item["tradition"] not in traditions_seen else 0.0
-            score = 0.7 * sim + 0.3 * max(tier_w, graph_s) + diversity
+            score = self._vector_weight * sim + self._graph_weight * max(tier_w, graph_s) + diversity
             traditions_seen.add(item["tradition"])
             scored.append((score, item))
 
