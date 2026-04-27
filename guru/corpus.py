@@ -10,8 +10,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).parent.parent
-CORPUS_DIR = PROJECT_ROOT / "corpus"
+from guru.paths import CORPUS_DIR
 
 
 def resolve_chunk_path(chunk_id: str, corpus_dir: Path = CORPUS_DIR) -> Path | None:

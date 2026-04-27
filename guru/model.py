@@ -12,11 +12,10 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = PROJECT_ROOT / "config" / "model.toml"
+from guru.paths import CONFIG_MODEL as CONFIG_PATH, SCRIPTS_DIR
 
 # Make scripts/ importable
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(SCRIPTS_DIR))
 from llm import call_llm  # noqa: E402
 
 

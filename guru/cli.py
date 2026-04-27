@@ -19,16 +19,14 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from guru.paths import CONFIG_EMBEDDING as CONFIG_PATH, SCRIPTS_DIR
+
+sys.path.insert(0, str(SCRIPTS_DIR))
 
 from guru.model import ModelProvider
 from guru.preferences import UserPreferences
 from guru.prompt import build_prompt
 from guru.retriever import HybridRetriever
-
-
-CONFIG_PATH = PROJECT_ROOT / "config" / "embedding.toml"
 
 
 def embed_query(query: str) -> list[float]:

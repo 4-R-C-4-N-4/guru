@@ -18,12 +18,14 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = PROJECT_ROOT / "config" / "model.toml"
-TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
-DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
+from guru.paths import (
+    CONFIG_MODEL as CONFIG_PATH,
+    DEFAULT_DB,
+    SCRIPTS_DIR,
+    TAXONOMY_TOML,
+)
 
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(SCRIPTS_DIR))
 from vector_store import VectorStore  # noqa: E402
 
 from guru.corpus import resolve_chunk_path
