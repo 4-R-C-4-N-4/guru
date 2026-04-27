@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-27T22:45:52.586Z",
-  "updated_at": "2026-04-27T22:45:52.586Z",
+  "updated_at": "2026-04-27T22:46:48.954Z",
   "tags": [
     "corpus",
     "greek_mystery",
@@ -15,5 +15,6 @@
   ],
   "relationships": {
     "parent": "098bdd6b"
-  }
+  },
+  "description": "After C1 (chunker fix) and C2 (Orphic normalizer + config) land, regenerate the corpus:\n\n```bash\n# 1. Re-chunk just this text — overwrites corpus/greek_mystery/orphic-hymns/chunks/\npython scripts/chunk.py --tradition greek_mystery --text orphic-hymns\n\n# 2. Re-embed only this text's chunks — replaces rows in chunk_embeddings\npython scripts/embed_corpus.py --reindex --tradition greek_mystery --text orphic-hymns\n\n# 3. Verify\npython scripts/validate_index.py\n```\n\n**Don't:**\n- hand-edit any file under `corpus/greek_mystery/orphic-hymns/chunks/`\n- delete and re-fetch `raw/greek_mystery/orphic-hymns-*.txt` (the raw is fine — it's the chunker that misreads it)\n\n**Risk:** the chunk count will change (one chunk per Roman-numeral hymn instead of one per page), so any downstream tables that key on `chunk_id` need attention. Check:\n- `nodes` table (chunk node rows will be replaced if the script handles that)\n- `edges` table (any EXPRESSES / PARALLELS / CONTRASTS rows on Orphic chunks will dangle if old chunk_ids vanish)\n- `staged_tags` and `staged_edges` — same concern\n- `chunk_embeddings` — `--reindex` should overwrite by chunk_id, but old chunk_ids that no longer exist will leak\n\nLikely needs a small follow-up SQL pass to delete dangling rows on Orphic chunk_ids, OR run on a backed-up DB and verify before rolling forward."
 }

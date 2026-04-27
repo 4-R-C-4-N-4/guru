@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-27T22:45:52.503Z",
-  "updated_at": "2026-04-27T22:45:52.503Z",
+  "updated_at": "2026-04-27T22:46:48.883Z",
   "files": [
     {
       "path": "scripts/chunkers/page_chunker.py",
@@ -23,5 +23,6 @@
   ],
   "relationships": {
     "parent": "098bdd6b"
-  }
+  },
+  "description": "**Bug:** `_extract_title` in `scripts/chunkers/page_chunker.py:30-43` searches the first 10 newline-split lines and matches `(.+?)` greedy — for sources that store an entire page (or hymn, or chapter) as a single line with no newlines, the whole content matches and becomes the \"title\".\n\n**Repro:** any `chunking/<X>/<Y>.toml` with `strategy = \"page-as-chunk\"` whose raw text comes back from the source as one line. Verified for `chunking/greek_mystery/orphic-hymns.toml`.\n\n**Fix sketch:**\n- Cap candidate title length (e.g. skip lines > 80 chars).\n- If no short line matches the pattern in the first 10, return None and let the caller format `\"Hymn {n}\"` (the `KeyError/IndexError` fallback at line 95 already handles that).\n- Optional: add a sentence-boundary fallback that tries `re.split(r'\\.\\s+', content)` to find a candidate title within long lines.\n\n**Test:** `tests/test_chunking.py` should grow a fixture for a single-line input that exercises the cap."
 }
