@@ -1,13 +1,13 @@
 {
   "id": "a38d8314",
   "type": "refactor",
-  "state": "open",
+  "state": "active",
   "summary": "Config cleanup and hardcodes — runtime knobs that should be config-driven",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:00:07.877Z",
-  "updated_at": "2026-04-27T13:00:24.553Z",
+  "updated_at": "2026-04-27T14:10:18.575Z",
   "tags": [
     "config",
     "hardcodes",
@@ -25,5 +25,11 @@
       "a309bb8e",
       "e652528f"
     ]
+  },
+  "work": {
+    "branch": "todo/a38d8314",
+    "base_branch": "main",
+    "started_at": "2026-04-27T14:10:18.575Z",
+    "started_by": "Hermes Agent"
   }
 }
