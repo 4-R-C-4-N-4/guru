@@ -1,0 +1,25 @@
+{
+  "id": "dc8a8e00",
+  "type": "bug",
+  "state": "open",
+  "summary": "Orphic Hymns: source-specific normalizer — strip 'Sacred Texts/Previous Next/p. NN' nav, split page-blob on Roman-numeral hymn boundaries",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:45:52.544Z",
+  "updated_at": "2026-04-27T22:45:52.544Z",
+  "files": [
+    {
+      "path": "chunking/greek_mystery/orphic-hymns.toml"
+    }
+  ],
+  "tags": [
+    "chunking",
+    "corpus",
+    "greek_mystery",
+    "acquire"
+  ],
+  "relationships": {
+    "parent": "098bdd6b"
+  }
+}

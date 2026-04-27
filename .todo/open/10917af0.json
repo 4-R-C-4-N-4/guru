@@ -1,0 +1,19 @@
+{
+  "id": "10917af0",
+  "type": "chore",
+  "state": "open",
+  "summary": "Re-chunk + re-embed Orphic Hymns after C1+C2 land — invoke chunk.py and embed_corpus.py --reindex",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:45:52.586Z",
+  "updated_at": "2026-04-27T22:45:52.586Z",
+  "tags": [
+    "corpus",
+    "greek_mystery",
+    "re-embed"
+  ],
+  "relationships": {
+    "parent": "098bdd6b"
+  }
+}
