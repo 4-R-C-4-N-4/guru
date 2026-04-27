@@ -1,0 +1,35 @@
+{
+  "id": "a309bb8e",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Move llama.cpp HTTP timeout (1200s) into config/model.toml",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:24.522Z",
+  "updated_at": "2026-04-27T14:19:48.197Z",
+  "files": [
+    {
+      "path": "scripts/llm.py",
+      "lines": [
+        89,
+        123
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "llm",
+    "timeout"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "45db507ec0491f893494fd1ff7db68ce57a7ebb7",
+    "resolved_at": "2026-04-27T14:19:48.197Z",
+    "resolved_by": "unknown",
+    "note": "Added [provider].timeout (1200s default) to config/model.toml. Wired through call_llm and all four backends. ModelProvider reads it from config."
+  }
+}

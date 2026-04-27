@@ -1,0 +1,35 @@
+{
+  "id": "d9839f50",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Centralize Ollama embed endpoint URL — three modules hardcode http://localhost:11434/api/embed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:15.124Z",
+  "updated_at": "2026-04-27T14:16:41.493Z",
+  "files": [
+    {
+      "path": "guru/cli.py",
+      "lines": [
+        45,
+        45
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "embedding",
+    "ollama"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "2cccb13156d82d6113313419dbfe3b2ce91ad935",
+    "resolved_at": "2026-04-27T14:16:41.493Z",
+    "resolved_by": "unknown",
+    "note": "Three call sites + helper. OLLAMA_BASE_URL env var now overrides embed and chat together."
+  }
+}

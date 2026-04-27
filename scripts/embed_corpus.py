@@ -32,7 +32,7 @@ DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
 # ── embedding providers ───────────────────────────────────────────────────────
 
-def embed_ollama(texts: list[str], model: str) -> list[list[float]]:
+def embed_ollama(texts: list[str], model: str, timeout: float = 120) -> list[list[float]]:
     """Batched embed via ollama's /api/embed.
 
     Sends the entire `texts` list as a single request — ollama's API
@@ -43,15 +43,16 @@ def embed_ollama(texts: list[str], model: str) -> list[list[float]]:
     """
     import json
     import urllib.request
+    from llm import ollama_embed_url
     if not texts:
         return []
     payload = json.dumps({"model": model, "input": texts}).encode()
     req = urllib.request.Request(
-        "http://localhost:11434/api/embed",
+        ollama_embed_url(),
         data=payload,
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=120) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         data = json.loads(resp.read())
     embeddings = data["embeddings"]
     if len(embeddings) != len(texts):
@@ -61,13 +62,13 @@ def embed_ollama(texts: list[str], model: str) -> list[list[float]]:
     return embeddings
 
 
-def embed_sentence_transformers(texts: list[str], model: str) -> list[list[float]]:
+def embed_sentence_transformers(texts: list[str], model: str, timeout: float = 120) -> list[list[float]]:
     from sentence_transformers import SentenceTransformer
     encoder = SentenceTransformer(model)
     return encoder.encode(texts, show_progress_bar=False).tolist()
 
 
-def embed_api(texts: list[str], model: str) -> list[list[float]]:
+def embed_api(texts: list[str], model: str, timeout: float = 120) -> list[list[float]]:
     """OpenAI-compatible embedding API."""
     from openai import OpenAI
     client = OpenAI()
@@ -175,6 +176,7 @@ def main() -> None:
     model_name = model_cfg.get("model_name", "nomic-embed-text")
     batch_size = int(proc_cfg.get("batch_size", 32))
     delay = float(proc_cfg.get("delay", 0.0))
+    timeout = float(proc_cfg.get("timeout", 120))
     model_tag = f"{provider}/{model_name}"
 
     embed_fn = EMBED_FNS.get(provider)
@@ -208,7 +210,7 @@ def main() -> None:
         texts = [c["body"] for c in batch]
 
         try:
-            embeddings = embed_fn(texts, model_name)
+            embeddings = embed_fn(texts, model_name, timeout=timeout)
         except Exception as e:
             logger.error(f"Embedding batch {i//batch_size+1} failed: {e}")
             errors += len(batch)

@@ -18,12 +18,14 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = PROJECT_ROOT / "config" / "model.toml"
-TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
-DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
+from guru.paths import (
+    CONFIG_MODEL as CONFIG_PATH,
+    DEFAULT_DB,
+    SCRIPTS_DIR,
+    TAXONOMY_TOML,
+)
 
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(SCRIPTS_DIR))
 from vector_store import VectorStore  # noqa: E402
 
 from guru.corpus import resolve_chunk_path
@@ -47,9 +49,6 @@ def _load_taxonomy_labels() -> dict[str, str]:
     return labels
 
 
-TIER_WEIGHTS = {"verified": 1.0, "proposed": 0.7, "inferred": 0.4}
-
-
 class HybridRetriever:
     def __init__(
         self,
@@ -63,7 +62,11 @@ class HybridRetriever:
         self._top_k = int(self._rcfg.get("top_k", 10))
         self._min_sim = float(self._rcfg.get("min_similarity", 0.50))
         self._max_per_trad = int(self._rcfg.get("max_per_tradition", 3))
+        self._max_concept_walks = int(self._rcfg.get("max_concept_walks", 5))
+        self._concept_min_word_len = int(self._rcfg.get("concept_match_min_word_len", 3))
         self._diversity_boost = float(self._rkcfg.get("diversity_boost", 0.1))
+        self._vector_weight = float(self._rkcfg.get("vector_weight", 0.7))
+        self._graph_weight = float(self._rkcfg.get("graph_weight", 0.3))
         self._tier_w = {
             "verified": float(self._rkcfg.get("tier_verified", 1.0)),
             "proposed": float(self._rkcfg.get("tier_proposed", 0.7)),
@@ -115,11 +118,12 @@ class HybridRetriever:
         Returns list of {chunk_id, tier, tradition} dicts.
         """
         query_lower = query.lower()
+        min_len = self._concept_min_word_len
         matched_concept_ids = [
             f"concept.{cid}"
             for cid, defn in self._taxonomy.items()
             if cid.replace("_", " ") in query_lower
-            or any(word in query_lower for word in cid.split("_") if len(word) > 4)
+            or any(word in query_lower for word in cid.split("_") if len(word) >= min_len)
         ]
 
         if not matched_concept_ids:
@@ -130,7 +134,9 @@ class HybridRetriever:
         results: list[dict] = []
 
         try:
-            for concept_id in matched_concept_ids[:5]:  # cap graph walk breadth
+            cap = self._max_concept_walks
+            walked = matched_concept_ids if cap == 0 else matched_concept_ids[:cap]
+            for concept_id in walked:
                 # Direct EXPRESSES edges: chunks that express this concept
                 rows = conn.execute(
                     """SELECT e.source_id as chunk_id, e.tier,
@@ -225,20 +231,20 @@ class HybridRetriever:
             if not prefs.is_chunk_allowed(trad):
                 continue
             if cid in seen:
-                # Upgrade tier if graph provides a stronger signal
-                existing_w = TIER_WEIGHTS.get(seen[cid]["tier"], 0.4)
-                new_w = TIER_WEIGHTS.get(hit.get("tier", "inferred"), 0.4)
+                existing_w = self._tier_w.get(seen[cid]["tier"], self._tier_w["inferred"])
+                new_w = self._tier_w.get(hit.get("tier", "inferred"), self._tier_w["inferred"])
                 if new_w > existing_w:
                     seen[cid]["tier"] = hit["tier"]
                 seen[cid]["graph_score"] = max(seen[cid]["graph_score"], new_w)
             else:
+                tier = hit.get("tier", "inferred")
                 seen[cid] = {
                     "chunk_id": cid,
                     "similarity": 0.0,
-                    "tier": hit.get("tier", "inferred"),
+                    "tier": tier,
                     "tradition": trad,
                     "metadata": hit.get("metadata", {}),
-                    "graph_score": TIER_WEIGHTS.get(hit.get("tier", "inferred"), 0.4),
+                    "graph_score": self._tier_w.get(tier, self._tier_w["inferred"]),
                 }
 
         # Score each candidate
@@ -250,7 +256,7 @@ class HybridRetriever:
             tier_w = self._tier_w.get(item["tier"], 0.4)
             graph_s = item.get("graph_score", 0.0)
             diversity = self._diversity_boost if item["tradition"] not in traditions_seen else 0.0
-            score = 0.7 * sim + 0.3 * max(tier_w, graph_s) + diversity
+            score = self._vector_weight * sim + self._graph_weight * max(tier_w, graph_s) + diversity
             traditions_seen.add(item["tradition"])
             scored.append((score, item))
 

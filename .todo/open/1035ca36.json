@@ -1,0 +1,27 @@
+{
+  "id": "1035ca36",
+  "type": "chore",
+  "state": "open",
+  "summary": "Comment drift in _merge_and_rank — claims 'upgrade tier' but really sets tier from authoritative graph source",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:31.455Z",
+  "updated_at": "2026-04-27T13:53:31.455Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        228,
+        228
+      ]
+    }
+  ],
+  "tags": [
+    "cleanup",
+    "docs"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}

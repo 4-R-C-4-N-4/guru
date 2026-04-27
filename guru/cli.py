@@ -19,8 +19,9 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from guru.paths import CONFIG_EMBEDDING as CONFIG_PATH, SCRIPTS_DIR
+
+sys.path.insert(0, str(SCRIPTS_DIR))
 
 from guru.model import ModelProvider
 from guru.preferences import UserPreferences
@@ -28,25 +29,25 @@ from guru.prompt import build_prompt
 from guru.retriever import HybridRetriever
 
 
-CONFIG_PATH = PROJECT_ROOT / "config" / "embedding.toml"
-
-
 def embed_query(query: str) -> list[float]:
     """Embed a query string using the configured embedding model."""
     with open(CONFIG_PATH, "rb") as f:
         cfg = tomllib.load(f)
     model_cfg = cfg.get("model", {})
+    proc_cfg = cfg.get("processing", {})
     provider = model_cfg.get("provider", "ollama")
     model_name = model_cfg.get("model_name", "nomic-embed-text")
+    timeout = float(proc_cfg.get("timeout", 120))
 
     if provider == "ollama":
+        from llm import ollama_embed_url
         payload = json.dumps({"model": model_name, "input": query}).encode()
         req = urllib.request.Request(
-            "http://localhost:11434/api/embed",
+            ollama_embed_url(),
             data=payload,
             headers={"Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read())["embeddings"][0]
     elif provider == "sentence_transformers":
         from sentence_transformers import SentenceTransformer

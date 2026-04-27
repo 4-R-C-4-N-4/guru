@@ -12,11 +12,10 @@ from pathlib import Path
 
 import tomllib
 
-PROJECT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = PROJECT_ROOT / "config" / "model.toml"
+from guru.paths import CONFIG_MODEL as CONFIG_PATH, SCRIPTS_DIR
 
 # Make scripts/ importable
-sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(SCRIPTS_DIR))
 from llm import call_llm  # noqa: E402
 
 
@@ -39,8 +38,15 @@ class ModelProvider:
         cfg = _load_config(config_path)
         prov = cfg.get("provider", {})
         self.provider = prov.get("name", "llamacpp")
-        self.model = prov.get("model", "Carnice-27b-Q4_K_M.gguf")
+        model = prov.get("model")
+        if not model:
+            raise ValueError(
+                f"[provider].model missing from {config_path}. "
+                "No silent default — set it explicitly to the model your backend serves."
+            )
+        self.model = model
         self.max_tokens = int(prov.get("max_tokens", 2048))
+        self.timeout = float(prov.get("timeout", 1200))
 
     def generate(self, system: str, prompt: str, max_tokens: int | None = None) -> str:
         """
@@ -57,6 +63,7 @@ class ModelProvider:
             system=system,
             prompt=prompt,
             max_tokens=max_tokens or self.max_tokens,
+            timeout=self.timeout,
         )
 
     def __repr__(self) -> str:

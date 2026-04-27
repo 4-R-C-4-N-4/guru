@@ -1,0 +1,35 @@
+{
+  "id": "a0aa61cf",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Replace concept-match word-length threshold (len(word) > 4) — magic number drops short core terms (gnosis, logos, aeons, dao)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:24.493Z",
+  "updated_at": "2026-04-27T14:21:00.846Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        122,
+        122
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "retriever",
+    "recall"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "13024e3e3825352f445c1795ca21421059656224",
+    "resolved_at": "2026-04-27T14:21:00.846Z",
+    "resolved_by": "unknown",
+    "note": "Added [retrieval].concept_match_min_word_len (default 3, previously hardcoded > 4 so effective floor was 5). Now captures dao/maya/ayin/logos/aeons/gnosis via the per-token substring path; full-ID phrase match unaffected."
+  }
+}

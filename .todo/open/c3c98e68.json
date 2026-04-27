@@ -1,0 +1,28 @@
+{
+  "id": "c3c98e68",
+  "type": "bug",
+  "state": "open",
+  "summary": "Graph walk emits both source and target of PARALLELS/CONTRASTS edges — skews ranking via doubled graph_score",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:25.394Z",
+  "updated_at": "2026-04-27T13:53:25.394Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        171,
+        181
+      ]
+    }
+  ],
+  "tags": [
+    "retriever",
+    "graph",
+    "ranking"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  }
+}
