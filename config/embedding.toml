@@ -24,3 +24,8 @@ batch_size = 32
 
 # Seconds to wait between API calls (rate limiting)
 delay = 0.0
+
+# HTTP timeout (seconds) for embedding requests. Batched corpus embeds may
+# legitimately take longer than single-query embeds, but we keep one knob
+# to avoid drift across consumers.
+timeout = 120
