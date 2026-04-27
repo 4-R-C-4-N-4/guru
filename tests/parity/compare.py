@@ -20,6 +20,14 @@ COMPARE = {
         "chunk_id, concept_id, status, score, justification, is_new_concept, "
         "new_concept_def, model, prompt_version"
     ),
+    # staged_edges parity matters because reclassify mutates edge_type and
+    # tier; reject preserves tier; surface_only/unrelated reclassify writes
+    # those values back to edge_type even though they never appear in the
+    # live edges table. Excludes id (AUTOINCREMENT) and reviewer/timestamp.
+    "staged_edges": (
+        "source_chunk, target_chunk, edge_type, confidence, justification, "
+        "status, tier"
+    ),
     "edges": "source_id, target_id, type, tier, justification",
     # nodes: include definition because todo:bdbdccd5 made the CLI populate it
     "nodes": "id, type, tradition_id, label, definition",

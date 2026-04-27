@@ -1,13 +1,13 @@
 {
   "id": "1035ca36",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Comment drift in _merge_and_rank — claims 'upgrade tier' but really sets tier from authoritative graph source",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:53:31.455Z",
-  "updated_at": "2026-04-27T13:53:31.455Z",
+  "updated_at": "2026-04-27T14:39:42.017Z",
   "files": [
     {
       "path": "guru/retriever.py",
@@ -23,5 +23,11 @@
   ],
   "relationships": {
     "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "3b7439374d2936f181027c17c1fd365a15919087",
+    "resolved_at": "2026-04-27T14:39:42.017Z",
+    "resolved_by": "unknown",
+    "note": "Replaced 'upgrade tier if better' with an explanation of why vector hits arrive 'inferred' (vector search has no tier) and what the merge actually contributes."
   }
 }

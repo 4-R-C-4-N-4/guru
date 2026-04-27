@@ -1,0 +1,33 @@
+{
+  "id": "aa09356e",
+  "type": "chore",
+  "state": "done",
+  "summary": "File handle leak in seed_tags.py — tomllib.load(open(...)) never closed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:25.364Z",
+  "updated_at": "2026-04-27T14:34:15.446Z",
+  "files": [
+    {
+      "path": "scripts/seed_tags.py",
+      "lines": [
+        27,
+        27
+      ]
+    }
+  ],
+  "tags": [
+    "cleanup",
+    "resource-leak"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "ba96fe04f87ff76b2ad5d3b9814f9ea8bdaaccc6",
+    "resolved_at": "2026-04-27T14:34:15.446Z",
+    "resolved_by": "unknown",
+    "note": "Replaced tomllib.load(open(...)) with a context manager. Reclassified bug→chore: this script processes ~40 chunks and exits, so the leaked descriptors never approached the soft limit in practice. Pattern fix only."
+  }
+}

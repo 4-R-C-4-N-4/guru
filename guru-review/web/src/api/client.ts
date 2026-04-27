@@ -1,10 +1,14 @@
 import type {
   ActionPayload,
+  ApplyPreview,
   ApplyResult,
   Chunk,
   ChunksResponse,
   ConceptDef,
+  EdgeFilterParams,
+  EdgesResponse,
   FilterParams,
+  PendingEdge,
   QueueRow,
   Stats,
 } from './types';
@@ -70,11 +74,27 @@ export const api = {
   ): Promise<{ ok: true; queued: boolean; idempotent?: boolean }> =>
     postJson(`/api/tags/${stagedTagId}/action`, payload),
 
+  edges: (params: EdgeFilterParams & { cursor?: number; limit?: number }): Promise<EdgesResponse> => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== undefined && v !== null && v !== '') q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return getJson(`/api/edges${qs ? `?${qs}` : ''}`);
+  },
+
+  edge: (id: number): Promise<{ edge: PendingEdge }> => getJson(`/api/edges/${id}`),
+
+  postEdgeAction: (
+    stagedEdgeId: number,
+    payload: ActionPayload,
+  ): Promise<{ ok: true; queued: boolean; idempotent?: boolean }> =>
+    postJson(`/api/edges/${stagedEdgeId}/action`, payload),
+
   deleteQueued: (clientActionId: string): Promise<{ ok: true; deleted: number }> =>
     delJson(`/api/queue/${encodeURIComponent(clientActionId)}`),
 
-  applyPreview: (): Promise<{ total_queued: number; by_action: Record<string, number>; affected_staged_tags: number }> =>
-    getJson('/api/apply/preview'),
+  applyPreview: (): Promise<ApplyPreview> => getJson('/api/apply/preview'),
 
   apply: (clientActionId: string): Promise<ApplyResult> =>
     postJson('/api/apply', { client_action_id: clientActionId }),

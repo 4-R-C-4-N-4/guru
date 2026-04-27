@@ -24,12 +24,13 @@ N_GPU_LAYERS="999"
 THREADS="6"
 BATCH_SIZE="512"
 
-# --- Sampling defaults (overridable per-request from clients) ---
-TEMP="0.2"
-TOP_P="0.9"
-TOP_K="40"
-MIN_P="0.05"
-REPEAT_PENALTY="1.05"
+# --- Sampling defaults (overridable per-request from clients, or via env
+#     from a model-specific wrapper — see run-mistral.sh for an example) ---
+TEMP="${TEMP:-0.2}"
+TOP_P="${TOP_P:-0.9}"
+TOP_K="${TOP_K:-40}"
+MIN_P="${MIN_P:-0.05}"
+REPEAT_PENALTY="${REPEAT_PENALTY:-1.05}"
 
 # --- Sanity checks ---
 if [[ ! -f "$MODEL_PATH" ]]; then

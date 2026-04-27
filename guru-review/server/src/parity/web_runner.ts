@@ -12,9 +12,11 @@ import { buildApply } from '../apply.js';
 import { applySchema } from '../schema.js';
 
 interface Action {
-  staged_tag_id: number;
-  action: 'accept' | 'reject' | 'skip' | 'reassign';
+  target_id: number;
+  target_table?: 'staged_tags' | 'staged_edges';   // defaults to staged_tags
+  action: 'accept' | 'reject' | 'skip' | 'reassign' | 'reclassify';
   reassign_to?: string;
+  reclassify_to?: string;
   client_action_id: string;
 }
 
@@ -42,26 +44,30 @@ applySchema(rw);
 
 const stmts = {
   insertReviewAction: rw.prepare(
-    'INSERT INTO review_actions(staged_tag_id, action, reassign_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?)',
+    'INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
   ),
   deleteUnappliedAction: rw.prepare(
     'DELETE FROM review_actions WHERE client_action_id = ? AND applied_at IS NULL',
   ),
   selectStagedTagExists: rw.prepare('SELECT id FROM staged_tags WHERE id = ?'),
+  selectStagedEdgeExists: rw.prepare('SELECT id FROM staged_edges WHERE id = ?'),
   selectQueuedActions: rw.prepare(
-    'SELECT id, staged_tag_id, action, reassign_to, reviewer, client_action_id, created_at FROM review_actions WHERE applied_at IS NULL ORDER BY id ASC',
+    'SELECT id, target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id, created_at FROM review_actions WHERE applied_at IS NULL ORDER BY id ASC',
   ),
   selectStagedTag: rw.prepare(
     'SELECT id, chunk_id, concept_id, score, justification, is_new_concept, new_concept_def, status, model, prompt_version FROM staged_tags WHERE id = ?',
   ),
+  selectStagedEdge: rw.prepare(
+    'SELECT id, source_chunk, target_chunk, edge_type, confidence, justification, status, tier FROM staged_edges WHERE id = ?',
+  ),
   ensureConceptNode: rw.prepare(
     "INSERT INTO nodes(id, type, label, definition) VALUES(?, 'concept', ?, ?) ON CONFLICT(id) DO UPDATE SET definition = COALESCE(nodes.definition, excluded.definition)",
   ),
-  insertOrUpdateEdge: rw.prepare(
-    "INSERT INTO edges(source_id, target_id, type, tier, justification) VALUES(?, ?, 'EXPRESSES', ?, ?) ON CONFLICT(source_id, target_id, type) DO UPDATE SET tier=excluded.tier, justification=excluded.justification",
+  upsertEdge: rw.prepare(
+    'INSERT INTO edges(source_id, target_id, type, tier, justification) VALUES(?, ?, ?, ?, ?) ON CONFLICT(source_id, target_id, type) DO UPDATE SET tier=excluded.tier, justification=excluded.justification',
   ),
-  deleteExpressesEdge: rw.prepare(
-    "DELETE FROM edges WHERE source_id = ? AND target_id = ? AND type = 'EXPRESSES'",
+  deleteEdge: rw.prepare(
+    'DELETE FROM edges WHERE source_id = ? AND target_id = ? AND type = ?',
   ),
   updateStagedTagStatus: rw.prepare(
     'UPDATE staged_tags SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?',
@@ -69,6 +75,12 @@ const stmts = {
   updateStagedTagConcept: rw.prepare('UPDATE staged_tags SET concept_id=? WHERE id=?'),
   insertReassignedTag: rw.prepare(
     'INSERT INTO staged_tags(chunk_id, concept_id, score, justification, is_new_concept, model, prompt_version) VALUES(?, ?, ?, ?, 0, ?, ?)',
+  ),
+  updateStagedEdgeStatus: rw.prepare(
+    'UPDATE staged_edges SET status=?, tier=?, reviewed_by=?, reviewed_at=? WHERE id=?',
+  ),
+  updateStagedEdgeStatusType: rw.prepare(
+    'UPDATE staged_edges SET status=?, edge_type=?, tier=?, reviewed_by=?, reviewed_at=? WHERE id=?',
   ),
   markActionApplied: rw.prepare(
     "UPDATE review_actions SET applied_at = strftime('%Y-%m-%dT%H:%M:%SZ','now'), error = ? WHERE id = ?",
@@ -78,10 +90,13 @@ const stmts = {
 };
 
 for (const a of fixture.actions) {
+  const targetTable = a.target_table ?? 'staged_tags';
   stmts.insertReviewAction.run(
-    a.staged_tag_id,
+    a.target_id,
+    targetTable,
     a.action,
     a.action === 'reassign' ? a.reassign_to ?? null : null,
+    a.action === 'reclassify' ? a.reclassify_to ?? null : null,
     fixture.reviewer,
     a.client_action_id,
   );

@@ -24,7 +24,11 @@ for tradition in ("gnosticism", "jewish_mysticism"):
 
     for chunk_id, label, meta_json in rows:
         chunk_file = resolve_chunk_path(chunk_id)
-        body = tomllib.load(open(chunk_file, "rb"))["content"]["body"] if chunk_file else label
+        if chunk_file:
+            with open(chunk_file, "rb") as f:
+                body = tomllib.load(f)["content"]["body"]
+        else:
+            body = label
         prompt = build_prompt(body, label, concepts)
         try:
             raw = call_ollama("qwen3:8b", SYSTEM_PROMPT, prompt)

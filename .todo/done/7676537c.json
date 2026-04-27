@@ -1,13 +1,13 @@
 {
   "id": "7676537c",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Remove dead 'and not escape_next' check in parse_json_response — escape_next always False at that point",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:53:31.422Z",
-  "updated_at": "2026-04-27T13:53:31.422Z",
+  "updated_at": "2026-04-27T14:38:49.841Z",
   "files": [
     {
       "path": "scripts/llm.py",
@@ -23,5 +23,11 @@
   ],
   "relationships": {
     "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "6f3b5a05810b0fd3ba3b17531f963787a24c7a43",
+    "resolved_at": "2026-04-27T14:38:49.841Z",
+    "resolved_by": "unknown",
+    "note": "Dropped the dead 'and not escape_next' conjunct on the quote branch — escape_next was unconditionally False at that point."
   }
 }

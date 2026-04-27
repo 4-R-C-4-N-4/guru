@@ -1,0 +1,34 @@
+{
+  "id": "93ad20c3",
+  "type": "chore",
+  "state": "done",
+  "summary": "Retriever logic + cleanup — non-config bugs and stale artifacts from review",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:15.752Z",
+  "updated_at": "2026-04-27T14:39:54.582Z",
+  "tags": [
+    "review",
+    "cleanup",
+    "retriever"
+  ],
+  "relationships": {
+    "children": [
+      "aa09356e",
+      "c3c98e68",
+      "61adeb9c",
+      "a46658be",
+      "1d65611e",
+      "7676537c",
+      "1035ca36",
+      "dfc35fed"
+    ]
+  },
+  "resolution": {
+    "commit": "b4f36cd4f5a432514b4222e4432d3d96862a6e57",
+    "resolved_at": "2026-04-27T14:39:54.582Z",
+    "resolved_by": "unknown",
+    "note": "All 8 children closed. Bug fixes: graph walk no longer double-counts edge endpoints; parse_json_response handles top-level objects. Cleanups: seed_tags.py FH leak, retriever.py JSON swallow logging + dead local import, llm.py dead escape_next conjunct, _merge_and_rank comment, deleted tag_concepts.py.bak. 113 tests pass."
+  }
+}
