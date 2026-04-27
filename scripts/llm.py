@@ -35,6 +35,9 @@ def ollama_embed_url() -> str:
     return f"{ollama_base_url()}/api/embed"
 
 
+DEFAULT_HTTP_TIMEOUT = 1200
+
+
 def _chat_openai_compat(
     base_url: str,
     model: str,
@@ -73,7 +76,7 @@ def _chat_openai_compat(
     return ""
 
 
-def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500) -> str:
+def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """
     Call the local llama.cpp server via raw HTTP (no openai SDK dependency).
     Uses urllib so there's no DNS lookup or connection overhead at import time.
@@ -97,7 +100,7 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500) 
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=1200) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         data = json.loads(resp.read())
 
     msg = data["choices"][0]["message"]
@@ -111,7 +114,7 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500) 
     return reasoning
 
 
-def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048) -> str:
+def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
     import os
     import urllib.request
@@ -131,14 +134,14 @@ def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048) ->
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=1200) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         data = json.loads(resp.read())
     return data["message"]["content"]
 
 
-def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048) -> str:
+def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     import anthropic
-    client = anthropic.Anthropic()
+    client = anthropic.Anthropic(timeout=timeout)
     msg = client.messages.create(
         model=model,
         max_tokens=max_tokens,
@@ -148,9 +151,9 @@ def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048)
     return msg.content[0].text
 
 
-def call_openai(model: str, system: str, prompt: str, max_tokens: int = 2048) -> str:
+def call_openai(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     from openai import OpenAI
-    resp = OpenAI().chat.completions.create(
+    resp = OpenAI(timeout=timeout).chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system},
@@ -176,6 +179,7 @@ def call_llm(
     system: str,
     prompt: str,
     max_tokens: int = 1500,
+    timeout: float = DEFAULT_HTTP_TIMEOUT,
 ) -> str:
     """
     Call an LLM and return the response string.
@@ -186,7 +190,7 @@ def call_llm(
     fn = PROVIDERS.get(provider)
     if fn is None:
         raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
-    return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens)
+    return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens, timeout=timeout)
 
 
 def parse_json_response(raw: str) -> list | dict:

@@ -28,11 +28,23 @@ def test_loads_model_from_config(tmp_path):
 name = "llamacpp"
 model = "Foo-7B.gguf"
 max_tokens = 1024
+timeout = 60
 """)
     mp = ModelProvider(config_path=cfg)
     assert mp.model == "Foo-7B.gguf"
     assert mp.provider == "llamacpp"
     assert mp.max_tokens == 1024
+    assert mp.timeout == 60.0
+
+
+def test_timeout_default_when_omitted(tmp_path):
+    cfg = _write_cfg(tmp_path, """
+[provider]
+name = "llamacpp"
+model = "Foo.gguf"
+""")
+    mp = ModelProvider(config_path=cfg)
+    assert mp.timeout == 1200.0
 
 
 def test_missing_model_raises(tmp_path):

@@ -46,6 +46,7 @@ class ModelProvider:
             )
         self.model = model
         self.max_tokens = int(prov.get("max_tokens", 2048))
+        self.timeout = float(prov.get("timeout", 1200))
 
     def generate(self, system: str, prompt: str, max_tokens: int | None = None) -> str:
         """
@@ -62,6 +63,7 @@ class ModelProvider:
             system=system,
             prompt=prompt,
             max_tokens=max_tokens or self.max_tokens,
+            timeout=self.timeout,
         )
 
     def __repr__(self) -> str:
