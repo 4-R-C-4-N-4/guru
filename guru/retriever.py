@@ -62,6 +62,7 @@ class HybridRetriever:
         self._top_k = int(self._rcfg.get("top_k", 10))
         self._min_sim = float(self._rcfg.get("min_similarity", 0.50))
         self._max_per_trad = int(self._rcfg.get("max_per_tradition", 3))
+        self._max_concept_walks = int(self._rcfg.get("max_concept_walks", 5))
         self._diversity_boost = float(self._rkcfg.get("diversity_boost", 0.1))
         self._vector_weight = float(self._rkcfg.get("vector_weight", 0.7))
         self._graph_weight = float(self._rkcfg.get("graph_weight", 0.3))
@@ -131,7 +132,9 @@ class HybridRetriever:
         results: list[dict] = []
 
         try:
-            for concept_id in matched_concept_ids[:5]:  # cap graph walk breadth
+            cap = self._max_concept_walks
+            walked = matched_concept_ids if cap == 0 else matched_concept_ids[:cap]
+            for concept_id in walked:
                 # Direct EXPRESSES edges: chunks that express this concept
                 rows = conn.execute(
                     """SELECT e.source_id as chunk_id, e.tier,
