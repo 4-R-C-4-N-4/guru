@@ -1,0 +1,29 @@
+{
+  "id": "1ed885bb",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Promote hardcoded 0.7/0.3 vector vs graph ranking weights into [ranking] config",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:15.089Z",
+  "updated_at": "2026-04-27T13:00:15.089Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        253,
+        253
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "retriever",
+    "ranking"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  }
+}

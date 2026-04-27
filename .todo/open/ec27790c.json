@@ -1,0 +1,29 @@
+{
+  "id": "ec27790c",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Make graph-walk concept breadth cap configurable — hardcoded [:5] silently drops matches",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:24.462Z",
+  "updated_at": "2026-04-27T13:00:24.462Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        133,
+        133
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "retriever",
+    "graph"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "9524b312",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Move embedding HTTP timeout into config/embedding.toml — currently 30s/30s/120s split across modules",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:24.430Z",
+  "updated_at": "2026-04-27T13:00:24.430Z",
+  "files": [
+    {
+      "path": "scripts/embed_corpus.py",
+      "lines": [
+        54,
+        54
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "embedding",
+    "timeout"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  }
+}
