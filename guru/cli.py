@@ -38,9 +38,10 @@ def embed_query(query: str) -> list[float]:
     model_name = model_cfg.get("model_name", "nomic-embed-text")
 
     if provider == "ollama":
+        from llm import ollama_embed_url
         payload = json.dumps({"model": model_name, "input": query}).encode()
         req = urllib.request.Request(
-            "http://localhost:11434/api/embed",
+            ollama_embed_url(),
             data=payload,
             headers={"Content-Type": "application/json"},
         )

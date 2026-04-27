@@ -50,9 +50,10 @@ def embed_query(query: str, config_path: Path) -> list[float]:
     if provider == "ollama":
         import json
         import urllib.request
+        from llm import ollama_embed_url
         payload = json.dumps({"model": model_name, "input": query}).encode()
         req = urllib.request.Request(
-            "http://localhost:11434/api/embed",
+            ollama_embed_url(),
             data=payload,
             headers={"Content-Type": "application/json"},
         )

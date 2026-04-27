@@ -43,11 +43,12 @@ def embed_ollama(texts: list[str], model: str) -> list[list[float]]:
     """
     import json
     import urllib.request
+    from llm import ollama_embed_url
     if not texts:
         return []
     payload = json.dumps({"model": model, "input": texts}).encode()
     req = urllib.request.Request(
-        "http://localhost:11434/api/embed",
+        ollama_embed_url(),
         data=payload,
         headers={"Content-Type": "application/json"},
     )

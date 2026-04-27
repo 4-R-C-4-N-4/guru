@@ -24,6 +24,17 @@ LLAMACPP_BASE_URL = "http://127.0.0.1:8080"
 OLLAMA_BASE_URL = "http://localhost:11434"
 
 
+def ollama_base_url() -> str:
+    """Resolve OLLAMA_BASE_URL from env or default. Used by embedding callers
+    that don't go through the chat path."""
+    import os
+    return os.environ.get("OLLAMA_BASE_URL", OLLAMA_BASE_URL)
+
+
+def ollama_embed_url() -> str:
+    return f"{ollama_base_url()}/api/embed"
+
+
 def _chat_openai_compat(
     base_url: str,
     model: str,
