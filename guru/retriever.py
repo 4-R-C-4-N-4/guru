@@ -12,11 +12,14 @@ Pipeline:
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 import sys
 from pathlib import Path
 
 import tomllib
+
+logger = logging.getLogger(__name__)
 
 from guru.paths import (
     CONFIG_MODEL as CONFIG_PATH,
@@ -300,10 +303,13 @@ class HybridRetriever:
             # Concept tags come from live EXPRESSES edges (VectorStore.get_metadata)
             raw_concepts = meta.get("concepts", [])
             if isinstance(raw_concepts, str):
-                import json as _json
                 try:
-                    raw_concepts = _json.loads(raw_concepts)
-                except Exception:
+                    raw_concepts = json.loads(raw_concepts)
+                except json.JSONDecodeError as e:
+                    logger.warning(
+                        "concepts metadata for %s is not valid JSON (%s); falling back to []. raw=%r",
+                        cid, e, raw_concepts[:200],
+                    )
                     raw_concepts = []
 
             output.append(RetrievedChunk(
