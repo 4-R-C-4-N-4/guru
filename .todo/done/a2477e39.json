@@ -1,0 +1,37 @@
+{
+  "id": "a2477e39",
+  "type": "bug",
+  "state": "done",
+  "summary": "Resolve dual tier-weight source in HybridRetriever — config silently ignored in merge step",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:00:15.055Z",
+  "updated_at": "2026-04-27T14:15:12.324Z",
+  "files": [
+    {
+      "path": "guru/retriever.py",
+      "lines": [
+        50,
+        253
+      ]
+    }
+  ],
+  "tags": [
+    "config",
+    "hardcodes",
+    "retriever",
+    "ranking"
+  ],
+  "relationships": {
+    "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "099eecd0a49b8bd7142283ee4feb9f15183aff42",
+    "resolved_at": "2026-04-27T14:15:12.324Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_retriever_ranking.py",
+    "test_function": "test_inverted_tier_weights_flow_through_merge",
+    "note": "Removed module-level TIER_WEIGHTS, replaced its three usages in _merge_and_rank with self._tier_w. Three regression tests cover config-flow, default ordering, and inverted-weight tier upgrade."
+  }
+}
