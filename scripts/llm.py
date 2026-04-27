@@ -196,7 +196,11 @@ def call_llm(
 def parse_json_response(raw: str) -> list | dict:
     """
     Robustly extract JSON from an LLM response.
-    Handles markdown fences, thinking model preamble, partial wrapping.
+
+    Handles markdown fences, thinking-model preamble, and partial wrapping
+    for both top-level arrays and top-level objects. For arrays, attempts
+    to repair truncated output by closing the array after the last complete
+    inner object. Returns [] on total failure.
     """
     if not raw:
         return []
@@ -208,17 +212,21 @@ def parse_json_response(raw: str) -> list | dict:
     # Handle two-stage responses if you add the ===JSON=== marker later
     if "===JSON===" in raw:
         raw = raw.split("===JSON===", 1)[1].strip()
-    # Try to find a JSON array
-    match = re.search(r'\[.*', raw, re.DOTALL)
+    # Skip preamble — locate the first '[' or '{' and parse from there.
+    match = re.search(r'[\[\{]', raw)
     if match:
-        raw = match.group(0)
+        raw = raw[match.start():]
     # First attempt: parse as-is
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         pass
-    # Repair attempt: truncate to the last complete object, close the array
-    # Walk back from the end to find the last complete object
+    # Repair: only meaningful for arrays. For a truncated object we'd need
+    # a smarter parser; callers should retry with a higher max_tokens budget.
+    if not raw.startswith("["):
+        return []
+    # Walk forward, tracking string/escape state, to find the last complete
+    # top-level object. Then close the array.
     depth = 0
     last_complete = -1
     in_string = False
@@ -230,7 +238,7 @@ def parse_json_response(raw: str) -> list | dict:
         if c == '\\':
             escape_next = True
             continue
-        if c == '"' and not escape_next:
+        if c == '"':
             in_string = not in_string
             continue
         if in_string:
@@ -242,11 +250,9 @@ def parse_json_response(raw: str) -> list | dict:
             if depth == 0:
                 last_complete = i
     if last_complete > 0:
-        # Take everything up to and including the last complete object, then close the array
         repaired = raw[:last_complete + 1] + "]"
         try:
             return json.loads(repaired)
         except json.JSONDecodeError:
             pass
-    # Give up, return empty
     return []
