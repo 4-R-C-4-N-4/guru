@@ -1,13 +1,13 @@
 {
   "id": "9524b312",
   "type": "refactor",
-  "state": "open",
+  "state": "done",
   "summary": "Move embedding HTTP timeout into config/embedding.toml — currently 30s/30s/120s split across modules",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:00:24.430Z",
-  "updated_at": "2026-04-27T13:00:24.430Z",
+  "updated_at": "2026-04-27T14:17:59.859Z",
   "files": [
     {
       "path": "scripts/embed_corpus.py",
@@ -25,5 +25,11 @@
   ],
   "relationships": {
     "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "789fdf4fe631c35738ca02f87c6abcfe5695f817",
+    "resolved_at": "2026-04-27T14:17:59.859Z",
+    "resolved_by": "unknown",
+    "note": "Single [processing].timeout knob, default 120s. Three callers updated."
   }
 }
