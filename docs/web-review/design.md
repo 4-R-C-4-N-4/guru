@@ -12,7 +12,7 @@
 
 - Review the **~15k pending `staged_tags` rows** from a phone over the local network. Sessions will be many; the tool needs to feel sustainable, not heroic.
 - **Match the unit of review to the unit of generation.** The LLM tagged each chunk holistically — reading the passage, then proposing N concepts with scores. The reviewer should audit the same way: read the chunk once, then evaluate the model's full take on it. The CLI's per-tag fragmentation (one card per `(chunk, concept)` pair) makes you re-read the same passage 3-7 times for the same chunk and prevents you from noticing patterns *across* a chunk's tags. The web tool flips this: the unit of review is the chunk-with-its-pending-tags, not the individual tag.
-- Preserve **exactly** the semantics of `scripts/review_tags.py` so the live graph state after a session is indistinguishable from what the CLI would have produced for the same decisions. (Aggregation is a UI concern only — the underlying writes are still per-`staged_tag_id`.)
+- Preserve **exactly** the semantics of `scripts/review_tags.py` so the live graph state after a session is indistinguishable from what the CLI would have produced for the same decisions. (Aggregation is a UI concern only — the underlying writes are still per-`target_id`.)
 - Protect the database. Three days of 3090 tagging time is the asset being insured. No path through the new tool can corrupt `staged_tags` rows or insert junk into `edges` without an operator-initiated apply step.
 - Make per-device review attribution possible (`reviewer = "ivy-phone"` vs. `"ivy-laptop"` vs. `"human"` from the CLI), so future audits can tell sources apart.
 
@@ -123,7 +123,7 @@ One additive table. No modifications to existing schema.
 ```sql
 CREATE TABLE IF NOT EXISTS review_actions (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
-    staged_tag_id     INTEGER NOT NULL REFERENCES staged_tags(id),
+    target_id     INTEGER NOT NULL REFERENCES staged_tags(id),
     action            TEXT NOT NULL CHECK(action IN ('accept','reject','skip','reassign')),
     reassign_to       TEXT,                       -- concept_id, required iff action='reassign'
     reviewer          TEXT NOT NULL,              -- e.g. 'ivy-phone', 'ivy-laptop', 'human'
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS review_actions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_review_actions_unapplied
-    ON review_actions(staged_tag_id) WHERE applied_at IS NULL;
+    ON review_actions(target_id) WHERE applied_at IS NULL;
 
 CREATE INDEX IF NOT EXISTS idx_review_actions_client_id
     ON review_actions(client_action_id);
@@ -187,7 +187,7 @@ All writes go through this set, prepared once at boot:
 const stmts = {
   insertReviewAction: rw.prepare(`
     INSERT INTO review_actions
-      (staged_tag_id, action, reassign_to, reviewer, client_action_id)
+      (target_id, action, reassign_to, reviewer, client_action_id)
     VALUES (?, ?, ?, ?, ?)
   `),
   deleteUnappliedAction: rw.prepare(`
@@ -265,7 +265,7 @@ Add to startup. ~5MB at 15k rows. Pruned alongside snapshots.
 | `GET` | `/api/texts?tradition=X` | Distinct `text_id`s within a tradition (from `metadata_json`). |
 | `GET` | `/api/chunks` | **Keyset-paginated** chunks with their pending tags. Query: `tradition`, `text`, `concept`, `min_score`, `cursor`, `limit`. Excludes any tag with an unapplied action. Returns `{ chunks, next_cursor, pending_chunks_in_filter, pending_tags_in_filter }`. See §4.6. |
 | `GET` | `/api/queue` | Currently queued (un-applied) actions, with their tag context, for the apply preview screen. |
-| `POST` | `/api/tags/:staged_tag_id/action` | Body: `{ action, reassign_to?, client_action_id, reviewer }`. Idempotent on `client_action_id`. |
+| `POST` | `/api/tags/:target_id/action` | Body: `{ action, reassign_to?, client_action_id, reviewer }`. Idempotent on `client_action_id`. |
 | `DELETE` | `/api/queue/:client_action_id` | Remove a queued action before apply. |
 | `POST` | `/api/apply` | Body: `{ client_action_id }`. Drains queue in single transaction. Idempotent. |
 | `GET` | `/api/apply/preview` | What would happen if apply ran now. Counts and a sample. |
@@ -286,7 +286,7 @@ WHERE st.status = 'pending'
   AND st.score >= :min_score
   AND NOT EXISTS (
       SELECT 1 FROM review_actions ra
-      WHERE ra.staged_tag_id = st.id AND ra.applied_at IS NULL
+      WHERE ra.target_id = st.id AND ra.applied_at IS NULL
   )
   -- + optional tradition / text_id filters
   -- + cursor: (n.tradition_id, n.id) > (:cursor_trad, :cursor_id)
@@ -302,7 +302,7 @@ WHERE st.chunk_id IN (:chunk_ids)
   AND st.score >= :min_score
   AND NOT EXISTS (
       SELECT 1 FROM review_actions ra
-      WHERE ra.staged_tag_id = st.id AND ra.applied_at IS NULL
+      WHERE ra.target_id = st.id AND ra.applied_at IS NULL
   )
 ORDER BY st.chunk_id, st.score DESC, st.id ASC;
 ```
@@ -328,7 +328,7 @@ Returned shape:
 
 ```ts
 type PendingTag = {
-  staged_tag_id: number;
+  target_id: number;
   concept_id: string;
   concept_label: string;       // from nodes.label, used in concept picker too
   concept_def: string;         // full definition prose (see §5.3 for display)
@@ -390,7 +390,7 @@ const apply = rw.transaction((reviewerActionId: string) => {
   for (const q of queued) {
     try {
       // Re-check current staged_tag status — may have been resolved by CLI in parallel
-      const tag = stmts.selectStagedTag.get(q.staged_tag_id) as StagedTag | undefined;
+      const tag = stmts.selectStagedTag.get(q.target_id) as StagedTag | undefined;
       if (!tag || tag.status !== 'pending') {
         // No-op. Mark action applied with a note. Preserves audit trail.
         stmts.markActionApplied.run({

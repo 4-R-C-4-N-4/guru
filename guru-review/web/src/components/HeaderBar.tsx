@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
 import type { Stats } from '../api/types';
 import { StatsDrawer } from './StatsDrawer';
@@ -9,6 +9,8 @@ export function HeaderBar(): React.ReactElement {
   const [stats, setStats] = useState<Stats | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const loc = useLocation();
+  const onEdges = loc.pathname.startsWith('/edges');
 
   useEffect(() => subscribeRetry(setRetryCount), []);
 
@@ -30,12 +32,27 @@ export function HeaderBar(): React.ReactElement {
     };
   }, []);
 
+  const pendingCount = onEdges ? stats?.pending_edges : stats?.pending_tags;
+  const pendingLabel = onEdges ? 'edges' : 'tags';
+
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-zinc-800 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/70">
         <div className="flex items-center justify-between px-4 py-3 mono text-sm">
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-3">
             <Link to="/" className="font-bold text-accent">guru-review</Link>
+            <Link
+              to="/"
+              className={`text-xs ${!onEdges ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              tags
+            </Link>
+            <Link
+              to="/edges"
+              className={`text-xs ${onEdges ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              edges
+            </Link>
             {retryCount > 0 && (
               <span
                 className="rounded border border-amber-500/40 bg-amber-500/10 px-1.5 text-xs text-amber-300"
@@ -52,7 +69,7 @@ export function HeaderBar(): React.ReactElement {
                 className="hover:text-zinc-200"
                 aria-label="session stats"
               >
-                {stats.queued_actions} queued · {stats.pending_tags.toLocaleString()} pending
+                {stats.queued_actions} queued · {(pendingCount ?? 0).toLocaleString()} {pendingLabel}
               </button>
               <Link to="/queue" className="rounded border border-accent/50 px-2 py-1 text-accent hover:bg-accent/10">
                 Apply{stats.queued_actions > 0 ? ` ${stats.queued_actions}` : ''}

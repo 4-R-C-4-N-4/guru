@@ -1,0 +1,37 @@
+{
+  "id": "90c79a3f",
+  "type": "feature",
+  "state": "done",
+  "summary": "C3: review_edges.py — extract accept_edge / reject_edge / reclassify_edge helpers with DELETE-retraction discipline + tests. Mirror of review_tags's editorial overlay.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.161Z",
+  "updated_at": "2026-04-26T21:14:20.341Z",
+  "files": [
+    {
+      "path": "scripts/review_edges.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "cli",
+    "editorial-overlay",
+    "helpers",
+    "tests"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "a8a1e876"
+    ]
+  },
+  "resolution": {
+    "commit": "41c52e65146658470e947f81157280a300b82962",
+    "resolved_at": "2026-04-26T21:14:20.341Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_review_edges.py",
+    "test_function": "test_accept_writes_verified_and_marks_status",
+    "note": "Three editorial-overlay helpers (accept_edge, reject_edge, reclassify_edge) extracted from review_edges.py inline loop. DELETE-retraction discipline lands on reject + reclassify-old-type. surface_only/unrelated reclassify routes through typed reject (per edges.md §4 fix to the prior CLI bug where reclassify-to-surface_only would CHECK-fail at promote). 10 unit tests cover all branches; full suite 102/102 + parity green."
+  }
+}

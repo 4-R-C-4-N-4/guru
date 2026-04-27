@@ -20,6 +20,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 from review_tags import promote_to_expresses, reject_tag, reassign_tag  # noqa: E402
+from review_edges import accept_edge, reject_edge, reclassify_edge  # noqa: E402
 
 REVIEWER = "parity-harness"
 
@@ -28,8 +29,8 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def apply_action(conn: sqlite3.Connection, action: dict) -> None:
-    sid = action["staged_tag_id"]
+def apply_tag_action(conn: sqlite3.Connection, action: dict) -> None:
+    sid = action["target_id"]
     kind = action["action"]
     # Use sqlite3.Row for kw-style access, mirroring review_tags.py's
     # in-loop row dict so the helpers receive the same shape they expect.
@@ -57,7 +58,39 @@ def apply_action(conn: sqlite3.Connection, action: dict) -> None:
     elif kind == "reassign":
         reassign_tag(conn, row, action["reassign_to"])
     else:
-        raise RuntimeError(f"unknown action: {kind}")
+        raise RuntimeError(f"unknown tag action: {kind}")
+
+
+def apply_edge_action(conn: sqlite3.Connection, action: dict) -> None:
+    sid = action["target_id"]
+    kind = action["action"]
+    conn.row_factory = sqlite3.Row
+    row = conn.execute(
+        "SELECT * FROM staged_edges WHERE id=?", (sid,),
+    ).fetchone()
+    if row is None:
+        raise RuntimeError(f"seed missing staged_edge id={sid}")
+
+    if kind == "accept":
+        accept_edge(conn, row)
+    elif kind == "reject":
+        reject_edge(conn, row)
+    elif kind == "skip":
+        pass
+    elif kind == "reclassify":
+        reclassify_edge(conn, row, action["reclassify_to"])
+    else:
+        raise RuntimeError(f"unknown edge action: {kind}")
+
+
+def apply_action(conn: sqlite3.Connection, action: dict) -> None:
+    target_table = action.get("target_table", "staged_tags")
+    if target_table == "staged_tags":
+        apply_tag_action(conn, action)
+    elif target_table == "staged_edges":
+        apply_edge_action(conn, action)
+    else:
+        raise RuntimeError(f"unknown target_table: {target_table}")
 
 
 def main() -> None:

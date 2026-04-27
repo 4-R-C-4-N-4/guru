@@ -32,10 +32,10 @@ const ActionSchema = z.discriminatedUnion('action', [
 export function tagsRouter(stmts: PreparedStmts): Router {
   const r = Router();
 
-  r.post('/tags/:staged_tag_id/action', (req, res) => {
-    const id = Number.parseInt(req.params.staged_tag_id, 10);
+  r.post('/tags/:target_id/action', (req, res) => {
+    const id = Number.parseInt(req.params.target_id, 10);
     if (!Number.isFinite(id) || id <= 0) {
-      res.status(400).json({ error: 'invalid staged_tag_id' });
+      res.status(400).json({ error: 'invalid target_id' });
       return;
     }
 
@@ -57,8 +57,10 @@ export function tagsRouter(stmts: PreparedStmts): Router {
     try {
       stmts.insertReviewAction.run(
         id,
+        'staged_tags',
         action,
         action === 'reassign' ? reassign_to : null,
+        null,                  // reclassify_to — staged_tags branch never sets this
         reviewer,
         client_action_id,
       );
