@@ -49,9 +49,6 @@ def _load_taxonomy_labels() -> dict[str, str]:
     return labels
 
 
-TIER_WEIGHTS = {"verified": 1.0, "proposed": 0.7, "inferred": 0.4}
-
-
 class HybridRetriever:
     def __init__(
         self,
@@ -227,20 +224,20 @@ class HybridRetriever:
             if not prefs.is_chunk_allowed(trad):
                 continue
             if cid in seen:
-                # Upgrade tier if graph provides a stronger signal
-                existing_w = TIER_WEIGHTS.get(seen[cid]["tier"], 0.4)
-                new_w = TIER_WEIGHTS.get(hit.get("tier", "inferred"), 0.4)
+                existing_w = self._tier_w.get(seen[cid]["tier"], self._tier_w["inferred"])
+                new_w = self._tier_w.get(hit.get("tier", "inferred"), self._tier_w["inferred"])
                 if new_w > existing_w:
                     seen[cid]["tier"] = hit["tier"]
                 seen[cid]["graph_score"] = max(seen[cid]["graph_score"], new_w)
             else:
+                tier = hit.get("tier", "inferred")
                 seen[cid] = {
                     "chunk_id": cid,
                     "similarity": 0.0,
-                    "tier": hit.get("tier", "inferred"),
+                    "tier": tier,
                     "tradition": trad,
                     "metadata": hit.get("metadata", {}),
-                    "graph_score": TIER_WEIGHTS.get(hit.get("tier", "inferred"), 0.4),
+                    "graph_score": self._tier_w.get(tier, self._tier_w["inferred"]),
                 }
 
         # Score each candidate
