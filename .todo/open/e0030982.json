@@ -1,0 +1,25 @@
+{
+  "id": "e0030982",
+  "type": "feature",
+  "state": "open",
+  "summary": "Auto-promote staged_edges to live edges at tier=proposed (mirrors auto_promote.py for tags)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:54:58.397Z",
+  "updated_at": "2026-04-27T22:55:09.592Z",
+  "tags": [
+    "autopromote",
+    "edges",
+    "pipeline"
+  ],
+  "relationships": {
+    "children": [
+      "8c5f3527",
+      "aa53e5b3",
+      "d1a3e7aa",
+      "5374225a",
+      "3cd6e5a6"
+    ]
+  }
+}
