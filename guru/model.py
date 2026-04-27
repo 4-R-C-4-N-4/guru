@@ -38,7 +38,13 @@ class ModelProvider:
         cfg = _load_config(config_path)
         prov = cfg.get("provider", {})
         self.provider = prov.get("name", "llamacpp")
-        self.model = prov.get("model", "Carnice-27b-Q4_K_M.gguf")
+        model = prov.get("model")
+        if not model:
+            raise ValueError(
+                f"[provider].model missing from {config_path}. "
+                "No silent default — set it explicitly to the model your backend serves."
+            )
+        self.model = model
         self.max_tokens = int(prov.get("max_tokens", 2048))
 
     def generate(self, system: str, prompt: str, max_tokens: int | None = None) -> str:
