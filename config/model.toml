@@ -35,6 +35,12 @@ max_per_tradition = 3
 # 0 = no cap. Higher values widen recall but multiply graph queries.
 max_concept_walks = 5
 
+# Minimum word length for substring matching of concept_id components against
+# the query. Used as a precision/recall knob: at 4 it excluded gnosis, logos,
+# aeons, dao, maya. Lowered to 3 to capture core esoteric terms; full-id
+# (concept name with underscores → spaces) matching is unaffected.
+concept_match_min_word_len = 3
+
 [ranking]
 # Final score = vector_weight * cosine_sim
 #             + graph_weight  * max(tier_weight, graph_score)

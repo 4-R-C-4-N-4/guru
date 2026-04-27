@@ -63,6 +63,7 @@ class HybridRetriever:
         self._min_sim = float(self._rcfg.get("min_similarity", 0.50))
         self._max_per_trad = int(self._rcfg.get("max_per_tradition", 3))
         self._max_concept_walks = int(self._rcfg.get("max_concept_walks", 5))
+        self._concept_min_word_len = int(self._rcfg.get("concept_match_min_word_len", 3))
         self._diversity_boost = float(self._rkcfg.get("diversity_boost", 0.1))
         self._vector_weight = float(self._rkcfg.get("vector_weight", 0.7))
         self._graph_weight = float(self._rkcfg.get("graph_weight", 0.3))
@@ -117,11 +118,12 @@ class HybridRetriever:
         Returns list of {chunk_id, tier, tradition} dicts.
         """
         query_lower = query.lower()
+        min_len = self._concept_min_word_len
         matched_concept_ids = [
             f"concept.{cid}"
             for cid, defn in self._taxonomy.items()
             if cid.replace("_", " ") in query_lower
-            or any(word in query_lower for word in cid.split("_") if len(word) > 4)
+            or any(word in query_lower for word in cid.split("_") if len(word) >= min_len)
         ]
 
         if not matched_concept_ids:
