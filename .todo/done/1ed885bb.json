@@ -1,13 +1,13 @@
 {
   "id": "1ed885bb",
   "type": "refactor",
-  "state": "open",
+  "state": "done",
   "summary": "Promote hardcoded 0.7/0.3 vector vs graph ranking weights into [ranking] config",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:00:15.089Z",
-  "updated_at": "2026-04-27T13:00:15.089Z",
+  "updated_at": "2026-04-27T14:15:41.562Z",
   "files": [
     {
       "path": "guru/retriever.py",
@@ -25,5 +25,11 @@
   ],
   "relationships": {
     "parent": "a38d8314"
+  },
+  "resolution": {
+    "commit": "94726d0f288012b526413c774f080250fef0273f",
+    "resolved_at": "2026-04-27T14:15:41.562Z",
+    "resolved_by": "unknown",
+    "note": "Added [ranking].vector_weight (0.7) and [ranking].graph_weight (0.3) to config/model.toml, retriever now reads them. Defaults preserve previous behavior."
   }
 }
