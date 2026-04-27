@@ -1,13 +1,13 @@
 {
   "id": "1d65611e",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Delete stale scripts/tag_concepts.py.bak — leftover from migration",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T13:53:31.391Z",
-  "updated_at": "2026-04-27T13:53:31.391Z",
+  "updated_at": "2026-04-27T14:39:17.397Z",
   "files": [
     {
       "path": "scripts/tag_concepts.py.bak"
@@ -19,5 +19,11 @@
   ],
   "relationships": {
     "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "22080e1cfdba40d7377c3b0d49abcde16b878891",
+    "resolved_at": "2026-04-27T14:39:17.397Z",
+    "resolved_by": "unknown",
+    "note": "Deleted; original is in commit 8ebb30f."
   }
 }
