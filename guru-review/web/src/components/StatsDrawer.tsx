@@ -39,6 +39,7 @@ export function StatsDrawer({ stats, onClose }: Props): React.ReactElement {
 
             <Section title="Pool">
               <Row k="pending tags" v={stats.pending_tags} />
+              <Row k="pending edges" v={stats.pending_edges} />
             </Section>
           </div>
         )}

@@ -42,7 +42,7 @@ interface OuterRow {
 }
 
 interface InnerRow {
-  staged_tag_id: number;
+  target_id: number;
   chunk_id: string;
   concept_id: string;
   score: number;
@@ -78,7 +78,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     const outerWhere: string[] = [
       "st.status = 'pending'",
       'st.score >= ?',
-      'NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.staged_tag_id = st.id AND ra.applied_at IS NULL)',
+      "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
     ];
     const outerParams: unknown[] = [min_score];
 
@@ -119,7 +119,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     if (outerRows.length > 0) {
       const placeholders = outerRows.map(() => '?').join(',');
       const innerSql = `
-        SELECT id AS staged_tag_id, chunk_id, concept_id, score, justification,
+        SELECT id AS target_id, chunk_id, concept_id, score, justification,
                is_new_concept, new_concept_def
         FROM staged_tags
         WHERE chunk_id IN (${placeholders})
@@ -127,7 +127,9 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           AND score >= ?
           AND NOT EXISTS (
               SELECT 1 FROM review_actions ra
-              WHERE ra.staged_tag_id = staged_tags.id AND ra.applied_at IS NULL
+              WHERE ra.target_id = staged_tags.id
+                AND ra.target_table = 'staged_tags'
+                AND ra.applied_at IS NULL
           )
         ORDER BY chunk_id, score DESC, id ASC
       `;
@@ -191,7 +193,7 @@ function buildChunk(
   text_id: string | null;
   body: string;
   pending_tags: Array<{
-    staged_tag_id: number;
+    target_id: number;
     concept_id: string;
     concept_label: string;
     concept_def: string;
@@ -210,7 +212,7 @@ function buildChunk(
     pending_tags: tags.map((t) => {
       const ci = concepts.get(t.concept_id);
       return {
-        staged_tag_id: t.staged_tag_id,
+        target_id: t.target_id,
         concept_id: t.concept_id,
         concept_label: ci?.label ?? t.concept_id,
         concept_def: ci?.definition ?? '',
@@ -230,7 +232,7 @@ function computeCounts(
   const where: string[] = [
     "st.status = 'pending'",
     'st.score >= ?',
-    'NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.staged_tag_id = st.id AND ra.applied_at IS NULL)',
+    "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
   ];
   const params: unknown[] = [filters.min_score];
 

@@ -1,15 +1,18 @@
-// Apply transaction — drains review_actions queue into staged_tags + edges + nodes.
-// Mirrors scripts/review_tags.py:promote_to_expresses exactly. The parity
-// harness at tests/parity/ asserts row-content equivalence between this and
-// the CLI for the same fixture decision sequence.
+// Apply transaction — drains review_actions queue into staged_tags or
+// staged_edges + edges + nodes, dispatching on target_table. Mirrors
+// scripts/review_tags.py and scripts/review_edges.py editorial-overlay
+// helpers. The parity harness at tests/parity/ asserts row-content
+// equivalence between this and the CLI for the same fixture decisions.
 import type Database from 'better-sqlite3';
 import type { PreparedStmts } from './db.js';
 
 interface QueuedAction {
   id: number;
-  staged_tag_id: number;
-  action: 'accept' | 'reject' | 'skip' | 'reassign';
+  target_id: number;
+  target_table: 'staged_tags' | 'staged_edges';
+  action: 'accept' | 'reject' | 'skip' | 'reassign' | 'reclassify';
   reassign_to: string | null;
+  reclassify_to: string | null;
   reviewer: string;
   client_action_id: string;
   created_at: string;
@@ -28,9 +31,20 @@ interface StagedTag {
   prompt_version: string | null;
 }
 
+interface StagedEdge {
+  id: number;
+  source_chunk: string;
+  target_chunk: string;
+  edge_type: 'PARALLELS' | 'CONTRASTS' | 'surface_only' | 'unrelated';
+  confidence: number;
+  justification: string | null;
+  status: string;
+  tier: string;
+}
+
 export interface ApplyResult {
   applied: number;
-  edges_created: number; // counts inserts/upserts on edges (accepts only)
+  edges_created: number; // upserts on accept/reclassify (verified)
   skipped_already_resolved: number;
   errors: Array<{ action_id: number; client_action_id: string; error: string }>;
 }
@@ -46,6 +60,161 @@ function pythonTitleCase(s: string): string {
   return s.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+
+// ── staged_tags branch (existing behaviour) ────────────────────────────
+
+function applyTagAction(
+  stmts: PreparedStmts,
+  q: QueuedAction,
+  result: ApplyResult,
+): boolean {
+  const tag = stmts.selectStagedTag.get(q.target_id) as StagedTag | undefined;
+
+  if (!tag || tag.status !== 'pending') {
+    stmts.markActionApplied.run(
+      `tag was ${tag?.status ?? 'missing'} at apply time`,
+      q.id,
+    );
+    result.skipped_already_resolved++;
+    return true;
+  }
+
+  switch (q.action) {
+    case 'accept': {
+      const conceptNodeId = `concept.${tag.concept_id}`;
+      const label = pythonTitleCase(tag.concept_id);
+      stmts.ensureConceptNode.run(conceptNodeId, label, tag.new_concept_def);
+      // Editorial overlay: human accept = verified, full stop.
+      stmts.upsertEdge.run(
+        tag.chunk_id, conceptNodeId, 'EXPRESSES', 'verified',
+        tag.justification ?? '',
+      );
+      stmts.updateStagedTagStatus.run('accepted', q.reviewer, nowIso(), tag.id);
+      result.edges_created++;
+      break;
+    }
+    case 'reject': {
+      stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      stmts.updateStagedTagStatus.run('rejected', q.reviewer, nowIso(), tag.id);
+      break;
+    }
+    case 'reassign': {
+      if (!q.reassign_to) {
+        throw new Error(`reassign action ${q.id} missing reassign_to`);
+      }
+      stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
+      stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);
+      stmts.insertReassignedTag.run(
+        tag.chunk_id, q.reassign_to, tag.score,
+        `Reassigned from ${tag.concept_id}`,
+        tag.model, tag.prompt_version,
+      );
+      break;
+    }
+    case 'skip': {
+      break;
+    }
+    default: {
+      throw new Error(
+        `unknown action for staged_tags: ${q.action} (action ${q.id})`,
+      );
+    }
+  }
+
+  stmts.markActionApplied.run(null, q.id);
+  result.applied++;
+  return true;
+}
+
+
+// ── staged_edges branch (new) ──────────────────────────────────────────
+
+function applyEdgeAction(
+  stmts: PreparedStmts,
+  q: QueuedAction,
+  result: ApplyResult,
+): boolean {
+  const edge = stmts.selectStagedEdge.get(q.target_id) as StagedEdge | undefined;
+
+  if (!edge || edge.status !== 'pending') {
+    stmts.markActionApplied.run(
+      `staged_edge was ${edge?.status ?? 'missing'} at apply time`,
+      q.id,
+    );
+    result.skipped_already_resolved++;
+    return true;
+  }
+
+  switch (q.action) {
+    case 'accept': {
+      // Editorial overlay: human accept = verified.
+      stmts.upsertEdge.run(
+        edge.source_chunk, edge.target_chunk, edge.edge_type,
+        'verified', edge.justification ?? '',
+      );
+      stmts.updateStagedEdgeStatus.run(
+        'accepted', 'verified', q.reviewer, nowIso(), edge.id,
+      );
+      result.edges_created++;
+      break;
+    }
+    case 'reject': {
+      stmts.deleteEdge.run(edge.source_chunk, edge.target_chunk, edge.edge_type);
+      // Preserve current tier on rejected rows (audit clarity); only status
+      // and reviewer/timestamp change.
+      stmts.updateStagedEdgeStatus.run(
+        'rejected', edge.tier, q.reviewer, nowIso(), edge.id,
+      );
+      break;
+    }
+    case 'reclassify': {
+      if (!q.reclassify_to) {
+        throw new Error(`reclassify action ${q.id} missing reclassify_to`);
+      }
+      // Always retract the OLD-type edge first.
+      stmts.deleteEdge.run(edge.source_chunk, edge.target_chunk, edge.edge_type);
+
+      if (q.reclassify_to === 'PARALLELS' || q.reclassify_to === 'CONTRASTS') {
+        // Promote at the new type at tier=verified.
+        stmts.upsertEdge.run(
+          edge.source_chunk, edge.target_chunk, q.reclassify_to,
+          'verified', edge.justification ?? '',
+        );
+        stmts.updateStagedEdgeStatusType.run(
+          'reclassified', q.reclassify_to, 'verified',
+          q.reviewer, nowIso(), edge.id,
+        );
+        result.edges_created++;
+      } else {
+        // surface_only / unrelated → typed reject. Old edge already deleted;
+        // record what the curator classified for audit but write no live edge
+        // (the edges.type CHECK forbids these values).
+        stmts.updateStagedEdgeStatusType.run(
+          'rejected', q.reclassify_to, edge.tier,
+          q.reviewer, nowIso(), edge.id,
+        );
+      }
+      break;
+    }
+    case 'skip': {
+      break;
+    }
+    default: {
+      throw new Error(
+        `unknown action for staged_edges: ${q.action} (action ${q.id})`,
+      );
+    }
+  }
+
+  stmts.markActionApplied.run(null, q.id);
+  result.applied++;
+  return true;
+}
+
+
+// ── transaction wrapper ────────────────────────────────────────────────
+
 export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
   const tx = rw.transaction((): ApplyResult => {
     const queued = stmts.selectQueuedActions.all() as QueuedAction[];
@@ -57,85 +226,15 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
     };
 
     for (const q of queued) {
-      const tag = stmts.selectStagedTag.get(q.staged_tag_id) as StagedTag | undefined;
-
-      // Re-check status — if CLI got there first, no-op (audit-trail preserved).
-      if (!tag || tag.status !== 'pending') {
-        stmts.markActionApplied.run(
-          `tag was ${tag?.status ?? 'missing'} at apply time`,
-          q.id,
+      if (q.target_table === 'staged_tags') {
+        applyTagAction(stmts, q, result);
+      } else if (q.target_table === 'staged_edges') {
+        applyEdgeAction(stmts, q, result);
+      } else {
+        throw new Error(
+          `unknown target_table: ${String(q.target_table)} (action ${q.id})`,
         );
-        result.skipped_already_resolved++;
-        continue;
       }
-
-      switch (q.action) {
-        case 'accept': {
-          const conceptNodeId = `concept.${tag.concept_id}`;
-          const label = pythonTitleCase(tag.concept_id);
-          // COALESCE in the prepared stmt preserves any pre-existing definition
-          // (taxonomy-seeded concepts safe). Pass new_concept_def regardless of
-          // is_new_concept — for is_new_concept=0 it's null, harmless.
-          stmts.ensureConceptNode.run(conceptNodeId, label, tag.new_concept_def);
-          // Editorial overlay: human accept = verified, full stop. Score
-          // is no longer consulted for tier — that's auto-promote's job.
-          // ON CONFLICT DO UPDATE on the prepared stmt upgrades any prior
-          // auto-promoted 'proposed' or 'inferred' edge to 'verified'.
-          stmts.insertOrUpdateEdge.run(
-            tag.chunk_id,
-            conceptNodeId,
-            'verified',
-            tag.justification ?? '',
-          );
-          stmts.updateStagedTagStatus.run('accepted', q.reviewer, nowIso(), tag.id);
-          result.edges_created++;
-          break;
-        }
-        case 'reject': {
-          // Retract any auto-promoted edge for this (chunk, concept) pair
-          // before marking rejected. Without this, a rejected row's edge
-          // would stay live in production. DELETE on a non-existent row
-          // is a no-op so this is safe regardless of prior auto-promote
-          // state.
-          stmts.deleteExpressesEdge.run(tag.chunk_id, `concept.${tag.concept_id}`);
-          stmts.updateStagedTagStatus.run('rejected', q.reviewer, nowIso(), tag.id);
-          break;
-        }
-        case 'reassign': {
-          if (!q.reassign_to) {
-            throw new Error(`reassign action ${q.id} missing reassign_to`);
-          }
-          // Retract the original-concept edge before mutating concept_id.
-          // The new concept's edge will materialize on the next auto-
-          // promote run if the spawned row qualifies.
-          stmts.deleteExpressesEdge.run(tag.chunk_id, `concept.${tag.concept_id}`);
-          stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
-          stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);
-          // Carry parent provenance forward — the spawned row inherits
-          // the same model + prompt_version so the partial UNIQUE works
-          // correctly and so future fine-tune exports can filter cleanly.
-          stmts.insertReassignedTag.run(
-            tag.chunk_id,
-            q.reassign_to,
-            tag.score,
-            `Reassigned from ${tag.concept_id}`,
-            tag.model,
-            tag.prompt_version,
-          );
-          break;
-        }
-        case 'skip': {
-          // No staged_tags write — close the action only.
-          break;
-        }
-        default: {
-          const exhaustive: never = q.action;
-          throw new Error(`unknown action: ${String(exhaustive)}`);
-        }
-      }
-
-      stmts.markActionApplied.run(null, q.id);
-      result.applied++;
     }
 
     return result;

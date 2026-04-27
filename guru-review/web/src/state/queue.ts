@@ -12,7 +12,10 @@ import type { ActionPayload } from '../api/types';
 const KEY = 'guru-review:retry-queue';
 
 interface PendingPost {
-  staged_tag_id: number;
+  target_id: number;
+  /** which surface this action belongs to. Defaults to staged_tags for
+   * backward compatibility with queue items persisted before edges shipped. */
+  target_table?: 'staged_tags' | 'staged_edges';
   payload: ActionPayload;
   attempts: number;
   next_attempt_at: number; // ms epoch
@@ -49,10 +52,15 @@ export function subscribe(fn: (n: number) => void): () => void {
   };
 }
 
-export async function enqueue(stagedTagId: number, payload: ActionPayload): Promise<void> {
+export async function enqueue(
+  targetId: number,
+  payload: ActionPayload,
+  targetTable: 'staged_tags' | 'staged_edges' = 'staged_tags',
+): Promise<void> {
   const items = await load();
   items.push({
-    staged_tag_id: stagedTagId,
+    target_id: targetId,
+    target_table: targetTable,
     payload,
     attempts: 0,
     next_attempt_at: Date.now(),
@@ -77,7 +85,8 @@ async function drainOnce(): Promise<void> {
 
   for (const item of due) {
     try {
-      const res = await fetch(`/api/tags/${item.staged_tag_id}/action`, {
+      const surface = item.target_table === 'staged_edges' ? 'edges' : 'tags';
+      const res = await fetch(`/api/${surface}/${item.target_id}/action`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(item.payload),

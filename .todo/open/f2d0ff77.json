@@ -1,0 +1,24 @@
+{
+  "id": "f2d0ff77",
+  "type": "chore",
+  "state": "open",
+  "summary": "C8: operator live run — snapshot, apply v3_003 migration to live DB, rebuild server + web bundles, restart server, smoke-test phone edge review, audit canary, close umbrella",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-26T20:53:37.329Z",
+  "updated_at": "2026-04-26T20:54:08.481Z",
+  "tags": [
+    "edges",
+    "operator",
+    "go-live",
+    "critical"
+  ],
+  "relationships": {
+    "parent": "659b7664",
+    "depends_on": [
+      "caf23a37",
+      "327c934f"
+    ]
+  }
+}
