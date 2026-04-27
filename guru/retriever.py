@@ -239,7 +239,10 @@ class HybridRetriever:
                 "graph_score": 0.0,
             }
 
-        # Merge graph hits — upgrade tier if better
+        # Merge graph hits. Vector hits arrive tagged 'inferred' (vector
+        # search has no tier signal), so this loop adopts the graph-side
+        # tier whenever it carries more weight, and contributes graph_score
+        # for the final ranking.
         for hit in graph_chunks:
             cid = hit["chunk_id"]
             trad = hit.get("tradition", "")
