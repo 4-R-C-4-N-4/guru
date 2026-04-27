@@ -1,0 +1,35 @@
+{
+  "id": "a46658be",
+  "type": "bug",
+  "state": "done",
+  "summary": "parse_json_response only handles top-level arrays — fails when openai provider returns json_object",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T13:53:25.461Z",
+  "updated_at": "2026-04-27T14:38:49.808Z",
+  "files": [
+    {
+      "path": "scripts/llm.py",
+      "lines": [
+        181,
+        237
+      ]
+    }
+  ],
+  "tags": [
+    "llm",
+    "json-parsing"
+  ],
+  "relationships": {
+    "parent": "93ad20c3"
+  },
+  "resolution": {
+    "commit": "6f3b5a05810b0fd3ba3b17531f963787a24c7a43",
+    "resolved_at": "2026-04-27T14:38:49.808Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_parse_json_response.py",
+    "test_function": "test_object_with_inner_array_not_mangled",
+    "note": "Regex now matches '[' or '{' at the first JSON-bearing character. Top-level objects and objects-containing-arrays no longer mangled. Repair path remains array-only by design."
+  }
+}
