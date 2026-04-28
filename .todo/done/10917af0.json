@@ -1,13 +1,13 @@
 {
   "id": "10917af0",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Re-chunk + re-embed Orphic Hymns after C1+C2 land — invoke chunk.py and embed_corpus.py --reindex",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T22:45:52.586Z",
-  "updated_at": "2026-04-28T12:35:37.651Z",
+  "updated_at": "2026-04-28T12:51:14.658Z",
   "tags": [
     "corpus",
     "greek_mystery",
@@ -32,5 +32,11 @@
       "content": "PREREQUISITE: ticket d47747c4 must run BEFORE this one. The Orphic rechunk produces a NEW chunk_id space (Roman-numeral hymn numbers instead of source page numbers), making all existing Orphic-keyed rows in nodes / edges / staged_tags / staged_edges / chunk_embeddings stale. d47747c4 covers the cleanup transaction. Without it, rechunking leaves hundreds of orphaned rows behind.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "3d3c47287165ed8e758004458c616fa5bc004a5b",
+    "resolved_at": "2026-04-28T12:51:14.658Z",
+    "resolved_by": "unknown",
+    "note": "Corpus TOML regenerated: 141 chunks under corpus/greek_mystery/orphic-hymns/chunks/, committed in this branch. Chunk_ids preserved (no DB references invalidated). Operator handoff for re-embed: after PR merges, run 'scripts/cleanup_orphic_pre_rechunk.sh' for audit, then '--apply' to take a snapshot and re-embed Orphic chunks against the clean bodies. Optional --force-reset-staged to also reset Orphic staged_edges to pending so they can be re-proposed against cleaner embeddings (curator decision)."
+  }
 }
