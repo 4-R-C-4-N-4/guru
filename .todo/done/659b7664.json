@@ -1,13 +1,13 @@
 {
   "id": "659b7664",
   "type": "feature",
-  "state": "active",
+  "state": "done",
   "summary": "Edge review web extension (Pass C — staged_edges via the web tool, parallel to staged_tags)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.066Z",
-  "updated_at": "2026-04-26T21:08:09.199Z",
+  "updated_at": "2026-04-27T23:22:01.783Z",
   "files": [
     {
       "path": "docs/web-review/edges.md"
@@ -53,5 +53,11 @@
     "base_branch": "main",
     "started_at": "2026-04-26T21:08:09.199Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a0ef03a1274dad892135a50e515d09538ba68d43",
+    "resolved_at": "2026-04-27T23:22:01.783Z",
+    "resolved_by": "unknown",
+    "note": "All 8 children done. C1–C7 landed via PR #1 (todo/659b7664 web extension implementation). C8 (f2d0ff77) closed in commit a0ef03a 'tested and working' — operator live run verified: v3_003 migration applied, server rebuilt + restarted, phone smoke-test confirmed via DB audit (staged_edges.id=3 accepted on live DB at 22:28:17Z)."
   }
 }

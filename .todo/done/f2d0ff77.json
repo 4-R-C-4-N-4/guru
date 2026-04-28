@@ -1,13 +1,13 @@
 {
   "id": "f2d0ff77",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "C8: operator live run — snapshot, apply v3_003 migration to live DB, rebuild server + web bundles, restart server, smoke-test phone edge review, audit canary, close umbrella",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-26T20:53:37.329Z",
-  "updated_at": "2026-04-26T20:54:08.481Z",
+  "updated_at": "2026-04-27T23:15:35.659Z",
   "tags": [
     "edges",
     "operator",
@@ -20,5 +20,10 @@
       "caf23a37",
       "327c934f"
     ]
+  },
+  "resolution": {
+    "commit": "3bb40f31b7e64a68f20730c93ef57ee2ae599aa8",
+    "resolved_at": "2026-04-27T23:15:35.659Z",
+    "resolved_by": "unknown"
   }
 }
