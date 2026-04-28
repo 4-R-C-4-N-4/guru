@@ -16,6 +16,11 @@
 --
 -- Schema version: bump SCHEMA_VERSION in scripts/export.py and the
 -- EXPECTED_SCHEMA_VERSION constant in guru-web on every change.
+--
+-- CHANGELOG:
+--   v2 (2026-04-28) Schema-isolated export (corpus_new + atomic swap).
+--                     Export uses COPY FROM STDIN instead of INSERT.
+--                     DDL stays unprefixed; export.py prefixes at emission.
 
 CREATE EXTENSION IF NOT EXISTS vector;
 
