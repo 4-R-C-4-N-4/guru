@@ -362,6 +362,33 @@ def emit_inserts(conn: sqlite3.Connection, f) -> None:
     f.write("\n")
 
 
+def emit_indexes(f) -> None:
+    """Emit CREATE INDEX statements after bulk INSERTs.
+
+    Indexes live in the export artifact (not schema/corpus-schema.sql)
+    because pgvector's HNSW build cost is proportional to insert order —
+    creating the index post-bulk-load is materially faster than building
+    it incrementally as rows arrive. The schema file's own header comment
+    documents this. The DROP TABLE … CASCADE at the top of the dump
+    cleans up any prior indexes on reload.
+
+    Inside the same BEGIN…COMMIT, so reload stays all-or-nothing.
+    """
+    f.write("-- ── post-load indexes (vector + FK lookups) ──\n")
+    f.write("-- HNSW on chunks.embedding is the hot path for retrieval.\n")
+    f.write("-- The btrees on FK-ish columns accelerate graph traversal\n")
+    f.write("-- and tradition-scoped queries.\n")
+    f.write(
+        "CREATE INDEX chunks_embedding_hnsw ON chunks "
+        "USING hnsw (embedding vector_cosine_ops);\n"
+    )
+    f.write("CREATE INDEX chunks_text_id   ON chunks (text_id);\n")
+    f.write("CREATE INDEX chunks_tradition ON chunks (tradition);\n")
+    f.write("CREATE INDEX edges_source     ON edges (source);\n")
+    f.write("CREATE INDEX edges_target     ON edges (target);\n")
+    f.write("\n")
+
+
 def emit_metadata(f, version: int, commit: str, exported_at: str) -> None:
     """Final corpus_metadata block. Written LAST so a mid-load failure
     leaves the table unset, and the web app's schema-version check then
@@ -427,10 +454,10 @@ def main() -> None:
         # 3. Data — traditions, texts, concepts, chunks, edges in FK order
         emit_inserts(conn, f)
 
-        # 4. Post-load indexes (HNSW, FK lookups) land here once the
-        #    emit_inserts step populates rows. Separate ticket may cover
-        #    this; for now schema/corpus-schema.sql carries no indexes
-        #    and we add them inline in a later ticket.
+        # 4. Post-load indexes — HNSW vector + FK-ish btrees. Built after
+        #    INSERTs so HNSW costs less; inside the same BEGIN/COMMIT so
+        #    reload stays all-or-nothing.
+        emit_indexes(f)
 
         # 5. Metadata last — mid-load failure leaves this unset and the
         #    web app refuses to serve.
