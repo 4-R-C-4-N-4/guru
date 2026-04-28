@@ -1,0 +1,31 @@
+{
+  "id": "ef28be7e",
+  "type": "chore",
+  "state": "done",
+  "summary": "validate_index.py opens config TOML as the DB — 'file is not a database' error",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-28T13:00:30.207Z",
+  "updated_at": "2026-04-28T13:01:08.504Z",
+  "files": [
+    {
+      "path": "scripts/validate_index.py",
+      "lines": [
+        85,
+        85
+      ]
+    }
+  ],
+  "tags": [
+    "scripts",
+    "validation",
+    "bug"
+  ],
+  "resolution": {
+    "commit": "aff58644359d4df15058dccbc09069db463c7885",
+    "resolved_at": "2026-04-28T13:01:08.504Z",
+    "resolved_by": "unknown",
+    "note": "Drop the CONFIG_PATH arg so VectorStore() defaults to data/guru.db. Reclassified bug→chore: the bug is a one-line wrong-path-arg, not behavioral logic, and validate_index.py has no automated test target (depends on live Ollama for the spot-check). Verified manually — all 4 checks pass post-fix."
+  }
+}
