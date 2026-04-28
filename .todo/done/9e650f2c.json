@@ -1,0 +1,41 @@
+{
+  "id": "9e650f2c",
+  "type": "chore",
+  "state": "done",
+  "summary": "scripts/migrations/v3_004_normalize_chunk_ids.sql — single-transaction in-place rewrite of every chunk_id reference across nodes / edges / chunk_embeddings / staged_tags / staged_edges, with pre-migration collision audit",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-28T16:53:18.018Z",
+  "updated_at": "2026-04-28T17:53:35.959Z",
+  "files": [
+    {
+      "path": "scripts/migrations/v3_004_normalize_chunk_ids.sql"
+    }
+  ],
+  "tags": [
+    "chunks",
+    "refactor",
+    "migration",
+    "sql"
+  ],
+  "relationships": {
+    "parent": "9ec1dcee"
+  },
+  "description": "## Deliverable\n\nscripts/migrations/v3_004_normalize_chunk_ids.sql — single transaction that updates chunk_id strings in place across every table that references them.\n\n## Tables affected\n\n- nodes — id (PRIMARY KEY) for type='chunk' rows\n- edges — source_id, target_id (any chunk-side endpoints, including the 305 [auto] PARALLELS, 90 verified EXPRESSES, 2,067 proposed EXPRESSES, 2,531 BELONGS_TO inferred)\n- chunk_embeddings — chunk_id (PRIMARY KEY)\n- staged_tags — chunk_id\n- staged_edges — source_chunk, target_chunk\n\n## Approach\n\nPRAGMA foreign_keys=OFF inside a transaction (necessary because the FKs from edges/chunk_embeddings/staged_* into nodes(id) are not declared ON UPDATE CASCADE — without disabling, the nodes UPDATE would fail). Apply the per-tradition prefix rewrites in a deterministic order, then PRAGMA foreign_key_check before COMMIT to verify zero orphans.\n\nPer-tradition prefix map (must match scripts/backfill_chunk_ids.py from C1):\n\n    Neoplatonism.        → neoplatonism.\n    Egyptian.            → egyptian.\n    Taoism.              → taoism.\n    Greek Mystery.       → greek_mystery.\n    Christian Mysticism. → christian_mysticism.\n    Zoroastrianism.      → zoroastrianism.\n    Jewish Mysticism.    → jewish_mysticism.\n    Buddhism.            → buddhism.\n    Mesopotamian.        → mesopotamian.\n\nFor each of those 9 prefixes, run:\n\n    UPDATE nodes            SET id           = REPLACE(id,           '<DISPLAY>.', '<SNAKE>.') WHERE id           LIKE '<DISPLAY>.%';\n    UPDATE edges            SET source_id    = REPLACE(source_id,    '<DISPLAY>.', '<SNAKE>.') WHERE source_id    LIKE '<DISPLAY>.%';\n    UPDATE edges            SET target_id    = REPLACE(target_id,    '<DISPLAY>.', '<SNAKE>.') WHERE target_id    LIKE '<DISPLAY>.%';\n    UPDATE chunk_embeddings SET chunk_id     = REPLACE(chunk_id,     '<DISPLAY>.', '<SNAKE>.') WHERE chunk_id     LIKE '<DISPLAY>.%';\n    UPDATE staged_tags      SET chunk_id     = REPLACE(chunk_id,     '<DISPLAY>.', '<SNAKE>.') WHERE chunk_id     LIKE '<DISPLAY>.%';\n    UPDATE staged_edges     SET source_chunk = REPLACE(source_chunk, '<DISPLAY>.', '<SNAKE>.') WHERE source_chunk LIKE '<DISPLAY>.%';\n    UPDATE staged_edges     SET target_chunk = REPLACE(target_chunk, '<DISPLAY>.', '<SNAKE>.') WHERE target_chunk LIKE '<DISPLAY>.%';\n\n## Pre-migration collision audit\n\nBefore any UPDATE: SELECT count of would-collide rows for each tradition. Currently:\n\n    Jewish Mysticism: 37 chunks\n    jewish_mysticism: 6 chunks       ← if these point at the SAME chunk file, the rewrite produces a PRIMARY KEY conflict on nodes\n\nIf any collisions exist, the migration must abort with a SELECT that prints the colliding chunk_ids so the operator can decide (manual reconcile, drop one set, etc.). Audit-only mode: include the colliding-rows SELECT inline above the UPDATEs, behind a comment. Or split into two scripts: an audit .sql and the actual migration .sql.\n\n## Post-migration verification (inside the same transaction, before COMMIT)\n\n    PRAGMA foreign_key_check;  -- must return zero rows\n    SELECT 'unmigrated nodes',        COUNT(*) FROM nodes\n        WHERE type='chunk' AND id GLOB '*[A-Z]*';  -- catch any remaining capitalization\n    SELECT 'unmigrated edges (source)', COUNT(*) FROM edges\n        WHERE source_id GLOB '*[A-Z]*' AND source_id NOT LIKE 'concept.%';\n    -- ... same for target_id, chunk_embeddings, staged_*\n    -- All counts must be zero.\n\nIf any check fails, ROLLBACK and report.\n\n## Out of scope\n\n- Changes to schema/corpus-schema.sql (the canonical Postgres schema) — this is a SQLite migration on the operator's working DB; the export artifact will reflect the new IDs naturally on the next export.\n- Changes to scripts/export.py — chunk_id is just text passed through; format change is transparent.",
+  "analysis": [
+    {
+      "timestamp": "2026-04-28T17:51:27.517Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Initial migration missed tagging_progress.chunk_id (PRIMARY KEY REFERENCES nodes(id)) — verified by running against a copy of the live DB and seeing 2,335 FK violations from tagging_progress. Also missed staged_concepts.motivating_chunk (FK, but currently 0 rows so dormant). Updating migration to cover both. Confirmed full set of chunk_id-shaped columns by grepping the schema for 'REFERENCES nodes(id)' and 'chunk_id': nodes.id, edges.source_id, edges.target_id, chunk_embeddings.chunk_id, staged_tags.chunk_id, staged_edges.source_chunk, staged_edges.target_chunk, tagging_progress.chunk_id, staged_concepts.motivating_chunk. nodes.tradition_id also references nodes(id) but only points at tradition rows (already snake_case), so it's not in scope.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "cdd8e2bbf933a2e6e2271add48bdf9b2d6c23a26",
+    "resolved_at": "2026-04-28T17:53:35.959Z",
+    "resolved_by": "unknown",
+    "note": "v3_004 migration tested against an in-memory fixture (6/6 unit tests) and a copy of the live DB (2,335 chunks, 0 FK violations, integrity ok). Initial draft missed tagging_progress and staged_concepts — caught via the live-DB run and added before close. Will be invoked by C3 (cleanup_chunk_ids.sh)."
+  }
+}
