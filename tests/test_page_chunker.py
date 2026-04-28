@@ -17,8 +17,9 @@ sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "chunkers"))
 from page_chunker import DEFAULT_TITLE_MAX_LEN, _extract_title  # noqa: E402
 
 
-# Same pattern in chunking/greek_mystery/orphic-hymns.toml
-ORPHIC_PATTERN = r'^(?:(?:[IVXLCDM]+|SECT)\.\s+)?(?:TO\s+)?(.+?)[\.\*]?\s*$'
+# Same pattern as chunking/greek_mystery/orphic-hymns.toml — requires
+# literal "TO X" to avoid matching bare Roman numerals.
+ORPHIC_PATTERN = r'^(?:[IVXLCDM]+\.\s+)?TO\s+(.+?)[\.\*]?\s*$'
 
 
 def test_short_title_line_matched_normally():
@@ -27,15 +28,27 @@ def test_short_title_line_matched_normally():
     assert _extract_title(content, {"title_pattern": ORPHIC_PATTERN}) == "JUNO"
 
 
-def test_single_line_blob_falls_back_to_no_title():
-    """Pre-fix: this returned the entire body. Now: skipped because >80 chars,
-    no other line, returns None — caller formats label as 'Hymn N' only."""
+def test_single_line_blob_extracts_title_via_sentence_head():
+    """Single-line scraped page (post pre_strip) has the title as the
+    leading sentence. Sentence-head candidate extraction finds it
+    because 'TO NEREUS' is short and matches the strict pattern."""
     body = (
-        "Sacred Texts Classics Index Previous Next XXII. TO NEREUS. "
-        "The FUMIGATION from MYRRH. O Thou, who dost the roots of Ocean keep "
-        "In seats cærulean, dæmon of the deep..."
+        "XXII. TO NEREUS. The FUMIGATION from MYRRH. O Thou, who dost "
+        "the roots of Ocean keep In seats cærulean, dæmon of the deep..."
     )
-    assert len(body) > DEFAULT_TITLE_MAX_LEN  # premise of the fix
+    assert len(body) > DEFAULT_TITLE_MAX_LEN
+    assert _extract_title(body, {"title_pattern": ORPHIC_PATTERN}) == "NEREUS"
+
+
+def test_single_line_blob_with_unstripped_nav_falls_back_to_none():
+    """If the source still has 'Sacred Texts Classics Index Previous Next' nav
+    and the title pattern is strict (requires 'TO X'), no candidate matches —
+    pre_strip must run first for the orphic case to work end-to-end."""
+    body = (
+        "Sacred Texts Classics Index Previous Next The FUMIGATION from MYRRH. "
+        "O Thou, who dost the roots of Ocean keep..."
+    )
+    # No "TO X" sentence in this fragment — strict pattern returns None.
     assert _extract_title(body, {"title_pattern": ORPHIC_PATTERN}) is None
 
 
@@ -55,9 +68,16 @@ def test_title_max_len_override_via_config():
     """Per-source override is honored."""
     body = "XV. TO JUNO." + " (footnote: " + "x" * 100 + ")"  # ~120 chars
     cfg = {"title_pattern": ORPHIC_PATTERN, "title_max_len": 200}
-    # With the override, the long line is admitted and the regex matches.
     title = _extract_title(body, cfg)
     assert title is not None and "JUNO" in title
+
+
+def test_bare_roman_numeral_does_not_become_title():
+    """Regression for the chunker output 'Hymn XXII. XXII' bug — strict
+    title pattern requires literal 'TO', so a bare 'XXII' fragment does
+    not match as title."""
+    body = "XXII"
+    assert _extract_title(body, {"title_pattern": ORPHIC_PATTERN}) is None
 
 
 def test_no_pattern_returns_none():
