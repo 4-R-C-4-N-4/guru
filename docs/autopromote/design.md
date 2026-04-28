@@ -229,9 +229,71 @@ After every fresh tagging run, `auto_promote.sh --apply` brings the new score=3 
 
 ---
 
-## 10. Future: cross-tradition (PARALLELS / CONTRASTS) auto-promote
+## 10. Cross-tradition (PARALLELS / CONTRASTS) auto-promote — shipped
 
-Out of scope for this design, but worth flagging the symmetric idea: `propose_edges.py` already attaches an LLM `confidence` float to `staged_edges`. A future `auto_promote_edges.py` could promote rows with `confidence >= 0.85` into `edges` at tier=`proposed` (never `verified` — cross-tradition equivalence is editorially loaded enough that human review should retain the top tier). Defer until the per-tag auto-promote has settled and the operator sees the staging-vs-shipped balance they want.
+Symmetric to per-tag auto-promote, against `staged_edges` (populated by
+`propose_edges.py`). Lives in `scripts/auto_promote_edges.py` +
+`scripts/auto_promote_edges.sh`.
+
+### Promotion rule
+
+Per row in `staged_edges`:
+
+```
+status = 'pending'
+AND confidence >= floor                       -- default 0.85
+AND edge_type IN ('PARALLELS','CONTRASTS')    -- skip surface_only/unrelated
+AND NOT EXISTS (live edges row for same (source, target, type))
+                                              ↓
+INSERT INTO edges(source_id, target_id, type, tier='proposed',
+                  justification='[auto] ' || staged_edges.justification)
+ON CONFLICT(source_id, target_id, type) DO NOTHING
+```
+
+`tier='verified'` is never written by this script — the verified tier
+stays behind the human gate (`scripts/review_edges.py` and the web edge
+review path in `guru-review/server/src/apply.ts`).
+
+### What does NOT auto-promote
+
+- `confidence < floor`
+- `edge_type IN ('surface_only','unrelated')` — both are valid in
+  `staged_edges` but the live `edges.type` CHECK rejects them. The
+  filter is defence-in-depth; the constraint would catch them anyway.
+- Rows whose corresponding live edge already exists (re-run safety).
+- Non-`pending` rows (already accepted/rejected/reclassified by a human).
+
+### No model filter
+
+Unlike the per-tag auto-promote, there is no `--model` filter.
+`staged_edges` has no `model` column — `propose_edges.py` writes
+`(source_chunk, target_chunk, edge_type, confidence, justification)`
+only. If model attribution becomes useful, it's a schema-add ticket
+against `staged_edges` first.
+
+### Editorial overlay — retract on Reject / Reclassify
+
+The human edge-review path (CLI `review_edges.py` + the web tool's
+`apply.ts` edge branch) treats Accept / Reject / Reclassify symmetrically
+to the per-tag overlay (§6):
+
+- Accept → write `tier='verified'` (regardless of LLM confidence)
+- Reject → DELETE the live edge row if it exists
+- Reclassify → DELETE the live edge for the original `edge_type`; the
+  new edge_type's row will materialise on the next auto-promote run if
+  it qualifies
+
+This means an auto-promoted edge at `tier='proposed'` can be retracted
+by a human reviewer the same way a per-tag auto-promoted EXPRESSES edge
+can. See `tests/parity/fixtures/decision_sequence.json` for the
+reject-after-auto-promote case.
+
+### Tests
+
+`tests/test_auto_promote_edges.py` — 15 tests covering confidence
+boundary, type filter, status filter, conflict-skip, apply tier=proposed,
+never-verified guarantee, idempotency, no-downgrade-on-existing, summary
+shape, dry-run discipline.
 
 ---
 
