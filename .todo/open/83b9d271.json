@@ -1,0 +1,15 @@
+{
+  "id": "83b9d271",
+  "type": "chore",
+  "state": "open",
+  "summary": "Refactor export.py: COPY format + schema-qualified DDL",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-28T22:11:07.734Z",
+  "updated_at": "2026-04-28T22:11:20.336Z",
+  "relationships": {
+    "parent": "7db94cc0"
+  },
+  "description": "Replace INSERT emitters with COPY FROM STDIN. Prefix all CREATE TABLE, COPY, and validation references with configurable schema (default: corpus_new). Update vec_to_pg and esc/esc_array for COPY tab-delimited format."
+}
