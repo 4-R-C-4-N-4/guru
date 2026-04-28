@@ -1,13 +1,13 @@
 {
   "id": "e0030982",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Auto-promote staged_edges to live edges at tier=proposed (mirrors auto_promote.py for tags)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-27T22:54:58.397Z",
-  "updated_at": "2026-04-28T01:11:56.920Z",
+  "updated_at": "2026-04-28T01:16:41.868Z",
   "tags": [
     "autopromote",
     "edges",
@@ -31,5 +31,11 @@
       "content": "Spec said 'AND model = X' filter mirroring auto_promote.py for tags. But staged_edges has no model column — propose_edges.py at scripts/propose_edges.py:143 INSERTs only (source_chunk, target_chunk, edge_type, confidence, justification). Drop the model filter. All other promotion rules (confidence floor, edge_type IN ('PARALLELS','CONTRASTS'), status='pending', NOT EXISTS already-live edge) still apply. If model attribution is needed later it's a schema-add ticket against staged_edges first.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "d9ddbc0ffb1a064dfb459d63702040256e2c1f23",
+    "resolved_at": "2026-04-28T01:16:41.868Z",
+    "resolved_by": "unknown",
+    "note": "All 5 children landed: scripts/auto_promote_edges.py + 15-test suite, scripts/auto_promote_edges.sh wrapper, docs/autopromote/design.md §10 rewritten with concrete impl + retract semantics, 4 round-trip retraction tests proving compose with review_edges. 142 tests pass. Live DB dry-run reports 5,520 candidates at confidence>=0.85 (PARALLELS=5,510, CONTRASTS=10) — operator runs scripts/auto_promote_edges.sh --apply when ready."
+  }
 }
