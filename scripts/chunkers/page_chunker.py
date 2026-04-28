@@ -27,15 +27,25 @@ def _extract_number(filename: str, content: str, config: dict) -> str | None:
     return None
 
 
+DEFAULT_TITLE_MAX_LEN = 80
+
+
 def _extract_title(content: str, config: dict) -> str | None:
-    """Extract a title string from the content using title_pattern."""
+    """Extract a title string from the content using title_pattern.
+
+    A title is, by definition, short. We cap candidate-line length so a
+    single-line source (e.g. a scraped page where the entire hymn is on
+    one line with no newlines) doesn't end up matching the whole body
+    via a permissive pattern. Override with `title_max_len` in config.
+    """
     pattern = config.get("title_pattern")
     if not pattern:
         return None
+    max_len = int(config.get("title_max_len", DEFAULT_TITLE_MAX_LEN))
     # Search in the first few lines for the title
     for line in content.split("\n")[:10]:
         line = line.strip()
-        if not line:
+        if not line or len(line) > max_len:
             continue
         m = re.match(pattern, line)
         if m:
