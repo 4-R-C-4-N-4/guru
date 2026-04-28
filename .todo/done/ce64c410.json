@@ -1,0 +1,34 @@
+{
+  "id": "ce64c410",
+  "type": "bug",
+  "state": "done",
+  "summary": "scripts/export.py emits no CREATE INDEX statements — production loads run without HNSW or FK indexes",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-28T16:42:18.051Z",
+  "updated_at": "2026-04-28T16:43:47.967Z",
+  "files": [
+    {
+      "path": "scripts/export.py",
+      "lines": [
+        430,
+        433
+      ]
+    }
+  ],
+  "tags": [
+    "export",
+    "indexes",
+    "performance",
+    "bug"
+  ],
+  "resolution": {
+    "commit": "e0692ed52e99a126aaa1fdf5ddbe87c148db9cb2",
+    "resolved_at": "2026-04-28T16:43:47.967Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_export_indexes.py",
+    "test_function": "test_emits_hnsw_index_on_chunks_embedding",
+    "note": "5 indexes emitted between inserts and metadata. Verified end-to-end on the live corpus: 82681-82685 (post-inserts at 77663, pre-metadata at 82688)."
+  }
+}
