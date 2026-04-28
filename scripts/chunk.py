@@ -188,7 +188,12 @@ def process_source(
 
     total_tokens = 0
     for idx, chunk in enumerate(final_chunks):
-        chunk_id = f"{tradition_val}.{source_id}.{idx + 1:03d}"
+        # chunk_id uses the snake_case directory name (machine-readable, URL-safe).
+        # The display name lives in chunk_data["chunk"]["tradition"] below for
+        # citation rendering. Older corpora used tradition_val here, which
+        # produced "Greek Mystery.foo.001" style IDs that diverged from the
+        # on-disk path — see scripts/migrations/v3_004_normalize_chunk_ids.sql.
+        chunk_id = f"{tradition}.{source_id}.{idx + 1:03d}"
         chunk_data = {
             "chunk": {
                 "id": chunk_id,

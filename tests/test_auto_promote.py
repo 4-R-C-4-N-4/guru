@@ -335,11 +335,11 @@ def test_summarize_groups_by_tier_and_tradition(conn):
     )
     conn.execute(
         "INSERT INTO nodes(id,type,tradition_id,label) "
-        "VALUES('Christian Mysticism.boehme.001','chunk','christian_mysticism','Boehme 1')"
+        "VALUES('christian_mysticism.boehme.001','chunk','christian_mysticism','Boehme 1')"
     )
     _seed_tag(conn, chunk="gnosticism.gospel-of-thomas.001", concept="a", score=3)
     _seed_tag(conn, chunk="gnosticism.gospel-of-thomas.002", concept="b", score=2)
-    _seed_tag(conn, chunk="Christian Mysticism.boehme.001", concept="c", score=1)
+    _seed_tag(conn, chunk="christian_mysticism.boehme.001", concept="c", score=1)
 
     cands = fetch_candidates(conn, score_floor=1, model=DEFAULT_MODEL)
     s = summarize(cands)
