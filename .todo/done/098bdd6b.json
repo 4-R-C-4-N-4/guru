@@ -1,0 +1,32 @@
+{
+  "id": "098bdd6b",
+  "type": "bug",
+  "state": "done",
+  "summary": "Orphic Hymns chunks malformed — section bloat, hymn-number mismatch, source nav noise",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:45:43.736Z",
+  "updated_at": "2026-04-28T12:51:35.257Z",
+  "tags": [
+    "chunking",
+    "corpus",
+    "greek_mystery",
+    "data-quality"
+  ],
+  "relationships": {
+    "children": [
+      "8b4f303d",
+      "dc8a8e00",
+      "10917af0",
+      "d47747c4"
+    ]
+  },
+  "description": "## Findings\n\nAll 141 chunks under corpus/greek_mystery/orphic-hymns/ have malformed metadata, surfaced by a `python -m guru query \"What is gnosis?\" --verbose` showing the entire hymn body as the citation header.\n\n## Three compounding causes\n\n**Bug 1 — `_extract_title` captures entire body as title**\n`scripts/chunkers/page_chunker.py:36` does `content.split(\"\\n\")[:10]`. Orphic raw is single-line (no newlines), so the loop runs once with line=full_content. The regex `^(?:[IVXLCDM]+|SECT)\\.\\s+(?:TO\\s+)?(.+?)[\\.\\*]?\\s*$` then matches the entire string and `m.group(1)` becomes the whole body. Format string `\"Hymn {n}. {title}\"` produces the bloated section header. Affects every Orphic chunk.\n\n**Bug 2 — filename number ≠ hymn number**\n`raw/greek_mystery/orphic-hymns-NN.txt` is paginated by source page, not by hymn. Spot check:\n- `orphic-hymns-22.txt` contains hymn XV (To Juno)\n- `orphic-hymns-29.txt` contains hymn XXII (To Nereus) — chunk 063 reads \"Hymn 29\" but the body is hymn 22\n- `orphic-hymns-63.txt` contains hymn LVI (To Terrestrial Hermes)\nThe chunker's `number_source = \"filename\"` extracts the page number and labels it as a hymn number with an offset that grows through the book.\n\n**Bug 3 — source navigation cruft retained in body**\nEvery chunk body starts with `\"Sacred Texts Classics Index Previous Next \"` and ends with `\"Next: XXIII: To the Nereids\"`-style nav. Pollutes embeddings — the cosine similarity to the nav text pulls these chunks into unrelated queries.\n\n## Fix path (children)\n\n1. C1 — chunker change (cap title length, generic across sources)\n2. C2 — Orphic-specific normalizer at acquire/chunk time (strip nav, split page-blob on `^[IVXLCDM]+\\.\\s+TO\\s+` boundaries)\n3. C3 — re-chunk + re-embed via the pipeline (`scripts/chunk.py` → `scripts/embed_corpus.py --reindex --tradition greek_mystery --text orphic-hymns`)\n\n## Constraint\n\nDo **not** hand-edit `corpus/**/*.toml` or `raw/**/*.txt`. Fix lives in the chunker code or `chunking/greek_mystery/orphic-hymns.toml` config; the data is regenerated.",
+  "resolution": {
+    "commit": "58df26ad3f1250ac3548c4995f7c17f6b4281e7b",
+    "resolved_at": "2026-04-28T12:51:35.257Z",
+    "resolved_by": "unknown",
+    "note": "All 4 children landed: 8b4f303d (page_chunker title-length cap), dc8a8e00 (Orphic normalizer + sentence-head titles + no-match label fallback), d47747c4 (scripts/cleanup_orphic_pre_rechunk.sh audit + re-embed wrapper), 10917af0 (corpus TOML regenerated, 141 chunks). 155 unit + chunking tests pass. Operator handoff: scripts/cleanup_orphic_pre_rechunk.sh --apply after PR merges to re-embed against clean bodies."
+  }
+}

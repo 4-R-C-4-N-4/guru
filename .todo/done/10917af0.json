@@ -1,0 +1,42 @@
+{
+  "id": "10917af0",
+  "type": "chore",
+  "state": "done",
+  "summary": "Re-chunk + re-embed Orphic Hymns after C1+C2 land — invoke chunk.py and embed_corpus.py --reindex",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:45:52.586Z",
+  "updated_at": "2026-04-28T12:51:14.658Z",
+  "tags": [
+    "corpus",
+    "greek_mystery",
+    "re-embed"
+  ],
+  "relationships": {
+    "parent": "098bdd6b"
+  },
+  "description": "After C1 (chunker fix) and C2 (Orphic normalizer + config) land, regenerate the corpus:\n\n```bash\n# 1. Re-chunk just this text — overwrites corpus/greek_mystery/orphic-hymns/chunks/\npython scripts/chunk.py --tradition greek_mystery --text orphic-hymns\n\n# 2. Re-embed only this text's chunks — replaces rows in chunk_embeddings\npython scripts/embed_corpus.py --reindex --tradition greek_mystery --text orphic-hymns\n\n# 3. Verify\npython scripts/validate_index.py\n```\n\n**Don't:**\n- hand-edit any file under `corpus/greek_mystery/orphic-hymns/chunks/`\n- delete and re-fetch `raw/greek_mystery/orphic-hymns-*.txt` (the raw is fine — it's the chunker that misreads it)\n\n**Risk:** the chunk count will change (one chunk per Roman-numeral hymn instead of one per page), so any downstream tables that key on `chunk_id` need attention. Check:\n- `nodes` table (chunk node rows will be replaced if the script handles that)\n- `edges` table (any EXPRESSES / PARALLELS / CONTRASTS rows on Orphic chunks will dangle if old chunk_ids vanish)\n- `staged_tags` and `staged_edges` — same concern\n- `chunk_embeddings` — `--reindex` should overwrite by chunk_id, but old chunk_ids that no longer exist will leak\n\nLikely needs a small follow-up SQL pass to delete dangling rows on Orphic chunk_ids, OR run on a backed-up DB and verify before rolling forward.",
+  "analysis": [
+    {
+      "timestamp": "2026-04-28T12:33:43.334Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Verified scripts/chunk.py supports --tradition <name> + --only <source_id> filters (chunk.py:270, 285-288), and scripts/embed_corpus.py supports --tradition + --text filters. Dry-run scoped to orphic-hymns only touches that text — confirmed via 'python scripts/chunk.py --dry-run --tradition greek_mystery --only orphic-hymns' which produces 141 chunks under corpus/greek_mystery/orphic-hymns/chunks/ and zero writes elsewhere. So the re-run for this ticket is exactly: 'python scripts/chunk.py --tradition greek_mystery --only orphic-hymns' followed by 'python scripts/embed_corpus.py --reindex --tradition greek_mystery --text orphic-hymns'. Note the small flag-name mismatch: chunk.py uses --only for source_id, embed_corpus.py uses --text — both filter to a single text within a tradition. After C1+C2 land, the dry-run output here will drop from 141 chunks (one per source page) to ~88 (one per Roman-numeral hymn).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-04-28T12:35:37.650Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "PREREQUISITE: ticket d47747c4 must run BEFORE this one. The Orphic rechunk produces a NEW chunk_id space (Roman-numeral hymn numbers instead of source page numbers), making all existing Orphic-keyed rows in nodes / edges / staged_tags / staged_edges / chunk_embeddings stale. d47747c4 covers the cleanup transaction. Without it, rechunking leaves hundreds of orphaned rows behind.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "3d3c47287165ed8e758004458c616fa5bc004a5b",
+    "resolved_at": "2026-04-28T12:51:14.658Z",
+    "resolved_by": "unknown",
+    "note": "Corpus TOML regenerated: 141 chunks under corpus/greek_mystery/orphic-hymns/chunks/, committed in this branch. Chunk_ids preserved (no DB references invalidated). Operator handoff for re-embed: after PR merges, run 'scripts/cleanup_orphic_pre_rechunk.sh' for audit, then '--apply' to take a snapshot and re-embed Orphic chunks against the clean bodies. Optional --force-reset-staged to also reset Orphic staged_edges to pending so they can be re-proposed against cleaner embeddings (curator decision)."
+  }
+}

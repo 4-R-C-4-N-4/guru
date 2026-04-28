@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.132"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 89. Sacred Texts Classics Index Previous Next LXXXII. TO OCEAN. The Fumigation from AROMATICS OCEAN I call, whose nature ever flows, From whom at first both Gods and men arose; Sire incorruptible, whose waves surround, 3 And earth's concluding mighty circle bound: p. 220 Hence every river, hence the spreading sea, 5 And earth's pure bubbling fountains spring from thee: Hear, mighty fire, for boundless bliss is thine, Whose waters purify the pow'rs divine: Earth's friendly limit, fountain of the pole, Whose waves wide spreading and circumfluent roll. Approach benevolent, with placid mind, And be for ever to thy mystics kind. Footnotes 219:3 LXXXII. Ver. 3.] Whose waves surround , &c. Gesner well observes, that this opinion of the ocean surrounding the earth, is exceeding ancient. see his Præl. i. de Navigationibus vet. § I. Next: LXXXIII: To Vesta"
+section = "Hymn LXXXII. OCEAN"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 225
+token_count = 208
 
 [content]
-body = "Sacred Texts Classics Index Previous Next LXXXII. TO OCEAN. The Fumigation from AROMATICS OCEAN I call, whose nature ever flows, From whom at first both Gods and men arose; Sire incorruptible, whose waves surround, 3 And earth's concluding mighty circle bound: p. 220 Hence every river, hence the spreading sea, 5 And earth's pure bubbling fountains spring from thee: Hear, mighty fire, for boundless bliss is thine, Whose waters purify the pow'rs divine: Earth's friendly limit, fountain of the pole, Whose waves wide spreading and circumfluent roll. Approach benevolent, with placid mind, And be for ever to thy mystics kind. Footnotes 219:3 LXXXII. Ver. 3.] Whose waves surround , &c. Gesner well observes, that this opinion of the ocean surrounding the earth, is exceeding ancient. see his Præl. i. de Navigationibus vet. § I. Next: LXXXIII: To Vesta"
+body = "LXXXII. TO OCEAN. The Fumigation from AROMATICS OCEAN I call, whose nature ever flows, From whom at first both Gods and men arose; Sire incorruptible, whose waves surround, 3 And earth's concluding mighty circle bound: p. 220 Hence every river, hence the spreading sea, 5 And earth's pure bubbling fountains spring from thee: Hear, mighty fire, for boundless bliss is thine, Whose waters purify the pow'rs divine: Earth's friendly limit, fountain of the pole, Whose waves wide spreading and circumfluent roll. Approach benevolent, with placid mind, And be for ever to thy mystics kind. Footnotes 219:3 LXXXII. Ver. 3.] Whose waves surround , &c. Gesner well observes, that this opinion of the ocean surrounding the earth, is exceeding ancient. see his Præl. i. de Navigationibus vet. § I."
 
 [annotations]
 concepts = []

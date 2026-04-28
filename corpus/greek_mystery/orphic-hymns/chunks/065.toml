@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.065"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 31. Sacred Texts Classics Index Previous Next p. 149 XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe. Next: XXV: To the Earth"
+section = "Hymn XXIV. PROTEUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 262
+token_count = 242
 
 [content]
-body = "Sacred Texts Classics Index Previous Next p. 149 XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe. Next: XXV: To the Earth"
+body = "XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe."
 
 [annotations]
 concepts = []

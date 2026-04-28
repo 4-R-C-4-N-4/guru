@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.075"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 39. Sacred Texts Classics Index Previous Next XXXII. TO VICTORY. The FUMIGATION from MANNA. O Powerful Victory, by men desir'd, With adverse breasts to dreadful fury fir'd, Thee I invoke, whose might alone can quell Contending rage, and molestation fell: 'Tis thine in battle to confer the crown, 5 The victor's prize, the mark of sweet renown; For thou rul'st all things, Victory divine! And glorious strife, and joyful shouts are thine. Come, mighty Goddess, and thy suppliant bless, With sparkling eye, elated with success; 10 May deeds illustrious thy protection claim, And find, led on by thee immortal Fame. Next: XXXIII: To Apollo"
+section = "Hymn XXXII. VICTORY"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 159
+token_count = 144
 
 [content]
-body = "Sacred Texts Classics Index Previous Next XXXII. TO VICTORY. The FUMIGATION from MANNA. O Powerful Victory, by men desir'd, With adverse breasts to dreadful fury fir'd, Thee I invoke, whose might alone can quell Contending rage, and molestation fell: 'Tis thine in battle to confer the crown, 5 The victor's prize, the mark of sweet renown; For thou rul'st all things, Victory divine! And glorious strife, and joyful shouts are thine. Come, mighty Goddess, and thy suppliant bless, With sparkling eye, elated with success; 10 May deeds illustrious thy protection claim, And find, led on by thee immortal Fame. Next: XXXIII: To Apollo"
+body = "XXXII. TO VICTORY. The FUMIGATION from MANNA. O Powerful Victory, by men desir'd, With adverse breasts to dreadful fury fir'd, Thee I invoke, whose might alone can quell Contending rage, and molestation fell: 'Tis thine in battle to confer the crown, 5 The victor's prize, the mark of sweet renown; For thou rul'st all things, Victory divine! And glorious strife, and joyful shouts are thine. Come, mighty Goddess, and thy suppliant bless, With sparkling eye, elated with success; 10 May deeds illustrious thy protection claim, And find, led on by thee immortal Fame."
 
 [annotations]
 concepts = []

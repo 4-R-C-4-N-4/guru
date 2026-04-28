@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.120"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 81. Sacred Texts Classics Index Previous Next p. 205 LXXIV. TO PALÆMON. The FUMIGATION from. MANNA. O Nurs'd with Dionysius, doom'd to keep Thy dwelling in the widely-spreading deep: With joyful aspect to my pray'r incline, Propitious come, and bless the rites divine: Thro' earth and sea thy ministers attend, 5 And from old Ocean's stormy waves defend: For ships their safety ever owe to thee, Who wand'rest with them thro' the raging sea. Come, guardian pow'r, whom mortal tribes desire, And far avert the deep's destructive ire. 10 Next: LXXV: To the Muses"
+section = "Hymn LXXIV. PALÆMON"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 148
+token_count = 126
 
 [content]
-body = "Sacred Texts Classics Index Previous Next p. 205 LXXIV. TO PALÆMON. The FUMIGATION from. MANNA. O Nurs'd with Dionysius, doom'd to keep Thy dwelling in the widely-spreading deep: With joyful aspect to my pray'r incline, Propitious come, and bless the rites divine: Thro' earth and sea thy ministers attend, 5 And from old Ocean's stormy waves defend: For ships their safety ever owe to thee, Who wand'rest with them thro' the raging sea. Come, guardian pow'r, whom mortal tribes desire, And far avert the deep's destructive ire. 10 Next: LXXV: To the Muses"
+body = "LXXIV. TO PALÆMON. The FUMIGATION from. MANNA. O Nurs'd with Dionysius, doom'd to keep Thy dwelling in the widely-spreading deep: With joyful aspect to my pray'r incline, Propitious come, and bless the rites divine: Thro' earth and sea thy ministers attend, 5 And from old Ocean's stormy waves defend: For ships their safety ever owe to thee, Who wand'rest with them thro' the raging sea. Come, guardian pow'r, whom mortal tribes desire, And far avert the deep's destructive ire. 10"
 
 [annotations]
 concepts = []

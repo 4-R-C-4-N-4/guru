@@ -1,10 +1,45 @@
 [chunking]
 strategy = "page-as-chunk"
 section_label_format = "Hymn {n}. {title}"
-number_source = "filename"
+# Used when number_pattern (Roman numeral) does not match — i.e. the page
+# is preface, dissertation, SECT material, etc. Avoids labeling those as
+# "Hymn N" when they aren't hymns.
+section_label_format_no_number_match = "Front Matter, p. {n}"
+
+# Source pages from sacred-texts.com are paginated by print-edition page,
+# NOT by hymn number — so the filename's NN is a page number, not a hymn
+# number. The Roman numeral inside the body (e.g. "XXII. TO NEREUS.") is
+# the canonical hymn id. Anchor on start of (post-strip) content.
+number_source = "content"
+number_pattern = '^([IVXLCDM]+)\.'
+
 title_source = "content"
-title_pattern = '^(?:(?:[IVXLCDM]+|SECT)\.\s+)?(?:TO\s+)?(.+?)[\.\*]?\s*$'
+# Require literal 'TO X' (case-insensitive — source has both 'TO' and 'To').
+# Otherwise candidate strings that happen to be bare Roman numerals (the
+# leading 'XXII' in 'XXII. TO NEREUS.') match and the title duplicates the
+# hymn number.
+title_pattern = '(?i)^(?:[IVXLCDM]+\.\s+)?TO\s+(.+?)[\.\*]?\s*$'
+title_max_len = 80
 max_tokens = 800
+
+# Strip sacred-texts navigation cruft. Each page comes back as a single
+# line: "Sacred Texts Classics Index Previous Next XXII. TO NEREUS. ...
+# Next: XXIII: To the Nereids". Embedding the prefix/suffix pollutes
+# vector similarity (the nav phrases pull these chunks into unrelated
+# queries). Patterns are applied in order via re.sub('').
+pre_strip_patterns = [
+    # Header: 'Sacred Texts Classics Index <link variants>'.
+    # Variants seen: 'Previous Next', 'Previous' alone (last page), 'Next' alone
+    # (first page). Strip any combination.
+    '^Sacred Texts Classics Index(?:\s+(?:Previous|Next))+\s+',
+    # Print-edition page marker that often appears at the very start of a
+    # scraped page, e.g. 'p. 219 LXXXI. TO THE SOUTH WIND'. Stripping the
+    # leading one only — interior 'p. NN' tokens are kept for citation
+    # cross-reference. Match optional 'i'/'ii'/'iii' (front matter) or arabic.
+    '^p\.\s+(?:[ivxlcdm]+|\d+)\s+',
+    # Footer: 'Next: <Roman>: <Title>' or 'Next: <Title>' on the final page.
+    '\s+Next:\s+(?:[IVXLCDM]+:)?.*$',
+]
 
 [metadata]
 tradition = "Greek Mystery"

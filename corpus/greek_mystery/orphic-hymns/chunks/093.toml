@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.093"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 54. Sacred Texts Classics Index Previous Next XLVII. TO SABASIUS. The FUMIGATION from AROMATICS HEAR me, illustrious father, dæmon fam'd. Great Saturn's offspring, and Sabasius nam'd; p. 180 Inserting Bacchus, bearer of the vine, And founding God, within thy thigh divine, That when mature, the Dionysian God 5 Might burst the bands of his conceal'd abode, And come to sacred Tmolus, his delight, Where Ippa dwells, all beautiful and bright. Come blessed Phrygian God, the king of all, And aid thy mystics, when on thee they call. 10 Next: XLVIII: To Ippa"
+section = "Hymn XLVII. SABASIUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 159
+token_count = 141
 
 [content]
-body = "Sacred Texts Classics Index Previous Next XLVII. TO SABASIUS. The FUMIGATION from AROMATICS HEAR me, illustrious father, dæmon fam'd. Great Saturn's offspring, and Sabasius nam'd; p. 180 Inserting Bacchus, bearer of the vine, And founding God, within thy thigh divine, That when mature, the Dionysian God 5 Might burst the bands of his conceal'd abode, And come to sacred Tmolus, his delight, Where Ippa dwells, all beautiful and bright. Come blessed Phrygian God, the king of all, And aid thy mystics, when on thee they call. 10 Next: XLVIII: To Ippa"
+body = "XLVII. TO SABASIUS. The FUMIGATION from AROMATICS HEAR me, illustrious father, dæmon fam'd. Great Saturn's offspring, and Sabasius nam'd; p. 180 Inserting Bacchus, bearer of the vine, And founding God, within thy thigh divine, That when mature, the Dionysian God 5 Might burst the bands of his conceal'd abode, And come to sacred Tmolus, his delight, Where Ippa dwells, all beautiful and bright. Come blessed Phrygian God, the king of all, And aid thy mystics, when on thee they call. 10"
 
 [annotations]
 concepts = []
