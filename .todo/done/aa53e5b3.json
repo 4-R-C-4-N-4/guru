@@ -1,0 +1,30 @@
+{
+  "id": "aa53e5b3",
+  "type": "chore",
+  "state": "done",
+  "summary": "tests/test_auto_promote_edges.py — confidence floor, model filter, surface_only/unrelated skipped, conflict-skip on existing edge, dry-run no writes, [auto] prefix on justification",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:55:09.483Z",
+  "updated_at": "2026-04-28T01:14:02.106Z",
+  "files": [
+    {
+      "path": "tests/test_auto_promote_edges.py"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "edges",
+    "tests"
+  ],
+  "relationships": {
+    "parent": "e0030982"
+  },
+  "resolution": {
+    "commit": "4e97a7fcbeb2998745f9e2f0c2d298cf52054e97",
+    "resolved_at": "2026-04-28T01:14:02.106Z",
+    "resolved_by": "unknown",
+    "note": "15 tests in tests/test_auto_promote_edges.py — confidence boundary, type filter, status filter, conflict-skip, apply tier=proposed, never verified, idempotent, doesn't downgrade, summary shape, dry-run discipline."
+  }
+}

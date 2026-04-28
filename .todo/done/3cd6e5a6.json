@@ -1,0 +1,27 @@
+{
+  "id": "3cd6e5a6",
+  "type": "chore",
+  "state": "done",
+  "summary": "Verify edge retraction works after auto-promote: review_edges.py + web reject/reclassify must DELETE the live edge row. Add parity fixture for reject-after-auto-promote.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:55:09.592Z",
+  "updated_at": "2026-04-28T01:16:28.506Z",
+  "tags": [
+    "autopromote",
+    "edges",
+    "parity"
+  ],
+  "relationships": {
+    "parent": "e0030982"
+  },
+  "resolution": {
+    "commit": "3e7875e90614d92879cf3f9d6c5af353634f53bd",
+    "resolved_at": "2026-04-28T01:16:28.506Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_autopromote_edges_retraction.py",
+    "test_function": "test_reject_after_auto_promote_deletes_live_edge",
+    "note": "4 round-trip tests verify the retraction primitives compose with auto_promote_edges. Parity coverage for CLI↔web reject/reclassify already exists in tests/parity/fixtures/decision_sequence.json (decision-edge-002/003) from PR #1's C7."
+  }
+}

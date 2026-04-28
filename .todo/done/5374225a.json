@@ -1,0 +1,30 @@
+{
+  "id": "5374225a",
+  "type": "chore",
+  "state": "done",
+  "summary": "Update docs/autopromote/design.md — replace §10 'Future' with concrete impl notes; document retract semantics for review_edges/web edge-reject path",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:55:09.551Z",
+  "updated_at": "2026-04-28T01:15:02.478Z",
+  "files": [
+    {
+      "path": "docs/autopromote/design.md"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "edges",
+    "docs"
+  ],
+  "relationships": {
+    "parent": "e0030982"
+  },
+  "resolution": {
+    "commit": "7b0c1c1281b162e9bc5901a663fb433ceb6ea3eb",
+    "resolved_at": "2026-04-28T01:15:02.478Z",
+    "resolved_by": "unknown",
+    "note": "Replaced 'Future' placeholder in §10 with the actual rule, the no-model-filter rationale, and the retract semantics for Reject/Reclassify on auto-promoted edges."
+  }
+}

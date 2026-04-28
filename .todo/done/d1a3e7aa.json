@@ -1,0 +1,30 @@
+{
+  "id": "d1a3e7aa",
+  "type": "chore",
+  "state": "done",
+  "summary": "scripts/auto_promote_edges.sh — bash wrapper for snapshot + integrity_check + --apply (mirrors auto_promote.sh)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:55:09.516Z",
+  "updated_at": "2026-04-28T01:14:31.176Z",
+  "files": [
+    {
+      "path": "scripts/auto_promote_edges.sh"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "edges",
+    "ops"
+  ],
+  "relationships": {
+    "parent": "e0030982"
+  },
+  "resolution": {
+    "commit": "199c1ad2beecf3b84429ec4230b792080eb69a55",
+    "resolved_at": "2026-04-28T01:14:31.176Z",
+    "resolved_by": "unknown",
+    "note": "Bash wrapper mirrors auto_promote.sh pattern: dry-run default, --apply takes labelled snapshot to ~/guru-backups/ with integrity_check + manifest of edge counts before invoking the python script with --apply."
+  }
+}
