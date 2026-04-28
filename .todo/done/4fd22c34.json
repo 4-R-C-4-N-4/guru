@@ -1,0 +1,35 @@
+{
+  "id": "4fd22c34",
+  "type": "chore",
+  "state": "done",
+  "summary": "Update scripts/chunk.py:191 to use snake_case dir name + write scripts/backfill_chunk_ids.py to rewrite existing corpus TOML files in place + update tests with hardcoded display-name IDs",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-28T16:53:17.987Z",
+  "updated_at": "2026-04-28T17:47:47.892Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py",
+      "lines": [
+        191,
+        191
+      ]
+    }
+  ],
+  "tags": [
+    "chunks",
+    "refactor",
+    "corpus"
+  ],
+  "relationships": {
+    "parent": "9ec1dcee"
+  },
+  "description": "## Deliverable\n\nTwo code changes + test updates, atomic in one commit so the corpus TOML on-disk state never diverges from the chunk.py logic.\n\n### 1. scripts/chunk.py:191 (one-line fix)\n\nCurrently:\n    chunk_id = f'{tradition_val}.{source_id}.{idx + 1:03d}'\n\nThe variable tradition_val is loaded from meta.toml and holds the display name ('Christian Mysticism', 'Greek Mystery'). The on-disk path uses the snake_case directory name. Switch chunk_id to use the directory-name variable (already available in scope as 'tradition' or similar — check the locals at that point in chunk.py).\n\nKeep tradition_val available as chunk_data['chunk']['tradition'] (the display-name field) — that's already there for citation rendering and doesn't need to change.\n\n### 2. scripts/backfill_chunk_ids.py (new file)\n\nOne-shot script that walks corpus/*/*/chunks/*.toml, reads each, rewrites the chunk.id field from display-name form to snake_case form, writes back. Idempotent — second run is a no-op. Should print a summary: 'Rewrote N chunks across M traditions (no-op for K already-correct chunks).'\n\nPattern: tradition prefix transforms via an explicit map of 9 affected traditions (Neoplatonism, Egyptian, Taoism, Greek Mystery, Christian Mysticism, Zoroastrianism, Jewish Mysticism, Buddhism, Mesopotamian) → their snake_case forms. The 3 already-correct ones (gnosticism, hermeticism, jewish_mysticism) are no-ops.\n\nUse the same per-tradition map that the SQL migration (C2) uses — keep them in lockstep so a future tradition addition is one place to update.\n\n### 3. Tests\n\nSearch tests/ for hardcoded display-name chunk_ids:\n    grep -nE '(Christian Mysticism|Greek Mystery|Jewish Mysticism|Neoplatonism|Egyptian|Taoism|Zoroastrianism|Buddhism|Mesopotamian)\\.' tests/\n\nLikely sites: test_chunk_paths.py, test_retrieval.py, possibly fixture files. Rewrite to snake_case form. The tests should still pass without the resolve_chunk_path fallback (which gets removed in C4).\n\n## Order vs other children\n\nC1 lands the code change but does NOT execute the live migration. C2 writes the SQL migration file (also no execution). C3 is the operator handoff that runs both. So C1+C2 land in the PR; C3 is what gets invoked post-merge.\n\n## Constraint\n\nPipeline-driven. Do NOT hand-edit corpus/*.toml files; the backfill_chunk_ids.py script regenerates them deterministically. Tests should verify the script produces the expected output for a small fixture.",
+  "resolution": {
+    "commit": "f3f55adcb90531eafd2cfc6ecd57ea6e5f73ba8f",
+    "resolved_at": "2026-04-28T17:47:47.892Z",
+    "resolved_by": "unknown",
+    "note": "chunk.py:191 fixed; backfill script with idempotent dry-run + apply paths; 9 unit tests for normalize/rewrite. Live dry-run reports 2,335 files to rewrite across 9 traditions. C2 (SQL migration) and C3 (operator wrapper) are next; C4 (drop the resolve_chunk_path fallback) lands in a follow-up PR after operator confirms parity."
+  }
+}
