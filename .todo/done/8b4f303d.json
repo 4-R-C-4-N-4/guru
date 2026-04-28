@@ -1,0 +1,36 @@
+{
+  "id": "8b4f303d",
+  "type": "bug",
+  "state": "done",
+  "summary": "Cap title length in page_chunker._extract_title — single-line sources match the whole body as title",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:45:52.503Z",
+  "updated_at": "2026-04-28T12:38:48.986Z",
+  "files": [
+    {
+      "path": "scripts/chunkers/page_chunker.py",
+      "lines": [
+        30,
+        43
+      ]
+    }
+  ],
+  "tags": [
+    "chunking",
+    "page_chunker"
+  ],
+  "relationships": {
+    "parent": "098bdd6b"
+  },
+  "description": "**Bug:** `_extract_title` in `scripts/chunkers/page_chunker.py:30-43` searches the first 10 newline-split lines and matches `(.+?)` greedy — for sources that store an entire page (or hymn, or chapter) as a single line with no newlines, the whole content matches and becomes the \"title\".\n\n**Repro:** any `chunking/<X>/<Y>.toml` with `strategy = \"page-as-chunk\"` whose raw text comes back from the source as one line. Verified for `chunking/greek_mystery/orphic-hymns.toml`.\n\n**Fix sketch:**\n- Cap candidate title length (e.g. skip lines > 80 chars).\n- If no short line matches the pattern in the first 10, return None and let the caller format `\"Hymn {n}\"` (the `KeyError/IndexError` fallback at line 95 already handles that).\n- Optional: add a sentence-boundary fallback that tries `re.split(r'\\.\\s+', content)` to find a candidate title within long lines.\n\n**Test:** `tests/test_chunking.py` should grow a fixture for a single-line input that exercises the cap.",
+  "resolution": {
+    "commit": "7245755763df751b709ac8df05210a1bba2693e6",
+    "resolved_at": "2026-04-28T12:38:48.986Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_page_chunker.py",
+    "test_function": "test_single_line_blob_falls_back_to_no_title",
+    "note": "Default cap of 80 chars (configurable via title_max_len). 7 tests cover the regression, override, and edge cases. Single-line sources now safely return None instead of swallowing the body as title."
+  }
+}
