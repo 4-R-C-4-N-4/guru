@@ -1,0 +1,25 @@
+{
+  "id": "c8dcc8c0",
+  "type": "chore",
+  "state": "open",
+  "summary": "scripts/cleanup_chunk_ids.sh — operator wrapper: snapshot + audit + apply v3_004 + run TOML backfill + parity check (mirrors cleanup_orphic_pre_rechunk.sh)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-28T16:53:18.058Z",
+  "updated_at": "2026-04-28T16:54:25.920Z",
+  "files": [
+    {
+      "path": "scripts/cleanup_chunk_ids.sh"
+    }
+  ],
+  "tags": [
+    "chunks",
+    "refactor",
+    "ops"
+  ],
+  "relationships": {
+    "parent": "9ec1dcee"
+  },
+  "description": "## Deliverable\n\nscripts/cleanup_chunk_ids.sh — bash wrapper that runs the full normalization end-to-end against the live DB. Mirrors the cleanup_orphic_pre_rechunk.sh + auto_promote.sh pattern.\n\n## Steps the script performs\n\n1. **Audit** (always): print pre-migration row counts per affected tradition, broken down by table. Same query pattern as cleanup_orphic_pre_rechunk.sh.\n\n2. **Collision check**: run the pre-migration audit query from C2's migration script. If any colliding chunk_ids exist (e.g. 'Jewish Mysticism.foo.001' and 'jewish_mysticism.foo.001' both pointing at distinct rows), abort with the colliding list printed.\n\n3. **Snapshot** (with --apply): take a labelled backup at ~/guru-backups/guru-<TS>-pre-chunk-id-normalize.db, run integrity_check.\n\n4. **Apply migration** (with --apply): sqlite3 data/guru.db < scripts/migrations/v3_004_normalize_chunk_ids.sql. Migration runs in its own transaction; bash captures exit code.\n\n5. **Run TOML backfill** (with --apply): python3 scripts/backfill_chunk_ids.py to rewrite corpus TOML files. Must run AFTER the SQL migration succeeds — otherwise we risk corpus TOMLs and DB diverging if the SQL fails.\n\n6. **Verify parity** (with --apply): query a few chunk_ids from the DB, check that resolve_chunk_path locates the matching corpus TOML file. If any mismatch, print and exit non-zero.\n\n## Flags\n\n    scripts/cleanup_chunk_ids.sh                 # audit only — no writes\n    scripts/cleanup_chunk_ids.sh --apply         # full migration (snapshot + sql + backfill + verify)\n    scripts/cleanup_chunk_ids.sh --apply --skip-backfill   # if backfill already ran (debugging)\n\n## Operator handoff\n\nAfter PR with C1+C2+C3+C4 merges:\n\n    scripts/cleanup_chunk_ids.sh                 # see what would change\n    scripts/cleanup_chunk_ids.sh --apply         # commit\n\nThe agent stops at green tests + script ready. Operator runs --apply against the live DB."
+}

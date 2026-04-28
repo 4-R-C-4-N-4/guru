@@ -1,13 +1,13 @@
 {
   "id": "9ec1dcee",
   "type": "chore",
-  "state": "open",
+  "state": "active",
   "summary": "Make chunk_ids and corpus directory names internally consistent (root cause: chunk.py uses display name, dirs are snake_case)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-04-25T15:27:45.922Z",
-  "updated_at": "2026-04-25T15:28:44.665Z",
+  "updated_at": "2026-04-28T16:53:18.095Z",
   "files": [
     {
       "path": "scripts/chunk.py",
@@ -26,6 +26,12 @@
   "relationships": {
     "depends_on": [
       "6ccb04d9"
+    ],
+    "children": [
+      "4fd22c34",
+      "9e650f2c",
+      "c8dcc8c0",
+      "234998f8"
     ]
   },
   "analysis": [
