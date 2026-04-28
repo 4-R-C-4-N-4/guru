@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-04-25T15:27:45.922Z",
-  "updated_at": "2026-04-28T16:53:18.095Z",
+  "updated_at": "2026-04-28T17:55:27.373Z",
   "files": [
     {
       "path": "scripts/chunk.py",
@@ -48,6 +48,13 @@
       "type": "conclusion",
       "content": "Pick one canonical form (recommend the directory name — already snake_case, URL-safe, machine-readable). Update chunk.py:191 to use the dir-name var. Backfill: rewrite chunk.id field in every corpus/*/*/chunks/*.toml, then re-run scripts/graph_bootstrap.py and re-embed (scripts/embed_corpus.py) to rebuild nodes/edges/staged_tags/staged_edges/vector_store with the new ids. Keep tradition display name as a separate field on chunk_data['chunk']['tradition'] (already there). After this lands, remove the fallback branch from the helper introduced by 6ccb04d9.",
       "confidence": "medium"
+    },
+    {
+      "timestamp": "2026-04-28T17:55:27.373Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "C1 (4fd22c34) + C2 (9e650f2c) + C3 (c8dcc8c0) implemented and tested. C4 (234998f8) deliberately deferred to a follow-up PR — removing the resolve_chunk_path snake_case fallback before the operator runs cleanup_chunk_ids.sh --apply would break runtime queries. Parent stays active until operator runs --apply on the live DB and confirms parity, then a follow-up PR lands C4 and closes the parent. 172 unit tests + 13 chunking tests all pass on this branch.",
+      "confidence": "high"
     }
   ]
 }
