@@ -1,0 +1,32 @@
+{
+  "id": "8c5f3527",
+  "type": "feature",
+  "state": "done",
+  "summary": "scripts/auto_promote_edges.py — confidence-floor + model + edge_type filter, dry-run default, --apply path, ON CONFLICT DO NOTHING, [auto] justification prefix",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-27T22:55:09.450Z",
+  "updated_at": "2026-04-28T01:14:02.069Z",
+  "files": [
+    {
+      "path": "scripts/auto_promote_edges.py"
+    }
+  ],
+  "tags": [
+    "autopromote",
+    "edges",
+    "script"
+  ],
+  "relationships": {
+    "parent": "e0030982"
+  },
+  "resolution": {
+    "commit": "4e97a7fcbeb2998745f9e2f0c2d298cf52054e97",
+    "resolved_at": "2026-04-28T01:14:02.069Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_auto_promote_edges.py",
+    "test_function": "test_apply_writes_proposed_tier_and_auto_prefix",
+    "note": "scripts/auto_promote_edges.py — confidence floor (default 0.85), edge_type filter (PARALLELS/CONTRASTS only, skips surface_only/unrelated), status='pending', NOT EXISTS already-live, ON CONFLICT DO NOTHING, [auto] prefix, always tier='proposed'. No model filter — see analysis on parent."
+  }
+}
