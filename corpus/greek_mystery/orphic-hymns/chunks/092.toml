@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.092"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 53. Sacred Texts Classics Index Previous Next XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind. Footnotes 179:* So called from περι and κιονισ, a little pillar. Next: XVLII: To Sabasius"
+section = "Hymn XLVI. BACCHUS PERICIONIUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 158
+token_count = 140
 
 [content]
-body = "Sacred Texts Classics Index Previous Next XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind. Footnotes 179:* So called from περι and κιονισ, a little pillar. Next: XVLII: To Sabasius"
+body = "XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind. Footnotes 179:* So called from περι and κιονισ, a little pillar."
 
 [annotations]
 concepts = []

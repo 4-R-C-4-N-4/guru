@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.105"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 66. Sacred Texts Classics Index Previous Next p. 192 LIX. TO THE GRACES. The FUMIGATION from STORAX. HEAR me, illustrious Graces, mighty nam'd, From Jove descended and Eunomia fam'd; Thalia, and Aglaia fair and bright, And blest Euphrosyne whom joys delight: Mothers of mirth, all lovely to the view, 5 Pleasure abundant pure belongs to you: Various, forever flourishing and fair, Desir'd by mortals, much invok'd in pray'r: Circling, dark-ey'd, delightful to mankind, Come, and your mystics bless with bounteous mind. Next: LX: To Nemesis"
+section = "Hymn LIX. THE GRACES"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 152
+token_count = 133
 
 [content]
-body = "Sacred Texts Classics Index Previous Next p. 192 LIX. TO THE GRACES. The FUMIGATION from STORAX. HEAR me, illustrious Graces, mighty nam'd, From Jove descended and Eunomia fam'd; Thalia, and Aglaia fair and bright, And blest Euphrosyne whom joys delight: Mothers of mirth, all lovely to the view, 5 Pleasure abundant pure belongs to you: Various, forever flourishing and fair, Desir'd by mortals, much invok'd in pray'r: Circling, dark-ey'd, delightful to mankind, Come, and your mystics bless with bounteous mind. Next: LX: To Nemesis"
+body = "LIX. TO THE GRACES. The FUMIGATION from STORAX. HEAR me, illustrious Graces, mighty nam'd, From Jove descended and Eunomia fam'd; Thalia, and Aglaia fair and bright, And blest Euphrosyne whom joys delight: Mothers of mirth, all lovely to the view, 5 Pleasure abundant pure belongs to you: Various, forever flourishing and fair, Desir'd by mortals, much invok'd in pray'r: Circling, dark-ey'd, delightful to mankind, Come, and your mystics bless with bounteous mind."
 
 [annotations]
 concepts = []

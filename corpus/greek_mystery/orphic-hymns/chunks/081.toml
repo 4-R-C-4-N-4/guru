@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.081"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 43. Sacred Texts Classics Index Previous Next p. 167 XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas. Next: XXXVII: To the Curetes"
+section = "Hymn XXXVI. THE TITANS * The FUMIGATION from FRANKINCENSE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 178
+token_count = 156
 
 [content]
-body = "Sacred Texts Classics Index Previous Next p. 167 XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas. Next: XXXVII: To the Curetes"
+body = "XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas."
 
 [annotations]
 concepts = []

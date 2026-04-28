@@ -2,13 +2,13 @@
 id = "Greek Mystery.orphic-hymns.091"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn 52. Sacred Texts Classics Index Previous Next XLV. TO LIKNITUS + BACCHUS. The FUMIGATION from MANNA. LIKNITAN Bacchus, bearer of the vine, Thee I invoke to bless these rites divine: p. 179 Florid and gay, of nymphs the blossom bright, And of fair Venus, Goddess of delight, 'Tis thine mad footsteps with mad nymphs to beat, 5 Dancing thro' groves with lightly leaping feet: From Jove's high counsels nurst by Proserpine, And born the dread of all the pow'rs divine: Come, blessed pow'r, regard thy suppliant's voice, Propitious come, and in these rites rejoice. 10 Footnotes 178:+ XLV. + Or the Fan-bearer. Concerning Liknitus and the following Bacchuses, see the last section of the Dissertation. Next: XLVI: To Bacchus Pericionius"
+section = "Hymn XLV. LIKNITUS + BACCHUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 204
+token_count = 184
 
 [content]
-body = "Sacred Texts Classics Index Previous Next XLV. TO LIKNITUS + BACCHUS. The FUMIGATION from MANNA. LIKNITAN Bacchus, bearer of the vine, Thee I invoke to bless these rites divine: p. 179 Florid and gay, of nymphs the blossom bright, And of fair Venus, Goddess of delight, 'Tis thine mad footsteps with mad nymphs to beat, 5 Dancing thro' groves with lightly leaping feet: From Jove's high counsels nurst by Proserpine, And born the dread of all the pow'rs divine: Come, blessed pow'r, regard thy suppliant's voice, Propitious come, and in these rites rejoice. 10 Footnotes 178:+ XLV. + Or the Fan-bearer. Concerning Liknitus and the following Bacchuses, see the last section of the Dissertation. Next: XLVI: To Bacchus Pericionius"
+body = "XLV. TO LIKNITUS + BACCHUS. The FUMIGATION from MANNA. LIKNITAN Bacchus, bearer of the vine, Thee I invoke to bless these rites divine: p. 179 Florid and gay, of nymphs the blossom bright, And of fair Venus, Goddess of delight, 'Tis thine mad footsteps with mad nymphs to beat, 5 Dancing thro' groves with lightly leaping feet: From Jove's high counsels nurst by Proserpine, And born the dread of all the pow'rs divine: Come, blessed pow'r, regard thy suppliant's voice, Propitious come, and in these rites rejoice. 10 Footnotes 178:+ XLV. + Or the Fan-bearer. Concerning Liknitus and the following Bacchuses, see the last section of the Dissertation."
 
 [annotations]
 concepts = []
