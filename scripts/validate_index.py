@@ -82,7 +82,10 @@ def main() -> None:
 
     sys.path.insert(0, str(Path(__file__).parent))
     from vector_store import VectorStore
-    vs = VectorStore(CONFIG_PATH)
+    # No arg → VectorStore picks up its DEFAULT_DB (data/guru.db). Passing
+    # CONFIG_PATH (config/embedding.toml) here was a long-standing bug —
+    # SQLite then failed with "file is not a database" on the first query.
+    vs = VectorStore()
 
     corpus_ids = collect_chunk_ids()
     vector_count = vs.count()
