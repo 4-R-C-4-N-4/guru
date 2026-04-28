@@ -1,0 +1,15 @@
+{
+  "id": "446a7cbf",
+  "type": "chore",
+  "state": "open",
+  "summary": "Test export artifact round-trip against fresh Postgres",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-28T22:05:29.855Z",
+  "updated_at": "2026-04-28T22:05:41.586Z",
+  "relationships": {
+    "parent": "5f27a76f"
+  },
+  "description": "Run export.py locally, then pipe the artifact to a fresh Postgres instance (Docker or local). Verify tables exist in corpus schema, metadata is correct, and counts match. Run validate() against a test guru.db."
+}

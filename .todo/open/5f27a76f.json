@@ -1,0 +1,20 @@
+{
+  "id": "5f27a76f",
+  "type": "feature",
+  "state": "open",
+  "summary": "Export v2: schema-isolated COPY corpus with atomic swap",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-28T22:05:29.728Z",
+  "updated_at": "2026-04-28T22:05:41.453Z",
+  "relationships": {
+    "children": [
+      "b8e04c7b",
+      "fe52a0f5",
+      "ccc63b99",
+      "446a7cbf"
+    ]
+  },
+  "description": "Refactor scripts/export.py to produce a self-contained Postgres SQL artifact using COPY format, schema-qualified tables (corpus_new.*), inline validation, and an atomic schema swap. This is the producer side of the cross-repo corpus contract."
+}
