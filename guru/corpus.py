@@ -1,9 +1,8 @@
-"""guru/corpus.py — corpus path resolution helpers.
+"""guru/corpus.py — corpus path resolution helper.
 
-Bridges the case/space mismatch between chunk_id tradition prefixes
-(display names like "Christian Mysticism") and corpus directory names
-(snake_case like "christian_mysticism"). Becomes dead code once
-todo:9ec1dcee unifies the two forms.
+Maps a chunk_id to its on-disk TOML path. After todo:9ec1dcee normalized
+chunk_ids to snake_case (matching the corpus directory layout), this is
+a straight directory join — no fallback or normalization needed.
 """
 
 from __future__ import annotations
@@ -14,18 +13,13 @@ from guru.paths import CORPUS_DIR
 
 
 def resolve_chunk_path(chunk_id: str, corpus_dir: Path = CORPUS_DIR) -> Path | None:
-    """Map chunk_id "<trad>.<text_id>.<seq>" -> corpus/<dir>/<text_id>/chunks/<seq>.toml.
+    """Map chunk_id "<trad>.<text_id>.<seq>" → corpus/<trad>/<text_id>/chunks/<seq>.toml.
 
-    The tradition segment may be a display name ("Christian Mysticism") while
-    directories are snake_case ("christian_mysticism"). Tries the raw segment
-    first, then a normalized snake_case form.
+    Returns None if the path doesn't exist or the chunk_id is malformed.
     """
-    parts = chunk_id.split(".")
+    parts = chunk_id.split(".", 2)
     if len(parts) < 3:
         return None
-    raw_trad, text_id, seq = parts[0], parts[1], parts[2]
-    for trad in (raw_trad, raw_trad.lower().replace(" ", "_")):
-        p = corpus_dir / trad / text_id / "chunks" / f"{seq}.toml"
-        if p.exists():
-            return p
-    return None
+    trad, text_id, seq = parts
+    p = corpus_dir / trad / text_id / "chunks" / f"{seq}.toml"
+    return p if p.exists() else None
