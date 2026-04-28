@@ -1,0 +1,20 @@
+{
+  "id": "ed031e66",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add inline validation + atomic swap block to export artifact",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-04-28T22:11:07.766Z",
+  "updated_at": "2026-04-28T22:44:55.938Z",
+  "relationships": {
+    "parent": "7db94cc0"
+  },
+  "description": "Emit a PL/pgSQL DO block that validates schema_version and chunk_count. Emit ALTER SCHEMA ... RENAME atomic swap stanza after validation. Ensure the entire artifact is one transaction (BEGIN/COMMIT).",
+  "resolution": {
+    "commit": "HEAD",
+    "resolved_at": "2026-04-28T22:44:55.938Z",
+    "resolved_by": "unknown"
+  }
+}
