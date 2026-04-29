@@ -1,0 +1,31 @@
+{
+  "id": "875642fe",
+  "type": "bug",
+  "state": "done",
+  "summary": "v2 export emits no GRANTs on corpus schema; app role gets permission denied",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-04-29T13:55:45.972Z",
+  "updated_at": "2026-04-29T14:03:31.538Z",
+  "files": [
+    {
+      "path": "scripts/export.py"
+    }
+  ],
+  "tags": [
+    "postgres",
+    "deployment",
+    "corpus-schema",
+    "v2"
+  ],
+  "description": "Hit live in prod after merging guru-web and loading v2 corpus artifact:\n\n  error: An error occurred while loading instrumentation hook: permission denied for schema corpus\n\nCause: export artifact runs as postgres superuser, so the new corpus.* tables are owned by postgres and the app DB role has no rights on the corpus schema. The atomic swap drops corpus_old on each load (along with any GRANTs the operator applied post-load), so the fix has to live in the artifact itself.\n\nFix:\n- export.py reads GURU_DB_APP_ROLE env var (fail loudly if unset), emits GRANT USAGE ON SCHEMA corpus_new TO <role> and GRANT SELECT ON ALL TABLES IN SCHEMA corpus_new TO <role> after the COPY blocks and before the swap. Grants travel with the schema rename.\n- guru-web/deploy/README.md: document GURU_DB_APP_ROLE and add to the laptop-side export step (separate PR in guru-web).\n\nDone when:\n- export.py emits GRANT statements for the staging schema before the swap\n- main() raises SystemExit if GURU_DB_APP_ROLE is unset\n- a unit test covers the GRANT emission shape\n- prod-style reload as the app role can SELECT from corpus.chunks without permission errors",
+  "resolution": {
+    "commit": "b6b3d5a",
+    "resolved_at": "2026-04-29T14:03:31.538Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_export_grants.py",
+    "test_function": "test_emits_usage_on_schema",
+    "note": "GRANT USAGE/SELECT emitted on staging schema before swap; APP_ROLE='guru' hardcoded constant matches prod role"
+  }
+}

@@ -1,28 +1,27 @@
 """
 export.py — Produce export/guru-corpus.sql.gz (v2 export artifact).
 
-One gzipped SQL file that `gunzip -c ... | psql $DATABASE_URL` loads into
-a fresh or existing Postgres 17 + pgvector instance. The artifact is a
-single transaction — a load failure leaves any prior corpus intact. All
-bulk INSERTs run before index creation; corpus_metadata is written last
-so mid-load failures leave the web app's version check unset.
+One gzipped SQL file that `gunzip -c ... | psql -v ON_ERROR_STOP=1`
+loads into a Postgres 17 + pgvector instance. The artifact replaces the
+entire corpus atomically via an ALTER SCHEMA … RENAME swap, leaving the
+`public` schema (users, sessions, queries, etc.) untouched.
 
 Data sources combined by this script:
   - data/guru.db: nodes (traditions/concepts/chunks), edges, chunk_embeddings
-  - corpus/traditions.toml: tradition registry
   - corpus/{tradition}/{text_id}/metadata.toml: per-text metadata
   - corpus/{tradition}/{text_id}/chunks/*.toml: per-chunk body + token count
   - concepts/taxonomy.toml: concept domains + definitions
-  - schema/corpus-schema.sql: canonical Postgres DDL
+  - schema/corpus-schema.sql: canonical Postgres DDL template (unprefixed)
 
-Child tickets flesh out the stubs below (helpers, validate, version
-counter, INSERT emitters, metadata block).
+Schema isolation: the emitted artifact creates `corpus_new.*` tables, loads
+via COPY FROM STDIN, validates inline, then swaps `corpus_new` → `corpus`.
 """
 
 from __future__ import annotations
 
 import gzip
 import logging
+import re
 import sqlite3
 import subprocess
 import sys
@@ -44,13 +43,20 @@ TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
 # EXPECTED_SCHEMA_VERSION must advance in the same deploy.
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 EMBEDDING_MODEL = "ollama/nomic-embed-text"
 EMBEDDING_DIM = 768
 
-# Tables the export fully replaces on each load. Ordered for drop with
-# CASCADE fallback — edges first (no inbound FKs), corpus_metadata last.
-CORPUS_TABLES = ["edges", "chunks", "concepts", "texts", "traditions", "corpus_metadata"]
+# Schema used for the staging area during load. The swap renames this to
+# the live `corpus` schema after validation passes.
+STAGING_SCHEMA = "corpus_new"
+LIVE_SCHEMA = "corpus"
+
+# Postgres role the web app authenticates as (matches systemd's DATABASE_URL
+# on guru-web-prod). The artifact GRANTs USAGE/SELECT to this role on the
+# staging schema before the swap, so reloads don't strand the app on a
+# permission-denied corpus. Update here AND on the VPS in lockstep.
+APP_ROLE = "guru"
 
 
 def git_sha() -> str:
@@ -59,9 +65,7 @@ def git_sha() -> str:
     ).decode().strip()
 
 
-# ── SQL value emitters ────────────────────────────────────────────────
-# All three return a bare SQL fragment suitable for splicing into an
-# INSERT VALUES list. None/empty inputs emit literal NULL.
+# ── SQL value emitters (for INSERT — kept for metadata block) ─────────
 
 def esc(s: str | None) -> str:
     """Escape a Python string to a Postgres single-quoted literal."""
@@ -72,8 +76,7 @@ def esc(s: str | None) -> str:
 
 def esc_array(xs: list[str] | None) -> str:
     """Emit a Postgres text[] literal: '{"a","b"}' with embedded quotes
-    escaped. Empty list and None both collapse to NULL so export.py can
-    forward a missing section_path without special-casing upstream."""
+    escaped. Empty list and None both collapse to NULL."""
     if not xs:
         return "NULL"
     inner = ",".join('"' + x.replace("\\", "\\\\").replace('"', '\\"') + '"' for x in xs)
@@ -82,21 +85,40 @@ def esc_array(xs: list[str] | None) -> str:
 
 def vec_to_pg(blob: bytes, expected_dim: int) -> str:
     """Render a float32 little-endian blob as pgvector's text format:
-    '[0.1234567,...]'. Callers wrap this in ::vector in the INSERT."""
+    '[0.1234567,...]'."""
     arr = np.frombuffer(blob, dtype=np.float32)
     if arr.shape[0] != expected_dim:
         raise ValueError(f"vector dim mismatch: {arr.shape[0]} != {expected_dim}")
-    # 7 significant digits is within float32 precision; more wastes bytes.
-    return "'[" + ",".join(f"{x:.7f}" for x in arr) + "]'"
+    return "[" + ",".join(f"{x:.7f}" for x in arr) + "]"
 
 
-def validate(conn: sqlite3.Connection) -> None:
+# ── COPY value escape ─────────────────────────────────────────────────
+# Postgres COPY FROM STDIN (text format) uses a very small escape set:
+#   \ → \\, \t → \t, \n → \n, \r → \r, and NULL is represented as \N.
+# Everything else (including single quotes) is literal.
+
+_COPY_ESCAPES = str.maketrans({
+    "\\": "\\\\",
+    "\t": "\\t",
+    "\n": "\\n",
+    "\r": "\\r",
+})
+
+
+def copy_esc(s: str | None) -> str:
+    """Escape a Python string for Postgres COPY FROM STDIN (text format).
+    None → \\N. Backslashes and newlines are escaped."""
+    if s is None:
+        return "\\N"
+    return s.translate(_COPY_ESCAPES)
+
+
+# ── validation (local, before export) ─────────────────────────────────
+
+def validate(conn: sqlite3.Connection) -> int:
     """Refuse to export if the corpus is inconsistent.
 
-    Three checks:
-      1. every chunk node has a chunk_embeddings row
-      2. every chunk_embeddings row references a real chunk node
-      3. every vector is at the pinned dim and model
+    Returns the chunk count so the emitted validation block can hardcode it.
     """
     n_chunks = conn.execute(
         "SELECT COUNT(*) FROM nodes WHERE type='chunk'"
@@ -138,15 +160,11 @@ def validate(conn: sqlite3.Connection) -> None:
         "validate: %d chunks, all pinned to %s @ %dd",
         n_chunks, EMBEDDING_MODEL, EMBEDDING_DIM,
     )
+    return n_chunks
 
 
 def next_corpus_version(conn: sqlite3.Connection) -> int:
-    """Monotonic counter persisted in data/guru.db::_export_state.
-
-    Every call increments and returns the new value, so each export
-    carries a strictly higher corpus_version than the previous one even
-    across machine reboots or a moved checkout.
-    """
+    """Monotonic counter persisted in data/guru.db::_export_state."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS _export_state ("
         "  key TEXT PRIMARY KEY, value TEXT NOT NULL"
@@ -166,13 +184,9 @@ def next_corpus_version(conn: sqlite3.Connection) -> int:
 
 
 # ── data loaders ──────────────────────────────────────────────────────
-# Each loader returns rows already sorted by primary key so the emitter
-# layer stays deterministic without re-sorting.
 
 def load_traditions(conn: sqlite3.Connection) -> list[dict]:
-    """From nodes WHERE type='tradition'. traditions.toml is stale
-    (auto-derived once, never refreshed) — SQLite is the live source of
-    truth for which traditions actually exist in the graph."""
+    """From nodes WHERE type='tradition'. SQLite is the live source of truth."""
     rows = []
     for node_id, label in conn.execute(
         "SELECT id, label FROM nodes WHERE type='tradition' ORDER BY id"
@@ -182,14 +196,12 @@ def load_traditions(conn: sqlite3.Connection) -> list[dict]:
 
 
 def load_texts() -> list[dict]:
-    """From corpus/{tradition_dir}/{text_id}/metadata.toml. Uses the
-    parent-parent directory name as the canonical tradition id — the
-    'tradition' field in metadata.toml is unreliable (mixed case)."""
+    """From corpus/{tradition_dir}/{text_id}/metadata.toml."""
     rows = []
     for p in sorted(CORPUS_DIR.rglob("metadata.toml")):
         with open(p, "rb") as fp:
             d = tomllib.load(fp)
-        tradition_dir = p.parts[-3]  # .../corpus/<dir>/<text_id>/metadata.toml
+        tradition_dir = p.parts[-3]
         rows.append({
             "id": d["text_id"],
             "tradition": tradition_dir,
@@ -203,13 +215,9 @@ def load_texts() -> list[dict]:
 
 
 def load_concepts(conn: sqlite3.Connection) -> list[dict]:
-    """Merge SQLite node rows (id, label) with concepts/taxonomy.toml
-    (domain, definition). Taxonomy is the canonical source for the two
-    descriptive fields; SQLite is canonical for which concepts actually
-    exist in the live graph."""
+    """Merge SQLite node rows with concepts/taxonomy.toml."""
     with open(TAXONOMY_TOML, "rb") as fp:
         tax = tomllib.load(fp)
-    # taxonomy.toml shape: { concepts: { domain: { concept_id: definition }}}
     lookup: dict[str, tuple[str, str]] = {}
     for domain, members in tax["concepts"].items():
         for cid, definition in members.items():
@@ -219,7 +227,6 @@ def load_concepts(conn: sqlite3.Connection) -> list[dict]:
     for node_id, label in conn.execute(
         "SELECT id, label FROM nodes WHERE type='concept' ORDER BY id"
     ):
-        # SQLite ids are "concept.<short_id>"; taxonomy uses <short_id>
         short = node_id.removeprefix("concept.")
         domain, definition = lookup.get(short, (None, None))
         rows.append({
@@ -232,18 +239,12 @@ def load_concepts(conn: sqlite3.Connection) -> list[dict]:
 
 
 def load_chunks(conn: sqlite3.Connection):
-    """Yield chunk rows joining corpus TOMLs with chunk_embeddings.
-    Streams one chunk at a time so the 2531-row corpus never fully
-    materializes in memory."""
-    # Pre-load all (chunk_id → vector) from SQLite into a dict keyed by
-    # chunk_id. 2531 rows × 3 KB ≈ 7.5 MB — fine to hold in memory.
+    """Yield chunk rows joining corpus TOMLs with chunk_embeddings."""
     emb = {
         cid: vec for cid, vec in conn.execute(
             "SELECT chunk_id, vector FROM chunk_embeddings"
         )
     }
-    # Walk TOMLs in a deterministic order; text_id comes from the
-    # dotted id's middle segment (always canonical kebab-case).
     paths = sorted(CORPUS_DIR.rglob("chunks/*.toml"))
     for p in paths:
         with open(p, "rb") as fp:
@@ -254,10 +255,7 @@ def load_chunks(conn: sqlite3.Connection):
             raise SystemExit(
                 f"chunk {cid} has a TOML but no chunk_embeddings row"
             )
-        # corpus/<tradition_dir>/<text_id>/chunks/NNN.toml → tradition_dir
         tradition_dir = p.parts[-4]
-        # id format is "<raw_tradition>.<text_id>.<seq>"; text_id =
-        # middle segment. Split on dots from the LEFT then take [1].
         parts = cid.split(".")
         text_id = parts[1] if len(parts) >= 3 else chunk.get("text_id")
         yield {
@@ -266,22 +264,16 @@ def load_chunks(conn: sqlite3.Connection):
             "tradition": tradition_dir,
             "text_name": chunk["text_name"],
             "section": chunk.get("section"),
-            "section_path": None,  # not populated in v1 TOMLs
+            "section_path": None,
             "translator": chunk.get("translator"),
             "body": d["content"]["body"],
             "token_count": int(chunk.get("token_count", 0)),
             "vector": emb[cid],
         }
-    # Sort order: sorted(rglob(...)) gives lexicographic path order,
-    # which for this layout matches chunk.id primary-key order closely
-    # but not exactly (Title Case vs lowercase sorts differently). The
-    # emitter sorts explicitly, so this is just a streaming detail.
 
 
 def load_edges(conn: sqlite3.Connection) -> list[dict]:
-    """SQLite edges → Postgres column names. v1 schema has no `weight`
-    column, so the Postgres `weight` column is always NULL from this
-    pipeline (the column exists for downstream ranking hooks)."""
+    """SQLite edges → Postgres column names."""
     rows = []
     for r in conn.execute(
         "SELECT source_id, target_id, type, tier, justification "
@@ -298,103 +290,183 @@ def load_edges(conn: sqlite3.Connection) -> list[dict]:
     return rows
 
 
-# ── emitters ──────────────────────────────────────────────────────────
+# ── DDL prefixer ──────────────────────────────────────────────────────
+# schema/corpus-schema.sql is kept unprefixed so it stays byte-identical
+# with the copy in guru-web.  export.py prefixes table names on the fly.
 
-def emit_inserts(conn: sqlite3.Connection, f) -> None:
-    """Write INSERTs for traditions, texts, concepts, chunks, edges in
-    FK-dependency order. Every row is deterministic (stable sort, fixed
-    float precision) so re-exports of unchanged data are byte-identical
-    except for the corpus_version counter."""
-    f.write("-- traditions\n")
-    for r in load_traditions(conn):
-        f.write(
-            f"INSERT INTO traditions (id, label, description, color) "
-            f"VALUES ({esc(r['id'])}, {esc(r['label'])}, NULL, NULL);\n"
+def prefix_ddl(sql: str, schema: str) -> str:
+    """Prefix every table name in the canonical DDL with `schema.`.
+
+    Line-oriented — relies on each clause fitting on one line in the
+    schema. The CI hash check keeps both repos' schemas in lock-step,
+    so reformatting is detectable; if a multi-line clause is ever added,
+    this function needs a real parser.
+
+    Handles:
+      CREATE TABLE traditions (...)   → CREATE TABLE corpus_new.traditions (...)
+      CREATE INDEX idx ON chunks (...) → CREATE INDEX idx ON corpus_new.chunks (...)
+      text_id TEXT NOT NULL REFERENCES texts(id) → REFERENCES corpus_new.texts(id)
+    """
+    out = []
+    for line in sql.splitlines():
+        line = re.sub(
+            r"(CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?)(\w+)",
+            rf"\1{schema}.\2",
+            line,
         )
-    f.write("\n")
+        line = re.sub(
+            r"(CREATE\s+(?:UNIQUE\s+)?INDEX\s+\S+\s+ON\s+)(\w+)",
+            rf"\1{schema}.\2",
+            line,
+        )
+        line = re.sub(
+            r"(REFERENCES\s+)(\w+)",
+            rf"\1{schema}.\2",
+            line,
+        )
+        out.append(line)
+    return "\n".join(out)
 
-    f.write("-- texts\n")
+
+# ── emitters (COPY FORMAT) ────────────────────────────────────────────
+
+def emit_copy_start(f, schema: str, table: str, cols: list[str]) -> None:
+    f.write(f"COPY {schema}.{table} ({', '.join(cols)}) FROM STDIN;\n")
+
+
+def emit_copy_end(f) -> None:
+    f.write("\\.\n\n")
+
+
+def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
+    """Write COPY blocks for traditions, texts, concepts, chunks, edges.
+    Returns chunk count for the validation block."""
+    # traditions
+    emit_copy_start(f, schema, "traditions", ["id", "label", "description", "color"])
+    for r in load_traditions(conn):
+        f.write(f"{copy_esc(r['id'])}\t{copy_esc(r['label'])}\t\\N\t\\N\n")
+    emit_copy_end(f)
+
+    # texts
+    emit_copy_start(f, schema, "texts",
+                    ["id", "tradition", "label", "translator", "source_url", "sections_format"])
     for r in load_texts():
         f.write(
-            f"INSERT INTO texts (id, tradition, label, translator, "
-            f"source_url, sections_format) VALUES ("
-            f"{esc(r['id'])}, {esc(r['tradition'])}, {esc(r['label'])}, "
-            f"{esc(r['translator'])}, {esc(r['source_url'])}, "
-            f"{esc(r['sections_format'])});\n"
+            f"{copy_esc(r['id'])}\t{copy_esc(r['tradition'])}\t{copy_esc(r['label'])}\t"
+            f"{copy_esc(r['translator'])}\t{copy_esc(r['source_url'])}\t"
+            f"{copy_esc(r['sections_format'])}\n"
         )
-    f.write("\n")
+    emit_copy_end(f)
 
-    f.write("-- concepts\n")
+    # concepts
+    emit_copy_start(f, schema, "concepts", ["id", "label", "domain", "definition"])
     for r in load_concepts(conn):
         f.write(
-            f"INSERT INTO concepts (id, label, domain, definition) "
-            f"VALUES ({esc(r['id'])}, {esc(r['label'])}, "
-            f"{esc(r['domain'])}, {esc(r['definition'])});\n"
+            f"{copy_esc(r['id'])}\t{copy_esc(r['label'])}\t"
+            f"{copy_esc(r['domain'])}\t{copy_esc(r['definition'])}\n"
         )
-    f.write("\n")
+    emit_copy_end(f)
 
-    f.write("-- chunks\n")
-    # Materialize + sort by id for byte-stable output
+    # chunks
+    emit_copy_start(f, schema, "chunks",
+                    ["id", "text_id", "tradition", "text_name", "section",
+                     "section_path", "translator", "body", "token_count", "embedding"])
     chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
     for r in chunks:
+        # section_path is always None in v1 (TOMLs don't populate it).
+        # When that changes, write a copy_esc_array() — esc_array() emits
+        # SQL literal form with surrounding quotes, wrong for COPY.
+        assert r["section_path"] is None, "section_path COPY emitter not implemented"
+        # vectors are already in pgvector text format, no ::vector needed for COPY
+        vector = vec_to_pg(r["vector"], EMBEDDING_DIM)
         f.write(
-            f"INSERT INTO chunks (id, text_id, tradition, text_name, "
-            f"section, section_path, translator, body, token_count, "
-            f"embedding) VALUES ("
-            f"{esc(r['id'])}, {esc(r['text_id'])}, {esc(r['tradition'])}, "
-            f"{esc(r['text_name'])}, {esc(r['section'])}, "
-            f"{esc_array(r['section_path'])}, {esc(r['translator'])}, "
-            f"{esc(r['body'])}, {r['token_count']}, "
-            f"{vec_to_pg(r['vector'], EMBEDDING_DIM)}::vector);\n"
+            f"{copy_esc(r['id'])}\t{copy_esc(r['text_id'])}\t{copy_esc(r['tradition'])}\t"
+            f"{copy_esc(r['text_name'])}\t{copy_esc(r['section'])}\t"
+            f"\\N\t{copy_esc(r['translator'])}\t"
+            f"{copy_esc(r['body'])}\t{r['token_count']}\t{vector}\n"
         )
-    f.write("\n")
+    emit_copy_end(f)
 
-    f.write("-- edges\n")
+    # edges
+    emit_copy_start(f, schema, "edges",
+                    ["source", "target", "edge_type", "tier", "weight", "annotation"])
     for r in load_edges(conn):
-        weight = "NULL" if r["weight"] is None else f"{r['weight']}"
+        weight = "\\N" if r["weight"] is None else str(r["weight"])
         f.write(
-            f"INSERT INTO edges (source, target, edge_type, tier, "
-            f"weight, annotation) VALUES ("
-            f"{esc(r['source'])}, {esc(r['target'])}, "
-            f"{esc(r['edge_type'])}, {esc(r['tier'])}, {weight}, "
-            f"{esc(r['annotation'])});\n"
+            f"{copy_esc(r['source'])}\t{copy_esc(r['target'])}\t"
+            f"{copy_esc(r['edge_type'])}\t{copy_esc(r['tier'])}\t"
+            f"{weight}\t{copy_esc(r['annotation'])}\n"
         )
-    f.write("\n")
+    emit_copy_end(f)
+
+    return len(chunks)
 
 
-def emit_indexes(f) -> None:
-    """Emit CREATE INDEX statements after bulk INSERTs.
-
-    Indexes live in the export artifact (not schema/corpus-schema.sql)
-    because pgvector's HNSW build cost is proportional to insert order —
-    creating the index post-bulk-load is materially faster than building
-    it incrementally as rows arrive. The schema file's own header comment
-    documents this. The DROP TABLE … CASCADE at the top of the dump
-    cleans up any prior indexes on reload.
-
-    Inside the same BEGIN…COMMIT, so reload stays all-or-nothing.
-    """
+def emit_indexes(f, schema: str) -> None:
+    """Emit CREATE INDEX statements after bulk COPY."""
     f.write("-- ── post-load indexes (vector + FK lookups) ──\n")
-    f.write("-- HNSW on chunks.embedding is the hot path for retrieval.\n")
-    f.write("-- The btrees on FK-ish columns accelerate graph traversal\n")
-    f.write("-- and tradition-scoped queries.\n")
-    f.write(
-        "CREATE INDEX chunks_embedding_hnsw ON chunks "
-        "USING hnsw (embedding vector_cosine_ops);\n"
-    )
-    f.write("CREATE INDEX chunks_text_id   ON chunks (text_id);\n")
-    f.write("CREATE INDEX chunks_tradition ON chunks (tradition);\n")
-    f.write("CREATE INDEX edges_source     ON edges (source);\n")
-    f.write("CREATE INDEX edges_target     ON edges (target);\n")
+    f.write(f"CREATE INDEX chunks_embedding_hnsw ON {schema}.chunks "
+            f"USING hnsw (embedding vector_cosine_ops);\n")
+    f.write(f"CREATE INDEX chunks_text_id   ON {schema}.chunks (text_id);\n")
+    f.write(f"CREATE INDEX chunks_tradition ON {schema}.chunks (tradition);\n")
+    f.write(f"CREATE INDEX edges_source     ON {schema}.edges (source);\n")
+    f.write(f"CREATE INDEX edges_target     ON {schema}.edges (target);\n")
     f.write("\n")
 
 
-def emit_metadata(f, version: int, commit: str, exported_at: str) -> None:
-    """Final corpus_metadata block. Written LAST so a mid-load failure
-    leaves the table unset, and the web app's schema-version check then
-    refuses to serve a half-loaded corpus."""
-    f.write("-- corpus_metadata (written last — mid-load failure leaves it unset)\n")
-    f.write("INSERT INTO corpus_metadata (key, value) VALUES\n")
+def emit_validation(f, schema: str, expected_chunks: int) -> None:
+    """Inline PL/pgSQL validation block. Raises on mismatch → rolls back tx."""
+    f.write("-- ── inline validation ──\n")
+    f.write("DO $$\n")
+    f.write("DECLARE\n")
+    f.write("  v_schema_version INT;\n")
+    f.write(f"  v_expected_chunks INT := {expected_chunks};\n")
+    f.write("  v_actual_chunks INT;\n")
+    f.write("BEGIN\n")
+    f.write(f"  SELECT value::int INTO v_schema_version "
+            f"FROM {schema}.corpus_metadata WHERE key = 'schema_version';\n")
+    f.write(f"  IF v_schema_version != {SCHEMA_VERSION} THEN\n")
+    f.write("    RAISE EXCEPTION 'schema version mismatch: expected %, got %', "
+            f"{SCHEMA_VERSION}, v_schema_version;\n")
+    f.write("  END IF;\n")
+    f.write(f"  SELECT COUNT(*) INTO v_actual_chunks FROM {schema}.chunks;\n")
+    f.write("  IF v_actual_chunks != v_expected_chunks THEN\n")
+    f.write("    RAISE EXCEPTION 'chunk count mismatch: expected %, got %', "
+            "v_expected_chunks, v_actual_chunks;\n")
+    f.write("  END IF;\n")
+    f.write("END $$;\n\n")
+
+
+def emit_grants(f, schema: str, role: str) -> None:
+    """Emit GRANTs so the app role can read corpus.* after the swap.
+    Postgres ACLs are stored against schema/table OIDs, so they survive
+    ALTER SCHEMA RENAME — granting on the staging schema is sufficient."""
+    f.write("-- ── grants for app role ──\n")
+    f.write(f"GRANT USAGE ON SCHEMA {schema} TO {role};\n")
+    f.write(f"GRANT SELECT ON ALL TABLES IN SCHEMA {schema} TO {role};\n\n")
+
+
+def emit_swap(f, staging: str, live: str) -> None:
+    """Atomic schema swap via ALTER SCHEMA … RENAME. Postgres has no
+    `ALTER SCHEMA IF EXISTS`, so the first rename is gated on
+    pg_namespace; the rest of the swap stays plain SQL. Sub-millisecond."""
+    f.write("-- ── atomic schema swap ──\n")
+    f.write("DO $$\n")
+    f.write("BEGIN\n")
+    f.write(f"  IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = '{live}') THEN\n")
+    f.write(f"    EXECUTE 'ALTER SCHEMA {live} RENAME TO {live}_old';\n")
+    f.write("  END IF;\n")
+    f.write("END $$;\n")
+    f.write(f"ALTER SCHEMA {staging} RENAME TO {live};\n")
+    f.write(f"DROP SCHEMA IF EXISTS {live}_old CASCADE;\n\n")
+
+
+def emit_metadata(f, schema: str, version: int, commit: str, exported_at: str) -> None:
+    """corpus_metadata block. Atomicity comes from the schema swap below
+    — live `corpus` is untouched until the swap, so order within the
+    staging schema doesn't affect what consumers see."""
+    f.write(f"-- corpus_metadata\n")
+    emit_copy_start(f, schema, "corpus_metadata", ["key", "value"])
     rows = [
         ("schema_version",    str(SCHEMA_VERSION)),
         ("embedding_model",   EMBEDDING_MODEL),
@@ -403,11 +475,12 @@ def emit_metadata(f, version: int, commit: str, exported_at: str) -> None:
         ("exported_at",       exported_at),
         ("source_commit_sha", commit),
     ]
-    for i, (k, v) in enumerate(rows):
-        comma = "," if i < len(rows) - 1 else ";"
-        f.write(f"  ({esc(k)}, {esc(v)}){comma}\n")
-    f.write("\n")
+    for k, v in rows:
+        f.write(f"{copy_esc(k)}\t{copy_esc(v)}\n")
+    emit_copy_end(f)
 
+
+# ── main ──────────────────────────────────────────────────────────────
 
 def main() -> None:
     logging.basicConfig(
@@ -424,7 +497,7 @@ def main() -> None:
     conn = sqlite3.connect(DEFAULT_DB)
     conn.row_factory = sqlite3.Row
 
-    validate(conn)
+    n_chunks = validate(conn)
     version = next_corpus_version(conn)
     commit = git_sha()
     exported_at = datetime.now(timezone.utc).isoformat()
@@ -441,27 +514,31 @@ def main() -> None:
 
         f.write("BEGIN;\n\n")
 
-        # 1. Drop existing corpus tables (CASCADE drops dependent indexes/views)
-        f.write(
-            f"DROP TABLE IF EXISTS {', '.join(CORPUS_TABLES)} CASCADE;\n\n"
-        )
+        # 1. Drop/create staging schema
+        f.write(f"DROP SCHEMA IF EXISTS {STAGING_SCHEMA} CASCADE;\n")
+        f.write(f"CREATE SCHEMA {STAGING_SCHEMA};\n\n")
 
-        # 2. Canonical schema (byte-identical to guru-web's copy)
+        # 2. Canonical DDL (prefix table names with staging schema)
         f.write("-- ── canonical schema (schema/corpus-schema.sql) ──\n")
-        f.write(SCHEMA_FILE.read_text())
+        ddl = prefix_ddl(SCHEMA_FILE.read_text(), STAGING_SCHEMA)
+        f.write(ddl)
         f.write("\n\n")
 
-        # 3. Data — traditions, texts, concepts, chunks, edges in FK order
-        emit_inserts(conn, f)
+        # 3. Data — COPY blocks in FK order
+        emit_copies(conn, f, STAGING_SCHEMA)
 
-        # 4. Post-load indexes — HNSW vector + FK-ish btrees. Built after
-        #    INSERTs so HNSW costs less; inside the same BEGIN/COMMIT so
-        #    reload stays all-or-nothing.
-        emit_indexes(f)
+        # 4. Post-load indexes
+        emit_indexes(f, STAGING_SCHEMA)
 
-        # 5. Metadata last — mid-load failure leaves this unset and the
-        #    web app refuses to serve.
-        emit_metadata(f, version, commit, exported_at)
+        # 5. Metadata (last)
+        emit_metadata(f, STAGING_SCHEMA, version, commit, exported_at)
+
+        # 6. Grants — must precede the swap so they ride the ALTER SCHEMA RENAME
+        emit_grants(f, STAGING_SCHEMA, APP_ROLE)
+
+        # 7. Validation + atomic swap
+        emit_validation(f, STAGING_SCHEMA, n_chunks)
+        emit_swap(f, STAGING_SCHEMA, LIVE_SCHEMA)
 
         f.write("COMMIT;\n")
 

@@ -20,7 +20,7 @@ from export import emit_indexes  # noqa: E402
 
 def _emit_to_string() -> str:
     buf = io.StringIO()
-    emit_indexes(buf)
+    emit_indexes(buf, "corpus_new")
     return buf.getvalue()
 
 
@@ -33,17 +33,17 @@ def test_emits_hnsw_index_on_chunks_embedding():
 def test_emits_chunks_btrees():
     out = _emit_to_string()
     assert "CREATE INDEX chunks_text_id" in out
-    assert "ON chunks (text_id)" in out
+    assert "ON corpus_new.chunks (text_id)" in out
     assert "CREATE INDEX chunks_tradition" in out
-    assert "ON chunks (tradition)" in out
+    assert "ON corpus_new.chunks (tradition)" in out
 
 
 def test_emits_edges_btrees():
     out = _emit_to_string()
     assert "CREATE INDEX edges_source" in out
-    assert "ON edges (source)" in out
+    assert "ON corpus_new.edges (source)" in out
     assert "CREATE INDEX edges_target" in out
-    assert "ON edges (target)" in out
+    assert "ON corpus_new.edges (target)" in out
 
 
 def test_emits_exactly_five_indexes():
