@@ -432,9 +432,16 @@ def emit_validation(f, schema: str, expected_chunks: int) -> None:
 
 
 def emit_swap(f, staging: str, live: str) -> None:
-    """Atomic schema swap via ALTER SCHEMA … RENAME. Sub-millisecond."""
+    """Atomic schema swap via ALTER SCHEMA … RENAME. Postgres has no
+    `ALTER SCHEMA IF EXISTS`, so the first rename is gated on
+    pg_namespace; the rest of the swap stays plain SQL. Sub-millisecond."""
     f.write("-- ── atomic schema swap ──\n")
-    f.write(f"ALTER SCHEMA IF EXISTS {live} RENAME TO {live}_old;\n")
+    f.write("DO $$\n")
+    f.write("BEGIN\n")
+    f.write(f"  IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = '{live}') THEN\n")
+    f.write(f"    EXECUTE 'ALTER SCHEMA {live} RENAME TO {live}_old';\n")
+    f.write("  END IF;\n")
+    f.write("END $$;\n")
     f.write(f"ALTER SCHEMA {staging} RENAME TO {live};\n")
     f.write(f"DROP SCHEMA IF EXISTS {live}_old CASCADE;\n\n")
 
