@@ -52,6 +52,12 @@ EMBEDDING_DIM = 768
 STAGING_SCHEMA = "corpus_new"
 LIVE_SCHEMA = "corpus"
 
+# Postgres role the web app authenticates as (matches systemd's DATABASE_URL
+# on guru-web-prod). The artifact GRANTs USAGE/SELECT to this role on the
+# staging schema before the swap, so reloads don't strand the app on a
+# permission-denied corpus. Update here AND on the VPS in lockstep.
+APP_ROLE = "guru"
+
 
 def git_sha() -> str:
     return subprocess.check_output(
@@ -431,6 +437,15 @@ def emit_validation(f, schema: str, expected_chunks: int) -> None:
     f.write("END $$;\n\n")
 
 
+def emit_grants(f, schema: str, role: str) -> None:
+    """Emit GRANTs so the app role can read corpus.* after the swap.
+    Postgres ACLs are stored against schema/table OIDs, so they survive
+    ALTER SCHEMA RENAME — granting on the staging schema is sufficient."""
+    f.write("-- ── grants for app role ──\n")
+    f.write(f"GRANT USAGE ON SCHEMA {schema} TO {role};\n")
+    f.write(f"GRANT SELECT ON ALL TABLES IN SCHEMA {schema} TO {role};\n\n")
+
+
 def emit_swap(f, staging: str, live: str) -> None:
     """Atomic schema swap via ALTER SCHEMA … RENAME. Postgres has no
     `ALTER SCHEMA IF EXISTS`, so the first rename is gated on
@@ -518,7 +533,10 @@ def main() -> None:
         # 5. Metadata (last)
         emit_metadata(f, STAGING_SCHEMA, version, commit, exported_at)
 
-        # 6. Validation + atomic swap
+        # 6. Grants — must precede the swap so they ride the ALTER SCHEMA RENAME
+        emit_grants(f, STAGING_SCHEMA, APP_ROLE)
+
+        # 7. Validation + atomic swap
         emit_validation(f, STAGING_SCHEMA, n_chunks)
         emit_swap(f, STAGING_SCHEMA, LIVE_SCHEMA)
 
