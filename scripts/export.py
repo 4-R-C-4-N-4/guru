@@ -288,46 +288,31 @@ def load_edges(conn: sqlite3.Connection) -> list[dict]:
 # schema/corpus-schema.sql is kept unprefixed so it stays byte-identical
 # with the copy in guru-web.  export.py prefixes table names on the fly.
 
-_TABLE_RE = re.compile(r"\bCREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?")
-_INDEX_RE = re.compile(r"\bCREATE\s+(?:UNIQUE\s+)?INDEX\s+(\S+)\s+ON\s+")
-# Match REFERENCES table_name(col) in FK clauses
-_REF_RE = re.compile(r"REFERENCES\s+(\w+)")
-
-
 def prefix_ddl(sql: str, schema: str) -> str:
     """Prefix every table name in the canonical DDL with `schema.`.
+
+    Line-oriented — relies on each clause fitting on one line in the
+    schema. The CI hash check keeps both repos' schemas in lock-step,
+    so reformatting is detectable; if a multi-line clause is ever added,
+    this function needs a real parser.
 
     Handles:
       CREATE TABLE traditions (...)   → CREATE TABLE corpus_new.traditions (...)
       CREATE INDEX idx ON chunks (...) → CREATE INDEX idx ON corpus_new.chunks (...)
       text_id TEXT NOT NULL REFERENCES texts(id) → REFERENCES corpus_new.texts(id)
     """
-    # Prefix CREATE TABLE <name>
-    def _table_sub(m: re.Match) -> str:
-        prefix = m.group(0)
-        # Insert schema. between the last token and the table name
-        # The match captures up to and including the optional quotes / IF NOT EXISTS
-        # We need to find where the actual table name starts
-        # Simpler approach: just insert schema. before the first identifier after CREATE TABLE
-        return re.sub(r"(CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?)(\S+)",
-                      rf"\1{schema}.\2", prefix, count=1)
-    # Actually, let's do this more carefully line by line
-    lines = sql.splitlines()
     out = []
-    for line in lines:
-        # CREATE TABLE traditions (
+    for line in sql.splitlines():
         line = re.sub(
             r"(CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?)(\w+)",
             rf"\1{schema}.\2",
             line,
         )
-        # CREATE INDEX foo ON chunks
         line = re.sub(
             r"(CREATE\s+(?:UNIQUE\s+)?INDEX\s+\S+\s+ON\s+)(\w+)",
             rf"\1{schema}.\2",
             line,
         )
-        # REFERENCES texts(id)
         line = re.sub(
             r"(REFERENCES\s+)(\w+)",
             rf"\1{schema}.\2",
@@ -382,14 +367,16 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
                      "section_path", "translator", "body", "token_count", "embedding"])
     chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
     for r in chunks:
-        # section_path is a text[]; emit in Postgres text-array format
-        section_path = esc_array(r["section_path"]) if r["section_path"] else "\\N"
+        # section_path is always None in v1 (TOMLs don't populate it).
+        # When that changes, write a copy_esc_array() — esc_array() emits
+        # SQL literal form with surrounding quotes, wrong for COPY.
+        assert r["section_path"] is None, "section_path COPY emitter not implemented"
         # vectors are already in pgvector text format, no ::vector needed for COPY
         vector = vec_to_pg(r["vector"], EMBEDDING_DIM)
         f.write(
             f"{copy_esc(r['id'])}\t{copy_esc(r['text_id'])}\t{copy_esc(r['tradition'])}\t"
             f"{copy_esc(r['text_name'])}\t{copy_esc(r['section'])}\t"
-            f"{section_path}\t{copy_esc(r['translator'])}\t"
+            f"\\N\t{copy_esc(r['translator'])}\t"
             f"{copy_esc(r['body'])}\t{r['token_count']}\t{vector}\n"
         )
     emit_copy_end(f)
@@ -453,8 +440,10 @@ def emit_swap(f, staging: str, live: str) -> None:
 
 
 def emit_metadata(f, schema: str, version: int, commit: str, exported_at: str) -> None:
-    """Written LAST so a mid-load failure leaves the table unset."""
-    f.write(f"-- corpus_metadata (written last — mid-load failure leaves it unset)\n")
+    """corpus_metadata block. Atomicity comes from the schema swap below
+    — live `corpus` is untouched until the swap, so order within the
+    staging schema doesn't affect what consumers see."""
+    f.write(f"-- corpus_metadata\n")
     emit_copy_start(f, schema, "corpus_metadata", ["key", "value"])
     rows = [
         ("schema_version",    str(SCHEMA_VERSION)),
