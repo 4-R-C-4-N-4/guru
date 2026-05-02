@@ -1,0 +1,35 @@
+{
+  "id": "f7f4de23",
+  "type": "refactor",
+  "state": "done",
+  "summary": "Remove redundant corpus/traditions.toml registry; let chunks-walk fallback own tradition node creation",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-02T18:34:53.864Z",
+  "updated_at": "2026-05-02T18:39:37.663Z",
+  "files": [
+    {
+      "path": "scripts/graph_bootstrap.py"
+    }
+  ],
+  "tags": [
+    "refactor",
+    "graph",
+    "bootstrap",
+    "docs"
+  ],
+  "description": "Proposed change: delete corpus/traditions.toml, remove bootstrap_traditions() (and the unused tradition_texts return path) from scripts/graph_bootstrap.py, and let bootstrap_chunks()'s in-loop upsert remain the sole creator of tradition nodes. Optionally add a LABEL_OVERRIDES dict at the top of graph_bootstrap.py for the awkward auto-generated labels (greek_mystery → \"Greek Mysteries\", egyptian → \"Egyptian Religion\", mesopotamian → \"Mesopotamian Religion\").\n\nWhy redundant: the registry currently lists 4/13 traditions. bootstrap_chunks() already upserts every tradition node it discovers under corpus/, so the missing 9 are auto-created with id.replace(\"_\",\" \").title() labels. For the 4 registered, the auto-fallback label happens to match the curated name verbatim — registry adds no value. The texts field is dead metadata: read into a return-value dict that main() never consumes; bootstrap_chunks() rediscovers texts by walking corpus/ directly.\n\nCross-impact (analyzed before capture):\n\n1. Code consumers — only scripts/graph_bootstrap.py reads TRADITIONS_TOML / traditions.toml. Confirmed via grep across .py / .sh / .md / .toml. No tests reference it. Nothing in guru/ package or export/ reads it.\n\n2. Docs — non-trivial. Three sections describe an unimplemented richer schema for this file:\n   - docs/guru-architecture.md §4.1 (lines 95-119) walks through \"adding a new tradition\" by editing traditions.toml with a schema that includes description, enabled_by_default, tags, and nested texts with sections_format/era. None of those keys exist in the actual file.\n   - docs/guru-architecture.md §4.2 (lines 123-136) describes per-text metadata (era, language_original, sections_format, content_warnings, tags) living in traditions.toml for UI filtering / retrieval scoping. Currently that per-text metadata lives in corpus/{tradition}/{text}/metadata.toml (written by chunk.py: text_name, translator, source_url, sections_format, chunk_count). Other fields (era, language_original, content_warnings) don't exist anywhere.\n   - docs/guru-implementation.md mentions traditions.toml at lines 51, 264, 299, 806, 920 — including step 2.8 \"Write corpus/traditions.toml registry from chunking configs\" which clearly intended this to be auto-generated.\n\n3. Future feature implication — the docs commit to a future where richer tradition/text metadata lives in traditions.toml. Deleting it commits to the alternative: tradition-level metadata in a Python constants file (LABEL_OVERRIDES + any future per-tradition fields), per-text metadata staying in corpus/.../metadata.toml. That's a deliberate architectural choice that needs to be reflected in the doc updates.\n\nDecision points before implementing:\n- (a) Delete + commit to \"metadata-lives-elsewhere\" world. Update docs §4.1 and §4.2 to remove the unimplemented schema and point readers at where the data actually lives (constants in graph_bootstrap.py for labels, metadata.toml per text). Also remove step 2.8 from implementation.md and the corpus tree references on lines 51/806.\n- (b) Defer deletion: leave the file/function in place until the docs vision is either implemented or formally scoped out. Risk: continued staleness drift as new traditions are added.\n- (c) Promote the file: actually implement the richer schema — extend traditions.toml to all 13 traditions with full per-tradition + per-text metadata, write code in retrieval/UI layers to consume it. Significantly larger scope.\n\nRecommendation: (a). The fallback already does the work, the doc vision has been latent for a long time without being implemented, and the file's continued existence in 1/3-baked form is the source of the original confusion. Do the deletion and the doc updates as a single commit so future readers don't see a code-doc divergence.\n\nFiles touched if (a):\n- delete corpus/traditions.toml\n- edit scripts/graph_bootstrap.py: remove bootstrap_traditions() / TRADITIONS_TOML / the call from main(); optionally add LABEL_OVERRIDES dict consulted in bootstrap_chunks()'s upsert\n- edit docs/guru-architecture.md: rewrite §4.1 and §4.2 to reflect actual metadata layout\n- edit docs/guru-implementation.md: drop step 2.8, drop traditions.toml from corpus tree references at lines 51/806/920, update §Pass A description (line 299)\n\nNo test changes required.",
+  "work": {
+    "branch": "todo/f7f4de23",
+    "base_branch": "main",
+    "started_at": "2026-05-02T18:36:39.338Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "a305a4bdeb5317ba9bd62cb16dbeb047ddc96808",
+    "resolved_at": "2026-05-02T18:39:37.663Z",
+    "resolved_by": "unknown",
+    "note": "Deleted registry file, removed bootstrap_traditions() and TRADITIONS_TOML from graph_bootstrap.py, replaced with LABEL_OVERRIDES dict. Updated docs/guru-architecture.md (§3.2, §4.1, §4.2) and docs/guru-implementation.md (Stage 2 step 2.8, §Pass A, corpus tree). Bootstrap runs clean: 13 tradition nodes with curated labels for greek_mystery / egyptian / mesopotamian. 19 chunking tests pass."
+  }
+}
