@@ -261,9 +261,8 @@ related_chunks = []
 2.5  Build paragraph-grouping splitter (for prose texts like sermons)
 2.6  Build chunk.py orchestrator (reads raw/, applies configs, writes corpus/)
 2.7  Build token counter (tiktoken or equivalent, used to enforce 800-token budget)
-2.8  Write corpus/traditions.toml registry from chunking configs
-2.9  QA pass: verify chunk boundaries for 2-3 texts per tradition
-2.10 Round-trip test: verify chunk concatenation matches raw source
+2.8  QA pass: verify chunk boundaries for 2-3 texts per tradition
+2.9  Round-trip test: verify chunk concatenation matches raw source
 ```
 
 ---
@@ -296,9 +295,8 @@ Insert concept nodes        Propose new concepts         traditions:
 **`scripts/graph_bootstrap.py`**
 
 - Creates SQLite database `guru.db` with schema from architecture doc
-- Inserts tradition nodes from `corpus/traditions.toml`
 - Inserts concept nodes from `concepts/taxonomy.toml` (hand-curated starter taxonomy)
-- Inserts chunk nodes from `corpus/**/*.toml` with BELONGS_TO edges to their tradition
+- Walks `corpus/{tradition}/`, upserting a tradition node per directory (label from `LABEL_OVERRIDES` or the title-cased id) and a chunk node per `chunks/*.toml` with a `BELONGS_TO` edge to its tradition
 
 **`concepts/taxonomy.toml`** — The hand-curated concept vocabulary:
 
@@ -803,7 +801,6 @@ guru/
 │   └── ...
 ├── raw/                          # Stage 1 output (git-ignored, large)
 ├── corpus/                       # Stage 2 output (git-tracked)
-│   ├── traditions.toml
 │   └── ...
 ├── data/
 │   ├── guru.db                   # Stage 3 output (SQLite)
@@ -917,9 +914,8 @@ STAGE 2: CHUNKING
   2.5  Build paragraph-grouping splitter
   2.6  Build chunk.py orchestrator
   2.7  Build token counter
-  2.8  Write corpus/traditions.toml
-  2.9  QA pass: verify chunk boundaries
-  2.10 Round-trip test
+  2.8  QA pass: verify chunk boundaries
+  2.9  Round-trip test
 
 STAGE 3: CONCEPT GRAPH
   3.1  Write concepts/taxonomy.toml

@@ -2,8 +2,9 @@
 Guru Graph Bootstrap — Pass A of Stage 3.
 
 Creates (or migrates) data/guru.db and populates:
-  - tradition nodes from corpus/traditions.toml
   - concept nodes from concepts/taxonomy.toml
+  - tradition nodes (one per directory under corpus/) — labels come from
+    LABEL_OVERRIDES or the title-cased id fallback
   - chunk nodes from corpus/**/chunks/*.toml
   - BELONGS_TO edge from every chunk to its tradition node
 
@@ -27,8 +28,23 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 SCHEMA_SQL = Path(__file__).parent / "schema.sql"
 CORPUS_DIR = PROJECT_ROOT / "corpus"
-TRADITIONS_TOML = CORPUS_DIR / "traditions.toml"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
+
+# Tradition labels are auto-derived from the directory name under corpus/
+# via id.replace("_", " ").title(). Overrides live here for the cases
+# where the auto-cased form is awkward (singular instead of plural,
+# adjective instead of noun phrase, etc.).
+LABEL_OVERRIDES: dict[str, str] = {
+    "greek_mystery": "Greek Mysteries",
+    "egyptian": "Egyptian Religion",
+    "mesopotamian": "Mesopotamian Religion",
+}
+
+
+def tradition_label(tradition_id: str) -> str:
+    return LABEL_OVERRIDES.get(
+        tradition_id, tradition_id.replace("_", " ").title()
+    )
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -67,23 +83,6 @@ def upsert_edge(conn: sqlite3.Connection, source_id: str, target_id: str,
 
 # ── passes ───────────────────────────────────────────────────────────────────
 
-def bootstrap_traditions(conn: sqlite3.Connection) -> dict[str, list[str]]:
-    """Insert tradition nodes. Returns {tradition_id: [text_ids]}."""
-    with open(TRADITIONS_TOML, "rb") as f:
-        data = tomllib.load(f)
-
-    tradition_texts: dict[str, list[str]] = {}
-    for trad in data.get("tradition", []):
-        tid = trad["id"]
-        name = trad.get("name", tid)
-        upsert_node(conn, id=tid, type="tradition", label=name)
-        tradition_texts[tid] = trad.get("texts", [])
-        logger.info(f"  tradition: {tid}")
-
-    conn.commit()
-    return tradition_texts
-
-
 def bootstrap_concepts(conn: sqlite3.Connection) -> None:
     """Insert concept nodes from taxonomy.toml."""
     with open(TAXONOMY_TOML, "rb") as f:
@@ -119,9 +118,11 @@ def bootstrap_chunks(conn: sqlite3.Connection) -> int:
             continue
         tradition_id = trad_dir.name
 
-        # Ensure tradition node exists (even if not in traditions.toml yet)
+        # Tradition nodes are created here, on first encounter under
+        # corpus/. Labels come from LABEL_OVERRIDES or the title-cased
+        # id fallback.
         upsert_node(conn, id=tradition_id, type="tradition",
-                    label=tradition_id.replace("_", " ").title())
+                    label=tradition_label(tradition_id))
 
         for text_dir in sorted(trad_dir.iterdir()):
             if not text_dir.is_dir():
@@ -213,9 +214,6 @@ def main() -> None:
 
     logger.info(f"Applying schema to {db_path} ...")
     apply_schema(conn)
-
-    logger.info("Bootstrapping traditions ...")
-    bootstrap_traditions(conn)
 
     logger.info("Bootstrapping concepts ...")
     bootstrap_concepts(conn)

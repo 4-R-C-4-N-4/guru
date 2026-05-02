@@ -808,7 +808,62 @@ translator = "L.W. King"
 notes = "Babylonian creation epic, ~1500 BCE. Tiamat/Marduk cosmic combat. Parallels with Tiamat-as-primordial-chaos in later cosmologies, and with the Gnostic Sophia/Demiurge narratives via shared ancient Near Eastern substrate."
 
 
+# ============================================
+# WESTERN ESOTERIC / CONSCIOUSNESS STUDIES
+# ============================================
+# Bridge between 19th-c. Theosophical reception of Hermeticism
+# and 20th-c. consciousness/recurrence philosophy. Ouspensky's
+# Tertium Organum is pre-Gurdjieff but already contains the
+# higher-dimensional-consciousness, recurrence, and levels-of-
+# logic material that defines the Fourth Way lineage. The only
+# Ouspensky work in clear US public domain — In Search of the
+# Miraculous (1949) and A New Model of the Universe (1931) are
+# both still in copyright.
 
+[[source]]
+id = "tertium-organum"
+tradition = "western_esoteric"
+label = "Tertium Organum (P.D. Ouspensky)"
+url = "https://sacred-texts.com/eso/to/index.htm"
+format = "html_multi"
+license = "public_domain_us_pre_1929"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+notes = "Russian original 1912 (2nd ed. 1916); English translation 1920 (Manas Press), revised 1922. Index page links to ~28 sequential chapters (to01.htm through to28.htm)."
+
+
+# ============================================
+# RENAISSANCE HERMETICISM (Bruno)
+# ============================================
+# Bruno is the most important Renaissance synthesis of Hermetic,
+# Neoplatonic, and Christian-mystical material — read Plotinus,
+# the Corpus Hermeticum, and Cusa, then articulated his own
+# infinite-cosmos vision. Note on translation availability: every
+# major Bruno dialogue's English translation is post-1928 and
+# under copyright (Singer 1950, Greenberg 1950, Lindsay 1962,
+# Memmo 1964, Imerti 1964, Jaki 1975, de Lucca 1998, Rowland 2013,
+# Gatti 2018) — esotericarchives.com hosts the Memmo Furori
+# without clear license documentation, so avoid that source.
+# L. Williams 1887/1889 is the only clean PD English Bruno.
+
+[[source]]
+id = "heroic-enthusiasts-pt1"
+tradition = "renaissance_hermeticism"
+label = "The Heroic Enthusiasts, Part I (Gli Eroici Furori)"
+url = "https://www.gutenberg.org/cache/epub/19817/pg19817-images.html"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "L. Williams"
+notes = "Bruno 1585; Williams' translation London 1887, the first English version. Project Gutenberg ebook #19817."
+
+[[source]]
+id = "heroic-enthusiasts-pt2"
+tradition = "renaissance_hermeticism"
+label = "The Heroic Enthusiasts, Part II (Gli Eroici Furori)"
+url = "https://www.gutenberg.org/files/19833/19833-h/19833-h.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "L. Williams"
+notes = "Second part of Williams' translation, London 1889. Project Gutenberg ebook #19833."
 
 # ============================================
 # NOTES ON DEFERRED ADDITIONS

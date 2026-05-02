@@ -48,7 +48,6 @@ Each text is stored as a collection of chunks in a local directory structure:
 
 ```
 corpus/
-├── traditions.toml          # tradition metadata registry
 ├── gnosticism/
 │   ├── gospel-of-thomas/
 │   │   ├── metadata.toml    # text-level metadata
@@ -96,44 +95,31 @@ related_chunks = ["hermeticism.corpus-hermeticum.005", "vedanta.chandogya.006"]
 
 Adding a new tradition (e.g., Jainism, Shinto, Indigenous Australian Dreamtime) or a new text within an existing tradition is a pure data pipeline operation with no code changes required:
 
-1. **Add chunks.** Create a new directory under `corpus/`, write chunk TOML files following the schema in 3.3.
-2. **Register the tradition.** Add an entry to `traditions.toml`:
+1. **Add a manifest entry.** Append a `[[source]]` block to `sources/manifest.toml` with the new text's id, tradition, label, url, format, and license.
+2. **Acquire and chunk.** Run `scripts/acquire.py --only <id>` to download, then write a chunking config under `chunking/{tradition}/{id}.toml` (the `scripts/chunk_init.py` scaffolder pre-fills it from the manifest entry plus the raw layout) and run `scripts/chunk.py --only <id>`. This populates `corpus/{tradition}/{id}/chunks/*.toml` and `corpus/{tradition}/{id}/metadata.toml` (text-level metadata).
+3. **Bootstrap nodes.** Run `scripts/graph_bootstrap.py`. It walks `corpus/` and upserts a tradition node for every directory it sees, plus chunk nodes and `BELONGS_TO` edges. Tradition labels default to `id.replace("_", " ").title()`; override the awkward cases in `LABEL_OVERRIDES` at the top of `graph_bootstrap.py`.
+4. **Tag concepts.** Run the concept-tagging pipeline on the new chunks. The tagger proposes concept tags from the existing taxonomy and suggests new concepts where nothing fits.
+5. **Review edges.** A human review pass accepts/rejects proposed `EXPRESSES` edges and creates any new `PARALLELS`/`CONTRASTS`/`DERIVES_FROM` edges connecting new concepts to existing ones.
+6. **Embed and index.** Run the embedding pipeline on new chunks and upsert into the vector store.
 
-```toml
-[jainism]
-id = "jainism"
-label = "Jainism"
-description = "Ancient Indian tradition emphasizing non-violence, non-absolutism, and asceticism."
-enabled_by_default = true
-tags = ["indian", "soteriology", "ascetic"]
-texts = [
-    { id = "tattvartha-sutra", label = "Tattvartha Sutra", sections_format = "chapter:verse" },
-    { id = "uttaradhyayana", label = "Uttaradhyayana Sutra", sections_format = "lecture.verse" },
-]
-```
-
-3. **Tag concepts.** Run the concept-tagging pipeline on the new chunks. The tagger proposes concept tags from the existing taxonomy and suggests new concepts where nothing fits.
-4. **Review edges.** A human review pass accepts/rejects proposed `EXPRESSES` edges and creates any new `PARALLELS`/`CONTRASTS`/`DERIVES_FROM` edges connecting new concepts to existing ones.
-5. **Embed and index.** Run the embedding pipeline on new chunks and upsert into the vector store.
-
-The key invariant: after step 5, the new tradition is fully queryable. No prompt changes, no retrieval code changes, no retraining. The concept graph and vector store are the only integration surfaces.
+The key invariant: after step 6, the new tradition is fully queryable. No prompt changes, no retrieval code changes, no retraining. The concept graph and vector store are the only integration surfaces.
 
 ### 4.2 Text-Level Metadata for Filtering
 
-Each text entry in `traditions.toml` carries metadata that powers both UI filtering and retrieval scoping:
+Per-text metadata lives in `corpus/{tradition}/{text_id}/metadata.toml`, written by `scripts/chunk.py` from the chunking config plus the raw `.meta.toml` provenance. Each chunk TOML also carries the same fields denormalised under `[chunk]` for citation rendering.
 
 ```toml
-[gnosticism.texts.gospel-of-thomas]
-id = "gospel-of-thomas"
-label = "Gospel of Thomas"
+# corpus/gnosticism/gospel-of-thomas/metadata.toml
 tradition = "gnosticism"
-era = "early_christian"             # rough period for timeline filtering
-language_original = "Coptic"
-sections_format = "logion"          # how to display section references
-chunk_count = 22                    # auto-populated by ingestion
-content_warnings = []               # optional, for sensitive material
-tags = ["sayings_gospel", "nag_hammadi", "jesus_traditions"]
+text_id = "gospel-of-thomas"
+text_name = "Gospel of Thomas"
+translator = "Thomas O. Lambdin"
+source_url = "https://gnosis.org/naghamm/gthlamb.html"
+sections_format = "logion"
+chunk_count = 22
 ```
+
+The fields the bootstrap consumes today are `text_name`, `translator`, `source_url` (stored on chunk nodes' `metadata_json`), and `sections_format` (used for citation display). Additional per-text filters — era, original language, content warnings — are not implemented. If they're needed, this is the place to extend (and `bootstrap_chunks()` to start reading new keys), not a separate registry file.
 
 ### 4.3 User Preference Model
 
