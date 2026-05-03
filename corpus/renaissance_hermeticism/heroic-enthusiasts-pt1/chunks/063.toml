@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.heroic-enthusiasts-pt1.063"
+tradition = "renaissance_hermeticism"
+text_name = "The Heroic Enthusiasts, Part I (Gli Eroici Furori)"
+section = "Fifth Dialogues"
+translator = "L. Williams"
+source_url = "https://www.gutenberg.org/cache/epub/19817/pg19817-images.html"
+token_count = 143
+
+[content]
+body = "Exemption I am sure you would not claim, Being subject to the common influence; Shining on earth as do the stars in heaven.\n\nYour sov'reign beauty, ladies, our austerity Cannot depreciate, nor would do so, For we have not in view a superhuman kind, Such poison,[A] therefore, far from you be set, For here we see the one, the great Diana, Who is to you as sun amongst the stars.\n\nWit, words, learning and art, And whatsoe'er is mine of scribbling faculty, I humbly place before you.\n\n[A] Arsenico.\n\nTranscribers Notes: Page 162: Original source said 34"
+
+[annotations]
+concepts = []
+related_chunks = []

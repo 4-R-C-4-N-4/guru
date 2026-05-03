@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.001"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Page 1"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 220
+
+[content]
+body = "TERTIUM ORGANUM THE THIRD CANON OF THOUGHT A KEY TO THE ENIGMAS OF THE WORLD P. D. OUSPENSKY TRANSLATED FROM THE RUSSIAN BY NICHOLAS BESSARABOFF AND CLAUDE BRAGDON—WITH AN INTRODUCTION BY CLAUDE BRAGDON SECOND AMERICAN EDITION, AUTHORIZED AND REVISED THE MYSTERY OF SPACE AND TIME. SHADOWS AND REALITY, OCCULTISM AND LOVE. ANIMATED NATURE. VOICES OF THE STONES. MATHEMATICS OF THE INFINITE. THE LOGIC OF ECSTASY. MYSTICAL THEOSOPHY. COSMIC CONSCIOUSNESS. THE NEW MORALITY. BIRTH OF THE SUPERMAN. NEW YORK; ALFRED A KNOPF [1922] Scanned, proofed and formatted at sacred-texts.com, May 2005 by John Bruno Hare. This text is in the public domain in the United States because it was published prior to 1923"
+
+[annotations]
+concepts = []
+related_chunks = []

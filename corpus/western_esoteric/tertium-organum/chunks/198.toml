@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.198"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Chapter XXII (part 26)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 274
+
+[content]
+body = "Lodizhensky's, near Tula, and read different parts of \"The Love p.\n\n287 of the Good,\" much regretting that he had not known the books before.— P.\n\nD.\n\nOuspensky .\n\n288:1 \"The Ante-Nicene Fathers.\" Buffalo, The Christian Literature Pub.\n\nCo., 1885.\n\nVol.\n\nII, pp.\n\n463, 464.\n\n289:1 Ibid.\n\np.\n\n493.\n\n289:2 Abridged quotation from \"The saying of Lao Tzu^.\" Wisdom of the East Series.\n\n291:1 Musings of a Chinese Mystic.\" Wisdom of the East Series.\n\n292:1 \"Light on the Path,\" p.\n\n92.\n\nLondon, Theosophical Pub.\n\nCo.\n\n293:1 Paul Anikieff.\n\n\"Mysticism of St.\n\nSimeon the New Theologian.\" St.\n\nPetersburg, 1906.\n\n294:1 Prof.\n\nW.\n\nJames.\n\n\"The Varieties of Religious Experience,\" pp.\n\n400, 401.\n\n298:1 Prof.\n\nWilliam James, \"The Varieties of Religious Experience.\" Lectures XVI and XVII.\n\nMysticism.\n\n302:1 \"The Idiot,\" by Fyodor Dostoyevsky, transl.\n\nof Constance Garnett.\n\nNew York, the Macmillan Co."
+
+[annotations]
+concepts = []
+related_chunks = []

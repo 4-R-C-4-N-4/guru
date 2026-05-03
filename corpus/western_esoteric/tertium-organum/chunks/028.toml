@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.028"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Chapter III (part 3)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 159
+
+[content]
+body = "How from them is it possible to imagine a man, with all the richness of his physical and spiritual life?\n\nIt is impossible.\n\nOur relation to the four-dimensional world will be analogous to the relation of that consciousness which sees five circles upon the table to a man .\n\nWe see just \"finger tips\"—to us the fourth dimension is inconceivable.\n\nWe know that it is possible to represent a three-dimensional body upon a plane, that it is possible to draw a cube, a polyhedron or a sphere.\n\nThis will not be a real cube or a real sphere, but the projection of a cube or of a sphere on a plane.\n\nWe may conceive of the three-dimensional bodies of our space somewhat in the nature of images in our space of to us incomprehensible four-dimensional bodies."
+
+[annotations]
+concepts = []
+related_chunks = []

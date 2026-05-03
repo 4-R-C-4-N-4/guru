@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.219"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Page 28 (part 3)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 93
+
+[content]
+body = "And truth itself is motion, and can never lead to arrestment, to the cessation of search.\n\nALL THAT ARRESTS THE MOTION OF THOUGHT—IS FALSE.\n\nTherefore the true and real progress of thought is only in the broadest striving toward knowledge, that does not recognize the possibility of arrestment in any found forms of knowledge at all.\n\nThe meaning of life is in eternal search.\n\nAnd only in that search can we find something truly new."
+
+[annotations]
+concepts = []
+related_chunks = []

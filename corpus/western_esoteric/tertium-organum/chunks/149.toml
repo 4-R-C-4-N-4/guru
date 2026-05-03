@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.149"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Chapter XVIII (part 12)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 270
+
+[content]
+body = "The method of science is experiment; the method of philosophy is speculation; the method of religion and art is moral or esthetic emotional inspiration.\n\nBut both science and philosophy, religion and art, begin to serve true knowledge only when in them commence to manifest the sensing and finding of some inner property in things.\n\nIn general it is quite possible to say—and perhaps it will be most true to fact—that the aim of even purely intellectual systems of philosophy and science consists not at all in the giving to man of certain data of knowledge, but in the raising of man to such a height of thinking and feeling as to enable him to pass to those new and higher forms of knowledge to which art and religion approach more nearly.\n\nIt is necessary however to remember that these very divisions into science, philosophy, religion and art betray the poverty and incompleteness of each.\n\nA complete religion unites in itself religion, art, philosophy and science; a complete art equally unites them, while a complete science or a complete philosophy comprehends religion and art.\n\nA religion which contradicts science, and a science which contradicts religion are both equally false.\n\nFootnotes 214:1 Al-Ghazzali, \"The Alchemy of Happiness.\" 222:1 C.\n\nH.\n\nHinton, \"A New Era of Thought,\" pp.\n\n77, 78."
+
+[annotations]
+concepts = []
+related_chunks = []
