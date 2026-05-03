@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.132"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXXXII. OCEAN"
+section = "Hymn LXXXIII. VESTA (part 1)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 208
+token_count = 713
 
 [content]
-body = "LXXXII. TO OCEAN. The Fumigation from AROMATICS OCEAN I call, whose nature ever flows, From whom at first both Gods and men arose; Sire incorruptible, whose waves surround, 3 And earth's concluding mighty circle bound: p. 220 Hence every river, hence the spreading sea, 5 And earth's pure bubbling fountains spring from thee: Hear, mighty fire, for boundless bliss is thine, Whose waters purify the pow'rs divine: Earth's friendly limit, fountain of the pole, Whose waves wide spreading and circumfluent roll. Approach benevolent, with placid mind, And be for ever to thy mystics kind. Footnotes 219:3 LXXXII. Ver. 3.] Whose waves surround , &c. Gesner well observes, that this opinion of the ocean surrounding the earth, is exceeding ancient. see his Præl. i. de Navigationibus vet. § I."
+body = "LXXXIII.\n\nTO VESTA.\n\nThe FUMIGATION from AROMATICS.\n\nDaughter of Saturn, venerable dame, The seat containing of unweary'd flame; 2 p.\n\n221 In sacred rites these ministers are thine, Mystics much-blessed, holy and divine In thee, the Gods have fix'd place, 5 Strong, stable, basis of the mortal race: Eternal, much-form'd ever-florid queen, Laughing and blessed, and of lovely mien; 8 p.\n\n222 Accept these rites, accord each just desire, And gentle health, and needful good inspire.\n\nFootnotes 220:2 XXXIII.\n\nVer.\n\n2] The seat containing of unweary'd flame .\n\nVesta is celebrated in this Hymn as the earth, and is the same with the mother of the Gods; as is evident from the Hymn to that divinity, in which she is expressly called Vesta.\n\nNow this perfectly agrees with the fragment of Philolaus the Pythagorean, preserved by Stobæus, in Eclog.\n\nPhys.\n\np.\n\n51.\n\n\"Philolaus (says he) places fire in the middle at the centre, which he calls the Vesta of the universe, the house of Jupiter, the mother of the Gods, and the basis, coherence, and measure of nature.\" From whence it appears, that they are greatly mistaken who suppose the Pythagoreans meant the sun, by the fire at the centre: and this is still more evident, from the following words of Simplicius de Cælo, lib ii.\n\nΟἱ δὲ γνησίςερον ἀυτον μετασχόντες, p.\n\n221 μετασχόντες, τὸ μὲν πῦρ ἐν τῷ μέσῳ φασὶ τὴν δημιυργικην δίναμιν, εκ τῦ μέσυ ὅλην τηγ γην τρέφυσαν, καὶ τὸ ψυχόμενον ἀυτῆς ἀνεγέιρυσαν.\n\nδἰ ὃ οἱ μέν, ΖΗΝΟΣ ΠΥΡΓΟΝ ἀυτὸ καλυσιν.\n\nὡσ ἀυτὸς ἐν τοῖσ Πυθαγορείοις διηγήσατο.\n\nοἱ δὲ ΔΙΟΣ ΦΥΛΑΚΗΝ ὡσ ἐν τὐτοις.\n\nοῖ δὲ, ΔΙΟΣ ΘΡΟΝΟΝ᾽ ὡς ἄλλοι φασίν."
 
 [annotations]
 concepts = []

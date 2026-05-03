@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.222"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Page 30 (part 1)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 794
+
+[content]
+body = "Errata page viii: 'exent'->'extent' page 3: 'acount'->'account' page 6: 'theoreticial'->'theoretical' page 15: 'the the'->'the' page 16: 'standpont'->'standpoint' page 17: 'whch'->'which' page 26: 'preceive'->'perceive' page 32: 'monastry'->'monastery' page 38: 'Moveover'->'Moreover' page 53: 'exended'->'extended' page 60: 'chaacteristic'->'characteristic' page 64: 'itslf'->'itself' page 76: 'geometrican'->'geometrician' page 85: 'faculity'->'faculty' page 88: 'milleniums'->'millenniums' page 99: 'hm'->'him' page 101: 'apearance'->'appearance' page 104: 'phenonema'->'phenomena' page 116: 'psychologicial'->'psychological' page 122: 'preceeding'->'preceding' page 122: 'whch'->'which' page 125: 'represenatives'->'representatives' page 127: 'seach'->'search' page 131: 'fom'->'from' page 133: 'circumbscribing'->'circumbscribing' page 135: 'Moveover'->'Moreover' page 170: 'neligible'->'negligible' page 179: 'and and'->'and' page 188: 'undertanding'->'understanding' page 192: 'indentifying'->'identifying' page 199: 'myterious'->'mysterious' page 199: 'phnomenon'->'phenomenon' page 201: 'pychic'->'psychic' page 206: 'preception'->'perception' page 215: 'comparsion'->'comparison' page 217: 'intellecct'->'intellect' page 219: 'insantiy'->'insanity' page 227: 'naviagtion'->'navigation' page 232: 'possibilty'->'possibility' page 240: 'itelf'->'itself' page 243: 'ncmber'->'number' page 256: 'caculating'->'calculating' page 259: 'indentifies'->'identifies' page 262: 'absudity'->'absurdity' page 263: 'incorrectnes'->'incorrectness' page 274: 'Vendântists'->'Vedântists' page 275: 'Vendântist'->'Vedântist' page 275: ' Vendânta '->' Vedânta ' page 279: 'everwhere'->'everywhere' page 282: 'Diety'->'Deity' page 285: 'intellctual'->'intellectual' page 288: ' Superconciousness '->' Superconsciousness ' page 297: 'conciousness'->'consciousness' page 298: 'Religous'->'Religious' page 306: 'consciousnes'->'consciousness' page 307: 'enirely'->'entirely' page 308: 'hunmankind'->'humankind' page 311:"
+
+[annotations]
+concepts = []
+related_chunks = []

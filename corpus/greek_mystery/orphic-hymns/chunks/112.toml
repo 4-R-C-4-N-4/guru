@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.112"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXVI. ESCULAPIUS"
+section = "Hymn LXVII. HEALTH"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 171
+token_count = 224
 
 [content]
-body = "LXVI. TO ESCULAPIUS. The FUMIGATION from MANNA. GREAT Esculapius, skill'd to heal mankind,, All-ruling Pæan, and physician kind; Whose arts medic'nal, can alone assuage Diseases dire, and stop their dreadful rage: Strong lenient God, regard my suppliant pray'r, Bring gentle Health, adorn'd with lovely hair; Convey the means of mitigating pain, And raging, deadly pestilence restrain. O pow'r all-flourishing, abundant, bright, Apollo's honor'd offspring, God of light; 10 Husband of blameless Health, the constant foe Of dread Disease the minister of woe: p. 199 Come, blessed saviour, and my health defend, And to my life afford a prosp'rous end."
+body = "LXVII. TO HEALTH. The FUMIGATION from MANNA. O Much-desir'd, prolific, gen'ral queen, Hear me, life-bearing, Health, of beauteous mien, Mother of all; by thee diseases dire, Of bliss destructive, from our life retire; And ev'ry house is flourishing and fair, 5 If with rejoicing aspect thou art there: Each dædal art, thy vig'rous force inspires, And all the world thy helping hand desires; Pluto life's bane alone resists thy will, And ever hates thy all-preserving skill. 10 O fertile queen, from thee forever flows To mortal life from agony repose; And men without thy all-sustaining ease, Find nothing useful, nothing form'd to please; Without thy aid, not Plutus' self can thrive, 15 Nor man to much afflicted age arrive; For thou alone of countenance serene, Dost govern all things, universal queen. Assist thy mystics with propitious mind, And far avert disease of ev'ry kind."
 
 [annotations]
 concepts = []

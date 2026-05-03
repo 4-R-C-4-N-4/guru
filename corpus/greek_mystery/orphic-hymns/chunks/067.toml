@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.067"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXVI. THE MOTHER OF THE GODS"
+section = "Hymn XXVII. MERCURY"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 334
+token_count = 249
 
 [content]
-body = "XXVI. TO THE MOTHER OF THE GODS. The FUMIGATION from a Variety of ODORIFEROUS SUBSTANCES. Mother of Gods, great nurse of all, draw near, Divinely honor'd, and regard my pray'r: Thron'd on a car, by lions drawn along, By bull-destroying lions, swift and strong, Thou sway'st the sceptre of the pole divine, 5 5 And the world's middle seat, much-fam'd, is thine. Hence earth is thine, and needy mortals share Their constant food, from thy protecting care: From thee at first both Gods and men arose; From thee, the sea and ev'ry river flows. 10 Vesta, and source of good, thy name we find To mortal men rejoicing to be kind; For ev'ry good to give, thy soul delights; Come, mighty pow'r, propitious to our rites, All-taming, blessed, Phrygian saviour, come, 15 Saturn's great queen, rejoicing in the drum. p. 152 Celestial, ancient, life-supporting maid, Fanatic Goddess, give thy suppliant aid; With joyful aspect on our incense shine, And, pleas'd, accept the sacrifice divine. Footnotes 151:5 Ver. 5.] We have already observed, that the mother of the Gods is the same with Rhea; and Proclus, in the second book of his Commentary on Euclid, informs us, that the pole of the world is called by the Pythagoreans the seal of Rhea."
+body = "XXVII. TO MERCURY. The FUMIGATION from FRANKINCENSE. HERMES, draw near, and to my pray'r incline, Angel of Jove, and Maia's son divine; Studious of contests, ruler of mankind, With heart almighty, and a prudent mind. Celestial messenger, of various skill, 5 Whose pow'rful arts could watchful Argus kill: With winged feet, 'tis thine thro' air to course, O friend of man, and prophet of discourse: Great life-supporter, to rejoice is thine, In arts gymnastic, and in fraud divine: 10 With pow'r endu'd all language to explain, Of care the loos'ner, and the source of gain. Whose hand contains of blameless peace the rod, Corucian, blessed, profitable God; Of various speech, whose aid in works we find, 15 And in necessities to mortals kind: p. 153 Dire weapon of the tongue, which men revere, Be present, Hermes, and thy suppliant hear; Assist my works, conclude my life with peace, Give graceful speech, and me memory's increase. 20"
 
 [annotations]
 concepts = []

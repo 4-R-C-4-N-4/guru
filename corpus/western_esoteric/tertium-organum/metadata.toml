@@ -1,0 +1,7 @@
+tradition = "western_esoteric"
+text_id = "tertium-organum"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+sections_format = "chapter"
+chunk_count = 225

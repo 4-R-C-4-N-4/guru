@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.108"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXII. EQUITY"
+section = "Hymn LXIII. LAW A HYMN"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 222
+token_count = 257
 
 [content]
-body = "LXII. TO EQUITY. The FUMIGATION from FRANKINCENSE. O Blessed Equity, mankind's delight, Th' eternal friend of conduct just and right: Abundant, venerable, honor'd maid, To judgments pure, dispensing constant aid, p. 195 A stable conscience, and an upright mind; For men unjust, by thee are undermin'd, Whose souls perverse thy bondage ne'er desire, But more untam'd decline thy scourges dire: Harmonious, friendly power, averse to strife, In peace rejoicing, and a stable life; 10 Lovely, loquacious, of a gentle mind, Hating excess, to equal deeds inclin'd: Wisdom, and virtue of whate'er degree, Receive their proper bound alone in thee. Hear, Goddess Equity, the deeds destroy 15 Of evil men, which human life annoy; That all may yield to thee of mortal birth, Whether supported by the fruits of earth, Or in her kindly fertile bosom found, or in the depths of Marine Jove profound. 20"
+body = "LXIII. TO LAW A HYMN. THE holy king of Gods and men I call, Celestial Law, the righteous seal of all; The seal which stamps whate'er the earth contains, Nature's firm basis, and the liquid plains: Stable, and starry, of harmonious frame, 5 Preserving laws eternally the same: p. 196 Thy all-composing pow'r in heaven appears, Connects its frame, and props the starry spheres; And shakes weak Envy with tremendous sound, Toss'd by thy arm in giddy whirls around. 10 'Tis thine, the life of mortals to defend, And crown existence with a blessed end; For thy command and alone, of all that lives Order and rule to ev'ry dwelling gives: Ever observant of the upright mind, 15 And of just actions the companion kind; Foe to the lawless, with avenging ire, Their steps involving in destruction dire. Come, bless, abundant pow'r, whom all revere, By all desir'd, with favr'ing mind draw near; 20 Give me thro' life, on thee to fix my fight, And ne'er forsake the equal paths of right."
 
 [annotations]
 concepts = []

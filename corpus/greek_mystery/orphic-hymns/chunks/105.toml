@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.105"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LIX. THE GRACES"
+section = "Hymn LX. NEMESIS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 133
+token_count = 229
 
 [content]
-body = "LIX. TO THE GRACES. The FUMIGATION from STORAX. HEAR me, illustrious Graces, mighty nam'd, From Jove descended and Eunomia fam'd; Thalia, and Aglaia fair and bright, And blest Euphrosyne whom joys delight: Mothers of mirth, all lovely to the view, 5 Pleasure abundant pure belongs to you: Various, forever flourishing and fair, Desir'd by mortals, much invok'd in pray'r: Circling, dark-ey'd, delightful to mankind, Come, and your mystics bless with bounteous mind."
+body = "LX. TO NEMESIS. A HYMN. THEE, Nemesis I call, almighty queen, By whom the deeds of mortal life are seen: Eternal, much rever'd, of boundless sight, Alone rejoicing in the just and right: Changing the counsels of the human breast 5 For ever various, rolling without rest. p. 193 To every mortal is thy influence known, And men beneath thy righteous bondage groan; For ev'ry thought within the mind conceal'd Is to thy fight perspicuously reveal'd. 10 The soul unwilling reason to obey By lawless passion rul'd, thy eyes survey. All to see, hear, and rule, O pow'r divine Whose nature Equity contains, is thine. Come, blessed, holy Goddess, hear my pray'r, 15 And make thy mystic's life, thy constant care: Give aid benignant in the needful hour, And strength abundant to the reas'ning pow'r; And far avert the dire, unfriendly race Of counsels impious, arrogant, and base. 20"
 
 [annotations]
 concepts = []

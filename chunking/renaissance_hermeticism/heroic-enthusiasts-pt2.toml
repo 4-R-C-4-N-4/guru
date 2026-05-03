@@ -1,0 +1,20 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# Bruno's dialogue structure. See heroic-enthusiasts-pt1.toml for rationale.
+[chunking]
+strategy = "regex-section-split"
+pattern = '\b(PREFACE|INTRODUCTION(?!,)|(?:First|Second|Third|Fourth|Fifth) Dialogue)\b'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    "^.*?\\*\\*\\* START OF .*?\\*\\*\\*",
+    "\\*\\*\\* END OF .*",
+    "\\bINTRODUCTION\\.\\s*(?:(?:First|Second|Third|Fourth|Fifth) Dialogue\\.?\\s*){4,}",
+    "(?:(?:First|Second|Third|Fourth|Fifth) Dialogue\\.?\\s*){4,}",
+]
+
+[metadata]
+tradition = "renaissance_hermeticism"
+text_name = "The Heroic Enthusiasts, Part II (Gli Eroici Furori)"
+translator = "L. Williams"
+sections_format = "section"

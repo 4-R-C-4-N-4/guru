@@ -1,0 +1,29 @@
+# Generated scaffold from scripts/chunk_init.py — hand-tuned to use the
+# in-body 'CHAPTER {Roman}' marker as the canonical chunk number, mirroring
+# orphic-hymns.toml. Default filename-based numbering produces misleading
+# 'Chapter NN' labels because pages 1-9 are front matter and the download
+# index is not the chapter index. Pages without a CHAPTER marker (title
+# page, contents, preface, intro essay, conclusion, errata, back index)
+# fall back to 'Page {n}'.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+section_label_format_no_number_match = "Page {n}"
+number_source = "content"
+# Roman numeral after 'CHAPTER ' (all-caps). Body uses 'CHAPTER X', back
+# index uses 'Chapter X' (mixed case) — case-sensitive match keeps the
+# back index from masquerading as a chapter.
+number_pattern = 'CHAPTER\s+([IVXLCDM]+)'
+max_tokens = 800
+pre_strip_patterns = [
+    "^Sacred Texts.*?at sacred-texts\\.com",
+    "Previous Next[^\\n]*",
+    "Next:[^\\n]*$",
+    "Click to enlarge[^\\n]*",
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+sections_format = "chapter"

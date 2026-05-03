@@ -1,0 +1,38 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# Bruno's dialogue structure. The Gutenberg HTML extracts to a single line
+# (no \n\n breaks), so paragraph-group falls through to sentence subsplit
+# and produces one giant 'Section 1<x>' family that overflows the a-z
+# suffix range. Splitting on the section markers keeps the dialogue
+# structure and stays within sane sub-chunk counts.
+[chunking]
+strategy = "regex-section-split"
+# PREFACE / INTRODUCTION / N Dialogue. The negative lookahead on
+# INTRODUCTION rejects the title-page phrase 'WITH AN INTRODUCTION,
+# COMPILED CHIEFLY...' (followed by comma) so only the essay heading
+# 'INTRODUCTION. Nola, a city...' (followed by period) matches.
+pattern = '\b(PREFACE|INTRODUCTION(?!,)|(?:First|Second|Third|Fourth|Fifth) Dialogue)\b'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Project Gutenberg header through the START marker. Non-greedy
+    # matching is required: when the raw is single-line, [^\n]* would
+    # be unbounded and the trailing *** would backtrack to the END
+    # marker, eating the entire body.
+    "^.*?\\*\\*\\* START OF .*?\\*\\*\\*",
+    # END marker through the trailing license boilerplate.
+    "\\*\\*\\* END OF .*",
+    # Pt1 TOC: 'INTRODUCTION. First Dialogue. Second Dialogue. ... Fifth Dialogue.'
+    # Strip the whole stretch so the remaining INTRODUCTION/Dialogue
+    # markers are only the body headings.
+    "\\bINTRODUCTION\\.\\s*(?:(?:First|Second|Third|Fourth|Fifth) Dialogue\\.?\\s*){4,}",
+    # Bare TOC dialogue list (defensive fallback if the INTRODUCTION
+    # variant didn't match).
+    "(?:(?:First|Second|Third|Fourth|Fifth) Dialogue\\.?\\s*){4,}",
+]
+
+[metadata]
+tradition = "renaissance_hermeticism"
+text_name = "The Heroic Enthusiasts, Part I (Gli Eroici Furori)"
+translator = "L. Williams"
+sections_format = "section"

@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.heroic-enthusiasts-pt1.001"
+tradition = "renaissance_hermeticism"
+text_name = "The Heroic Enthusiasts, Part I (Gli Eroici Furori)"
+section = "PREFACE"
+translator = "L. Williams"
+source_url = "https://www.gutenberg.org/cache/epub/19817/pg19817-images.html"
+token_count = 216
+
+[content]
+body = ". When this Translation was begun, more than two years ago, for my own pleasure, in leisure hours, I had no knowledge of the difficulty I should find in the work, nor any thought of ever having it printed; but as \"Gli Eroici Furori\" of Giordano Bruno has never appeared in English, I decided to publish that portion of it which I have finished. I wish to thank those friends who have so kindly looked over my work from time to time, and given me their help in the choice of words and phrases. I must, moreover, confess that I am keenly alive to the shortcomings and defects of this Translation. I have used the word \"Enthusiasts\" in the title, rather than \"Enthusiasms,\" because it seemed to me more appropriate. L. W. Folkestone , September 1887 . ERRATA Page 3, line 10, for \"also mother\" read \"also my mother.\" Page 47, line 9, for \"poisons\" read \"poison.\""
+
+[annotations]
+concepts = []
+related_chunks = []

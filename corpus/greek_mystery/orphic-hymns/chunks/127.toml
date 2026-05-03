@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.127"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXXVII. AURORA"
+section = "Hymn LXXVIII. THEMIS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 218
+token_count = 228
 
 [content]
-body = "LXXVII. TO AURORA. The FUMIGATION from MANNA. HEAR me, O Goddess! whose emerging ray Leads on the broad refulgence of the day; Blushing Aurora, whose celestial light Beams on the world with red'ning splendours bright: Angel of Titan, whom with constant round, 5 Thy orient beams recall from night profound: Labour of ev'ry kind to lead is thine, Of mortal life the minister divine. Mankind in thee eternally delight, And none presumes to shun thy beauteous sight. 10 Soon as thy splendours break the bands of rest, And eyes unclose with pleasing sleep oppress'd; Men, reptiles, birds, and beasts, with gen'ral voice, And all the nations of the deep, rejoice; For all the culture of our life is thine. 15 Come, blessed pow'r! and to these rites incline: Thy holy light increase, and unconfin'd Diffuse its radiance on thy mystic's mind."
+body = "LXXVIII. TO THEMIS. The FUMIGATION from FRANKINCENSE. ILLUSTRIOUS Themis, of celestial birth, Thee I invoke, young blossom of the earth; 2 Beauteous-eyed virgin; first from thee alone, Prophetic oracles to men were known, Giv'n from the deep recesses of the fane 5 In sacred Pytho, where renown'd you reign; From thee, Apollo's oracles arose, And from thy pow'r his inspiration flows. Honour'd by all, of form divinely bright, Majestic virgin, wand'ring in the night: 10 Mankind from thee first learnt initial rites, And Bacchus' nightly choirs thy soul delights; For holy honours to disclose is thine, With all the culture of the pow'rs divine. Be present, Goddess, to my pray'r inclin'd, And bless the mystic rites with fav'ring mind. Footnotes 217:2 Ver. 2.] Young blossom of the earth . See the note to Hymn xi, to Hercules."
 
 [annotations]
 concepts = []

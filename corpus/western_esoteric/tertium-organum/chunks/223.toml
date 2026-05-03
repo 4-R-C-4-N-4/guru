@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.223"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Page 30 (part 2)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 43
+
+[content]
+body = "'self-conciousness'->'self-consciousness' page 322: 'Mable'->'Mabel' page 324: 'self-conscionsness'->'self-consciousness'"
+
+[annotations]
+concepts = []
+related_chunks = []

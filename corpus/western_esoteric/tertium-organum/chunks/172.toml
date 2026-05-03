@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tertium-organum.172"
+tradition = "western_esoteric"
+text_name = "Tertium Organum (P.D. Ouspensky)"
+section = "Chapter XXI (part 10)"
+translator = "Nicholas Bessaraboff and Claude Bragdon"
+source_url = "https://sacred-texts.com/eso/to/to00.htm"
+token_count = 53
+
+[content]
+body = "Footnotes 258:1 \"The Ancient Wisdom,\" by Annie Besant, Introd.\n\np.\n\n23, Theosophical Publishing Society, London.\n\n258:2 Although it should be remembered that we see only three out of seven colors of the solar spectrum."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.091"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLV. LIKNITUS + BACCHUS"
+section = "Hymn XLVI. BACCHUS PERICIONIUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 184
+token_count = 140
 
 [content]
-body = "XLV. TO LIKNITUS + BACCHUS. The FUMIGATION from MANNA. LIKNITAN Bacchus, bearer of the vine, Thee I invoke to bless these rites divine: p. 179 Florid and gay, of nymphs the blossom bright, And of fair Venus, Goddess of delight, 'Tis thine mad footsteps with mad nymphs to beat, 5 Dancing thro' groves with lightly leaping feet: From Jove's high counsels nurst by Proserpine, And born the dread of all the pow'rs divine: Come, blessed pow'r, regard thy suppliant's voice, Propitious come, and in these rites rejoice. 10 Footnotes 178:+ XLV. + Or the Fan-bearer. Concerning Liknitus and the following Bacchuses, see the last section of the Dissertation."
+body = "XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind. Footnotes 179:* So called from περι and κιονισ, a little pillar."
 
 [annotations]
 concepts = []
