@@ -51,8 +51,12 @@ def _seed_schema(conn: sqlite3.Connection) -> None:
                 CHECK(tier IN ('verified','proposed')),
             reviewed_by TEXT,
             reviewed_at TEXT,
-            UNIQUE(source_chunk, target_chunk)
+            model TEXT,
+            prompt_version TEXT
         );
+        CREATE UNIQUE INDEX idx_staged_edges_provenance_unique
+            ON staged_edges(source_chunk, target_chunk, model, prompt_version)
+            WHERE status = 'pending';
         INSERT INTO nodes(id, type, label) VALUES
             ('gnosticism', 'tradition', 'Gnosticism'),
             ('neoplatonism', 'tradition', 'Neoplatonism');

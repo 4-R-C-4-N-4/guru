@@ -92,13 +92,22 @@ CREATE TABLE IF NOT EXISTS staged_edges (
                         CHECK(tier IN ('verified','proposed')),
     reviewed_by     TEXT,
     reviewed_at     TEXT,
-    UNIQUE(source_chunk, target_chunk)
+    model           TEXT,
+    prompt_version  TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_staged_edges_source ON staged_edges(source_chunk);
 CREATE INDEX IF NOT EXISTS idx_staged_edges_target ON staged_edges(target_chunk);
 CREATE INDEX IF NOT EXISTS idx_staged_edges_status ON staged_edges(status);
 CREATE INDEX IF NOT EXISTS idx_staged_edges_type   ON staged_edges(edge_type);
+
+-- Partial UNIQUE: only enforce on pending rows so a re-propose against the
+-- same model doesn't dupe-violate, while frozen settled rows
+-- (accepted/rejected/reclassified) can coexist with new pending proposals
+-- from a different model run. Mirrors v3_001 staged_tags pattern.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_edges_provenance_unique
+    ON staged_edges(source_chunk, target_chunk, model, prompt_version)
+    WHERE status = 'pending';
 
 -- ============================================================
 -- STAGING — new concept proposals from tagging
