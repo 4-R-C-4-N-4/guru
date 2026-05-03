@@ -109,9 +109,30 @@ def fetch_index(url: str) -> list[dict]:
                 "url": href,
                 "title": a.get_text(strip=True)
             })
-    
-    logger.info(f"Found {len(links)} text links on index page")
-    return links
+
+    # Sacred-texts index pages often link to the same chapter twice — once
+    # in a header shortcut ('Start Reading' → first text page, 'Page Index'
+    # → back index) and again in the body chapter list, plus footer Next/
+    # Previous nav at the end. Without dedup, this produces duplicate raw
+    # files (e.g. tertium-organum-01.txt and -03.txt byte-identical).
+    # Keep the LAST occurrence of each URL: footer Next-links naturally
+    # land at the end of the list, which preserves correct chapter order.
+    seen = set()
+    deduped = []
+    for link in reversed(links):
+        if link["url"] in seen:
+            continue
+        seen.add(link["url"])
+        deduped.append(link)
+    deduped.reverse()
+    if len(deduped) < len(links):
+        logger.info(
+            f"Deduped {len(links) - len(deduped)} repeated link(s) "
+            f"({len(links)} → {len(deduped)})"
+        )
+
+    logger.info(f"Found {len(deduped)} text links on index page")
+    return deduped
 
 
 def extract_text_page(html: str, source_id: str) -> str:

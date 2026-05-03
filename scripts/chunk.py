@@ -51,6 +51,16 @@ def _ensure_chunkers_on_path():
         sys.path.insert(0, p)
 
 
+def _apply_pre_strip(content: str, patterns: list[str]) -> str:
+    """Run each regex through re.sub('') in order. Used to strip source
+    boilerplate (sacred-texts.com nav, Project Gutenberg headers, etc.)
+    before strategy dispatch so the body that gets chunked is the actual
+    text. DOTALL so multi-line patterns work."""
+    for pat in patterns:
+        content = re.sub(pat, "", content, flags=re.DOTALL)
+    return content.strip()
+
+
 def load_chunking_config(tradition: str, source_id: str) -> dict | None:
     path = CHUNKING_DIR / tradition / f"{source_id}.toml"
     if not path.exists():
@@ -123,6 +133,7 @@ def process_source(
     meta_cfg = cfg_full.get("metadata", {})
     strategy = cfg.get("strategy", "paragraph-group")
     max_tokens = int(cfg.get("max_tokens", 800))
+    pre_strip = list(cfg.get("pre_strip_patterns", []))
 
     strategy_type = STRATEGY_TYPES.get(strategy)
     if not strategy_type:
@@ -139,6 +150,8 @@ def process_source(
             return None
 
         text = raw_path.read_text(encoding="utf-8")
+        if pre_strip:
+            text = _apply_pre_strip(text, pre_strip)
 
         if strategy in ("regex-section-split", "regex"):
             import regex_splitter
@@ -165,6 +178,13 @@ def process_source(
         if not pages:
             logger.warning(f"[{source_id}] no multi-page raw files found for {tradition}/{source_id}-*.txt")
             return None
+
+        if pre_strip:
+            pages = [
+                (n, stem, _apply_pre_strip(content, pre_strip))
+                for n, stem, content in pages
+            ]
+            pages = [(n, stem, content) for n, stem, content in pages if content]
 
         import page_chunker
         final_chunks = page_chunker.split(pages, cfg)

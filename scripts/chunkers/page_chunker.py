@@ -70,23 +70,15 @@ def _extract_title(content: str, config: dict) -> str | None:
     return None
 
 
-def _apply_pre_strip(content: str, patterns: list[str]) -> str:
-    """Run each regex through re.sub('') in order. Used to strip source
-    navigation cruft (e.g. 'Sacred Texts Classics Index Previous Next ...
-    Next: XXIII: To the Nereids') before chunking, so the body that gets
-    embedded is the actual text. DOTALL so multi-line patterns work."""
-    for pat in patterns:
-        content = re.sub(pat, "", content, flags=re.DOTALL)
-    return content.strip()
-
-
 def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
     """
     Process multi-page source files into chunks.
 
     Args:
         pages: List of (page_number, filename_stem, content) tuples,
-               sorted by page_number.
+               sorted by page_number. The orchestrator (chunk.py) is
+               responsible for applying pre_strip_patterns before calling
+               this function.
         config: Chunking config dict (from [chunking] section of TOML).
                 Optional keys: section_label_format (default "Page {n}"),
                                number_source ("filename" or "content"),
@@ -94,7 +86,6 @@ def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
                                title_source ("content"),
                                title_pattern (regex),
                                title_max_len (int, default 80),
-                               pre_strip_patterns (list[regex], applied in order before chunking),
                                max_tokens (default 800).
 
     Returns:
@@ -107,7 +98,6 @@ def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
     # despite not being hymns. Defaults to "Page {n}".
     label_fmt_no_match = config.get("section_label_format_no_number_match", "Page {n}")
     max_tokens = int(config.get("max_tokens", 800))
-    pre_strip = list(config.get("pre_strip_patterns", []))
 
     try:
         from tokens import count_tokens
@@ -121,11 +111,6 @@ def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
         content = content.strip()
         if not content:
             continue
-
-        if pre_strip:
-            content = _apply_pre_strip(content, pre_strip)
-            if not content:
-                continue
 
         # Extract number
         number = _extract_number(filename, content, config)
