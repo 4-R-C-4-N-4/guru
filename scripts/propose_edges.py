@@ -59,6 +59,11 @@ def get_vector_store():
 
 # ── prompt ────────────────────────────────────────────────────────────────────
 
+# Bump this whenever SYSTEM_PROMPT or build_pair_prompt changes shape.
+# Stored in staged_edges.prompt_version so future re-runs can be filtered
+# (or re-evaluated) against the prompt revision that produced them.
+PROMPT_VERSION = "v1"
+
 SYSTEM_PROMPT = """\
 You are a comparative religion scholar. Given two passages from different mystical
 traditions, classify their relationship. Respond ONLY with valid JSON.
@@ -137,14 +142,23 @@ def get_existing_pairs(conn: sqlite3.Connection) -> set[tuple[str, str]]:
 def upsert_staged_edge(conn: sqlite3.Connection,
                        source: str, target: str,
                        edge_type: str, confidence: float,
-                       justification: str) -> None:
+                       justification: str,
+                       model: str,
+                       prompt_version: str) -> None:
     a, b = pair_key(source, target)
+    # ON CONFLICT targets the partial UNIQUE index
+    # idx_staged_edges_provenance_unique (source_chunk, target_chunk, model,
+    # prompt_version) WHERE status='pending' — a re-propose with the same
+    # model+prompt is a no-op, but a different model can coexist.
     conn.execute(
         """INSERT INTO staged_edges
-               (source_chunk, target_chunk, edge_type, confidence, justification)
-           VALUES(?,?,?,?,?)
-           ON CONFLICT(source_chunk, target_chunk) DO NOTHING""",
-        (a, b, edge_type, confidence, justification),
+               (source_chunk, target_chunk, edge_type, confidence,
+                justification, model, prompt_version)
+           VALUES(?,?,?,?,?,?,?)
+           ON CONFLICT(source_chunk, target_chunk, model, prompt_version)
+           WHERE status = 'pending'
+           DO NOTHING""",
+        (a, b, edge_type, confidence, justification, model, prompt_version),
     )
 
 
@@ -217,7 +231,9 @@ def run_proposals(
 
                 if edge_type in ("PARALLELS", "CONTRASTS"):
                     upsert_staged_edge(conn, chunk_id, nb_id,
-                                       edge_type, confidence, justification)
+                                       edge_type, confidence, justification,
+                                       model=model,
+                                       prompt_version=PROMPT_VERSION)
                     existing_pairs.add(key)
                     proposed += 1
                     logger.info(f"  {chunk_id} ↔ {nb_id}: {edge_type} ({confidence:.2f})")
@@ -237,7 +253,11 @@ def run_proposals(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Propose cross-tradition edges")
     parser.add_argument("--provider", default="llamacpp")
-    parser.add_argument("--model", default="Carnice-27b-Q4_K_M.gguf")
+    parser.add_argument("--model",
+                        default="Mistral-Small-3.2-24B-Instruct-2506-UD-Q5_K_XL.gguf",
+                        help="Provenance label written to staged_edges.model. "
+                             "Should match whatever's actually serving at the "
+                             "llamacpp endpoint (start via scripts/run-mistral.sh).")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--top-n", type=int, default=5)
     parser.add_argument("--min-similarity", type=float, default=0.75)

@@ -68,9 +68,13 @@ CREATE TABLE staged_edges (
                         CHECK(tier IN ('verified','proposed')),
     reviewed_by     TEXT,
     reviewed_at     TEXT,
-    UNIQUE(source_chunk, target_chunk)
+    model           TEXT,
+    prompt_version  TEXT
 );
 CREATE INDEX idx_staged_edges_status ON staged_edges(status);
+CREATE UNIQUE INDEX idx_staged_edges_provenance_unique
+    ON staged_edges(source_chunk, target_chunk, model, prompt_version)
+    WHERE status = 'pending';
 
 -- Tradition + chunk nodes (3 chunks for a small but representative slice).
 INSERT INTO nodes(id, type, label) VALUES ('gnosticism', 'tradition', 'Gnosticism');

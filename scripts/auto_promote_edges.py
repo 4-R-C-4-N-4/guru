@@ -16,11 +16,12 @@ excluded — those values are valid in staged_edges but rejected by the
 live `edges.type` CHECK constraint, so promoting them would fail.
 Existing live edges are not touched (ON CONFLICT DO NOTHING; re-run safe).
 
-Note on the model filter: unlike auto_promote.py for tags, staged_edges
-has no `model` column (propose_edges.py records (source_chunk,
-target_chunk, edge_type, confidence, justification) only). If
-model-attributed promotion is ever needed, schema-add against
-staged_edges first.
+Note on the model filter: staged_edges carries (model, prompt_version)
+provenance as of v3_005. This script does not currently filter on it —
+all promotable rows above the confidence floor are eligible regardless
+of which model proposed them. If you want a model-scoped promotion
+(e.g. only promote rows from Mistral), add a --model arg here that
+joins on staged_edges.model.
 
 Usage:
     python3 scripts/auto_promote_edges.py                       # dry-run, --confidence 0.85

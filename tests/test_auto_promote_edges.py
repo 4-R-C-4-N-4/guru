@@ -57,8 +57,12 @@ def _seed_schema(conn: sqlite3.Connection) -> None:
             tier TEXT NOT NULL DEFAULT 'proposed',
             reviewed_by TEXT,
             reviewed_at TEXT,
-            UNIQUE(source_chunk, target_chunk)
+            model TEXT,
+            prompt_version TEXT
         );
+        CREATE UNIQUE INDEX idx_staged_edges_provenance_unique
+            ON staged_edges(source_chunk, target_chunk, model, prompt_version)
+            WHERE status = 'pending';
         INSERT INTO nodes(id, type, tradition_id, label) VALUES
             ('a.t.001', 'chunk', 'a', 'A1'),
             ('a.t.002', 'chunk', 'a', 'A2'),
