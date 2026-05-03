@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.098"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LII. AMPHIETUS BACCHUS"
+section = "Hymn LIII. SILENUS, SATYRUS, and the PRIESTESSES of BACCHUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 184
+token_count = 215
 
 [content]
-body = "LII. To AMPHIETUS BACCHUS. The FUMIGATION from every AROMATIC except FRANKINCENSE. TERRESTRIAL Dionysius, hear my pray'r, Awak'ned rise with nymphs of lovely hair: Great Amphietus Bacchus, annual God, Who laid asleep in Proserpine's abode, Did'st lull to drowsy and oblivious rest, The rites triennial, and the sacred feast; Which rous'd again by thee, in graceful ring, Thy nurses round thee mystic anthems sing; When briskly dancing with rejoicing pow'rs, Thou mov'st in concert with the circling hours. 10 Come, blessed, fruitful, horned, and divine, And on these rites with joyful aspect shine; Accept the general incense and the pray'r, And make prolific holy fruits thy care."
+body = "LIII. To SILENUS, SATYRUS, and the PRIESTESSES of BACCHUS. The FUMIGATION from MANNA. GREAT nurse of Bacchus, to my pray'r incline., Silenus, honor'd by the pow'rs divine And by mankind at the triennial feast Illustrious dæmon, reverenc'd as the best: Holy, august, the source of lawful rites, 5 Rejoicing pow'r, whom vigilance delights With Sylvans dancing ever young and fair, Head of the Bacchic Nymphs, who ivy bear. With all thy Satyrs on our incense shine, Dæmons wild form'd, and bless the rites divine; 10 Come, rouse to sacred Joy thy pupil kin, * And Brumal Nymphs with rites Lenæan bring; Our orgies shining thro' the night inspire, And bless triumphant pow'r the sacred choir. Footnotes 185:* Because he was the nurse of Bacchus."
 
 [annotations]
 concepts = []

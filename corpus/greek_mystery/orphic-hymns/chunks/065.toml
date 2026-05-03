@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.065"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXIV. PROTEUS"
+section = "Hymn XXV"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 242
+token_count = 328
 
 [content]
-body = "XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe."
+body = "XXV. TO THE EARTH * The FUMIGATION from every kind of SEED, except BEANS and AROMATICS. O Goddess, Earth, of Gods and men the source, Endu'd with fertile, all destroying force; All-parent, bounding, whose prolific pow'rs, Produce a store of beauteous fruits and flow'rs, All-various maid, th' eternal world's strong base 5 Immortal, blessed, crown'd with ev'ry grace; From whose wide womb, as from an endless root, Fruits, many-form'd, mature and grateful shoot. Deep bosom'd, blessed, pleas'd with grassy plains, Sweet to the smell, and with prolific rains. 10 All flow'ry dæmon, centre of the world, Around thy orb, the beauteous stars are hurl'd With rapid whirl, eternal and divine, Whose frames with matchless skill and wisdom shine. Come, blessed Goddess, listen to my pray'r, 15 And make increase of fruits thy constant care; With fertile Seasons in thy train, draw near, And with propitious mind thy suppliant hear. Footnotes 150:* According to Orpheus, as related by Proclus, in Tim. p. 292. Earth is the mother of every thing, of which Heaven is the father. And the reader will please to observe, that, in the Orphic theology, Rhea, the mother of the Gods, the Earth, and Vesta, are all one and the same divinity, considered according to her essential peculiarities."
 
 [annotations]
 concepts = []

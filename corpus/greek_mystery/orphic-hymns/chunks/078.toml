@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.078"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXIII. APOLLO (part 3)"
+section = "Hymn XXXIV"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 274
+token_count = 134
 
 [content]
-body = "Ζεὺς δέ τε πάντων ἐςὶ ϑεὸς, πάντων τε κεραςὴς, Πνέυμασι συζι#ων, ( ) φωναῖσι τε ἀερομικτοις· That is, \"But Jupiter is the God of all, and the mingler of all things; whistling with the breathing winds and aerial voices.\" And this perfectly agrees with Apollo, considered as Jupiter, or the sun of the intelligible world.\n\n164:41 Ver.\n\n41.] The figur'd seal .\n\nSince Apollo in the intelligible world is the demiurgus of the universe, and consequently comprehends in his essence the archetypal ideas of all sensible forms, he may with great propriety be said to posses the figured seal, of which every visible species is nothing more than an impression.\n\nIt is however necessary to observe, that in the great p.\n\n165 seal of ideas, all forms subsist in indivisible union and immaterial perfection: but in their imitative impressions in bodies, they are found full of boundless multitude, and material imperfection."
+body = "XXXIV. T O L A T O N A. The FUMIGATION from MYRRH. DARK veil'd Latona, much invoked queen, Twin-bearing Goddess, of a noble mien; Cæantis great, a mighty mind is thine, Offspring prolific, blest of Jove divine: Phœbus proceeds from thee, the God of light, 5 And Dian fair, whom winged darts delight; She in Ortygia's honor'd regions born, In Delos he, which mountains high adorn. Hear me, O Goddess, with propitious mind, And end these holy rites, with aspect kind. 10"
 
 [annotations]
 concepts = []

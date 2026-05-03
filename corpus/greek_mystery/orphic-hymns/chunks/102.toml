@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.102"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LVI. THE TERRESTRIAL HERMES"
+section = "Hymn LVII. CUPID, OR LOVE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 200
+token_count = 183
 
 [content]
-body = "LVI. TO THE TERRESTRIAL HERMES. The FUMIGATION from STORAX. HERMES I call, whom Fate decrees to dwell In the dire path which leads to deepest hell O Bacchic Hermes, progeny divine Of Dionysius, parent of the vine, p. 189 And of celestial Venus Paphian queen, 5 Dark eye-lash'd Goddess of a lovely mien: Who constant wand'rest thro' the sacred feats Where hell's dread empress, Proserpine, retreats; To wretched souls the leader of thc way When Fate decrees, to regions void of day: 10 Thine is the wand which causes sleep to fly, Or lulls to slumb'rous rest the weary eye; For Proserpine thro' Tart'rus dark and wide Gave thee forever flowing souls to guide. Come, blessed pow'r the sacrifice attend, 15 And grant our mystic works a happy end."
+body = "LVII. TO CUPID, OR LOVE. The FUMIGATION from AROMATICS. I Call great Cupid, source of sweet delight, Holy and pure, and lovely to the sight; Darting, and wing'd, impetuous fierce desire, With Gods and mortals playing, wand'ring fire: Cautious, and two-fold, keeper of the keys 5 Of heav'n and earth, the air, and spreading seas; Of all that Ceres' fertile realms contains, By which th' all-parent Goddess life sustains, Or dismal Tartarus is doom'd to keep, Widely extended, or the sounding, deep; 10 p. 190 For thee, all Nature's various realms obey, Who rul'st alone, with universal sway. Come, blessed pow'r, regard these mystic fires, And far avert, unlawful mad desires."
 
 [annotations]
 concepts = []

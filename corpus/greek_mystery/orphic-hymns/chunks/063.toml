@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.063"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXII. NEREUS"
+section = "Hymn XXIII. THE NEREIDS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 179
+token_count = 203
 
 [content]
-body = "XXII. TO NEREUS. The FUMIGATION from MYRRH. O Thou, who doff the roots of Ocean keep In seats cærulean, dæmon of the deep, With fifty nymphs (attending in thy train, Fair virgin artists) glorying thro' the main: The dark foundation of the rolling sea 5 And Earth's wide bounds, belong much-fam'd to thee; Great dæmon, source of all, whose pow'r can make The Earth's unmeasur'd, holy basis shake, When blust'ring winds in secret caverns pent, By thee excited, struggle hard for vent: 10 Come, blessed Nereus, listen to my pray'r, And cease to shake the earth with wrath severe; p. 148 Send on our sacred rites abundant health, With peace divine and necessary wealth."
+body = "XXIII. TO THE NEREIDS. The FUMIGATION from AROMATICS. DAUGHTERS of Nereus, resident in caves Merg'd deep in Ocean, sporting thro' the waves; Fanatic fifty nymphs, who thro' the main Delight to follow in the Triton's train, Rejoicing close behind their cars to keep; 5 Whose forms half wild, are nourish'd by the deep, With other nymphs of different degree Leaping and wand'ring thro' the liquid sea: Bright, wat'ry dolphins, sonorous and gay, Well pleas'd to sport with bachanalian play; 10 Nymphs beauteous-ey'd, whom sacrifice delights, Send rich abundance on our mystic rites; For you at first disclos'd the rites divine, Of holy Bacchus and of Proserpine, Of fair Calliope from whom I spring, 15 And of Apollo bright, the Muse's king."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.056"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XV. JUNO"
+section = "Hymn XVI. NEPTUNE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 255
+token_count = 253
 
 [content]
-body = "XV. TO JUNO * . The FUMIGATION from AROMATICS. O Royal Juno of majestic mien, Aerial-form'd, divine, Jove's blessed queen, Thron'd in the bosom of cærulean air, The race of mortals is thy constant care. p. 141 The cooling gales thy pow'r alone inspires, Which nourish life, which ev'ry life desires. Mother of clouds and winds, from thee alone Producing all things, mortal life is known: All natures share thy temp'rament divine, And universal sway alone is thine. 10 With founding blasts of wind, the swelling sea And rolling rivers roar, when shook by thee. Come, blessed Goddess, fam'd almighty queen, With aspect kind, rejoicing and serene. Footnotes 140:* Juno is called by the Orphic theologers, according to Proclus Ζωογόνος ϑεά or the vivific Goddess: an epithet perfectly agreeing with the attributes ascribed to her in this Hymn. And in Theol. Plat. p. 483, he says that Juno is the source of the soul's procreation."
+body = "XVI. TO NEPTUNE. The FUMIGATION from MYRRH HEAR, Neptune, ruler of the sea profound, Whose liquid grasp begirts the solid ground; Who, at the bottom of the stormy main, Dark and deep-bosom'd, hold'st thy wat'ry reign; Thy awful hand the brazen trident bears, And ocean's utmost bound, thy will reveres: Thee I invoke, whose steeds the foam divide, From whose dark locks the briny waters glide; Whose voice loud founding thro' the roaring deep, Drives all its billows, in a raging heap; 10 When fiercely riding thro' the boiling sea, Thy hoarse command the trembling waves obey. p. 142 Earth shaking, dark-hair'd God, the liquid plains (The third division) Fate to thee ordains, 'Tis thine, cærulian dæmon, to survey Well pleas'd the monsters of the ocean play, 15 Confirm earth's basis, and with prosp'rous gales Waft ships along, and swell the spacious sails; Add gentle Peace, and fair-hair'd Health beside, And pour abundance in a blameless tide. 20"
 
 [annotations]
 concepts = []

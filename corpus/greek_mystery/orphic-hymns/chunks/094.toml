@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.094"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLVIII. IPPA * The FUMIGATION from STORAX"
+section = "Hymn XLIX. LYSIUS LENÆUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 133
+token_count = 237
 
 [content]
-body = "XLVIII. TO IPPA * The FUMIGATION from STORAX. Great nurse of Bacchus, to my pray'r incline, For holy Sabus' secret rites are thine, The mystic rites of Bacchus' nightly choirs, Compos'd of sacred, loud-resounding fires: Hear me, terrestrial mother, mighty queen, 5 Whether on Phyrgia's holy mountain + seen, Or if to dwell in Tmolus thee delights, With holy aspect come, and bless these rites. Footnotes 180:* Ippa according to Proclus is same with Juno. 180:+ Ida."
+body = "XLIX. TO LYSIUS LENÆUS. A HYMN. Hear me, Jove's son, blest Bacchus, God of wine, Born of two mothers, honor'd and divine; Lysian, Euion * Bacchus, various-nam'd, Of Gods the offspring secret, holy, fam'd: Fertile and nourishing whose liberal care 5 Earth's fruits increases, flourishing and fair; Sounding, magnanimous, Lenæan pow'r O various form'd, medic'nal, holy flow'r: Mortals in thee, repose from labour find, Delightful charm, desir'd by all mankind: 10 Fair-hair'd Euion, Bromian, joyful God, Lysian, invested with the leafy rod. To these our rites, benignant pow'r incline, When fav'ring men, or when on Gods you shine; Be present to thy mystic's suppliant pray'r, 15 Rejoicing come, and fruits abundant bear. Footnotes 181:* Euion ingeminat, reparabilis assonat Echo. Persius ."
 
 [annotations]
 concepts = []

@@ -4,11 +4,11 @@ tradition = "Egyptian"
 text_name = "The Egyptian Heaven and Hell"
 section = "Chapter 1"
 translator = "E.A. Wallis Budge"
-source_url = "https://sacred-texts.com/egy/ehh.htm"
-token_count = 133
+source_url = "https://sacred-texts.com/egy/ehh/ehh00.htm"
+token_count = 167
 
 [content]
-body = "Sacred-texts Egypt The Egyptian Heaven and Hell by E. A. Wallis Budge [1905] This is a three volume collection of texts and commentary about the Ancient Egyptian alternate reality called the Tuat. The Tuat was both the region that the boat of the Sun God Ra traversed during the night, and the place where inhabitants of this world went after death. A description of the Tuat, and its inhabitants and portals, was inscribed on the walls of the tombs of all social strata. Vol. I: The Book of Am-Tuat Vol. II: The Book of Gates Vol. III: The Egyptian Heaven and Hell"
+body = "Sacred Texts Egypt EHH Index Index Next The Egyptian Heaven and Hell by E. A. Wallis Budge London; Kegan, Paul, Trench, Trübner & Co. [1905] Scanned at Sacred-texts.com, May 2003. J.B. Hare, Redactor. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact. Click to view Scene from the Papyrus of Nekht, allowing the deceased and the wife worshipping Osiris in the Other World, and the manner of the house in which they expect to live, and their vineyard and garden with its lake of water. (British Museum, No. 10,471, sheet 21.) Next: Preface"
 
 [annotations]
 concepts = []

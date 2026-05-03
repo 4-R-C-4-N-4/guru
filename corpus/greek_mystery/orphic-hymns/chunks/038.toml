@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.038"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn III. HEAVEN"
+section = "Hymn IV. FIRE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 532
+token_count = 130
 
 [content]
-body = "III. TO HEAVEN. The FUMIGATION from FRANKINCENSE. GREAT Heav'n, whose mighty frame no respite knows, Father of all, from whom the world arose: Hear, bounteous parent, source and end of all, Forever whirling round this earthly ball; Abode of Gods, whose guardian pow'r surrounds 5 5 Th' eternal World with ever during bounds; p. 117 Whose ample bosom and encircling folds The dire necessity of nature holds. Ætherial, earthly, whose all-various frame 9 Azure and full of forms, no power can tame. 10 All-seeing Heav'n, progenitor of Time * , Forever blessed, deity sublime, Propitious on a novel mystic shine, And crown his wishes with a life divine. Footnotes 116:5 III Ver. 5] Whose guardian power surrounds, &c. and v. ii. All-seeing Heaven. ὁ τυ Ὀρφέος ὐρανὸς ύρος καὶ πάντων φυλὰξ είναι βέλεται· Damascius περὶ αρχῶν, i.e. \"according to Orpheus, Heaven is the inspector and guardian of all things.\" 117:9 III. Ver. 9.] We have already observed in our Dissertation, that according to the Platonists, subordinate natures are contained in the supreme, and such as are supreme in the subordinate: and this doctrine which is originally Egyptian, is mentioned by Proclus in Tim. p. 292. as Orphical. ἔσι γὰρ καὶ ἐν γῆ ὐρανὸς καὶ ἐν ὐρανῷ γῆ, καὶ ἐνταῦθα μὲν ὁ ὐρανὸς χθονίως, εκεῖ δ᾽ε ὐρανίως ἡ γῆ i. e. \"heaven is in earth, and earth in heaven; but here heaven subsists in an earthly manner, and there earth in a celestial manner.\" 117:* Saturn."
+body = "IV. TO FIRE. The FUMIGATION from SAFFRON. O Ever untam'd Fire, who reign'st on high In Jove's dominions ruler of the sky; The glorious sun with dazzling lustre bright, And moon and stars from thee derive their light; All taming pow'r, ætherial shining fire, 5 Whose vivid blasts the heat of life inspire: p. 118 The world's best element, light-bearing pow'r, With starry radiance shining, splendid flow'r, O hear my suppliant pray'r, and may thy frame Be ever innocent, serene, and tame. 10"
 
 [annotations]
 concepts = []

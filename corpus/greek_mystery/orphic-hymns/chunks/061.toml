@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.061"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XX. THE CLOUDS"
+section = "Hymn XXI. THE SEA, OR TETHYS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 135
+token_count = 215
 
 [content]
-body = "XX. TO THE CLOUDS. The FUMIGATION from MYRRH. Ærial clouds, thro' heav'n's resplendent plains Who wander, parents of prolific rains; Who nourish fruits, whose water'y frames are hurl'd, By winds impetuous, round the mighty world; All-thund'ring, lion-roaring, flashing fire, 5 In Air's wide bosom, bearing thunders dire Impell'd by ev'ry stormy, sounding gale, With rapid course, along the skies ye fail. With blowing winds your wat'ry frames I call, On mother Earth with fruitful show'rs to fall."
+body = "XXI. TO THE SEA, OR TETHYS * . The FUMIGATION from FRANKINCENSE and MANNA. TETHYS I call, with eyes cærulean bright, Hid in a veil obscure from human sight; Great Ocean's empress, wand'ring thro' the deep, And pleas'd with gentle gales, the earth to sweep; p. 147 Whose blessed waves in swift succession go, 5 And lash the rocky shore with endless flow: Delighting in the Sea serene to play, In ships exulting and the wat'ry way. Mother of Venus, and of clouds obscure, Great nurse of beasts, and source of fountains pure. 10 O venerable Goddess, hear my pray'r, And make benevolent my life thy care; Send, blessed queen, to ships a prosp'rous breeze, And waft them safely o'er the stormy seas. Footnotes 146:* See the last note to Hymn v. for an explanation of the Goddess Tethys."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.080"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXV. DIANA"
+section = "Hymn XXXVI. THE TITANS * The FUMIGATION from FRANKINCENSE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 355
+token_count = 156
 
 [content]
-body = "XXXV. TO DIANA. The FUMIGATION from MANNA. Hear me, Jove's daughter, celebrated queen, Bacchian and Titan, of a noble mien: p. 166 In darts rejoicing and on all to shine, Torch-bearing Goddess, Dictynna divine; O'er births presiding, and thyself a maid, 5 5 To labour-pangs imparting ready aid: Dissolver of the zone and wrinkl'd care, Fierce huntress, glorying in the Sylvan war: Swift in the course, in dreadful arrows skill'd, Wandering by night, rejoicing in the field: 10 Of manly form, erect, of bounteous mind, Illustrious dæmon, nurse of human kind: Immortal, earthly, bane of monsters fell, 'Tis thine; blest maid, on woody hills to dwell: Foe of the stag, whom woods and dogs delight, 15 In endless youth who flourish fair and bright. O, universal queen, august, divine, A various form, Cydonian pow'r, is thine: Dread guardian Goddess, with benignant mind Auspicious, come to mystic rites inclin'd 20 Give earth a store of beauteous fruits to bear, Send gentle Peace, and Health with lovely hair, And to the mountains drive Disease and Care. Footnotes 166:5 Ver. 5.] O'er births presiding . In the original, λοχεία: and Proclus, in Plat. Theol. p. 403. observes that this epithet is given to Diana by theologians, because she is the inspector of natural progression and generation."
+body = "XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas."
 
 [annotations]
 concepts = []

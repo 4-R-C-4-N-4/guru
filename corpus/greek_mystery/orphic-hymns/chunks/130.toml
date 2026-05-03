@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.130"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXXX. THE WEST WIND"
+section = "Hymn LXXXI. THE SOUTH WIND"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 116
+token_count = 108
 
 [content]
-body = "LXXX. TO THE WEST WIND. The FUMIGATION from FRANKINCENSE. SEA-born, aerial, blowing from the west, Sweet gales, who give to weary'd labour rest: Vernal and grassy, and of gentle found, To ships delightful, thro' the sea profound; For these, impell'd by you with gentle force, 5 Pursue with prosp'rous Fate their destin'd course. With blameless gales regard my suppliant pray'r, Zephyrs unseen, light-wing'd, and form'd from air."
+body = "LXXXI. TO THE SOUTH WIND. The FUMIGATION from FRANKINCENSE. WIDE coursing gales, whose lightly leaping feet With rapid wings the air's wet bosom beat, Approach benevolent, swift-whirling pow'rs, With humid clouds the principles of flow'rs: For flow'ry clouds are portion'd to your care, 5 To send on earth from all surrounding air. Bear, blessed pow'rs, these holy rites attend, And fruitful rains on earth all-parent send."
 
 [annotations]
 concepts = []

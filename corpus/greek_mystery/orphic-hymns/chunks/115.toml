@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.115"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXIX. THE FURIES"
+section = "Hymn LXX. MELINOE"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 195
+token_count = 197
 
 [content]
-body = "LXIX. TO THE FURIES. The FUMIGATION from AROMATICS. HEAR me, illustrious Furies, mighty nam'd, Terrific pow'rs, for prudent counsel fam'd; Holy and pure, from Jove terrestrial born And Proserpine, whom lovely locks adorn: Whose piercing sight, with vision unconfin'd, 5 Surveys the deeds of all the impious kind: On Fate attendant, punishing the race (With wrath severe) of deeds unjust and base. Dark-colour'd queens, whose glittering eyes, are bright With dreadful, radiant, life-destroying, light: 10 Eternal rulers, terrible and strong, To whom revenge, and tortures dire belong; Fatal and horrid to the human sight, With snaky tresses wand'ring in the night; Either approach, and in these rites rejoice, 15 For ye, I call, with holy, suppliant voice."
+body = "LXX. TO MELINOE. The FUMIGATION from AROMATICS. Call Melinoe, saffron-veil'd, terrene, Who from infernal Pluto's sacred queen, Mixt with Saturnian Jupiter, arose, Near where Cocytus' mournful river flows; When under Pluto's semblance, Jove divine 5 Deceiv'd with guileful arts dark Proserpine. Hence, Partly black thy limbs and partly white, From Pluto dark, from Jove etherial, bright Thy colour'd members, men by night inspire When seen in specter'd forms with terrors dire; 10 Now darkly visible, involv'd in night, Perspicuous now they meet the fearful fight. Terrestrial queen expel wherever found The soul's mad fears to earth's remotest bound; With holy aspect on our incense shrine, 15 And bless thy mystics, and the rites divine."
 
 [annotations]
 concepts = []

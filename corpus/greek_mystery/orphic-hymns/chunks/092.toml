@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.092"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLVI. BACCHUS PERICIONIUS"
+section = "Hymn XLVII. SABASIUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 140
+token_count = 141
 
 [content]
-body = "XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind. Footnotes 179:* So called from περι and κιονισ, a little pillar."
+body = "XLVII. TO SABASIUS. The FUMIGATION from AROMATICS HEAR me, illustrious father, dæmon fam'd. Great Saturn's offspring, and Sabasius nam'd; p. 180 Inserting Bacchus, bearer of the vine, And founding God, within thy thigh divine, That when mature, the Dionysian God 5 Might burst the bands of his conceal'd abode, And come to sacred Tmolus, his delight, Where Ippa dwells, all beautiful and bright. Come blessed Phrygian God, the king of all, And aid thy mystics, when on thee they call. 10"
 
 [annotations]
 concepts = []

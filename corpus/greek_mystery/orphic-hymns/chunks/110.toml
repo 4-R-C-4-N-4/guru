@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.110"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXIV. MARS"
+section = "Hymn LXV. VULCAN * The FUMIGATION from FRANKINCENSE and MANNA"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 257
+token_count = 269
 
 [content]
-body = "LXIV. TO MARS * . The FUMIGATION from FRANKINCENSE. Magnanimous, unconquer'd, boistrous Mars, In darts rejoicing, and in bloody wars p. 197 Fierce and untam'd, whose mighty pow'r can make The strongest walls from their foundations shake: Mortal destroying king, defil'd with gore, 5 Pleas'd with war's dreadful and tumultuous roar: Thee, human blood, and swords, and spears delight, And the dire ruin of mad savage fight. Stay, furious contests, and avenging strife, Whose works with woe, embitter human life; 10 To lovely Venus, and to Bacchus yield, To Ceres give the weapons of the field; Encourage peace, to gentle works inclin'd, And give abundance, with benignant mind. Footnotes 196:* This deity, according to Proclus, in Repub. p. 388. perpetually discerns and nourishes, and constantly excites the contrarieties of the universe, that the world may exist perfect and entire from its parts. But he requires the assistance of Venus, that he may insert order and harmony into things contrary and discordant."
+body = "LXV. TO VULCAN * The FUMIGATION from FRANKINCENSE and MANNA. STRONG, mighty Vulcan, bearing splendid light, Unweary'd fire, with flaming torrents bright: Strong-handed, deathless, and of art divine, Pure element, a portion of the world is thine: p. 198 All-taming artist, all-diffusive pow'r, 5 'Tis thine supreme, all substance to devour: Æther, Sun, Moon, and Stars, light pure and clear, For these thy lucid parts to men appear. To thee, all dwellings, cities, tribes belong, Diffus'd thro' mortal bodies bright and strong. 10 Hear, blessed power, to holy rites incline, And all propitious on the incense shine: Suppress the rage of fires unweary'd frame, And still preserve our nature's vital flame. Footnotes 197:* This deity, according to Proclus, in Repub. p. 385. adorns by his artifice, the sensible machine of the universe, which he fills with certain reasons, proportions, and powers of Nature. But he requires the assistance of Venus, that he may invent sensible effects with beauty, and by this means cause the pulchritude of the world."
 
 [annotations]
 concepts = []

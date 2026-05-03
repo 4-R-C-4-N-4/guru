@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.064"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXIII. THE NEREIDS"
+section = "Hymn XXIV. PROTEUS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 203
+token_count = 242
 
 [content]
-body = "XXIII. TO THE NEREIDS. The FUMIGATION from AROMATICS. DAUGHTERS of Nereus, resident in caves Merg'd deep in Ocean, sporting thro' the waves; Fanatic fifty nymphs, who thro' the main Delight to follow in the Triton's train, Rejoicing close behind their cars to keep; 5 Whose forms half wild, are nourish'd by the deep, With other nymphs of different degree Leaping and wand'ring thro' the liquid sea: Bright, wat'ry dolphins, sonorous and gay, Well pleas'd to sport with bachanalian play; 10 Nymphs beauteous-ey'd, whom sacrifice delights, Send rich abundance on our mystic rites; For you at first disclos'd the rites divine, Of holy Bacchus and of Proserpine, Of fair Calliope from whom I spring, 15 And of Apollo bright, the Muse's king."
+body = "XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe."
 
 [annotations]
 concepts = []
