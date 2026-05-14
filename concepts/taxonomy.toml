@@ -30,6 +30,12 @@ asha_cosmic_order      = "Truth as the fundamental structure of reality."
 soul_migration         = "The transmigration of the soul across lives."
 psychopomp_journey     = "Guided passage of the soul through afterlife realms."
 infinite_cosmos        = "The doctrine of the universe as boundless and without center or circumference, populated by innumerable worlds — Bruno's rejection of the closed Aristotelian sphere; the divine and the cosmos as ontologically infinite."
+correspondence         = "The Hermetic axiom that the structure of the cosmos is reflected at every scale — 'as above, so below; as within, so without' — making each level a legible map of the others."
+microcosm_macrocosm    = "The human being as a small-scale image of the entire cosmos; the body, soul, and intellect mirroring the structure of the heavens and the divine — distinct from correspondence in that it makes the human the privileged mirror."
+maat_cosmic_order      = "The Egyptian principle of truth, balance, and right order underlying both the cosmos and human conduct; the parallel to Zoroastrian asha and Greek dike."
+cosmic_sympathy        = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
+fall_of_sophia         = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
+tzimtzum               = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
 
 # ============================================================
 # SOTERIOLOGY — salvation, liberation, and the return
@@ -44,6 +50,10 @@ hidden_sayings = "Esoteric teachings reserved for those ready to receive them; o
 mystical_union = "The merging of the individual soul or self with the divine, transcending personal identity."
 self_knowledge = "The recognition of one's own true divine nature as the primary path to liberation; 'know thyself' as soteriology."
 divine_madness = "Ecstatic irrational rapture — Plato's mania, Bruno's furore — by which the soul transcends ordinary reason and attains direct contact with divine reality; madness reframed as higher knowledge."
+theosis_deification = "The doctrine — central to Eastern Orthodox and Maximian theology — that the human person is progressively transformed into a partaker of the divine nature by grace, not merely justified or united in passing ecstasy."
+dark_night = "John of the Cross's stage of contemplative purgation: a felt absence and aridity of God that strips the soul of attachments to its own consolations en route to deeper union."
+sunyata_emptiness = "The Buddhist doctrine that all phenomena lack independent self-nature; emptiness as the positive recognition that things arise only in dependence on conditions — distinct from kenoma's mere deficiency."
+anamnesis = "Platonic recollection: knowledge as the soul's recovery of what it knew before birth, with learning as remembering rather than acquisition."
 
 # ============================================================
 # THEOLOGY — nature of the divine and divine attributes
@@ -62,6 +72,8 @@ cosmic_dualism = "Ontological opposition between two primal principles (light/da
 numerical_mysticism = "Numbers, proportions, and mathematical relationships as the underlying structure of divine reality."
 ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
 unity_of_being = "The doctrine that all existence is ultimately one substance or one divine reality; non-duality as a theological claim."
+divine_providence = "Pronoia — the doctrine that the divine actively orders the unfolding of the cosmos and human affairs toward intelligible ends, against pure chance or blind necessity."
+evil_as_privation = "Augustinian and Plotinian doctrine that evil has no positive being of its own but is a lack, distortion, or absence of the good — denying ontological dualism while preserving moral seriousness."
 
 # ============================================================
 # PRAXIS — practice, ritual, and spiritual method
@@ -80,6 +92,10 @@ ritual_fire            = "Fire as medium of divine presence."
 funerary_navigation    = "Texts and rituals guiding the soul through death."
 heroic_furor           = "Bruno's eroici furori — a passionate, ennobling spiritual ardor that drives the soul toward divine wisdom; distinguished from base or animal passions by its orientation to infinite truth."
 wu_wei                 = "Effortless action aligned with the spontaneous flow of the Dao; non-coercive, non-striving conduct that yields results without forcing — the sage acts without acting."
+meditation             = "Disciplined inward attention — sitting, focused, or open-awareness practice — as a stand-alone term that umbrellas active_contemplation, inner_silence, and dhyana-style sitting."
+prayer                 = "Direct address to the divine, whether petitionary, contemplative, or liturgical; speech and silence offered upward."
+alchemical_work        = "The transformation of base substance — outer matter or the inner soul — into a purified, perfected, or 'gold' state; the magnum opus as both laboratory practice and spiritual allegory."
+theurgy                = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
 
 # ============================================================
 # ANTHROPOLOGY — nature of the human being
@@ -92,6 +108,7 @@ kingdom_within = "The claim that the divine realm is present inside the individu
 opposites_transcended = "The dissolution of binary oppositions (male/female, inner/outer, above/below) as a mark of spiritual completion."
 childlike_innocence = "The infant or child as symbol of the unfallen, undivided spiritual state; return to primordial simplicity."
 body_as_obstacle = "The material body viewed as a prison, tomb, or source of error that hinders spiritual knowledge and return."
+mechanical_humanity = "Gurdjieff and Ouspensky's claim that ordinary human beings live in a state of waking sleep, reacting mechanically without unified will or consciousness, and that the spiritual path begins with recognising this condition."
 
 # ============================================================
 # ETHICS — moral teaching and conduct
