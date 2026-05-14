@@ -86,3 +86,7 @@ guru-review/**/*.tsbuildinfo
 guru-review/server/config.json
 guru-review/config.json
 data/guru-shadow*
+
+.claude
+.codex
+.hermes
