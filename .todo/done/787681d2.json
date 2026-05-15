@@ -1,13 +1,13 @@
 {
   "id": "787681d2",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Extend generic_html.py to recognize CCEL content containers",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-15T16:08:15.779Z",
-  "updated_at": "2026-05-15T16:08:51.590Z",
+  "updated_at": "2026-05-15T16:26:27.697Z",
   "files": [
     {
       "path": "scripts/downloaders/generic_html.py"
@@ -19,5 +19,26 @@
       "c3a35743",
       "d31b348a"
     ]
+  },
+  "work": {
+    "branch": "todo/787681d2",
+    "base_branch": "main",
+    "started_at": "2026-05-15T16:22:31.711Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-15T16:25:21.583Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Ticket spec was correct that CCEL needs book-content in the selector list, but incomplete: 'bbook' is on <p> tags not <div>, so adding it to content_classes is a no-op (find_all('div', class_='bbook') matches nothing). More importantly, CCEL also exposes <div id='content'> and <div id='main'> which are already matched by existing content_ids, AND those divs are ancestors of the book-content divs. With the current append-all logic, extraction yields ~3x duplication (id=main contains id=content contains all book-content divs, each get_text()'d separately and concatenated). Adding book-content alone helps quality but worsens duplication. Real fix: change extraction to first-tier-wins priority — semantic tags > content classes > content ids > body fallback. Drop 'bbook' from the proposed selector addition.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "7609978bb79fb6c752aeff725a3b80dfe0850b61",
+    "resolved_at": "2026-05-15T16:26:27.697Z",
+    "resolved_by": "unknown",
+    "note": "All subtasks complete. generic_html.py now extracts CCEL content cleanly. T1's Eckhart child (f1d19981) is unblocked."
   }
 }
