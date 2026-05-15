@@ -1,0 +1,21 @@
+{
+  "id": "658b2489",
+  "type": "chore",
+  "state": "open",
+  "summary": "Chunk Plato Symposium — paragraph-group",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T17:25:24.945Z",
+  "updated_at": "2026-05-15T17:25:54.133Z",
+  "files": [
+    {
+      "path": "chunking/platonism/plato-symposium.toml"
+    }
+  ],
+  "tags": [
+    "chunking",
+    "corpus"
+  ],
+  "description": "Source: raw/platonism/plato-symposium.txt — 117,872 chars, single file (format=html, Jowett 1871).\n\nAudit findings:\n- Head: minor sacred-texts crumb ('Sacred Texts Classics Plato'), then clean Jowett title page.\n- Tail: ends with '-THE END-'.\n- No usable in-body section markers. Jowett renders dialogue as continuous narrative prose ('he said,' 'I said'); no Stephanus pagination; no headings between speeches.\n- Speaker labels (SOCRATES, DIOTIMA, etc.) appear only once each, in the all-caps PERSONS OF THE DIALOGUE list at top.\n\nRecommended strategy: paragraph-group (like the long Boehme excerpts).\n\npre_strip:\n  - leading 'Sacred Texts Classics Plato' crumb\n  - trailing '-THE END-'\n\nSplitting by encomium speech (Phaedrus → Pausanias → Eryximachus → Aristophanes → Agathon → Socrates/Diotima → Alcibiades) would require manual offsets and is not worth doing in v1."
+}
