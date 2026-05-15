@@ -101,24 +101,24 @@ def extract_text(html: str, source_id: str) -> str:
         for element in soup(class_=cls):
             element.decompose()
     
-    # Extract from main content containers (priority order)
+    # Extract from main content containers — first tier that matches wins,
+    # so we don't stack nested containers and triple-count their text.
     containers = []
-    
-    # Try specific content containers first
+
     for tag in ["main", "article"]:
         containers.extend(soup.find_all(tag))
-    
-    # Try divs with content-related classes
-    content_classes = ["content", "main-content", "text", "body", "article-content"]
-    for cls in content_classes:
-        containers.extend(soup.find_all("div", class_=cls))
-    
-    # Try by ID
-    content_ids = ["content", "main", "text", "article", "body"]
-    for id_name in content_ids:
-        el = soup.find(id=id_name)
-        if el:
-            containers.append(el)
+
+    if not containers:
+        content_classes = ["content", "main-content", "text", "body", "article-content", "book-content"]
+        for cls in content_classes:
+            containers.extend(soup.find_all("div", class_=cls))
+
+    if not containers:
+        content_ids = ["content", "main", "text", "article", "body"]
+        for id_name in content_ids:
+            el = soup.find(id=id_name)
+            if el:
+                containers.append(el)
     
     text = ""
     if containers:
