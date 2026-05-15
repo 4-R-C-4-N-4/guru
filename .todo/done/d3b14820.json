@@ -1,0 +1,26 @@
+{
+  "id": "d3b14820",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add 1 Enoch (Charles 1917) entry to manifest + verify acquire.py",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T16:08:51.522Z",
+  "updated_at": "2026-05-15T16:36:32.322Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "relationships": {
+    "parent": "e82cc1b0"
+  },
+  "description": "Append [[source]] entry to sources/manifest.toml:\n\nid = \"enoch-charles-1917\"\ntradition = \"jewish_mysticism\"\nlabel = \"The Book of Enoch (1 Enoch, Charles translation)\"\nurl = \"https://sacred-texts.com/bib/boe/index.htm\"\nformat = \"html_multi\"\nlicense = \"public_domain\"\ntranslator = \"R.H. Charles\"\nnotes = \"Charles 1917. 113 chapter files boe000.htm-boe112.htm, contiguous sequential numbering. Watchers narrative (chs. 1-36) is the proto-Gnostic substrate for archons/emanation_hierarchy concepts already in corpus.\"\n\nTradition is 'jewish_mysticism' (existing — sits with Zohar/merkabah), not a new 'second_temple_apocalyptic' bucket.\n\nOPEN: Charles 1917 preserves editorial brackets [[ ]] (Greek-only) and [[[[ ]]]] (Ethiopic-only). Check whether existing chunker tolerates these or strips/normalizes them. May need a preprocessing pass — decide during implementation.",
+  "resolution": {
+    "commit": "9e69c5444f6d4d5fc389ac0eba5f73dbb51505ca",
+    "resolved_at": "2026-05-15T16:36:32.322Z",
+    "resolved_by": "unknown",
+    "note": "Added manifest entry, ran acquire.py via html_multi/sacred_texts downloader. 115 part files written (113 chapters boe000-boe112 mapped to -01..-113, plus errata.htm and pageidx.htm picked up from index links — minor noise, kept as-is). Total 273KB extracted. The 'editorial brackets [[ ]]/[[[[ ]]]]' concern from the proposal was a phantom — the sacred-texts etext does not preserve them in HTML; extracted text has no such markers. No preprocessing needed."
+  }
+}
