@@ -931,3 +931,18 @@ format = "html"
 license = "public_domain"
 translator = "E.H. Whinfield"
 notes = "Whinfield 1898 — heavily abridged paraphrase. Rumi 13th c. Book I opens with the reed-flute prologue, the foundational Sufi statement of return_to_source. Single-file HTML. NOTE: Nicholson Book I (1925) is US-PD and is the scholarly standard, but only available as archive.org scans requiring OCR; deferred."
+
+
+# ============================================
+# CCEL (Phase 1 — Eckhart only for now)
+# ============================================
+
+[[source]]
+id = "eckhart-sermons-field"
+tradition = "christian_mysticism"
+label = "Meister Eckhart's Sermons (Field translation)"
+url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+format = "html"
+license = "public_domain"
+translator = "Claud Field"
+notes = "Field 1909 (H.R. Allenson, London), first English translation. Seven sermons aggregated on a single CCEL page. Funkelein (spark of the soul) doctrine — connects to Boehme inner-light material already in corpus."
