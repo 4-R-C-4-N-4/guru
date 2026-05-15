@@ -901,3 +901,18 @@ notes = "Second part of Williams' translation, London 1889. Project Gutenberg eb
 # 7. Orphic Argonautica (Taylor translation)
 #    Available on sacred-texts but narrative-heavy rather than
 #    conceptually dense. Defer unless corpus becomes narrative-focused.
+
+
+# ============================================
+# PLATONISM (Phase 1 cross-tradition expansion)
+# ============================================
+
+[[source]]
+id = "plato-symposium"
+tradition = "platonism"
+label = "Plato: Symposium"
+url = "https://sacred-texts.com/cla/plato/symposiu.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The Diotima speech (201d-212c) is the canonical statement of ascent from love of beautiful bodies to the Form of Beauty itself — direct source for Plotinus I.6 (already in corpus) and Bruno's Eroici Furori. Single-file HTML."
