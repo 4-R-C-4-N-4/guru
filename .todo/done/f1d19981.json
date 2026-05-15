@@ -1,0 +1,29 @@
+{
+  "id": "f1d19981",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add Eckhart Sermons (Field, CCEL) entry to manifest + verify acquire.py (requires T2 done)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T16:08:51.492Z",
+  "updated_at": "2026-05-15T16:33:20.237Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "relationships": {
+    "parent": "e82cc1b0",
+    "depends_on": [
+      "787681d2"
+    ]
+  },
+  "description": "Append [[source]] entry to sources/manifest.toml:\n\nid = \"eckhart-sermons-field\"\ntradition = \"christian_mysticism\"\nlabel = \"Meister Eckhart's Sermons (Field translation)\"\nurl = \"https://ccel.org/ccel/eckhart/sermons.all.html\"\nformat = \"html\"\nlicense = \"public_domain\"\ntranslator = \"Claud Field\"\nnotes = \"Field 1909 (H.R. Allenson, London), first English translation. Seven sermons aggregated on a single CCEL page. Funkelein (spark of the soul) doctrine — connects to Boehme inner-light material already in corpus.\"\n\nDEPENDS on T2 (787681d2) — generic_html.py needs 'book-content'/'bbook' selectors before extraction will be clean. Running acquire.py before T2 will produce raw output polluted with CCEL nav chrome.\n\nFirst non-sacred-texts / non-gnosis.org / non-gutenberg source domain.",
+  "resolution": {
+    "commit": "921579d03f0ee0ca4858417ce565ca8348cf0de0",
+    "resolved_at": "2026-05-15T16:33:20.237Z",
+    "resolved_by": "unknown",
+    "note": "Added manifest entry, ran acquire.py, raw/christian_mysticism/eckhart-sermons-field.txt (67556 chars) extracted cleanly via the T2-fixed extractor. No CCEL nav chrome ('Please login', 'loading…' absent). Trailing 'Index of Pages of the Print Edition' is inside CCEL's book-content div — intrinsic to their content, chunker will drop as low-signal. First non-sacred-texts/non-gnosis source domain ingested."
+  }
+}
