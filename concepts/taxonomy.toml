@@ -36,6 +36,7 @@ maat_cosmic_order      = "The Egyptian principle of truth, balance, and right or
 cosmic_sympathy        = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
 fall_of_sophia         = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
 tzimtzum               = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
+watchers_descent       = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
 
 # ============================================================
 # SOTERIOLOGY — salvation, liberation, and the return
@@ -54,6 +55,11 @@ theosis_deification = "The doctrine — central to Eastern Orthodox and Maximian
 dark_night = "John of the Cross's stage of contemplative purgation: a felt absence and aridity of God that strips the soul of attachments to its own consolations en route to deeper union."
 sunyata_emptiness = "The Buddhist doctrine that all phenomena lack independent self-nature; emptiness as the positive recognition that things arise only in dependence on conditions — distinct from kenoma's mere deficiency."
 anamnesis = "Platonic recollection: knowledge as the soul's recovery of what it knew before birth, with learning as remembering rather than acquisition."
+ladder_of_love = "Diotima's staged ascent from love of beautiful bodies → beautiful souls → beautiful pursuits → beautiful knowledge → Beauty itself; the canonical scala amoris that grounds Plotinus's On the Beautiful and Bruno's Eroici Furori — distinct from generic spiritual_ascent in that eros is the specific motive force."
+fana_annihilation = "Sufi self-effacement in God — the via by which the lover is unmade as a separate ego and recovered as God's act; specifies the practice/event rather than mystical_union's resulting state."
+separation_from_source = "The felt condition of exile from one's divine origin — Rumi's reed flute torn from its bed, Plotinus's 'we have forgotten,' the Gnostic forgetfulness; the affective wound that complements return_to_source and gives the return its motive."
+forbidden_knowledge = "Transgressive knowing acquired against divine prohibition — the Watchers' teaching of metallurgy, sorcery, and cosmetics in 1 Enoch, the Gnostic Eve narratives, the Promethean mytheme; explicitly contrasted with gnosis_direct_knowledge, which is salvific."
+eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
 
 # ============================================================
 # THEOLOGY — nature of the divine and divine attributes
@@ -96,6 +102,8 @@ meditation             = "Disciplined inward attention — sitting, focused, or 
 prayer                 = "Direct address to the divine, whether petitionary, contemplative, or liturgical; speech and silence offered upward."
 alchemical_work        = "The transformation of base substance — outer matter or the inner soul — into a purified, perfected, or 'gold' state; the magnum opus as both laboratory practice and spiritual allegory."
 theurgy                = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
+divine_intoxication    = "Ecstatic, non-rational receptivity to the divine figured as drunkenness — Plato's symposium wine, Rumi's sukr, Eckhart's 'sober drunkenness'; the passive/receptive metaphor for divine encounter, distinct from divine_madness's active possessing rapture."
+detachment_gelassenheit = "Eckhart's Abgeschiedenheit/Gelassenheit — radical letting-go of will, image, and grasping that opens the soul to God; distinct from inner_silence (quietness) and from material renunciation, and adjacent to Sufi tark and Buddhist non-grasping as a practice rather than a metaphysical claim."
 
 # ============================================================
 # ANTHROPOLOGY — nature of the human being
@@ -109,6 +117,8 @@ opposites_transcended = "The dissolution of binary oppositions (male/female, inn
 childlike_innocence = "The infant or child as symbol of the unfallen, undivided spiritual state; return to primordial simplicity."
 body_as_obstacle = "The material body viewed as a prison, tomb, or source of error that hinders spiritual knowledge and return."
 mechanical_humanity = "Gurdjieff and Ouspensky's claim that ordinary human beings live in a state of waking sleep, reacting mechanically without unified will or consciousness, and that the spiritual path begins with recognising this condition."
+birth_of_word_in_soul = "Eckhart's signature doctrine that the Father eternally begets the Son in the ground of the soul; the human interior as the actual site of the divine generative act, distinct from inner_light's static indwelling."
+poverty_of_spirit = "Eckhart's radical reading of Matthew 5:3 — the saint as one who wants nothing, knows nothing, and has nothing, having emptied even the will and the self with which to receive God; distinct from renunciation_of_wealth (material poverty)."
 
 # ============================================================
 # ETHICS — moral teaching and conduct
