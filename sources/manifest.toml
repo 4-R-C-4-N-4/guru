@@ -946,3 +946,18 @@ format = "html"
 license = "public_domain"
 translator = "Claud Field"
 notes = "Field 1909 (H.R. Allenson, London), first English translation. Seven sermons aggregated on a single CCEL page. Funkelein (spark of the soul) doctrine — connects to Boehme inner-light material already in corpus."
+
+
+# ============================================
+# SECOND TEMPLE / JEWISH PSEUDEPIGRAPHA (Phase 1)
+# ============================================
+
+[[source]]
+id = "enoch-charles-1917"
+tradition = "jewish_mysticism"
+label = "The Book of Enoch (1 Enoch, Charles translation)"
+url = "https://sacred-texts.com/bib/boe/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "R.H. Charles"
+notes = "Charles 1917. 113 chapter files boe000.htm-boe112.htm, contiguous sequential numbering. The Watchers narrative (chs. 1-36) is the proto-Gnostic substrate for archons/emanation_hierarchy material already in corpus. Editorial brackets [[ ]] (Greek-only) and [[[[ ]]]] (Ethiopic-only) preserved in source — treat as text-critical metadata."
