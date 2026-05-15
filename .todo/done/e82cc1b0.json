@@ -1,13 +1,13 @@
 {
   "id": "e82cc1b0",
   "type": "chore",
-  "state": "active",
+  "state": "done",
   "summary": "Add 4 corpus sources: Plato Symposium, Masnavi Book I, Eckhart Sermons, 1 Enoch",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-15T16:08:15.739Z",
-  "updated_at": "2026-05-15T16:31:31.209Z",
+  "updated_at": "2026-05-15T16:36:41.023Z",
   "description": "Add four new public-domain texts to sources/manifest.toml to expand cross-tradition coverage:\n\n1. Plato Symposium — Jowett 1871 (Scribner), https://sacred-texts.com/cla/plato/symposiu.htm, format=html, tradition=platonism (new). Single file ~127KB. The Diotima speech is direct ancestor of Plotinus I.6 (already in corpus) and Bruno's Eroici Furori.\n\n2. Rumi Masnavi Book I — Whinfield 1898, https://sacred-texts.com/isl/masnavi/msn01.htm, format=html, tradition=sufism (new). Single file ~115KB. Whinfield is abridged — note this in source notes. Open question: is Nicholson Book I (1925) US-PD and a better choice? Defer to implementer.\n\n3. Eckhart Sermons (Field) — Field 1909, https://ccel.org/ccel/eckhart/sermons.all.html, format=html, tradition=christian_mysticism (existing). 7 sermons, single page ~115KB. New source domain (CCEL). DEPENDS ON T2 (787681d2) — needs generic_html.py CCEL selector fix before extraction will work cleanly.\n\n4. 1 Enoch (Charles 1917) — R.H. Charles, https://sacred-texts.com/bib/boe/index.htm, format=html_multi, tradition=jewish_mysticism (existing — sits with Zohar/merkabah material rather than coining a singleton 'second_temple_apocalyptic'). 113 files boe000.htm-boe112.htm, strictly contiguous. Charles preserves editorial brackets [[ ]] for Greek-only and [[[[ ]]]] for Ethiopic-only — consider whether chunker handles them or whether to preprocess.\n\nDone contract: all 4 entries appended to manifest.toml, acquire.py run successfully for each, raw/<tradition>/<id>.txt + .meta.toml present for all 4. Verify Eckhart extraction has minimal navigation chrome (depends on T2).",
   "relationships": {
     "children": [
@@ -22,5 +22,11 @@
     "base_branch": "main",
     "started_at": "2026-05-15T16:31:31.209Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "4d8b45bd1941c2869d279f52d9b9487ac670234d",
+    "resolved_at": "2026-05-15T16:36:41.023Z",
+    "resolved_by": "unknown",
+    "note": "All 4 subtasks complete. Phase 1 corpus expansion shipped:\n- Plato Symposium (Jowett 1871) — 117872 chars — new tradition 'platonism'\n- Rumi Masnavi Book I (Whinfield 1898) — 100905 chars — new tradition 'sufism'  \n- Eckhart Sermons (Field 1909, CCEL) — 67556 chars — extends 'christian_mysticism'\n- 1 Enoch (Charles 1917, 115 parts) — 273282 chars — extends 'jewish_mysticism'\n\nTotal ~560KB new corpus material across 2 new + 2 existing tradition buckets."
   }
 }
