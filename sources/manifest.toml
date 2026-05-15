@@ -916,3 +916,18 @@ format = "html"
 license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). The Diotima speech (201d-212c) is the canonical statement of ascent from love of beautiful bodies to the Form of Beauty itself — direct source for Plotinus I.6 (already in corpus) and Bruno's Eroici Furori. Single-file HTML."
+
+
+# ============================================
+# SUFISM (Phase 1 cross-tradition expansion)
+# ============================================
+
+[[source]]
+id = "masnavi-book-1"
+tradition = "sufism"
+label = "The Masnavi, Book I (Rumi)"
+url = "https://sacred-texts.com/isl/masnavi/msn01.htm"
+format = "html"
+license = "public_domain"
+translator = "E.H. Whinfield"
+notes = "Whinfield 1898 — heavily abridged paraphrase. Rumi 13th c. Book I opens with the reed-flute prologue, the foundational Sufi statement of return_to_source. Single-file HTML. NOTE: Nicholson Book I (1925) is US-PD and is the scholarly standard, but only available as archive.org scans requiring OCR; deferred."
