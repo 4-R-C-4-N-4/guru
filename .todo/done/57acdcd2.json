@@ -1,0 +1,28 @@
+{
+  "id": "57acdcd2",
+  "type": "chore",
+  "state": "done",
+  "summary": "Chunk 1 Enoch (Charles 1917) — page-as-chunk over 115 part files",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T17:25:25.063Z",
+  "updated_at": "2026-05-15T17:44:32.224Z",
+  "files": [
+    {
+      "path": "chunking/jewish_mysticism/enoch-charles-1917.toml"
+    }
+  ],
+  "tags": [
+    "chunking",
+    "corpus",
+    "html_multi"
+  ],
+  "description": "Source: raw/jewish_mysticism/enoch-charles-1917-*.txt — 273,282 chars total across 115 part files (format=html_multi, Charles 1917).\n\nAudit findings:\n- Per-file head chrome: every one of the 115 files starts with 'Sacred Texts Bible Apocrypha Index [Previous] Next Buy this Book on Kindle The Book of Enoch , by R.H. Charles, [1917], at sacred-texts.com' (~150 chars × 115 ≈ 17KB pure boilerplate).\n- File mapping: file 01 = title page; files 02-13 = preface + introduction; file 14 = 'CHAPTER X.' (file N ≈ chapter N-4 roughly); each remaining file ≈ one chapter.\n- In-body section markers: 'CHAPTER I.', 'CHAPTER II.', ... — all-caps with period.\n- file 114 = errata.htm (one line: \"Errata page 88: 'astonied'->'astonished'\").\n- file 115 = pageidx.htm (per-page index, pure metadata, low retrieval value).\n- Inline page markers 'p. vii', 'p. 8' scattered through — minor, can leave or strip.\n\nRecommended strategy: page-as-chunk with number_source = 'content' pulling the 'CHAPTER N.' pattern (mirrors the tertium-organum approach from PR #16).\n\npre_strip:\n  - per-file leading 'Sacred Texts Bible Apocrypha Index ... at sacred-texts.com' chrome (applied to each part)\n\nskip_ids:\n  - 'enoch-charles-1917-114' (errata)\n  - 'enoch-charles-1917-115' (page index)\n\nOPEN: the sacred-texts per-page crumb pattern is similar to the existing pattern in sacred_texts profile in chunk_init.py — verify it already covers the Enoch crumb or extend if not.",
+  "resolution": {
+    "commit": "548eee7ad4c82ab1300cf0f1cc6922dc358ac1e9",
+    "resolved_at": "2026-05-15T17:44:32.224Z",
+    "resolved_by": "unknown",
+    "note": "Wrote chunking/jewish_mysticism/enoch-charles-1917.toml with page-as-chunk strategy. number_source='content' with number_pattern='CHAPTER\\s+([IVXLCDM]+)\\.?\\s' — the trailing period had to be made optional because Charles 1917 is inconsistent (file 32 / CHAPTER XXVIII lacks it). Recovery: 93 → 120 unique chapter labels. pre_strip removes the per-file 'Sacred Texts Bible Apocrypha Index ... at sacred-texts.com' crumb (~17KB total) and trailing 'Next:' nav. 141 chunks (61810 tokens, avg 438/chunk). Front matter (file 01-04) and back matter (errata 114, pageidx 115) fall through to 'Page {n}' label as designed — kept rather than skipped since chunk.py has no skip_ids support and the 2 extra noise chunks are tiny."
+  }
+}
