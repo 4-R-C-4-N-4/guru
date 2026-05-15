@@ -1,0 +1,24 @@
+{
+  "id": "d31b348a",
+  "type": "chore",
+  "state": "open",
+  "summary": "Add 'book-content' and 'bbook' to generic_html.py content_classes (line 112) + regression-test against one existing html source",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T16:08:51.590Z",
+  "updated_at": "2026-05-15T16:09:20.980Z",
+  "files": [
+    {
+      "path": "scripts/downloaders/generic_html.py",
+      "lines": [
+        112,
+        112
+      ]
+    }
+  ],
+  "relationships": {
+    "parent": "787681d2"
+  },
+  "description": "Edit scripts/downloaders/generic_html.py line 112:\n\nOLD: content_classes = [\"content\", \"main-content\", \"text\", \"body\", \"article-content\"]\nNEW: content_classes = [\"content\", \"main-content\", \"text\", \"body\", \"article-content\", \"book-content\", \"bbook\"]\n\nRegression test: re-run acquire.py for one existing source that uses format=html (e.g., a Hermeticum tractate or gnosis Gospel of Thomas). Confirm raw/ output is byte-identical (sha256 unchanged in .meta.toml) — proves the new selectors don't fire on existing content.\n\nThen run acquire.py for the new Eckhart source (T1.eckhart, f1d19981) and inspect raw output to confirm CCEL chrome is excluded and only sermon text is extracted.\n\nDone contract: file edited, regression test passes, Eckhart extraction looks clean."
+}

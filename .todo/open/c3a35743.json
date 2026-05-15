@@ -1,0 +1,15 @@
+{
+  "id": "c3a35743",
+  "type": "chore",
+  "state": "open",
+  "summary": "Sanity-grep raw/ for 'book-content' and 'bbook' class collisions before editing selectors",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T16:08:51.555Z",
+  "updated_at": "2026-05-15T16:09:20.950Z",
+  "relationships": {
+    "parent": "787681d2"
+  },
+  "description": "Before editing generic_html.py:\n\ngrep -r 'book-content\\|\"bbook\"\\|class=\"bbook' raw/ 2>/dev/null | head\n\nConfirm neither class appears in any existing raw/ source's HTML capture. If 'book-content' appears in unrelated sources (it's a fairly generic name), the simple selector addition risks misclassifying their content. 'bbook' is CCEL-specific and should be safe.\n\nIf collisions found: scope the selector match more narrowly (e.g., only when host is ccel.org) before proceeding to c2_2."
+}

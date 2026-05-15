@@ -1,0 +1,23 @@
+{
+  "id": "787681d2",
+  "type": "chore",
+  "state": "open",
+  "summary": "Extend generic_html.py to recognize CCEL content containers",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-15T16:08:15.779Z",
+  "updated_at": "2026-05-15T16:08:51.590Z",
+  "files": [
+    {
+      "path": "scripts/downloaders/generic_html.py"
+    }
+  ],
+  "description": "CCEL (ccel.org) uses <div class=\"book-content\"> as its primary content container and <div class=\"bbook\"> as a secondary wrapper. Neither class is in generic_html.py's content_classes selector list (line 112), so extraction falls through to soup.body.get_text() which pulls in CCEL's full navigation chrome (header, sidebar, footnote panel — none of which are tagged <nav>/<aside>).\n\nConcrete fix in scripts/downloaders/generic_html.py line 112:\n\n  content_classes = [\"content\", \"main-content\", \"text\", \"body\", \"article-content\"]\n\nbecomes:\n\n  content_classes = [\"content\", \"main-content\", \"text\", \"body\", \"article-content\", \"book-content\", \"bbook\"]\n\nPrecondition: sanity-grep raw/ to confirm no existing source HTML has class='book-content' or class='bbook' that we'd start picking up unintentionally. 'bbook' is CCEL-specific enough to be safe; 'book-content' is generic enough to want verification.\n\nDone contract: selectors added, grep shows no collisions in existing raw/, re-running acquire.py for one existing html source (e.g., a Hermeticum tractate) produces byte-identical raw output (no regression).\n\nRationale for editing generic_html.py rather than forking a ccel.py downloader: CCEL has no different control flow (single-page fetch, no index walking), so the fix is purely a selector-list addition. gnosis_org.py is arguably already a YAGNI artifact in the codebase; not worth repeating the pattern. If CCEL later needs pagination/footnote handling for longer works, fork to ccel.py at that point with a real reason.",
+  "relationships": {
+    "children": [
+      "c3a35743",
+      "d31b348a"
+    ]
+  }
+}
