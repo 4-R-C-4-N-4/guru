@@ -1,0 +1,39 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# Field's 7 sermons + PREFACE on a single CCEL page. Section markers in
+# the body are 'PREFACE' (preceded by 2 spaces or the publisher imprint)
+# and Roman numeral + uppercase title for each sermon. Sermon IV's title
+# is 'TRUE HEARING' (no 'THE'), so the regex accepts either 'THE ' or a
+# 4+ all-caps word after the numeral. The PREFACE alternative omits the
+# lookahead since it's followed by a quoted lowercase opener ('" Meister
+# Eckhart ,"...').
+[chunking]
+strategy = "regex-section-split"
+pattern = '\b(PREFACE|(?:I|II|III|IV|V|VI|VII)(?=\s+(?:THE\s+|[A-Z]{4,})))\b'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # CCEL print-edition page markers ('2-3', '4-5', ..., '64-65') scatter
+    # throughout the body. Scripture refs use colons ('Luke 1:28'), so the
+    # \d+-\d+ shape is safe to strip without collateral damage.
+    "\\b\\d+-\\d+\\b",
+    # Leading front-matter through to the PREFACE boundary. Without this,
+    # the title page ('HEART AND LIFE BOOKLETS. No. 22 MEISTER ECKHART'S
+    # SERMONS FIRST TIME TRANSLATED INTO ENGLISH BY CLAUD FIELD, M.A.
+    # LONDON: H. R. ALLENSON, LTD. RACQUET COURT, 114 FLEET STREET, E.C.')
+    # becomes the pre-PREFACE prologue and is discarded by the splitter —
+    # which is what we want, but strip it explicitly so any leakage is
+    # contained.
+    "^.*?(?=\\s+PREFACE)",
+    # Trailing scripture index + print-edition page index — pure metadata.
+    "Indexes\\s+Index of Scripture References.*$",
+    # 'ECKHART'S SERMONS' connector between PREFACE and Sermon I would
+    # otherwise leak into the PREFACE chunk's tail.
+    "ECKHART['’]S SERMONS",
+]
+
+[metadata]
+tradition = "christian_mysticism"
+text_name = "Meister Eckhart's Sermons (Field translation)"
+translator = "Claud Field"
+sections_format = "section"

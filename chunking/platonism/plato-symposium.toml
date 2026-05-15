@@ -1,0 +1,19 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# Jowett's continuous narrative prose (no speech headings, no Stephanus
+# pagination), so paragraph-group is appropriate. Pre_strip removes the
+# sacred-texts crumb and the '-THE END-' trailer.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+pre_strip_patterns = [
+    "^Sacred Texts Classics Plato\\s+",
+    "-THE END-\\s*$",
+]
+
+[metadata]
+tradition = "platonism"
+text_name = "Plato: Symposium"
+translator = "Benjamin Jowett"
+sections_format = "section"

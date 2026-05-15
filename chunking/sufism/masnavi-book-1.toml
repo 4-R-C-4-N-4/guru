@@ -1,0 +1,21 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# Whinfield's edition with clean PROLOGUE / STORY I .. STORY XIV section
+# markers in the body. pre_strip removes the sacred-texts crumb and the
+# 'Next: The Masnavi Book II' trailer. The *NOTES footnote block at the
+# end stays attached to the final STORY chunk.
+[chunking]
+strategy = "regex-section-split"
+pattern = '\b(PROLOGUE|STORY\s+[IVX]+)\.\s*'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    "^Sacred Texts Islam Index Next Buy this Book at Amazon\\.com\\s+",
+    "Next:\\s+The Masnavi Book II\\s*$",
+]
+
+[metadata]
+tradition = "sufism"
+text_name = "The Masnavi, Book I (Rumi)"
+translator = "E.H. Whinfield"
+sections_format = "section"

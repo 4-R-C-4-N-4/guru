@@ -1,0 +1,33 @@
+# Generated scaffold from scripts/chunk_init.py — strategy hand-tuned for
+# the Charles 1917 multi-page Enoch. Each of the 113 numbered files maps
+# to one chapter (CHAPTER I .. CXVIII Roman) plus a handful of front-
+# matter pages. number_source = 'content' pulls the Roman numeral from
+# the in-body 'CHAPTER N.' marker (mirroring the tertium-organum pattern
+# in PR #16). Pages without a CHAPTER marker (title page, preface,
+# introduction essay, errata, page-index) fall back to 'Page {n}' using
+# the filename ordinal.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+section_label_format_no_number_match = "Page {n}"
+number_source = "content"
+# Roman numeral after CHAPTER, anchored case-sensitive so back-index
+# entries like 'Chapter X' (mixed case) don't masquerade as chapter
+# headings. The trailing period is optional — Charles 1917 has it on
+# most chapters but a few (e.g. CHAPTER XXVIII in file 32) lack it.
+number_pattern = 'CHAPTER\s+([IVXLCDM]+)\.?\s'
+max_tokens = 800
+pre_strip_patterns = [
+    # Per-page sacred-texts crumb at the top of every one of the 115 part
+    # files (~150 chars × 115 ≈ 17KB of pure chrome). Variants seen:
+    # 'Index Next', 'Index Previous Next', 'Index Previous' (last page).
+    "^Sacred Texts Bible Apocrypha Index(?:\\s+(?:Previous|Next))+\\s+Buy this Book on Kindle.*?at sacred-texts\\.com\\s*",
+    # Trailing 'Next:' / 'Previous:' nav at the bottom of pages.
+    "Next:[^\\n]*$",
+]
+
+[metadata]
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+translator = "R.H. Charles"
+sections_format = "chapter"
