@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.eckhart-sermons-field.008"
+tradition = "christian_mysticism"
+text_name = "Meister Eckhart's Sermons (Field translation)"
+section = "IIc"
+translator = "Claud Field"
+source_url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+token_count = 117
+
+[content]
+body = "No man desires anything so eagerly as God desires to bring men to the knowledge of Himself.\n\nGod is always ready, but we are very unready.\n\nGod is near us, but we are far from Him.\n\nGod is within, and we are without.\n\nGod is friendly; we are estranged.\n\nThe prophet saith, “God leadeth the righteous by a narrow path into a broad and wide place, that is into the true freedom of those who have become one spirit with God.” May God help us all to follow Him that He may bring us to Himself.\n\nAmen."
+
+[annotations]
+concepts = []
+related_chunks = []

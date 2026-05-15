@@ -1,0 +1,15 @@
+[chunk]
+id = "sufism.masnavi-book-1.002"
+tradition = "sufism"
+text_name = "The Masnavi, Book I (Rumi)"
+section = "PROLOGUEb"
+translator = "E.H. Whinfield"
+source_url = "https://sacred-texts.com/isl/masnavi/msn01.htm"
+token_count = 253
+
+[content]
+body = "Knowest thou why thy mirror reflects not?\n\nBecause the rust has not been scoured from its face.\n\nIf it were purified from all rust and defilement, It would reflect the shining of the SUN Of GOD.6 O friends, ye have now heard this tale, Which sets forth the very essence of my case.\n\n*NOTES: 1.\n\nLove signifies the strong attraction that draws all creatures back to reunion with their Creator.\n\n2.\n\nSelf-annihilation leads to eternal life in God the universal Noumenon, by whom all phenomena subsist.\n\nSee Gulshan i Raz, I.\n\n400.\n\n3.\n\n\"Raw\" and \"Ripe\" are terms for \"Men of externals\" and \"Men of heart\" or Mystics.\n\n4.\n\nAlluding to the giving of the law on Mount Sinai.\n\nKoran vii.\n\n139.\n\n5.\n\nAll phenomenal existences (man included) are but \"veils\" obscuring the face of the Divine Noumenon, the only real existence, and the moment His sustaining presence is withdrawn they at once relapse into their original nothingness.\n\nSee Gulshan i Raz, I.\n\n165.\n\n6.\n\nSo Bernard of Clairvaux.\n\nSee Gulshan i Raz, I.\n\n435."
+
+[annotations]
+concepts = []
+related_chunks = []

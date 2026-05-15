@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.063"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XLIV"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 34
+
+[content]
+body = "CHAPTER XLIV. Also another phenomenon I saw in regard to the lightnings: how some of the stars arise and become lightnings and cannot part with their new form."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.123"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XCI"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 274
+
+[content]
+body = "XCI. 12.-17. The Last Three Weeks . CHAPTER XCI. 12. And after that there shall be another, the eighth week, that of righteousness, And a sword shall be given to it that a righteous judgement may be executed on the oppressors, And sinners shall be delivered into the hands of the righteous. p. 134 13 And at its close they shall acquire houses through their righteousness, And a house shall be built for the Great King in glory for evermore, 14 d . And all mankind shall look to the path of uprightness. 14 a . And after that, in the ninth week, the righteous judgement shall be revealed to the whole world, b . And all the works of the godless shall vanish from all the earth, c . And the world shall be written down for destruction. 15. And after this, in the tenth week in the seventh part, There shall be the great eternal judgement, In which He will execute vengeance amongst the angels. 16. And the first heaven shall depart and pass away, And a new heaven shall appear, And all the powers of the heavens shall give sevenfold light. 17. And after that there will be many weeks without number for ever, And all shall be in goodness and righteousness, And sin shall no more be mentioned for ever."
+
+[annotations]
+concepts = []
+related_chunks = []

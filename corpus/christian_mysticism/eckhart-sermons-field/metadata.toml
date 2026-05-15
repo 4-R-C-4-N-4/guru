@@ -1,0 +1,7 @@
+tradition = "christian_mysticism"
+text_id = "eckhart-sermons-field"
+text_name = "Meister Eckhart's Sermons (Field translation)"
+translator = "Claud Field"
+source_url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+sections_format = "section"
+chunk_count = 23

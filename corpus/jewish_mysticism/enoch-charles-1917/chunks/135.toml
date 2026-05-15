@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.135"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter CV"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 104
+
+[content]
+body = "CV. God and the Messiah to dwell with Man . CHAPTER CV. 1. In those days the Lord bade (them) to summon and testify to the children of earth concerning their wisdom: Show (it) unto them; for ye are their guides, and a recompense over the whole earth. 2. For I and My son will be united with them for ever in the paths of uprightness in their lives; and ye shall have peace: rejoice, ye children of uprightness. Amen."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.eckhart-sermons-field.015"
+tradition = "christian_mysticism"
+text_name = "Meister Eckhart's Sermons (Field translation)"
+section = "Vc"
+translator = "Claud Field"
+source_url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+token_count = 360
+
+[content]
+body = "Thus happens it to the noble soul which goes to God to school, and learns there what God is in His essence, and what He is in the Trinity, and what He is in man, and what is most acceptable to Him.\n\nSt Augustine saith that the righteousness of God in the Godhead and in the Trinity and in all creatures is the source of the chief joy which is in heaven.\n\nGod in human nature is a lamp of living light, and “the light shineth in darkness and the darkness comprehendeth it not.” The darkness must ever more flee the light, as the night flees day.\n\nThus the soul learns to know God’s will.\n\nSt Paul saith, “This is God’s will, our sanctification.” And this is our sanctification, to know what we were before time; what we are in time, and what we shall be after time.\n\nThus the soul loses itself in these three, and recketh naught of the body, till it comes to it in the temple, and obeys it without murmuring.\n\nThe Father is a revelation of the Godhead, the Son is an image and countenance of the Father, and the Holy Ghost is an effulgence of that countenance, and a mutual love between Them, and these properties They have always possessed in Themselves.\n\nThe Three Persons have stooped out of pity down to human nature, and the Son became man, and was the most despised man on the earth, and suffered pain at the hands of the  creatures whom He Himself created with the Father, through Whose will He became man.\n\nThus was Christ till His death, and when He rose from the dead then was seen the most despised of all men united with the Godhead in the Person of Christ."
+
+[annotations]
+concepts = []
+related_chunks = []

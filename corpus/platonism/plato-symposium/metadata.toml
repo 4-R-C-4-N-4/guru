@@ -1,0 +1,7 @@
+tradition = "platonism"
+text_id = "plato-symposium"
+text_name = "Plato: Symposium"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/symposiu.htm"
+sections_format = "section"
+chunk_count = 36

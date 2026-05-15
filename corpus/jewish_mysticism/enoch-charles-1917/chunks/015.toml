@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.015"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Page 3 (part 13)"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 239
+
+[content]
+body = "42-49 occurs in a Greek Vatican MS.\n\n(No.\n\n1809); there are also a few quotations in early Greek ecclesiastical writings; and i.\n\n9, v.\n\n4.\n\nxxvii.\n\n2 are quoted in the Epistle of St.\n\nJude 14, 15.\n\nxix:1 Op.\n\ncit.\n\n, p.\n\n27.\n\nxix:2 It is a great pity that one system of chapter-enumeration runs through the whole volume; if each separate book began with chap.\n\ni.\n\nit would be much better.\n\nFor obvious reasons this cannot be done here; see Editors' General Preface.\n\nxxiii:1 See also lxxxii.\n\n4-6.\n\nit.\n\nxxiii:2 Charles, The Book of Enoch , p.\n\n147 (1912).\n\nxxiv:1 Op.\n\ncit.\n\np.\n\n150.\n\nxxiv:2 for the points of difference between the Pharisees and Sadducees see the present writer's The Books of the Apocrypha, their Origin, Teaching, and Contents , chap.\n\nvii.\n\n(1914).\n\nxxvi:1 Op.\n\ncit.\n\n, p.\n\n218."
+
+[annotations]
+concepts = []
+related_chunks = []

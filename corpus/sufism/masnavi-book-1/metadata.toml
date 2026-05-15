@@ -1,0 +1,7 @@
+tradition = "sufism"
+text_id = "masnavi-book-1"
+text_name = "The Masnavi, Book I (Rumi)"
+translator = "E.H. Whinfield"
+source_url = "https://sacred-texts.com/isl/masnavi/msn01.htm"
+sections_format = "section"
+chunk_count = 37

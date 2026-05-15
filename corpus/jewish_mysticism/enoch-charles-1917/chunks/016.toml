@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.016"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Page 4"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 277
+
+[content]
+body = "p. xxx ABBREVIATIONS, BRACKETS, AND SYMBOLS SPECIALLY USED IN THE TRANSLATION OF 1 ENOCH E denotes the Ethiopic Version. G s denotes the fragments of the Greek Version preserved In Syncellus: in the case of 8 b -9 b there are two forms of the text, G s1 G s2 . G g denotes the large fragment of the Greek Version discovered at Akhmîm, and deposited in the Gizeh Museum, Cairo. The following brackets are used in the translation of 1 Enoch: ⌈ ⌉ . The use of these brackets means that the words so enclosed are found in G g but not In E. ⌈⌈ ⌉⌉ . The use of these brackets means that the words so enclosed are found in E but not in G g or G s . 〈 〉 . The use of these brackets means that the words so enclosed are restored. [ ] The use of these brackets means that the words so enclosed are interpolations. ( ). The use of these brackets means that the words so enclosed are supplied by the editor. The use of thick type denotes that the words so printed are emended. † † corruption in the text. . . . = some words which have been lost."
+
+[annotations]
+concepts = []
+related_chunks = []
