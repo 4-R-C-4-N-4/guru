@@ -173,7 +173,9 @@ def upsert_staged_tag(
     tag: dict,
     model: str,
     prompt_version: str = PROMPT_VERSION,
-) -> None:
+    respect_reviewed: bool = False,
+    supersede_pending: bool = False,
+) -> str:
     """Insert a staged_tag with provenance.
 
     With the partial UNIQUE on (chunk_id, concept_id, model, prompt_version)
@@ -182,8 +184,49 @@ def upsert_staged_tag(
     under a *different* model/prompt_version produces a separate row,
     distinguishable by provenance — that's intentional, the bench
     harness/training-data export filters on these columns.
+
+    Policy flags for re-runs against an expanded taxonomy:
+      respect_reviewed — if a prior row for (chunk_id, concept_id, model)
+        has status != 'pending', skip this insert. The human verdict is
+        authoritative; the teacher's alternate score on the same cell is
+        noise. Scope is same-model: a different model deserves a fresh look.
+      supersede_pending — if a prior pending row exists for
+        (chunk_id, concept_id, model), delete it inside the same
+        transaction before inserting. Latest-pending wins; the reviewer
+        never sees two competing pending rows for the same cell.
+
+    Returns one of:
+      'skipped_reviewed' — respect_reviewed matched a prior non-pending row
+      'superseded'       — supersede_pending deleted a prior pending row
+                           and the new row was inserted
+      'inserted'         — fresh insert, no prior pending row
+      'conflict'         — ON CONFLICT DO NOTHING swallowed the insert
+                           (same provenance, pending, not superseded)
     """
-    conn.execute(
+    concept_id = tag["concept_id"]
+
+    if respect_reviewed:
+        reviewed = conn.execute(
+            """SELECT 1 FROM staged_tags
+                   WHERE chunk_id = ? AND concept_id = ? AND model = ?
+                     AND status != 'pending'
+                   LIMIT 1""",
+            (chunk_id, concept_id, model),
+        ).fetchone()
+        if reviewed is not None:
+            return "skipped_reviewed"
+
+    superseded = False
+    if supersede_pending:
+        cur = conn.execute(
+            """DELETE FROM staged_tags
+                   WHERE chunk_id = ? AND concept_id = ? AND model = ?
+                     AND status = 'pending'""",
+            (chunk_id, concept_id, model),
+        )
+        superseded = cur.rowcount > 0
+
+    cur = conn.execute(
         """INSERT INTO staged_tags
                (chunk_id, concept_id, score, justification, is_new_concept,
                 new_concept_def, model, prompt_version)
@@ -191,7 +234,7 @@ def upsert_staged_tag(
            ON CONFLICT DO NOTHING""",
         (
             chunk_id,
-            tag["concept_id"],
+            concept_id,
             tag["score"],
             tag["justification"],
             1 if tag["is_new_concept"] else 0,
@@ -200,6 +243,9 @@ def upsert_staged_tag(
             prompt_version,
         ),
     )
+    if cur.rowcount == 0:
+        return "conflict"
+    return "superseded" if superseded else "inserted"
 
 
 def mark_complete(conn: sqlite3.Connection, chunk_id: str) -> None:
@@ -219,6 +265,8 @@ def run_tagging(
     text_id: str | None,
     delay: float,
     max_body_chars: int | None = None,
+    respect_reviewed: bool = True,
+    supersede_pending: bool = True,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
@@ -230,8 +278,12 @@ def run_tagging(
 
     chunks = get_chunks(conn, tradition, text_id, resume)
     logger.info(f"Tagging {len(chunks)} chunks with {provider_name}/{model} ...")
+    logger.info(
+        f"  respect_reviewed={respect_reviewed}  supersede_pending={supersede_pending}"
+    )
 
-    tagged = skipped = errors = 0
+    tagged = errors = 0
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
 
     for i, chunk in enumerate(chunks):
         chunk_id = chunk["id"]
@@ -254,7 +306,12 @@ def run_tagging(
             tags = parse_tags(raw)
 
             for tag in tags:
-                upsert_staged_tag(conn, chunk_id, tag, model=model)
+                outcome = upsert_staged_tag(
+                    conn, chunk_id, tag, model=model,
+                    respect_reviewed=respect_reviewed,
+                    supersede_pending=supersede_pending,
+                )
+                outcomes[outcome] = outcomes.get(outcome, 0) + 1
 
             mark_complete(conn, chunk_id)
             conn.commit()
@@ -272,7 +329,13 @@ def run_tagging(
             logger.info(f"Batch {(i+1)//batch_size} complete ({tagged} tagged, {errors} errors)")
 
     conn.close()
-    print(f"\nDone: {tagged} chunks tagged, {skipped} skipped, {errors} errors")
+    print(
+        f"\nDone: {tagged} chunks tagged, {errors} errors  |  "
+        f"rows: inserted={outcomes['inserted']} "
+        f"superseded={outcomes['superseded']} "
+        f"skipped_reviewed={outcomes['skipped_reviewed']} "
+        f"conflict={outcomes['conflict']}"
+    )
 
 
 def main() -> None:
@@ -291,6 +354,19 @@ def main() -> None:
                              "0 (default) = unlimited; the chunker is the source "
                              "of truth for chunk size. Set positive only if "
                              "running against a small-context model.")
+    parser.add_argument("--respect-reviewed", action=argparse.BooleanOptionalAction,
+                        default=True,
+                        help="Skip inserting a staged_tag row if a prior row for "
+                             "(chunk_id, concept_id, model) has been adjudicated "
+                             "(status != 'pending'). Same-model only; different "
+                             "models always emit. Default: on. Pass "
+                             "--no-respect-reviewed to disable.")
+    parser.add_argument("--supersede-pending", action=argparse.BooleanOptionalAction,
+                        default=True,
+                        help="Before inserting a new pending row for "
+                             "(chunk_id, concept_id, model), delete any existing "
+                             "pending row for the same triple. Latest-pending wins. "
+                             "Default: on. Pass --no-supersede-pending to disable.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -310,6 +386,8 @@ def main() -> None:
         text_id=args.text,
         delay=args.delay,
         max_body_chars=args.max_body_chars or None,
+        respect_reviewed=args.respect_reviewed,
+        supersede_pending=args.supersede_pending,
     )
 
 

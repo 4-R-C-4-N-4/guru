@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.048"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XXIX"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 74
+
+[content]
+body = "CHAPTER XXIX. 1. And thence I went to another place in the desert, and approached to the east of this mountain range. 2. And ⌈⌈ there ⌉⌉ I saw aromatic trees exhaling the fragrance of frankincense and myrrh, and the trees also were similar to the almond tree."
+
+[annotations]
+concepts = []
+related_chunks = []

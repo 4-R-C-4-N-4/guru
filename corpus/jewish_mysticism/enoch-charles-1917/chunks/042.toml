@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.042"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XXIII"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 184
+
+[content]
+body = "p. 50 XXIII. The Fire that deals with the Luminaries of Heaven . CHAPTER XXIII. 1. From thence I went to another place to the west of the ends of the earth. 2. And I saw a ⌈⌈ burning ⌉⌉ fire which ran without resting, and paused not from its course day or night but (ran) regularly. 3. And I asked saying: 'What is this which rests not?' 4. Then Raguel, one of the holy angels who was with me, answered me ⌈⌈ and said unto me ⌉⌉ : 'This course ⌈ of fire ⌉ ⌈⌈ which thou hast seen ⌉⌉ is the fire in the west which †persecutes† all the luminaries of heaven.'"
+
+[annotations]
+concepts = []
+related_chunks = []

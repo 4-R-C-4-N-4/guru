@@ -1,0 +1,7 @@
+tradition = "jewish_mysticism"
+text_id = "enoch-charles-1917"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+sections_format = "chapter"
+chunk_count = 141

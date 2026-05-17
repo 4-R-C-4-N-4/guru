@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.138"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter CVII"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 154
+
+[content]
+body = "CHAPTER CVII. 1. And I saw written on them that generation upon generation shall transgress, till a generation of righteousness arises, and transgression is destroyed and sin passes away from the earth, and all manner p. 153 of good comes upon it. 2. And now, my son, go and make known to thy son Lamech that this son, which has been born, is in truth his son, and that (this) is no lie.' 3. And when Methuselah had heard the words of his father Enoch--for he had shown to him everything in secret--he returned and showed (them) to him and called the name of that son Noah; for he will comfort the earth after all the destruction."
+
+[annotations]
+concepts = []
+related_chunks = []

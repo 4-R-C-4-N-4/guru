@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.049"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XXX"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 85
+
+[content]
+body = "CHAPTER XXX. 1 .And beyond these, I went afar to the east, and I saw another place, a valley (full) of water. 2. And ⌈ therein there was ⌉ a tree, the colour (?) of fragrant trees such as the mastic. 3. And on the sides of those valleys I saw fragrant cinnamon. And beyond these I proceeded to the east."
+
+[annotations]
+concepts = []
+related_chunks = []

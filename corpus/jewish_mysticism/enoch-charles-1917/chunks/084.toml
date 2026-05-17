@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.084"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter LXIV"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 80
+
+[content]
+body = "p. 85 LXIV. Vision of the fallen Angels in the Place of Punishment . CHAPTER LXIV. 1. And other forms I saw hidden in that place. 2. I heard the voice of the angel saying: 'These are the angels who descended to the earth, and revealed what was hidden to the children of men and seduced the children of men into committing sin.'"
+
+[annotations]
+concepts = []
+related_chunks = []

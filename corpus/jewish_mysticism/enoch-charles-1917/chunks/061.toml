@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.061"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XLII"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 122
+
+[content]
+body = "XLII. The Dwelling-places of Wisdom and of Unrighteousness . CHAPTER XLII. 1. Wisdom found no place where she might dwell; Then a dwelling-place was assigned her in the heavens. 2 Wisdom went forth to make her dwelling among the children of men, And found no dwelling-place: Wisdom returned to her place, And took her seat among the angels. 3 And unrighteousness went forth from her chambers: Whom she sought not she found, And dwelt with them, p. 62 As rain in a desert And dew on a thirsty land."
+
+[annotations]
+concepts = []
+related_chunks = []

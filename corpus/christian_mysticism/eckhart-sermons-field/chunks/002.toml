@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.eckhart-sermons-field.002"
+tradition = "christian_mysticism"
+text_name = "Meister Eckhart's Sermons (Field translation)"
+section = "PREFACEb"
+translator = "Claud Field"
+source_url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+token_count = 30
+
+[content]
+body = "Note .—The best account of Eckhart in English is probably to be found in Vaughan’s “Hours with the Mystics,” vol.\n\ni."
+
+[annotations]
+concepts = []
+related_chunks = []

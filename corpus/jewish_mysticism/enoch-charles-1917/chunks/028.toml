@@ -1,0 +1,15 @@
+[chunk]
+id = "jewish_mysticism.enoch-charles-1917.028"
+tradition = "jewish_mysticism"
+text_name = "The Book of Enoch (1 Enoch, Charles translation)"
+section = "Chapter XI"
+translator = "R.H. Charles"
+source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
+token_count = 76
+
+[content]
+body = "CHAPTER XI. 1. And in those days I will open the store chambers of blessing which are in the heaven, so as to send them down ⌈ upon the earth ⌉ over the work and labour of the children of men. 2. And truth and peace shall be associated together throughout all the days of the world and throughout all the generations of men .'"
+
+[annotations]
+concepts = []
+related_chunks = []

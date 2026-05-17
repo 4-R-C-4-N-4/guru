@@ -1,0 +1,15 @@
+[chunk]
+id = "platonism.plato-symposium.036"
+tradition = "platonism"
+text_name = "Plato: Symposium"
+section = "Section 1"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/symposiu.htm"
+token_count = 341
+
+[content]
+body = "Agathon arose in order that he might take his place on the couch by Socrates, when suddenly a band of revellers entered, and spoiled the order of the banquet.\n\nSome one who was going out having left the door open, they had found their way in, and made themselves at home; great confusion ensued, and every one was compelled to drink large quantities of wine.\n\nAristodemus said that Eryximachus, Phaedrus, and others went away-he himself fell asleep, and as the nights were long took a good rest: he was awakened towards daybreak by a crowing of cocks, and when he awoke, the others were either asleep, or had gone away; there remained only Socrates, Aristophanes, and Agathon, who were drinking out of a large goblet which they passed round, and Socrates was discoursing to them.\n\nAristodemus was only half awake, and he did not hear the beginning of the discourse; the chief thing which he remembered was Socrates compelling the other two to acknowledge that the genius of comedy was the same with that of tragedy, and that the true artist in tragedy was an artist in comedy also.\n\nTo this they were constrained to assent, being drowsy, and not quite following the argument.\n\nAnd first of all Aristophanes dropped off, then, when the day was already dawning, Agathon.\n\nSocrates, having laid them to sleep, rose to depart; Aristodemus, as his manner was, following him.\n\nAt the Lyceum he took a bath, and passed the day as usual.\n\nIn the evening he retired to rest at his own home."
+
+[annotations]
+concepts = []
+related_chunks = []

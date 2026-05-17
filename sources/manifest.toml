@@ -901,3 +901,63 @@ notes = "Second part of Williams' translation, London 1889. Project Gutenberg eb
 # 7. Orphic Argonautica (Taylor translation)
 #    Available on sacred-texts but narrative-heavy rather than
 #    conceptually dense. Defer unless corpus becomes narrative-focused.
+
+
+# ============================================
+# PLATONISM (Phase 1 cross-tradition expansion)
+# ============================================
+
+[[source]]
+id = "plato-symposium"
+tradition = "platonism"
+label = "Plato: Symposium"
+url = "https://sacred-texts.com/cla/plato/symposiu.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The Diotima speech (201d-212c) is the canonical statement of ascent from love of beautiful bodies to the Form of Beauty itself — direct source for Plotinus I.6 (already in corpus) and Bruno's Eroici Furori. Single-file HTML."
+
+
+# ============================================
+# SUFISM (Phase 1 cross-tradition expansion)
+# ============================================
+
+[[source]]
+id = "masnavi-book-1"
+tradition = "sufism"
+label = "The Masnavi, Book I (Rumi)"
+url = "https://sacred-texts.com/isl/masnavi/msn01.htm"
+format = "html"
+license = "public_domain"
+translator = "E.H. Whinfield"
+notes = "Whinfield 1898 — heavily abridged paraphrase. Rumi 13th c. Book I opens with the reed-flute prologue, the foundational Sufi statement of return_to_source. Single-file HTML. NOTE: Nicholson Book I (1925) is US-PD and is the scholarly standard, but only available as archive.org scans requiring OCR; deferred."
+
+
+# ============================================
+# CCEL (Phase 1 — Eckhart only for now)
+# ============================================
+
+[[source]]
+id = "eckhart-sermons-field"
+tradition = "christian_mysticism"
+label = "Meister Eckhart's Sermons (Field translation)"
+url = "https://ccel.org/ccel/eckhart/sermons.all.html"
+format = "html"
+license = "public_domain"
+translator = "Claud Field"
+notes = "Field 1909 (H.R. Allenson, London), first English translation. Seven sermons aggregated on a single CCEL page. Funkelein (spark of the soul) doctrine — connects to Boehme inner-light material already in corpus."
+
+
+# ============================================
+# SECOND TEMPLE / JEWISH PSEUDEPIGRAPHA (Phase 1)
+# ============================================
+
+[[source]]
+id = "enoch-charles-1917"
+tradition = "jewish_mysticism"
+label = "The Book of Enoch (1 Enoch, Charles translation)"
+url = "https://sacred-texts.com/bib/boe/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "R.H. Charles"
+notes = "Charles 1917. 113 chapter files boe000.htm-boe112.htm, contiguous sequential numbering. The Watchers narrative (chs. 1-36) is the proto-Gnostic substrate for archons/emanation_hierarchy material already in corpus. Editorial brackets [[ ]] (Greek-only) and [[[[ ]]]] (Ethiopic-only) preserved in source — treat as text-critical metadata."
