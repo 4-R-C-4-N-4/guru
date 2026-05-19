@@ -24,6 +24,18 @@ mmdc -i docs/concept-hierarchy/schema-diagrams.md \
      -c /tmp/mmdc-config.json \
      -w 2400 -H 1800 --backgroundColor white
 
+# Two post-processing fixes that mmdc cannot do natively:
+#   1. --backgroundColor sets a CSS background; image viewers ignore CSS.
+#      Inject a real <rect> fill so the background is part of the SVG.
+#   2. htmlLabels:false splits each word into its own <tspan> with the
+#      separating space at the start of the next tspan; rsvg-convert and
+#      similar strip leading whitespace from tspan content unless the
+#      parent <text> carries xml:space="preserve".
+for f in docs/concept-hierarchy/img/schema-*.svg; do
+  sed -i 's|\(<svg [^>]*>\)\(<style>\)|\1<rect width="100%" height="100%" fill="white"/>\2|' "$f"
+  sed -i 's|<text |<text xml:space="preserve" |g' "$f"
+done
+
 # Rename the numbered outputs to descriptive names:
 cd docs/concept-hierarchy/img && \
   mv schema-1.svg local-current.svg && \
