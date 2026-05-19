@@ -4,7 +4,33 @@ Visual reference for the two databases in the guru system: the local SQLite (`da
 
 Rendered with Mermaid `erDiagram`. Tables show primary keys (PK), foreign keys (FK), and key columns. Noise columns (`reviewed_at`, `created_at`, `metadata_json`, etc.) are elided to keep the diagrams readable; consult `scripts/schema.sql` and `guru-web/schema/corpus-schema.sql` for the full column lists.
 
-Pre-rendered SVG artifacts live in [`img/`](img/) — [`local-current.svg`](img/local-current.svg), [`local-future.svg`](img/local-future.svg), [`exported-current.svg`](img/exported-current.svg), [`exported-future.svg`](img/exported-future.svg). Regenerate with `mmdc -i docs/concept-hierarchy/schema-diagrams.md -o docs/concept-hierarchy/img/schema.svg` (requires `@mermaid-js/mermaid-cli` on PATH), then rename `schema-{1,2,3,4}.svg` to the descriptive names above.
+Pre-rendered SVG artifacts live in [`img/`](img/) — [`local-current.svg`](img/local-current.svg), [`local-future.svg`](img/local-future.svg), [`exported-current.svg`](img/exported-current.svg), [`exported-future.svg`](img/exported-future.svg).
+
+To regenerate (requires `@mermaid-js/mermaid-cli` on PATH):
+
+```bash
+# Mermaid's default uses <foreignObject> for labels — only browsers render those.
+# Force native <text> elements so the SVG works in image viewers, IDE previews, etc.
+cat > /tmp/mmdc-config.json <<'EOF'
+{
+  "htmlLabels": false,
+  "flowchart": { "htmlLabels": false },
+  "themeVariables": { "fontSize": "16px" }
+}
+EOF
+
+mmdc -i docs/concept-hierarchy/schema-diagrams.md \
+     -o docs/concept-hierarchy/img/schema.svg \
+     -c /tmp/mmdc-config.json \
+     -w 2400 -H 1800 --backgroundColor white
+
+# Rename the numbered outputs to descriptive names:
+cd docs/concept-hierarchy/img && \
+  mv schema-1.svg local-current.svg && \
+  mv schema-2.svg local-future.svg && \
+  mv schema-3.svg exported-current.svg && \
+  mv schema-4.svg exported-future.svg
+```
 
 ---
 
