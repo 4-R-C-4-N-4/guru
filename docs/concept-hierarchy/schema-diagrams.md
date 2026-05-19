@@ -4,6 +4,8 @@ Visual reference for the two databases in the guru system: the local SQLite (`da
 
 Rendered with Mermaid `erDiagram`. Tables show primary keys (PK), foreign keys (FK), and key columns. Noise columns (`reviewed_at`, `created_at`, `metadata_json`, etc.) are elided to keep the diagrams readable; consult `scripts/schema.sql` and `guru-web/schema/corpus-schema.sql` for the full column lists.
 
+Pre-rendered SVG artifacts live in [`img/`](img/) — [`local-current.svg`](img/local-current.svg), [`local-future.svg`](img/local-future.svg), [`exported-current.svg`](img/exported-current.svg), [`exported-future.svg`](img/exported-future.svg). Regenerate with `mmdc -i docs/concept-hierarchy/schema-diagrams.md -o docs/concept-hierarchy/img/schema.svg` (requires `@mermaid-js/mermaid-cli` on PATH), then rename `schema-{1,2,3,4}.svg` to the descriptive names above.
+
 ---
 
 ## 1. Local SQLite — current state
@@ -31,7 +33,7 @@ erDiagram
     }
 
     chunk_embeddings {
-        TEXT chunk_id PK_FK
+        TEXT chunk_id PK, FK
         INTEGER dim
         TEXT model
         BLOB vector "float32 LE"
@@ -70,7 +72,7 @@ erDiagram
     }
 
     tagging_progress {
-        TEXT chunk_id PK_FK
+        TEXT chunk_id PK, FK
         TEXT completed_at
     }
 
@@ -116,7 +118,7 @@ erDiagram
     }
 
     chunk_embeddings {
-        TEXT chunk_id PK_FK
+        TEXT chunk_id PK, FK
         INTEGER dim
         TEXT model
         BLOB vector
@@ -149,7 +151,7 @@ erDiagram
     }
 
     tagging_progress {
-        TEXT chunk_id PK_FK
+        TEXT chunk_id PK, FK
         TEXT completed_at
     }
 
@@ -162,13 +164,13 @@ erDiagram
     }
 
     concept_family_membership {
-        TEXT concept_id PK_FK
-        TEXT family_id PK_FK
+        TEXT concept_id PK, FK
+        TEXT family_id PK, FK
         INTEGER is_primary "1=canonical home, 0=secondary"
     }
 
     concept_aliases {
-        TEXT concept_id PK_FK
+        TEXT concept_id PK, FK
         TEXT alias PK
     }
 
@@ -332,13 +334,13 @@ erDiagram
     }
 
     concept_family_membership {
-        TEXT concept_id PK_FK
-        TEXT family_id PK_FK
+        TEXT concept_id PK, FK
+        TEXT family_id PK, FK
         BOOLEAN is_primary
     }
 
     concept_aliases {
-        TEXT concept_id PK_FK
+        TEXT concept_id PK, FK
         TEXT alias PK
     }
 
