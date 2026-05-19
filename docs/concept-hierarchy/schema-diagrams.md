@@ -1,61 +1,22 @@
 # Schema Diagrams — Local SQLite and Exported Postgres
 
-Visual reference for the two databases in the guru system: the local SQLite (`data/guru.db`) where the pipeline writes, and the exported Postgres on the VPS where guru-web reads. Diagrams are paired before/after the concept-hierarchy migration described in [design.md](design.md).
+Visual reference for the two databases in the guru system: the local SQLite (`data/guru.db`) where the pipeline writes, and the exported Postgres on the VPS where guru-web reads. Diagrams show **the full schema with the concept-hierarchy migration applied** — every existing table is preserved, with the migration's additions flagged "NEW" in the column comments and surfaced in section headers.
 
-Rendered with Mermaid `erDiagram`. Tables show primary keys (PK), foreign keys (FK), and key columns. Noise columns (`reviewed_at`, `created_at`, `metadata_json`, etc.) are elided to keep the diagrams readable; consult `scripts/schema.sql` and `guru-web/schema/corpus-schema.sql` for the full column lists.
+The migration described in [design.md](design.md) is purely additive: three new tables in each database plus one denormalised column on Postgres `concepts`. **No existing table is altered, no row is dropped, no concept ID is renamed.** If the migration were rolled back tomorrow, the un-NEW parts of these diagrams are exactly what would remain.
 
-Pre-rendered SVG artifacts live in [`img/`](img/) — [`local-current.svg`](img/local-current.svg), [`local-future.svg`](img/local-future.svg), [`exported-current.svg`](img/exported-current.svg), [`exported-future.svg`](img/exported-future.svg).
+Rendered with Mermaid `erDiagram`. Noise columns (`reviewed_at`, `created_at`, `metadata_json`, etc.) are elided; consult `scripts/schema.sql` and `guru-web/schema/corpus-schema.sql` for full column lists. Each database is split into topical sub-diagrams to keep individual canvases readable — the dense FK-to-`nodes` topology in SQLite produces an illegible strip when crammed into one image.
 
-To regenerate (requires `@mermaid-js/mermaid-cli` on PATH):
-
-```bash
-# Mermaid's default uses <foreignObject> for labels — only browsers render those.
-# Force native <text> elements so the SVG works in image viewers, IDE previews, etc.
-cat > /tmp/mmdc-config.json <<'EOF'
-{
-  "htmlLabels": false,
-  "flowchart": { "htmlLabels": false },
-  "themeVariables": { "fontSize": "16px" }
-}
-EOF
-
-mmdc -i docs/concept-hierarchy/schema-diagrams.md \
-     -o docs/concept-hierarchy/img/schema.svg \
-     -c /tmp/mmdc-config.json \
-     -w 2400 -H 1800 --backgroundColor white
-
-# Two post-processing fixes that mmdc cannot do natively:
-#   1. --backgroundColor sets a CSS background; image viewers ignore CSS.
-#      Inject a real <rect> fill so the background is part of the SVG.
-#   2. htmlLabels:false splits each word into its own <tspan> with the
-#      separating space at the start of the next tspan; rsvg-convert and
-#      similar strip leading whitespace from tspan content unless the
-#      parent <text> carries xml:space="preserve".
-for f in docs/concept-hierarchy/img/schema-*.svg; do
-  # Use the actual viewBox dimensions, not "100%". The rect lives inside the
-  # SVG's user coordinate system (the viewBox), where "100%" resolves against
-  # the viewport — which strict renderers interpret as zero when the SVG has
-  # no explicit width/height attributes, producing a tiny corner square.
-  vb=$(grep -oE 'viewBox="[^"]+"' "$f" | head -1 | sed 's/viewBox="//;s/"$//')
-  w=$(echo "$vb" | awk '{print $3}')
-  h=$(echo "$vb" | awk '{print $4}')
-  sed -i "s|\(<svg [^>]*>\)\(<style>\)|\1<rect x=\"0\" y=\"0\" width=\"$w\" height=\"$h\" fill=\"white\"/>\2|" "$f"
-  sed -i 's|<text |<text xml:space="preserve" |g' "$f"
-done
-
-# Rename the numbered outputs to descriptive names:
-cd docs/concept-hierarchy/img && \
-  mv schema-1.svg local-current.svg && \
-  mv schema-2.svg local-future.svg && \
-  mv schema-3.svg exported-current.svg && \
-  mv schema-4.svg exported-future.svg
-```
+Pre-rendered SVG artifacts live in [`img/`](img/). Regen recipe at the bottom.
 
 ---
 
-## 1. Local SQLite — current state
+## 1. Local SQLite
 
-The pipeline source-of-truth. Uses a polymorphic `nodes` table (concepts, chunks, traditions all share an ID space) with `edges` between them. Staging tables hold LLM output pending review; bookkeeping table tracks what's been tagged.
+The pipeline source-of-truth. Polymorphic `nodes` table (concepts, chunks, traditions share an ID space), `edges` between them, staging tables for LLM output pending review.
+
+### 1.1 Live graph + bookkeeping (no NEW content — current production)
+
+The persisted state — what the pipeline considers ground truth. Unchanged by the migration.
 
 ```mermaid
 erDiagram
@@ -82,6 +43,70 @@ erDiagram
         INTEGER dim
         TEXT model
         BLOB vector "float32 LE"
+    }
+
+    tagging_progress {
+        TEXT chunk_id PK, FK
+        TEXT completed_at
+    }
+
+    nodes ||--o{ nodes : "tradition_id (self-ref)"
+    nodes ||--o{ edges : "source_id"
+    nodes ||--o{ edges : "target_id"
+    nodes ||--|| chunk_embeddings : "chunk_id"
+    nodes ||--|| tagging_progress : "chunk_id"
+```
+
+### 1.2 Concept hierarchy (entirely NEW — added by the migration)
+
+Three new tables. `nodes` is shown for FK context — its `type='concept'` rows are what `concept_family_membership` and `concept_aliases` reference. None of `nodes`' columns change.
+
+```mermaid
+erDiagram
+    nodes {
+        TEXT id PK
+        TEXT type "concept rows referenced here"
+        TEXT label
+        TEXT definition
+    }
+
+    concept_families {
+        TEXT id PK "NEW — domain or domain.family"
+        TEXT parent_id FK "NEW — NULL for domain rows"
+        TEXT label "NEW"
+        TEXT definition "NEW"
+        TEXT aliases "NEW — JSON array of strings"
+    }
+
+    concept_family_membership {
+        TEXT concept_id PK, FK "NEW"
+        TEXT family_id PK, FK "NEW"
+        INTEGER is_primary "NEW — 1=canonical, 0=secondary"
+    }
+
+    concept_aliases {
+        TEXT concept_id PK, FK "NEW"
+        TEXT alias PK "NEW"
+    }
+
+    concept_families ||--o{ concept_families : "parent_id (self-ref domain→family)"
+    nodes ||--o{ concept_family_membership : "concept_id"
+    concept_families ||--o{ concept_family_membership : "family_id"
+    nodes ||--o{ concept_aliases : "concept_id"
+```
+
+`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`. Reverse-lookup index on `(family_id)` supports "which concepts are in this family." `concept_aliases` indexes `alias` for LIKE matching from the query path.
+
+### 1.3 Pipeline staging (no NEW content — current production)
+
+LLM output pending human review. The review CLI promotes accepted rows into `edges` (tags) or `nodes` (new concepts). Unchanged by the migration.
+
+```mermaid
+erDiagram
+    nodes {
+        TEXT id PK
+        TEXT type "FK target only here"
+        TEXT label
     }
 
     staged_tags {
@@ -116,75 +141,23 @@ erDiagram
         TEXT status
     }
 
-    tagging_progress {
-        TEXT chunk_id PK, FK
-        TEXT completed_at
-    }
-
-    nodes ||--o{ nodes : "tradition_id (self-ref)"
-    nodes ||--o{ edges : "source_id"
-    nodes ||--o{ edges : "target_id"
-    nodes ||--|| chunk_embeddings : "chunk_id"
     nodes ||--o{ staged_tags : "chunk_id"
     nodes ||--o{ staged_edges : "source_chunk"
     nodes ||--o{ staged_edges : "target_chunk"
     nodes ||--o{ staged_concepts : "motivating_chunk"
-    nodes ||--|| tagging_progress : "chunk_id"
 ```
 
-**Reading the model.** `nodes` is the universe of identities. `edges` is the live graph between them — `EXPRESSES` for chunk→concept tags, `PARALLELS` / `CONTRASTS` for cross-tradition concept relationships, `BELONGS_TO` for chunk→tradition membership, `DERIVES_FROM` for derivation chains. Everything in the `staged_*` family is LLM output pending human review; the review CLI promotes accepted rows into `edges` (for tags) or into `nodes` (for new concepts).
-
-The taxonomy lives **outside** this schema today — `concepts/taxonomy.toml` is the source of truth for the flat domain→concept mapping, and `nodes` carries only `id`, `label`, `definition` for each concept with no structural relationship between them beyond what `edges` happens to express.
+**Population shape of the NEW tables.** Family rows ship populated (sync from `concepts/taxonomy.toml`); `concept_family_membership` ships with `is_primary = 1` rows populated, `is_primary = 0` rows empty in v1; `concept_aliases` ships empty; family `aliases` ship empty or hand-seeded. All grow organically through review actions and surfaced query patterns.
 
 ---
 
-## 2. Local SQLite — future state (post-hierarchy)
+## 2. Exported Postgres (guru-web)
 
-**Everything in §1 carries forward unchanged.** This diagram shows only the three new tables and their FK relationship to `nodes` (kept in for context). The migration is purely additive — no existing table touched, no existing concept ID renamed.
+The export artifact built by `scripts/export.py` and loaded into the VPS Postgres at `guru-corpus`. Denormalised for read-side simplicity; pgvector handles embeddings; `edges` stays polymorphic (untyped `source`/`target` text) so the same table carries chunk↔concept and concept↔concept.
 
-```mermaid
-erDiagram
-    nodes {
-        TEXT id PK
-        TEXT type "concept rows used here"
-        TEXT label
-        TEXT definition
-    }
+### 2.1 Corpus structure (no NEW content — current production)
 
-    concept_families {
-        TEXT id PK "domain or domain.family"
-        TEXT parent_id FK "NULL for domain rows"
-        TEXT label
-        TEXT definition
-        TEXT aliases "JSON array of strings"
-    }
-
-    concept_family_membership {
-        TEXT concept_id PK, FK
-        TEXT family_id PK, FK
-        INTEGER is_primary "1=canonical home, 0=secondary"
-    }
-
-    concept_aliases {
-        TEXT concept_id PK, FK
-        TEXT alias PK
-    }
-
-    concept_families ||--o{ concept_families : "parent_id (self-ref domain→family)"
-    nodes ||--o{ concept_family_membership : "concept_id"
-    concept_families ||--o{ concept_family_membership : "family_id"
-    nodes ||--o{ concept_aliases : "concept_id"
-```
-
-`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`. Reverse-lookup index on `(family_id)` supports "which concepts are in this family." `concept_aliases` indexes `alias` for LIKE matching from the query path.
-
-**Population shape.** Family rows ship populated (sync from TOML); `concept_family_membership` ships with `is_primary = 1` rows populated, `is_primary = 0` rows empty in v1; `concept_aliases` ships empty; family `aliases` ship empty or hand-seeded. All four grow organically through review actions and surfaced query patterns; nothing about v1 readiness blocks on alias coverage.
-
----
-
-## 3. Exported Postgres (guru-web) — current state
-
-The export artifact built by `scripts/export.py` and loaded into the VPS Postgres at `guru-corpus`. Denormalised for read-side simplicity; pgvector handles embeddings; the `edges` table is intentionally polymorphic (untyped `source`/`target` text) so the same table carries chunk↔concept and concept↔concept edges.
+Traditions, texts, and chunks. The denormalised `chunks` table is what vector search returns.
 
 ```mermaid
 erDiagram
@@ -204,13 +177,6 @@ erDiagram
         TEXT sections_format
     }
 
-    concepts {
-        TEXT id PK
-        TEXT label
-        TEXT domain "flat string today"
-        TEXT definition
-    }
-
     chunks {
         TEXT id PK
         TEXT text_id FK
@@ -223,34 +189,14 @@ erDiagram
         VECTOR_768 embedding "pgvector HNSW"
     }
 
-    edges {
-        TEXT source PK "polymorphic"
-        TEXT target PK "polymorphic"
-        TEXT edge_type PK "EXPRESSES|PARALLELS|..."
-        TEXT tier
-        REAL weight
-        TEXT annotation
-    }
-
-    corpus_metadata {
-        TEXT key PK
-        TEXT value
-    }
-
     traditions ||--o{ texts : "tradition"
     traditions ||--o{ chunks : "tradition"
     texts ||--o{ chunks : "text_id"
 ```
 
-**Reading the model.** `traditions` and `texts` are the corpus-organisation skeleton. `chunks` is the searchable substrate, denormalised so a vector hit returns its tradition and text name without joins. `concepts` is a flat list keyed only by ID, with `domain` as a free-form string (no FK, no normalised hierarchy). `edges` is the polymorphic graph — its `source` and `target` are bare text references that the web app resolves against the appropriate table per `edge_type`. `corpus_metadata` is a key/value manifest; loaded last by the export artifact so a mid-load failure leaves it absent and the web app refuses to serve.
+### 2.2 Concepts + hierarchy (`concepts.family_id` is NEW; three NEW tables)
 
-**The asymmetry with SQLite.** The pipeline's polymorphic `nodes` table becomes three separate tables (`traditions`, `texts`, `chunks`) on the export side — denormalisation for read performance — and `concepts` becomes its own table. The pipeline's `edges` carries the same shape on both sides; only the FK constraints differ.
-
----
-
-## 4. Exported Postgres — future state (post-hierarchy)
-
-**Everything in §3 carries forward.** This diagram shows only the three new tables, the new `concepts.family_id` denormalised column, and the `concepts` table for context.
+`concepts` gains a `family_id` column (denormalised primary family). Three new tables mirror the SQLite shape with native Postgres types: `aliases` is `TEXT[]` not JSON, `is_primary` is `BOOLEAN` not `INTEGER`. The conversion happens in `export.py`'s `load_families` / `load_concept_family_membership` emitter blocks.
 
 ```mermaid
 erDiagram
@@ -263,22 +209,22 @@ erDiagram
     }
 
     concept_families {
-        TEXT id PK "domain or domain.family"
-        TEXT parent_id FK "NULL for domain rows"
-        TEXT label
-        TEXT definition
-        TEXT_ARRAY aliases "native TEXT[]"
+        TEXT id PK "NEW — domain or domain.family"
+        TEXT parent_id FK "NEW — NULL for domain rows"
+        TEXT label "NEW"
+        TEXT definition "NEW"
+        TEXT_ARRAY aliases "NEW — native TEXT[]"
     }
 
     concept_family_membership {
-        TEXT concept_id PK, FK
-        TEXT family_id PK, FK
-        BOOLEAN is_primary
+        TEXT concept_id PK, FK "NEW"
+        TEXT family_id PK, FK "NEW"
+        BOOLEAN is_primary "NEW"
     }
 
     concept_aliases {
-        TEXT concept_id PK, FK
-        TEXT alias PK
+        TEXT concept_id PK, FK "NEW"
+        TEXT alias PK "NEW"
     }
 
     concept_families ||--o{ concept_families : "parent_id (self-ref domain→family)"
@@ -288,15 +234,36 @@ erDiagram
     concepts ||--o{ concept_aliases : "concept_id"
 ```
 
-Mirror of the SQLite shape with native Postgres types: `aliases` is `TEXT[]` not JSON, `is_primary` is `BOOLEAN` not `INTEGER`. The conversion is in `export.py`'s `load_families` / `load_concept_family_membership` emitter blocks. The `concepts.family_id` column is intentionally redundant with `concept_family_membership WHERE is_primary` — turns "filter chunks by family" from a three-way join into two-way.
+The `concepts.family_id` denormalisation is intentionally redundant with `concept_family_membership WHERE is_primary` — turns "filter chunks by family" from a three-way join (`chunks` → `edges` → `concepts` → `concept_family_membership`) into a two-way one. The membership table remains the audit table; `family_id` is the convenience column.
 
-**What's still polymorphic.** `edges` retains its `source`/`target` design — chunks → concepts (EXPRESSES) live alongside concept → concept (PARALLELS, CONTRASTS) in the same table. The hierarchy doesn't add any new edge types. Family-level expansion at retrieval time happens through joins via `concept_family_membership`, not through new edge rows.
+**`concepts.domain` is kept**, not dropped. Derivable from `concept_families.parent_id` of the row pointed at by `family_id`, but every existing query in `src/lib/` that filters by domain keeps working unchanged. Removing it is a separate cleanup, out of scope for this migration.
 
-**`concepts.domain` kept.** Derivable from `concept_families.parent_id` of the row pointed at by `family_id`, but every existing query in `src/lib/` that filters by domain keeps working unchanged. Removing it is a separate cleanup, out of scope.
+### 2.3 Edges and metadata (no NEW content — current production)
+
+`edges` is the polymorphic graph — `source` and `target` are bare text references the web app resolves against the appropriate table per `edge_type`. Chunks → concepts (EXPRESSES) and concept → concept (PARALLELS / CONTRASTS) coexist here. `corpus_metadata` is the key/value manifest loaded last by the export artifact so a mid-load failure leaves it absent.
+
+```mermaid
+erDiagram
+    edges {
+        TEXT source PK "polymorphic"
+        TEXT target PK "polymorphic"
+        TEXT edge_type PK "EXPRESSES|PARALLELS|CONTRASTS|..."
+        TEXT tier
+        REAL weight
+        TEXT annotation
+    }
+
+    corpus_metadata {
+        TEXT key PK
+        TEXT value
+    }
+```
+
+**The hierarchy doesn't add any new edge types.** Family-level expansion at retrieval time happens through joins via `concept_family_membership`, not through new edge rows. `edges` stays exactly as it is today.
 
 ---
 
-## 5. The two databases at a glance
+## 3. The two databases at a glance
 
 | concern | local SQLite | exported Postgres |
 |---|---|---|
@@ -305,10 +272,58 @@ Mirror of the SQLite shape with native Postgres types: `aliases` is `TEXT[]` not
 | **embeddings** | `chunk_embeddings.vector` as float32 BLOB | `chunks.embedding` as pgvector VECTOR(768), HNSW indexed |
 | **staging** | `staged_tags`, `staged_edges`, `staged_concepts` (LLM output pending review) | *(none — staging never exported)* |
 | **bookkeeping** | `tagging_progress` | *(none — bookkeeping never exported)* |
-| **taxonomy structure** (post-migration) | `concept_families` + `concept_family_membership` + `concept_aliases` | same three tables + denormalised `concepts.family_id` |
+| **NEW from this migration** | `concept_families` + `concept_family_membership` + `concept_aliases` (§1.2) | same three tables + denormalised `concepts.family_id` (§2.2) |
 | **aliases storage** | JSON-encoded text on `concept_families.aliases`; rows in `concept_aliases` | native `TEXT[]` on `concept_families.aliases`; rows in `concept_aliases` |
-| **conversion boundary** | `scripts/export.py` (read SQLite → emit Postgres COPY statements) |  |
+| **conversion boundary** | — | `scripts/export.py` (read SQLite → emit Postgres COPY statements) |
 
-**What never crosses the boundary.** The `staged_*` tables and `tagging_progress` are pipeline-internal; the export emits only reviewed, promoted state. The hierarchy work doesn't change this: family memberships and aliases are taxonomy state (always exported), not in-flight LLM output (never exported).
+**What never crosses the boundary.** The `staged_*` tables and `tagging_progress` are pipeline-internal; the export emits only reviewed, promoted state. The hierarchy work doesn't change this — family memberships and aliases are taxonomy state (always exported), not in-flight LLM output (never exported).
 
-**What changes when the hierarchy ships.** From the export pipeline's perspective: three new emitter blocks in `export.py` (`load_families`, `load_concept_family_membership`, `load_concept_aliases`), one enrichment to `load_concepts` (adding `family_id`), and `SCHEMA_VERSION` bumps from 2 to 3. From the consumer's perspective: three new tables to query, one new column on an existing table, and `src/lib/graph.ts` learns to expand family/domain matches into concept sets.
+**What changes when the migration ships.** Three new emitter blocks in `export.py` (`load_families`, `load_concept_family_membership`, `load_concept_aliases`), one enrichment to `load_concepts` (adding `family_id`), `SCHEMA_VERSION` bumps from 2 to 3, and `src/lib/graph.ts` learns to expand family/domain matches into concept sets.
+
+---
+
+## Regenerating the SVGs
+
+Requires `@mermaid-js/mermaid-cli` on PATH. The pipeline produces six SVGs corresponding to the six `\`\`\`mermaid` blocks above (numbered 1–6 by appearance) and renames them to descriptive filenames.
+
+```bash
+# Mermaid's default uses <foreignObject> for labels — only browsers render those.
+# Force native <text> elements so the SVG works in image viewers, IDE previews, etc.
+cat > /tmp/mmdc-config.json <<'EOF'
+{
+  "htmlLabels": false,
+  "flowchart": { "htmlLabels": false },
+  "themeVariables": { "fontSize": "16px" }
+}
+EOF
+
+mmdc -i docs/concept-hierarchy/schema-diagrams.md \
+     -o docs/concept-hierarchy/img/schema.svg \
+     -c /tmp/mmdc-config.json \
+     -w 2400 -H 1800 --backgroundColor white
+
+# Two post-processing fixes that mmdc cannot do natively:
+#   1. --backgroundColor sets a CSS background; image viewers ignore CSS.
+#      Inject a real <rect> sized to the viewBox so the background is part
+#      of the SVG. "100%" resolves against the viewport and renders as a
+#      tiny corner square in strict viewers; use literal viewBox dimensions.
+#   2. htmlLabels:false splits each word into its own <tspan> with the
+#      separating space at the start of the next tspan; rsvg-convert and
+#      similar strip leading whitespace from tspan content unless the
+#      parent <text> carries xml:space="preserve".
+for f in docs/concept-hierarchy/img/schema-*.svg; do
+  vb=$(grep -oE 'viewBox="[^"]+"' "$f" | head -1 | sed 's/viewBox="//;s/"$//')
+  w=$(echo "$vb" | awk '{print $3}')
+  h=$(echo "$vb" | awk '{print $4}')
+  sed -i "s|\(<svg [^>]*>\)\(<style>\)|\1<rect x=\"0\" y=\"0\" width=\"$w\" height=\"$h\" fill=\"white\"/>\2|" "$f"
+  sed -i 's|<text |<text xml:space="preserve" |g' "$f"
+done
+
+cd docs/concept-hierarchy/img && \
+  mv schema-1.svg local-live.svg && \
+  mv schema-2.svg local-hierarchy.svg && \
+  mv schema-3.svg local-staging.svg && \
+  mv schema-4.svg exported-corpus.svg && \
+  mv schema-5.svg exported-concepts.svg && \
+  mv schema-6.svg exported-edges.svg
+```
