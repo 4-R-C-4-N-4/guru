@@ -95,64 +95,15 @@ The taxonomy lives **outside** this schema today — `concepts/taxonomy.toml` is
 
 ## 2. Local SQLite — future state (post-hierarchy)
 
-Adds three new tables. Existing tables are unchanged.
+**Everything in §1 carries forward unchanged.** This diagram shows only the three new tables and their FK relationship to `nodes` (kept in for context). The migration is purely additive — no existing table touched, no existing concept ID renamed.
 
 ```mermaid
 erDiagram
     nodes {
         TEXT id PK
-        TEXT type "tradition|concept|chunk"
-        TEXT tradition_id FK
+        TEXT type "concept rows used here"
         TEXT label
         TEXT definition
-        TEXT metadata_json
-    }
-
-    edges {
-        INTEGER id PK
-        TEXT source_id FK
-        TEXT target_id FK
-        TEXT type
-        TEXT tier
-        TEXT justification
-    }
-
-    chunk_embeddings {
-        TEXT chunk_id PK, FK
-        INTEGER dim
-        TEXT model
-        BLOB vector
-    }
-
-    staged_tags {
-        INTEGER id PK
-        TEXT chunk_id FK
-        TEXT concept_id
-        INTEGER score
-        TEXT status
-        TEXT model
-        TEXT prompt_version
-    }
-
-    staged_edges {
-        INTEGER id PK
-        TEXT source_chunk FK
-        TEXT target_chunk FK
-        TEXT edge_type
-        TEXT status
-        TEXT model
-        TEXT prompt_version
-    }
-
-    staged_concepts {
-        INTEGER id PK
-        TEXT proposed_id UK
-        TEXT motivating_chunk FK
-    }
-
-    tagging_progress {
-        TEXT chunk_id PK, FK
-        TEXT completed_at
     }
 
     concept_families {
@@ -160,7 +111,7 @@ erDiagram
         TEXT parent_id FK "NULL for domain rows"
         TEXT label
         TEXT definition
-        TEXT aliases "JSON array"
+        TEXT aliases "JSON array of strings"
     }
 
     concept_family_membership {
@@ -174,34 +125,15 @@ erDiagram
         TEXT alias PK
     }
 
-    nodes ||--o{ nodes : "tradition_id"
-    nodes ||--o{ edges : "source_id"
-    nodes ||--o{ edges : "target_id"
-    nodes ||--|| chunk_embeddings : "chunk_id"
-    nodes ||--o{ staged_tags : "chunk_id"
-    nodes ||--o{ staged_edges : "source_chunk"
-    nodes ||--o{ staged_edges : "target_chunk"
-    nodes ||--o{ staged_concepts : "motivating_chunk"
-    nodes ||--|| tagging_progress : "chunk_id"
-
-    concept_families ||--o{ concept_families : "parent_id (self-ref)"
+    concept_families ||--o{ concept_families : "parent_id (self-ref domain→family)"
     nodes ||--o{ concept_family_membership : "concept_id"
     concept_families ||--o{ concept_family_membership : "family_id"
     nodes ||--o{ concept_aliases : "concept_id"
 ```
 
-### What's new
+`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`. Reverse-lookup index on `(family_id)` supports "which concepts are in this family." `concept_aliases` indexes `alias` for LIKE matching from the query path.
 
-- **`concept_families`** — both domain rows (`parent_id = NULL`) and family rows (`parent_id` → their domain). One self-referential FK carries both tiers. `aliases` is a JSON-encoded array for user-facing query synonyms.
-- **`concept_family_membership`** — unified table for primary and secondary affiliations. `is_primary = 1` rows are canonical homes (one per concept, enforced by partial unique index `idx_concept_primary_family` on `concept_id WHERE is_primary = 1`); `is_primary = 0` rows are cross-cutting secondary affiliations. Forward index on PK, reverse-lookup index `idx_concept_family_membership_family` on `family_id`.
-- **`concept_aliases`** — concept-level synonyms for query matching (`monad` ↔ `the One`). Multiple rows per concept; index on `alias` supports LIKE lookups.
-- **`nodes` is unchanged.** The taxonomy migration is purely additive — no columns added to existing tables in SQLite, no concept IDs renamed, no rows touched in `edges` or `staged_tags`.
-
-### What's deferred
-
-- `concept_family_membership` ships with `is_primary = 0` rows empty in v1. Secondary memberships populate organically through review actions, not from the TOML.
-- `concept_aliases` ships empty. Populated incrementally as natural-language queries surface.
-- Family `aliases` JSON columns ship empty (or with a small hand-seeded set). Same growth pattern.
+**Population shape.** Family rows ship populated (sync from TOML); `concept_family_membership` ships with `is_primary = 1` rows populated, `is_primary = 0` rows empty in v1; `concept_aliases` ships empty; family `aliases` ship empty or hand-seeded. All four grow organically through review actions and surfaced query patterns; nothing about v1 readiness blocks on alias coverage.
 
 ---
 
@@ -273,60 +205,20 @@ erDiagram
 
 ## 4. Exported Postgres — future state (post-hierarchy)
 
-Adds three new tables (mirroring the SQLite shape, with native Postgres types instead of JSON-encoded text) and one denormalised column on `concepts`. Existing tables are otherwise unchanged.
+**Everything in §3 carries forward.** This diagram shows only the three new tables, the new `concepts.family_id` denormalised column, and the `concepts` table for context.
 
 ```mermaid
 erDiagram
-    traditions {
-        TEXT id PK
-        TEXT label
-        TEXT description
-        TEXT color
-    }
-
-    texts {
-        TEXT id PK
-        TEXT tradition FK
-        TEXT label
-        TEXT translator
-        TEXT source_url
-        TEXT sections_format
-    }
-
     concepts {
         TEXT id PK
         TEXT label
         TEXT domain "kept; derivable from family_id"
         TEXT definition
-        TEXT family_id FK "NEW: denormalised primary family"
-    }
-
-    chunks {
-        TEXT id PK
-        TEXT text_id FK
-        TEXT tradition FK
-        TEXT text_name
-        TEXT section
-        TEXT body
-        VECTOR_768 embedding
-    }
-
-    edges {
-        TEXT source PK
-        TEXT target PK
-        TEXT edge_type PK
-        TEXT tier
-        REAL weight
-        TEXT annotation
-    }
-
-    corpus_metadata {
-        TEXT key PK
-        TEXT value
+        TEXT family_id FK "NEW — denormalised primary family"
     }
 
     concept_families {
-        TEXT id PK
+        TEXT id PK "domain or domain.family"
         TEXT parent_id FK "NULL for domain rows"
         TEXT label
         TEXT definition
@@ -344,28 +236,18 @@ erDiagram
         TEXT alias PK
     }
 
-    traditions ||--o{ texts : "tradition"
-    traditions ||--o{ chunks : "tradition"
-    texts ||--o{ chunks : "text_id"
-
-    concept_families ||--o{ concept_families : "parent_id (self-ref)"
-    concept_families ||--o{ concepts : "family_id (denormalised)"
+    concept_families ||--o{ concept_families : "parent_id (self-ref domain→family)"
+    concept_families ||--o{ concepts : "family_id (denormalised primary)"
     concepts ||--o{ concept_family_membership : "concept_id"
     concept_families ||--o{ concept_family_membership : "family_id"
     concepts ||--o{ concept_aliases : "concept_id"
 ```
 
-### What's new
+Mirror of the SQLite shape with native Postgres types: `aliases` is `TEXT[]` not JSON, `is_primary` is `BOOLEAN` not `INTEGER`. The conversion is in `export.py`'s `load_families` / `load_concept_family_membership` emitter blocks. The `concepts.family_id` column is intentionally redundant with `concept_family_membership WHERE is_primary` — turns "filter chunks by family" from a three-way join into two-way.
 
-- **`concept_families`** — same shape as SQLite, but `aliases` is native `TEXT[]` instead of JSON-encoded text. Conversion happens in `export.py`'s `load_families` (the only place that crosses the storage boundary).
-- **`concept_family_membership`** — same shape, with `BOOLEAN` `is_primary` instead of `INTEGER 0/1`. Partial unique index `idx_concept_primary_family ON (concept_id) WHERE is_primary` + reverse-lookup index on `family_id`.
-- **`concept_aliases`** — same shape, native types.
-- **`concepts.family_id`** — denormalised column added to the existing table. Redundant with `concept_family_membership WHERE is_primary` (the primary row) but turns "filter chunks by family" from a three-way join into a two-way one (`chunks` → `edges` → `concepts`). The membership table remains the audit table; `family_id` is the convenience column.
-- **`concepts.domain`** — kept. Derivable from `concept_families.parent_id` of the row pointed at by `family_id`, but every existing query in `src/lib/` that filters by domain keeps working unchanged. Removing it is a separate cleanup, out of scope for this migration.
+**What's still polymorphic.** `edges` retains its `source`/`target` design — chunks → concepts (EXPRESSES) live alongside concept → concept (PARALLELS, CONTRASTS) in the same table. The hierarchy doesn't add any new edge types. Family-level expansion at retrieval time happens through joins via `concept_family_membership`, not through new edge rows.
 
-### What's still polymorphic
-
-`edges` retains its polymorphic `source`/`target` design — chunks → concepts (EXPRESSES) live alongside concept → concept (PARALLELS, CONTRASTS) in the same table. The hierarchy doesn't add any new edge types or relationships to `edges`. Family-level expansion at retrieval time happens through joins via `concept_family_membership`, not through new edge rows.
+**`concepts.domain` kept.** Derivable from `concept_families.parent_id` of the row pointed at by `family_id`, but every existing query in `src/lib/` that filters by domain keeps working unchanged. Removing it is a separate cleanup, out of scope.
 
 ---
 
