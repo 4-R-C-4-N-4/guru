@@ -32,7 +32,14 @@ mmdc -i docs/concept-hierarchy/schema-diagrams.md \
 #      similar strip leading whitespace from tspan content unless the
 #      parent <text> carries xml:space="preserve".
 for f in docs/concept-hierarchy/img/schema-*.svg; do
-  sed -i 's|\(<svg [^>]*>\)\(<style>\)|\1<rect width="100%" height="100%" fill="white"/>\2|' "$f"
+  # Use the actual viewBox dimensions, not "100%". The rect lives inside the
+  # SVG's user coordinate system (the viewBox), where "100%" resolves against
+  # the viewport — which strict renderers interpret as zero when the SVG has
+  # no explicit width/height attributes, producing a tiny corner square.
+  vb=$(grep -oE 'viewBox="[^"]+"' "$f" | head -1 | sed 's/viewBox="//;s/"$//')
+  w=$(echo "$vb" | awk '{print $3}')
+  h=$(echo "$vb" | awk '{print $4}')
+  sed -i "s|\(<svg [^>]*>\)\(<style>\)|\1<rect x=\"0\" y=\"0\" width=\"$w\" height=\"$h\" fill=\"white\"/>\2|" "$f"
   sed -i 's|<text |<text xml:space="preserve" |g' "$f"
 done
 
