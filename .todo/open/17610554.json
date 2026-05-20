@@ -1,0 +1,22 @@
+{
+  "id": "17610554",
+  "type": "chore",
+  "state": "open",
+  "summary": "Update guru/prompt.py and scripts/tag_concepts.py: load_taxonomy returns enriched dicts with family_id/family_label/domain_id; build_prompt renders concepts grouped by domain → family with one-line family glosses. Bump PROMPT_VERSION from 'v1'. Per design.md §8.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.673Z",
+  "updated_at": "2026-05-20T18:39:16.673Z",
+  "files": [
+    {
+      "path": "guru/prompt.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  }
+}

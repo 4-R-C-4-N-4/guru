@@ -1,0 +1,23 @@
+{
+  "id": "ea1c2372",
+  "type": "chore",
+  "state": "open",
+  "summary": "Hand-cluster the 88 concepts into proper two-tier families per design.md §4 starting hierarchy (22 families across 6 domains). Edit concepts/taxonomy.toml, re-run scripts/sync_taxonomy.py --apply. Membership table updates via ON CONFLICT clause; no other table touched. Revisit the §4 known-judgment-calls (wu_wei, transformative_path, ecstatic_modes, numerical_mysticism, forbidden_knowledge) during the pass. Per design.md §13 step 6.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.738Z",
+  "updated_at": "2026-05-20T18:39:16.738Z",
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy",
+    "manual"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "89c9ee47",
+  "type": "chore",
+  "state": "open",
+  "summary": "Update scripts/export.py to emit four new tables (load_families, load_concept_family_membership with 0/1→BOOLEAN conversion, load_concept_aliases, load_family_aliases) and enrich load_concepts to populate concepts.family_id via WHERE is_primary=1. Bump SCHEMA_VERSION to 3. Update schema/corpus-schema.sql to match (four new CREATE TABLEs with all constraints + ALTER + COMMENT clauses). Producing a working export artifact is the done criterion; guru-web side is coordinated separately based on this artifact. Per design.md §10.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.805Z",
+  "updated_at": "2026-05-20T18:39:16.805Z",
+  "files": [
+    {
+      "path": "scripts/export.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  }
+}

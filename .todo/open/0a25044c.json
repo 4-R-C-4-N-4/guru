@@ -1,0 +1,22 @@
+{
+  "id": "0a25044c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Add scripts/sync_taxonomy.py: parses taxonomy.toml, upserts concept_families and concept_family_membership rows (is_primary=1 for TOML primaries, demote-then-upsert on moves), replaces alias rows for owners mentioned in TOML with Python str.lower() applied before INSERT. --dry-run default; --apply commits. Report counts per §7 step 7. Per design.md §7.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.641Z",
+  "updated_at": "2026-05-20T18:39:16.641Z",
+  "files": [
+    {
+      "path": "scripts/sync_taxonomy.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  }
+}

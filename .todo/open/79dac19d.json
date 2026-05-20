@@ -1,0 +1,22 @@
+{
+  "id": "79dac19d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Update review surfaces to show family context. scripts/review_tags.py print_tag_row gains FAMILY: domain → family / — definition lines. Same for scripts/review_edges.py. Per design.md §9.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.769Z",
+  "updated_at": "2026-05-20T18:39:16.769Z",
+  "files": [
+    {
+      "path": "scripts/review_tags.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  }
+}
