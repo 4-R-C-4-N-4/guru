@@ -146,7 +146,6 @@ erDiagram
         TEXT parent_id FK "NEW — NULL for domains"
         TEXT label "NEW"
         TEXT definition "NEW"
-        TEXT aliases "NEW — JSON array"
     }
 
     concept_family_membership {
@@ -157,6 +156,11 @@ erDiagram
 
     concept_aliases {
         TEXT concept_id PK, FK "NEW"
+        TEXT alias PK "NEW"
+    }
+
+    family_aliases {
+        TEXT family_id PK, FK "NEW"
         TEXT alias PK "NEW"
     }
 
@@ -173,9 +177,10 @@ erDiagram
     nodes ||--o{ concept_family_membership : "concept_id"
     concept_families ||--o{ concept_family_membership : "family_id"
     nodes ||--o{ concept_aliases : "concept_id"
+    concept_families ||--o{ family_aliases : "family_id"
 ```
 
-`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`. Reverse-lookup index on `(family_id)`. `concept_aliases` indexes `alias` for LIKE matching from the query path. Family rows ship populated (from `concepts/taxonomy.toml`); membership rows ship with `is_primary = 1` populated and `is_primary = 0` empty in v1; alias rows ship empty and populate incrementally.
+`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`, plus `CHECK(is_primary IN (0,1))` against stray values. Reverse-lookup index on `(family_id)`. `concept_aliases` and `family_aliases` are symmetric join tables (same shape, same indexability) and both index `alias` for LIKE matching from the query path. FKs from membership/alias tables to `nodes`/`concepts` use ON DELETE CASCADE so concept deletion cleans up dependent rows automatically. Family rows ship populated (from `concepts/taxonomy.toml`); membership rows ship with `is_primary = 1` populated and `is_primary = 0` empty in v1; alias rows ship empty (or hand-seeded) and populate incrementally.
 
 ---
 
@@ -290,7 +295,6 @@ erDiagram
         TEXT parent_id FK "NEW — NULL for domains"
         TEXT label "NEW"
         TEXT definition "NEW"
-        TEXT_ARRAY aliases "NEW — native TEXT[]"
     }
 
     concept_family_membership {
@@ -304,6 +308,11 @@ erDiagram
         TEXT alias PK "NEW"
     }
 
+    family_aliases {
+        TEXT family_id PK, FK "NEW"
+        TEXT alias PK "NEW"
+    }
+
     traditions ||--o{ texts : "tradition"
     traditions ||--o{ chunks : "tradition"
     texts ||--o{ chunks : "text_id"
@@ -312,6 +321,7 @@ erDiagram
     concepts ||--o{ concept_family_membership : "concept_id"
     concept_families ||--o{ concept_family_membership : "family_id"
     concepts ||--o{ concept_aliases : "concept_id"
+    concept_families ||--o{ family_aliases : "family_id"
 ```
 
 `concepts.family_id` is the denormalised primary family — intentionally redundant with `concept_family_membership WHERE is_primary`, kept for two-way-join filters from chunks. `concepts.domain` is also kept (derivable but every existing query in `src/lib/` uses it; removal is a separate cleanup). Native Postgres types: `aliases` is `TEXT[]` not JSON, `is_primary` is `BOOLEAN` not `INTEGER`. Conversion from SQLite happens in `export.py`'s `load_families` / `load_concept_family_membership` emitter blocks. `edges` is unchanged — the hierarchy adds no new edge types; family-level expansion at retrieval is a join through `concept_family_membership`, not new rows.
@@ -327,8 +337,8 @@ erDiagram
 | **embeddings** | `chunk_embeddings.vector` as float32 BLOB | `chunks.embedding` as pgvector VECTOR(768), HNSW indexed |
 | **staging** | `staged_tags`, `staged_edges`, `staged_concepts` | *(never exported)* |
 | **bookkeeping** | `tagging_progress` | *(never exported)* |
-| **NEW from this migration** | `concept_families` + `concept_family_membership` + `concept_aliases` | same three tables + denormalised `concepts.family_id` |
-| **aliases storage** | JSON-encoded text on `concept_families.aliases`; rows in `concept_aliases` | native `TEXT[]` on `concept_families.aliases`; rows in `concept_aliases` |
+| **NEW from this migration** | `concept_families` + `concept_family_membership` + `concept_aliases` + `family_aliases` | same four tables + denormalised `concepts.family_id` |
+| **aliases storage** | symmetric join tables — rows in `concept_aliases` and `family_aliases` | symmetric join tables — rows in `concept_aliases` and `family_aliases` |
 | **conversion boundary** | — | `scripts/export.py` (SQLite → Postgres COPY) |
 
 ---

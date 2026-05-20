@@ -11,7 +11,7 @@ The flat-with-categories TOML is doing two jobs badly. The scholarly domains (`c
 
 Just as importantly, guru-web users routinely query at a higher level than a discrete concept — they type `cosmology` or `salvation`, not `monad` or `theosis`. Today those queries match no concept label at all and fall through to vector search alone. The same hierarchy that helps the tagger also unlocks domain- and family-scoped retrieval on the read side.
 
-This doc specifies a small, additive schema delta (three new tables plus one denormalised column), a TOML restructure, a sync script, prompt and review-surface changes, the export path into guru-web, the query-side expansion that makes high-level queries work, and a concrete starting family proposal to iterate on. Two refinements layered into the schema from the start give it room to grow: user-facing **alias** mechanisms on families/domains (inline column) and on concepts themselves (join table) so natural-language queries map to canonical IDs, and an `is_primary` flag on `concept_family_membership` so cross-cutting secondary affiliations (unpopulated in v1) live in the same table as the primary home, with the single-primary-per-concept invariant enforced by a partial unique index. Every existing concept ID, every tagged chunk, every edge, and every staged tag is preserved unchanged.
+This doc specifies a small, additive schema delta (four new tables plus one denormalised column), a TOML restructure, a sync script, prompt and review-surface changes, the export path into guru-web, the query-side expansion that makes high-level queries work, and a concrete starting family proposal to iterate on. Two refinements layered into the schema from the start give it room to grow: symmetric user-facing **alias** join tables for families/domains and for concepts so natural-language queries map to canonical IDs, and an `is_primary` flag on `concept_family_membership` so cross-cutting secondary affiliations (unpopulated in v1) live in the same table as the primary home, with the single-primary-per-concept invariant enforced by a partial unique index. Every existing concept ID, every tagged chunk, every edge, and every staged tag is preserved unchanged.
 
 ---
 
@@ -23,7 +23,7 @@ This doc specifies a small, additive schema delta (three new tables plus one den
 - Surface family groupings to the LLM in `build_prompt()` so it picks within a family rather than across the flat 88-concept space.
 - Show family context in the review surfaces (CLI and web).
 - Propagate the hierarchy through `export.py` and `corpus-schema.sql` so guru-web can filter and expand on it.
-- Extend guru-web's concept extractor so user queries at the family or domain level expand into the underlying concept set, with `aliases` (inline column on families/domains, join table for concepts) bridging natural-language queries and canonical IDs.
+- Extend guru-web's concept extractor so user queries at the family or domain level expand into the underlying concept set, with symmetric alias join tables (`family_aliases`, `concept_aliases`) bridging natural-language queries and canonical IDs.
 - Lay the substrate the new-concept proposal loop will use for family-scoped dedupe.
 - Create the secondary-membership seam (`is_primary = FALSE` rows in `concept_family_membership`, unpopulated in v1) so cross-cutting family affiliations have a first-class home when the time comes, without re-opening the schema.
 
@@ -35,7 +35,7 @@ This doc specifies a small, additive schema delta (three new tables plus one den
 - Per-tradition concept variants (e.g. `mystical_union/sufi`). Cross-tradition variants stay as one concept.
 - Automated family assignment for the existing 88 concepts. The first clustering pass is manual.
 - Cross-family concept relationships (e.g. `gnosis_direct_knowledge` upstream of `self_knowledge`). That's the relational-graph layer's job — separate from secondary memberships (`is_primary = FALSE` in `concept_family_membership`), which handle family-level affiliations only.
-- Populating secondary memberships, `concept_aliases`, or family/domain `aliases` in v1. All three are additive seams; population is ongoing work driven by reviewer judgment and surfaced query patterns.
+- Populating secondary memberships, `concept_aliases`, or `family_aliases` in v1. All three are additive seams; population is ongoing work driven by reviewer judgment and surfaced query patterns.
 - A "browse by domain" UI. The minimum bar is that free-text queries at the hierarchy level do something useful.
 
 ---
@@ -144,21 +144,25 @@ Ethics is small enough today that a single family is the honest call; subdividin
 
 ## 5. SQLite schema delta
 
-Three new tables in `scripts/schema.sql`. None touch `nodes`, `edges`, `staged_tags`, or any existing concept reference.
+Four new tables in `scripts/schema.sql`. None touch `nodes`, `edges`, `staged_tags`, or any existing concept reference.
 
 ```sql
 CREATE TABLE IF NOT EXISTS concept_families (
   id          TEXT PRIMARY KEY,
   parent_id   TEXT REFERENCES concept_families(id),
   label       TEXT NOT NULL,
-  definition  TEXT NOT NULL,
-  aliases     TEXT             -- JSON array of strings; see §5.1
+  definition  TEXT NOT NULL
 );
 
+-- "Families under domain X" is a hot lookup once query expansion lands:
+CREATE INDEX IF NOT EXISTS idx_concept_families_parent
+  ON concept_families(parent_id);
+
 CREATE TABLE IF NOT EXISTS concept_family_membership (
-  concept_id  TEXT NOT NULL REFERENCES nodes(id),
+  concept_id  TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
   family_id   TEXT NOT NULL REFERENCES concept_families(id),
-  is_primary  INTEGER NOT NULL DEFAULT 0,   -- 1 = canonical home, 0 = secondary affiliation
+  is_primary  INTEGER NOT NULL DEFAULT 0
+                CHECK(is_primary IN (0, 1)),   -- 1 = canonical home, 0 = secondary
   PRIMARY KEY (concept_id, family_id)
 );
 
@@ -171,45 +175,59 @@ CREATE INDEX IF NOT EXISTS idx_concept_family_membership_family
   ON concept_family_membership(family_id);
 
 CREATE TABLE IF NOT EXISTS concept_aliases (
-  concept_id  TEXT NOT NULL REFERENCES nodes(id),
+  concept_id  TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
   alias       TEXT NOT NULL,
   PRIMARY KEY (concept_id, alias)
 );
 
 CREATE INDEX IF NOT EXISTS idx_concept_aliases_alias
   ON concept_aliases(alias);
+
+CREATE TABLE IF NOT EXISTS family_aliases (
+  family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
+  alias       TEXT NOT NULL,
+  PRIMARY KEY (family_id, alias)
+);
+
+CREATE INDEX IF NOT EXISTS idx_family_aliases_alias
+  ON family_aliases(alias);
 ```
 
 **Self-referential `parent_id`** carries both upper tiers in one table. A domain row has `parent_id = NULL`; a family row has `parent_id` pointing at its domain.
 
 **Composite IDs** for family rows: `cosmology.cosmic_agents`, not bare `cosmic_agents`. Family names will collide across domains (`cosmic_order` in cosmology vs a possible `moral_order` in ethics) and the dotted form encodes the hierarchy in a human-readable way. Domains use bare IDs (`cosmology`), so the dotted form is unambiguously `domain.family`.
 
-**One unified membership table, `is_primary` flag.** A concept's set of family affiliations lives in a single table; the `is_primary = 1` row is its canonical home and drives prompt rendering, scoped dedupe, and the "domain → family → concept" path. `is_primary = 0` rows are secondary affiliations (§5.3). Forward lookup ("all family affiliations for concept Y") is `WHERE concept_id = Y`; reverse lookup ("all concepts in family X, primary or secondary") is `WHERE family_id = X`; tagger lookup ("the primary family for concept Y") is `WHERE concept_id = Y AND is_primary = 1`. The single-primary invariant is enforced by the partial unique index on `(concept_id) WHERE is_primary = 1`.
+**One unified membership table, `is_primary` flag.** A concept's set of family affiliations lives in a single table; the `is_primary = 1` row is its canonical home and drives prompt rendering, scoped dedupe, and the "domain → family → concept" path. `is_primary = 0` rows are secondary affiliations (§5.3). Forward lookup ("all family affiliations for concept Y") is `WHERE concept_id = Y`; reverse lookup ("all concepts in family X, primary or secondary") is `WHERE family_id = X`; tagger lookup ("the primary family for concept Y") is `WHERE concept_id = Y AND is_primary = 1`. The single-primary invariant is enforced by the partial unique index on `(concept_id) WHERE is_primary = 1`; the `CHECK(is_primary IN (0, 1))` prevents stray values from manual SQL or future migrations.
 
-**FKs everywhere.** `concept_family_membership` references both `nodes(id)` and `concept_families(id)`; `concept_aliases` references `nodes(id)`. Every membership references a real family, every alias references a real concept, and orphans are impossible by construction.
+**Symmetric alias tables.** `concept_aliases(concept_id, alias)` and `family_aliases(family_id, alias)` have parallel shape: same PK form, same indexed `alias` column, same population mechanics. Earlier drafts had family aliases as an inline JSON-encoded array column; the split-into-rows version eliminates the JSON↔array conversion in `export.py`, unifies the query path in `src/lib/graph.ts`, and lets both alias surfaces take a `pg_trgm` GIN index later if alias volume ever justifies it.
+
+**ON DELETE CASCADE** on the FKs that reference `nodes(id)` and `concept_families(id)` from the membership and alias tables — deleting a concept or family cleans up its dependent rows automatically rather than failing with a RESTRICT error. The FK from `concept_family_membership.family_id → concept_families(id)` stays at default RESTRICT (deleting a family with members is a deliberate action that should require the membership rows be removed first).
 
 **No tier column.** The tier is implicit: `parent_id IS NULL` ⟺ domain. A separate `tier` enum is redundant with `parent_id` and creates the possibility of the two disagreeing.
 
-### 5.1 Aliases (families, domains, and concepts)
+### 5.1 Aliases (`family_aliases` and `concept_aliases`)
 
-Two parallel mechanisms, deliberately shaped differently to fit their volume and update patterns.
+Two parallel mechanisms with identical shape. `label` is the canonical, prompt-facing string ("Cosmic Agents", "Monad"); aliases are user-facing synonyms that the query path also matches. Family labels that read well as prompt headers don't necessarily read well as queries users type, and concept labels like `monad` miss when users type "the One" — both tables fix the same problem at their tier.
 
-**Family and domain aliases — inline column on `concept_families`.** `label` is the canonical, prompt-facing string ("Cosmic Agents"). `aliases` is a JSON-encoded array of user-facing synonyms — for `cosmology.cosmic_agents` this might be `["demiurges and powers", "cosmic powers", "world-rulers"]`. Family labels that read well as prompt headers don't necessarily read well as queries users type. Domains carry aliases the same way: `cosmology` matches the bare term but `["the cosmos", "origin of the universe"]` would also dispatch to the domain.
+**Symmetric design.** Earlier drafts had `family_aliases` as an inline JSON-encoded array column on `concept_families` (since family count is small). Promoting them to a join table parallel to `concept_aliases` costs almost nothing — a couple-dozen extra rows in `family_aliases` versus a few-dozen JSON-encoded strings — and pays back in:
 
-**Concept aliases — separate `concept_aliases` table.** Concepts outnumber families ~4×, alias counts per concept are uneven, and indexing alias→concept needs a join-table for clean LIKE behaviour. Each row is one alias for one concept: `('monad', 'the One')`, `('monad', 'the First Principle')`, `('gnosis_direct_knowledge', 'gnosis')`. The asymmetry with family aliases (inline) is intentional — small static set vs larger growing set.
+- One query path in `src/lib/graph.ts` instead of two (a join, not a join-or-unnest)
+- No JSON ↔ `TEXT[]` conversion in `export.py`
+- Both surfaces can take a `pg_trgm` GIN index symmetrically if alias volume ever justifies it
+- Both populate the same way through review actions; one mental model, not two
 
-**Storage asymmetry between databases.** `concept_families.aliases` is JSON-encoded text in SQLite, native `TEXT[]` in Postgres. The conversion happens in exactly one place: `export.py`'s `load_families`. Nothing reads JSON-encoded aliases at runtime in guru-web; nothing reads native arrays at runtime in the pipeline.
+Domains use the same `family_aliases` table — domain rows live in `concept_families` (with `parent_id = NULL`), so their aliases naturally land in `family_aliases` against the bare-ID `family_id` (`cosmology`, not `cosmology.cosmic_agents`).
 
 **Alias hygiene.** Aliases must unambiguously target one family or concept. If a phrase plausibly belongs to two — `"god"` could route to any number of families in theology and cosmology; `"light"` to `divine_light` (theology) but also `inner_light` (anthropology) — leave it off both rather than create cross-family false matches. The quality gate during alias population is: would a user typing this phrase be satisfied with the chunks they get back? If the answer is "depends on which sense they meant," it's not a good alias. Prefer longer, more specific phrases (`"the highest divine realm"`) over single tokens (`"realm"`).
 
-**Population is incremental.** All three alias surfaces (family inline, domain inline, concept table) ship empty in v1 and accumulate as natural-language queries surface that the canonical labels fail to match. The sync script's report (§7) flags families with no aliases and concepts with no aliases as worklists. Population is not the migration's blocker.
+**Population is incremental.** Both alias surfaces ship empty in v1 (or with a small hand-seeded set) and accumulate as natural-language queries surface that the canonical labels fail to match. The sync script's report (§7) flags families and concepts with no aliases as worklists. Population is not the migration's blocker.
 
-### 5.2 What `concept_aliases` does and does not include
+### 5.2 What the alias tables do and do not include
 
 - `alias` is the user-facing surface string. Both single phrases ("the One") and multi-token phrases ("the absolutely simple principle") are valid.
-- Aliases are *not* stored in the TOML alongside concept definitions inline — they live in a dedicated `[concept_aliases]` section (§6) so the per-family concept lists stay clean.
+- Concept aliases are stored in a dedicated `[concept_aliases]` TOML section (§6). Family aliases stay inline under each `[families.X.Y]` block in the TOML for editing ergonomics — when reading a family's definition you see its aliases next to it — and the sync script splits the inline array into rows of `family_aliases` on apply.
 - Aliases are *not* shown to the LLM in the tagger prompt. The prompt sees `id`, `label`, `definition`, family context. Aliases are read-side metadata only.
-- Aliases do *not* affect concept identity, definition, or tagging. A concept with 12 aliases and a concept with 0 aliases are functionally identical from the tagging path's perspective.
+- Aliases do *not* affect identity, definition, or tagging. A concept (or family) with 12 aliases and one with 0 aliases are functionally identical from the tagging path's perspective.
 
 ### 5.3 Secondary family affiliations (`is_primary = 0`)
 
@@ -273,7 +291,7 @@ demiurge                = ["the craftsman", "the second power"]
 # ... etc, populated incrementally
 ```
 
-All alias fields (family `aliases`, domain `aliases`, `[concept_aliases]` entries) are **optional**. Domains, families, and concepts without aliases match by their canonical label only. Population is incremental — fill in aliases as natural-language queries surface that the canonical label fails to match.
+All alias fields are **optional**. Family aliases stay inline under each `[families.X]` or `[families.X.Y]` block as an `aliases = [...]` array for editing ergonomics; the sync script splits the array into rows of `family_aliases(family_id, alias)` on apply. Concept aliases live in the dedicated `[concept_aliases]` section (parallel structure to the table). Domains, families, and concepts without aliases match by their canonical label only. Population is incremental — fill in aliases as natural-language queries surface that the canonical label fails to match.
 
 The loader distinguishes domain-level (one segment after `families.`) from family-level (two segments) by counting dots in the TOML path. One-segment entries are domain rows with `parent_id = NULL`; two-segment entries are family rows pointing at the matching one-segment domain. (Alternative: explicit `[domains.X]` sectioning — rejected as more verbose for no gain, with the dot-count rule documented in a header comment at the top of the file.)
 
@@ -295,13 +313,16 @@ Default behaviour is `--dry-run`, summarising what would change. Same defaulting
 
 Logic per run:
 
-1. Parse TOML, build the expected state: `{family_id: (parent_id, label, definition, aliases)}`, `{concept_id: family_id}`, and `{concept_id: [aliases]}`.
-2. Upsert each family row (`INSERT … ON CONFLICT(id) DO UPDATE SET parent_id=excluded.parent_id, label=excluded.label, definition=excluded.definition, aliases=excluded.aliases`). Aliases are stored as JSON-encoded text in SQLite.
+1. Parse TOML, build the expected state: `{family_id: (parent_id, label, definition)}`, `{family_id: [aliases]}` (from inline arrays), `{concept_id: family_id}`, and `{concept_id: [aliases]}`.
+2. Upsert each family row (`INSERT … ON CONFLICT(id) DO UPDATE SET parent_id=excluded.parent_id, label=excluded.label, definition=excluded.definition`).
 3. Upsert each concept node — same pattern `promote_to_expresses` (`scripts/review_tags.py:67`) already uses for `nodes`, covering the case where a concept is in TOML but no chunk has tagged it yet.
 4. Set primary memberships from the TOML. For each concept Y assigned to family X:
    - Demote any other current primary: `UPDATE concept_family_membership SET is_primary = 0 WHERE concept_id = Y AND is_primary = 1 AND family_id != X` — the demoted row stays as a secondary affiliation rather than being deleted, on the conservative assumption that the previous home may still be a legitimate cross-cutting affiliation. A `--strict-primary` flag (off by default) would instead delete the demoted row for a clean cut.
    - Upsert the target as primary: `INSERT INTO concept_family_membership (concept_id, family_id, is_primary) VALUES (Y, X, 1) ON CONFLICT(concept_id, family_id) DO UPDATE SET is_primary = 1`.
-5. Replace `concept_aliases` rows for each concept that appears in the TOML's `[concept_aliases]` section: `DELETE FROM concept_aliases WHERE concept_id = ?` then `INSERT` the new alias set. Concepts not mentioned in `[concept_aliases]` are not touched (so manually-added aliases via review surfaces survive).
+5. Replace alias rows for each owner mentioned in the TOML, on both alias tables:
+   - For each family whose `aliases = [...]` array appears in the TOML: `DELETE FROM family_aliases WHERE family_id = ?` then `INSERT` the new alias set.
+   - For each concept appearing in the TOML's `[concept_aliases]` section: `DELETE FROM concept_aliases WHERE concept_id = ?` then `INSERT` the new alias set.
+   - Owners not mentioned (no `aliases = [...]` on the family, no entry in `[concept_aliases]`) are not touched — so manually-added aliases via review surfaces survive sync runs.
 6. **Does not touch** existing `is_primary = 0` rows in `concept_family_membership`. Secondary memberships are populated only via review actions (§5.3), not from the TOML. The sync reads existing secondary rows and reports their count but does not write or delete them.
 7. Report: `N families upserted, M primary memberships unchanged, K primary memberships moved (from→to), L primaries demoted to secondary, J concepts in DB with no primary family, F families with no concepts, A families with no aliases, C concepts with no aliases, S secondary memberships present`.
 
@@ -409,19 +430,21 @@ CREATE TABLE concepts (
 
 ### 10.2 Schema additions
 
-Three new tables in `schema/corpus-schema.sql`, mirroring the SQLite shape:
+Four new tables in `schema/corpus-schema.sql`, mirroring the SQLite shape:
 
 ```sql
 CREATE TABLE concept_families (
     id          TEXT PRIMARY KEY,
     parent_id   TEXT REFERENCES concept_families(id),
     label       TEXT NOT NULL,
-    definition  TEXT NOT NULL,
-    aliases     TEXT[] NOT NULL DEFAULT '{}'   -- native Postgres array; see §5.1
+    definition  TEXT NOT NULL
 );
 
+CREATE INDEX idx_concept_families_parent
+    ON concept_families(parent_id);
+
 CREATE TABLE concept_family_membership (
-    concept_id  TEXT NOT NULL REFERENCES concepts(id),
+    concept_id  TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
     family_id   TEXT NOT NULL REFERENCES concept_families(id),
     is_primary  BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (concept_id, family_id)
@@ -434,37 +457,51 @@ CREATE INDEX idx_concept_family_membership_family
     ON concept_family_membership(family_id);
 
 CREATE TABLE concept_aliases (
-    concept_id  TEXT NOT NULL REFERENCES concepts(id),
+    concept_id  TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
     alias       TEXT NOT NULL,
     PRIMARY KEY (concept_id, alias)
 );
 
 CREATE INDEX idx_concept_aliases_alias
     ON concept_aliases(alias);
+
+CREATE TABLE family_aliases (
+    family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
+    alias       TEXT NOT NULL,
+    PRIMARY KEY (family_id, alias)
+);
+
+CREATE INDEX idx_family_aliases_alias
+    ON family_aliases(alias);
 ```
 
-The Postgres `is_primary` is a native `BOOLEAN`; SQLite uses `INTEGER` with `0`/`1` values. The export step (§10.3) converts at emit time.
-
-The Postgres `concept_families.aliases` column uses the native `TEXT[]` array type rather than SQLite's JSON-encoded text. The export step (§10.3) handles the conversion in exactly one place: read JSON-encoded aliases from SQLite, emit as Postgres array literals.
+`is_primary` is a native `BOOLEAN` here vs `INTEGER` 0/1 in SQLite — `export.py` converts at emit time. No JSON-array conversion any more; both `family_aliases` and `concept_aliases` are row-shaped on both sides.
 
 Plus one denormalised column on the existing `concepts` table:
 
 ```sql
 ALTER TABLE concepts ADD COLUMN family_id TEXT REFERENCES concept_families(id);
+
+COMMENT ON COLUMN concepts.family_id IS
+    'Denormalised primary family for two-way-join filters. Maintained by export.py from concept_family_membership WHERE is_primary; do not edit at runtime.';
+
+COMMENT ON COLUMN concepts.domain IS
+    'Derived from concept_families.parent_id of the row pointed at by family_id. Set by export.py only; do not edit at runtime. May be removed in a follow-on migration once src/lib/ queries no longer reference it.';
 ```
 
 The `family_id` column on `concepts` is intentionally redundant with `concept_family_membership`. The common read pattern is "filter or group chunks by family," which without denormalisation needs a three-way join (`chunks` → `edges` (EXPRESSES) → `concepts` → `concept_family_membership`). With `concepts.family_id` it's a two-way join. The membership table stays as the audit table; `concepts.family_id` is the convenience column.
 
-The existing `concepts.domain` column also stays. It's derivable (`concept_families.parent_id` of the row pointed at by `family_id`), but every existing query in `src/lib/` that filters by domain keeps working unchanged. Removing it is a separate cleanup.
+The existing `concepts.domain` column also stays — derivable from `concept_families.parent_id` of the row pointed at by `family_id`, but every existing query in `src/lib/` that filters by domain keeps working unchanged. The column comment marks it as derived-and-export-only so future code paths know not to write to it; full removal is queued for a follow-on `src/lib/` migration.
 
 ### 10.3 Export changes
 
-`export.py` adds three new emitter blocks and an enrichment to the existing one:
+`export.py` adds four new emitter blocks and an enrichment to the existing one:
 
-1. `load_families()` — read `concept_families` from SQLite (including the JSON-encoded `aliases` column), emit `concept_families` rows with aliases converted to Postgres array literal syntax.
+1. `load_families()` — read `concept_families` from SQLite, emit four-column `concept_families` rows. No aliases on the row any more; they're a separate table.
 2. `load_concept_family_membership()` — read the membership table including `is_primary`, emit each row to Postgres converting `0`/`1` to `FALSE`/`TRUE`. In v1 every row has `is_primary = 1` (only primaries populated); the column carries through cleanly when secondary rows start appearing.
 3. `load_concept_aliases()` — read the aliases table, emit it. Empty until aliases get populated.
-4. `load_concepts()` already merges TOML and `nodes`; extend it to also pull each concept's primary `family_id` (from `WHERE is_primary = 1`) into the new `concepts.family_id` column.
+4. `load_family_aliases()` — read the family aliases table, emit it. Same shape as `load_concept_aliases`; empty in v1 unless hand-seeded.
+5. `load_concepts()` already merges TOML and `nodes`; extend it to also pull each concept's primary `family_id` (from `WHERE is_primary = 1`) into the new `concepts.family_id` column. `concepts.domain` is set by the same lookup chain (`concept_families.parent_id` of that primary family) so the derived-only invariant holds at the moment of export.
 
 Schema isolation via `corpus_new.*` (the existing staging-then-swap pattern at `export.py:52-53`) extends to the new tables for free — they're created in the staging schema and atomic-renamed into `corpus` at load time, same as everything else. `SCHEMA_VERSION` in `export.py:46` bumps from 2 to 3.
 
@@ -495,9 +532,9 @@ Each match emits `(concept_id, match_tier)` where `match_tier ∈ {concept, fami
 **Matching semantics — substring LIKE everywhere.** All three paths use `%token%` substring match against lowercased values, the same as today's concept-label match. For aliases that means:
 
 - Concept aliases: `WHERE EXISTS (SELECT 1 FROM concept_aliases ca WHERE ca.concept_id = concepts.id AND LOWER(ca.alias) LIKE $1)`.
-- Family/domain aliases (Postgres TEXT[]): `WHERE LOWER(label) LIKE $1 OR EXISTS (SELECT 1 FROM unnest(aliases) a WHERE LOWER(a) LIKE $1)`.
+- Family/domain aliases (parallel shape now that `family_aliases` is a join table): `WHERE LOWER(label) LIKE $1 OR EXISTS (SELECT 1 FROM family_aliases fa WHERE fa.family_id = concept_families.id AND LOWER(fa.alias) LIKE $1)`.
 
-Equality matching would mean "cosmic powers" hits but "the cosmic powers" misses — wrong semantics for free-text queries. The substring pattern matches the existing label-LIKE behaviour so the three namespaces are uniform.
+Symmetric query shape across both alias surfaces — the earlier `unnest(aliases)` form is gone. Equality matching would mean "cosmic powers" hits but "the cosmic powers" misses — wrong semantics for free-text queries. The substring pattern matches the existing label-LIKE behaviour so the three namespaces are uniform.
 
 **v1 with empty alias tables.** All alias matches return zero rows in v1. Queries match canonical labels only, which is exactly today's behaviour for the concept path plus the new family/domain paths. Aliases earn their keep as they get populated; the query code is correct from day one and just lights up more results over time.
 
@@ -529,14 +566,14 @@ The proposal loop (not yet built; lives in this design's slipstream) is the plan
 
 Strict ordering. Each step is independently shippable and a no-op for already-tagged data.
 
-1. **SQLite migration** — `scripts/migrations/v3_006_concept_families.sql` creates `concept_families` (with `aliases`), `concept_family_membership` (with `is_primary` and the partial unique index), and `concept_aliases`. Idempotent.
+1. **SQLite migration** — `scripts/migrations/v3_006_concept_families.sql` creates `concept_families`, `concept_family_membership` (with `is_primary`, the `CHECK(is_primary IN (0,1))`, ON DELETE CASCADE to `nodes`, and the partial unique index), `concept_aliases` (with ON DELETE CASCADE), `family_aliases` (with ON DELETE CASCADE), and the supporting indexes (`idx_concept_families_parent`, `idx_concept_family_membership_family`, `idx_concept_aliases_alias`, `idx_family_aliases_alias`). Idempotent.
 2. **Restructure `taxonomy.toml`** with the new sectioning. Even at this step every family can be a single-tier mirror of the old categories (one family per domain, containing all that domain's concepts). The file parses, the sync script works, the tagger prompt renders — the family tier just isn't doing much work yet.
-3. **`scripts/sync_taxonomy.py`** populates the three new SQLite tables (families, primary memberships at `is_primary = 1`, concept aliases). Run with `--dry-run` first, eyeball the report, then `--apply`. Secondary memberships (`is_primary = 0`) are left empty by the sync; populated only via review actions.
+3. **`scripts/sync_taxonomy.py`** populates the four new SQLite tables (families, primary memberships at `is_primary = 1`, concept aliases, family aliases). Run with `--dry-run` first, eyeball the report, then `--apply`. Secondary memberships (`is_primary = 0`) are left empty by the sync; populated only via review actions.
 4. **Update `load_taxonomy()` and `build_prompt()`** to render grouped. Bump `PROMPT_VERSION` from `v1`. **This is the moment the LLM starts seeing structure.** New tag runs from this point use the new prompt; old `staged_tags` remain valid at `v1`.
 5. **Ad-hoc bench** — run the new prompt against the old on a held-out sample (50–100 chunks). Decision metric: agreement-with-review at score ≥ 2. Once the planned bench harness ships (`docs/benchmark-stage4.md`), the comparison becomes formalised.
 6. **Hand-cluster per §4** into proper two-tier families. Edit TOML, re-run sync. The membership table updates via the `ON CONFLICT(concept_id) DO UPDATE` clause; no other table is touched. Iterate as the right family structure becomes clearer.
 7. **Update review surfaces** — `print_tag_row` in `review_tags.py`, equivalents in `review_edges.py` and the guru-review web UI. Cosmetic, low-risk.
-8. **Update `export.py`** to emit the new tables (`concept_families` with aliases, `concept_family_membership` with `is_primary`, `concept_aliases`) and the `concepts.family_id` column; bump `SCHEMA_VERSION` to 3. Update `guru-web/schema/corpus-schema.sql` to match.
+8. **Update `export.py`** to emit the new tables (`concept_families`, `concept_family_membership` with `is_primary`, `concept_aliases`, `family_aliases`) and the `concepts.family_id` column with its COMMENT clauses; bump `SCHEMA_VERSION` to 3. Update `guru-web/schema/corpus-schema.sql` to match.
 9. **Run a full export + VPS apply** to land the schema on the Postgres mirror.
 10. **Update `extractConcepts` in `src/lib/graph.ts`** for family/domain matching with scalar weight by match tier, substring LIKE against label + aliases across all three namespaces. Verify against representative high-level queries (`cosmology`, `the cosmos`, `cosmic agents`, `the One`, `salvation`).
 11. **Family-aware new-concept proposal loop** is built on this foundation as separate work.
@@ -558,15 +595,18 @@ If the migration needs to be unwound:
 
 ```sql
 -- SQLite
+DROP TABLE family_aliases;
 DROP TABLE concept_aliases;
 DROP TABLE concept_family_membership;
 DROP TABLE concept_families;
 
 -- guru-web Postgres
+DROP TABLE family_aliases;
 DROP TABLE concept_aliases;
 DROP TABLE concept_family_membership;
 DROP TABLE concept_families;
 ALTER TABLE concepts DROP COLUMN family_id;
+COMMENT ON COLUMN concepts.domain IS NULL;
 ```
 
 `tag_concepts.py` and `extractConcepts` revert by checking out the prior commit. `PROMPT_VERSION` and `SCHEMA_VERSION` revert. No `staged_tags`, `edges`, `nodes`, or chunk data is touched.
@@ -587,3 +627,6 @@ ALTER TABLE concepts DROP COLUMN family_id;
 - **Concepts that genuinely span families** (e.g. `numerical_mysticism`, `forbidden_knowledge`). Two-level policy in the unified `concept_family_membership` table: the `is_primary = 1` row records the dominant family (drives prompt rendering, scoped dedupe, the canonical home); `is_primary = 0` rows record secondary affiliations for retrieval. v1 has only primary rows — the prose-in-definition workaround handles current cases and the seam is open. The open question is the *population trigger*: a reviewer-driven workflow (every `[c]reassign` action in the candidate-concept reviewer offers a "keep the old family as secondary?" option) is probably right, but the UX hasn't been designed. The exit ramp to the relational graph layer is still real — secondary memberships handle family-level cross-cutting but not concept-to-concept relationships.
 - **Whether to surface families through the corpus metadata endpoint.** `src/app/api/corpus/route.ts` could return the family tree alongside traditions/texts so the UI can build a navigator. Straightforward but independent from the query-extraction work in §11.
 - **Vector-path enrichment from aliases (future).** Today `vectorSearch` embeds the raw user query and is completely isolated from the hierarchy. A future enhancement could use alias matches as a signal to enrich the vector path: when a query matches a family alias, do a second embedding pass on the family definition and blend the vector results, or at index time factor family definitions into chunk embeddings so the embedded chunks know their family. Both would move the retrieval needle further than the keyword path can on its own, but neither is in scope for this migration — they want their own spec once the keyword path is in production and we have query-traffic data to inform the design.
+- **Alias case normalisation.** The schema accepts `"The One"` and `"the one"` as distinct PK values; the query path lowercases on read so both match equivalently, but storage allows duplicates. At ~30 aliases the dupes are easy to spot manually. Worth tightening later either by normalising on write (`CHECK(alias = LOWER(alias))`) or by storing a normalised shadow column with a functional index. Not blocking.
+- **`pg_trgm` GIN index on alias columns (future, at scale).** The query path's substring LIKE against `concept_aliases.alias` and `family_aliases.alias` is fast at thousands of rows. At ~50K rows it starts to matter. Mitigation when triggered: `CREATE EXTENSION IF NOT EXISTS pg_trgm` plus `CREATE INDEX … USING gin (LOWER(alias) gin_trgm_ops)` on each alias table. Not part of v1.
+- **Alias uniqueness across owners.** The schema lets the same alias point to two different concepts (or two different families). The hygiene rule in §5.1 says aliases should unambiguously target one thing, but the schema doesn't enforce it. A sync-time sanity check that warns on duplicates is the natural enforcement point; explicit `UNIQUE(alias)` would be too strict (legitimate cross-owner synonyms should occasionally exist with a quality gate, not be prohibited by schema). Open: where the warning lives and what its failure mode is.
