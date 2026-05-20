@@ -324,7 +324,7 @@ erDiagram
     concept_families ||--o{ family_aliases : "family_id"
 ```
 
-`concepts.family_id` is the denormalised primary family — intentionally redundant with `concept_family_membership WHERE is_primary`, kept for two-way-join filters from chunks. `concepts.domain` is also kept (derivable but every existing query in `src/lib/` uses it; removal is a separate cleanup). Native Postgres types: `aliases` is `TEXT[]` not JSON, `is_primary` is `BOOLEAN` not `INTEGER`. Conversion from SQLite happens in `export.py`'s `load_families` / `load_concept_family_membership` emitter blocks. `edges` is unchanged — the hierarchy adds no new edge types; family-level expansion at retrieval is a join through `concept_family_membership`, not new rows.
+`concepts.family_id` is the denormalised primary family — intentionally redundant with `concept_family_membership WHERE is_primary`, kept for two-way-join filters from chunks. `concepts.domain` is also kept (derivable but every existing query in `src/lib/` uses it; removal is a separate cleanup, queued for a follow-on `src/lib/` migration). `is_primary` is a native `BOOLEAN` here vs `INTEGER` 0/1 in SQLite — `export.py`'s `load_concept_family_membership` converts at emit time. The four new tables (`concept_families`, `concept_family_membership`, `concept_aliases`, `family_aliases`) mirror the SQLite shape one-for-one; no JSON↔array conversion any more since both alias surfaces are row-shaped on both sides. `edges` is unchanged — the hierarchy adds no new edge types; family-level expansion at retrieval is a join through `concept_family_membership`, not new rows.
 
 ---
 
