@@ -1,0 +1,14 @@
+{
+  "id": "10512e6a",
+  "type": "feature",
+  "state": "open",
+  "summary": "Implement concept-hierarchy migration per docs/concept-hierarchy/design.md",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:38:52.095Z",
+  "updated_at": "2026-05-20T18:38:52.095Z",
+  "tags": [
+    "concept-hierarchy"
+  ]
+}
