@@ -156,12 +156,12 @@ erDiagram
 
     concept_aliases {
         TEXT concept_id PK, FK "NEW"
-        TEXT alias PK "NEW"
+        TEXT alias PK "NEW — CHECK lowercased"
     }
 
     family_aliases {
         TEXT family_id PK, FK "NEW"
-        TEXT alias PK "NEW"
+        TEXT alias PK "NEW — CHECK lowercased"
     }
 
     nodes ||--o{ nodes : "tradition_id"
@@ -180,7 +180,7 @@ erDiagram
     concept_families ||--o{ family_aliases : "family_id"
 ```
 
-`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`, plus `CHECK(is_primary IN (0,1))` against stray values. Reverse-lookup index on `(family_id)`. `concept_aliases` and `family_aliases` are symmetric join tables (same shape, same indexability) and both index `alias` for LIKE matching from the query path. FKs from membership/alias tables to `nodes`/`concepts` use ON DELETE CASCADE so concept deletion cleans up dependent rows automatically. Family rows ship populated (from `concepts/taxonomy.toml`); membership rows ship with `is_primary = 1` populated and `is_primary = 0` empty in v1; alias rows ship empty (or hand-seeded) and populate incrementally.
+`concept_family_membership` enforces "exactly one primary family per concept" via a partial unique index on `(concept_id) WHERE is_primary = 1`, plus `CHECK(is_primary IN (0,1))` against stray values. Reverse-lookup index on `(family_id)`. `concept_aliases` and `family_aliases` are symmetric join tables (same shape, same indexability) and both index `alias` for LIKE matching from the query path; the `CHECK(alias = LOWER(alias))` ensures stored values are already lowercased so query-time LOWER is a no-op on aliases and the Python-side `.lower()` in the sync script does the load-bearing case folding. FKs from membership/alias tables to `nodes`/`concepts` use ON DELETE CASCADE so concept deletion cleans up dependent rows automatically. Family rows ship populated (from `concepts/taxonomy.toml`); membership rows ship with `is_primary = 1` populated and `is_primary = 0` empty in v1; alias rows ship empty (or hand-seeded) and populate incrementally.
 
 ---
 
@@ -305,12 +305,12 @@ erDiagram
 
     concept_aliases {
         TEXT concept_id PK, FK "NEW"
-        TEXT alias PK "NEW"
+        TEXT alias PK "NEW — CHECK lowercased"
     }
 
     family_aliases {
         TEXT family_id PK, FK "NEW"
-        TEXT alias PK "NEW"
+        TEXT alias PK "NEW — CHECK lowercased"
     }
 
     traditions ||--o{ texts : "tradition"

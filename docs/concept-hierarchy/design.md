@@ -176,7 +176,7 @@ CREATE INDEX IF NOT EXISTS idx_concept_family_membership_family
 
 CREATE TABLE IF NOT EXISTS concept_aliases (
   concept_id  TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
-  alias       TEXT NOT NULL,
+  alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
   PRIMARY KEY (concept_id, alias)
 );
 
@@ -185,7 +185,7 @@ CREATE INDEX IF NOT EXISTS idx_concept_aliases_alias
 
 CREATE TABLE IF NOT EXISTS family_aliases (
   family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
-  alias       TEXT NOT NULL,
+  alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
   PRIMARY KEY (family_id, alias)
 );
 
@@ -219,6 +219,8 @@ Two parallel mechanisms with identical shape. `label` is the canonical, prompt-f
 Domains use the same `family_aliases` table — domain rows live in `concept_families` (with `parent_id = NULL`), so their aliases naturally land in `family_aliases` against the bare-ID `family_id` (`cosmology`, not `cosmology.cosmic_agents`).
 
 **Alias hygiene.** Aliases must unambiguously target one family or concept. If a phrase plausibly belongs to two — `"god"` could route to any number of families in theology and cosmology; `"light"` to `divine_light` (theology) but also `inner_light` (anthropology) — leave it off both rather than create cross-family false matches. The quality gate during alias population is: would a user typing this phrase be satisfied with the chunks they get back? If the answer is "depends on which sense they meant," it's not a good alias. Prefer longer, more specific phrases (`"the highest divine realm"`) over single tokens (`"realm"`).
+
+**Case normalisation.** Aliases are stored lowercased so user queries match regardless of how they're typed. The load-bearing normalisation is **Python-side** in `sync_taxonomy.py` (and any future review-action writer): `alias.lower()` is applied before INSERT. Python's `str.lower()` is Unicode-aware via the Unicode database — `'Sūnyatā'.lower()` returns `'sūnyatā'` correctly, the same way Postgres' Unicode-aware `LOWER` does. The `CHECK(alias = LOWER(alias))` on each alias column is a secondary defense. In Postgres it's fully Unicode-aware and would reject a mixed-case non-ASCII alias if one ever bypassed the sync script. In SQLite the CHECK is ASCII-only (SQLite's built-in `LOWER` only folds the ASCII range), which means it catches `'The One'` but not `'Sūnyatā'`. The Python lowercase makes the SQLite CHECK trivially satisfied in normal flow; the SQLite weakness only matters for direct manual SQL, and the strict Postgres CHECK catches that case at export time. Spot-checked the existing taxonomy: 32 non-ASCII characters appear in the corpus, all in concept *definitions* (em dashes, one arrow), zero in IDs, labels, or anything that would feed `family_aliases` / `concept_aliases`. No latent normalisation bug today; the two-layer normalisation is forward-protection.
 
 **Population is incremental.** Both alias surfaces ship empty in v1 (or with a small hand-seeded set) and accumulate as natural-language queries surface that the canonical labels fail to match. The sync script's report (§7) flags families and concepts with no aliases as worklists. Population is not the migration's blocker.
 
@@ -319,10 +321,10 @@ Logic per run:
 4. Set primary memberships from the TOML. For each concept Y assigned to family X:
    - Demote any other current primary: `UPDATE concept_family_membership SET is_primary = 0 WHERE concept_id = Y AND is_primary = 1 AND family_id != X` — the demoted row stays as a secondary affiliation rather than being deleted, on the conservative assumption that the previous home may still be a legitimate cross-cutting affiliation. A `--strict-primary` flag (off by default) would instead delete the demoted row for a clean cut.
    - Upsert the target as primary: `INSERT INTO concept_family_membership (concept_id, family_id, is_primary) VALUES (Y, X, 1) ON CONFLICT(concept_id, family_id) DO UPDATE SET is_primary = 1`.
-5. Replace alias rows for each owner mentioned in the TOML, on both alias tables:
-   - For each family whose `aliases = [...]` array appears in the TOML: `DELETE FROM family_aliases WHERE family_id = ?` then `INSERT` the new alias set.
-   - For each concept appearing in the TOML's `[concept_aliases]` section: `DELETE FROM concept_aliases WHERE concept_id = ?` then `INSERT` the new alias set.
-   - Owners not mentioned (no `aliases = [...]` on the family, no entry in `[concept_aliases]`) are not touched — so manually-added aliases via review surfaces survive sync runs.
+5. Replace alias rows for each owner mentioned in the TOML, on both alias tables. Each value is passed through Python's `str.lower()` before INSERT (Unicode-aware case folding — see §5.1) so SQLite stores the canonical lowercased form and the CHECK constraint on the column is trivially satisfied:
+   - For each family whose `aliases = [...]` array appears in the TOML: `DELETE FROM family_aliases WHERE family_id = ?` then `INSERT (family_id, alias.lower())` for each alias.
+   - For each concept appearing in the TOML's `[concept_aliases]` section: `DELETE FROM concept_aliases WHERE concept_id = ?` then `INSERT (concept_id, alias.lower())` for each alias.
+   - Owners not mentioned (no `aliases = [...]` on the family, no entry in `[concept_aliases]`) are not touched — so manually-added aliases via review surfaces survive sync runs (the review-action writer applies the same `.lower()` discipline).
 6. **Does not touch** existing `is_primary = 0` rows in `concept_family_membership`. Secondary memberships are populated only via review actions (§5.3), not from the TOML. The sync reads existing secondary rows and reports their count but does not write or delete them.
 7. Report: `N families upserted, M primary memberships unchanged, K primary memberships moved (from→to), L primaries demoted to secondary, J concepts in DB with no primary family, F families with no concepts, A families with no aliases, C concepts with no aliases, S secondary memberships present`.
 
@@ -458,7 +460,7 @@ CREATE INDEX idx_concept_family_membership_family
 
 CREATE TABLE concept_aliases (
     concept_id  TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
-    alias       TEXT NOT NULL,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
     PRIMARY KEY (concept_id, alias)
 );
 
@@ -467,13 +469,15 @@ CREATE INDEX idx_concept_aliases_alias
 
 CREATE TABLE family_aliases (
     family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
-    alias       TEXT NOT NULL,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
     PRIMARY KEY (family_id, alias)
 );
 
 CREATE INDEX idx_family_aliases_alias
     ON family_aliases(alias);
 ```
+
+The Postgres CHECK is the **strict downstream catch** for the SQLite/Postgres LOWER asymmetry described in §5.1. Postgres' `LOWER` is Unicode-aware, so a row like `('monad', 'Sūnyatā')` that slips through the lenient SQLite check would be rejected at export time when the COPY hits the Postgres constraint. With the Python-side `.lower()` in the sync script doing the actual normalisation, this rarely fires — but it's the canonical authority on what counts as lowercased.
 
 `is_primary` is a native `BOOLEAN` here vs `INTEGER` 0/1 in SQLite — `export.py` converts at emit time. No JSON-array conversion any more; both `family_aliases` and `concept_aliases` are row-shaped on both sides.
 
@@ -627,6 +631,6 @@ COMMENT ON COLUMN concepts.domain IS NULL;
 - **Concepts that genuinely span families** (e.g. `numerical_mysticism`, `forbidden_knowledge`). Two-level policy in the unified `concept_family_membership` table: the `is_primary = 1` row records the dominant family (drives prompt rendering, scoped dedupe, the canonical home); `is_primary = 0` rows record secondary affiliations for retrieval. v1 has only primary rows — the prose-in-definition workaround handles current cases and the seam is open. The open question is the *population trigger*: a reviewer-driven workflow (every `[c]reassign` action in the candidate-concept reviewer offers a "keep the old family as secondary?" option) is probably right, but the UX hasn't been designed. The exit ramp to the relational graph layer is still real — secondary memberships handle family-level cross-cutting but not concept-to-concept relationships.
 - **Whether to surface families through the corpus metadata endpoint.** `src/app/api/corpus/route.ts` could return the family tree alongside traditions/texts so the UI can build a navigator. Straightforward but independent from the query-extraction work in §11.
 - **Vector-path enrichment from aliases (future).** Today `vectorSearch` embeds the raw user query and is completely isolated from the hierarchy. A future enhancement could use alias matches as a signal to enrich the vector path: when a query matches a family alias, do a second embedding pass on the family definition and blend the vector results, or at index time factor family definitions into chunk embeddings so the embedded chunks know their family. Both would move the retrieval needle further than the keyword path can on its own, but neither is in scope for this migration — they want their own spec once the keyword path is in production and we have query-traffic data to inform the design.
-- **Alias case normalisation.** The schema accepts `"The One"` and `"the one"` as distinct PK values; the query path lowercases on read so both match equivalently, but storage allows duplicates. At ~30 aliases the dupes are easy to spot manually. Worth tightening later either by normalising on write (`CHECK(alias = LOWER(alias))`) or by storing a normalised shadow column with a functional index. Not blocking.
-- **`pg_trgm` GIN index on alias columns (future, at scale).** The query path's substring LIKE against `concept_aliases.alias` and `family_aliases.alias` is fast at thousands of rows. At ~50K rows it starts to matter. Mitigation when triggered: `CREATE EXTENSION IF NOT EXISTS pg_trgm` plus `CREATE INDEX … USING gin (LOWER(alias) gin_trgm_ops)` on each alias table. Not part of v1.
+- **`pg_trgm` GIN index on alias columns (future, at scale).** The query path's substring LIKE against `concept_aliases.alias` and `family_aliases.alias` is fast at thousands of rows. At ~50K rows it starts to matter. Mitigation when triggered: `CREATE EXTENSION IF NOT EXISTS pg_trgm` plus `CREATE INDEX … USING gin (alias gin_trgm_ops)` on each alias table (no `LOWER()` wrapper needed since stored values are already lowercased per §5.1). Not part of v1.
+- **Diacritic-insensitive matching.** Storage is lowercased and Unicode-preserved, so `'sūnyatā'` doesn't match a user query `'sunyata'`. At current scale the editor can write whatever transliteration users actually type and leave fancier matching out of scope. The future trigger is volume + complaints; mitigation is the Postgres `unaccent` extension (same shape as `pg_trgm` above — add when warranted, not pre-emptive).
 - **Alias uniqueness across owners.** The schema lets the same alias point to two different concepts (or two different families). The hygiene rule in §5.1 says aliases should unambiguously target one thing, but the schema doesn't enforce it. A sync-time sanity check that warns on duplicates is the natural enforcement point; explicit `UNIQUE(alias)` would be too strict (legitimate cross-owner synonyms should occasionally exist with a quality gate, not be prohibited by schema). Open: where the warning lives and what its failure mode is.
