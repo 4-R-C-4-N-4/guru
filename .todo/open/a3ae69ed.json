@@ -1,0 +1,25 @@
+{
+  "id": "a3ae69ed",
+  "type": "bug",
+  "state": "open",
+  "summary": "tag_concepts.py: bump LLM max_tokens from 6000 to 24000 to prevent thinking-budget overflow on Qwen teacher",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-21T17:37:26.094Z",
+  "updated_at": "2026-05-21T17:37:26.094Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py",
+      "lines": [
+        305,
+        305
+      ]
+    }
+  ],
+  "tags": [
+    "llm-config",
+    "token-budget",
+    "tagging"
+  ]
+}
