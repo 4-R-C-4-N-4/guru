@@ -32,6 +32,17 @@ TOP_K="${TOP_K:-40}"
 MIN_P="${MIN_P:-0.05}"
 REPEAT_PENALTY="${REPEAT_PENALTY:-1.05}"
 
+# --- Reasoning routing ---
+# REASONING=auto + REASONING_FORMAT=deepseek route a thinking model's
+# preamble into message.reasoning_content instead of mixing it into
+# message.content. scripts/llm.py:call_llamacpp already handles that
+# split: it returns content when present, falls back to reasoning_content
+# only when content is empty. With these flags, the production tagging
+# path will read clean JSON from content even when the model thinks for
+# thousands of tokens first. Non-thinking models (Mistral) are unaffected.
+REASONING="${REASONING:-auto}"
+REASONING_FORMAT="${REASONING_FORMAT:-deepseek}"
+
 # --- Sanity checks ---
 if [[ ! -f "$MODEL_PATH" ]]; then
     echo "Model not found: $MODEL_PATH" >&2
@@ -73,6 +84,8 @@ exec "$LLAMA_BIN" \
     --top-k "$TOP_K" \
     --min-p "$MIN_P" \
     --repeat-penalty "$REPEAT_PENALTY" \
+    --reasoning "$REASONING" \
+    --reasoning-format "$REASONING_FORMAT" \
     --jinja \
     --no-webui \
     --metrics
