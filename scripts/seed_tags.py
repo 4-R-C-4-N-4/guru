@@ -7,7 +7,8 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 from guru.corpus import resolve_chunk_path
 from tag_concepts import (load_taxonomy, build_prompt, SYSTEM_PROMPT,
-                           parse_tags, upsert_staged_tag, mark_complete, call_ollama)
+                           parse_tags, upsert_staged_tag, mark_complete)
+from llm import call_ollama
 
 db = sqlite3.connect(str(ROOT / "data" / "guru.db"))
 db.execute("PRAGMA foreign_keys=ON")
@@ -31,7 +32,7 @@ for tradition in ("gnosticism", "jewish_mysticism"):
             body = label
         prompt = build_prompt(body, label, concepts)
         try:
-            raw = call_ollama("qwen3:8b", SYSTEM_PROMPT, prompt)
+            raw = call_ollama("qwen3:8b", SYSTEM_PROMPT, prompt, max_tokens=8192)
             tags = parse_tags(raw)
             for t in tags:
                 upsert_staged_tag(db, chunk_id, t, model="qwen3-8b-seed")

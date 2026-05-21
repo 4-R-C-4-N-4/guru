@@ -9,8 +9,12 @@ Supported providers:
 
 Usage:
     from llm import call_llm
-    response = call_llm(provider="llamacpp", model="Carnice-27b-Q4_K_M.gguf",
-                        system="...", prompt="...", max_tokens=1024)
+    response = call_llm(provider="llamacpp", model="Qwen3.5-27B-UD-Q4_K_XL.gguf",
+                        system="...", prompt="...", max_tokens=8192)
+
+    max_tokens is a required argument — there is no library-level default
+    because the right value depends on the model (thinking models need
+    headroom for a reasoning preamble) and on the task.
 """
 
 import json
@@ -76,7 +80,7 @@ def _chat_openai_compat(
     return ""
 
 
-def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """
     Call the local llama.cpp server via raw HTTP (no openai SDK dependency).
     Uses urllib so there's no DNS lookup or connection overhead at import time.
@@ -114,7 +118,7 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500, 
     return reasoning
 
 
-def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
     import os
     import urllib.request
@@ -139,7 +143,7 @@ def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048, ti
     return data["message"]["content"]
 
 
-def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_anthropic(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     import anthropic
     client = anthropic.Anthropic(timeout=timeout)
     msg = client.messages.create(
@@ -151,7 +155,7 @@ def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048,
     return msg.content[0].text
 
 
-def call_openai(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_openai(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     from openai import OpenAI
     resp = OpenAI(timeout=timeout).chat.completions.create(
         model=model,
@@ -178,14 +182,16 @@ def call_llm(
     model: str,
     system: str,
     prompt: str,
-    max_tokens: int = 1500,
+    max_tokens: int,
     timeout: float = DEFAULT_HTTP_TIMEOUT,
 ) -> str:
     """
     Call an LLM and return the response string.
 
-    For thinking models (llama.cpp Carnice, etc.): set max_tokens >= 800 so the
-    reasoning phase completes before the answer is emitted.
+    max_tokens is required: the right value depends on the model (thinking
+    models need 8k+ for the reasoning preamble alone) and on the task,
+    and a library-level default was the silent failure mode that lost
+    ~12% of chunks on the 2026-05 tagging run.
     """
     fn = PROVIDERS.get(provider)
     if fn is None:
