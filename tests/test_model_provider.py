@@ -60,7 +60,19 @@ def test_empty_model_string_raises(tmp_path):
     cfg = _write_cfg(tmp_path, """
 [provider]
 name = "llamacpp"
+max_tokens = 1024
 model = ""
 """)
     with pytest.raises(ValueError):
         ModelProvider(config_path=cfg)
+
+
+def test_repo_model_config_has_thinking_budget():
+    """The committed config/model.toml must leave room for a thinking model's
+    reasoning preamble. 2048 was the value that silently cut Qwen off
+    mid-reasoning on the interactive query path; 8192 is the floor."""
+    mp = ModelProvider()
+    assert mp.max_tokens >= 8192, (
+        f"config/model.toml [provider].max_tokens={mp.max_tokens} is too low "
+        f"to carry a thinking model's preamble through to a JSON answer."
+    )

@@ -1,0 +1,35 @@
+{
+  "id": "e40b39e3",
+  "type": "feature",
+  "state": "done",
+  "summary": "tag_concepts.py: add --chunk-ids-from-file flag to target a specific chunk list for recovery runs",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-05-21T17:56:07.048Z",
+  "updated_at": "2026-05-21T17:58:26.308Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py"
+    }
+  ],
+  "tags": [
+    "llm-config",
+    "tagging",
+    "recovery"
+  ],
+  "work": {
+    "branch": "model-tags",
+    "base_branch": "main",
+    "started_at": "2026-05-21T17:56:07.090Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "fecdc118fec1b46d47d1c85013978cbf8a107b39",
+    "resolved_at": "2026-05-21T17:58:26.308Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_chunk_ids.py",
+    "test_function": "test_get_chunks_returns_requested_in_order",
+    "note": "Added --chunk-ids-from-file flag; designed for recovery of 1410 zero-tag chunks. Two list files generated locally at data/recovery/zero_tag_chunks_{all,body}.txt."
+  }
+}

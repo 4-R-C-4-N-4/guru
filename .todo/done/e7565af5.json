@@ -1,0 +1,39 @@
+{
+  "id": "e7565af5",
+  "type": "feature",
+  "state": "done",
+  "summary": "llm.py: add canary warning when raw response is long, lacks closing bracket, and contains thinking-process markers — surface silent thinking-budget overflows on day 1, not day 6",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-21T17:37:26.127Z",
+  "updated_at": "2026-05-21T17:42:25.799Z",
+  "files": [
+    {
+      "path": "scripts/llm.py",
+      "lines": [
+        79,
+        114
+      ]
+    }
+  ],
+  "tags": [
+    "llm-config",
+    "token-budget",
+    "observability"
+  ],
+  "work": {
+    "branch": "model-tags",
+    "base_branch": "main",
+    "started_at": "2026-05-21T17:40:38.899Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "7ec7c462a795471f2b9399ce79b5cc174c5b9b91",
+    "resolved_at": "2026-05-21T17:42:25.799Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_thinking_overflow_canary.py",
+    "test_function": "test_parse_emits_warning_on_thinking_overflow",
+    "note": "Canary added at both return-[] sites in parse_json_response; verified 13/13 hit rate against captured 2026-05 overflow artifacts"
+  }
+}

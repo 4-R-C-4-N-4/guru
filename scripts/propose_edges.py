@@ -111,7 +111,11 @@ Respond with:
 # ── providers ─────────────────────────────────────────────────────────────────
 
 def call_llm_pair(provider: str, model: str, prompt: str) -> dict:
-    raw = call_llm(provider, model, SYSTEM_PROMPT, prompt, max_tokens=800)
+    # 4000 leaves headroom for a thinking model's reasoning preamble. The
+    # 7193-edge run used Mistral (non-thinking) which never needed more
+    # than ~200 tokens, but the previous 800 ceiling would silently truncate
+    # if anyone swapped in the Qwen teacher for consistency with tagging.
+    raw = call_llm(provider, model, SYSTEM_PROMPT, prompt, max_tokens=4000)
     result = parse_json_response(raw)
     return result if isinstance(result, dict) else {}
 

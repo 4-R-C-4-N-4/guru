@@ -35,8 +35,11 @@ TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 sys.path.insert(0, str(Path(__file__).parent))
 from llm import call_llm, parse_json_response, PROVIDERS
 
-
-# ── prompt ───────────────────────────────────────────────────────────────────
+# Sized for thinking models that write a reasoning preamble before the JSON
+# answer. The Qwen3.5-27B teacher used 4-6k tokens just for the preamble on
+# dense chunks; an earlier 6000 budget cut ~12% of chunks off mid-reasoning,
+# which the pipeline could not distinguish from a legitimate empty result.
+LLM_MAX_TOKENS = 24000
 
 SYSTEM_PROMPT = """\
 You are a comparative religion scholar helping to build a concept index of mystical texts.
@@ -140,10 +143,56 @@ def load_taxonomy() -> list[dict]:
     return concepts
 
 
+def read_chunk_ids_file(path: Path) -> list[str]:
+    """Parse a newline-delimited chunk-ids file.
+
+    Strips whitespace, drops blank lines and '#' comments, preserves order,
+    de-dupes while preserving first occurrence. Used by --chunk-ids-from-file
+    to drive recovery runs against a hand-curated list.
+    """
+    seen: set[str] = set()
+    out: list[str] = []
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line in seen:
+            continue
+        seen.add(line)
+        out.append(line)
+    return out
+
+
 def get_chunks(conn: sqlite3.Connection,
                tradition: str | None,
                text_id: str | None,
-               resume: bool) -> list[dict]:
+               resume: bool,
+               chunk_ids: list[str] | None = None) -> list[dict]:
+    """Load chunk rows for tagging.
+
+    If chunk_ids is provided, fetches exactly those chunks (in the order given)
+    and ignores tradition/text_id/resume. Missing IDs are logged and skipped.
+    Otherwise, the tradition/text_id/resume filters apply as before.
+    """
+    if chunk_ids:
+        placeholders = ",".join("?" * len(chunk_ids))
+        rows = conn.execute(
+            f"SELECT id, label, metadata_json FROM nodes "
+            f"WHERE type = 'chunk' AND id IN ({placeholders})",
+            chunk_ids,
+        ).fetchall()
+        by_id = {r[0]: r for r in rows}
+        missing = [cid for cid in chunk_ids if cid not in by_id]
+        if missing:
+            logger.warning(
+                f"--chunk-ids-from-file: {len(missing)} ID(s) not found in DB; skipping. "
+                f"First few: {missing[:5]}"
+            )
+        return [
+            {"id": by_id[cid][0], "label": by_id[cid][1], "meta": json.loads(by_id[cid][2])}
+            for cid in chunk_ids if cid in by_id
+        ]
+
     sql = """
         SELECT n.id, n.label, n.metadata_json
         FROM nodes n
@@ -267,6 +316,7 @@ def run_tagging(
     max_body_chars: int | None = None,
     respect_reviewed: bool = True,
     supersede_pending: bool = True,
+    chunk_ids: list[str] | None = None,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
@@ -276,7 +326,7 @@ def run_tagging(
     conn = sqlite3.connect(str(db_path))
     conn.execute("PRAGMA foreign_keys=ON")
 
-    chunks = get_chunks(conn, tradition, text_id, resume)
+    chunks = get_chunks(conn, tradition, text_id, resume, chunk_ids=chunk_ids)
     logger.info(f"Tagging {len(chunks)} chunks with {provider_name}/{model} ...")
     logger.info(
         f"  respect_reviewed={respect_reviewed}  supersede_pending={supersede_pending}"
@@ -302,7 +352,7 @@ def run_tagging(
         prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
 
         try:
-            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=6000)
+            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=LLM_MAX_TOKENS)
             tags = parse_tags(raw)
 
             for tag in tags:
@@ -367,6 +417,12 @@ def main() -> None:
                              "(chunk_id, concept_id, model), delete any existing "
                              "pending row for the same triple. Latest-pending wins. "
                              "Default: on. Pass --no-supersede-pending to disable.")
+    parser.add_argument("--chunk-ids-from-file",
+                        help="Path to a newline-delimited file of chunk IDs. "
+                             "When set, processes exactly those chunks (in the "
+                             "order given) and ignores --tradition/--text/--resume. "
+                             "Blank lines and '#' comments are skipped. Use for "
+                             "recovery runs that target a hand-curated list.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -375,6 +431,14 @@ def main() -> None:
         format="%(asctime)s [%(levelname)s] %(message)s",
         stream=sys.stderr,
     )
+
+    chunk_ids = None
+    if args.chunk_ids_from_file:
+        chunk_ids = read_chunk_ids_file(Path(args.chunk_ids_from_file))
+        if not chunk_ids:
+            logger.error(f"--chunk-ids-from-file is empty: {args.chunk_ids_from_file}")
+            sys.exit(1)
+        logger.info(f"Loaded {len(chunk_ids)} chunk IDs from {args.chunk_ids_from_file}")
 
     run_tagging(
         db_path=Path(args.db),
@@ -388,6 +452,7 @@ def main() -> None:
         max_body_chars=args.max_body_chars or None,
         respect_reviewed=args.respect_reviewed,
         supersede_pending=args.supersede_pending,
+        chunk_ids=chunk_ids,
     )
 
 

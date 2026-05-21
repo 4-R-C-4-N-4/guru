@@ -1,0 +1,39 @@
+{
+  "id": "a3ae69ed",
+  "type": "bug",
+  "state": "done",
+  "summary": "tag_concepts.py: bump LLM max_tokens from 6000 to 24000 to prevent thinking-budget overflow on Qwen teacher",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-21T17:37:26.094Z",
+  "updated_at": "2026-05-21T17:40:32.034Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py",
+      "lines": [
+        305,
+        305
+      ]
+    }
+  ],
+  "tags": [
+    "llm-config",
+    "token-budget",
+    "tagging"
+  ],
+  "work": {
+    "branch": "model-tags",
+    "base_branch": "main",
+    "started_at": "2026-05-21T17:39:46.155Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "f73b62c918e054840c3bcbca81f8b4f55a73b3ae",
+    "resolved_at": "2026-05-21T17:40:32.034Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_config.py",
+    "test_function": "test_llm_max_tokens_has_thinking_budget",
+    "note": "Extracted budget to LLM_MAX_TOKENS module constant, raised 6000→24000; regression test pins floor at 16000"
+  }
+}
