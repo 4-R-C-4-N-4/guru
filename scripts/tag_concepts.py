@@ -35,8 +35,11 @@ TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 sys.path.insert(0, str(Path(__file__).parent))
 from llm import call_llm, parse_json_response, PROVIDERS
 
-
-# ── prompt ───────────────────────────────────────────────────────────────────
+# Sized for thinking models that write a reasoning preamble before the JSON
+# answer. The Qwen3.5-27B teacher used 4-6k tokens just for the preamble on
+# dense chunks; an earlier 6000 budget cut ~12% of chunks off mid-reasoning,
+# which the pipeline could not distinguish from a legitimate empty result.
+LLM_MAX_TOKENS = 24000
 
 SYSTEM_PROMPT = """\
 You are a comparative religion scholar helping to build a concept index of mystical texts.
@@ -302,7 +305,7 @@ def run_tagging(
         prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
 
         try:
-            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=6000)
+            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=LLM_MAX_TOKENS)
             tags = parse_tags(raw)
 
             for tag in tags:
