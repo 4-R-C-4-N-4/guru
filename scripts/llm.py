@@ -193,6 +193,40 @@ def call_llm(
     return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens, timeout=timeout)
 
 
+_THINKING_MARKERS = (
+    "Thinking Process",
+    "Analyze the Request",
+    "Analyze the Passage",
+    "<think>",
+    "Final list",
+    "Final List",
+    "Okay, final",
+    "Step-by-step",
+    "Let me analyze",
+)
+
+
+def _looks_like_thinking_overflow(raw: str) -> bool:
+    """Did the model burn the token budget on reasoning prose without
+    closing JSON?
+
+    A response from a thinking model that ran out of max_tokens mid-reasoning
+    is long (≥5000 chars), contains a reasoning-mode marker, and lacks a
+    closing top-level bracket. parse_json_response will return [] for this
+    shape — indistinguishable from a legitimate empty answer. The canary
+    surfaces it as a logger warning so the caller can raise max_tokens
+    before another multi-day run silently drops chunks.
+    """
+    if len(raw) < 5000:
+        return False
+    head = raw[:1000]
+    tail = raw[-2000:]
+    if not any(m in head or m in tail for m in _THINKING_MARKERS):
+        return False
+    stripped = raw.rstrip()
+    return not (stripped.endswith("]") or stripped.endswith("}"))
+
+
 def parse_json_response(raw: str) -> list | dict:
     """
     Robustly extract JSON from an LLM response.
@@ -201,10 +235,15 @@ def parse_json_response(raw: str) -> list | dict:
     for both top-level arrays and top-level objects. For arrays, attempts
     to repair truncated output by closing the array after the last complete
     inner object. Returns [] on total failure.
+
+    Emits a logger warning when the input looks like a thinking-budget
+    overflow (long, reasoning-marker preamble, no closing bracket) so
+    silent failures show up in run logs immediately.
     """
     if not raw:
         return []
 
+    original_raw = raw
     raw = raw.strip()
     # Strip markdown fences
     raw = re.sub(r'^```(?:json)?\s*', '', raw)
@@ -224,6 +263,12 @@ def parse_json_response(raw: str) -> list | dict:
     # Repair: only meaningful for arrays. For a truncated object we'd need
     # a smarter parser; callers should retry with a higher max_tokens budget.
     if not raw.startswith("["):
+        if _looks_like_thinking_overflow(original_raw):
+            logger.warning(
+                "LLM response (%d chars) looks like a thinking-budget overflow: "
+                "reasoning prose, no closing JSON bracket. Raise max_tokens on the calling site.",
+                len(original_raw),
+            )
         return []
     # Walk forward, tracking string/escape state, to find the last complete
     # top-level object. Then close the array.
@@ -255,4 +300,10 @@ def parse_json_response(raw: str) -> list | dict:
             return json.loads(repaired)
         except json.JSONDecodeError:
             pass
+    if _looks_like_thinking_overflow(original_raw):
+        logger.warning(
+            "LLM response (%d chars) looks like a thinking-budget overflow: "
+            "reasoning prose, no closing JSON bracket. Raise max_tokens on the calling site.",
+            len(original_raw),
+        )
     return []
