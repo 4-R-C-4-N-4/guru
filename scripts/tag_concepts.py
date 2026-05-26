@@ -130,16 +130,30 @@ def parse_tags(raw: str) -> list[dict]:
 # ── main logic ───────────────────────────────────────────────────────────────
 
 def load_taxonomy() -> list[dict]:
+    """Return [{id, definition, node_id}] for every concept in the taxonomy.
+
+    Tolerates both the legacy flat ``[concepts.DOMAIN]`` layout and the
+    three-tier ``[concepts.DOMAIN.FAMILY]`` layout (design.md §6) by walking
+    the ``concepts`` tree to any depth and collecting leaf-string definitions.
+    Family/domain enrichment of these dicts is layered on separately
+    (todo:17610554); this loader stays structure-only.
+    """
     with open(TAXONOMY_TOML, "rb") as f:
         data = tomllib.load(f)
-    concepts = []
-    for category, items in data.get("concepts", {}).items():
-        for concept_id, definition in items.items():
-            concepts.append({
-                "id": concept_id,
-                "definition": definition,
-                "node_id": f"concept.{concept_id}",
-            })
+    concepts: list[dict] = []
+
+    def _collect(node: dict) -> None:
+        for key, val in node.items():
+            if isinstance(val, dict):
+                _collect(val)
+            elif isinstance(val, str):
+                concepts.append({
+                    "id": key,
+                    "definition": val,
+                    "node_id": f"concept.{key}",
+                })
+
+    _collect(data.get("concepts", {}))
     return concepts
 
 

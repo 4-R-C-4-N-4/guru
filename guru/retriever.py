@@ -42,13 +42,25 @@ def _load_config(path: Path = CONFIG_PATH) -> dict:
 
 
 def _load_taxonomy_labels() -> dict[str, str]:
-    """Return {concept_id: definition} for keyword matching."""
+    """Return {concept_id: definition} for keyword matching.
+
+    Tolerates both the legacy flat ``[concepts.DOMAIN]`` layout and the
+    three-tier ``[concepts.DOMAIN.FAMILY]`` layout (design.md §6): walks the
+    ``concepts`` tree and collects every leaf string as a concept definition,
+    regardless of nesting depth.
+    """
     with open(TAXONOMY_TOML, "rb") as f:
         data = tomllib.load(f)
     labels: dict[str, str] = {}
-    for cat_concepts in data.get("concepts", {}).values():
-        for cid, defn in cat_concepts.items():
-            labels[cid] = defn
+
+    def _collect(node: dict) -> None:
+        for key, val in node.items():
+            if isinstance(val, dict):
+                _collect(val)
+            elif isinstance(val, str):
+                labels[key] = val
+
+    _collect(data.get("concepts", {}))
     return labels
 
 

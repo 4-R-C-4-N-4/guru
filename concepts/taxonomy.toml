@@ -1,16 +1,81 @@
-# Guru Concept Taxonomy v1
-# Hand-curated starter vocabulary for LLM-assisted tagging (Stage 3).
-# Each concept has a stable snake_case ID and a one-sentence definition
-# shown verbatim to the LLM during tag_concepts.py scoring.
+# Guru Concept Taxonomy v2 — three-tier hierarchy (domain → family → concept)
 #
-# Structure: [concepts.{category}]
-#   concept_id = "definition"
+# Sectioning (the sync loader counts dots after the prefix to assign tiers):
+#   [families.DOMAIN]         → domain row   (parent_id = NULL)
+#   [families.DOMAIN.FAMILY]  → family row   (parent_id = DOMAIN)
+#   [concepts.DOMAIN.FAMILY]  → concepts whose primary family is DOMAIN.FAMILY
+#   [concept_aliases]         → concept synonyms (parallel to the concept_aliases table)
+#
+# Family/domain aliases are optional inline `aliases = [...]` arrays; concept
+# aliases live in [concept_aliases]. All alias fields are optional and populated
+# incrementally as queries surface (design.md §5.1, §6).
+#
+# INITIAL STATE — single-tier mirror: one family per domain (family id == domain
+# id) holding all that domain's concepts, mirroring the old flat categories.
+# Hand-clustering into the §4 two-tier hierarchy is deferred to todo:ea1c2372.
+# Applied to SQLite by scripts/sync_taxonomy.py (todo:0a25044c).
+# See docs/concept-hierarchy/design.md §6.
 
 # ============================================================
-# COSMOLOGY — origin and structure of the universe
+# DOMAINS
 # ============================================================
-[concepts.cosmology]
+[families.cosmology]
+label = "Cosmology"
+definition = "Origin and structure of the universe."
 
+[families.soteriology]
+label = "Soteriology"
+definition = "Salvation, liberation, and the soul's return."
+
+[families.theology]
+label = "Theology"
+definition = "The nature of the divine and divine attributes."
+
+[families.praxis]
+label = "Praxis"
+definition = "Practice, ritual, and spiritual method."
+
+[families.anthropology]
+label = "Anthropology"
+definition = "The nature of the human being."
+
+[families.ethics]
+label = "Ethics"
+definition = "Moral teaching and conduct."
+
+# ============================================================
+# FAMILIES — mirror state: one family per domain (id == domain id).
+# ============================================================
+
+[families.cosmology.cosmology]
+label = "Cosmology"
+definition = "Origin and structure of the universe."
+
+[families.soteriology.soteriology]
+label = "Soteriology"
+definition = "Salvation, liberation, and the soul's return."
+
+[families.theology.theology]
+label = "Theology"
+definition = "The nature of the divine and divine attributes."
+
+[families.praxis.praxis]
+label = "Praxis"
+definition = "Practice, ritual, and spiritual method."
+
+[families.anthropology.anthropology]
+label = "Anthropology"
+definition = "The nature of the human being."
+
+[families.ethics.ethics]
+label = "Ethics"
+definition = "Moral teaching and conduct."
+
+# ============================================================
+# CONCEPTS — grouped by family (domain.family).
+# ============================================================
+
+[concepts.cosmology.cosmology]
 emanation_hierarchy = "A chain of divine beings or principles flowing downward from a single transcendent source (the One or the Father), each level less perfect than the one above."
 demiurge = "A secondary creator deity—often ignorant or malevolent—responsible for fashioning the material world, distinct from the supreme transcendent God."
 pleroma = "The divine fullness or totality of the highest realm, populated by aeons and divine attributes, contrasted with the deficient material world."
@@ -38,11 +103,7 @@ fall_of_sophia         = "The Gnostic myth of Wisdom's prolapse from the Pleroma
 tzimtzum               = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
 watchers_descent       = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
 
-# ============================================================
-# SOTERIOLOGY — salvation, liberation, and the return
-# ============================================================
-[concepts.soteriology]
-
+[concepts.soteriology.soteriology]
 gnosis_direct_knowledge = "Salvation through direct experiential knowledge of the divine nature, not through faith, ritual, or moral works alone."
 return_to_source = "The soul's journey back to its divine origin, reversing the fall into matter through stages of purification or illumination."
 divine_marriage = "The reunification of complementary divine principles (male-female, spirit-matter) as a symbol of wholeness and salvation."
@@ -61,11 +122,7 @@ separation_from_source = "The felt condition of exile from one's divine origin �
 forbidden_knowledge = "Transgressive knowing acquired against divine prohibition — the Watchers' teaching of metallurgy, sorcery, and cosmetics in 1 Enoch, the Gnostic Eve narratives, the Promethean mytheme; explicitly contrasted with gnosis_direct_knowledge, which is salvific."
 eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
 
-# ============================================================
-# THEOLOGY — nature of the divine and divine attributes
-# ============================================================
-[concepts.theology]
-
+[concepts.theology.theology]
 apophatic_theology = "Describing the divine only by negation—God transcends all positive categories and concepts; the via negativa."
 divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
 divine_hiddenness = "The supreme God's radical concealment beyond ordinary knowledge or perception; the Hidden Father."
@@ -81,11 +138,7 @@ unity_of_being = "The doctrine that all existence is ultimately one substance or
 divine_providence = "Pronoia — the doctrine that the divine actively orders the unfolding of the cosmos and human affairs toward intelligible ends, against pure chance or blind necessity."
 evil_as_privation = "Augustinian and Plotinian doctrine that evil has no positive being of its own but is a lack, distortion, or absence of the good — denying ontological dualism while preserving moral seriousness."
 
-# ============================================================
-# PRAXIS — practice, ritual, and spiritual method
-# ============================================================
-[concepts.praxis]
-
+[concepts.praxis.praxis]
 letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
 permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
 inner_silence = "The practice of stilling the mind and speech to open receptivity to divine knowledge or presence."
@@ -105,11 +158,7 @@ theurgy                = "Iamblichean ritual practice that engages the gods dire
 divine_intoxication    = "Ecstatic, non-rational receptivity to the divine figured as drunkenness — Plato's symposium wine, Rumi's sukr, Eckhart's 'sober drunkenness'; the passive/receptive metaphor for divine encounter, distinct from divine_madness's active possessing rapture."
 detachment_gelassenheit = "Eckhart's Abgeschiedenheit/Gelassenheit — radical letting-go of will, image, and grasping that opens the soul to God; distinct from inner_silence (quietness) and from material renunciation, and adjacent to Sufi tark and Buddhist non-grasping as a practice rather than a metaphysical claim."
 
-# ============================================================
-# ANTHROPOLOGY — nature of the human being
-# ============================================================
-[concepts.anthropology]
-
+[concepts.anthropology.anthropology]
 tripartite_soul = "Division of the human being into three principles: spirit (pneuma), soul (psyche), and body/matter (hyle or soma)."
 inner_light = "The divine spark or luminous quality residing within the human person, potentially recognisable through introspection."
 kingdom_within = "The claim that the divine realm is present inside the individual, accessible without external mediation."
@@ -120,12 +169,15 @@ mechanical_humanity = "Gurdjieff and Ouspensky's claim that ordinary human being
 birth_of_word_in_soul = "Eckhart's signature doctrine that the Father eternally begets the Son in the ground of the soul; the human interior as the actual site of the divine generative act, distinct from inner_light's static indwelling."
 poverty_of_spirit = "Eckhart's radical reading of Matthew 5:3 — the saint as one who wants nothing, knows nothing, and has nothing, having emptied even the will and the self with which to receive God; distinct from renunciation_of_wealth (material poverty)."
 
-# ============================================================
-# ETHICS — moral teaching and conduct
-# ============================================================
-[concepts.ethics]
-
+[concepts.ethics.ethics]
 renunciation_of_wealth = "The spiritual danger of attachment to material possessions; wealth as a spiritual obstacle."
 love_of_neighbour = "Active compassionate care for others as a central spiritual obligation or expression of divine love."
 rejection_of_hypocrisy = "Critique of outward religious observance that lacks inner transformation; form without substance."
 paradox_as_teaching = "Using apparent contradiction, reversal, or riddle to destabilise ordinary understanding and induce insight."
+
+# ============================================================
+# CONCEPT ALIASES
+# ============================================================
+# Populated incrementally as natural-language queries surface that a concept's
+# canonical label fails to match (design.md §5.1). Empty at migration time.
+[concept_aliases]
