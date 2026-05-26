@@ -1,0 +1,36 @@
+{
+  "id": "ad1c2299",
+  "type": "chore",
+  "state": "done",
+  "summary": "SQLite migration: v3_006_concept_families.sql creates concept_families, concept_family_membership (with is_primary CHECK + partial unique index + parent_id index + reverse-lookup index), concept_aliases, family_aliases (both with CHECK(alias=LOWER(alias)) and ON DELETE CASCADE). Per design.md §5.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.574Z",
+  "updated_at": "2026-05-26T17:51:12.600Z",
+  "files": [
+    {
+      "path": "scripts/migrations/v3_006_concept_families.sql"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-26T17:46:33.872Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "17ddd51be841d231eb9a30e461b8d55815531a01",
+    "resolved_at": "2026-05-26T17:51:12.600Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_migration_v3_006.py",
+    "test_function": "test_creates_four_tables",
+    "note": "v3_006_concept_families.sql: 4 tables + 5 indexes per design.md §5, purely additive & idempotent. Mirrored into scripts/schema.sql. Verified via 13 unit tests + real-schema CLI apply (foreign_key_check empty, integrity ok, idempotent re-run)."
+  }
+}
