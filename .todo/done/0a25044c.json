@@ -1,0 +1,36 @@
+{
+  "id": "0a25044c",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add scripts/sync_taxonomy.py: parses taxonomy.toml, upserts concept_families and concept_family_membership rows (is_primary=1 for TOML primaries, demote-then-upsert on moves), replaces alias rows for owners mentioned in TOML with Python str.lower() applied before INSERT. --dry-run default; --apply commits. Report counts per §7 step 7. Per design.md §7.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.641Z",
+  "updated_at": "2026-05-26T18:12:07.987Z",
+  "files": [
+    {
+      "path": "scripts/sync_taxonomy.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-26T18:05:17.758Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9d9df887f74ef3421c88907176f5ca7159e05685",
+    "resolved_at": "2026-05-26T18:12:07.987Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_sync_taxonomy.py",
+    "test_function": "test_apply_populates_all_tables",
+    "note": "sync_taxonomy.py per §7: family/node/primary-membership upserts (demote-then-upsert), lowercased alias replacement, dry-run(default)/apply with rollback-based preview, FK-enforced, §7 report+worklists. Does not touch is_primary=0. 12 unit tests + scratch-DB smoke (12 families/88 primaries, idempotent, FK-clean). Full suite 243 passed (sole failure pre-existing unrelated chunking)."
+  }
+}
