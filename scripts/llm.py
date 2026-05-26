@@ -9,8 +9,12 @@ Supported providers:
 
 Usage:
     from llm import call_llm
-    response = call_llm(provider="llamacpp", model="Carnice-27b-Q4_K_M.gguf",
-                        system="...", prompt="...", max_tokens=1024)
+    response = call_llm(provider="llamacpp", model="Qwen3.5-27B-UD-Q4_K_XL.gguf",
+                        system="...", prompt="...", max_tokens=8192)
+
+    max_tokens is a required argument — there is no library-level default
+    because the right value depends on the model (thinking models need
+    headroom for a reasoning preamble) and on the task.
 """
 
 import json
@@ -76,7 +80,7 @@ def _chat_openai_compat(
     return ""
 
 
-def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """
     Call the local llama.cpp server via raw HTTP (no openai SDK dependency).
     Uses urllib so there's no DNS lookup or connection overhead at import time.
@@ -114,7 +118,7 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int = 1500, 
     return reasoning
 
 
-def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
     import os
     import urllib.request
@@ -139,7 +143,7 @@ def call_ollama(model: str, system: str, prompt: str, max_tokens: int = 2048, ti
     return data["message"]["content"]
 
 
-def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_anthropic(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     import anthropic
     client = anthropic.Anthropic(timeout=timeout)
     msg = client.messages.create(
@@ -151,7 +155,7 @@ def call_anthropic(model: str, system: str, prompt: str, max_tokens: int = 2048,
     return msg.content[0].text
 
 
-def call_openai(model: str, system: str, prompt: str, max_tokens: int = 2048, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_openai(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     from openai import OpenAI
     resp = OpenAI(timeout=timeout).chat.completions.create(
         model=model,
@@ -178,19 +182,55 @@ def call_llm(
     model: str,
     system: str,
     prompt: str,
-    max_tokens: int = 1500,
+    max_tokens: int,
     timeout: float = DEFAULT_HTTP_TIMEOUT,
 ) -> str:
     """
     Call an LLM and return the response string.
 
-    For thinking models (llama.cpp Carnice, etc.): set max_tokens >= 800 so the
-    reasoning phase completes before the answer is emitted.
+    max_tokens is required: the right value depends on the model (thinking
+    models need 8k+ for the reasoning preamble alone) and on the task,
+    and a library-level default was the silent failure mode that lost
+    ~12% of chunks on the 2026-05 tagging run.
     """
     fn = PROVIDERS.get(provider)
     if fn is None:
         raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
     return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens, timeout=timeout)
+
+
+_THINKING_MARKERS = (
+    "Thinking Process",
+    "Analyze the Request",
+    "Analyze the Passage",
+    "<think>",
+    "Final list",
+    "Final List",
+    "Okay, final",
+    "Step-by-step",
+    "Let me analyze",
+)
+
+
+def _looks_like_thinking_overflow(raw: str) -> bool:
+    """Did the model burn the token budget on reasoning prose without
+    closing JSON?
+
+    A response from a thinking model that ran out of max_tokens mid-reasoning
+    is long (≥5000 chars), contains a reasoning-mode marker, and lacks a
+    closing top-level bracket. parse_json_response will return [] for this
+    shape — indistinguishable from a legitimate empty answer. The canary
+    surfaces it as a logger warning so the caller can raise max_tokens
+    before another multi-day run silently drops chunks.
+    """
+    if len(raw) < 5000:
+        return False
+    head = raw[:1000]
+    tail = raw[-2000:]
+    if not any(m in head or m in tail for m in _THINKING_MARKERS):
+        return False
+    stripped = raw.rstrip()
+    return not (stripped.endswith("]") or stripped.endswith("}"))
 
 
 def parse_json_response(raw: str) -> list | dict:
@@ -201,10 +241,15 @@ def parse_json_response(raw: str) -> list | dict:
     for both top-level arrays and top-level objects. For arrays, attempts
     to repair truncated output by closing the array after the last complete
     inner object. Returns [] on total failure.
+
+    Emits a logger warning when the input looks like a thinking-budget
+    overflow (long, reasoning-marker preamble, no closing bracket) so
+    silent failures show up in run logs immediately.
     """
     if not raw:
         return []
 
+    original_raw = raw
     raw = raw.strip()
     # Strip markdown fences
     raw = re.sub(r'^```(?:json)?\s*', '', raw)
@@ -224,6 +269,12 @@ def parse_json_response(raw: str) -> list | dict:
     # Repair: only meaningful for arrays. For a truncated object we'd need
     # a smarter parser; callers should retry with a higher max_tokens budget.
     if not raw.startswith("["):
+        if _looks_like_thinking_overflow(original_raw):
+            logger.warning(
+                "LLM response (%d chars) looks like a thinking-budget overflow: "
+                "reasoning prose, no closing JSON bracket. Raise max_tokens on the calling site.",
+                len(original_raw),
+            )
         return []
     # Walk forward, tracking string/escape state, to find the last complete
     # top-level object. Then close the array.
@@ -255,4 +306,10 @@ def parse_json_response(raw: str) -> list | dict:
             return json.loads(repaired)
         except json.JSONDecodeError:
             pass
+    if _looks_like_thinking_overflow(original_raw):
+        logger.warning(
+            "LLM response (%d chars) looks like a thinking-budget overflow: "
+            "reasoning prose, no closing JSON bracket. Raise max_tokens on the calling site.",
+            len(original_raw),
+        )
     return []

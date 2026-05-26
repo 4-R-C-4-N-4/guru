@@ -13,8 +13,11 @@ llamacpp_url = "http://127.0.0.1:8080"
 # ollama_url = "http://localhost:11434"
 
 # Max tokens to generate per response.
-# Set high enough for thinking models to complete reasoning before answering.
-max_tokens = 2048
+# Must accommodate a thinking model's reasoning preamble (4-6k tokens for
+# the Qwen3.5-27B teacher) plus the final answer. 2048 silently cut Qwen
+# off mid-reasoning on dense queries; 8192 is the floor that reliably
+# carries the preamble + a moderate answer through to JSON close.
+max_tokens = 8192
 
 # HTTP timeout (seconds) for chat completions. Generous for thinking models
 # that may spend minutes on reasoning before emitting the answer.

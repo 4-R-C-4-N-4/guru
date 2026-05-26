@@ -1,0 +1,33 @@
+{
+  "id": "b406c972",
+  "type": "chore",
+  "state": "done",
+  "summary": "serve-llama.sh: investigate llama.cpp --reasoning-format flag to route Qwen reasoning into reasoning_content field so call_llamacpp's existing fallback path can detect/handle thinking responses",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-21T17:37:26.239Z",
+  "updated_at": "2026-05-21T17:46:24.305Z",
+  "files": [
+    {
+      "path": "scripts/serve-llama.sh"
+    }
+  ],
+  "tags": [
+    "llm-config",
+    "server-config",
+    "thinking-models"
+  ],
+  "work": {
+    "branch": "model-tags",
+    "base_branch": "main",
+    "started_at": "2026-05-21T17:45:27.662Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "188e70551e2e01207b7798e97da130957a26fce2",
+    "resolved_at": "2026-05-21T17:46:24.305Z",
+    "resolved_by": "unknown",
+    "note": "Added --reasoning auto --reasoning-format deepseek to serve-llama.sh; takes effect on next server restart. Flags routing through env vars for per-model override."
+  }
+}
