@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-05-20T18:39:16.738Z",
-  "updated_at": "2026-05-20T18:39:16.738Z",
+  "updated_at": "2026-05-26T20:34:51.847Z",
   "files": [
     {
       "path": "concepts/taxonomy.toml"
@@ -19,5 +19,14 @@
   ],
   "relationships": {
     "parent": "10512e6a"
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-26T20:34:51.846Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Revisit two ex-orphan placements during the clustering pass (placed in commit 8fcfa4d, backfilled live):\n\n(1) emotional_epistemology — currently soteriology (mirror); §4 target knowledge_path. Stretches knowledge_path's 'salvific knowing' gloss: it is the doctrine that emotion is a valid MODE OF KNOWING reality (Ouspensky, Tertium Organum) — an epistemic-faculty claim more than a salvation path. Candidates: a new 'modes of knowing / supra-rational epistemology' family (possibly shared with cosmic_consciousness, whose new-family question operator also parked), or anthropology as a human faculty.\n\n(2) prophetic_rejection — currently ethics (mirror); §4 target moral_teaching. Weakest fit of the seven: a reception/pedagogy motif (the prophet rejected by his own; Gospel of Thomas logion), sits only loosely with rejection_of_hypocrisy / paradox_as_teaching. Candidates: keep in ethics as a teaching-reception motif, give it its own home, or soteriology.\n\nBoth kept as-placed for now per operator decision; flagged so clustering reconsiders them alongside the §4 known-judgment-calls (wu_wei, transformative_path, ecstatic_modes, numerical_mysticism, forbidden_knowledge).",
+      "confidence": "medium"
+    }
+  ]
 }
