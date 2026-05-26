@@ -109,11 +109,20 @@ def test_tag_concepts_loader_reads_all_concepts():
 
     concepts = tc.load_taxonomy()
     assert len(concepts) == TOTAL_CONCEPTS
-    # shape is unchanged by the restructure — no family enrichment yet (that is
-    # todo:17610554's job).
+    # load_taxonomy is enriched with family/domain context (todo:17610554, §8).
+    expected_keys = {
+        "id", "definition", "node_id",
+        "family_id", "family_label", "family_definition",
+        "domain_id", "domain_label", "domain_definition",
+    }
     for c in concepts:
-        assert set(c) == {"id", "definition", "node_id"}
+        assert set(c) == expected_keys
         assert c["node_id"] == f"concept.{c['id']}"
+        # family_id is the two-segment domain.family path
+        assert c["family_id"].startswith(c["domain_id"] + ".")
+    # ordered by (domain, family, concept)
+    keys = [(c["domain_id"], c["family_id"], c["id"]) for c in concepts]
+    assert keys == sorted(keys)
 
 
 def test_loaders_agree_with_raw_toml():

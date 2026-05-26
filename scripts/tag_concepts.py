@@ -47,6 +47,49 @@ For each passage given, score it against every concept definition provided.
 Respond ONLY with a valid JSON array (no markdown, no commentary).
 """
 
+def _render_concepts(concepts: list[dict]) -> str:
+    """Render the concept list as a domain → family grouped outline (design.md
+    §8). Concepts are grouped under one-line family glosses; ids within a family
+    are padded so definitions align. Insertion order is preserved, so the
+    (domain, family, concept) ordering from load_taxonomy() carries through.
+    """
+    # Group preserving first-seen order (dicts are insertion-ordered).
+    domains: dict[str, dict] = {}
+    for c in concepts:
+        d_id = c.get("domain_id", "")
+        f_id = c.get("family_id", "")
+        dom = domains.setdefault(d_id, {
+            "label": c.get("domain_label") or d_id.replace("_", " ").title() or "Uncategorized",
+            "definition": c.get("domain_definition", ""),
+            "families": {},
+        })
+        fam = dom["families"].setdefault(f_id, {
+            "label": c.get("family_label") or f_id.split(".")[-1].replace("_", " ").title() or "Uncategorized",
+            "definition": c.get("family_definition", ""),
+            "concepts": [],
+        })
+        fam["concepts"].append(c)
+
+    lines = ["Concepts (grouped by domain → family):", ""]
+    for dom in domains.values():
+        head = f"# {dom['label']}"
+        if dom["definition"]:
+            head += f" — {dom['definition']}"
+        lines.append(head)
+        lines.append("")
+        for fam in dom["families"].values():
+            fhead = f"  ## {fam['label']}"
+            if fam["definition"]:
+                fhead += f" — {fam['definition']}"
+            lines.append(fhead)
+            width = max((len(c["id"]) for c in fam["concepts"]), default=0)
+            for c in fam["concepts"]:
+                token = f"{c['id']}:"
+                lines.append(f"    - {token:<{width + 2}}{c['definition']}")
+            lines.append("")
+    return "\n".join(lines).rstrip()
+
+
 def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
                  max_body_chars: int | None = None) -> str:
     """Build the per-chunk concept-scoring prompt.
@@ -55,12 +98,14 @@ def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
     enforces the token budget at chunk creation time and downstream
     prompts trust that contract. max_body_chars is an optional cap for
     operators running against a smaller-context model; 0/None = unlimited.
+
+    Concepts are rendered grouped by domain → family (design.md §8, prompt
+    version v2). The JSON *output* contract is unchanged — the model still
+    returns one object per concept with score >= 1; the grouping is
+    presentation-only.
     """
     body = chunk_body if not max_body_chars else chunk_body[:max_body_chars]
-    concepts_block = "\n".join(
-        f'  {{"id": "{c["id"]}", "definition": "{c["definition"]}"}}'
-        for c in concepts
-    )
+    concepts_block = _render_concepts(concepts)
     return f"""\
 Passage ({chunk_citation}):
 \"\"\"
@@ -73,10 +118,7 @@ Rate each concept 0-3 for how strongly this passage expresses it:
   2 = clearly present
   3 = central theme
 
-Concepts:
-[
 {concepts_block}
-]
 
 Return a JSON array of objects for every concept with score >= 1:
 [
@@ -130,30 +172,50 @@ def parse_tags(raw: str) -> list[dict]:
 # ── main logic ───────────────────────────────────────────────────────────────
 
 def load_taxonomy() -> list[dict]:
-    """Return [{id, definition, node_id}] for every concept in the taxonomy.
+    """Return enriched concept dicts ordered by (domain, family, concept).
 
-    Tolerates both the legacy flat ``[concepts.DOMAIN]`` layout and the
-    three-tier ``[concepts.DOMAIN.FAMILY]`` layout (design.md §6) by walking
-    the ``concepts`` tree to any depth and collecting leaf-string definitions.
-    Family/domain enrichment of these dicts is layered on separately
-    (todo:17610554); this loader stays structure-only.
+    Each dict carries ``id``, ``definition``, ``node_id`` plus the family/domain
+    context build_prompt() renders as group headers (design.md §8):
+    ``family_id``, ``family_label``, ``family_definition``, ``domain_id``,
+    ``domain_label``, ``domain_definition``. The family/domain labels and glosses
+    are cross-referenced from the ``[families.*]`` tree; labels fall back to a
+    title-cased id segment when not given explicitly (§5.1).
+
+    Aliases are deliberately excluded — the tagging prompt sees canonical labels
+    and definitions only.
     """
     with open(TAXONOMY_TOML, "rb") as f:
         data = tomllib.load(f)
+    families = data.get("families", {})
     concepts: list[dict] = []
 
-    def _collect(node: dict) -> None:
-        for key, val in node.items():
-            if isinstance(val, dict):
-                _collect(val)
-            elif isinstance(val, str):
+    for domain_id, fams in data.get("concepts", {}).items():
+        domain_body = families.get(domain_id, {})
+        if not isinstance(domain_body, dict):
+            domain_body = {}
+        domain_label = domain_body.get("label") or domain_id.replace("_", " ").title()
+        domain_definition = domain_body.get("definition", "")
+        for family_key, members in fams.items():
+            family_id = f"{domain_id}.{family_key}"
+            family_body = domain_body.get(family_key, {})
+            if not isinstance(family_body, dict):
+                family_body = {}
+            family_label = family_body.get("label") or family_key.replace("_", " ").title()
+            family_definition = family_body.get("definition", "")
+            for cid, definition in members.items():
                 concepts.append({
-                    "id": key,
-                    "definition": val,
-                    "node_id": f"concept.{key}",
+                    "id": cid,
+                    "definition": definition,
+                    "node_id": f"concept.{cid}",
+                    "family_id": family_id,
+                    "family_label": family_label,
+                    "family_definition": family_definition,
+                    "domain_id": domain_id,
+                    "domain_label": domain_label,
+                    "domain_definition": domain_definition,
                 })
 
-    _collect(data.get("concepts", {}))
+    concepts.sort(key=lambda c: (c["domain_id"], c["family_id"], c["id"]))
     return concepts
 
 

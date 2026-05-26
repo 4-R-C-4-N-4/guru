@@ -75,7 +75,8 @@ def test_upsert_writes_provenance(conn: sqlite3.Connection) -> None:
     row = conn.execute(
         "SELECT model, prompt_version, score FROM staged_tags WHERE concept_id='gnosis'"
     ).fetchone()
-    assert row == ("qwen3.5-27b", "v1", 3)
+    # prompt_version defaults to the module constant (bumped to v2 in §8).
+    assert row == ("qwen3.5-27b", PROMPT_VERSION, 3)
 
 
 def test_default_prompt_version_uses_module_constant(conn: sqlite3.Connection) -> None:

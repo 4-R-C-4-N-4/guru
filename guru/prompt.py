@@ -21,7 +21,14 @@ if TYPE_CHECKING:
 # not the retrieval-side build_prompt() defined further down this module.
 # Those are different prompts for different sides of the pipeline. The
 # constant lives here per docs/v3.md §4.1.
-PROMPT_VERSION = "v1"
+#
+# v2 (concept-hierarchy, design.md §8): the concept block changed from a flat
+# JSON array to a domain → family grouped outline with per-family glosses. The
+# JSON *output* schema is unchanged; the presentation did. The partial UNIQUE
+# index on staged_tags(chunk_id, concept_id, model, prompt_version) keeps v1
+# and v2 tags distinguishable, so old tags stay valid and re-tag runs produce
+# new v2 rows.
+PROMPT_VERSION = "v2"
 
 
 TIER_LABELS = {

@@ -23,6 +23,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 sys.path.insert(0, str(PROJECT_ROOT))
 from tag_concepts import upsert_staged_tag  # noqa: E402
+from guru.prompt import PROMPT_VERSION  # noqa: E402
 
 
 def _seed_schema(conn: sqlite3.Connection) -> None:
@@ -175,7 +176,7 @@ def test_supersede_pending_replaces_old_pending_row(conn: sqlite3.Connection) ->
     rows = conn.execute(
         "SELECT score, prompt_version, status FROM staged_tags WHERE concept_id='gnosis'"
     ).fetchall()
-    assert rows == [(3, "v1", "pending")], "old pending replaced by new pending"
+    assert rows == [(3, PROMPT_VERSION, "pending")], "old pending replaced by new pending"
 
 
 def test_supersede_pending_scoped_to_same_model(conn: sqlite3.Connection) -> None:
