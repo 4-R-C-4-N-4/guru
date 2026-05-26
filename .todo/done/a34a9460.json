@@ -1,0 +1,45 @@
+{
+  "id": "a34a9460",
+  "type": "chore",
+  "state": "done",
+  "summary": "Restructure concepts/taxonomy.toml to three-tier sectioning: [families.DOMAIN], [families.DOMAIN.FAMILY], [concepts.DOMAIN.FAMILY], and [concept_aliases]. Initial state: families = single-tier mirror (one family per domain, all that domain's concepts inside). Hand-clustering deferred to a later ticket. Per design.md §6.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.607Z",
+  "updated_at": "2026-05-26T18:04:49.952Z",
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-26T17:57:44.155Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-26T18:02:08.673Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "TOML restructure to three-tier nesting (concepts.DOMAIN.FAMILY) breaks two existing readers that assume two-level concepts.DOMAIN: guru/retriever.py:_load_taxonomy_labels (runs on every query) and scripts/tag_concepts.py:load_taxonomy. design.md §13 step 2 requires the restructure be a no-op ('the file parses, the sync script works, the tagger prompt renders'). So this ticket also makes both readers nesting-tolerant (recursive leaf-string collection, same concept->definition output as today, NO family enrichment). Family enrichment of load_taxonomy + prompt grouping + PROMPT_VERSION bump remain ticket 17610554's scope. Initial mirror state: one family per domain, family id == domain id (e.g. cosmology.cosmology); §4 two-tier clustering deferred to ea1c2372.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "56f89e612e2078f273d26619f87594f40d3daa0c",
+    "resolved_at": "2026-05-26T18:04:49.952Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_taxonomy_structure.py",
+    "test_function": "test_total_concept_count_preserved",
+    "note": "taxonomy.toml restructured to three-tier §6 layout, single-tier mirror state (one family per domain). 88 defs verbatim. Loaders (retriever, tag_concepts) made nesting-tolerant to preserve §13 no-op invariant; family enrichment deferred to 17610554. 9 structure tests + full suite green (231 passed; sole failure is pre-existing unrelated chunking round-trip)."
+  }
+}
