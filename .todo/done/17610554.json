@@ -1,0 +1,36 @@
+{
+  "id": "17610554",
+  "type": "chore",
+  "state": "done",
+  "summary": "Update guru/prompt.py and scripts/tag_concepts.py: load_taxonomy returns enriched dicts with family_id/family_label/domain_id; build_prompt renders concepts grouped by domain → family with one-line family glosses. Bump PROMPT_VERSION from 'v1'. Per design.md §8.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.673Z",
+  "updated_at": "2026-05-26T18:17:10.874Z",
+  "files": [
+    {
+      "path": "guru/prompt.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-26T18:12:37.931Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "25dcf01daab97a47ae4c3197118ab2f9917b93f5",
+    "resolved_at": "2026-05-26T18:17:10.874Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_prompt_hierarchy.py",
+    "test_function": "test_grouped_headers_and_glosses",
+    "note": "load_taxonomy enriched with family/domain context (sorted by domain,family,concept); build_prompt renders domain→family grouped outline with glosses (JSON output contract unchanged); PROMPT_VERSION v1→v2. Verified visually against live taxonomy + new test_tag_prompt_hierarchy.py. Full suite 250 passed (sole failure pre-existing unrelated chunking round-trip)."
+  }
+}
