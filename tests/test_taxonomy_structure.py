@@ -22,7 +22,8 @@ TAXONOMY = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 EXPECTED_DOMAINS = {
     "cosmology", "soteriology", "theology", "praxis", "anthropology", "ethics"
 }
-TOTAL_CONCEPTS = 88
+# 88 original + 7 ex-orphan concepts placed into mirror families (backfill pass).
+TOTAL_CONCEPTS = 95
 
 
 def _load() -> dict:

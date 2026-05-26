@@ -102,6 +102,7 @@ cosmic_sympathy        = "The Stoic and Plotinian doctrine that all parts of the
 fall_of_sophia         = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
 tzimtzum               = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
 watchers_descent       = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
+apocatastasis = "The doctrine of the periodic restoration or recurrence of all things to their original state after vast cycles."
 
 [concepts.soteriology.soteriology]
 gnosis_direct_knowledge = "Salvation through direct experiential knowledge of the divine nature, not through faith, ritual, or moral works alone."
@@ -121,6 +122,7 @@ fana_annihilation = "Sufi self-effacement in God — the via by which the lover 
 separation_from_source = "The felt condition of exile from one's divine origin — Rumi's reed flute torn from its bed, Plotinus's 'we have forgotten,' the Gnostic forgetfulness; the affective wound that complements return_to_source and gives the return its motive."
 forbidden_knowledge = "Transgressive knowing acquired against divine prohibition — the Watchers' teaching of metallurgy, sorcery, and cosmetics in 1 Enoch, the Gnostic Eve narratives, the Promethean mytheme; explicitly contrasted with gnosis_direct_knowledge, which is salvific."
 eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
+emotional_epistemology = "The doctrine that emotions constitute a valid and necessary mode of knowing reality, complementing or surpassing intellectual cognition."
 
 [concepts.theology.theology]
 apophatic_theology = "Describing the divine only by negation—God transcends all positive categories and concepts; the via negativa."
@@ -157,6 +159,7 @@ alchemical_work        = "The transformation of base substance — outer matter 
 theurgy                = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
 divine_intoxication    = "Ecstatic, non-rational receptivity to the divine figured as drunkenness — Plato's symposium wine, Rumi's sukr, Eckhart's 'sober drunkenness'; the passive/receptive metaphor for divine encounter, distinct from divine_madness's active possessing rapture."
 detachment_gelassenheit = "Eckhart's Abgeschiedenheit/Gelassenheit — radical letting-go of will, image, and grasping that opens the soul to God; distinct from inner_silence (quietness) and from material renunciation, and adjacent to Sufi tark and Buddhist non-grasping as a practice rather than a metaphysical claim."
+nature_preservation = "The ethical imperative to live in accordance with one's innate nature and avoid artificial social constraints that harm it."
 
 [concepts.anthropology.anthropology]
 tripartite_soul = "Division of the human being into three principles: spirit (pneuma), soul (psyche), and body/matter (hyle or soma)."
@@ -168,12 +171,16 @@ body_as_obstacle = "The material body viewed as a prison, tomb, or source of err
 mechanical_humanity = "Gurdjieff and Ouspensky's claim that ordinary human beings live in a state of waking sleep, reacting mechanically without unified will or consciousness, and that the spiritual path begins with recognising this condition."
 birth_of_word_in_soul = "Eckhart's signature doctrine that the Father eternally begets the Son in the ground of the soul; the human interior as the actual site of the divine generative act, distinct from inner_light's static indwelling."
 poverty_of_spirit = "Eckhart's radical reading of Matthew 5:3 — the saint as one who wants nothing, knows nothing, and has nothing, having emptied even the will and the self with which to receive God; distinct from renunciation_of_wealth (material poverty)."
+linga_sharira = "The persistent form or image of a human being that exists from birth to death, distinct from the impermanent physical matter."
+cosmic_consciousness = "A state of awareness transcending ordinary human consciousness, often involving unity with the universe or higher dimensions."
 
 [concepts.ethics.ethics]
 renunciation_of_wealth = "The spiritual danger of attachment to material possessions; wealth as a spiritual obstacle."
 love_of_neighbour = "Active compassionate care for others as a central spiritual obligation or expression of divine love."
 rejection_of_hypocrisy = "Critique of outward religious observance that lacks inner transformation; form without substance."
 paradox_as_teaching = "Using apparent contradiction, reversal, or riddle to destabilise ordinary understanding and induce insight."
+good_thought_word_deed = "The Zoroastrian triad of right thought, right speech, and right action as the foundation of ethical life; truth-in-living."
+prophetic_rejection = "The phenomenon where spiritual messengers or healers are rejected by their own community due to familiarity or lack of awe."
 
 # ============================================================
 # CONCEPT ALIASES
