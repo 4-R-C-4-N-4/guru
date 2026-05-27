@@ -10,11 +10,11 @@
 # aliases live in [concept_aliases]. All alias fields are optional and populated
 # incrementally as queries surface (design.md §5.1, §6).
 #
-# INITIAL STATE — single-tier mirror: one family per domain (family id == domain
-# id) holding all that domain's concepts, mirroring the old flat categories.
-# Hand-clustering into the §4 two-tier hierarchy is deferred to todo:ea1c2372.
-# Applied to SQLite by scripts/sync_taxonomy.py (todo:0a25044c).
-# See docs/concept-hierarchy/design.md §6.
+# Hand-clustered into the §4 two-tier hierarchy (22 families across 6 domains)
+# — todo:ea1c2372. The family tier drives RETRIEVAL (guru-web query expansion /
+# family browse), not tagging: tagging stays concept-driven on the flat v1 prompt
+# (see docs/concept-hierarchy/bench-v1-vs-v2.md). Applied to SQLite by
+# scripts/sync_taxonomy.py. See docs/concept-hierarchy/design.md §4, §6.
 
 # ============================================================
 # DOMAINS
@@ -44,137 +44,244 @@ label = "Ethics"
 definition = "Moral teaching and conduct."
 
 # ============================================================
-# FAMILIES — mirror state: one family per domain (id == domain id).
+# FAMILIES (under domains)
 # ============================================================
 
-[families.cosmology.cosmology]
-label = "Cosmology"
-definition = "Origin and structure of the universe."
+# ── cosmology ──
+[families.cosmology.divine_structure]
+label = "Divine Structure"
+definition = "The architecture of the highest realms."
 
-[families.soteriology.soteriology]
-label = "Soteriology"
-definition = "Salvation, liberation, and the soul's return."
+[families.cosmology.cosmic_agents]
+label = "Cosmic Agents"
+definition = "Beings or powers acting on or within the cosmos."
 
-[families.theology.theology]
-label = "Theology"
-definition = "The nature of the divine and divine attributes."
+[families.cosmology.cosmic_order]
+label = "Cosmic Order"
+definition = "The lawful structure of reality."
 
-[families.praxis.praxis]
-label = "Praxis"
-definition = "Practice, ritual, and spiritual method."
+[families.cosmology.origin_events]
+label = "Origin Events"
+definition = "Originating events and re-creations of the cosmos."
 
-[families.anthropology.anthropology]
-label = "Anthropology"
-definition = "The nature of the human being."
+[families.cosmology.soul_cosmology]
+label = "Soul Cosmology"
+definition = "The cosmic geography of the soul."
 
-[families.ethics.ethics]
-label = "Ethics"
-definition = "Moral teaching and conduct."
+
+# ── soteriology ──
+[families.soteriology.knowledge_path]
+label = "Knowledge Path"
+definition = "Salvation through knowing."
+
+[families.soteriology.union_and_return]
+label = "Union And Return"
+definition = "Merging with and returning to the divine source."
+
+[families.soteriology.ecstatic_ascent]
+label = "Ecstatic Ascent"
+definition = "Eros-driven rapture and ascent."
+
+[families.soteriology.purgation_and_emptiness]
+label = "Purgation And Emptiness"
+definition = "The felt costs, negations, and emptyings of the path."
+
+[families.soteriology.soteric_categories]
+label = "Soteric Categories"
+definition = "Typological frames for who is saved and when."
+
+
+# ── theology ──
+[families.theology.divine_nature]
+label = "Divine Nature"
+definition = "What God is, including via negation."
+
+[families.theology.divine_attributes_and_acts]
+label = "Divine Attributes And Acts"
+definition = "What God reveals or does."
+
+[families.theology.ontological_structure]
+label = "Ontological Structure"
+definition = "How being itself is structured."
+
+
+# ── praxis ──
+[families.praxis.contemplative_practice]
+label = "Contemplative Practice"
+definition = "Inward attention as method, including non-coercive aligned action."
+
+[families.praxis.ritual_and_symbolic]
+label = "Ritual And Symbolic"
+definition = "Outward acts and symbol-bearing media."
+
+[families.praxis.ascetic_discipline]
+label = "Ascetic Discipline"
+definition = "Bodily and moral self-purification."
+
+[families.praxis.ecstatic_modes]
+label = "Ecstatic Modes"
+definition = "Non-rational receptivity as practice."
+
+[families.praxis.transformative_path]
+label = "Transformative Path"
+definition = "Transformation through intensified work."
+
+
+# ── anthropology ──
+[families.anthropology.divine_indwelling]
+label = "Divine Indwelling"
+definition = "The divine present within the human."
+
+[families.anthropology.human_constitution]
+label = "Human Constitution"
+definition = "What humans are, by default."
+
+[families.anthropology.spiritual_completion]
+label = "Spiritual Completion"
+definition = "The realised state."
+
+
+# ── ethics ──
+[families.ethics.moral_teaching]
+label = "Moral Teaching"
+definition = "Right conduct and the pedagogy of insight."
 
 # ============================================================
-# CONCEPTS — grouped by family (domain.family).
+# CONCEPTS (grouped by family)
 # ============================================================
 
-[concepts.cosmology.cosmology]
+[concepts.cosmology.divine_structure]
 emanation_hierarchy = "A chain of divine beings or principles flowing downward from a single transcendent source (the One or the Father), each level less perfect than the one above."
-demiurge = "A secondary creator deity—often ignorant or malevolent—responsible for fashioning the material world, distinct from the supreme transcendent God."
 pleroma = "The divine fullness or totality of the highest realm, populated by aeons and divine attributes, contrasted with the deficient material world."
 kenoma = "The void or emptiness outside the pleroma; the realm of matter, ignorance, and deficiency."
-divine_sparks = "Fragments of divine light or spirit trapped inside material bodies, awaiting liberation and return to their source."
+monad = "The absolutely simple, undivided first principle from which all multiplicity and existence flows."
+aeons = "Divine archetypal beings or eternal attributes dwelling within the Pleroma, often arranged in male-female syzygies."
+logos = "The divine reason, word, or ordering principle through which the universe was created; mediates between the transcendent God and the material world."
 sephirot = "The ten attributes or emanations through which the Ein Sof (Infinite) reveals itself and creates the universe in Kabbalistic theology."
 sefirot_tree = "The diagrammatic arrangement of the ten Sephirot as a structured 'Tree of Life' mapping divine and cosmic forces."
-logos = "The divine reason, word, or ordering principle through which the universe was created; mediates between the transcendent God and the material world."
-aeons = "Divine archetypal beings or eternal attributes dwelling within the Pleroma, often arranged in male-female syzygies."
-monad = "The absolutely simple, undivided first principle from which all multiplicity and existence flows."
+
+[concepts.cosmology.cosmic_agents]
+demiurge = "A secondary creator deity—often ignorant or malevolent—responsible for fashioning the material world, distinct from the supreme transcendent God."
 archons = "Malevolent planetary rulers or demiurgic powers that govern the material world and obstruct the soul's ascent."
-letters_of_creation = "The twenty-two Hebrew letters as the building blocks through which God creates and sustains all existence."
-ahura_mazda_principle  = "The divine ordering principle of truth and light."
+ahura_mazda_principle = "The divine ordering principle of truth and light."
 angra_mainyu_principle = "The principle of cosmic disorder and falsity."
-frashokereti           = "The final restoration/renovation of the cosmos."
-asha_cosmic_order      = "Truth as the fundamental structure of reality."
-soul_migration         = "The transmigration of the soul across lives."
-psychopomp_journey     = "Guided passage of the soul through afterlife realms."
-infinite_cosmos        = "The doctrine of the universe as boundless and without center or circumference, populated by innumerable worlds — Bruno's rejection of the closed Aristotelian sphere; the divine and the cosmos as ontologically infinite."
-correspondence         = "The Hermetic axiom that the structure of the cosmos is reflected at every scale — 'as above, so below; as within, so without' — making each level a legible map of the others."
-microcosm_macrocosm    = "The human being as a small-scale image of the entire cosmos; the body, soul, and intellect mirroring the structure of the heavens and the divine — distinct from correspondence in that it makes the human the privileged mirror."
-maat_cosmic_order      = "The Egyptian principle of truth, balance, and right order underlying both the cosmos and human conduct; the parallel to Zoroastrian asha and Greek dike."
-cosmic_sympathy        = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
-fall_of_sophia         = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
-tzimtzum               = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
-watchers_descent       = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
+watchers_descent = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
+
+[concepts.cosmology.cosmic_order]
+asha_cosmic_order = "Truth as the fundamental structure of reality."
+maat_cosmic_order = "The Egyptian principle of truth, balance, and right order underlying both the cosmos and human conduct; the parallel to Zoroastrian asha and Greek dike."
+correspondence = "The Hermetic axiom that the structure of the cosmos is reflected at every scale — 'as above, so below; as within, so without' — making each level a legible map of the others."
+microcosm_macrocosm = "The human being as a small-scale image of the entire cosmos; the body, soul, and intellect mirroring the structure of the heavens and the divine — distinct from correspondence in that it makes the human the privileged mirror."
+cosmic_sympathy = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
+infinite_cosmos = "The doctrine of the universe as boundless and without center or circumference, populated by innumerable worlds — Bruno's rejection of the closed Aristotelian sphere; the divine and the cosmos as ontologically infinite."
+
+[concepts.cosmology.origin_events]
+letters_of_creation = "The twenty-two Hebrew letters as the building blocks through which God creates and sustains all existence."
+tzimtzum = "Luria's doctrine of the divine self-contraction by which Ein Sof withdraws to make ontological room for a created world; creation as divine self-limitation rather than emanation outward."
+fall_of_sophia = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
+frashokereti = "The final restoration/renovation of the cosmos."
 apocatastasis = "The doctrine of the periodic restoration or recurrence of all things to their original state after vast cycles."
 
-[concepts.soteriology.soteriology]
+[concepts.cosmology.soul_cosmology]
+divine_sparks = "Fragments of divine light or spirit trapped inside material bodies, awaiting liberation and return to their source."
+soul_migration = "The transmigration of the soul across lives."
+psychopomp_journey = "Guided passage of the soul through afterlife realms."
+
+[concepts.soteriology.knowledge_path]
 gnosis_direct_knowledge = "Salvation through direct experiential knowledge of the divine nature, not through faith, ritual, or moral works alone."
-return_to_source = "The soul's journey back to its divine origin, reversing the fall into matter through stages of purification or illumination."
-divine_marriage = "The reunification of complementary divine principles (male-female, spirit-matter) as a symbol of wholeness and salvation."
-pneumatic_elect = "A spiritual elite who possess the divine spark and are predestined for salvation, contrasted with psychic (faithful) and hylic (material) persons."
-hidden_sayings = "Esoteric teachings reserved for those ready to receive them; outer meaning conceals an inner liberating truth."
-mystical_union = "The merging of the individual soul or self with the divine, transcending personal identity."
 self_knowledge = "The recognition of one's own true divine nature as the primary path to liberation; 'know thyself' as soteriology."
-divine_madness = "Ecstatic irrational rapture — Plato's mania, Bruno's furore — by which the soul transcends ordinary reason and attains direct contact with divine reality; madness reframed as higher knowledge."
-theosis_deification = "The doctrine — central to Eastern Orthodox and Maximian theology — that the human person is progressively transformed into a partaker of the divine nature by grace, not merely justified or united in passing ecstasy."
-dark_night = "John of the Cross's stage of contemplative purgation: a felt absence and aridity of God that strips the soul of attachments to its own consolations en route to deeper union."
-sunyata_emptiness = "The Buddhist doctrine that all phenomena lack independent self-nature; emptiness as the positive recognition that things arise only in dependence on conditions — distinct from kenoma's mere deficiency."
 anamnesis = "Platonic recollection: knowledge as the soul's recovery of what it knew before birth, with learning as remembering rather than acquisition."
-ladder_of_love = "Diotima's staged ascent from love of beautiful bodies → beautiful souls → beautiful pursuits → beautiful knowledge → Beauty itself; the canonical scala amoris that grounds Plotinus's On the Beautiful and Bruno's Eroici Furori — distinct from generic spiritual_ascent in that eros is the specific motive force."
-fana_annihilation = "Sufi self-effacement in God — the via by which the lover is unmade as a separate ego and recovered as God's act; specifies the practice/event rather than mystical_union's resulting state."
-separation_from_source = "The felt condition of exile from one's divine origin — Rumi's reed flute torn from its bed, Plotinus's 'we have forgotten,' the Gnostic forgetfulness; the affective wound that complements return_to_source and gives the return its motive."
+hidden_sayings = "Esoteric teachings reserved for those ready to receive them; outer meaning conceals an inner liberating truth."
 forbidden_knowledge = "Transgressive knowing acquired against divine prohibition — the Watchers' teaching of metallurgy, sorcery, and cosmetics in 1 Enoch, the Gnostic Eve narratives, the Promethean mytheme; explicitly contrasted with gnosis_direct_knowledge, which is salvific."
-eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
 emotional_epistemology = "The doctrine that emotions constitute a valid and necessary mode of knowing reality, complementing or surpassing intellectual cognition."
 
-[concepts.theology.theology]
+[concepts.soteriology.union_and_return]
+return_to_source = "The soul's journey back to its divine origin, reversing the fall into matter through stages of purification or illumination."
+divine_marriage = "The reunification of complementary divine principles (male-female, spirit-matter) as a symbol of wholeness and salvation."
+mystical_union = "The merging of the individual soul or self with the divine, transcending personal identity."
+theosis_deification = "The doctrine — central to Eastern Orthodox and Maximian theology — that the human person is progressively transformed into a partaker of the divine nature by grace, not merely justified or united in passing ecstasy."
+fana_annihilation = "Sufi self-effacement in God — the via by which the lover is unmade as a separate ego and recovered as God's act; specifies the practice/event rather than mystical_union's resulting state."
+
+[concepts.soteriology.ecstatic_ascent]
+divine_madness = "Ecstatic irrational rapture — Plato's mania, Bruno's furore — by which the soul transcends ordinary reason and attains direct contact with divine reality; madness reframed as higher knowledge."
+ladder_of_love = "Diotima's staged ascent from love of beautiful bodies → beautiful souls → beautiful pursuits → beautiful knowledge → Beauty itself; the canonical scala amoris that grounds Plotinus's On the Beautiful and Bruno's Eroici Furori — distinct from generic spiritual_ascent in that eros is the specific motive force."
+
+[concepts.soteriology.purgation_and_emptiness]
+dark_night = "John of the Cross's stage of contemplative purgation: a felt absence and aridity of God that strips the soul of attachments to its own consolations en route to deeper union."
+separation_from_source = "The felt condition of exile from one's divine origin — Rumi's reed flute torn from its bed, Plotinus's 'we have forgotten,' the Gnostic forgetfulness; the affective wound that complements return_to_source and gives the return its motive."
+sunyata_emptiness = "The Buddhist doctrine that all phenomena lack independent self-nature; emptiness as the positive recognition that things arise only in dependence on conditions — distinct from kenoma's mere deficiency."
+
+[concepts.soteriology.soteric_categories]
+pneumatic_elect = "A spiritual elite who possess the divine spark and are predestined for salvation, contrasted with psychic (faithful) and hylic (material) persons."
+eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
+
+[concepts.theology.divine_nature]
 apophatic_theology = "Describing the divine only by negation—God transcends all positive categories and concepts; the via negativa."
-divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
 divine_hiddenness = "The supreme God's radical concealment beyond ordinary knowledge or perception; the Hidden Father."
-sacred_names = "Divine names or formulas that carry ontological power, used in prayer, liturgy, or magical practice."
-covenant = "A binding agreement or relationship between the divine and a people or individual, establishing mutual obligations."
+divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
+ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
+anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
+
+[concepts.theology.divine_attributes_and_acts]
 divine_light = "The uncreated luminous quality of the divine, sometimes experienced directly in mystical states; illumination as revelation."
 living_god = "The divine conceived as active, present, and dynamic—not an abstract principle but a personal responsive reality."
-anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
+sacred_names = "Divine names or formulas that carry ontological power, used in prayer, liturgy, or magical practice."
+divine_providence = "Pronoia — the doctrine that the divine actively orders the unfolding of the cosmos and human affairs toward intelligible ends, against pure chance or blind necessity."
+covenant = "A binding agreement or relationship between the divine and a people or individual, establishing mutual obligations."
+
+[concepts.theology.ontological_structure]
+unity_of_being = "The doctrine that all existence is ultimately one substance or one divine reality; non-duality as a theological claim."
+evil_as_privation = "Augustinian and Plotinian doctrine that evil has no positive being of its own but is a lack, distortion, or absence of the good — denying ontological dualism while preserving moral seriousness."
 cosmic_dualism = "Ontological opposition between two primal principles (light/darkness, truth/lie, spirit/matter) as the fundamental structure of reality."
 numerical_mysticism = "Numbers, proportions, and mathematical relationships as the underlying structure of divine reality."
-ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
-unity_of_being = "The doctrine that all existence is ultimately one substance or one divine reality; non-duality as a theological claim."
-divine_providence = "Pronoia — the doctrine that the divine actively orders the unfolding of the cosmos and human affairs toward intelligible ends, against pure chance or blind necessity."
-evil_as_privation = "Augustinian and Plotinian doctrine that evil has no positive being of its own but is a lack, distortion, or absence of the good — denying ontological dualism while preserving moral seriousness."
 
-[concepts.praxis.praxis]
-letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
-permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
-inner_silence = "The practice of stilling the mind and speech to open receptivity to divine knowledge or presence."
-spiritual_ascent = "A staged journey of the soul upward through heavenly realms or levels of being toward the divine source."
-fasting_and_prayer = "Ascetic disciplines that prepare the body and mind for spiritual receptivity or purification."
-ritual_purity = "The maintenance of a state of cleanliness—physical, moral, or spiritual—required for encounter with the divine."
+[concepts.praxis.contemplative_practice]
+meditation = "Disciplined inward attention — sitting, focused, or open-awareness practice — as a stand-alone term that umbrellas active_contemplation, inner_silence, and dhyana-style sitting."
 active_contemplation = "A form of meditation that uses imagery, imagination, or symbolic thought rather than purely empty stillness."
-self_examination       = "Daily review of thought and action as spiritual practice."
-ritual_fire            = "Fire as medium of divine presence."
-funerary_navigation    = "Texts and rituals guiding the soul through death."
-heroic_furor           = "Bruno's eroici furori — a passionate, ennobling spiritual ardor that drives the soul toward divine wisdom; distinguished from base or animal passions by its orientation to infinite truth."
-wu_wei                 = "Effortless action aligned with the spontaneous flow of the Dao; non-coercive, non-striving conduct that yields results without forcing — the sage acts without acting."
-meditation             = "Disciplined inward attention — sitting, focused, or open-awareness practice — as a stand-alone term that umbrellas active_contemplation, inner_silence, and dhyana-style sitting."
-prayer                 = "Direct address to the divine, whether petitionary, contemplative, or liturgical; speech and silence offered upward."
-alchemical_work        = "The transformation of base substance — outer matter or the inner soul — into a purified, perfected, or 'gold' state; the magnum opus as both laboratory practice and spiritual allegory."
-theurgy                = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
-divine_intoxication    = "Ecstatic, non-rational receptivity to the divine figured as drunkenness — Plato's symposium wine, Rumi's sukr, Eckhart's 'sober drunkenness'; the passive/receptive metaphor for divine encounter, distinct from divine_madness's active possessing rapture."
+inner_silence = "The practice of stilling the mind and speech to open receptivity to divine knowledge or presence."
 detachment_gelassenheit = "Eckhart's Abgeschiedenheit/Gelassenheit — radical letting-go of will, image, and grasping that opens the soul to God; distinct from inner_silence (quietness) and from material renunciation, and adjacent to Sufi tark and Buddhist non-grasping as a practice rather than a metaphysical claim."
+wu_wei = "Effortless action aligned with the spontaneous flow of the Dao; non-coercive, non-striving conduct that yields results without forcing — the sage acts without acting."
 nature_preservation = "The ethical imperative to live in accordance with one's innate nature and avoid artificial social constraints that harm it."
 
-[concepts.anthropology.anthropology]
-tripartite_soul = "Division of the human being into three principles: spirit (pneuma), soul (psyche), and body/matter (hyle or soma)."
+[concepts.praxis.ritual_and_symbolic]
+letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
+permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
+ritual_fire = "Fire as medium of divine presence."
+funerary_navigation = "Texts and rituals guiding the soul through death."
+theurgy = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
+prayer = "Direct address to the divine, whether petitionary, contemplative, or liturgical; speech and silence offered upward."
+
+[concepts.praxis.ascetic_discipline]
+fasting_and_prayer = "Ascetic disciplines that prepare the body and mind for spiritual receptivity or purification."
+ritual_purity = "The maintenance of a state of cleanliness—physical, moral, or spiritual—required for encounter with the divine."
+self_examination = "Daily review of thought and action as spiritual practice."
+
+[concepts.praxis.ecstatic_modes]
+heroic_furor = "Bruno's eroici furori — a passionate, ennobling spiritual ardor that drives the soul toward divine wisdom; distinguished from base or animal passions by its orientation to infinite truth."
+divine_intoxication = "Ecstatic, non-rational receptivity to the divine figured as drunkenness — Plato's symposium wine, Rumi's sukr, Eckhart's 'sober drunkenness'; the passive/receptive metaphor for divine encounter, distinct from divine_madness's active possessing rapture."
+
+[concepts.praxis.transformative_path]
+alchemical_work = "The transformation of base substance — outer matter or the inner soul — into a purified, perfected, or 'gold' state; the magnum opus as both laboratory practice and spiritual allegory."
+spiritual_ascent = "A staged journey of the soul upward through heavenly realms or levels of being toward the divine source."
+
+[concepts.anthropology.divine_indwelling]
 inner_light = "The divine spark or luminous quality residing within the human person, potentially recognisable through introspection."
 kingdom_within = "The claim that the divine realm is present inside the individual, accessible without external mediation."
-opposites_transcended = "The dissolution of binary oppositions (male/female, inner/outer, above/below) as a mark of spiritual completion."
-childlike_innocence = "The infant or child as symbol of the unfallen, undivided spiritual state; return to primordial simplicity."
+birth_of_word_in_soul = "Eckhart's signature doctrine that the Father eternally begets the Son in the ground of the soul; the human interior as the actual site of the divine generative act, distinct from inner_light's static indwelling."
+
+[concepts.anthropology.human_constitution]
+tripartite_soul = "Division of the human being into three principles: spirit (pneuma), soul (psyche), and body/matter (hyle or soma)."
 body_as_obstacle = "The material body viewed as a prison, tomb, or source of error that hinders spiritual knowledge and return."
 mechanical_humanity = "Gurdjieff and Ouspensky's claim that ordinary human beings live in a state of waking sleep, reacting mechanically without unified will or consciousness, and that the spiritual path begins with recognising this condition."
-birth_of_word_in_soul = "Eckhart's signature doctrine that the Father eternally begets the Son in the ground of the soul; the human interior as the actual site of the divine generative act, distinct from inner_light's static indwelling."
-poverty_of_spirit = "Eckhart's radical reading of Matthew 5:3 — the saint as one who wants nothing, knows nothing, and has nothing, having emptied even the will and the self with which to receive God; distinct from renunciation_of_wealth (material poverty)."
 linga_sharira = "The persistent form or image of a human being that exists from birth to death, distinct from the impermanent physical matter."
+
+[concepts.anthropology.spiritual_completion]
+opposites_transcended = "The dissolution of binary oppositions (male/female, inner/outer, above/below) as a mark of spiritual completion."
+childlike_innocence = "The infant or child as symbol of the unfallen, undivided spiritual state; return to primordial simplicity."
+poverty_of_spirit = "Eckhart's radical reading of Matthew 5:3 — the saint as one who wants nothing, knows nothing, and has nothing, having emptied even the will and the self with which to receive God; distinct from renunciation_of_wealth (material poverty)."
 cosmic_consciousness = "A state of awareness transcending ordinary human consciousness, often involving unity with the universe or higher dimensions."
 
-[concepts.ethics.ethics]
+[concepts.ethics.moral_teaching]
 renunciation_of_wealth = "The spiritual danger of attachment to material possessions; wealth as a spiritual obstacle."
 love_of_neighbour = "Active compassionate care for others as a central spiritual obligation or expression of divine love."
 rejection_of_hypocrisy = "Critique of outward religious observance that lacks inner transformation; form without substance."
@@ -186,5 +293,5 @@ prophetic_rejection = "The phenomenon where spiritual messengers or healers are 
 # CONCEPT ALIASES
 # ============================================================
 # Populated incrementally as natural-language queries surface that a concept's
-# canonical label fails to match (design.md §5.1). Empty at migration time.
+# canonical label fails to match (design.md §5.1). Empty for now.
 [concept_aliases]
