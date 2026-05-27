@@ -1,0 +1,36 @@
+{
+  "id": "89c9ee47",
+  "type": "chore",
+  "state": "done",
+  "summary": "Update scripts/export.py to emit four new tables (load_families, load_concept_family_membership with 0/1→BOOLEAN conversion, load_concept_aliases, load_family_aliases) and enrich load_concepts to populate concepts.family_id via WHERE is_primary=1. Bump SCHEMA_VERSION to 3. Update schema/corpus-schema.sql to match (four new CREATE TABLEs with all constraints + ALTER + COMMENT clauses). Producing a working export artifact is the done criterion; guru-web side is coordinated separately based on this artifact. Per design.md §10.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.805Z",
+  "updated_at": "2026-05-27T18:24:34.492Z",
+  "files": [
+    {
+      "path": "scripts/export.py"
+    }
+  ],
+  "tags": [
+    "concept-hierarchy"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-27T18:24:27.029Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "09874432a9e7a6a2d0dbc78620b43d9e8219e171",
+    "resolved_at": "2026-05-27T18:24:34.492Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_export_hierarchy.py",
+    "test_function": "test_load_concepts_enriched",
+    "note": "export.py emits the 4 hierarchy tables (BOOLEAN is_primary), enriches concepts with family_id + derived domain, FK-safe COPY order, +5 indexes, prefix_ddl handles ALTER/COMMENT, SCHEMA_VERSION→3. corpus-schema.sql mirrors it. Verified by producing the real artifact (schema v3, 28 families/95 memberships, t/f booleans). guru-web must bump EXPECTED_SCHEMA_VERSION in lockstep."
+  }
+}
