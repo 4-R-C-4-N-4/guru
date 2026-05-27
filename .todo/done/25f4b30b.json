@@ -1,0 +1,30 @@
+{
+  "id": "25f4b30b",
+  "type": "chore",
+  "state": "done",
+  "summary": "Ad-hoc bench: tag 50-100 held-out chunks with the new prompt, compare agreement-with-review at score >= 2 against the old prompt. Capture the diff in docs/concept-hierarchy/ as a one-time notes file. Decision gate: if agreement materially worse, debug before proceeding to clustering. Per design.md §13 step 5.",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-20T18:39:16.705Z",
+  "updated_at": "2026-05-27T18:04:38.062Z",
+  "tags": [
+    "concept-hierarchy",
+    "manual"
+  ],
+  "relationships": {
+    "parent": "10512e6a"
+  },
+  "work": {
+    "branch": "tag-family",
+    "base_branch": "main",
+    "started_at": "2026-05-27T12:28:45.954Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "f47fe1a879036f678865709f2914952b844dd4ce",
+    "resolved_at": "2026-05-27T18:04:38.062Z",
+    "resolved_by": "unknown",
+    "note": "Bench run on 90 held-out chunks (same Qwen model, isolating the prompt). v2 grouped prompt regressed agreement-with-review at score>=2 (precision 95.1→85.1, recall 71.7→50.4, agreement 78.9→61.5). Decision gate FAILED → tagging reverted to flat v1 prompt (commit f47fe1a); hierarchy kept as a separate retrieval/structure layer. Confound: benched in mirror state. Write-up: docs/concept-hierarchy/bench-v1-vs-v2.md."
+  }
+}
