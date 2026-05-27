@@ -39,7 +39,8 @@ def load_chunk_body(db_path: Path, chunk_id: str) -> str:
     return d["content"]["body"]
 
 
-def print_tag_row(row: dict, concept_def: str, body: str) -> None:
+def print_tag_row(row: dict, concept_def: str, body: str,
+                  family: dict | None = None) -> None:
     print()
     print("=" * 70)
     print(f"CHUNK:   {row['chunk_id']}")
@@ -48,6 +49,10 @@ def print_tag_row(row: dict, concept_def: str, body: str) -> None:
     print(f"BODY:    {body[:400]}{'...' if len(body) > 400 else ''}")
     print("-" * 70)
     print(f"CONCEPT: {row['concept_id']}")
+    if family:
+        print(f"FAMILY:  {family['domain']} → {family['family']}")
+        if family['definition']:
+            print(f"         — {family['definition']}")
     print(f"DEF:     {concept_def or '(new concept)'}")
     print(f"SCORE:   {row['score']}/3")
     print(f"LLM:     {row['justification']}")
@@ -62,6 +67,24 @@ def get_concept_def(conn: sqlite3.Connection, concept_id: str) -> str:
         (f"concept.{concept_id}",),
     ).fetchone()
     return row[0] if row else ""
+
+
+def get_concept_family(conn: sqlite3.Connection, concept_id: str) -> dict | None:
+    """Primary-family context for a concept: {domain, family, definition}, in
+    id-style (e.g. 'anthropology' → 'spiritual_completion'). Returns None if the
+    concept has no primary family (e.g. a brand-new, unclustered concept)."""
+    row = conn.execute(
+        """SELECT m.family_id, f.definition, f.parent_id
+             FROM concept_family_membership m
+             JOIN concept_families f ON f.id = m.family_id
+            WHERE m.concept_id = ? AND m.is_primary = 1""",
+        (f"concept.{concept_id}",),
+    ).fetchone()
+    if not row:
+        return None
+    family_id, family_def, domain_id = row[0], row[1], row[2]
+    family_short = family_id.split(".", 1)[1] if "." in family_id else family_id
+    return {"domain": domain_id or "?", "family": family_short, "definition": family_def or ""}
 
 
 def promote_to_expresses(conn: sqlite3.Connection,
@@ -197,8 +220,9 @@ def review_tags(
     for row in rows:
         row = dict(row)
         concept_def = get_concept_def(conn, row["concept_id"])
+        family = get_concept_family(conn, row["concept_id"])
         body = load_chunk_body(db_path, row["chunk_id"])
-        print_tag_row(row, concept_def, body)
+        print_tag_row(row, concept_def, body, family)
 
         while True:
             try:
