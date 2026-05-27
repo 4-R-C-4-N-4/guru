@@ -22,13 +22,13 @@ if TYPE_CHECKING:
 # Those are different prompts for different sides of the pipeline. The
 # constant lives here per docs/v3.md §4.1.
 #
-# v2 (concept-hierarchy, design.md §8): the concept block changed from a flat
-# JSON array to a domain → family grouped outline with per-family glosses. The
-# JSON *output* schema is unchanged; the presentation did. The partial UNIQUE
-# index on staged_tags(chunk_id, concept_id, model, prompt_version) keeps v1
-# and v2 tags distinguishable, so old tags stay valid and re-tag runs produce
-# new v2 rows.
-PROMPT_VERSION = "v2"
+# Stays at v1: the v2 domain→family grouped tagging prompt was benched
+# (docs/concept-hierarchy/bench-v1-vs-v2.md) and regressed agreement-with-review
+# (recall −21pp), so tagging remains concept-driven on the flat v1 prompt. The
+# concept hierarchy is a separate retrieval/structure layer that does not touch
+# the tagging call; family assignment is done deterministically by
+# scripts/sync_taxonomy.py, not by the tagger LLM.
+PROMPT_VERSION = "v1"
 
 
 TIER_LABELS = {

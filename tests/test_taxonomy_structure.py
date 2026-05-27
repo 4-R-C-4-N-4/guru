@@ -110,20 +110,12 @@ def test_tag_concepts_loader_reads_all_concepts():
 
     concepts = tc.load_taxonomy()
     assert len(concepts) == TOTAL_CONCEPTS
-    # load_taxonomy is enriched with family/domain context (todo:17610554, §8).
-    expected_keys = {
-        "id", "definition", "node_id",
-        "family_id", "family_label", "family_definition",
-        "domain_id", "domain_label", "domain_definition",
-    }
+    # Tagging is concept-driven (flat v1 prompt); load_taxonomy returns the bare
+    # concept shape, not family-enriched dicts. The grouped v2 prompt was benched
+    # and reverted — see docs/concept-hierarchy/bench-v1-vs-v2.md.
     for c in concepts:
-        assert set(c) == expected_keys
+        assert set(c) == {"id", "definition", "node_id"}
         assert c["node_id"] == f"concept.{c['id']}"
-        # family_id is the two-segment domain.family path
-        assert c["family_id"].startswith(c["domain_id"] + ".")
-    # ordered by (domain, family, concept)
-    keys = [(c["domain_id"], c["family_id"], c["id"]) for c in concepts]
-    assert keys == sorted(keys)
 
 
 def test_loaders_agree_with_raw_toml():
