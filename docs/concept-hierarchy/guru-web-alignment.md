@@ -165,8 +165,10 @@ tagging decision, family classification of a *candidate* concept should be a
 
 1. Take the v3 `corpus-schema.sql` additions **verbatim** (byte-identical) and bump
    `EXPECTED_SCHEMA_VERSION` 2 → 3 on a branch.
-2. Generate a real export here, apply to a **staging Postgres**, integration-test
-   (this is also the first true Postgres load-test of the v3 artifact — see risk below).
+2. Generate a real export here, apply to a **staging Postgres**, integration-test.
+   (The v3 artifact has already been load-tested against `pgvector/pgvector:pg17` —
+   loads clean, the inline `schema_version==3` validation passes, FK/BOOLEAN/indexes
+   all correct — so this step is confirmation on the real VPS PG, not a first try.)
 3. Implement the three-namespace `extractConcepts` + tier-weighted ranking; verify
    against representative high-level queries (`cosmology`, `the cosmos`, `cosmic agents`,
    `the One`, `salvation`).
@@ -175,9 +177,9 @@ tagging decision, family classification of a *candidate* concept should be a
 
 ## 7. Open questions / watch-items
 
-- **The export has only been structurally validated, not loaded into Postgres** (no local
-  PG in the pipeline env). Step 2 above is the first real load-test — do it on staging
-  before prod.
+- The v3 export has been **load-tested against pgvector pg17** (clean load, validation
+  block passes, FK/BOOLEAN/partial-unique-index all enforced). The remaining check is the
+  real VPS Postgres apply on staging — version/extension parity, not artifact correctness.
 - Whether `concepts.domain` is removed in a follow-on or kept (needs a guru-web query audit).
 - Ranking weights (1.0 / 0.5 / 0.25) are a starting point — revisit on real results.
 - Two placements (`emotional_epistemology` → soteriology.knowledge_path,
