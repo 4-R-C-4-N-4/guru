@@ -13,6 +13,7 @@ Run with: pytest tests/test_chunking.py
 """
 
 import re
+import sys
 import tomllib
 from pathlib import Path
 
@@ -20,6 +21,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 CORPUS_DIR = PROJECT_ROOT / "corpus"
 RAW_DIR = PROJECT_ROOT / "raw"
 CHUNKING_DIR = PROJECT_ROOT / "chunking"
+
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from chunk import _apply_pre_strip  # noqa: E402  — mirror the chunker's pre-strip exactly
 
 
 def normalize_ws(text: str) -> str:
@@ -49,12 +53,18 @@ def find_chunked_texts() -> list[tuple[str, str]]:
     return pairs
 
 
-def _load_raw_text(tradition: str, text_id: str) -> str:
-    """Load raw text for a source, handling both single and multi-page."""
+def _load_raw_text(tradition: str, text_id: str, pre_strip: list[str] | None = None) -> str:
+    """Load raw text for a source, handling both single and multi-page, applying
+    pre_strip_patterns the *same way the chunker does* (scripts/chunk.py): whole-
+    content for a single raw file, per-page for multi-page sources. The per-page
+    distinction matters — these patterns are `^`/`$`-anchored page boilerplate, so
+    applying them to the concatenated blob would mis-strip across page boundaries."""
+    pre_strip = pre_strip or []
     raw_file = RAW_DIR / tradition / f"{text_id}.txt"
     if raw_file.exists():
-        return raw_file.read_text(encoding="utf-8")
-    # Multi-page: concatenate all pages in numeric order
+        content = raw_file.read_text(encoding="utf-8")
+        return _apply_pre_strip(content, pre_strip) if pre_strip else content
+    # Multi-page: strip each page, drop now-empty pages, concatenate in order.
     trad_dir = RAW_DIR / tradition
     pages = list(trad_dir.glob(f"{text_id}-*.txt"))
     if pages:
@@ -62,7 +72,14 @@ def _load_raw_text(tradition: str, text_id: str) -> str:
             m = re.search(r'-(\d+)\.txt$', p.name)
             return int(m.group(1)) if m else 0
         pages.sort(key=_page_num)
-        return "\n\n".join(p.read_text(encoding="utf-8") for p in pages)
+        out = []
+        for p in pages:
+            content = p.read_text(encoding="utf-8")
+            if pre_strip:
+                content = _apply_pre_strip(content, pre_strip)
+            if content:
+                out.append(content)
+        return "\n\n".join(out)
     return ""
 
 
@@ -85,15 +102,23 @@ def test_round_trip():
         cfg_path = CHUNKING_DIR / tradition / f"{text_id}.toml"
 
         max_tokens = 800
+        pre_strip: list[str] = []
         if cfg_path.exists():
             with open(cfg_path, "rb") as f:
                 cfg = tomllib.load(f)
             max_tokens = int(cfg.get("chunking", {}).get("max_tokens", 800))
+            pre_strip = list(cfg.get("chunking", {}).get("pre_strip_patterns", []))
 
         chunk_files = sorted(chunk_dir.glob("*.toml"))
         assert chunk_files, f"No chunk files in {chunk_dir}"
 
-        raw_text = _load_raw_text(tradition, text_id)
+        # Mirror the chunker: pre_strip_patterns are re.sub('')'d out of the raw
+        # before splitting (scripts/chunk.py:_apply_pre_strip), so chunk bodies are
+        # faithful to the *stripped* source, not the verbatim raw. Without this the
+        # round-trip wrongly flags sources with inline page markers / boilerplate
+        # (e.g. CCEL '\d+-\d+' page numbers, sacred-texts page nav) the chunker removed.
+        # Applied per-page for multi-page sources, matching the chunker exactly.
+        raw_text = _load_raw_text(tradition, text_id, pre_strip)
         raw_norm = normalize_ws(raw_text)
         cursor = 0
 
