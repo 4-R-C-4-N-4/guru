@@ -46,9 +46,22 @@ def test_emits_edges_btrees():
     assert "ON corpus_new.edges (target)" in out
 
 
-def test_emits_exactly_five_indexes():
+def test_emits_concept_hierarchy_indexes():
     out = _emit_to_string()
-    assert out.count("CREATE INDEX") == 5
+    assert "idx_concept_families_parent ON corpus_new.concept_families (parent_id)" in out
+    # the one-primary-per-concept invariant is a partial UNIQUE index
+    assert ("CREATE UNIQUE INDEX idx_concept_primary_family ON "
+            "corpus_new.concept_family_membership (concept_id) WHERE is_primary") in out
+    assert "idx_concept_family_membership_family ON corpus_new.concept_family_membership (family_id)" in out
+    assert "idx_concept_aliases_alias ON corpus_new.concept_aliases (alias)" in out
+    assert "idx_family_aliases_alias ON corpus_new.family_aliases (alias)" in out
+
+
+def test_emits_exactly_ten_indexes():
+    # 5 original (chunks×3, edges×2) + 5 concept-hierarchy (one is UNIQUE).
+    import re
+    out = _emit_to_string()
+    assert len(re.findall(r"CREATE (?:UNIQUE )?INDEX", out)) == 10
 
 
 def test_no_create_index_anywhere_else_in_module():
