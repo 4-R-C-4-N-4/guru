@@ -664,35 +664,13 @@ license = "public_domain"
 translator = "Thomas Taylor"
 notes = "Taylor's translations of selected Enneads. Index page links to individual tractates. Taylor's rendering is influential in the Western esoteric tradition (Blake, the Romantics, later Theosophists) but tends to be more expansive than literal. Consider each tractate as a separate source."
 
-[[source]]
-id = "plotinus-on-the-beautiful"
-tradition = "neoplatonism"
-label = "Plotinus: On the Beautiful (Ennead I.6)"
-url = "https://sacred-texts.com/cla/plotenn/enn011.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The most influential single Ennead in Western esoteric reception. Beauty as ascent to the One."
-
-[[source]]
-id = "plotinus-on-intelligible-beauty"
-tradition = "neoplatonism"
-label = "Plotinus: On Intelligible Beauty (Ennead V.8)"
-url = "https://sacred-texts.com/cla/plotenn/enn076.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The intelligible realm and the vision of the One. Direct source for later emanationist cosmologies."
-
-[[source]]
-id = "plotinus-on-the-good-or-the-one"
-tradition = "neoplatonism"
-label = "Plotinus: On the Good, or the One (Ennead VI.9)"
-url = "https://sacred-texts.com/cla/plotenn/enn088.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The capstone Ennead on the nature of the One and the soul's return. Creates strong edges with Kabbalistic Ein Sof and Hermetic unity."
+# todo:901712e4 — REMOVED the three single-Ennead sources (plotinus-on-the-beautiful
+# I.6, -on-intelligible-beauty V.8, -on-the-good-or-the-one VI.9). Their format=html
+# URLs pointed at single Ennead *section* sub-pages, so each landed only a nav-polluted
+# 80-2391 byte fragment = 1 trivial chunk. The full tractates already live in
+# plotinus-select-works-index above (838 chunks); 20/20 and 19/19 of the concepts they
+# expressed were redundant with the index. Removed rather than repointed — repointing
+# would only duplicate the index.
 
 
 # --------------------------------------------
