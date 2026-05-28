@@ -5,10 +5,10 @@ text_name = "Avesta (Gathas)"
 section = "Gathas Introduction, Section 1b"
 translator = "L.H. Mills"
 source_url = "https://sacred-texts.com/zor/sbe31/sbe31005.htm"
-token_count = 57
+token_count = 37
 
 [content]
-body = "An analysis and general summary is placed before each chapter as more convenient than massing them all together.\n\nThe reader is reminded that the rhythm of the original, so far as it could be reasonably conjectured, is somewhat imitated in parts of the translations.\n\nNext: Yasna XXIX"
+body = "The reader is reminded that the rhythm of the original, so far as it could be reasonably conjectured, is somewhat imitated in parts of the translations.\n\nNext: Yasna XXIX"
 
 [annotations]
 concepts = []

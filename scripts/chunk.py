@@ -57,9 +57,23 @@ STRATEGY_TYPES = {
 # cannot run into real content or the trailing "Next:" footer, and is a no-op
 # for non-sacred-texts sources (0 false-positives across the corpus).
 # Per-config pre_strip_patterns still apply on top.
-# See docs/upstream-data-cleanup.md, todo:8abbb645.
+# See docs/upstream-data-cleanup.md, todo:8abbb645 (nav) and todo:0a708fa4 (the
+# scan/front-matter artifacts below — all uniform sacred-texts boilerplate,
+# validated 0-false-positive across the corpus):
+#   - {p. N} brace page markers (scan artifact; the BRACED form only — bare
+#     "p. N" is a legitimate citation and is left alone). \s* spans the newline
+#     forms ("{p.\n\n302}", "{ p. 48 }") that survive into the raw.
+#   - "Buy this Book at Amazon.com <title>, <tr>, [<year>], at sacred-texts.com"
+#     front-matter preamble on first pages; bounded by the closing marker.
+#   - "click to enlarge" image-link caption.
+# NOTE: \bPlate <N> / \bFig. were deliberately NOT added — in this corpus they
+# are in-text references in Budge's commentary ("see Plate III."), not captions;
+# stripping them would mangle real sentences (todo:0a708fa4 analysis).
 BASELINE_PRE_STRIP: list[str] = [
     r'Sacred Texts\b[A-Za-z ]*?\bIndex(?:\s+Index)?(?:\s+(?:Previous|Next))+\s+',
+    r'\{\s*p\.\s*\d+\s*\}',
+    r'Buy this Book at Amazon\.com\b.*?\bat sacred-texts\.com\s*',
+    r'(?i)click to enlarge\s*',
 ]
 
 
