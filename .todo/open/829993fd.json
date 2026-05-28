@@ -1,0 +1,25 @@
+{
+  "id": "829993fd",
+  "type": "chore",
+  "state": "open",
+  "summary": "Re-export cleaned corpus to guru-web PG + verify query mis-hits resolved",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:05:11.427Z",
+  "updated_at": "2026-05-28T15:05:11.467Z",
+  "files": [
+    {
+      "path": "scripts/export.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "retrieval",
+    "deploy"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Make the cleanup actually land in retrieval: re-export + verify. (Depends on C1; re-runnable after each strip child.)\n\nAfter the strip/drop children, the local corpus + guru.db are clean. Re-export to\nthe guru-web Postgres (scripts/export.py → VPS load; see memory\nproject_vps_psql_pattern: `sudo -u postgres psql guru < file.sql`). Then verify\nthe original query mis-hits are resolved: re-run the queries that previously\nsurfaced boilerplate and confirm clean primary-source chunks now rank correctly.\n\nThis can run incrementally — after C1 alone it already delivers the ~30% win; re-run\nafter C2-C4 land.\n\nDone contract:\n- export.py run; guru-web PG row counts (chunks/embeddings) match the local cleaned corpus.\n- Before/after retrieval check on >=1 query that previously mis-hit on boilerplate\n  now returns clean content (capture the two outputs).\n- Confirm EXPECTED_SCHEMA_VERSION alignment if export touches schema (see\n  docs/concept-hierarchy/guru-web-alignment.md)."
+}
