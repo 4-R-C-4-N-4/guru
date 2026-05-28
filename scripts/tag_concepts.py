@@ -2,13 +2,14 @@
 tag_concepts.py — Pass B of Stage 3: LLM-assisted concept tagging.
 
 For each chunk in guru.db, asks an LLM to score it against every concept in
-the taxonomy and writes results to staged_tags. Supports --resume to skip
-already-tagged chunks.
+the taxonomy and writes results to staged_tags. --resume (skip chunks already
+in tagging_progress) is ON by default, so re-runs only tag never-seen chunks
+and won't redo or clobber prior work; pass --no-resume to re-tag everything.
 
 Usage:
     python3 scripts/tag_concepts.py \\
         --provider ollama --model llama3 \\
-        [--batch-size 10] [--resume] \\
+        [--batch-size 10] [--no-resume] \\
         [--tradition gnosticism] [--text gospel-of-thomas]
 """
 
@@ -409,13 +410,21 @@ def run_tagging(
     )
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
+    """Construct the CLI parser (extracted from main for testability)."""
     parser = argparse.ArgumentParser(description="LLM-assisted concept tagging")
     parser.add_argument("--provider", choices=list(PROVIDERS), default="llamacpp")
     parser.add_argument("--model", default="Qwen3.5-27B-UD-Q4_K_XL.gguf")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--batch-size", type=int, default=0)
-    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--resume", action=argparse.BooleanOptionalAction,
+                        default=True,
+                        help="Skip chunks already in tagging_progress (i.e. tagged "
+                             "by a prior run). Default: on — re-running tag_concepts "
+                             "only tags never-seen chunks and won't redo/clobber "
+                             "existing work. Pass --no-resume to re-tag everything "
+                             "(e.g. after a prompt change); reviewed verdicts are "
+                             "still protected by --respect-reviewed.")
     parser.add_argument("--tradition")
     parser.add_argument("--text")
     parser.add_argument("--delay", type=float, default=0.0,
@@ -445,7 +454,11 @@ def main() -> None:
                              "Blank lines and '#' comments are skipped. Use for "
                              "recovery runs that target a hand-curated list.")
     parser.add_argument("--verbose", "-v", action="store_true")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,

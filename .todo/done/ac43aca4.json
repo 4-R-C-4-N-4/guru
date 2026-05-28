@@ -1,0 +1,33 @@
+{
+  "id": "ac43aca4",
+  "type": "chore",
+  "state": "done",
+  "summary": "tag_concepts: make --resume (respect previous runs) default-on",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-05-28T17:56:11.871Z",
+  "updated_at": "2026-05-28T17:58:29.153Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "safety",
+    "pipeline"
+  ],
+  "work": {
+    "branch": "tag-concepts-resume-default",
+    "base_branch": "main",
+    "started_at": "2026-05-28T17:56:11.915Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9f302b5de10f3b262147493cef3e61ce0a5dc93f",
+    "resolved_at": "2026-05-28T17:58:29.153Z",
+    "resolved_by": "unknown",
+    "note": "Flipped tag_concepts --resume to default-on (BooleanOptionalAction). Re-runs now skip chunks already in tagging_progress, so tagging is idempotent by default and won't redo/clobber prior work; --no-resume forces a full re-tag. --respect-reviewed was already default-on (adjudicated tags protected). Extracted build_parser() + added test_resume_is_on_by_default. Commit 9f302b5; 263 tests green. This is the user's chosen mitigation for the enoch/tertium curation-protection concern — supersedes the proposed frozen-guard / debt ticket."
+  }
+}
