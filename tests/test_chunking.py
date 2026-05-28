@@ -23,7 +23,7 @@ RAW_DIR = PROJECT_ROOT / "raw"
 CHUNKING_DIR = PROJECT_ROOT / "chunking"
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from chunk import _apply_pre_strip  # noqa: E402  — mirror the chunker's pre-strip exactly
+from chunk import _apply_pre_strip, BASELINE_PRE_STRIP  # noqa: E402  — mirror the chunker's pre-strip exactly
 
 
 def normalize_ws(text: str) -> str:
@@ -102,12 +102,14 @@ def test_round_trip():
         cfg_path = CHUNKING_DIR / tradition / f"{text_id}.toml"
 
         max_tokens = 800
-        pre_strip: list[str] = []
+        # The chunker always applies BASELINE_PRE_STRIP first (sacred-texts nav),
+        # then per-config pre_strip_patterns — mirror that order exactly.
+        pre_strip: list[str] = list(BASELINE_PRE_STRIP)
         if cfg_path.exists():
             with open(cfg_path, "rb") as f:
                 cfg = tomllib.load(f)
             max_tokens = int(cfg.get("chunking", {}).get("max_tokens", 800))
-            pre_strip = list(cfg.get("chunking", {}).get("pre_strip_patterns", []))
+            pre_strip = list(BASELINE_PRE_STRIP) + list(cfg.get("chunking", {}).get("pre_strip_patterns", []))
 
         chunk_files = sorted(chunk_dir.glob("*.toml"))
         assert chunk_files, f"No chunk files in {chunk_dir}"
@@ -248,3 +250,34 @@ def test_token_budget_enforcement():
 
     assert not violations, f"Token budget violations:\n" + "\n".join(violations)
     print(f"  PASS: all chunks within token budget")
+
+
+def test_no_sacred_texts_nav_prefix():
+    """No chunk body may retain the sacred-texts nav header
+    ('Sacred Texts <Collection> Index Previous Next ...'). It pollutes embeddings
+    and causes query mis-hits — todo:8abbb645, docs/upstream-data-cleanup.md.
+    The chunker strips it via BASELINE_PRE_STRIP; this guards against regressions
+    (e.g. a new sacred-texts source added without re-chunking)."""
+    if not CORPUS_DIR.exists():
+        return
+    nav = re.compile(r'^Sacred Texts\b.*?\b(?:Previous|Next)\b', re.I | re.S)
+    offenders = []
+    for trad_dir in sorted(CORPUS_DIR.iterdir()):
+        if not trad_dir.is_dir() or trad_dir.name.endswith(".toml"):
+            continue
+        for text_dir in sorted(trad_dir.iterdir()):
+            if not text_dir.is_dir():
+                continue
+            chunk_dir = text_dir / "chunks"
+            if not chunk_dir.exists():
+                continue
+            for chunk_file in sorted(chunk_dir.glob("*.toml")):
+                with open(chunk_file, "rb") as f:
+                    d = tomllib.load(f)
+                if nav.match(d["content"]["body"].lstrip()):
+                    offenders.append(d["chunk"]["id"])
+    assert not offenders, (
+        f"{len(offenders)} chunk(s) retain the sacred-texts nav prefix; "
+        f"first few: {offenders[:5]}"
+    )
+    print("  PASS: no chunk retains the sacred-texts nav prefix")

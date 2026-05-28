@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.343"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 281"
+section = "Select Works, Section 282"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 20
+token_count = 22
 
 [content]
-body = "Sacred Texts Classics Index Previous Next THE FOURTH ENNEAD Next: FIRST TRACTATE"
+body = "FIRST TRACTATE. ON THE ESSENCE OF THE SOUL (1). Next: Section 1"
 
 [annotations]
 concepts = []

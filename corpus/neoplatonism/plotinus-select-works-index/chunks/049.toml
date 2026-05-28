@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 33"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 24
+token_count = 17
 
 [content]
-body = "Sacred Texts Classics Index Previous Next FOURTH TRACTATE. ON TRUE HAPPINESS. Next: Section 1"
+body = "FOURTH TRACTATE. ON TRUE HAPPINESS. Next: Section 1"
 
 [annotations]
 concepts = []

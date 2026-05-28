@@ -1,0 +1,17 @@
+# Recreated under todo:8abbb645 — this config was missing (the committed
+# corpus/zoroastrianism/bundahishn existed with no chunking/ config, so it
+# could not be re-chunked). Matches the committed output: 1 fetched page
+# (Chapter 1) page-as-chunk, sub-split into "Chapter 1 (part 1/2)". The
+# baseline sacred-texts nav strip (scripts/chunk.py BASELINE_PRE_STRIP) cleans
+# the leading "Sacred Texts Zoroastrianism Index Previous Next" header.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+number_source = "filename"
+max_tokens = 800
+
+[metadata]
+tradition = "Zoroastrianism"
+text_name = "Bundahishn (Creation)"
+translator = "E.W. West"
+sections_format = "chapter"

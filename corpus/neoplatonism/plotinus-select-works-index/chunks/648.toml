@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.648"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 546 (part 2)"
+section = "Select Works, Section 550"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 193
+token_count = 285
 
 [content]
-body = "In so doing, we shall not withhold Identity and Difference from the subsequents of the Intellectual order; the thing of Sense has, it is clear, a particular identity and a particular difference, but Identity and Difference have the generic status independently of the particular.\n\nThey will, moreover, be primary genera, because nothing can be predicated of them as denoting their essential nature.\n\nNothing, of course we mean, but Being; but this Being is not their genus, since they cannot be identified with any particular being as such.\n\nSimilarly, Being will not stand as genus to Motion or Stability, for these also are not its species.\n\nBeings [or Existents] comprise not merely what are to be regarded as species of the genus Being, but also participants in Being.\n\nOn the other hand, Being does not participate in the other four principles as its genera: they are not prior to Being; they do not even attain to its level.\n\nNext: Section 9"
+body = "Section 12 12. Enough upon that side of the question. But how does the perfection [goodness] of numbers, lifeless things, depend upon their particular unity? Just as all other inanimates find their perfection in their unity. If it should be objected that numbers are simply non-existent, we should point out that our discussion is concerned [not with units as such, but] with beings considered from the aspect of their unity. We may again be asked how the point- supposing its independent existence granted- participates in perfection. If the point is chosen as an inanimate object, the question applies to all such objects: but perfection does exist in such things, for example in a circle: the perfection of the circle will be perfection for the point; it will aspire to this perfection and strive to attain it, as far as it can, through the circle. But how are the five genera to be regarded? Do they form particulars by being broken up into parts? No; the genus exists as a whole in each of the things whose genus it is. But how, at that, can it remain a unity? The unity of a genus must be considered as a whole-in-many. Does it exist then only in the things participating in it? No; it has an independent existence of its own as well. But this will, no doubt, become clearer as we proceed. Next: Section 13"
 
 [annotations]
 concepts = []

@@ -1,0 +1,48 @@
+{
+  "id": "8abbb645",
+  "type": "bug",
+  "state": "done",
+  "summary": "Tier 1: strip '^Sacred Texts ... Previous Next' nav prefix (the ~30% win) + re-chunk/re-embed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.553Z",
+  "updated_at": "2026-05-28T15:48:07.532Z",
+  "files": [
+    {
+      "path": "chunking"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "chunking"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Tier 1 / the 80/20: strip the leading site-nav prefix from chunk bodies.\n\nPattern (collection word varies — Classics / Buddhism / Zoroastrianism / Egypt / Esoteric):\n    ^Sacred Texts\\b.*?\\bPrevious\\s+Next\\b\\s*      (non-greedy)\n971 local chunks (30%) match. Add it to pre_strip_patterns in every chunking\nconfig whose text has nav-prefixed chunks. By tradition (local counts):\nneoplatonism=716 (plotinus-select-works-index — page-as-chunk, currently NO\npre_strip), taoism=137, egyptian=68, zoroastrianism=19, christian_mysticism=14,\ngreek_mystery=10, jewish_mysticism=4, hermeticism=2, buddhism=1 (diamond-sutra).\nEnumerate the exact text_ids by re-running the corroboration scan.\n\nMechanism notes:\n- pre_strip is applied PER-PAGE for page-as-chunk/multi sources and whole-file\n  for single sources; both anchor \"^\", so each page's/file's leading nav is\n  removed. The round-trip test mirrors this exactly (tests/test_chunking.py\n  _load_raw_text), so it will stay valid.\n- Re-chunk affected texts, then refresh local guru.db: bootstrap_chunks (upsert\n  node labels) + cleanup_stale_chunk_nodes --apply (if chunk counts shift) +\n  embed_corpus --tradition X (INSERT OR REPLACE refreshes vectors) — the exact\n  sequence used in todo:73c83a22.\n\nDone contract:\n- A scan reports 0 chunks whose body starts with the nav prefix.\n- tests/test_chunking.py round-trip stays green.\n- Local guru.db has no stale chunk_ids for affected texts; embeddings refreshed.\n- Regression test: assert no chunk body matches ^Sacred Texts\\b.*Previous\\s+Next.",
+  "work": {
+    "branch": "junk-text-cleanup",
+    "base_branch": "main",
+    "started_at": "2026-05-28T15:28:42.717Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-28T15:33:15.838Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Validated nav-strip pattern: ^Sacred Texts\\b[A-Za-z ]*?\\bIndex(?:\\s+Index)?(?:\\s+(?:Previous|Next))+\\s+ — strips all 981 affected chunk bodies cleanly with 0 false-positives on the other ~2165. Implementation deviation from spec: the nav is a UNIFORM sacred-texts.com artifact spanning 32 configs (collection word varies: Classics/Taoism/Egypt/Egypt EHH Index/Zoroastrianism/Esoteric/Judaism/Gnosticism and Hermetica/Buddhism), so instead of pasting the identical pattern into 32 TOML files (error-prone, loses comments under tomli_w rewrite, misses future sacred-texts sources), add it ONCE as a BASELINE_PRE_STRIP in scripts/chunk.py applied to every text before per-config pre_strip_patterns (no-op for non-sacred-texts; 0 false-positives confirmed). Round-trip test updated to mirror the baseline. Operates on existing raw (re-chunk only, no re-acquire). This is the doc's caveat-#4 'handle the source artifact centrally' done at chunker level.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "10ed3a235ed9a10177da2f9935ecad64f1ef00b5",
+    "resolved_at": "2026-05-28T15:48:07.532Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunking.py",
+    "test_function": "test_no_sacred_texts_nav_prefix",
+    "note": "Stripped the sacred-texts nav prefix from 981 chunks across 32 texts -> 0, via BASELINE_PRE_STRIP in chunk.py (one change, not 32 config edits; covers future sacred-texts sources). Pattern is non-^-anchored (catches interior navs in multi-section pages), letters-only + non-greedy, 0 false-positives. Re-chunked the 32, refreshed guru.db (3137 files=nodes=embeddings, 0 stale). Recreated chunking/zoroastrianism/bundahishn.toml (lost config — pre-existing anomaly). Commit 10ed3a2; tests 263 green. FOLLOW-UPS (flagged, not done): (1) re-chunk shifted boundaries for 3 sub-split texts (plotinus 838->831, egyptian-book-of-the-dead 358->357, zhuangzi 295->294); embeddings refreshed but their promoted EXPRESSES tags may need re-tagging. (2) 'Buy this Book at Amazon.com' front-matter artifact in 21 chunks — separate pattern, fold into C2 (0a708fa4). (3) enoch-charles-1917 + tertium-organum show pre-existing chunker drift (re-chunk != committed) unrelated to nav — NOT touched; separate issue. Downstream: guru-web PG re-export is C5 (829993fd)."
+  }
+}

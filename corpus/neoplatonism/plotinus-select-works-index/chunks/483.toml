@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.483"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 400"
+section = "Select Works, Section 402 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 29
+token_count = 5
 
 [content]
-body = "Sacred Texts Classics Index Previous Next EIGHTH TRACTATE. THE SOUL'S DESCENT INTO BODY. Next: Section 1"
+body = "Next: Section 3"
 
 [annotations]
 concepts = []
