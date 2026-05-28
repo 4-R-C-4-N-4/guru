@@ -25,3 +25,13 @@ def test_llm_max_tokens_has_thinking_budget():
         f"accommodate a thinking model's reasoning preamble. Raising this "
         f"floor masks the 2026-05 silent-overflow regression."
     )
+
+
+def test_resume_is_on_by_default():
+    """--resume (skip chunks already in tagging_progress) defaults ON, so a
+    re-run only tags never-seen chunks and won't redo or clobber prior work;
+    --no-resume opts into a full re-tag. todo:ac43aca4."""
+    parser = tag_concepts.build_parser()
+    assert parser.parse_args([]).resume is True
+    assert parser.parse_args(["--no-resume"]).resume is False
+    assert parser.parse_args(["--resume"]).resume is True
