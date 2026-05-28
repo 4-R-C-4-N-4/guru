@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.208"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 175"
+section = "Select Works, Section 176"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 11
+token_count = 13
 
 [content]
-body = "THE THIRD ENNEAD Next: FIRST TRACTATE"
+body = "FIRST TRACTATE. FATE. Next: Section 1"
 
 [annotations]
 concepts = []

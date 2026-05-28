@@ -23,7 +23,7 @@ RAW_DIR = PROJECT_ROOT / "raw"
 CHUNKING_DIR = PROJECT_ROOT / "chunking"
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from chunk import _apply_pre_strip, BASELINE_PRE_STRIP  # noqa: E402  — mirror the chunker's pre-strip exactly
+from chunk import _apply_pre_strip, BASELINE_PRE_STRIP, is_apparatus_chunk  # noqa: E402  — mirror the chunker's pre-strip exactly
 
 
 def normalize_ws(text: str) -> str:
@@ -295,6 +295,7 @@ def test_no_scan_or_frontmatter_artifacts():
     checks = {
         "{p. N} brace marker": re.compile(r'\{\s*p\.\s*\d+\s*\}'),
         "Buy-this-Book preamble": re.compile(r'Buy this Book at Amazon\.com', re.I),
+        "sacred-texts byline": re.compile(r',\s*by\s+[^\n,]{2,40}?,\s*\[\d{3,4}\],\s*at sacred-texts\.com', re.I),
     }
     offenders = []
     for trad_dir in sorted(CORPUS_DIR.iterdir()):
@@ -318,3 +319,23 @@ def test_no_scan_or_frontmatter_artifacts():
         f"first few: {offenders[:5]}"
     )
     print("  PASS: no chunk retains {p.N} braces or the Buy-this-Book preamble")
+
+
+def test_is_apparatus_chunk_drops_only_pure_apparatus():
+    """The C3 whole-chunk drop test (todo:c6c13b63) must drop footer pointers
+    and errata blocks while keeping real content — never on length alone."""
+    # DROP: sacred-texts footer nav pointers that became their own chunk
+    assert is_apparatus_chunk("Next: Section 2")
+    assert is_apparatus_chunk("Previous: Pythagorean Ethical Sentences")
+    assert is_apparatus_chunk(
+        "Next: Eleventh Division of the Tuat.\n\nII.\n\nKingdom of Temu-Khepera-Ra"
+    )
+    # DROP: errata corrections — apparatus at any length
+    assert is_apparatus_chunk("Errata page 88: 'astonied'->'astonished'")
+    assert is_apparatus_chunk("Errata page viii: 'exent'->'extent' " + "x" * 2000)
+    # KEEP: real content, including a 9-token Gospel-of-Thomas logion (short ≠ junk)
+    assert not is_apparatus_chunk("Jesus said, 'Become passers-by.'")
+    # KEEP: prose that merely mentions "next" but doesn't start with the pointer
+    assert not is_apparatus_chunk("The next stage of the soul's ascent is union.")
+    # KEEP: a long body that starts with 'Next:' but is clearly content (length guard)
+    assert not is_apparatus_chunk("Next: " + "and the soul ascends through the spheres " * 10)

@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.110"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 89"
+section = "Select Works, Section 90"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 11
+token_count = 25
 
 [content]
-body = "THE SECOND ENNEAD Next: FIRST TRACTATE"
+body = "FIRST TRACTATE. ON THE KOSMOS OR ON THE HEAVENLY SYSTEM. Next: Section 1"
 
 [annotations]
 concepts = []

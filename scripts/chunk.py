@@ -74,7 +74,31 @@ BASELINE_PRE_STRIP: list[str] = [
     r'\{\s*p\.\s*\d+\s*\}',
     r'Buy this Book at Amazon\.com\b.*?\bat sacred-texts\.com\s*',
     r'(?i)click to enlarge\s*',
+    # Per-page byline header "<Title>, by <Translator>, [<year>], at
+    # sacred-texts.com" (todo:16255216 / C4a). Bounded by the closing marker;
+    # title/translator are non-newline-bounded so it can't span into content.
+    r'[^\n]{0,80}?,\s*by\s+[^\n,]{2,40}?,\s*\[\d{3,4}\],\s*at sacred-texts\.com\s*',
 ]
+
+
+def is_apparatus_chunk(body: str) -> bool:
+    """A whole-chunk DROP test (todo:c6c13b63 / C3): True when a chunk body is
+    nothing but sacred-texts apparatus, so it should be discarded rather than
+    kept (pre_strip can only remove text, not drop a chunk).
+
+    Two cases, both precise — never drop on length alone (a 9-token Gospel-of-
+    Thomas logion is real content):
+      - an Errata corrections block (never primary content, any length);
+      - a footer nav pointer that became its own short chunk
+        ("Next: <title>" / "Previous: <title>"), pattern AND a short-length
+        guard so a real chunk that merely starts with "Next:" is kept.
+    """
+    b = body.strip()
+    if re.match(r'(?i)Errata\b', b):
+        return True
+    if re.match(r'(?i)(?:Next|Previous)\s*:\s', b) and len(b) <= 200:
+        return True
+    return False
 
 
 def _ensure_chunkers_on_path():
@@ -225,6 +249,13 @@ def process_source(
         for chunk in final_chunks:
             if chunk.token_count == 0:
                 chunk.token_count = count_tokens(chunk.body)
+
+    # Drop whole-chunk apparatus (footer pointers, errata blocks) — see
+    # is_apparatus_chunk. Done after sub-splitting so we test final bodies.
+    dropped = [c for c in final_chunks if is_apparatus_chunk(c.body)]
+    if dropped:
+        final_chunks = [c for c in final_chunks if not is_apparatus_chunk(c.body)]
+        logger.info(f"[{source_id}] dropped {len(dropped)} apparatus chunk(s)")
 
     logger.info(f"[{source_id}] → {len(final_chunks)} chunks")
 
