@@ -43,7 +43,7 @@ TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
 # EXPECTED_SCHEMA_VERSION must advance in the same deploy.
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 EMBEDDING_MODEL = "ollama/nomic-embed-text"
 EMBEDDING_DIM = 768
 
@@ -215,26 +215,88 @@ def load_texts() -> list[dict]:
 
 
 def load_concepts(conn: sqlite3.Connection) -> list[dict]:
-    """Merge SQLite node rows with concepts/taxonomy.toml."""
+    """Merge SQLite node rows with concepts/taxonomy.toml, enriched with the
+    primary family (design.md §10.3). `definition` comes from the TOML (walked
+    to any depth so the three-tier [concepts.DOMAIN.FAMILY] layout works);
+    `family_id` and `domain` are derived from the DB's primary membership —
+    domain is the family's parent, not the TOML section, per §10.2."""
     with open(TAXONOMY_TOML, "rb") as fp:
         tax = tomllib.load(fp)
-    lookup: dict[str, tuple[str, str]] = {}
-    for domain, members in tax["concepts"].items():
-        for cid, definition in members.items():
-            lookup[cid] = (domain, definition)
+    defn_by_cid: dict[str, str] = {}
+
+    def _walk(node: dict) -> None:
+        for k, v in node.items():
+            if isinstance(v, dict):
+                _walk(v)
+            elif isinstance(v, str):
+                defn_by_cid[k] = v
+
+    _walk(tax.get("concepts", {}))
+
+    # primary family + its domain (parent) per concept node
+    fam_by_node: dict[str, tuple[str, str]] = {}
+    for node_id, family_id, domain in conn.execute(
+        """SELECT m.concept_id, m.family_id, f.parent_id
+             FROM concept_family_membership m
+             JOIN concept_families f ON f.id = m.family_id
+            WHERE m.is_primary = 1"""
+    ):
+        fam_by_node[node_id] = (family_id, domain)
 
     rows = []
     for node_id, label in conn.execute(
         "SELECT id, label FROM nodes WHERE type='concept' ORDER BY id"
     ):
         short = node_id.removeprefix("concept.")
-        domain, definition = lookup.get(short, (None, None))
+        family_id, domain = fam_by_node.get(node_id, (None, None))
         rows.append({
             "id": node_id,
             "label": label,
             "domain": domain,
-            "definition": definition,
+            "definition": defn_by_cid.get(short),
+            "family_id": family_id,
         })
+    return rows
+
+
+def load_families(conn: sqlite3.Connection) -> list[dict]:
+    """concept_families rows — domains (parent NULL) ordered before families so
+    the self-referential FK is satisfied during a row-by-row COPY."""
+    rows = []
+    for r in conn.execute(
+        "SELECT id, parent_id, label, definition FROM concept_families "
+        "ORDER BY (parent_id IS NOT NULL), id"
+    ):
+        rows.append({"id": r[0], "parent_id": r[1], "label": r[2], "definition": r[3]})
+    return rows
+
+
+def load_concept_family_membership(conn: sqlite3.Connection) -> list[dict]:
+    """Membership rows; SQLite 0/1 is_primary → Postgres BOOLEAN at emit time."""
+    rows = []
+    for r in conn.execute(
+        "SELECT concept_id, family_id, is_primary FROM concept_family_membership "
+        "ORDER BY concept_id, family_id"
+    ):
+        rows.append({"concept_id": r[0], "family_id": r[1], "is_primary": bool(r[2])})
+    return rows
+
+
+def load_concept_aliases(conn: sqlite3.Connection) -> list[dict]:
+    rows = []
+    for r in conn.execute(
+        "SELECT concept_id, alias FROM concept_aliases ORDER BY concept_id, alias"
+    ):
+        rows.append({"concept_id": r[0], "alias": r[1]})
+    return rows
+
+
+def load_family_aliases(conn: sqlite3.Connection) -> list[dict]:
+    rows = []
+    for r in conn.execute(
+        "SELECT family_id, alias FROM family_aliases ORDER BY family_id, alias"
+    ):
+        rows.append({"family_id": r[0], "alias": r[1]})
     return rows
 
 
@@ -324,6 +386,16 @@ def prefix_ddl(sql: str, schema: str) -> str:
             rf"\1{schema}.\2",
             line,
         )
+        line = re.sub(
+            r"(ALTER\s+TABLE\s+(?:IF\s+EXISTS\s+)?)(\w+)",
+            rf"\1{schema}.\2",
+            line,
+        )
+        line = re.sub(
+            r"(COMMENT\s+ON\s+COLUMN\s+)(\w+)(\.\w+)",
+            rf"\1{schema}.\2\3",
+            line,
+        )
         out.append(line)
     return "\n".join(out)
 
@@ -358,13 +430,46 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
         )
     emit_copy_end(f)
 
-    # concepts
-    emit_copy_start(f, schema, "concepts", ["id", "label", "domain", "definition"])
+    # concept_families — before concepts (concepts.family_id FK) and before
+    # membership/aliases. Domains (parent NULL) are ordered first by the loader
+    # so the self-referential parent_id FK holds row-by-row during COPY.
+    emit_copy_start(f, schema, "concept_families", ["id", "parent_id", "label", "definition"])
+    for r in load_families(conn):
+        f.write(
+            f"{copy_esc(r['id'])}\t{copy_esc(r['parent_id'])}\t"
+            f"{copy_esc(r['label'])}\t{copy_esc(r['definition'])}\n"
+        )
+    emit_copy_end(f)
+
+    # concepts (now carrying the denormalised primary family_id)
+    emit_copy_start(f, schema, "concepts", ["id", "label", "domain", "definition", "family_id"])
     for r in load_concepts(conn):
         f.write(
             f"{copy_esc(r['id'])}\t{copy_esc(r['label'])}\t"
-            f"{copy_esc(r['domain'])}\t{copy_esc(r['definition'])}\n"
+            f"{copy_esc(r['domain'])}\t{copy_esc(r['definition'])}\t"
+            f"{copy_esc(r['family_id'])}\n"
         )
+    emit_copy_end(f)
+
+    # concept_family_membership — after concepts + concept_families. 0/1 → t/f.
+    emit_copy_start(f, schema, "concept_family_membership", ["concept_id", "family_id", "is_primary"])
+    for r in load_concept_family_membership(conn):
+        f.write(
+            f"{copy_esc(r['concept_id'])}\t{copy_esc(r['family_id'])}\t"
+            f"{'t' if r['is_primary'] else 'f'}\n"
+        )
+    emit_copy_end(f)
+
+    # concept_aliases (empty in v1 until aliases are populated)
+    emit_copy_start(f, schema, "concept_aliases", ["concept_id", "alias"])
+    for r in load_concept_aliases(conn):
+        f.write(f"{copy_esc(r['concept_id'])}\t{copy_esc(r['alias'])}\n")
+    emit_copy_end(f)
+
+    # family_aliases (same shape; empty in v1)
+    emit_copy_start(f, schema, "family_aliases", ["family_id", "alias"])
+    for r in load_family_aliases(conn):
+        f.write(f"{copy_esc(r['family_id'])}\t{copy_esc(r['alias'])}\n")
     emit_copy_end(f)
 
     # chunks
@@ -411,6 +516,13 @@ def emit_indexes(f, schema: str) -> None:
     f.write(f"CREATE INDEX chunks_tradition ON {schema}.chunks (tradition);\n")
     f.write(f"CREATE INDEX edges_source     ON {schema}.edges (source);\n")
     f.write(f"CREATE INDEX edges_target     ON {schema}.edges (target);\n")
+    # concept-hierarchy indexes (kept here, not in corpus-schema.sql, per the
+    # schema header rule that all indexes are built post-bulk-load).
+    f.write(f"CREATE INDEX idx_concept_families_parent ON {schema}.concept_families (parent_id);\n")
+    f.write(f"CREATE UNIQUE INDEX idx_concept_primary_family ON {schema}.concept_family_membership (concept_id) WHERE is_primary;\n")
+    f.write(f"CREATE INDEX idx_concept_family_membership_family ON {schema}.concept_family_membership (family_id);\n")
+    f.write(f"CREATE INDEX idx_concept_aliases_alias ON {schema}.concept_aliases (alias);\n")
+    f.write(f"CREATE INDEX idx_family_aliases_alias ON {schema}.family_aliases (alias);\n")
     f.write("\n")
 
 

@@ -132,3 +132,62 @@ CREATE TABLE IF NOT EXISTS tagging_progress (
     chunk_id        TEXT PRIMARY KEY REFERENCES nodes(id),
     completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
+
+-- ============================================================
+-- CONCEPT HIERARCHY (domain → family → concept)
+-- See docs/concept-hierarchy/design.md §5. Applied to existing DBs by
+-- scripts/migrations/v3_006_concept_families.sql.
+-- ============================================================
+
+-- Domains (parent_id NULL) and families (parent_id → domain) in one
+-- self-referential table. Family IDs are composite ('cosmology.cosmic_agents'),
+-- domain IDs are bare ('cosmology'). Tier is implicit: parent_id IS NULL ⟺ domain.
+CREATE TABLE IF NOT EXISTS concept_families (
+    id          TEXT PRIMARY KEY,
+    parent_id   TEXT REFERENCES concept_families(id),
+    label       TEXT NOT NULL,
+    definition  TEXT NOT NULL
+);
+
+-- "Families under domain X" — hot lookup for query expansion.
+CREATE INDEX IF NOT EXISTS idx_concept_families_parent
+    ON concept_families(parent_id);
+
+-- Concept→family affiliations. is_primary=1 is the canonical home (exactly one
+-- per concept); is_primary=0 rows are secondary cross-cutting affiliations.
+CREATE TABLE IF NOT EXISTS concept_family_membership (
+    concept_id  TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
+    family_id   TEXT NOT NULL REFERENCES concept_families(id),
+    is_primary  INTEGER NOT NULL DEFAULT 0
+                    CHECK(is_primary IN (0, 1)),
+    PRIMARY KEY (concept_id, family_id)
+);
+
+-- Enforce exactly one primary family per concept.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_concept_primary_family
+    ON concept_family_membership(concept_id) WHERE is_primary = 1;
+
+-- Reverse lookup: which concepts are in family X (primary or secondary).
+CREATE INDEX IF NOT EXISTS idx_concept_family_membership_family
+    ON concept_family_membership(family_id);
+
+-- User-facing concept synonyms. alias stored lowercase (Python-side in
+-- sync_taxonomy.py; CHECK is an ASCII-range secondary defense in SQLite).
+CREATE TABLE IF NOT EXISTS concept_aliases (
+    concept_id  TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
+    PRIMARY KEY (concept_id, alias)
+);
+
+CREATE INDEX IF NOT EXISTS idx_concept_aliases_alias
+    ON concept_aliases(alias);
+
+-- User-facing family (and domain) synonyms; same shape as concept_aliases.
+CREATE TABLE IF NOT EXISTS family_aliases (
+    family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
+    PRIMARY KEY (family_id, alias)
+);
+
+CREATE INDEX IF NOT EXISTS idx_family_aliases_alias
+    ON family_aliases(alias);

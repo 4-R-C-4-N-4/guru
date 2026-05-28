@@ -21,6 +21,13 @@ if TYPE_CHECKING:
 # not the retrieval-side build_prompt() defined further down this module.
 # Those are different prompts for different sides of the pipeline. The
 # constant lives here per docs/v3.md §4.1.
+#
+# Stays at v1: the v2 domain→family grouped tagging prompt was benched
+# (docs/concept-hierarchy/bench-v1-vs-v2.md) and regressed agreement-with-review
+# (recall −21pp), so tagging remains concept-driven on the flat v1 prompt. The
+# concept hierarchy is a separate retrieval/structure layer that does not touch
+# the tagging call; family assignment is done deterministically by
+# scripts/sync_taxonomy.py, not by the tagger LLM.
 PROMPT_VERSION = "v1"
 
 

@@ -21,6 +21,9 @@
 --   v2 (2026-04-28) Schema-isolated export (corpus_new + atomic swap).
 --                     Export uses COPY FROM STDIN instead of INSERT.
 --                     DDL stays unprefixed; export.py prefixes at emission.
+--   v3 (2026-05-27) Concept hierarchy: concept_families / concept_family_membership
+--                     / concept_aliases / family_aliases tables + concepts.family_id.
+--                     Indexes remain in export.py:emit_indexes per the rule above.
 
 CREATE EXTENSION IF NOT EXISTS vector;
 
@@ -117,3 +120,42 @@ CREATE TABLE corpus_metadata (
     key   TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
+
+-- ─── concept hierarchy (domain → family → concept) ───────────────────
+-- Mirrors the SQLite shape (scripts/migrations/v3_006_concept_families.sql).
+-- See docs/concept-hierarchy/design.md §5, §10. Indexes are emitted post-load
+-- by export.py:emit_indexes (this file stays index-free, per the header rule).
+-- `is_primary` is native BOOLEAN here vs 0/1 INTEGER in SQLite — export.py
+-- converts at emit time.
+
+CREATE TABLE concept_families (
+    id          TEXT PRIMARY KEY,
+    parent_id   TEXT REFERENCES concept_families(id),
+    label       TEXT NOT NULL,
+    definition  TEXT NOT NULL
+);
+
+CREATE TABLE concept_family_membership (
+    concept_id  TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
+    family_id   TEXT NOT NULL REFERENCES concept_families(id),
+    is_primary  BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (concept_id, family_id)
+);
+
+CREATE TABLE concept_aliases (
+    concept_id  TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
+    PRIMARY KEY (concept_id, alias)
+);
+
+CREATE TABLE family_aliases (
+    family_id   TEXT NOT NULL REFERENCES concept_families(id) ON DELETE CASCADE,
+    alias       TEXT NOT NULL CHECK(alias = LOWER(alias)),
+    PRIMARY KEY (family_id, alias)
+);
+
+-- Denormalised primary family on concepts for two-way-join filters.
+ALTER TABLE concepts ADD COLUMN family_id TEXT REFERENCES concept_families(id);
+
+COMMENT ON COLUMN concepts.family_id IS 'Denormalised primary family for two-way-join filters. Maintained by export.py from concept_family_membership WHERE is_primary; do not edit at runtime.';
+COMMENT ON COLUMN concepts.domain IS 'Derived from concept_families.parent_id of the row pointed at by family_id. Set by export.py only; do not edit at runtime. May be removed in a follow-on migration once src/lib/ queries no longer reference it.';

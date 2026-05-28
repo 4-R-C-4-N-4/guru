@@ -45,8 +45,30 @@ def load_chunk_info(chunk_id: str) -> tuple[str, str]:
     return d["content"]["body"], f"{tradition} | {text_name} | {citation}"
 
 
+def chunk_families(conn: sqlite3.Connection, chunk_id: str) -> list[str]:
+    """Distinct primary concept-families a chunk expresses (via live EXPRESSES
+    edges → primary memberships), id-style 'domain→family', sorted. Shared
+    families between the two chunks are a quick coherence check for an edge."""
+    rows = conn.execute(
+        """SELECT DISTINCT cf.parent_id, cf.id
+             FROM edges e
+             JOIN concept_family_membership m
+               ON m.concept_id = e.target_id AND m.is_primary = 1
+             JOIN concept_families cf ON cf.id = m.family_id
+            WHERE e.source_id = ? AND e.type = 'EXPRESSES'""",
+        (chunk_id,),
+    ).fetchall()
+    out = set()
+    for parent_id, family_id in rows:
+        short = family_id.split(".", 1)[1] if "." in family_id else family_id
+        out.add(f"{parent_id or '?'}→{short}")
+    return sorted(out)
+
+
 def print_edge_row(row: dict, body_a: str, cite_a: str,
-                   body_b: str, cite_b: str) -> None:
+                   body_b: str, cite_b: str,
+                   fam_a: list[str] | None = None,
+                   fam_b: list[str] | None = None) -> None:
     w = 34
     print()
     print("=" * 70)
@@ -61,6 +83,10 @@ def print_edge_row(row: dict, body_a: str, cite_a: str,
         la = lines_a[i] if i < len(lines_a) else ""
         lb = lines_b[i] if i < len(lines_b) else ""
         print(f"{la:<{w}}  {lb}")
+    if fam_a is not None or fam_b is not None:
+        print("-" * 70)
+        print(f"FAMILIES A: {', '.join(fam_a or []) or '(none)'}")
+        print(f"FAMILIES B: {', '.join(fam_b or []) or '(none)'}")
     print("-" * 70)
 
 
@@ -208,7 +234,9 @@ def review_edges(
     for row in rows:
         body_a, cite_a = load_chunk_info(row["source_chunk"])
         body_b, cite_b = load_chunk_info(row["target_chunk"])
-        print_edge_row(row, body_a, cite_a, body_b, cite_b)
+        fam_a = chunk_families(conn, row["source_chunk"])
+        fam_b = chunk_families(conn, row["target_chunk"])
+        print_edge_row(row, body_a, cite_a, body_b, cite_b, fam_a, fam_b)
 
         while True:
             try:

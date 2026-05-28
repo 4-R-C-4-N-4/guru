@@ -55,6 +55,12 @@ def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
     enforces the token budget at chunk creation time and downstream
     prompts trust that contract. max_body_chars is an optional cap for
     operators running against a smaller-context model; 0/None = unlimited.
+
+    Concepts are rendered as a flat list (prompt version v1). The grouped
+    domain→family variant (design.md §8) was benched and regressed agreement-
+    with-review (docs/concept-hierarchy/bench-v1-vs-v2.md), so tagging stays
+    concept-driven; the concept hierarchy is a separate retrieval/structure
+    layer that does not touch this prompt.
     """
     body = chunk_body if not max_body_chars else chunk_body[:max_body_chars]
     concepts_block = "\n".join(
@@ -130,16 +136,31 @@ def parse_tags(raw: str) -> list[dict]:
 # ── main logic ───────────────────────────────────────────────────────────────
 
 def load_taxonomy() -> list[dict]:
+    """Return [{id, definition, node_id}] for every concept in the taxonomy.
+
+    Walks the three-tier ``[concepts.DOMAIN.FAMILY]`` tree (design.md §6) to any
+    depth and collects leaf-string definitions. Family/domain context is
+    deliberately NOT included: tagging is concept-driven on the flat v1 prompt;
+    the concept hierarchy is a separate retrieval/structure layer (see
+    docs/concept-hierarchy/bench-v1-vs-v2.md for why the grouped v2 prompt was
+    not adopted).
+    """
     with open(TAXONOMY_TOML, "rb") as f:
         data = tomllib.load(f)
-    concepts = []
-    for category, items in data.get("concepts", {}).items():
-        for concept_id, definition in items.items():
-            concepts.append({
-                "id": concept_id,
-                "definition": definition,
-                "node_id": f"concept.{concept_id}",
-            })
+    concepts: list[dict] = []
+
+    def _collect(node: dict) -> None:
+        for key, val in node.items():
+            if isinstance(val, dict):
+                _collect(val)
+            elif isinstance(val, str):
+                concepts.append({
+                    "id": key,
+                    "definition": val,
+                    "node_id": f"concept.{key}",
+                })
+
+    _collect(data.get("concepts", {}))
     return concepts
 
 
