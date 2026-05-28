@@ -1,0 +1,25 @@
+{
+  "id": "abae42da",
+  "type": "chore",
+  "state": "open",
+  "summary": "Delete orphaned sefer-yetirah (Sefaria) duplicate of sefer-yetzirah",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T14:00:18.688Z",
+  "updated_at": "2026-05-28T14:00:18.722Z",
+  "files": [
+    {
+      "path": "chunking/jewish_mysticism/sefer-yetirah.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-hygiene",
+    "jewish_mysticism"
+  ],
+  "relationships": {
+    "parent": "c75f8a2e"
+  },
+  "description": "Delete the orphaned sefer-yetirah duplicate.\n\ncorpus/jewish_mysticism/sefer-yetirah/ (6 chunks) + chunking/jewish_mysticism/sefer-yetirah.toml exist with NO manifest source. It is the abandoned Sefaria source (config translator = \"Sefaria Community Translation\") that the manifest's jewish_mysticism comment said to REMOVE in favor of sefer-yetzirah (Westcott, sacred-texts jud/yetzirah.htm, 7 chunks, present and correct). The manifest line was removed; the leftover config + corpus dir were never cleaned up.\n\nFIX:\n- Delete chunking/jewish_mysticism/sefer-yetirah.toml and corpus/jewish_mysticism/sefer-yetirah/, plus any raw/jewish_mysticism/sefer-yetirah.* leftover.\n- Re-run embed_corpus.py + graph rebuild so the 6 dropped chunks are removed from guru.db (chunk_embeddings + EXPRESSES edges) and from export.py output.\n\nACCEPTANCE: no sefer-yetirah anywhere (chunking/, corpus/, raw/); sefer-yetzirah remains; reconciliation diff clean; guru.db has no dangling chunk_embeddings for the deleted chunk ids.\nParent: c75f8a2e."
+}
