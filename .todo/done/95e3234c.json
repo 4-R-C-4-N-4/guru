@@ -1,13 +1,13 @@
 {
   "id": "95e3234c",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "Strip junk boilerplate/apparatus from corpus chunks to fix retrieval mis-hits",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-28T15:04:50.483Z",
-  "updated_at": "2026-05-28T15:05:11.427Z",
+  "updated_at": "2026-05-28T20:17:55.908Z",
   "files": [
     {
       "path": "docs/upstream-data-cleanup.md"
@@ -27,5 +27,11 @@
       "16255216",
       "829993fd"
     ]
+  },
+  "resolution": {
+    "commit": "5999361244a9dacff3dc3c45bd4dd913fc38c031",
+    "resolved_at": "2026-05-28T20:17:55.908Z",
+    "resolved_by": "unknown",
+    "note": "Junk-text cleanup epic complete. Shipped + merged: C1 nav strip (#22), C2 {p.N}/Buy/click (#24), C3 apparatus-drop + C4 byline (#25). Prod refresh handled by user. Caveats recorded on children (drift-text errata left in enoch/tertium; C4b interleaved footnotes deferred)."
   }
 }
