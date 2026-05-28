@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.542"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 450"
+section = "Select Works, Section 453"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 35
+token_count = 43
 
 [content]
-body = "Sacred Texts Classics Index Previous Next FOURTH TRACTATE. HOW THE SECONDARIES RISE FROM THE FIRST: AND ON THE ONE. Next: Section 1"
+body = "FIFTH TRACTATE. THAT THE INTELLECTUAL BEINGS ARE NOT OUTSIDE THE INTELLECTUAL-PRINCIPLE: AND ON THE NATURE OF THE GOOD. Next: Section 1"
 
 [annotations]
 concepts = []

@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 18"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 23
+token_count = 15
 
 [content]
-body = "Sacred Texts Classics Index Previous Next SECOND TRACTATE. ON VIRTUE. Next: Section 1"
+body = "SECOND TRACTATE. ON VIRTUE. Next: Section 1"
 
 [annotations]
 concepts = []

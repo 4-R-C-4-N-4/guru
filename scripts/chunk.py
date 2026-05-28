@@ -44,6 +44,24 @@ STRATEGY_TYPES = {
     "heading": "single",
 }
 
+# Boilerplate on EVERY sacred-texts.com page: the nav header
+# "Sacred Texts <Collection> Index Previous Next" (collection word varies:
+# Classics / Taoism / Egypt / Zoroastrianism / Esoteric / Judaism / Buddhism /
+# "Gnosticism and Hermetica" / "Egypt EHH Index"). It leaks into chunk bodies —
+# and thus embeddings, causing query mis-hits — for every sacred-texts source
+# whose config lacks a strip. Rather than duplicate this across ~32 configs we
+# strip it as a baseline for all texts. NOT "^"-anchored: a single raw page can
+# concatenate several print-sections, each re-emitting the nav, so it appears
+# interior to the page (and sub-splitting surfaces it as a chunk start) — re.sub
+# removes every occurrence. The pattern is letters-only + non-greedy, so it
+# cannot run into real content or the trailing "Next:" footer, and is a no-op
+# for non-sacred-texts sources (0 false-positives across the corpus).
+# Per-config pre_strip_patterns still apply on top.
+# See docs/upstream-data-cleanup.md, todo:8abbb645.
+BASELINE_PRE_STRIP: list[str] = [
+    r'Sacred Texts\b[A-Za-z ]*?\bIndex(?:\s+Index)?(?:\s+(?:Previous|Next))+\s+',
+]
+
 
 def _ensure_chunkers_on_path():
     p = str(CHUNKERS_DIR)
@@ -133,7 +151,7 @@ def process_source(
     meta_cfg = cfg_full.get("metadata", {})
     strategy = cfg.get("strategy", "paragraph-group")
     max_tokens = int(cfg.get("max_tokens", 800))
-    pre_strip = list(cfg.get("pre_strip_patterns", []))
+    pre_strip = BASELINE_PRE_STRIP + list(cfg.get("pre_strip_patterns", []))
 
     strategy_type = STRATEGY_TYPES.get(strategy)
     if not strategy_type:

@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.568"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 474"
+section = "Select Works, Section 478"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 32
+token_count = 22
 
 [content]
-body = "Sacred Texts Classics Index Previous Next SEVENTH TRACTATE. IS THERE AN IDEAL ARCHETYPE OF PARTICULAR BEINGS? Next: Section 1"
+body = "EIGHTH TRACTATE. ON THE INTELLECTUAL BEAUTY. Next: Section 1"
 
 [annotations]
 concepts = []
