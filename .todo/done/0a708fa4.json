@@ -1,0 +1,48 @@
+{
+  "id": "0a708fa4",
+  "type": "bug",
+  "state": "done",
+  "summary": "Tier 1: strip {p. N} braces + 'Buy this Book' preamble + plate/figure + re-chunk/re-embed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.622Z",
+  "updated_at": "2026-05-28T19:35:44.810Z",
+  "files": [
+    {
+      "path": "chunking"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "chunking"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Tier 1 (cont.): strip scan/front-matter artifacts that remain after C1's nav strip.\n\nPatterns:\n- \\{\\s*p\\.\\s*\\d+\\s*\\}   — brace page markers (121 local chunks). SAFE to strip.\n  Do NOT strip bare \"p. N\" (no braces) — caveat #2: it can be a legitimate citation.\n- \"Buy this Book at Amazon.com <Title>, <Translator>, tr. [<year>], at sacred-texts.com\"\n  — sacred-texts book-front-matter preamble on first pages (21 chunks; surfaced by\n  todo:8abbb645 once the nav prefix was stripped — e.g. bundahishn chunk 001 now\n  starts \"Buy this Book at Amazon.com Pahlavi Texts, Part I (SBE05) , E.W. West,\n  tr. [1880], at sacred-texts.com p. ix ...\"). Candidate pattern (validate like C1):\n  Buy this Book at Amazon\\.com\\b.*?\\bat sacred-texts\\.com\\s*  (non-greedy, bounded\n  by the closing \"at sacred-texts.com\"; leaves the following bare \"p. ix\" citation).\n- Plate/figure/scan apparatus: \"click to enlarge\", \\bPlate\\s+[IVXLC\\d], \\bFig\\.\n  (~110 in live v27) — image captions from the scans.\n\nMechanism: the brace-marker and \"Buy this Book\" patterns are uniform sacred-texts\nartifacts (like the nav), so add them to scripts/chunk.py BASELINE_PRE_STRIP\nalongside the C1 nav pattern — one place, covers all sources, no per-config edits.\nPlate/figure is narrower; use per-config pre_strip_patterns if it's text-specific.\nRe-chunk + re-embed affected (same refresh sequence as C1: clear dir → chunk.py\n--only → bootstrap_chunks → cleanup_stale → embed_corpus). Validate 0 false-positives\nacross the corpus before applying, exactly as C1 did.\n\nDone contract:\n- 0 chunk bodies contain the {p. N} brace form or the \"Buy this Book ... at\n  sacred-texts.com\" preamble; plate/figure caption fragments gone.\n- Bare \"p. N\" citations preserved (spot-check); 0 false-positives corpus-wide.\n- Round-trip green; embeddings refreshed.\n- Regression test: extend test_no_sacred_texts_nav_prefix (or a sibling) to assert\n  no chunk body contains \\{\\s*p\\.\\s*\\d+\\s*\\} or \"Buy this Book at Amazon.com\".",
+  "work": {
+    "branch": "junk-text-c2-scan-artifacts",
+    "base_branch": "main",
+    "started_at": "2026-05-28T19:30:35.677Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-28T19:32:03.128Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Plate/Fig REMOVED from C2 scope. Inspected actual occurrences: they are in-text references in Budge's commentary (e.g. 'the heart of the deceased (see Plate III.), are three beings...', 'cuts off a fore-leg (Fig. 3) and takes out the heart'), NOT standalone scan captions as the doc assumed. Stripping \\bPlate\\s+[IVXLC\\d] / \\bFig\\. would mangle real sentences. C2 will strip only the SAFE uniform artifacts: {p.N} brace markers (121 chunks) + 'Buy this Book at Amazon.com ... at sacred-texts.com' preamble (21) + 'click to enlarge' (0 local, defensive). All added to BASELINE_PRE_STRIP. Validated: 0 chunks emptied, 0 residual, 0 false-positives.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "32643f1d85ce2a7d72f04b7d1bed496a8b9c28de",
+    "resolved_at": "2026-05-28T19:35:44.810Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunking.py",
+    "test_function": "test_no_scan_or_frontmatter_artifacts",
+    "note": "Added {p.N} brace markers (121), 'Buy this Book...at sacred-texts.com' preamble (21), and 'click to enlarge' (0 local, defensive) to BASELINE_PRE_STRIP. SCOPE CORRECTION: Plate/Fig were NOT stripped — they are in-text references in Budge's commentary ('see Plate III.'), not scan captions; stripping would mangle sentences (analysis note on ticket). Re-chunked the 25 affected texts; guru.db refreshed via bootstrap+cleanup_stale+embed (3134 files=nodes=embeddings, 0 stale). Verified: 0 braces/Buy/click remain, Plate/Fig refs (39/13) preserved, enoch/tertium untouched, bare 'p. N' citations kept. Commit 32643f1; 265 tests green. Downstream: guru-web PG re-export is C5 (829993fd)."
+  }
+}
