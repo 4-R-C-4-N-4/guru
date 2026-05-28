@@ -1,0 +1,37 @@
+{
+  "id": "901712e4",
+  "type": "chore",
+  "state": "done",
+  "summary": "Remove/repoint 3 broken 1-chunk Plotinus single-Ennead sources",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T14:00:18.758Z",
+  "updated_at": "2026-05-28T15:23:33.582Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-hygiene",
+    "neoplatonism"
+  ],
+  "relationships": {
+    "parent": "c75f8a2e"
+  },
+  "description": "Remove (or repoint) the 3 broken Plotinus single-Ennead sources.\n\nneoplatonism/plotinus-on-the-beautiful, -on-intelligible-beauty, -on-the-good-or-the-one each landed only 1 trivial chunk: their format=html URLs hit single Ennead *section* sub-pages, so raw extraction captured 2130 B / 2391 B / 80 B (the 80 B one is essentially empty) and the chunk bodies still carry nav boilerplate (\"Sacred Texts Classics Index Previous Next Section 8...\"). The full Enneads already live in plotinus-select-works-index (html_multi, 1432 raw pages, 838 chunks).\n\nTWO PATHS (decide before implementing):\n(1) REMOVE (recommended — redundant with the index): delete the 3 [[source]] entries, their chunking/neoplatonism/*.toml, and corpus/neoplatonism/<id>/ dirs; re-run embed_corpus.py + graph rebuild.\n(2) REPOINT: if dedicated per-Ennead citation labels (Ennead I.6 / V.8 / VI.9) are wanted over the index's generic section labels, re-point at full-tractate sources and re-acquire + chunk + embed.\n\nACCEPTANCE: no near-empty (1-chunk, <500 B raw) neoplatonism sources; reconciliation diff clean; guru.db consistent.\nParent: c75f8a2e.",
+  "work": {
+    "branch": "manifest-alignment",
+    "base_branch": "main",
+    "started_at": "2026-05-28T15:22:04.357Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "ac9e2a336bc517abe68fb44257db544ec306e5cd",
+    "resolved_at": "2026-05-28T15:23:33.582Z",
+    "resolved_by": "unknown",
+    "note": "Removed the 3 broken/redundant single-Ennead sources (commit ac9e2a3): manifest entries + chunking configs + corpus dirs deleted; local guru.db pruned via cleanup_stale_chunk_nodes --apply (3 nodes/embeddings, 48 edges = 39 EXPRESSES + 6 PARALLELS + 3 BELONGS_TO, 44 staged_tags, 10 staged_edges). Verified: 0 refs remain, keeper plotinus-select-works-index intact (838), neoplatonism manifest⇄corpus 1:1, tests 17/17 green. Concepts were 100% redundant with the index; repoint rejected. Downstream: guru-web PG needs export.py re-run."
+  }
+}

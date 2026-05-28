@@ -1,13 +1,13 @@
 {
   "id": "c75f8a2e",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Align sources/manifest.toml with what actually landed in corpus/",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-28T13:25:36.398Z",
-  "updated_at": "2026-05-28T14:00:18.758Z",
+  "updated_at": "2026-05-28T15:23:33.628Z",
   "files": [
     {
       "path": "sources/manifest.toml"
@@ -25,5 +25,11 @@
       "abae42da",
       "901712e4"
     ]
+  },
+  "resolution": {
+    "commit": "ac9e2a336bc517abe68fb44257db544ec306e5cd",
+    "resolved_at": "2026-05-28T15:23:33.628Z",
+    "resolved_by": "unknown",
+    "note": "All 3 children done: abae42da (sefer-yetirah orphan removed), 73c83a22 (gnosis dispatch fixed, Mandaean John-Book landed, 66 chunks), 901712e4 (3 broken Plotinus singles removed). sources/manifest.toml now reconciled with corpus/. Adjacent items spun out as separate tickets (13f72b3d graph_bootstrap; 95e3234c junk-text cleanup). Downstream: guru-web PG re-export pending."
   }
 }
