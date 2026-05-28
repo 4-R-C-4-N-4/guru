@@ -1,0 +1,21 @@
+[chunking]
+# gnosis_org now preserves the page's <p> structure, so group consecutive
+# paragraphs within the token budget. (regex-section-split on the print-page
+# markers was rejected: "p. N" also appears in footnote cross-references, which
+# produced out-of-order, spurious section boundaries.)
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 10
+max_tokens = 800
+
+# gnosis_org emits the page navigation as a leading paragraph
+# ("Index Previous Next"). Strip it so it does not head the first chunk.
+pre_strip_patterns = [
+    '^Index Previous Next\s*',
+]
+
+[metadata]
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — Portents at John's Birth"
+translator = "G.R.S. Mead"
+sections_format = "paragraph"

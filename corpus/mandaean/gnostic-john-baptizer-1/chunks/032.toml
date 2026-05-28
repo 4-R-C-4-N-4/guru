@@ -1,0 +1,15 @@
+[chunk]
+id = "mandaean.gnostic-john-baptizer-1.032"
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — Portents at John's Birth"
+section = "Section 32"
+translator = "G.R.S. Mead"
+source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-1.htm"
+token_count = 9
+
+[content]
+body = "3 Sc . the\nSeven Rulers."
+
+[annotations]
+concepts = []
+related_chunks = []

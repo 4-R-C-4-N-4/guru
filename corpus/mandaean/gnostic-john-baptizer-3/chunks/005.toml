@@ -1,0 +1,15 @@
+[chunk]
+id = "mandaean.gnostic-john-baptizer-3.005"
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — Some Typical Extracts"
+section = "Section 5"
+translator = "G.R.S. Mead"
+source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
+token_count = 44
+
+[content]
+body = "THE GOOD FISHER REJECTS THE OVERTURES OF THE EVIL ONES AND\nOVERWHELMS THEM (§ 38).\n\nIn the Name of Great Life may hallowed Light be glorified."
+
+[annotations]
+concepts = []
+related_chunks = []

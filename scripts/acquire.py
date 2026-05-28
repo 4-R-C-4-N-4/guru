@@ -17,6 +17,7 @@ import logging
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import tomllib
 import tomli_w
@@ -37,6 +38,26 @@ FORMAT_DISPATCH: dict[str, str] = {
     "access_to_insight": "access_to_insight",
 }
 
+# Domain → downloader module. Checked BEFORE FORMAT_DISPATCH so a host with a
+# dedicated extractor is routed by domain regardless of `format`. Without this,
+# every html_multi source resolved to sacred_texts, so the gnosis.org Mandaean
+# John-Book had no working crawler and never landed (todo:73c83a22). gnosis.org
+# single pages (Gospel of Thomas/Philip) also belong here — they previously fell
+# through to generic_html.
+DOMAIN_DISPATCH: dict[str, str] = {
+    "gnosis.org": "gnosis_org",
+}
+
+
+def _module_for(format_name: str, url: str) -> str | None:
+    """Resolve the downloader module: domain match first, then format."""
+    host = urlparse(url).netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    if host in DOMAIN_DISPATCH:
+        return DOMAIN_DISPATCH[host]
+    return FORMAT_DISPATCH.get(format_name)
+
 
 def load_manifest(path: Path) -> list[dict[str, Any]]:
     """Load and return the list of sources from manifest.toml."""
@@ -51,14 +72,17 @@ def content_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def load_downloader(format_name: str):
+def load_downloader(format_name: str, url: str = ""):
     """
-    Dynamically import the downloader module for a given format.
+    Dynamically import the downloader module for a given format/url.
+
+    Domain takes precedence over format (see DOMAIN_DISPATCH), so a host with a
+    dedicated extractor is used regardless of `format`.
 
     Returns the module (must have a `download(source)` function).
-    Raises KeyError if format is unknown, ImportError if module missing.
+    Raises KeyError if neither domain nor format resolves, ImportError if missing.
     """
-    module_name = FORMAT_DISPATCH.get(format_name)
+    module_name = _module_for(format_name, url)
     if not module_name:
         raise KeyError(
             f"Unknown format '{format_name}'. "
@@ -138,9 +162,9 @@ def process_source(source: dict[str, Any], dry_run: bool = False) -> bool:
 
     logger.info(f"[{source_id}] Processing (format={fmt}, tradition={tradition})")
 
-    # Load downloader
+    # Load downloader (domain-aware: gnosis.org → gnosis_org, etc.)
     try:
-        downloader = load_downloader(fmt)
+        downloader = load_downloader(fmt, source.get("url", ""))
     except KeyError as e:
         logger.error(f"[{source_id}] {e}")
         return False

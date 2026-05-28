@@ -1,0 +1,15 @@
+[chunk]
+id = "mandaean.gnostic-john-baptizer-3.020"
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — Some Typical Extracts"
+section = "Section 20"
+translator = "G.R.S. Mead"
+source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
+token_count = 119
+
+[content]
+body = "1 The Mandæan\ncolour is white.\n\n2 In the M. text,\n146, 12, this is given as Sidmā. L. thinks it is a water-fowl of some kind.\n\n3 Presumably\nbecause it is always diving after its prey.\n\n4 Sc . the\nSeven.\n\np. 79\n\n1 Sc . to\nfrighten the fish into the nets.\n\n2 The\nJordan-Watchers.\n\np. 80\n\n1 Bait of some\nkind presumably.\n\n2 Detailing\nprobably the remaining two of the four objects referred to."
+
+[annotations]
+concepts = []
+related_chunks = []

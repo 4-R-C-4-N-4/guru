@@ -664,35 +664,13 @@ license = "public_domain"
 translator = "Thomas Taylor"
 notes = "Taylor's translations of selected Enneads. Index page links to individual tractates. Taylor's rendering is influential in the Western esoteric tradition (Blake, the Romantics, later Theosophists) but tends to be more expansive than literal. Consider each tractate as a separate source."
 
-[[source]]
-id = "plotinus-on-the-beautiful"
-tradition = "neoplatonism"
-label = "Plotinus: On the Beautiful (Ennead I.6)"
-url = "https://sacred-texts.com/cla/plotenn/enn011.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The most influential single Ennead in Western esoteric reception. Beauty as ascent to the One."
-
-[[source]]
-id = "plotinus-on-intelligible-beauty"
-tradition = "neoplatonism"
-label = "Plotinus: On Intelligible Beauty (Ennead V.8)"
-url = "https://sacred-texts.com/cla/plotenn/enn076.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The intelligible realm and the vision of the One. Direct source for later emanationist cosmologies."
-
-[[source]]
-id = "plotinus-on-the-good-or-the-one"
-tradition = "neoplatonism"
-label = "Plotinus: On the Good, or the One (Ennead VI.9)"
-url = "https://sacred-texts.com/cla/plotenn/enn088.htm"
-format = "html"
-license = "public_domain"
-translator = "Thomas Taylor"
-notes = "The capstone Ennead on the nature of the One and the soul's return. Creates strong edges with Kabbalistic Ein Sof and Hermetic unity."
+# todo:901712e4 — REMOVED the three single-Ennead sources (plotinus-on-the-beautiful
+# I.6, -on-intelligible-beauty V.8, -on-the-good-or-the-one VI.9). Their format=html
+# URLs pointed at single Ennead *section* sub-pages, so each landed only a nav-polluted
+# 80-2391 byte fragment = 1 trivial chunk. The full tractates already live in
+# plotinus-select-works-index above (838 chunks); 20/20 and 19/19 of the concepts they
+# expressed were redundant with the index. Removed rather than repointed — repointing
+# would only duplicate the index.
 
 
 # --------------------------------------------
@@ -758,26 +736,46 @@ notes = "Budge's translation of the Book of Am-Tuat (the Twelve Hours of the Nig
 # --------------------------------------------
 # The only living Gnostic religion. Mead's translation is partial
 # but it's the main PD access point to Mandaean material.
+#
+# todo:73c83a22 — these are the three "From the John-Book of the Mandaeans"
+# extract chapters (Sidra d'Yahya selections): gjb-2-1, gjb-2-2, gjb-2-3.
+# They are individual leaf chapter pages, NOT index pages — the previous
+# `format = "html_multi"` was a mislabel that (combined with html_multi being
+# hard-wired to the sacred_texts crawler) meant they never landed. Corrected to
+# `format = "html"`; gnosis.org now routes to the gnosis_org extractor via
+# acquire.py DOMAIN_DISPATCH. Mead's surrounding comparative chapters
+# (gjb-1 John in Christian tradition, gjb-3 Slavonic Josephus, gjb-4 Fourth
+# Gospel) are deliberately excluded — they are not Mandaean primary source.
 
 [[source]]
 id = "gnostic-john-baptizer-1"
 tradition = "mandaean"
-label = "Gnostic John the Baptizer I: PORTENTS AT JOHN'S BIRTH"
+label = "Gnostic John the Baptizer I: Portents at John's Birth"
 url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-1.htm"
-format = "html_multi"
+format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+notes = "Mead 1924. First of the Mandaean John-Book extracts (Sidra d'Yahya): portents at John's birth, the child planted in the world. Single leaf page; chunk regex-section-split on Mead's print-page markers (p. N)."
 
 [[source]]
 id = "gnostic-john-baptizer-2"
 tradition = "mandaean"
-label = "Gnostic John the Baptizer II: THE STORY OF THE BREACH WITH JUDAISM"
+label = "Gnostic John the Baptizer II: The Story of the Breach with Judaism"
 url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-2.htm"
-format = "html_multi"
+format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+notes = "Mead 1924. Second John-Book extract: Miryai expelled from Jewry, the breach with Judaism. Single leaf page; regex-section-split on print-page markers (p. N)."
+
+[[source]]
+id = "gnostic-john-baptizer-3"
+tradition = "mandaean"
+label = "Gnostic John the Baptizer III: Some Typical Extracts"
+url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Mead 1924. Third John-Book extract: typical pieces from the Mandaean John-Book (souls, world-rulers, the Poor). Single leaf page; regex-section-split on print-page markers (p. N)."
 
 
 # --------------------------------------------

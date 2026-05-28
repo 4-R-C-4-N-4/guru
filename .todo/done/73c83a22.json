@@ -1,0 +1,39 @@
+{
+  "id": "73c83a22",
+  "type": "bug",
+  "state": "done",
+  "summary": "acquire: no gnosis.org html_multi crawler — Mandaean John-Book never lands",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T14:00:18.609Z",
+  "updated_at": "2026-05-28T14:39:27.813Z",
+  "files": [
+    {
+      "path": "scripts/acquire.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "downloader",
+    "mandaean"
+  ],
+  "relationships": {
+    "parent": "c75f8a2e"
+  },
+  "description": "Fix the download path so the Mandaean John-Book (gnosis.org, html_multi) can be acquired — or decide to drop it.\n\nROOT CAUSE (verified): acquire.py FORMAT_DISPATCH maps html_multi -> the sacred_texts downloader by format, not domain. There is no gnosis.org multi-page crawler: scripts/downloaders/gnosis_org.py is single-page only and is NOT wired into FORMAT_DISPATCH (dead code — Thomas/Philip actually go through generic_html). Even when routed to sacred_texts, its download() only crawls sub-pages when \"index\" is in the URL (sacred_texts.py:236); the manifest's mandaean URLs are leaf pages gjb-2-1.htm / gjb-2-2.htm. mandaean is the ONLY html_multi source not on sacred-texts.com -> the only one that never landed. The manifest also wrongly models two leaf chapter URLs as html_multi indexes.\n\nTWO PATHS (decide before implementing):\n(1) WIRE IT UP (recommended for cohesion — only living Gnostic religion, adjacent to Thomas/Philip):\n    - Add gnosis.org multi-page support: either a multi-capable gnosis_org downloader + a dispatch route, or make dispatch domain-aware so html_multi picks the crawler by netloc.\n    - Repoint the manifest at the real \"Gnostic John the Baptizer\" index (gnosis.org/library/grs-mead/gnostic_john_baptist/) and model its sub-pages.\n    - Add chunking/mandaean/ config(s); run acquire.py + chunk.py + embed_corpus.py + graph rebuild.\n    - Test: the downloader resolves >1 sub-page from the John-Book index; raw/mandaean/ + corpus/mandaean/ land with a plausible chunk_count.\n(2) DROP IT: remove the 2 [[source]] entries (and NOTES references) from sources/manifest.toml. No corpus impact (nothing landed).\n\nParent: c75f8a2e.",
+  "work": {
+    "branch": "manifest-alignment",
+    "base_branch": "main",
+    "started_at": "2026-05-28T14:16:40.330Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "6442db8074dc3cdad1fb067e384a8ecb2121de9f",
+    "resolved_at": "2026-05-28T14:39:27.813Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_acquire_dispatch.py",
+    "test_function": "test_gnosis_routes_to_gnosis_org_regardless_of_format",
+    "note": "Domain-aware dispatch (acquire.py DOMAIN_DISPATCH) routes gnosis.org to the revived gnosis_org downloader regardless of format; gnosis_org now preserves <p> paragraphs. Manifest repointed (2 mislabeled html_multi → 3 html leaf pages, added gjb-2-3); paragraph-group chunking. Landed: raw/mandaean + corpus/mandaean (66 chunks across the 3 Sidra d'Yahya extracts), guru.db 66 nodes/embeddings/BELONGS_TO. Full suite 262 green incl. round-trip. Remaining/adjacent: (1) concept tagging (EXPRESSES) is the review-gated next stage, needs an LLM; (2) production guru-web PG needs export.py re-run; (3) ADJACENT BUG (not fixed, out of scope): graph_bootstrap.bootstrap_concepts crashes on the v2 three-tier taxonomy ('dict' bind on definition) — concept nodes are now sync_taxonomy.py's job; I ran only bootstrap_chunks."
+  }
+}
