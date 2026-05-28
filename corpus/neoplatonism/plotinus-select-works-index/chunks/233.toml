@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.233"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 198"
+section = "Select Works, Section 199"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 251
+token_count = 228
 
 [content]
-body = "Section 11 11. Are we, then, to conclude that particular things are determined by Necessities rooted in Nature and by the sequence of causes, and that everything is as good as anything can be? No: the Reason-Principle is the sovereign, making all: it wills things as they are and, in its reasonable act, it produces even what we know as evil: it cannot desire all to be good: an artist would not make an animal all eyes; and in the same way, the Reason-Principle would not make all divine; it makes Gods but also celestial spirits, the intermediate order, then men, then the animals; all is graded succession, and this in no spirit of grudging but in the expression of a Reason teeming with intellectual variety. We are like people ignorant of painting who complain that the colours are not beautiful everywhere in the picture: but the Artist has laid on the appropriate tint to every spot. Or we are censuring a drama because the persons are not all heroes but include a servant and a rustic and some scurrilous clown; yet take away the low characters and the power of the drama is gone; these are part and parcel of it. Next: Section 12"
+body = "Section 12 12. Suppose this Universe were the direct creation of the Reason-Principle applying itself, quite unchanged, to Matter, retaining, that is, the hostility to partition which it derives from its Prior, the Intellectual Principle- then, this its product, so produced, would be of supreme and unparalleled excellence. But the Reason-Principle could not be a thing of entire identity or even of closely compact diversity; and the mode in which it is here manifested is no matter of censure since its function is to be all things, each single thing in some distinctive way. But has it not, besides itself entering Matter, brought other beings down? Has it not for example brought Souls into Matter and, in adapting them to its creation, twisted them against their own nature and been the ruin of many of them? And can this be right? The answer is that the Souls are, in a fair sense, members of this Reason-Principle and that it has not adapted them to the creation by perverting them, but has set them in the place here to which their quality entitles them. Next: Section 13"
 
 [annotations]
 concepts = []

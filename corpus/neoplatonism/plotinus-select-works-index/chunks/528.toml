@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.528"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 442 (part 2)"
+section = "Select Works, Section 444 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 127
+token_count = 183
 
 [content]
-body = "Similarly the knowing principle itself cannot remain simplex, especially in the act of self-knowing: all silent though its self-perception be, it is dual to itself.\n\nOf course it has no need of minute self-handling since it has nothing to learn by its intellective act; before it is [effectively] Intellect, it holds knowledge of its own content.\n\nKnowledge implies desire, for it is, so to speak, discovery crowning a search; the utterly undifferentiated remains self-centred and makes no enquiry about that self: anything capable of analysing its content, must be a manifold.\n\nNext: Section 11"
+body = "The entire intellectual order may be figured as a kind of light with the One in repose at its summit as its King: but this manifestation is not cast out from it: we may think, rather, of the One as a light before the light, an eternal irradiation resting upon the Intellectual Realm; this, not identical with its source, is yet not severed from it nor of so remote a nature as to be less than Real-Being; it is no blind thing, but is seeing and knowing, the primal knower.\n\nThe One, as transcending Intellect, transcends knowing: above all need, it is above the need of the knowing which pertains solely to the Secondary Nature.\n\nKnowing is a unitary thing, but defined: the first is One, but undefined: a defined One would not be the One-absolute: the absolute is prior to the definite.\n\nNext: Section 13"
 
 [annotations]
 concepts = []

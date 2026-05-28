@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.616"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 521"
+section = "Select Works, Section 524"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 415
+token_count = 245
 
 [content]
-body = "Section 14 14. The Academy and the Lyceum are places, and parts of Place, just as \"above,\" \"below,\" \"here\" are species or parts of Place; the difference is of minuter delimitation. If then \"above,\" \"below,\" \"the middle\" are places- Delphi, for example, is the middle [of the earth]- and \"near-the-middle\" is also a place- Athens, and of course the Lyceum and the other places usually cited, are near the middle- what need have we to go further and seek beyond Place, admitting as we do that we refer in every instance to a place? If, however, we have in mind the presence of one thing in another, we are not speaking of a single entity, we are not expressing a single notion. Another consideration: when we say that a man is here, we present a relation of the man to that in which he is, a relation of the container to the contained. Why then do we not class as a relative whatever may be produced from this relation? Besides, how does \"here\" differ from \"at Athens\"? The demonstrative \"here\" admittedly signifies place; so, then, does \"at Athens\": \"at Athens\" therefore belongs to the category of Place. Again, if \"at Athens\" means \"is at Athens,\" then the \"is\" as well as the place belongs to the predicate; but this cannot be right: we do not regard \"is a quality\" as predicate, but \"a quality.\" Furthermore, if \"in time,\" \"in place\" are to be ranged under a category other than that applying to time and place, why not a separate category for \"in a vessel\"? Why not distinct categories for \"in Matter,\" \"in a subject,\" \"a part in a whole,\" \"a whole in its parts,\" \"a genus in its species,\" \"a species in a genus\"? We are certainly on the way to a goodly number of categories. Next: Section 15"
+body = "Section 17 17. We may be told that neither Act nor Motion requires a genus for itself, but that both revert to Relation, Act belonging to the potentially active, Motion to the potentially motive. Our reply is that Relation produces relatives as such, and not the mere reference to an external standard; given the existence of a thing, whether attributive or relative, it holds its essential character prior to any relationship: so then must Act and Motion, and even such an attribute as habit; they are not prevented from being prior to any relationship they may occupy, or from being conceivable in themselves. Otherwise, everything will be relative; for anything you think of- even Soul- bears some relationship to something else. But, to return to activity proper and the action, is there any reason why these should be referred to Relation? They must in every instance be either Motion or Act. If however activity is referred to Relation and the action made a distinct genus, why is not Motion referred to Relation and the movement made a distinct genus? Why not bisect the unity, Motion, and so make Action and Passion two species of the one thing, ceasing to consider Action and Passion as two genera? Next: Section 18"
 
 [annotations]
 concepts = []

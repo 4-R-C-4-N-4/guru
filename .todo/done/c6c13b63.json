@@ -1,0 +1,39 @@
+{
+  "id": "c6c13b63",
+  "type": "bug",
+  "state": "done",
+  "summary": "Tier 2: drop pure-apparatus chunks (^Next:/^Previous:/^Errata) via a chunker drop mechanism",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.712Z",
+  "updated_at": "2026-05-28T20:10:28.128Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "chunking"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Tier 2: drop whole chunks that are pure apparatus (no primary content).\n\nTargets:\n- ^(Next|Previous):\\s  TOC/nav pointers (\"Next: Section 3\", \"Next: Book XI: Zai Yu...\").\n- ^Errata\\b notes (\"Errata page 88: 'astonied'->'astonished'\").\n(5 such locally; ~170+ in the live v27 corpus.)\n\npre_strip_patterns can only remove text, not drop a whole chunk, so add a small\nmechanism to scripts/chunk.py: a `drop_patterns` config list; after splitting +\npre_strip, discard any chunk whose (stripped) body is fully/dominantly an\napparatus match. Apply to affected configs; re-chunk + re-embed; chunk_id\nsequence renumbers cleanly, so prune stale ids via cleanup_stale_chunk_nodes.\n\nHARD CAVEAT: never drop by length alone — a 9-token Gospel-of-Thomas logion is\nreal content. Drop ONLY on an explicit apparatus pattern (optionally AND-ed with\na short-length guard), never length alone.\n\nDone contract:\n- Pure-apparatus chunks removed; manual spot-check confirms no real content dropped.\n- Round-trip green for remaining chunks; embeddings refreshed (stale dropped\n  chunk_ids pruned).\n- Regression test: drop mechanism unit test — apparatus dropped, short real text kept.",
+  "work": {
+    "branch": "junk-text-c3-drop-apparatus",
+    "base_branch": "main",
+    "started_at": "2026-05-28T20:02:57.161Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "934b10d22d545ea657432bc63290a27dcdbcb8a1",
+    "resolved_at": "2026-05-28T20:10:28.128Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunking.py",
+    "test_function": "test_is_apparatus_chunk_drops_only_pure_apparatus",
+    "note": "Added is_apparatus_chunk + post-chunk drop filter. Drops footer nav pointers (Next:/Previous: <title>, pattern + <=200char guard) and Errata blocks (any length); never on length alone (9-token logion kept). Dropped 6: egyptian-heaven-and-hell x2, pythagorean-golden-verses x1, plotinus-select-works-index x3. enoch.140 + tertium.222 errata NOT dropped — pristine drift texts; re-chunking would cascade-invalidate 757/1850 curated tags (the cost you declined). Mechanism is in place for if/when those are re-chunked. Commit 934b10d; 266 tests green; guru.db 3128 consistent."
+  }
+}

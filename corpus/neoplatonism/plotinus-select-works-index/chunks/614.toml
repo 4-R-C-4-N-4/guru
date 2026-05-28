@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.614"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 519 (part 2)"
+section = "Select Works, Section 522"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 159
+token_count = 278
 
 [content]
-body = "And even if Ideal Forms of qualities are not posited, yet once the term \"habit\" is used in reference to Intellect, the question arises whether there is anything common to that habit and the habit we know in the lower.\n\nWisdom too is generally admitted to exist There.\n\nObviously, if it shares only its name with our wisdom, it is not to be reckoned among things of this sphere; if, however, the import is in both cases the same, then Quality is common to both realms- unless, of course, it be maintained that everything There, including even intellection, is Substance.\n\nThis question, however, applies to all the categories: are the two spheres irreconcilable, or can they be co-ordinated with a unity?\n\nNext: Section 13"
+body = "Section 15 15. The \"category of Action\": The quantum has been regarded as a single genus on the ground that Quantity and Number are attributes of Substance and posterior to it; the quale has been regarded as another genus because Quality is an attribute of Substance: on the same principle it is maintained that since activity is an attribute of Substance, Action constitutes yet another genus. Does then the action constitute the genus, or the activity from which the action springs, in the same way as Quality is the genus from which the quale is derived? Perhaps activity, action and agent should all be embraced under a single head? But, on the one hand, the action- unlike activity- tends to comport the agent; and on the other, it signifies being in some activity and therefore Being-in-Act [actual as distinct from potential Being]. Consequently the category will be one of Act rather than of Action. Act moreover incontestably manifests itself in Substance, as was found to be the case with Quality: it is connected with Substance as being a form of motion. But Motion is a distinct genus: for, seeing that Quality is a distinct attribute of Substance, and Quality a distinct attribute, and Relative takes its being from the relation of one substance to another, there can be no reason why Motion, also an attribute of Substance, should not also constitute a distinct genus. Next: Section 16"
 
 [annotations]
 concepts = []

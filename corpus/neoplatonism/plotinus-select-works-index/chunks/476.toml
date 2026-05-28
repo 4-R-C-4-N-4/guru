@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.476"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 396"
+section = "Select Works, Section 398"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 363
+token_count = 203
 
 [content]
-body = "Section 12 12. (17) A further consideration is that if every soul is to be held dissoluble the universe must long since have ceased to be: if it is pretended that one kind of soul, our own for example, is mortal, and another, that of the All, let us suppose, is immortal, we demand to know the reason of the difference alleged. Each is a principle of motion, each is self-living, each touches the same sphere by the same tentacles, each has intellection of the celestial order and of the super-celestial, each is seeking to win to what has essential being, each is moving upwards to the primal source. Again: the soul's understanding of the Absolute Forms by means of the visions stored up in it is effected within itself; such perception is reminiscence; the soul then must have its being before embodiment, and drawing on an eternal science, must itself be eternal. Every dissoluble entity, that has come to be by way of groupment, must in the nature of things be broken apart by that very mode which brought it together: but the soul is one and simplex, living not in the sense of potential reception of life but by its own energy; and this can be no cause of dissolution. But, we will be told, it tends to destruction by having been divided (in the body) and so becoming fragmentary. No: the soul, as we have shown, is not a mass, not a quantity. May not it change and so come to destruction? No: the change that destroys annuls the form but leaves the underlying substance: and that could not happen to anything except a compound. If it can be destroyed in no such ways, it is necessarily indestructible. Next: Section 13"
+body = "Section 14 14. (19) As for the souls of the other living beings, fallen to the degree of entering brute bodies, these too must be immortal. And if there is in the animal world any other phase of soul, its only possible origin, since it is the life-giver, is, still, that one principle of life: so too with the soul in the vegetal order. All have sprung from one source, all have life as their own, all are incorporeal, indivisible, all are real-beings. If we are told that man's soul being tripartite must as a compound entity be dissolved, our answer shall be that pure souls upon their emancipation will put away all that has fastened to them at birth, all that increment which the others will long retain. But even that inferior phase thus laid aside will not be destroyed as long as its source continues to exist, for nothing from the realm of real being shall pass away. Next: Section 15"
 
 [annotations]
 concepts = []

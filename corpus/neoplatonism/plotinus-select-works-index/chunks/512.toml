@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.512"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 429"
+section = "Select Works, Section 432"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 26
+token_count = 25
 
 [content]
-body = "SECOND TRACTATE. THE ORIGIN AND ORDER OF THE BEINGS. FOLLOWING ON THE FIRST. Next: Section 1"
+body = "THIRD TRACTATE. THE KNOWING HYPOSTASES AND THE TRANSCENDENT. Next: Section 1"
 
 [annotations]
 concepts = []
