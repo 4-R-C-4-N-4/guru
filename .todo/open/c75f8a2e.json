@@ -1,0 +1,22 @@
+{
+  "id": "c75f8a2e",
+  "type": "chore",
+  "state": "open",
+  "summary": "Align sources/manifest.toml with what actually landed in corpus/",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T13:25:36.398Z",
+  "updated_at": "2026-05-28T13:25:36.445Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "manifest",
+    "data-hygiene"
+  ],
+  "description": "Reconcile sources/manifest.toml + chunking/ + corpus/ so the manifest reflects what actually landed. Three mismatches found by diffing manifest [[source]] ids against corpus/{tradition}/{text_id}/metadata.toml (chunk_count) and the raw/ + chunking/ inputs.\n\nReproduce: load manifest, list corpus text dirs with chunk_count, and for each tradition check (a) manifest sources with no corpus dir, (b) corpus dirs with no manifest source, (c) landed dirs with anomalously low chunk_count vs raw byte size.\n\n== Finding A — `mandaean`: listed, never landed (0 chunks) ==\nManifest has 2 sources (gnostic-john-baptizer-1, gnostic-john-baptizer-2; format=html_multi; gnosis.org). Reality: no corpus/mandaean/, no raw/mandaean/, no chunking/mandaean/*.toml. The pipeline was never wired — acquire produced no raw and there is no chunking config, so chunk.py skips it regardless. The two URLs are individual chapter pages but marked html_multi \"index links to chapters\" — likely never validated.\nResolve (decision needed): EITHER (1) wire it up — write chunking/mandaean/ configs, fix the html_multi/index URLs, run acquire+chunk+embed (high cohesion: \"only living Gnostic religion\", adjacent to Thomas/Philip) — OR (2) remove the 2 manifest entries.\n\n== Finding B — `sefer-yetirah`: orphaned duplicate (recommend delete) ==\ncorpus/jewish_mysticism/sefer-yetirah/ (6 chunks) + chunking/jewish_mysticism/sefer-yetirah.toml exist with NO manifest source. It is the abandoned Sefaria source — its config's translator is \"Sefaria Community Translation\". The manifest comment (the jewish_mysticism block) explicitly said to REMOVE the sefaria sefer-yetirah entry in favor of sefer-yetzirah (Westcott, sacred-texts jud/yetzirah.htm, 7 chunks, present and correct). The manifest line was removed but the leftover chunking config + corpus dir were never cleaned up.\nResolve: delete chunking/jewish_mysticism/sefer-yetirah.toml + corpus/jewish_mysticism/sefer-yetirah/ (and any raw/ leftover). Then rebuild embeddings/graph so the dropped chunks leave chunk_embeddings + guru.db.\n\n== Finding C — 3 Plotinus singles: broken + redundant (1 chunk each) ==\nneoplatonism/plotinus-on-the-beautiful, -on-intelligible-beauty, -on-the-good-or-the-one each landed only 1 trivial chunk. Cause: their format=html URLs point at single Ennead *section* sub-pages, so raw extraction captured 2130 B / 2391 B / 80 B respectively (the 80 B one is essentially empty), and the chunk body still carries nav boilerplate (\"Sacred Texts Classics Index Previous Next Section 8...\"). The full Enneads are already in plotinus-select-works-index (html_multi, 1432 raw pages, 838 chunks).\nResolve (decision needed): EITHER (1) remove the 3 manifest entries + chunking configs + corpus dirs (cleanest — redundant with the index) — OR (2) re-point them at full-tractate sources if dedicated per-Ennead citation labels are wanted over the index's section labels. If removed, rebuild embeddings/graph.\n\n== Acceptance ==\n- manifest [[source]] set ⇄ corpus text dirs are 1:1 (modulo documented html_multi index→family expansions); no orphan corpus dirs; no near-empty (1-chunk, <500 B raw) landed sources.\n- Re-running the reconciliation diff reports zero mismatches.\n- Any deleted/added chunks are followed by embed_corpus.py + graph rebuild so guru.db (chunk_embeddings, EXPRESSES edges) and export.py output stay consistent — data via pipeline, never hand-edited.\n\nAdjacent (not in scope): README.md \"Starter Corpus (v1) — 22 texts / sources 404 pending\" and manifest header \"v1 — 22 source texts\" are stale (now 79 sources, 16 traditions). Flag only."
+}
