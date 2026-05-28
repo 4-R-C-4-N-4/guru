@@ -1,0 +1,31 @@
+{
+  "id": "16255216",
+  "type": "chore",
+  "state": "done",
+  "summary": "Tier 3: structural — strip leading title/byline + handle interleaved editorial footnotes",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.785Z",
+  "updated_at": "2026-05-28T20:10:28.171Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "chunking"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Tier 3 (structural — lower volume, most care):\n\n(a) Leading document title/byline repeated at chunk start, e.g.\n    \"The Life and Doctrines of Jacob Boehme, by Franz Hartmann, [translator]...\".\n    Strip via a per-source pre_strip or a chunker-level leading-title rule.\n(b) Interleaved editorial / philological footnotes in the body: (sic) (~20),\n    MS. / \"in his MS\" (~22), manuscript-collation notes. These are woven into\n    real text — separate the footnote stream at PARSE time (downloader/chunker),\n    NOT a blanket string strip (that would mangle sentences).\n\nRe-chunk + re-embed affected. This is the hardest, lowest-impact child — may be\nsplit further or partially deferred: if footnote-stream separation proves too\ninvasive, limit this child to the title/byline strip and note the deferral with\nrationale on the ticket.\n\nDone contract:\n- Leading title/byline removed from affected chunks (verify on Boehme).\n- Footnote handling implemented OR explicitly deferred with rationale on the ticket.\n- Round-trip green; embeddings refreshed.",
+  "resolution": {
+    "commit": "934b10d22d545ea657432bc63290a27dcdbcb8a1",
+    "resolved_at": "2026-05-28T20:10:28.171Z",
+    "resolved_by": "unknown",
+    "note": "C4a done: added the per-page '<Title>, by <Translator>, [<year>], at sacred-texts.com' byline to BASELINE_PRE_STRIP (14 boehme chunks; validated 0 false-positives; guarded by test_no_scan_or_frontmatter_artifacts byline check). C4b DEFERRED with rationale: interleaved (sic)/MS. editorial marks (~46 chunks) are woven into real sentences — blanket-stripping mangles content, and parse-time footnote separation is disproportionate to the impact. Shipped with C3 in commit 934b10d."
+  }
+}
