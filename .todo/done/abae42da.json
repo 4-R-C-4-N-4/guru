@@ -1,0 +1,46 @@
+{
+  "id": "abae42da",
+  "type": "chore",
+  "state": "done",
+  "summary": "Delete orphaned sefer-yetirah (Sefaria) duplicate of sefer-yetzirah",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T14:00:18.688Z",
+  "updated_at": "2026-05-28T14:08:49.942Z",
+  "files": [
+    {
+      "path": "chunking/jewish_mysticism/sefer-yetirah.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-hygiene",
+    "jewish_mysticism"
+  ],
+  "relationships": {
+    "parent": "c75f8a2e"
+  },
+  "description": "Delete the orphaned sefer-yetirah duplicate.\n\ncorpus/jewish_mysticism/sefer-yetirah/ (6 chunks) + chunking/jewish_mysticism/sefer-yetirah.toml exist with NO manifest source. It is the abandoned Sefaria source (config translator = \"Sefaria Community Translation\") that the manifest's jewish_mysticism comment said to REMOVE in favor of sefer-yetzirah (Westcott, sacred-texts jud/yetzirah.htm, 7 chunks, present and correct). The manifest line was removed; the leftover config + corpus dir were never cleaned up.\n\nFIX:\n- Delete chunking/jewish_mysticism/sefer-yetirah.toml and corpus/jewish_mysticism/sefer-yetirah/, plus any raw/jewish_mysticism/sefer-yetirah.* leftover.\n- Re-run embed_corpus.py + graph rebuild so the 6 dropped chunks are removed from guru.db (chunk_embeddings + EXPRESSES edges) and from export.py output.\n\nACCEPTANCE: no sefer-yetirah anywhere (chunking/, corpus/, raw/); sefer-yetzirah remains; reconciliation diff clean; guru.db has no dangling chunk_embeddings for the deleted chunk ids.\nParent: c75f8a2e.",
+  "work": {
+    "branch": "manifest-alignment",
+    "base_branch": "main",
+    "started_at": "2026-05-28T14:07:19.493Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-05-28T14:08:49.900Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Spec named 'embed_corpus.py + graph rebuild' to drop the stale chunks, but embed_corpus.py is additive (INSERT OR REPLACE + skips existing) and cannot remove. Correct mechanism is scripts/cleanup_stale_chunk_nodes.py, which treats corpus/**/chunks as canonical truth and prunes nodes+edges+staged_tags+staged_edges+staged_concepts+tagging_progress+chunk_embeddings for ids no longer on disk. Same correction applies to sibling tickets 73c83a22 and 901712e4.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "e957ca81467649e45dc44cc4f93b80e05b260df7",
+    "resolved_at": "2026-05-28T14:08:49.942Z",
+    "resolved_by": "unknown",
+    "note": "Removed chunking/jewish_mysticism/sefer-yetirah.toml + corpus/jewish_mysticism/sefer-yetirah/ + raw leftover (commit e957ca8). Pruned local guru.db via cleanup_stale_chunk_nodes.py --apply: 6 nodes/embeddings, 109 edges, 134 staged_tags, 5 staged_edges, 6 tagging_progress. Verified: 0 stale, 0 sefer-yetirah refs in guru.db, keeper sefer-yetzirah intact (7/7), jewish_mysticism manifest⇄corpus 1:1, test_citations 10/10 green. Downstream: production guru-web PG needs a re-export (export.py) to drop the same rows."
+  }
+}
