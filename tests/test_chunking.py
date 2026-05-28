@@ -281,3 +281,40 @@ def test_no_sacred_texts_nav_prefix():
         f"first few: {offenders[:5]}"
     )
     print("  PASS: no chunk retains the sacred-texts nav prefix")
+
+
+def test_no_scan_or_frontmatter_artifacts():
+    """No chunk body may retain the sacred-texts scan/front-matter artifacts
+    stripped by BASELINE_PRE_STRIP — todo:0a708fa4, docs/upstream-data-cleanup.md:
+      - {p. N} brace page markers (the BRACED form only; bare 'p. N' citations
+        are intentionally preserved),
+      - the 'Buy this Book at Amazon.com ... at sacred-texts.com' preamble.
+    (Plate/Fig references are NOT stripped — they are in-text content here.)"""
+    if not CORPUS_DIR.exists():
+        return
+    checks = {
+        "{p. N} brace marker": re.compile(r'\{\s*p\.\s*\d+\s*\}'),
+        "Buy-this-Book preamble": re.compile(r'Buy this Book at Amazon\.com', re.I),
+    }
+    offenders = []
+    for trad_dir in sorted(CORPUS_DIR.iterdir()):
+        if not trad_dir.is_dir() or trad_dir.name.endswith(".toml"):
+            continue
+        for text_dir in sorted(trad_dir.iterdir()):
+            if not text_dir.is_dir():
+                continue
+            chunk_dir = text_dir / "chunks"
+            if not chunk_dir.exists():
+                continue
+            for chunk_file in sorted(chunk_dir.glob("*.toml")):
+                with open(chunk_file, "rb") as f:
+                    d = tomllib.load(f)
+                body = d["content"]["body"]
+                for label, rx in checks.items():
+                    if rx.search(body):
+                        offenders.append(f"{d['chunk']['id']} ({label})")
+    assert not offenders, (
+        f"{len(offenders)} chunk(s) retain a scan/front-matter artifact; "
+        f"first few: {offenders[:5]}"
+    )
+    print("  PASS: no chunk retains {p.N} braces or the Buy-this-Book preamble")
