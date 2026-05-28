@@ -1,0 +1,7 @@
+tradition = "mandaean"
+text_id = "gnostic-john-baptizer-1"
+text_name = "Gnostic John the Baptizer — Portents at John's Birth"
+translator = "G.R.S. Mead"
+source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-1.htm"
+sections_format = "paragraph"
+chunk_count = 32

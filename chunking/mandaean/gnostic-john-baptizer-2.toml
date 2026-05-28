@@ -1,0 +1,17 @@
+[chunking]
+# See gnostic-john-baptizer-1.toml — paragraph-group over the gnosis_org
+# paragraph-preserved text; strip the leading "Index Previous Next" nav.
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 10
+max_tokens = 800
+
+pre_strip_patterns = [
+    '^Index Previous Next\s*',
+]
+
+[metadata]
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — The Story of the Breach with Judaism"
+translator = "G.R.S. Mead"
+sections_format = "paragraph"

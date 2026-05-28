@@ -17,18 +17,23 @@ logger = logging.getLogger(__name__)
 
 
 def normalize_whitespace(text: str) -> str:
-    """Normalize whitespace in extracted text."""
+    """Normalize whitespace while PRESERVING paragraph breaks.
+
+    Collapses runs of spaces/tabs and trims each line, but keeps blank-line
+    (\\n\\n) separators so downstream paragraph-group chunking has real
+    boundaries to work with. (The earlier version collapsed *all* whitespace
+    to single spaces, flattening the page into one line — which left
+    paragraph-group with a single blob to letter-suffix subsplit.)
+    """
     import re
-    
-    # Collapse multiple spaces
-    text = re.sub(r"\s+", " ", text)
-    # Collapse multiple newlines to max 2
+
+    # Collapse spaces/tabs only — not newlines.
+    text = re.sub(r"[ \t]+", " ", text)
+    # Strip trailing/leading whitespace per line.
+    text = "\n".join(line.strip() for line in text.split("\n"))
+    # Collapse 3+ newlines to a single blank-line separator.
     text = re.sub(r"\n{3,}", "\n\n", text)
-    # Strip leading/trailing whitespace per line
-    text = "\n".join([line.strip() for line in text.split("\n")])
-    # Remove empty lines at start/end
-    text = text.strip()
-    return text
+    return text.strip()
 
 
 def content_hash(text: str) -> str:
@@ -104,9 +109,17 @@ def download(source: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     # Remove ads and navigation
     for element in main.find_all(class_=["ad", "advertisement", "nav", "navigation", "menu"]):
         element.decompose()
-    
-    # Extract text
-    text = main.get_text(separator="\n")
+
+    # Extract text, preserving paragraph structure. gnosis.org pages use one
+    # <p> per verse/paragraph; join the block-level elements with blank lines
+    # so the chunker receives real paragraph boundaries. Fall back to a flat
+    # get_text() for pages without block markup.
+    blocks = main.find_all("p")
+    if blocks:
+        parts = [b.get_text(separator=" ", strip=True) for b in blocks]
+        text = "\n\n".join(p for p in parts if p)
+    else:
+        text = main.get_text(separator="\n")
     text = normalize_whitespace(text)
     
     if not text:

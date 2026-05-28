@@ -758,26 +758,46 @@ notes = "Budge's translation of the Book of Am-Tuat (the Twelve Hours of the Nig
 # --------------------------------------------
 # The only living Gnostic religion. Mead's translation is partial
 # but it's the main PD access point to Mandaean material.
+#
+# todo:73c83a22 — these are the three "From the John-Book of the Mandaeans"
+# extract chapters (Sidra d'Yahya selections): gjb-2-1, gjb-2-2, gjb-2-3.
+# They are individual leaf chapter pages, NOT index pages — the previous
+# `format = "html_multi"` was a mislabel that (combined with html_multi being
+# hard-wired to the sacred_texts crawler) meant they never landed. Corrected to
+# `format = "html"`; gnosis.org now routes to the gnosis_org extractor via
+# acquire.py DOMAIN_DISPATCH. Mead's surrounding comparative chapters
+# (gjb-1 John in Christian tradition, gjb-3 Slavonic Josephus, gjb-4 Fourth
+# Gospel) are deliberately excluded — they are not Mandaean primary source.
 
 [[source]]
 id = "gnostic-john-baptizer-1"
 tradition = "mandaean"
-label = "Gnostic John the Baptizer I: PORTENTS AT JOHN'S BIRTH"
+label = "Gnostic John the Baptizer I: Portents at John's Birth"
 url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-1.htm"
-format = "html_multi"
+format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+notes = "Mead 1924. First of the Mandaean John-Book extracts (Sidra d'Yahya): portents at John's birth, the child planted in the world. Single leaf page; chunk regex-section-split on Mead's print-page markers (p. N)."
 
 [[source]]
 id = "gnostic-john-baptizer-2"
 tradition = "mandaean"
-label = "Gnostic John the Baptizer II: THE STORY OF THE BREACH WITH JUDAISM"
+label = "Gnostic John the Baptizer II: The Story of the Breach with Judaism"
 url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-2.htm"
-format = "html_multi"
+format = "html"
 license = "public_domain"
 translator = "G.R.S. Mead"
-notes = "Mead's translation of selections from the Sidra d'Yahya (Mandaean John-Book). Primary source for the only surviving Gnostic religion. Index page links to individual chapters."
+notes = "Mead 1924. Second John-Book extract: Miryai expelled from Jewry, the breach with Judaism. Single leaf page; regex-section-split on print-page markers (p. N)."
+
+[[source]]
+id = "gnostic-john-baptizer-3"
+tradition = "mandaean"
+label = "Gnostic John the Baptizer III: Some Typical Extracts"
+url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
+format = "html"
+license = "public_domain"
+translator = "G.R.S. Mead"
+notes = "Mead 1924. Third John-Book extract: typical pieces from the Mandaean John-Book (souls, world-rulers, the Poor). Single leaf page; regex-section-split on print-page markers (p. N)."
 
 
 # --------------------------------------------

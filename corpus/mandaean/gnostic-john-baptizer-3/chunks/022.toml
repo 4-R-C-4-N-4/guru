@@ -1,0 +1,15 @@
+[chunk]
+id = "mandaean.gnostic-john-baptizer-3.022"
+tradition = "mandaean"
+text_name = "Gnostic John the Baptizer — Some Typical Extracts"
+section = "Section 22"
+translator = "G.R.S. Mead"
+source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
+token_count = 214
+
+[content]
+body = "5 That is, the\nliving water.\n\n6 This is\nconjectural.\n\np. 83\n\n1 Lidzbarski (p.\n465) thinks this refers to the Moslim period. Elsewhere we find the parallel\nphrase 'age of Bizbat,' which L. also refers to Muhammad. But Bizbat is\nclearly a corrupt form of Baal-Zebul, and therefore the reference should be\nmore general.\n\n2 Presumably\nstars.\n\np. 84\n\n1 Spirit or jinn\n(?)\n\np. 85\n\n1 A still more\ndegraded form of cult is mentioned, but the meaning baffles the translator; it\nis referred to those who bow down before Rūhā, here in mockery called 'Holy'\nSpirit.\n\n2 The above is\nobscure, especially the 'pen-demon' reference. The general sense. however,\nseems to be that those who fall away from the Mandæan faith are not to be\nrestrained by force, but let go their way."
+
+[annotations]
+concepts = []
+related_chunks = []
