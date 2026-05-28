@@ -1,13 +1,13 @@
 {
   "id": "13f72b3d",
   "type": "bug",
-  "state": "open",
+  "state": "wontfix",
   "summary": "graph_bootstrap.bootstrap_concepts crashes on v2 three-tier taxonomy (binds dict as definition)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-28T14:54:05.841Z",
-  "updated_at": "2026-05-28T14:54:05.879Z",
+  "updated_at": "2026-05-28T20:19:08.761Z",
   "files": [
     {
       "path": "scripts/graph_bootstrap.py",
