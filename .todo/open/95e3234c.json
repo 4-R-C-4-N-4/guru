@@ -1,0 +1,30 @@
+{
+  "id": "95e3234c",
+  "type": "bug",
+  "state": "open",
+  "summary": "Strip junk boilerplate/apparatus from corpus chunks to fix retrieval mis-hits",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.483Z",
+  "updated_at": "2026-05-28T15:04:50.785Z",
+  "files": [
+    {
+      "path": "docs/upstream-data-cleanup.md"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "retrieval"
+  ],
+  "description": "Stop boilerplate/apparatus text from polluting chunk embeddings and causing query mis-hits. Source analysis: docs/upstream-data-cleanup.md (mined from the live v27 corpus; corroborated on the local 3149-chunk corpus).\n\nEvidence (local): 971 chunks (30%) carry a leading \"Sacred Texts ... Previous Next\" nav prefix — neoplatonism=716 (plotinus-select-works-index), taoism=137, egyptian=68, zoroastrianism=19, christian_mysticism=14, greek_mystery=10, jewish_mysticism=4, hermeticism=2, buddhism=1; 121 chunks carry {p. N} brace scan markers; 5 are pure ^Next:/^Previous: apparatus.\n\nRoot cause: most chunking/*/*.toml never got pre_strip_patterns. The mechanism already exists (scripts/chunk.py::_apply_pre_strip) and is used by orphic-hymns + mandaean; it just needs applying to the rest. (Alternative considered — doc caveat #4: strip at the source-HTML/downloader level, cleaner but more work; pre_strip_patterns on the configs is the pragmatic lever this plan uses.)\n\nHard dependency (doc caveat #3): stripping changes chunk text, so affected chunks MUST be re-chunked + re-embedded (their vectors were computed on the polluted text) and re-exported to guru-web PG — otherwise retrieval stays broken.\n\nGlobal caveats applied to every child:\n- Never drop by length alone — \"Jesus said, 'Become passers-by.'\" is a real 9-token Gospel-of-Thomas logion. Short != junk.\n- Only the {p. N} brace form is an unambiguous scan artifact; bare \"p. N\" can be a legit citation — keep it.\n\nChildren (ordered): C1 nav-prefix strip (the ~30% 80/20) · C2 {p.N} brace + plate/figure strip · C3 drop pure-apparatus chunks · C4 structural (leading title/byline + interleaved footnotes) · C5 re-export to guru-web PG + verify mis-hits resolved.",
+  "relationships": {
+    "children": [
+      "8abbb645",
+      "0a708fa4",
+      "c6c13b63",
+      "16255216"
+    ]
+  }
+}

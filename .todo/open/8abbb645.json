@@ -1,0 +1,25 @@
+{
+  "id": "8abbb645",
+  "type": "bug",
+  "state": "open",
+  "summary": "Tier 1: strip '^Sacred Texts ... Previous Next' nav prefix (the ~30% win) + re-chunk/re-embed",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T15:04:50.553Z",
+  "updated_at": "2026-05-28T15:04:50.586Z",
+  "files": [
+    {
+      "path": "chunking"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "data-quality",
+    "chunking"
+  ],
+  "relationships": {
+    "parent": "95e3234c"
+  },
+  "description": "Tier 1 / the 80/20: strip the leading site-nav prefix from chunk bodies.\n\nPattern (collection word varies — Classics / Buddhism / Zoroastrianism / Egypt / Esoteric):\n    ^Sacred Texts\\b.*?\\bPrevious\\s+Next\\b\\s*      (non-greedy)\n971 local chunks (30%) match. Add it to pre_strip_patterns in every chunking\nconfig whose text has nav-prefixed chunks. By tradition (local counts):\nneoplatonism=716 (plotinus-select-works-index — page-as-chunk, currently NO\npre_strip), taoism=137, egyptian=68, zoroastrianism=19, christian_mysticism=14,\ngreek_mystery=10, jewish_mysticism=4, hermeticism=2, buddhism=1 (diamond-sutra).\nEnumerate the exact text_ids by re-running the corroboration scan.\n\nMechanism notes:\n- pre_strip is applied PER-PAGE for page-as-chunk/multi sources and whole-file\n  for single sources; both anchor \"^\", so each page's/file's leading nav is\n  removed. The round-trip test mirrors this exactly (tests/test_chunking.py\n  _load_raw_text), so it will stay valid.\n- Re-chunk affected texts, then refresh local guru.db: bootstrap_chunks (upsert\n  node labels) + cleanup_stale_chunk_nodes --apply (if chunk counts shift) +\n  embed_corpus --tradition X (INSERT OR REPLACE refreshes vectors) — the exact\n  sequence used in todo:73c83a22.\n\nDone contract:\n- A scan reports 0 chunks whose body starts with the nav prefix.\n- tests/test_chunking.py round-trip stays green.\n- Local guru.db has no stale chunk_ids for affected texts; embeddings refreshed.\n- Regression test: assert no chunk body matches ^Sacred Texts\\b.*Previous\\s+Next."
+}
