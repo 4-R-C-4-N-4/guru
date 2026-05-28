@@ -2,11 +2,15 @@
 Guru Graph Bootstrap — Pass A of Stage 3.
 
 Creates (or migrates) data/guru.db and populates:
-  - concept nodes from concepts/taxonomy.toml
   - tradition nodes (one per directory under corpus/) — labels come from
     LABEL_OVERRIDES or the title-cased id fallback
   - chunk nodes from corpus/**/chunks/*.toml
   - BELONGS_TO edge from every chunk to its tradition node
+
+Concept nodes/families are NOT created here — scripts/sync_taxonomy.py owns
+that (it loads the v2 three-tier concepts/taxonomy.toml into nodes + the
+concept_families tables). An earlier bootstrap_concepts() pass duplicated that
+job and crashed on the three-tier shape; removed (todo:13f72b3d).
 
 Idempotent: upserts on every run; safe to re-run after adding new chunks.
 
@@ -28,7 +32,6 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 SCHEMA_SQL = Path(__file__).parent / "schema.sql"
 CORPUS_DIR = PROJECT_ROOT / "corpus"
-TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
 # Tradition labels are auto-derived from the directory name under corpus/
 # via id.replace("_", " ").title(). Overrides live here for the cases
@@ -82,28 +85,6 @@ def upsert_edge(conn: sqlite3.Connection, source_id: str, target_id: str,
 
 
 # ── passes ───────────────────────────────────────────────────────────────────
-
-def bootstrap_concepts(conn: sqlite3.Connection) -> None:
-    """Insert concept nodes from taxonomy.toml."""
-    with open(TAXONOMY_TOML, "rb") as f:
-        data = tomllib.load(f)
-
-    count = 0
-    for category, concepts in data.get("concepts", {}).items():
-        for concept_id, definition in concepts.items():
-            node_id = f"concept.{concept_id}"
-            upsert_node(
-                conn,
-                id=node_id,
-                type="concept",
-                label=concept_id.replace("_", " ").title(),
-                definition=definition,
-            )
-            count += 1
-
-    conn.commit()
-    logger.info(f"  concepts: {count}")
-
 
 def bootstrap_chunks(conn: sqlite3.Connection) -> int:
     """Insert chunk nodes and BELONGS_TO edges."""
@@ -215,9 +196,7 @@ def main() -> None:
     logger.info(f"Applying schema to {db_path} ...")
     apply_schema(conn)
 
-    logger.info("Bootstrapping concepts ...")
-    bootstrap_concepts(conn)
-
+    # Concept nodes/families come from scripts/sync_taxonomy.py, not here.
     logger.info("Bootstrapping chunks + BELONGS_TO edges ...")
     n = bootstrap_chunks(conn)
 

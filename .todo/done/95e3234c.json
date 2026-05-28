@@ -1,13 +1,13 @@
 {
   "id": "95e3234c",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "Strip junk boilerplate/apparatus from corpus chunks to fix retrieval mis-hits",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-05-28T15:04:50.483Z",
-  "updated_at": "2026-05-28T15:05:11.427Z",
+  "updated_at": "2026-05-28T20:55:31.908Z",
   "files": [
     {
       "path": "docs/upstream-data-cleanup.md"
@@ -27,5 +27,11 @@
       "16255216",
       "829993fd"
     ]
+  },
+  "resolution": {
+    "commit": "0d110ef67b9a0ab7244dbe5514d5af5c1719b863",
+    "resolved_at": "2026-05-28T20:55:31.908Z",
+    "resolved_by": "unknown",
+    "note": "Junk-text cleanup epic complete: C1 nav (#22), C2 braces/Buy (#24), C3 apparatus-drop + C4 byline (#25), all merged. Prod refresh by user."
   }
 }

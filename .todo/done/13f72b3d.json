@@ -1,0 +1,40 @@
+{
+  "id": "13f72b3d",
+  "type": "bug",
+  "state": "done",
+  "summary": "graph_bootstrap.bootstrap_concepts crashes on v2 three-tier taxonomy (binds dict as definition)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-28T14:54:05.841Z",
+  "updated_at": "2026-05-28T20:55:18.182Z",
+  "files": [
+    {
+      "path": "scripts/graph_bootstrap.py",
+      "lines": [
+        86,
+        105
+      ]
+    }
+  ],
+  "tags": [
+    "graph",
+    "taxonomy",
+    "tooling"
+  ],
+  "description": "graph_bootstrap.py::bootstrap_concepts crashes on the v2 three-tier taxonomy.\n\nRepro: `python3 scripts/graph_bootstrap.py`\n  ... Bootstrapping concepts ...\n  sqlite3.ProgrammingError: Error binding parameter 5: type 'dict' is not supported\n\nRoot cause: bootstrap_concepts (scripts/graph_bootstrap.py ~L86-105) assumes the\nflat v1 taxonomy shape data[\"concepts\"][category] = {concept_id: definition_str}:\n\n    for category, concepts in data.get(\"concepts\", {}).items():\n        for concept_id, definition in concepts.items():\n            upsert_node(..., definition=definition)   # definition expected to be str\n\nBut concepts/taxonomy.toml is now the v2 THREE-TIER hierarchy with\n[concepts.DOMAIN.FAMILY] sections, so data[\"concepts\"][\"cosmology\"][\"divine_structure\"]\n= {emanation_hierarchy: \"...\", ...}. The inner loop therefore yields\nconcept_id=\"divine_structure\", definition={...a dict...}, and upsert_node binds\nthat dict to the `definition` column → ProgrammingError (parameter 5 = definition).\nmain() calls bootstrap_concepts at ~L219, so the whole graph bootstrap aborts\nbefore bootstrap_chunks runs.\n\nContext: concept nodes / families are now owned by scripts/sync_taxonomy.py\n(taxonomy.toml header + docs/concept-hierarchy/design.md §4,§6). So\nbootstrap_concepts is largely superseded.\n\nDiscovered while landing the Mandaean corpus (todo:73c83a22): graph_bootstrap\ncould not be run end-to-end; worked around by invoking only bootstrap_chunks().\n\nFix options (decision needed):\n(1) Remove bootstrap_concepts from graph_bootstrap and delegate concept/family\n    nodes to sync_taxonomy.py — graph_bootstrap then only does tradition + chunk\n    nodes + BELONGS_TO. Cleanest if sync_taxonomy is the single source of truth.\n(2) Update bootstrap_concepts to walk the three-tier [concepts.DOMAIN.FAMILY]\n    nesting (one extra level) if graph_bootstrap is meant to remain self-sufficient.\nAlso sanity-check apply_schema(schema.sql) against the current v3_006 migration\nstate while in here.\n\nRegression test: a test that runs graph_bootstrap (or bootstrap_concepts) against\nthe real taxonomy.toml without raising, OR asserts concept-node creation is\ndelegated to sync_taxonomy.",
+  "work": {
+    "branch": "chore-wrapup-gitattributes",
+    "base_branch": "main",
+    "started_at": "2026-05-28T20:51:13.416Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "fb23321a2d63eaeff38c1e5004f9b2fd2791f7b3",
+    "resolved_at": "2026-05-28T20:55:18.182Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_graph_bootstrap.py",
+    "test_function": "test_graph_bootstrap_builds_chunk_graph_without_taxonomy_crash",
+    "note": "Removed the obsolete/broken bootstrap_concepts pass (sync_taxonomy.py owns concept nodes). graph_bootstrap now runs clean end-to-end (3128 chunk + 16 tradition nodes on a temp DB, no crash). Reopened from the tentative wontfix and fixed properly."
+  }
+}
