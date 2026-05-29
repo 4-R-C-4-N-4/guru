@@ -107,6 +107,24 @@ def test_concept_aliases_section_exists():
     assert "concept_aliases" in _load()
 
 
+def test_concept_aliases_valid():
+    """Populated aliases must reference real concepts, be lowercase (the
+    concept_aliases.alias CHECK is alias = LOWER(alias)), and never be shared
+    across two concepts (which would make a query expand ambiguously)."""
+    tax = _load()
+    concept_ids = {cid for dom in tax["concepts"].values()
+                   for fam in dom.values() for cid in fam}
+    aliases = tax["concept_aliases"]
+    bad_ids = [k for k in aliases if k not in concept_ids]
+    assert not bad_ids, f"alias keys are not real concepts: {bad_ids}"
+    not_lower = [(k, a) for k, v in aliases.items() for a in v if a != a.lower()]
+    assert not not_lower, f"non-lowercase aliases violate the CHECK: {not_lower}"
+    from collections import Counter
+    counts = Counter(a for v in aliases.values() for a in v)
+    dupes = {a: n for a, n in counts.items() if n > 1}
+    assert not dupes, f"aliases shared across concepts (ambiguous expansion): {dupes}"
+
+
 # ── §13 no-op invariant: existing readers tolerate the new nesting ───────────
 
 
