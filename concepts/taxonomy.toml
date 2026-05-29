@@ -292,6 +292,60 @@ prophetic_rejection = "The phenomenon where spiritual messengers or healers are 
 # ============================================================
 # CONCEPT ALIASES
 # ============================================================
-# Populated incrementally as natural-language queries surface that a concept's
-# canonical label fails to match (design.md §5.1). Empty for now.
+# Natural-language synonyms that map a user query to a canonical concept via the
+# graph leg (extractConcepts -> walkGraph), complementing the lexical leg.
+#
+# CRITERION (matcher = GRAPH_MATCH_MODE=regex, the default since 2026-05-29):
+# word-boundary, case-insensitive (~*). An alias fires only on a WHOLE-WORD query
+# match, so short forms no longer substring-collide ("mania" no longer fires on
+# "man"). STILL true: a MULTI-WORD alias fires on each of its whole words, so a
+# phrase with a common word over-fires ("dark night of the soul" -> "soul",
+# "sacred marriage" -> "sacred", "the one" -> "one"). So prefer the rare/foreign
+# token (hieros gamos, via negativa, deus absconditus) over the English phrase
+# variant, and skip aliases already in the title-cased label (it self-matches).
+# Highest value is foreign/transliterated terms, where the user's word isn't the
+# corpus's word. List ALL hyphen/space/apostrophe spellings — the tokenizer does
+# NOT bridge them. Stored lowercase (CHECK alias = LOWER(alias); tidy, though ~*
+# is case-insensitive). The other ~62 concepts have plain-English self-matching
+# labels (divine_light, prayer, covenant, logos, monad, correspondence, ...) and
+# deliberately get none. Refined per downstream-matcher audit, 2026-05-29.
 [concept_aliases]
+
+# — alternate spelling / transliteration (the core recall gain) —
+sephirot = ["sefirot", "sefiroth"]
+ein_sof = ["ein-sof", "einsof", "ein soph", "ayn sof"]
+tzimtzum = ["tsimtsum", "zimzum"]
+maat_cosmic_order = ["ma'at", "maat"]
+asha_cosmic_order = ["arta"]
+ahura_mazda_principle = ["ohrmazd", "hormazd"]
+angra_mainyu_principle = ["ahriman"]
+frashokereti = ["frashegird", "frashokart"]
+apocatastasis = ["apokatastasis"]       # thin: target has ~1 EXPRESSES edge
+fana_annihilation = ["fana", "fana'", "fanaa"]
+wu_wei = ["wu-wei", "wuwei"]
+sunyata_emptiness = ["shunyata", "sunnata"]
+linga_sharira = ["linga-sarira"]        # thin: target has ~1 EXPRESSES edge
+
+# — foreign / technical term the label renames or buries (fires precisely) —
+gnosis_direct_knowledge = ["gnosis"]
+demiurge = ["yaldabaoth"]
+cosmic_sympathy = ["sympatheia"]
+mystical_union = ["unio mystica"]
+ladder_of_love = ["scala amoris"]
+divine_hiddenness = ["deus absconditus"]
+return_to_source = ["reditus"]
+detachment_gelassenheit = ["gelassenheit"]
+heroic_furor = ["eroici furori", "furore"]
+divine_intoxication = ["sukr"]
+divine_marriage = ["hieros gamos"]
+divine_madness = ["mania"]
+theosis_deification = ["divinization", "divinisation"]
+apophatic_theology = ["via negativa"]
+emanation_hierarchy = ["emanation"]
+
+# — common name not in the label (precise single tokens / rare compounds) —
+soul_migration = ["transmigration", "metempsychosis", "reincarnation"]
+psychopomp_journey = ["psychopomp"]
+anamnesis = ["recollection"]
+watchers_descent = ["nephilim"]
+alchemical_work = ["alchemy", "magnum opus"]
