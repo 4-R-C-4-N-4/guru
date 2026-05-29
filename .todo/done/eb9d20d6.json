@@ -1,0 +1,35 @@
+{
+  "id": "eb9d20d6",
+  "type": "chore",
+  "state": "done",
+  "summary": "Populate concept_aliases — first pass (33 transliteration/foreign-term concepts)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-05-29T15:13:42.981Z",
+  "updated_at": "2026-05-29T15:14:12.695Z",
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "tags": [
+    "taxonomy",
+    "aliases",
+    "retrieval"
+  ],
+  "work": {
+    "branch": "concept-aliases-subset",
+    "base_branch": "main",
+    "started_at": "2026-05-29T15:13:43.023Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "5233783ebac43e00632a30bd9761ff50fb2543cf",
+    "resolved_at": "2026-05-29T15:14:12.695Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_taxonomy_structure.py",
+    "test_function": "test_concept_aliases_valid",
+    "note": "33 concepts / 50 aliases populated in concepts/taxonomy.toml [concept_aliases]; loaded to guru.db (50 rows, 0 dangling, 0 non-lowercase). Curated against the word-boundary-regex matcher per the downstream audit. First pass (transliterations + rare/foreign tokens); the remaining 62 self-match labels. Downstream: export.py carries concept_aliases to guru-web PG (re-export needed for it to take effect); relates to dark-graph-leg debt 31a7fe76."
+  }
+}
