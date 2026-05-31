@@ -1,0 +1,12 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Brihadâranyaka, I,4, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+pre_strip_patterns = ['''(?m)^Footnotes\b[\s\S]*$''']
+
+[metadata]
+tradition = "Upanishads"
+text_name = "Brihadâranyaka-Upanishad"
+translator = "F. Max Müller"
+sections_format = "section"
