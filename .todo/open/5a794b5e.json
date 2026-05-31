@@ -1,0 +1,27 @@
+{
+  "id": "5a794b5e",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Patch sacred_texts.extract_text_page() to strip inline <font size=1> footnote refs and trailing Footnotes block",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-31T19:59:52.045Z",
+  "updated_at": "2026-05-31T19:59:52.088Z",
+  "files": [
+    {
+      "path": "scripts/downloaders/sacred_texts.py",
+      "lines": [
+        138,
+        204
+      ]
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "downloader",
+    "quality",
+    "sbe"
+  ],
+  "description": "## Why\n\nQuality improvement to `extract_text_page()`. **Not a blocker** for the Upanishads or pagan tickets — the pipeline tolerates the artifacts today and the existing Yasna corpus runs with them.\n\nFull rationale, code-path analysis, decision matrix: `docs/corpus-expansion/sbe-downloader-patch-assessment.md`.\n\n## Problem\n\nCurrent `extract_text_page()` (scripts/downloaders/sacred_texts.py:138-204) only decomposes class-based footnote containers (`class_=[\"footnotes\",\"notes\",\"fn\"]`). SBE-volume pages do not use those classes — they use bare `<font size=\"1\">` for inline footnote-ref superscripts and a trailing `<h3 align=\"CENTER\">Footnotes</h3>` apparatus block.\n\nEmpirical evidence (committed `raw/zoroastrianism/yasna-30.txt`):\n\n- Bare-digit ref glued mid-sentence: `\"a worse 5 , as to thought, as to word, and as to deed\"`\n- Bare-digit ref before period: `\"(The qualifying words are all in the neuter 1 .)\"`\n- Full Footnotes apparatus appended to translation: `25:1`, `26:1`, ... `35:6` notes\n\nSee `sbe-downloader-patch-assessment.md` §3.1 (markup) and §3.2 (committed evidence).\n\n## Patch scope\n\n1. Decompose `<font size=\"1\">` and `<sup>` elements before `main.get_text()`.\n2. Drop the trailing apparatus block from `<h3 align=\"CENTER\">Footnotes</h3>` onward.\n3. Verify zero false-positives across the corpus — the `font size=\"1\"` selector is sacred-texts-SBE-specific, but spot-check Egyptian (Budge) and other non-SBE sacred-texts pages.\n\n## Re-acquire + re-chunk + re-embed plan\n\nAlready-shipped SBE sources need re-acquisition once the patch lands:\n- Zoroastrian: `gathas-introduction`, `yasna-28..51`, `yasna-53`, `bundahishn` (manifest.toml:375-440)\n- Upanishads (if ticket 1 shipped first): all `upanishads.*` entries\n- Future Buddhist SBE49/SBE10/SBE11 if added per `docs/corpus-expansion-candidates.md` §3.7, §3.8, §4.11\n\n## Follow-up\n\nOnce the patch lands, revisit the bare `p. N` policy at `scripts/chunk.py:63-65`. The carve-out was because footnote-ref digits looked similar to page markers; that ambiguity goes away once refs are stripped.\n\n## Files\n\n- `scripts/downloaders/sacred_texts.py` — patch target\n- `docs/corpus-expansion/sbe-downloader-patch-assessment.md` — full analysis\n- `sources/manifest.toml` — SBE sources to re-acquire"
+}

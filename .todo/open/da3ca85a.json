@@ -1,0 +1,27 @@
+{
+  "id": "da3ca85a",
+  "type": "feature",
+  "state": "open",
+  "summary": "Add the pagan/folkloric batch — 5 new traditions, 7 sources (Aradia, Eddas, Kojiki, Yoruba, Kalevala, Mabinogion)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-05-31T19:59:51.964Z",
+  "updated_at": "2026-05-31T19:59:52.010Z",
+  "files": [
+    {
+      "path": "docs/corpus-expansion/pagan.md"
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "manifest",
+    "pagan",
+    "norse",
+    "shinto",
+    "yoruba",
+    "finnic",
+    "celtic"
+  ],
+  "description": "## Scope\n\nAdd 7 sources across 5 new traditions in one batch. All URLs verified clean on 2026-05-31; no GUESS markers, no slug or id collisions. Fully independent of the Upanishads ticket — can run in parallel.\n\n## Sources\n\n| id | url | format | tradition |\n|---|---|---|---|\n| aradia-gospel-witches | sacred-texts.com/pag/aradia/index.htm | html_multi | pagan_witchcraft |\n| poetic-edda-voluspo | sacred-texts.com/neu/poe/poe03.htm | html | norse |\n| poetic-edda-hovamol | sacred-texts.com/neu/poe/poe04.htm | html | norse |\n| kojiki-beginning-heaven-earth | sacred-texts.com/shi/kj/kj008.htm | html | shinto |\n| yoruba-speaking-peoples-ellis | sacred-texts.com/afr/yor/index.htm | html_multi | yoruba |\n| kalevala | gutenberg.org/cache/epub/5186/pg5186.html | html | finnic |\n| mabinogion | gutenberg.org/files/5160/5160-h/5160-h.htm | html | celtic |\n\nEach entry needs a `chunking/{trad}/{id}.toml`.\n\n## Per-source caveats (documented inline in pagan.md)\n\n- **Aradia**: exclude ara00–ara02 (title/preface/contents). Italian incantations interleaved with English translation — keep both, do not strip the Italian.\n- **Yoruba (Ellis)**: chapter numbering quirk noted at fetch time (see pagan.md). Colonial ethnography — tag as such, not insider account.\n- **Kojiki**: scope is Section I only (Beginning of Heaven and Earth). Drop Chamberlain's inline footnote ordinals; preserve sentence flow. Trailing Footnotes block needs strip.\n- **Eddas (Bellows)**: stanza-numbered commentary in `[brackets]` should be treated as text-critical metadata — mirror Enoch `[[ ]]` handling.\n- **Kalevala (Gutenberg #5186)**: strip Gutenberg header/license boilerplate and the back-matter (glossary, pronunciation notes) before chunking. Structure: PROEM + RUNE I–L; regex-section-split on `^RUNE ([IVXLC]+)\\.`.\n- **Mabinogion (Gutenberg #5160)**: 13 titled tales, not numbered. Title-heading regex split. Guest's extensive footnotes are scholarly apparatus — treat as metadata.\n\n## Pipeline\n\nacquire → chunk → embed_corpus → re-tag → re-edges. Five new tradition directories will be created under `corpus/` and `chunking/`.\n\n## Files\n\n- `docs/corpus-expansion/pagan.md` — draft manifest (all 7 URLs verified 2026-05-31)\n- `docs/corpus-expansion/url-vetting.md` — verification record\n- `sources/manifest.toml` — append target"
+}
