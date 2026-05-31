@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.088"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 73
+
+[content]
+body = "Underneath Manala's fire-rock Are their ever-flaming couches, For their pillows hissing serpents, Vipers green their writhing covers, For their drink the blood of adders, For their food the pangs of hunger, Pain and agony their solace; If thou wishest joy eternal, Shun the kingdom of Tuoui!\""
+
+[annotations]
+concepts = []
+related_chunks = []

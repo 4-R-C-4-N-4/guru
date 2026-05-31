@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.029"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune VIc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 492
+
+[content]
+body = "Swift as light it speeds its journey, Strikes the steed of Wainamoinen, Strikes the light-foot, ocean-swimmer, Strikes him near his golden girdle, Through the shoulder of the racer.\n\nThereupon wise Wainamoinen Headlong fell upon the waters, Plunged beneath the rolling billows, From the saddle of the courser, From his dappled steed of magic.\n\nThen arose a mighty storm-wind, Roaring wildly on the waters, Bore away old Wainamoinen Far from land upon the billows, On the high and rolling billows, On the broad sea's great expanses.\n\nBoasted then young Youkahainen, Thinking Waino dead and buried, These the boastful words be uttered: \"Nevermore, old Wainamoinen, Nevermore in all thy life-time, While the golden moonlight glistens, Nevermore wilt fix thy vision On the meadows of Wainola, On the plains of Kalevala; Full six years must swim the ocean, Tread the waves for seven summers, Eight years ride the foamy billows, In the broad expanse of water; Six long autumns as a fir-tree, Seven winters as a pebble; Eight long summers as an aspen.\" Thereupon the Lapland minstrel Hastened to his room delighting, When his mother thus addressed him \"Hast thou slain good Wainamoinen, Slain the son of Kalevala?\" Youkahainen thus made answer: \"I have slain old Wainamoinen, Slain the son of Kalevala, That he now may plow the ocean, That he now may sweep the waters, On the billows rock and slumber.\n\nIn the salt-sea plunged he headlong, In the deep sank the magician, Sidewise turned he to the sea-shore On his back to rock forever, Thus the boundless sea to travel, Thus to ride the rolling billows.\" This the answer of the mother: \"Woe to earth for this thine action, Gone forever, joy and singing, Vanished is the wit of ages!\n\nThou hast slain good Wainamoinen.\n\nSlain the ancient wisdom-singer, Slain the pride of Suwantala, Slain the hero of Wainola, Slain the joy of Kalevala.\""
+
+[annotations]
+concepts = []
+related_chunks = []

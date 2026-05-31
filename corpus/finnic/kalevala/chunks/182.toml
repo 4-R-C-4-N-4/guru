@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.182"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 643
+
+[content]
+body = "Often do the Northland vultures Hither come to feed their fledgelings; Hither bring the birds of heaven Bits of flesh and blood of heroes; Often do the beaks of ravens Tear the flesh of kindred corpses, Often do the eagle's talons Carry bones and trembling vitals, Such as ours, to feed their nestlings, In their rocky homes and ledges.\n\n\"Oh!\n\nmy mother can but wonder, Never can divine the answer, Where her reckless son is roaming, Where her hero's blood is flowing, Whether in the swamps and lowlands Whether in the heat of battle, Or upon the waves of the ocean, Or upon the hop-feld mountains, Or along some forest by-way.\n\nNothing can her mind discover Of the frailest of her heroes, Only think that he has perished.\n\nThus the hoary-headed mother Weeps and murmurs in her chambers: 'Where is now my son beloved, In the kingdom of Manala?\n\nSow thy crops, thou dread Tuoni, Harrow well the fields of Kalma!\n\nNow the bow receives its respite From the fingers of my Tiera; Bow and arrow now are useless, Now the merry birds can fatten In the fields, and fens, and forests; Bears may live in dens of freedom, On the fields may sport the elk-herds.'\" Spake the reckless Lemminkainen: \"Thus it is, mine aged mother, Thou that gavest me existence!\n\nThou hast reared thy broods of chickens, Hatched and reared thy flights of white-swans All of them the winds have scattered, Or the evil Lempo frightened; One flew hither, and one thither, And a third one, lost forever!\n\nThink thou of our former pleasures, Of our better days together, When I wandered like the flowers, Like the berry in the meadows.\n\nMany saw my form majestic, Many thought me well-proportioned.\n\nNow is not as then with Ahti, Into evil days have fallen, Since I see but storms and darkness!\n\nThen my eyes beheld but sunshine, Then we did not weep and murmur, Did not fill our hearts with sorrow, When the maids in joy were singing, When the virgins twined their tresses; Then the women joined in joyance, Whether brides were happy-wedded, Whether bridegrooms choose discreetly, Whether they were wise or unwise.\n\n\"But we must not grow disheartened, Let the Island-maidens cheer us; Here we are not yet enchanted, Not bewitched by magic singing, On the paths not left to perish, Sink and perish on our journey.\n\nFull of youth we should not suffer, Strong, we should not die unworthy, Whom the wizards have enchanted, Have bewitched with songs of magic; Sorcerers may charm and conquer, Bury them within their dungeons, Hide them spell-bound in their cabins.\n\nLet the wizards charm each other, And bewitch their magic offspring, Bring their tribes to fell destruction.\n\nNever did my gray-haired father Bow submission to a wizard, Offer worship to magicians."
+
+[annotations]
+concepts = []
+related_chunks = []

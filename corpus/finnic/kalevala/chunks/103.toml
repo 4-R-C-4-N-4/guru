@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.103"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIIIh"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 550
+
+[content]
+body = "From the corner spake Suowakko, This the language of the wizard: \"If the wand is dripping honey, Then the strangers that are coming Are but worthy friends and suitors.\" Then the hostess of the Northland, With the daughter of the hostess, Straightway left their work, and hastened From their dwelling to the court-yard; Looked about in all directions, Turned their eyes upon the waters, Saw a magic-colored vessel Rocking slowly in the harbor, Having sailed the bay of Lempo, Triple sails, and masts, and rigging, Sable was the nether portion, And the upper, scarlet-colored, At the helm an ancient hero Leaning on his oars of copper; Saw a fleet-foot racer running, Saw a red sledge lightly follow, Saw the magic sledge emblazoned, Guided toward the courts of Louhi; Saw and heard six golden cuckoos Sitting on the break-board, calling, Seven bluebirds richly colored Singing from the yoke and cross-bar; In the sledge a magic hero, Young, and strong, and proud, and handsome, Holding reins upon the courser.\n\nSpake the hostess of Pohyola: \"Dearest daughter, winsome maiden, Dost thou wish a noble suitor?\n\nShould these heroes come to woo thee, Wouldst thou leave thy home and country, Be the bride of him that pleases, Be his faithful life-companion?\n\n\"He that comes upon the waters, Sailing in a magic vessel, Having sailed the bay of Lempo, Is the good, old Wainamoinen; In his ship are countless treasures, Richest presents from Wainola.\n\n\"He that rides here in his snow-sledge In his sledge of magic beauty, With the cuckoos and the bluebirds, Is the blacksmith, Ilmarinen, Cometh hither empty-handed, Only brings some wisdom-sayings.\n\nWhen they come within the dwelling, Bring a bowl of honeyed viands, Bring a pitcher with two handles, Give to him that thou wouldst follow Give it to old Wainamoinen, Him that brings thee countless treasures, Costly presents in his vessel, Priceless gems from Kalevala.\" Spake the Northland's lovely daughter, This the language of the maiden \"Good, indeed, advice maternal, But I will not wed for riches, Wed no man for countless treasures; For his worth I'll choose a husband, For his youth and fine appearance, For his noble form and features; In the olden times the maidens Were not sold by anxious mothers To the suitors that they loved not."
+
+[annotations]
+concepts = []
+related_chunks = []

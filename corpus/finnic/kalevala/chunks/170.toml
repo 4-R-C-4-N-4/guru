@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.170"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXVIIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 282
+
+[content]
+body = "Thither archers never wander, There thy head cannot be severed; But an oath as strong as heaven, Thou must swear before thy mother; Thou wilt not for sixty summers Join in war or deadly combat, Even though thou wishest silver, Wishest gold and silver treasures.\" Spake the grateful Lemminkainen: \"I will swear an oath of honor, That I'll not in sixty summers Draw my sword in the arena, Test the warrior in battle; I have wounds upon my shoulders, On my breast two scars of broadsword, Of my former battles, relies, Relies of my last encounters, On the battle-fields of Northland, In the wars with men and heroes.\" Lemminkainen's mother answered: \"Go thou, take thy father's vessel, Go and bide thyself in safety, Travel far across nine oceans; In the tenth, sail to the centre, To the island, forest-covered, To the cliffs above the waters, Where thy father went before thee, Where he hid from his pursuers, In the times of summer conquests, In the darksome days of battle; Good the isle for thee to dwell in, Goodly place to live and linger; Hide one year, and then a second, In the third return in safety To thy mother's island dwelling, To thy father's ancient mansion, To my hero's place of resting.\""
+
+[annotations]
+concepts = []
+related_chunks = []

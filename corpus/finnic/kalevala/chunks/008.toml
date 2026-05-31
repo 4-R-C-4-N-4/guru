@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.008"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune IIe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 279
+
+[content]
+body = "Here a few days pass unnoted And as many nights fly over.\n\nWhen the seventh day had journeyed, On the morning of the eighth day, Wainamoinen, wise and ancient, Went to view his crop of barley, How his plowing, how his sowing, How his labors were resulting; Found his crop of barley growing, Found the blades were triple-knotted, And the ears he found six-sided.\n\nWainamoinen, old and trusty, Turned his face, and looked about him, Lo!\n\nthere comes a spring-time cuckoo, Spying out the slender birch-tree, Rests upon it, sweetly singing: \"Wherefore is the silver birch-tree Left unharmed of all the forest?\n\n\" Spake the ancient Wainamoinen: \"Therefore I have left the birch-tree, Left the birch-tree only growing, Home for thee for joyful singing.\n\nCall thou here, O sweet-voiced cuckoo, Sing thou here from throat of velvet, Sing thou here with voice of silver, Sing the cuckoo's golden flute-notes; Call at morning, call at evening, Call within the hour of noontide, For the better growth of forests, For the ripening of the barley, For the richness of, the Northland, For the joy of Kalevala.\""
+
+[annotations]
+concepts = []
+related_chunks = []

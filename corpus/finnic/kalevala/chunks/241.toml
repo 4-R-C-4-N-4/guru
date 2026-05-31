@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.241"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLIVd"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 128
+
+[content]
+body = "As he journeys through the forest, As he wanders through the woodlands, Pine and sorb-tree bid him welcome, Birch and willow bend obeisance, Beech and aspen bow submission; And the linden waves her branches To the measure of his playing, To the notes of the magician.\n\nAs the minstrel plays and wanders, Sings upon the mead and heather, Glen and hill his songs re-echo, Ferns and flowers laugh in pleasure, And the shrubs attune their voices To the music of the harp-strings, To the songs of Wainamoinen."
+
+[annotations]
+concepts = []
+related_chunks = []

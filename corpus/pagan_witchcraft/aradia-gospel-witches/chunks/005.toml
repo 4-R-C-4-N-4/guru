@@ -1,0 +1,15 @@
+[chunk]
+id = "pagan_witchcraft.aradia-gospel-witches.005"
+tradition = "pagan_witchcraft"
+text_name = "Aradia, or the Gospel of the Witches"
+section = "Page 2 (part 4)"
+translator = "Charles Godfrey Leland"
+source_url = "https://sacred-texts.com/pag/aradia/ara00.htm"
+token_count = 209
+
+[content]
+body = "So my friend the late M.\n\nDragomanoff told me how a certain man in Hungary, having learned that he had collected many spells (which were indeed subsequently published in folklore journals), stole into the scholar's room and surreptitiously copied them, so that the next year when Dragomanoff returned, he found the thief in full practice as a blooming magician.\n\nTruly he had not got many incantations, only a dozen or so, but a very little will go a great way in the business, and I venture to say there is perhaps hardly a single witch in Italy who knows as many as I have published, mine having been assiduously collected from many, far and wide.\n\nEverything of the kind which is written is, moreover, often destroyed with scrupulous care by priests or penitents, or the vast number who have a superstitious fear of even being in the same house with such documents, so that I regard the rescue of the Vangelo as something which is to say the least remarkable."
+
+[annotations]
+concepts = []
+related_chunks = []

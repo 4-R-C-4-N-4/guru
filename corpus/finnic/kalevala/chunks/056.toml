@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.056"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 389
+
+[content]
+body = "I have brought the best among them In my sledge to this thy cottage; Well I wrapped her in my fur-robes, Kept her warm enwrapped in bear-skin, Brought her to my mother's dwelling, As my faithful life-companion; Thus I paid the scornful maidens, Paid them well for their derision.\n\n\"Cherished mother of my being, I have found the long-sought jewel, I have won the Maid of Beauty.\n\nSpread our couch with finest linen, For our heads the softest pillows, On our table rarest viands, So that I may dwell in pleasure With my spouse, the bride of honor, With the pride of distant Sahri.\" This the answer of the mother: \"Be thou praised, O gracious Ukko, Loudly praised, O thou Creator, Since thou givest me a daughter, Ahti's bride, my second daughter, Who can stir the fire at evening, Who can weave me finest fabrics, Who can twirl the useful spindle, Who can rinse my silken ribbons, Who can full the richest garments.\n\n\"Son beloved, praise thy Maker, For the winning of this virgin, Pride and joy of distant Sahri Kind indeed is thy Creator, Wise the ever-knowing Ukko!\n\nPure the snow upon the mountains, Purer still thy Bride of Beauty; White the foam upon the ocean, Whiter still her virgin-spirit; Graceful on the lakes, the white-swan, Still more graceful, thy companion: Beautiful the stars in heaven, Still more beautiful, Kyllikki.\n\nLarger make our humble cottage, Wider build the doors and windows, Fashion thou the ceilings higher, Decorate the walls in beauty, Now that thou a bride hast taken From a tribe of higher station, Purest maiden of creation, From the meadow-lands of Sahri, From the upper shores of Northland.\""
+
+[annotations]
+concepts = []
+related_chunks = []

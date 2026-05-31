@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.034"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune VIIe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 292
+
+[content]
+body = "Forged the air a hollow cover; Nowhere see we hammer-traces, Nowhere find a single tongs-mark.\" Thus replied the hostess, Louhi: \"Him alone I'll give my daughter, Promise him my child in marriage, Who for me will forge the Sampo, Hammer me the lid in colors, From the tips of white-swan feathers, From the milk of greatest virtue, From a single grain of barley, From the finest wool of lambkins.\" Thereupon the hostess Louhi, Harnessed quick a dappled courser, Hitched him to her sledge of birch-wood, Placed within it Wainamoinen, Placed the hero on the cross-bench, Made him ready for his journey; Then addressed the ancient minstrel, These the words that Louhi uttered: \"Do not raise thine eyes to heaven, Look not upward on thy journey, While thy steed is fresh and frisky, While the day-star lights thy pathway, Ere the evening star has risen; If thine eyes be lifted upward, While the day-star lights thy pathway, Dire misfortune will befall thee, Some sad fate will overtake thee.\" Then the ancient Wainamoinen Fleetly drove upon his journey, Merrily he hastened homeward, Hastened homeward, happy-hearted From the ever-darksome Northland From the dismal Sariola."
+
+[annotations]
+concepts = []
+related_chunks = []

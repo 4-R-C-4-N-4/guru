@@ -1,0 +1,7 @@
+tradition = "shinto"
+text_id = "kojiki-beginning-heaven-earth"
+text_name = "The Kojiki: The Beginning of Heaven and Earth"
+translator = "Basil Hall Chamberlain"
+source_url = "https://sacred-texts.com/shi/kj/kj008.htm"
+sections_format = "section"
+chunk_count = 1

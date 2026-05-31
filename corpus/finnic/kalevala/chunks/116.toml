@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.116"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 549
+
+[content]
+body = "\"Osmotar, the beer-preparer, Kapo, brewer of the barley, Spake these words in saddened accents: 'Woe is me, my life hard-fated, Badly have I brewed the liquor, Have not brewed the beer in wisdom, Will not live within its vessels, Overflows and fills Pohyola!' \"From a tree-top sings the redbreast, From the aspen calls the robin: 'Do not grieve, thy beer is worthy, Put it into oaken vessels, Into strong and willing barrels Firmly bound with hoops of copper.' \"Thus was brewed the beer or Northland, At the hands of Osmo's daughter; This the origin of brewing Beer from Kalew-hops and barley; Great indeed the reputation Of the ancient beer of Kalew, Said to make the feeble hardy, Famed to dry the tears of women, Famed to cheer the broken-hearted, Make the aged young and supple, Make the timid brave and mighty, Make the brave men ever braver, Fill the heart with joy and gladness, Fill the mind with wisdom-sayings, Fill the tongue with ancient legends, Only makes the fool more foolish.\" When the hostess of Pohyola Heard how beer was first fermented, Heard the origin of brewing, Straightway did she fill with water Many oaken tubs and barrels; Filled but half the largest vessels, Mixed the barley with the water, Added also hops abundant; Well she mixed the triple forces In her tubs of oak and birch-wood, Heated stones for months succeeding, Thus to boil the magic mixture, Steeped it through the days of summer, Burned the wood of many forests, Emptied all the, springs of Pohya; Daily did the, forests lesson, And the wells gave up their waters, Thus to aid the hostess, Louhi, In the brewing of the liquors, From the water, hops, and barley, And from honey of the islands, For the wedding-feast of Northland, For Pohyola's great carousal And rejoicings at the marriage Of the Malden of the Rainbow To the blacksmith, Ilmarinen, Metal-worker of Wainola.\n\nSmoke is seen upon the island, Fire, upon the promontory, Black smoke rising to the heavens From the fire upon the island; Fills with clouds the half of Pohya, Fills Karelen's many hamlets; All the people look and wonder, This the chorus of the women: \"Whence are rising all these smoke-clouds, Why this dreadful fire in Northland?"
+
+[annotations]
+concepts = []
+related_chunks = []

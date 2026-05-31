@@ -1,0 +1,7 @@
+tradition = "celtic"
+text_id = "mabinogion"
+text_name = "The Mabinogion"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+sections_format = "tale"
+chunk_count = 192

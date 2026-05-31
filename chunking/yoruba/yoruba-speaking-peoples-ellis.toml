@@ -1,0 +1,23 @@
+# Ellis 1894: html_multi from sacred-texts.com. acquire writes one raw
+# file per fetched page (15 total: yor02..yor13 chapters I..IX,XIII..XV
+# with X-XII omitted in the archive, plus yor00/yor01 front-matter and
+# a couple of auto-detected adjacent pages). page-as-chunk: each chapter
+# file becomes one chunk, auto-sub-split at max_tokens on paragraph
+# boundaries. Front-matter pages will surface as additional chunks
+# unless apparatus-rejected downstream.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+section_label_format_no_number_match = "Page {n}"
+# Roman numeral after CHAPTER. Ellis chapter headings are "CHAPTER I.",
+# "CHAPTER II.", etc. Case-sensitive so back-matter index references
+# ("Chapter II") don't masquerade as chapter starts.
+number_source = "content"
+number_pattern = 'CHAPTER\s+([IVXLCDM]+)'
+max_tokens = 600
+
+[metadata]
+tradition = "yoruba"
+text_name = "The Yoruba-Speaking Peoples of the Slave Coast of West Africa"
+translator = "A.B. Ellis"
+sections_format = "chapter"

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.145"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXIVg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 21
+
+[content]
+body = "Mariatta—Wainamoinen's Departure EPILOGUE THE KALEVALA."
+
+[annotations]
+concepts = []
+related_chunks = []

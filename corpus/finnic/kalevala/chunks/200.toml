@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.200"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXIVc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 451
+
+[content]
+body = "I am hapless Kullerwoinen Whom the heroes of Untamo Carried to their distant country, When my height was but a hand-breadth.\" Quick the hopeful mother answers: \"O my worthy son, beloved, O my precious silver-buckle, Hast thou with thy mind of magic, Wandered through the fields of Northland Searching for thy home and kindred?\n\nAs one dead I long have mourned thee, Had supposed thee, in Manala.\n\nOnce I had two sons and heroes, Had two good and beauteous daughters, Two of these have long been absent, Elder son and elder daughter; For the wars my son departed, While my daughter strayed and perished If my son is home returning, Yet my daughter still is absent, Kullerwoinen asked his mother: \"Whither did my sister wander, What direction did she journey?\n\nThis the answer of the mother: \"This the story of thy sister: Went for berries to the woodlands, To the mountains went my daughter, Where the lovely maiden vanished, Where my pretty berry perished, Died some death beyond my knowledge, Nameless is the death she suffered.\n\nWho is mourning for the daughter?\n\nNo one mourns her as her mother, Walks and wanders, Mourns and searches, For her fairest child and daughter; Therefore did the mother wander, Searching for thy lovely sister, Like the bear she roamed the forest, Ran the glenways like the adder, Searched one day and then a second, Searched the third from morn till even, Till she reached the mountain-summit, There she called and called her daughter, Till the distant mountains answered, Called to her who had departed: I Where art thou, my lovely maiden, Come my daughter to thy mother!' \"Thus I called, and sought thy sister, This the answer of the mountains, Thus the hills and valleys echoed: 'Call no more, thou weeping mother, Weep no more for the departed; Nevermore in all thy lifetime, Never in the course of ages, Will she join again her kindred, At her brother's landing-places, In her father's humble dwelling.'\""
+
+[annotations]
+concepts = []
+related_chunks = []

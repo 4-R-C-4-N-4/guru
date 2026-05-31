@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.114"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXd"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 319
+
+[content]
+body = "Kapo, by the aid of magic, Rubbed her hands and knees together, And produced a magic marten, And the marten, golden-breasted; Thus instructed she her creature, Gave the marten these directions.\n\n'Thou, my golden-breasted marten, Thou my son of golden color, Haste thou whither I may send thee, To the bear-dens of the mountain, To the grottoes of the growler, Gather yeast upon thy fingers, Gather foam from lips of anger, From the lips of bears in battle, Bring it to the hands of Kapo, To the hands of Osmo's daughter.' \"Then the marten golden-breasted, Full consenting, hastened onward, Quickly bounding on his journey, Lightly leaping through the distance Leaping o'er the widest rivers, Leaping over rocky fissures, To the bear-dens of the mountain, To the grottoes of the growler, Where the wild-bears fight each other, Where they pass a dread existence, Iron rocks, their softest pillows, In the fastnesses of mountains; From their lips the foam was dripping, From their tongues the froth of anger; This the marten deftly gathered, Brought it to the maiden, Kapo, Laid it in her dainty fingers.\n\n\"Osmotar, the beer-preparer, Brewer of the beer of barley, Used the beer-foam as a ferment; But it brought no effervescence, Did not make the liquor sparkle."
+
+[annotations]
+concepts = []
+related_chunks = []

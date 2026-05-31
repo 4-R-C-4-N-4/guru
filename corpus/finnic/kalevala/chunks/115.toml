@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.115"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 703
+
+[content]
+body = "\"Osmotar, the beer-preparer, Thought again, and long debated: 'Who or what will bring the ferment, Th at my beer may not be lifeless?' \"Kalevatar, magic maiden, Grace and beauty in her fingers, Softly moving, lightly stepping, In her trimly-buckled sandals, Steps again upon the bottom, Turns one way and then another, In the centre of the caldron, Sees a pod upon the bottom, Lifts it in her snow-white fingers, Turns it o'er and o'er, and muses: 'What may come of this I know not, In the hands of magic maidens, In the hands of mystic Kapo, In the snowy virgin's fingers?' \"Kalevatar, sparkling maiden, Gave the pod to magic Kapo; Kapo, by the aid of magic, Rubbed the pod upon her knee-cap, And a honey-bee came flying From the pod within her fingers, Kapo thus addressed her birdling: 'Little bee with honeyed winglets, King of all the fragrant flowers, Fly thou whither I direct thee, To the islands in the ocean, To the water-cliffs and grottoes, Where asleep a maid has fallen, Girdled with a belt of copper By her side are honey-grasses, By her lips are fragrant flowers, Herbs and flowers honey-laden; Gather there the sweetened juices, Gather honey on thy winglets, From the calyces of flowers, From the tips of seven petals, Bring it to the hands of Kapo, To the hands of Osmo's daughter.' \"Then the bee, the swift-winged birdling, Flew away with lightning-swiftness On his journey to the islands, O'er the high waves of the ocean; Journeyed one day, then a second, Journeyed all the next day onward, Till the third day evening brought him To the islands in the ocean, To the water-cliffs and grottoes; Found the maiden sweetly sleeping, In her silver-tinselled raiment, Girdled with a belt of copper, In a nameless meadow, sleeping, In the honey-fields of magic; By her side were honeyed grasses, By her lips were fragrant flowers, Silver stalks with golden petals; Dipped its winglets in the honey, Dipped its fingers in the juices Of the sweetest of the flowers, Brought the honey back to Kapo, To the mystic maiden's fingers.\n\n\"Osmotar, the beer-preparer, Placed the honey in the liquor; Kapo mixed the beer and honey, And the wedding-beer fermented; Rose the live beer upward, upward, From the bottom of the vessels, Upward in the tubs of birch-wood, Foaming higher, higher, higher, Till it touched the oaken handles, Overflowing all the caldrons; To the ground it foamed and sparkled, Sank away in sand and gravel.\n\n\"Time had gone but little distance, Scarce a moment had passed over, Ere the heroes came in numbers To the foaming beer of Northland, Rushed to drink the sparkling liquor.\n\nEre all others Lemminkainen Drank, and grew intoxicated On the beer of Osmo's daughter, On the honey-drink of Kalew."
+
+[annotations]
+concepts = []
+related_chunks = []

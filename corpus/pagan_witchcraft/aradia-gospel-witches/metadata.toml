@@ -1,0 +1,7 @@
+tradition = "pagan_witchcraft"
+text_id = "aradia-gospel-witches"
+text_name = "Aradia, or the Gospel of the Witches"
+translator = "Charles Godfrey Leland"
+source_url = "https://sacred-texts.com/pag/aradia/ara00.htm"
+sections_format = "chapter"
+chunk_count = 76

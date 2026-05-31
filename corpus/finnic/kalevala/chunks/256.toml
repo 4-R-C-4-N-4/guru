@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.256"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLVIIIa"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 696
+
+[content]
+body = "OF THE FIRE-FISH.\n\nWainamoinen, the enchanter, The eternal wisdom-singer, Long reflected, well considered, How to weave the net of flax-yarn, Weave the fish-net of the fathers.\n\nSpake the minstrel of Wainola: \"Who will plow the field and fallow, Sow the flax, and spin the flax-threads, That I may prepare the fish-net, Wherewith I may catch the Fire-pike, May secure the thing of evil?\" Soon they found a fertile island, Found the fallow soil befitting, On the border of the heather, And between two stately oak-trees.\n\nThey prepared the soil for sowing.\n\nSearching everywhere for flax-seed, Found it in Tuoni's kingdom, In the keeping of an insect.\n\nThen they found a pile of ashes, Where the fire had burned a vessel; In the ashes sowed the seedlings Near the Alue-lake and border, In the rich and loamy fallow.\n\nThere the seed took root and flourished, Quickly grew to great proportions, In a single night in summer.\n\nThus the flax was sowed at evening, Placed within the earth by moonlight; Quick it grew, and quickly ripened, Quick Wainola's heroes pulled it, Quick they broke it on the hackles, Hastened with it to the waters, Dipped it in the lake and washed it; Quickly brought it borne and dried it.\n\nQuickly broke, and combed, and smoothed it, Brushed it well at early morning, Laid it into laps for spinning Quick the maidens twirl the spindles, Spin the flaxen threads for weaving, In a single night in summer.\n\nQuick the sisters wind and reel it, Make it ready for the needle.\n\nBrothers weave it into fish-nets, And the fathers twist the cordage, While the mothers knit the meshes, Rapidly the mesh-stick circles; Soon the fish-net is completed, In a single night in summer.\n\nAs the magic net is finished, And in length a hundred fathoms, On the rim three hundred fathoms.\n\nRounded stones are fastened to it, Joined thereto are seven float-boards.\n\nNow the young men take the fish-net, And the old men cheer them onward, Wish them good-luck at their fishing.\n\nLong they row and drag the flax-seine, Here and there the net is lowered; Now they drag it lengthwise, sidewise, Drag it through the slimy reed-beds; But they do not catch the Fire-pike, Only smelts, and luckless red-fish, Little fish of little value.\n\nSpake the ancient Wainamoinen: \"O thou blacksmith, Ilmarinen, Let us go ourselves a-fishing, Let us catch the fish of evil!\" To the fishing went the brothers, Magic heroes of the Northland, Pulled the fish-net through the waters, Toward an island in the deep-sea Then they turn and drag the fish-net Toward a meadow jutting seaward; Now they drag it toward Wainola, Draw it lengthwise, sidewise, crosswise, Catching fish of every species, salmon, trout, and pike, and whiting, Do not catch the evil Fire-fish."
+
+[annotations]
+concepts = []
+related_chunks = []

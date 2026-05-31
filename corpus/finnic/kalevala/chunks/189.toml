@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.189"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXIIb"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 598
+
+[content]
+body = "\"Summer-daughter, charming maiden, Southern mother of the woodlands, Spread abroad thy robes of safety, Spread thine apron o'er the forest, Let it cover all my cattle, And protect the unprotected, That no evil winds may harm them, May not suffer from the storm-clouds.\n\nGuard my flocks from every danger, Keep them from the hands of wild-beasts, From the swamps with sinking pathways, From the springs that bubble trouble, From the swiftly running waters, From the bottom of the whirlpool, That they may not find misfortune, May not wander to destruction, In the marshes sink and perish, Though against God's best intentions, Though against the will of Ukko.\n\n\"From a distance bring a bugle, Bring a shepherd's horn from heaven, Bring the honey-flute of Ukko, Play the music of creation, Blow the pipes of the magician, Play the flowers on the highlands, Charm the hills, and dales, and mount Charm the borders of the forest, Fill the forest-trees with honey, Fill with spice the fountain-borders.\n\n\"For my herds give food and shelter, Feed them all on honeyed pastures, Give them drink at honeyed fountains Feed them on thy golden grasses, On the leaves of silver saplings, From the springs of life and beauty, From the crystal-waters flowing, From the waterfalls of Rutya, From the uplands green and golden, From the glens enriched in silver.\n\nDig thou also golden fountains On the four sides of the willow, That the cows may drink in sweetness, And their udders swell with honey, That their milk may flow in streamlets; Let the milk be caught in vessels, Let the cow's gift be not wasted, Be not given to Manala.\n\n\"Many are the sons of evil, That to Mana take their milkings, Give their milk to evil-doers, Waste it in Tuoni's empire; Few there are, and they the worthy, That can get the milk from Mana; Never did my ancient mother Ask for counsel in the village, Never in the courts for wisdom; She obtained her milk from Mana, Took the sour-milk from the dealers, Sweet-milk from the greater distance, From the kingdom of Manala, From Tuoni's fields and pastures; Brought it in the dusk of evening, Through the by-ways in the darkness, That the wicked should not know it, That it should not find destruction.\n\n\"This the language of my mother, And these words I also echo: Whither does the cow's gift wander, Whither has the milk departed?\n\nHas it gone to feed the strangers, Banished to the distant village, Gone to feed the hamlet-lover, Or perchance to feed the forest, Disappeared within the woodlands, Scattered o'er the hills and mountains, Mingled with the lakes and rivers?"
+
+[annotations]
+concepts = []
+related_chunks = []

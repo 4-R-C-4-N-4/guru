@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.211"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXVIIc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 240
+
+[content]
+body = "I have brought her as companion To thy life in years declining, As a joy and consolation, When thy days are full of trouble!\" Spake the good, old Wainamoinen: \"Magic brother, wonder-forger, Throw the virgin to the furnace, To the flames, thy golden image, Forge from her a thousand trinkets.\n\nTake the image into Ehstland, Take her to the plains of Pohya, That for her the mighty powers May engage in deadly contest, Worthy trophy for the victor; Not for me this bride of wonder, Neither for my worthy people.\n\nI shall never wed an image Born from many magic metals, Never wed a silver maiden, Never wed a golden virgin.\" Then the hero of the waters Called together all his people, Spake these words of ancient wisdom: \"Every child of Northland, listen, Whether poor, or fortune-favored: Never bow before an image Born of molten gold and silver: Never while the sunlight brightens, Never while the moonlight glimmers, Choose a maiden of the metals, Choose a bride from gold created Cold the lips of golden maiden, Silver breathes the breath of sorrow.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.137"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale PWYLL PRINCE OF DYVEDn"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 349
+
+[content]
+body = "So the boy was given to Pendaran Dyved, and the nobles of the land were sent with him.\n\nAnd Teirnyon Twryv Vliant, and his companions, set out for his country, and his possessions, with love and gladness.\n\nAnd he went not without being offered the fairest jewels and the fairest horses, and the choicest dogs; but he would take none of them.\n\nThereupon they all remained in their own dominions.\n\nAnd Pryderi, the son of Pwyll the Chief of Annwvyn, was brought up carefully as was fit, so that he became the fairest youth, and the most comely, and the best skilled in all good games, of any in the kingdom.\n\nAnd thus passed years and years, until the end of Pwyll the Chief of Annwvyn’s life came, and he died.\n\nAnd Pryderi ruled the seven Cantrevs of Dyved prosperously, and he was beloved by his people, and by all around him.\n\nAnd at length he added unto them the three Cantrevs of Ystrad Tywi, and the four Cantrevs of Cardigan; and these were called the Seven Cantrevs of Seissyllwch.\n\nAnd when he made this addition, Pryderi the son of Pwyll the Chief of Annwvyn desired to take a wife.\n\nAnd the wife he chose was Kicva, the daughter of Gwynn Gohoyw, the son of Gloyw Wallt Lydan, the son of Prince Casnar, one of the nobles of this Island.\n\nAnd thus ends this portion of the Mabinogion."
+
+[annotations]
+concepts = []
+related_chunks = []

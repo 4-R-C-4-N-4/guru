@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.076"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 595
+
+[content]
+body = "Paths arise and come to meet her, And she questions thus the pathways: \"Paths of hope that God has fashioned, Have ye seen my Lemminkainen, Has my son and golden hero Travelled through thy many kingdoms?\" Sad, the many pathways answer: \"We ourselves have cares sufficient, Cannot watch thy son and hero, Wretched are the lives of pathways, Deep indeed our own misfortunes; We are trodden by, the red-deer, By the wolves, and bears, and roebucks, Driven o'er by heavy cart-wheels, By the feet of dogs are trodden, Trodden under foot of heroes, Foot-paths for contending armies.\" Seeks again the frantic mother, Seeks her long-lost son and hero, Seeks, and seeks, and does not find him; Finds the Moon within her orbit, Asks the Moon in pleading measures: \"Golden Moon, whom God has stationed In the heavens, the Sun's companion, Hast thou seen my Kaukomieli, Hast thou seen my silver apple, Anywhere in thy dominions?\n\n\" Thus the golden Moon makes answer: \"I have trouble all-sufficient, Cannot watch thy daring hero; Long the journey I must travel, Sad the fate to me befallen, Pitiful mine own misfortunes, All alone the nights to wander, Shine alone without a respite, In the winter ever watching, In the summer sink and perish.\" Still the mother seeks, and wanders, Seeks, and does not find her hero, Sees the Sun in the horizon, And the mother thus entreats him: Silver Sun, whom God has fashioned, Thou that giveth warmth and comfort, Hast thou lately seen my hero, Hast thou seen my Lemminkainen, Wandering in thy dominions?\" Thus the Sun in kindness answers: \"Surely has thy hero perished, To ingratitude a victim; Lemminkainen died and vanished In Tuoni's fatal river, In the waters of Manala, In the sacred stream and whirlpool, In the cataract and rapids, Sank within the drowning current To the realm of Tuonela, To Manala's lower regions.\" Lemminkainen's mother weeping, Wailing in the deeps of anguish, Mourns the fate of Kaukomieli, Hastens to the Northland smithy, To the forge of Ilmarinen, These the words the mother utters: \"Ilmarinen, metal-artist, Thou that long ago wert forging, Forging earth a concave cover, Yesterday wert forging wonders, Forge thou now, immortal blacksmith, Forge a rake with shaft of copper, Forge the teeth of strongest metal, Teeth in length a hundred fathoms, And five hundred long the handle.\" Ilmarinen does as bidden, Makes the rake in full perfection."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.177"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXIXg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 437
+
+[content]
+body = "Lemminkainen loud rejoices, Cries in tones of joyful greetings, These the words that Ahti utters: \"Faithful mother, well-beloved, Thou that gavest me existence, Happy I, that thou art living, That thou hast not yet departed To the kingdom of Tuoni, To the islands of the blessed, I had thought that thou hadst perished, Hadst been murdered by my foemen, Hadst been slain with bows and arrows.\n\nHeavy are mine eyes from weeping, And my checks are white with sorrow, Since I thought my mother slaughtered For the sins I had committed!\" Lemminkainen's mother answered: \"Long, indeed, hast thou been absent, Long, my son, hast thou been living In thy father's Isle of Refuge, Roaming on the secret island, Living at the doors of strangers, Living in a nameless country, Refuge from the Northland foemen.\" Spake the hero, Lemminkainen: \"Charming is that spot for living, Beautiful the magic island, Rainbow-colored was the forest, Blue the glimmer of the meadows, Silvered were, the pine-tree branches, Golden were the heather-blossoms; All the woodlands dripped with honey, Eggs in every rock and crevice, Honey flowed from birch and sorb-tree, Milk in streams from fir and aspen, Beer-foam dripping from the willows, Charming there to live and linger, All their edibles delicious.\n\nThis their only source of trouble: Great the fear for all the maidens, All the heroes filled with envy, Feared the coming of the stranger; Thought that all the island-maidens, Thought that all the wives and daughters, All the good, and all the evil, Gave thy son too much attention; Thought the stranger, Lemminkainen, Saw the Island-maids too often; Yet the virgins I avoided, Shunned the good and shunned the evil, Shunned the host of charming daughters, As the black-wolf shuns the sheep-fold, As the hawk neglects the chickens.\""
+
+[annotations]
+concepts = []
+related_chunks = []

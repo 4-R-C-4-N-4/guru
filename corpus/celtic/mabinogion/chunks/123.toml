@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.123"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale THE DREAM OF RHONABWYk"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 199
+
+[content]
+body = "“Rhonabwy,” said Iddawc, “would it not be wrong to forbid a youth who can give counsel so liberal as this from coming to the councils of his Lord?” Then Kai arose, and he said, “Whosoever will follow Arthur, let him be with him to-night in Cornwall, and whosoever will not, let him be opposed to Arthur even during the truce.” And through the greatness of the tumult that ensued, Rhonabwy awoke.\n\nAnd when he awoke he was upon the yellow calf-skin, having slept three nights and three days.\n\nAnd this tale is called the Dream of Rhonabwy.\n\nAnd this is the reason that no one knows the dream without a book, neither bard nor gifted seer; because of the various colours that were upon the horses, and the many wondrous colours of the arms and of the panoply, and of the precious scarfs, and of the virtue-bearing stones."
+
+[annotations]
+concepts = []
+related_chunks = []

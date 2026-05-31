@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.023"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale THE LADY OF THE FOUNTAIN"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 1
+
+[content]
+body = "."
+
+[annotations]
+concepts = []
+related_chunks = []

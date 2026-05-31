@@ -1,0 +1,15 @@
+[chunk]
+id = "pagan_witchcraft.aradia-gospel-witches.049"
+tradition = "pagan_witchcraft"
+text_name = "Aradia, or the Gospel of the Witches"
+section = "Chapter XIII (part 4)"
+translator = "Charles Godfrey Leland"
+source_url = "https://sacred-texts.com/pag/aradia/ara00.htm"
+token_count = 132
+
+[content]
+body = "And it may here be observed in sorrow, yet in very truth, that in a very great number of modern poetical handlings of classic mythic subjects, the writers have, despite all their genius as artists, produced rococo work which will appear to be such to an other generation, simply from their having missed the point, or omitted from ignorance something vital which the folk-lorist would probably not have lost.\n\nAchilles may be admirably drawn, as I have seen him, in a Louis XIV.\n\nwig with a Turkish scimitar, but still one could wish that the designer had been a little more familiar with Greek garments and weapons."
+
+[annotations]
+concepts = []
+related_chunks = []

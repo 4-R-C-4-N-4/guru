@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.104"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIIIi"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 509
+
+[content]
+body = "I shall choose without his treasures Ilmarinen for his wisdom, For his worth and good behavior, Him that forged the wondrous Sampo, Hammered thee the lid in colors.\" Spake the hostess of Pohyola: \"Senseless daughter, child of folly, Thus to choose the ancient blacksmith, From whose brow drips perspiration, Evermore to rinse his linen, Lave his hands, and eyes, and forehead, Keep his ancient house in order; Little use his wit and wisdom When compared with gold and silver.\" This the answer of the daughter: \"I will never, never, never, Wed the ancient Wainamoinen With his gold and priceless jewels; Never will I be a helpmate To a hero in his dotage, Little thanks my compensation.\" Wainamoinen, safely landing In advance of Ilmarinen, Pulls his gaily-covered vessel From the waves upon the sea-beach, On the cylinders of birch-wood, On the rollers copper-banded, Straightway hastens to the guest-room Of the hostess of Pohyola, Of the master of the Northland, Speaks these words upon the threshold To the famous Maid of Beauty: \"Come with me, thou lovely virgin, Be my bride and life-companion, Share with me my joys and sorrows, Be my honored wife hereafter!\" This the answer of the maiden: \"Hast thou built for me the vessel, Built for me the ship of magic From the fragments of the distaff, From the splinters of the spindle?\" Wainamoinen thus replying: \"I have built the promised vessel, Built the wondrous ship for sailing, Firmly joined the parts by magic; It will weather roughest billows, Will outlive the winds and waters, Swiftly glide upon the blue-back Of the deep and boundless ocean It will ride the waves in beauty, Like an airy bubble rising, Like a cork on lake and river, Through the angry seas of Northland, Through Pohyola's peaceful waters.\" Northland's fair and slender daughter Gives this answer to her suitor: \"Will not wed a sea-born hero, Do not care to rock the billows, Cannot live with such a husband Storms would bring us pain and trouble, Winds would rack our hearts and temples; Therefore thee I cannot follow, Cannot keep thy home in order, Cannot be thy life-companion, Cannot wed old Wainamoinen.\""
+
+[annotations]
+concepts = []
+related_chunks = []

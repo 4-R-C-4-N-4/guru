@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.044"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune IXg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 77
+
+[content]
+body = "O, ye people of Wainola, People of this generation, And the folk of future ages, Fashion not in emulation, River boat, nor ocean shallop, Boasting of its fine appearance, God alone can work completion, Give to cause its perfect ending, Never hand of man can find it, Never can the hero give it, Ukko is the only Master.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.245"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLVIa"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 630
+
+[content]
+body = "THE HONEY-EATER.\n\nCame the tidings to Pohyola, To the village of the Northland, That Wainola had recovered From her troubles and misfortunes, From her sicknesses and sorrows.\n\nLouhi, hostess of the Northland, Toothless dame of Sariola, Envy-laden, spake these measures: \"Know I other means of trouble, I have many more resources; I will drive the bear before me, From the heather and the mountain, Drive him from the fen and forest, Drive great Otso from the glen-wood On the cattle of Wainola, On the flocks of Kalevala.\" Thereupon the Northland hostess Drove the hungry bear of Pohya From his cavern to the meadows, To Wainola's plains and pastures.\n\nWainamoinen, ancient minstrel, To his brother spake as follows: \"O thou blacksmith, Ilmarinen, Forge a spear from magic metals, Forge a lancet triple-pointed, Forge the handle out of copper, That I may destroy great Otso, Slay the mighty bear of Northland, That he may not eat my horses, Nor destroy my herds of cattle, Nor the flocks upon my pastures.\" Thereupon the skillful blacksmith Forged a spear from magic metals, Forged a lancet triple-pointed, Not the longest, nor the shortest, Forged the spear in wondrous beauty.\n\nOn one side a bear was sitting, Sat a wolf upon the other, On the blade an elk lay sleeping, On the shaft a colt was running, Near the hilt a roebuck bounding.\n\nSnows had fallen from the heavens, Made the flocks as white as ermine Or the hare, in days of winter, And the minstrel sang these measures: \"My desire impels me onward To the Metsola-dominions, To the homes of forest-maidens, To the courts of the white virgins; I will hasten to the forest, Labor with the woodland-forces.\n\n\"Ruler of the Tapio-forests, Make of me a conquering hero, Help me clear these boundless woodlands.\n\nO Mielikki, forest-hostess, Tapio's wife, thou fair Tellervo, Call thy dogs and well enchain them, Set in readiness thy hunters, Let them wait within their kennels.\n\n\"Otso, thou O Forest-apple, Bear of honey-paws and fur-robes, Learn that Wainamoinen follows, That the singer comes to meet thee; Hide thy claws within thy mittens, Let thy teeth remain in darkness, That they may not harm the minstrel, May be powerless in battle.\n\nMighty Otso, much beloved, Honey-eater of the mountains, Settle on the rocks in slumber, On the turf and in thy caverns; Let the aspen wave above thee, Let the merry birch-tree rustle O'er thy head for thy protection."
+
+[annotations]
+concepts = []
+related_chunks = []

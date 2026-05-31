@@ -1,0 +1,7 @@
+tradition = "finnic"
+text_id = "kalevala"
+text_name = "The Kalevala"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+sections_format = "rune"
+chunk_count = 275

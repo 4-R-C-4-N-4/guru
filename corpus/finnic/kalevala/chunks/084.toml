@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.084"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIb"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 616
+
+[content]
+body = "Soon he fells the tree majestic, Fells the mighty forest-monarch, With his magic axe and power.\n\nFrom the stems he lops the branches, Splits the trunk in many pieces, Fashions lumber for the bottom, Countless boards, and ribs, and braces, For the singer's magic vessel, For the boat of the magician.\n\nWainamoinen, old and skilful, The eternal wonder-worker, Builds his vessel with enchantment, Builds his boat by art of magic, From the timber of the oak-tree, From its posts, and planks, and flooring.\n\nSings a song, and joins the frame-work; Sings a second, sets the siding; Sings a third time, sets the row-locks; Fashions oars, and ribs, and rudder, Joins the sides and ribs together.\n\nWhen the ribs were firmly fastened, When the sides were tightly jointed, Then alas!\n\nthree words were wanting, Lost the words of master-magic, How to fasten in the ledges, How the stern should be completed, How complete the boat's forecastle.\n\nThen the ancient Wainamoinen, Wise and wonderful enchanter, Heavy-hearted spake as follows: \"Woe is me, my life hard-fated!\n\nNever will this magic vessel Pass in safety o'er the water, Never ride the rough sea-billows.\" Then he thought and long considered, Where to find these words of magic, Find the lost-words of the Master: \"From the brains of countless swallows, From the heads of swans in dying, From the plumage of the gray-duck?\" For these words the hero searches, Kills of swans a goodly number, Kills a flock of fattened gray-duck, Kills of swallows countless numbers, Cannot find the words of magic, Not the lost-words of the Master.\n\nWainamoinen, wisdom-singer, Still reflected and debated: \"I perchance may find the lost-words On the tongue of summer-reindeer, In the mouth of the white squirrel.\" Now again he hunts the lost-words, Hastes to find the magic sayings, Kills a countless host of reindeer, Kills a rafterful of squirrels, Finds of words a goodly number, But they are of little value, Cannot find the magic lost-word.\n\nLong he thought and well considered: \"I can find of words a hundred In the dwellings of Tuoni, In the Manala fields and castles.\" Wainamoinen quickly journeys To the kingdom of Tuoni, There to find the ancient wisdom, There to learn the secret doctrine; Hastens on through fen and forest, Over meads and over marshes, Through the ever-rising woodlands, Journeys one week through the brambles, And a second through the hazels, Through the junipers the third week, When appear Tuoni's islands, And the Manala fields and castles."
+
+[annotations]
+concepts = []
+related_chunks = []

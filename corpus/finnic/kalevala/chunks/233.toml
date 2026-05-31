@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.233"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLIIf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 354
+
+[content]
+body = "Winds and storms have I encountered, Wretched days of toil and trouble, I have witnessed in the Northland; Never have I met such dangers On the land, nor on the ocean, Never in my hero life-time!\" Then the ancient Wainamoinen Spake and these the words he uttered: \"Weep no more, my goodly comrades, In my bark let no one murmur; Weeping cannot mend disaster, Tears can never still misfortune, Mourning cannot save from evil.\n\n\"Sea, command thy warring forces, Bid thy children cease their fury!\n\nAhto, still thy surging billows!\n\nSink, Wellamo, to thy slumber, That our boat may move in safety.\n\nRise, ye storm-winds, to your kingdoms, Lift your heads above the waters, To the regions of your kindred, To your people and dominions; Cut the trees within the forest, Bend the lindens of the valley, Let our vessel sail in safety!\" Then the reckless Lemminkainen, Handsome wizard, Kaukomieli, Spake these words in supplication: \"Come, O eagle, Turyalander, Bring three feathers from thy pinions, Three, O raven, three, O eagle, To protect this bark from evil!\" All the heroes of Wainola Call their forces to the rescue, And repair the sinking vessel.\n\nBy the aid of master-magic, Wainamoinen saved his war-ship, Saved his people from destruction, Well repaired his ship to battle With the roughest seas of Northland; Steers his mighty boat in safety Through the perils of the whirlpool, Through the watery deeps and dangers."
+
+[annotations]
+concepts = []
+related_chunks = []

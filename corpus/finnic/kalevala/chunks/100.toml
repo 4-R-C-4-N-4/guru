@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.100"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIIIe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 706
+
+[content]
+body = "These the words of Ilmarinen: \"Fair Annikki, lovely sister, Bring me now my silken raiment, Bring my best and richest vesture, Bring me now my softest linen, That my wooing prove successful.\" Straightway did the helpful sister Bring the finest of his raiment, Bring the softest of his linen, Raiment fashioned by his mother; Brought to him his silken stockings, Brought him shoes of marten-leather, Brought a vest of sky-blue color, Brought him scarlet-colored trousers, Brought a coat with scarlet trimming, Brought a red shawl trimmed in ermine Fourfold wrapped about his body; Brought a fur-coat made of seal-skin, Fastened with a thousand bottons, And adorned with countless jewels; Brought for him his magic girdle, Fastened well with golden buckles, That his artist-mother fashioned; Brought him gloves with golden wristlets, That the Laplanders had woven For a head of many ringlets; Brought the finest cap in Northland, That his ancient father purchased When he first began his wooing.\n\nIlmarinen, blacksmith-artist, Clad himself to look his finest, When he thus addressed a servant: \"Hitch for me a fleet-foot racer, Hitch him to my willing snow-sledge, For I start upon a journey To the distant shores of Pohya, To the dismal Sariola.\" Spake the servant thus in answer: \"Thou hast seven fleet-foot racers, Munching grain within their mangers, Which of these shall I make ready?\" Spake the blacksmith, Ilmarinen: \"Take the fleetest of my coursers, Put the gray steed in the harness, Hitch him to my sledge of magic; Place six cuckoos on the break-board, Seven bluebirds on the cross-bars, Thus to charm the Northland maidens, Thus to make them look and listen, As the cuckoos call and echo.\n\nBring me too my largest bear-skin, Fold it warm about the cross-bench; Bring me then my marten fur-robes, As a cover and protection.\" Straightway then the trusty servant Of the blacksmith, Ilmarinen, Put the gray steed in the harness, Hitched the racer to the snow-sledge, Placed six cuckoos on the break-board, Seven bluebirds on the cross-bars, On the front to sing and twitter; Then he brought the largest bear-skin, Folded it upon the cross-bench; Brought the finest robes of marten, Warm protection for the master.\n\nIlmarinen, forger-artist, The eternal metal-worker, Earnestly entreated Ukko: \"Send thy snow-flakes, Ukko, father, Let them gently fall from heaven, Let them cover all the heather, Let them hide the berry-bushes, That my sledge may glide in freedom O'er the hills to Sariola!\" Ukko sent the snow from heaven, Gently dropped the crystal snow-flakes, Lending thus his kind assistance To the hero, Ilmarinen, On his journey to the Northland.\n\nReins in hand, the ancient artist Seats him in his metal snow-sledge, And beseeches thus his Master: \"Good luck to my reins and traces, Good luck to my shafts and runners!"
+
+[annotations]
+concepts = []
+related_chunks = []

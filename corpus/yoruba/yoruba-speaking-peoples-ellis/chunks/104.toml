@@ -1,0 +1,15 @@
+[chunk]
+id = "yoruba.yoruba-speaking-peoples-ellis.104"
+tradition = "yoruba"
+text_name = "The Yoruba-Speaking Peoples of the Slave Coast of West Africa"
+section = "Chapter IX (part 8)"
+translator = "A.B. Ellis"
+source_url = "https://sacred-texts.com/afr/yor/yor01.htm"
+token_count = 36
+
+[content]
+body = "{Chapter X, Systems of Government, omitted} {Chapter XI, Laws and Customs, omitted} {Chapter XII, Language, omitted} Next: Chapter XIII: Proverbs."
+
+[annotations]
+concepts = []
+related_chunks = []

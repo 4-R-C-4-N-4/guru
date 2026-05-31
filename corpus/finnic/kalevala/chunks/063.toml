@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.063"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIIg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 213
+
+[content]
+body = "Thou didst, in thy better life-time, When a shepherd filled with malice, Ruin all thy mother's berries, Make thy sister, too unworthy, Ruin all thy brother's cattle, Drive to death thy father's stallions, Through the marshes, o'er the meadows, Through the lowlands, o'er the mountains, Heeding not thy mother's counsel.\" Thereupon the wretched Nasshut, Angry grew and swore for vengeance, Straightway limping through the door-way, Hobbled on beyond the court-yard, O'er the meadow-lands and pastures, To the river of the death-land, To the holy stream and whirlpool, To the kingdom of Tuoni, To the islands of Manala; Waited there for Kaukomieli, Listened long for Lemminkainen, Thinking he must pass this river On his journey to his country, On.\n\nthe highway to the islands, From the upper shores of Pohya, From the dreary Sariola."
+
+[annotations]
+concepts = []
+related_chunks = []

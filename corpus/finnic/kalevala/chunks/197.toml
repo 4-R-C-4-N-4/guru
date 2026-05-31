@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.197"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXIIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 124
+
+[content]
+body = "Do not slay thy magic servant, Slay the wife of Ilmarinen, Kill in her the worst of women, In these hurdles let her perish, Lest she wander hence in freedom, To perform some other mischief, Do some greater deed of malice!\" Quick as lightning fell the hostess, Quick the wife of Ilmarinen Fell and perished in the hurdles, On the ground before her cottage Thus the death of Northland's hostess, Cherished wife of Ilmarinen, Once the Maiden of the Rainbow, Wooed and watched for many summers, Pride and joy of Kalevala!"
+
+[annotations]
+concepts = []
+related_chunks = []

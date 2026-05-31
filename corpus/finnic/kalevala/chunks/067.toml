@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.067"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 191
+
+[content]
+body = "With his might he plunges forward; At the instep breaks his snow-shoe, Breaks the runners into fragments, On the mountings breaks his javelins, In the centre breaks his snow-staff, And the moose bounds on before him, Through the Hisi-woods and snow-fields, Out of reach of Lemminkainen.\n\nThen the reckless Kaukomieli Looked with bended head, ill-humored, One by one upon the fragments, Speaking words of ancient wisdom: \"Northland hunters, never, never, Go defiant to thy forests, In the Hisi vales and mountains, There to hunt the moose of Juutas, Like this senseless, reckless hero; I have wrecked my magic snow-shoes, Ruined too my useful snow-staff, And my javelins I have broken, While the wild-moose runs in safety Through the Hisi fields and forests.\""
+
+[annotations]
+concepts = []
+related_chunks = []

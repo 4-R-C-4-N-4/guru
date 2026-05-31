@@ -1,0 +1,15 @@
+[chunk]
+id = "pagan_witchcraft.aradia-gospel-witches.076"
+tradition = "pagan_witchcraft"
+text_name = "Aradia, or the Gospel of the Witches"
+section = "Page 24"
+translator = "Charles Godfrey Leland"
+source_url = "https://sacred-texts.com/pag/aradia/ara00.htm"
+token_count = 35
+
+[content]
+body = "This file has been moved. Its index will be displayed shortly. If it does not, you can click below to load it. Click here to go to the new location."
+
+[annotations]
+concepts = []
+related_chunks = []

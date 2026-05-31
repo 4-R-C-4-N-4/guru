@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.121"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXIc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 683
+
+[content]
+body = "\"Come, ye maidens that should serve me, Come, ye fellows from the village, Bring me fire upon the birch-bark, Light the fagots of the fir-tree, That I may behold the bridegroom, Chosen suitor of my daughter, Fairy Maiden of the Rainbow, See the color of his eyeballs, Whether they are blue or sable, See if they are warm and faithful.\" Quick the young lads from the village Brought the fire upon the birch-bark, Brought it on the tips of pine-wood; And the fire and smoke commingled Roll and roar about the hero, Blackening the suitor's visage, And the hostess speaks as follows; \"Bring the fire upon a taper, On the waxen tapers bring it!\" Then the maidens did as bidden, Quickly brought the lighted tapers, Made the suitor's eyeballs glisten, Made his cheeks look fresh and ruddy; Made his eyes of sable color Sparkle like the foam of waters, Like the reed-grass on the margin, Colored as the ocean jewels, Iridescent as the rainbow.\n\n\"Come, ye fellows of the hamlet, Lead my son-in-law and hero To the highest seat at table, To the seat of greatest honor, With his back upon the blue-wall, Looking on my bounteous tables, Facing all the guests of Northland.\" Then the hostess of Pohyola Served her guests in great abundance, Richest drinks and rarest viands, First of all she, served the bridegroom On his platters, honeyed biscuit, And the sweetest river salmon, Seasoned butter, roasted bacon, All the dainties of Pohyola.\n\nThen the helpers served the others, Filled the plates of all invited With the varied food of Northland.\n\nSpake the hostess of Pohyola: \"Come, ye maidens from the village, Hither bring the beer in pitchers, In the urns with double handles, To the many guests in-gathered, Ere all others, serve the bridegroom.\" Thereupon the merry maidens Brought the beer in silver pitchers From the copper-banded vessels, For the wedding-guests assembled; And the beer, fermenting, sparkled On the beard of Ilmarinen, On the beards of many heroes.\n\nWhen the guests had all partaken Of the wondrous beer of barley, Spake the beer in merry accents Through the tongues of the magicians, Through the tongue of many a hero, Through the tongue of Wainamoinen, Famed to be the sweetest singer Of the Northland bards and minstrels, These the words of the enchanter: \"O thou beer of honeyed flavor, Let us not imbibe in silence, Let some hero sing thy praises, Sing thy worth in golden measures; Let the hostess start the singing, Let the bridegroom sound thy virtues!\n\nHave our songs thus quickly vanished, Have our joyful tongues grown silent?\n\nEvil then has been the brewing, Then the beer must be unworthy, That it does not cheer the singer, Does not move the merry minstrel, That the golden guests are joyless, And the cuckoo is not singing."
+
+[annotations]
+concepts = []
+related_chunks = []

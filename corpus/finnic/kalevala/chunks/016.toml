@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.016"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune IIIh"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 228
+
+[content]
+body = "for waning beauty, Childhood vanished, youth departed, Silver sunshine, golden moonlight, Hope and pleasure of my childhood, Taken from me now forever, And so soon to be forgotten At the tool-bench of my brother, At the window of my sister, In the cottage of my father.\" Spake again the gray-haired mother To her wailing daughter Aino: \"Cease thy sorrow, foolish maiden, By thy tears thou art ungrateful, Reason none for thy repining, Not the slightest cause for weeping; Everywhere the silver sunshine Falls as bright on other households; Not alone the moonlight glimmers Through thy father's open windows, On the work-bench of thy brother; Flowers bloom in every meadow, Berries grow on every mountain; Thou canst go thyself and find them, All the day long go and find them; Not alone thy brother's meadows Grow the beauteous vines and flowers; Not alone thy father's mountains Yield the ripe, nutritious berries; Flowers bloom in other meadows, Berries grow on other mountains, There as here, my lovely Aino.\""
+
+[annotations]
+concepts = []
+related_chunks = []

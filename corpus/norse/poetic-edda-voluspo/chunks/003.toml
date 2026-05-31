@@ -1,0 +1,15 @@
+[chunk]
+id = "norse.poetic-edda-voluspo.003"
+tradition = "norse"
+text_name = "The Poetic Edda: Voluspo"
+section = "Section 1c"
+translator = "Henry Adams Bellows"
+source_url = "https://sacred-texts.com/neu/poe/poe03.htm"
+token_count = 768
+
+[content]
+body = "stanza 47 and note), of the dark elves (Svartalfaheim), of the dead (Niflheim), and presumably of the dwarfs (perhaps Nithavellir, cf.\n\nstanza 37 and note, but the ninth world is uncertain).\n\nThe tree: the world-ash Yggdrasil, [fp.\n\n4] symbolizing the universe; cf.\n\nGrimnismol , 29-35 and notes, wherein Yggdrasil is described at length.] p.\n\n4 3.\n\nOf old was the age | when Ymir lived; Sea nor cool waves | nor sand there were; Earth had not been, | nor heaven above, But a yawning gap, | and grass nowhere.\n\n4.\n\nThen Bur's sons lifted | the level land, Mithgarth the mighty | there they made; The sun from the south | warmed the stones of earth, And green was the ground | with growing leeks.\n\n5.\n\nThe sun, the sister | of the moon, from the south Her right hand cast | over heaven's rim; No knowledge she had | where her home should be, The moon knew not | what might was his, The stars knew not | where their stations were.\n\n[3.\n\nYmir : the giant out of whose body the gods made the world; cf.\n\nVafthruthnismol , 21.\n\nin this stanza as quoted in Snorri's Edda the first line runs: \"Of old was the age ere aught there was.\" Yawning gap : this phrase, \"Ginnunga-gap,\" is sometimes used as a proper name.\n\n4.\n\nBur's sons: Othin, Vili, and Ve.\n\nOf Bur we know only that his wife was Bestla, daughter of Bolthorn; cf.\n\nHovamol , 141.\n\nVili and Ve are mentioned by name in the Eddic poems only in Lokasenna , 26.\n\nMithgarth (\"Middle Dwelling\"): the world of men.\n\nLeeks : the leek was often used as the symbol of fine growth (cf.\n\nGuthrunarkvitha I, 17), and it was also supposed to have magic power (cf.\n\nSigrdrifumol , 7).\n\n5.\n\nVarious editors have regarded this stanza as interpolated; Hoffory thinks it describes the northern summer night in which the sun does not set.\n\nLines 3-5 are quoted by Snorri.\n\nIn the manuscripts line 4 follows line 5.\n\nRegarding the sun and moon [fp.\n\n5] as daughter and son of Mundilferi, cf.\n\nVafthruthnismol , 23 and note, and Grimnismol , 37 and note.] p.\n\n5 6.\n\nThen sought the gods | their assembly-seats, The holy ones, | and council held; Names then gave they | to noon and twilight, Morning they named, | and the waning moon, Night and evening, | the years to number.\n\n7.\n\nAt Ithavoll met | the mighty gods, Shrines and temples | they timbered high; Forges they set, and | they smithied ore, Tongs they wrought, | and tools they fashioned.\n\n8.\n\nIn their dwellings at peace | they played at tables, Of gold no lack | did the gods then know,-- Till thither came | up giant-maids three, Huge of might, | out of Jotunheim.\n\n[6.\n\nPossibly an interpolation, but there seems no strong reason for assuming this.\n\nLines 1-2 are identical with lines 1-2 of stanza 9, and line 2 may have been inserted here from that later stanza.\n\n7."
+
+[annotations]
+concepts = []
+related_chunks = []

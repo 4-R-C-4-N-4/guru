@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.118"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXh"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 640
+
+[content]
+body = "Stronger grew the beer imprisoned In the copper-banded vessels, Locked behind the copper faucets, Boiled, and foamed, and sang, and murmured: \"If ye do not bring a singer, That will sing my worth immortal, That will sing my praise deserving, I will burst these bands of copper, Burst the heads of all these barrels; Will not serve the best of heroes Till he sings my many virtues.\" Louhi, hostess of Pohyola, Called a trusted maiden-servant, Sent her to invite the people To the marriage of her daughter, These the words that Louhi uttered: \"O my trusted, truthful maiden, Servant-maid to me belonging, Call together all my people, Call the heroes to my banquet, Ask the rich, and ask the needy, Ask the blind and deaf, and crippled, Ask the young, and ask the aged; Go thou to the hills, and hedges, To the highways, and the by-ways, Urge them to my daughter's wedding; Bring the blind, and sorely troubled, In my boats upon the waters, In my sledges bring the halting, With the old, and sick, and needy; Ask the whole of Sariola, Ask the people of Karelen, Ask the ancient Wainamoinen, Famous bard and wisdom-singer; But I give command explicit Not to ask wild Lemminkainen, Not the island-dweller, Ahti!\" This the question of the servant: \"Why not ask wild Lemminkainen, Ancient islander and minstrel?\" Louhi gave this simple answer: \"Good the reasons that I give thee Why the wizard, Lemminkainen, Must not have an invitation To my daughter's feast and marriage Ahti courts the heat of battle, Lemminkainen fosters trouble, Skilful fighter of the virtues; Evil thinking, acting evil, He would bring but pain and sorrow, He would jest and jeer at maidens In their trimly buckled raiment, Cannot ask the evil-minded!\" Thus again the servant questions: \"Tell me how to know this Ahti, Also known as Lemminkainen, That I may not ask him hither; Do not know the isle of Ahti, Nor the home of Kaukomieli Spake the hostess of Pohyola: \"Easy 'tis to know the wizard, Easy find the Ahti-dwelling: Ahti lives on yonder island, On that point dwells Lemminkainen, In his mansion near the water, Far at sea his home and dwelling.\" Thereupon the trusted maiden Spread the wedding-invitations To the people of Pohyola, To the tribes of Kalevala; Asked the friendless, asked the homeless Asked the laborers and shepherds, Asked the fishermen and hunters, Asked the deaf, the dumb, the crippled, Asked the young, and asked the aged, Asked the rich, and asked the needy; Did not give an invitation To the reckless Lemminkainen, Island-dweller of the ocean."
+
+[annotations]
+concepts = []
+related_chunks = []
