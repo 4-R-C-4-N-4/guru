@@ -1,0 +1,7 @@
+tradition = "christian_mysticism"
+text_id = "dionysius-divine-names-2"
+text_name = "Pseudo-Dionysius: The Divine Names"
+translator = "C.E. Rolt"
+source_url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iii.html"
+sections_format = "chapter"
+chunk_count = 16

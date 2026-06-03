@@ -1,0 +1,26 @@
+# Mystical Theology — single CCEL page (~60KB) containing all 5 chapters.
+# Rolt 1920. Apophatic urtext. Regex-section-split on CHAPTER I..V.
+# Pre_strip handles standard CCEL apparatus (page markers, login prompt,
+# nav crumbs).
+[chunking]
+strategy = "regex-section-split"
+pattern = 'CHAPTER\s+(I|II|III|IV|V)\b'
+section_label_format = "Chapter {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # CCEL print-edition page markers (Eckhart precedent)
+    "\\b\\d+-\\d+\\b",
+    # CCEL navigation crumb / login prompts that scatter through ccel pages
+    "Please login or register to save highlights and make annotations\\.",
+    "VIEWNAME is workSection\\s*",
+    # The Author/Influence intro text by Rolt that may bleed if the page
+    # is multi-section. Defensive.
+    "^.*?(?=THE MYSTICAL THEOLOGY)",
+]
+
+[metadata]
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Mystical Theology"
+translator = "C.E. Rolt"
+sections_format = "chapter"

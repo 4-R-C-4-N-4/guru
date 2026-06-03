@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.dionysius-mystical-theology.006"
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Mystical Theology"
+section = "Chapter IIIb"
+translator = "C.E. Rolt"
+source_url = "https://www.ccel.org/ccel/rolt/dionysius.v.html"
+token_count = 391
+
+[content]
+body = "Now in the former treatises the course of the argument, as it came down from the highest to the lowest categories, embraced an ever-widening number of conceptions which increased at each stage of the descent, but in the present treatise it mounts upwards from below towards the category of transcendence, and in proportion to its ascent it contracts its terminology, and when the whole ascent is passed it will be totally dumb, being at last wholly united with Him Whom words cannot describe.\n\n533 533 At the last stage but one the mind beholds an Object to which all terms of thought are inadequate.\n\nThen, at the last stage, even the distinction between Subject and Object disappears, and the mind itself is That Which it contemplates.\n\nThought itself is transcended, and the whole Object-realm vanishes.\n\nOne Subject now knows itself as the part and knows itself as the Whole.\n\nBut why is it, you will ask, that after beginning from the highest category when one method was affirmative we begin from the lowest category where it is negative?\n\n534 534 In the Divine Names the order of procedure was: Goodness, Existence, Life, etc.\n\nNow it passes from sense-perception to thought.\n\nBecause, when affirming, the existence of that which transcends all affirmation, we were obliged to start from that which is most akin to It, and then to make the affirmation on which the rest depended; but when pursuing the negative method, to reach that which is beyond all negation, we must start by applying our negations to those qualities which differ most from the ultimate goal.\n\nSurely it is truer to affirm that God is life and goodness than that He is air or stone, and truer to deny that drunkenness or fury can be attributed to Him 199 than to deny that the may apply to Him the categories of human thought.\n\n535 535 This shows that the Via Negativa is not purely negative."
+
+[annotations]
+concepts = []
+related_chunks = []

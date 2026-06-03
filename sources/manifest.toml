@@ -2986,3 +2986,157 @@ license = "public_domain"
 translator = "F. Max Müller"
 notes = "SBE1. Whole text; 18 verses with Müller's commentary tail. Shortest principal Upanishad (18 verses); single sacred-texts page also carries Müller's verse-by-verse commentary tail."
 
+
+# ============================================
+# PSEUDO-DIONYSIUS (Tier 1 child 5/8) — apophatic urtext
+# ============================================
+# Rolt 1920 (SPCK, London); translator d. 1917, clean US-PD.
+# Mystical Theology = the urtext of apophatic_theology; sits between
+# Plotinus (held) and Eckhart (held). Divine Names = a major
+# emanation_hierarchy source.
+# Rolt's introduction (dionysius.iii.* pages) and the Celestial /
+# Ecclesiastical Hierarchies (dionysius.vi.* / vii.*) are intentionally
+# excluded — those go in a separate follow-up ticket per the ticket
+# description.
+# todo:d7c3ccef.
+
+[[source]]
+id = "dionysius-mystical-theology"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Mystical Theology"
+url = "https://www.ccel.org/ccel/rolt/dionysius.v.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Single 60KB CCEL page containing all 5 chapters inline. The urtext of apophatic_theology — 'the Divine Gloom', the via negativa. Regex-section-split on CHAPTER I..V."
+
+[[source]]
+id = "dionysius-divine-names-1"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 1"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.ii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 1 (file iv.ii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-2"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 2"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 2 (file iv.iii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-3"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 3"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iv.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 3 (file iv.iv). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-4"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 4"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.v.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 4 (file iv.v). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-5"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 5"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.vi.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 5 (file iv.vi). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-6"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 6"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.vii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 6 (file iv.vii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-7"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 7"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.viii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 7 (file iv.viii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-8"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 8"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.ix.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 8 (file iv.ix). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-9"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 9"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.x.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 9 (file iv.x). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-10"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 10"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xi.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 10 (file iv.xi). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-11"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 11"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 11 (file iv.xii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-12"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 12"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xiii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 12 (file iv.xiii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-13"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 13"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xiv.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 13 (file iv.xiv). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+

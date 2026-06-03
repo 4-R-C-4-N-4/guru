@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.dionysius-mystical-theology.004"
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Mystical Theology"
+section = "Chapter IIb"
+translator = "C.E. Rolt"
+source_url = "https://www.ccel.org/ccel/rolt/dionysius.v.html"
+token_count = 260
+
+[content]
+body = "but now ascending upwards from 196 particular to universal conceptions we strip off all qualities 528 528 The process from the universal to the particular is the process of actual development (existence before life, and life before rationality, etc.); the converse is the natural process of thought, which seeks to refer things to their universal laws of species, etc.\n\n(Divine Names, V.\n\n3).\n\nBut this latter process is not in itself the Via Negativa, but only the ground plan of it, differing from it as a ground plan of a mountain path differs from a journey up the actual path itself.\n\nThe process of developing life complicates, but enriches, the world; that of thought simplifies, but eviscerates it.\n\nContemplation, being an act of the human spirit, is a process of developing life, and yet follows the direction of thought.\n\nHence it enriches and simplifies at the same time.\n\nin order that we may attain a naked knowledge of that Unknowing which in all existent things is enwrapped by all objects of knowledge, 529 529 Cf.\n\np.\n\n194, n.\n\n1.\n\nand that we may begin to see that super-essential Darkness which is hidden by all the light that is in existent things."
+
+[annotations]
+concepts = []
+related_chunks = []

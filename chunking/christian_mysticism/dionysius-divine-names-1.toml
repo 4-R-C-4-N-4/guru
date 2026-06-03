@@ -1,0 +1,19 @@
+# Divine Names Chapter 1 — single CCEL page. Rolt 1920.
+# page-as-chunk since each CCEL chapter is one file; the chunker will
+# sub-split if a chapter exceeds the token budget.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Chapter 1, Section {n}"
+max_tokens = 800
+group_size = 2
+pre_strip_patterns = [
+    "\\b\\d+-\\d+\\b",
+    "Please login or register to save highlights and make annotations\\.",
+    "VIEWNAME is workSection\\s*",
+]
+
+[metadata]
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Divine Names"
+translator = "C.E. Rolt"
+sections_format = "chapter"
