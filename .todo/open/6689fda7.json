@@ -1,0 +1,29 @@
+{
+  "id": "6689fda7",
+  "type": "feature",
+  "state": "open",
+  "summary": "Plato: Phaedo — source for anamnesis, body_as_obstacle, soul_migration",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-03T18:45:33.311Z",
+  "updated_at": "2026-06-03T18:45:33.355Z",
+  "files": [
+    {
+      "path": "docs/corpus-expansion-candidates.md",
+      "lines": [
+        75,
+        79
+      ]
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "manifest",
+    "platonism"
+  ],
+  "relationships": {
+    "parent": "2b142a91"
+  },
+  "description": "**Parent:** Corpus Expansion Tier 1 (child 2 of 8)\n\n## Source\n\n- **Translator / license:** Jowett, 1871. US-PD.\n- **URL:** https://www.sacred-texts.com/cla/plato/phaedo.htm\n- **Structure:** single `<PRE>` page, ~155KB, continuous dialogue.\n- **Format:** `html`\n- **Chunking:** `paragraph-group`, 6–8 paras.\n\n## Concept payload\n\n`anamnesis` (recollection), `body_as_obstacle` (body-as-tomb), `soul_migration` — bridges Orphic/Pythagorean transmigration (already in `greek_mystery`) to Gnostic soul-imprisonment.\n\n## Ref\n\n`docs/corpus-expansion-candidates.md` §3.2"
+}

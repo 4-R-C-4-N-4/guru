@@ -7,7 +7,7 @@
     "type": "human"
   },
   "created_at": "2026-06-03T18:45:33.145Z",
-  "updated_at": "2026-06-03T18:45:33.181Z",
+  "updated_at": "2026-06-03T18:45:33.792Z",
   "files": [
     {
       "path": "docs/corpus-expansion-candidates.md",
@@ -25,5 +25,17 @@
     "neoplatonism",
     "buddhism"
   ],
-  "description": "## Goal\n\nSource four taxonomy concepts that are **defined-but-floating** in the corpus today (no primary source backing them):\n\n| Floating concept | Source that fixes it | Child |\n|---|---|---|\n| `demiurge`, `numerical_mysticism` | Plato — Timaeus | 1 |\n| `anamnesis`, `body_as_obstacle`, `soul_migration` | Plato — Phaedo | 2 |\n| `divine_madness`, `ladder_of_love`, `spiritual_ascent` | Plato — Phaedrus | 3 |\n| (cross-tradition illusion/awakening node) | Plato — Republic VI–VII (Cave + Good) | 4 |\n| `apophatic_theology` | Pseudo-Dionysius — Mystical Theology + Divine Names | 5 |\n| `theurgy`, `cosmic_sympathy` | Iamblichus — On the Mysteries | 6 |\n| `sunyata_emptiness` | Heart Sutra | 7 |\n| (broad ethical-psychological backbone) | Dhammapada | 8 |\n\n## Net corpus effect\n\n- platonism: 1 → 5 sources\n- christian_mysticism: gains its apophatic urtext (upstream of Eckhart already held)\n- neoplatonism: gains its theurgy primary (the pro-theurgy answer to anti-theurgy Plotinus already held)\n- buddhism: 1 → 3 sources (Diamond Sutra + Heart Sutra + Dhammapada)\n\n## Sequence\n\nThe 4 Plato children share the Jowett translation pattern → do them as a block. Then Dionysius + Iamblichus (apophatic + theurgy bridge). Then Heart Sutra + Dhammapada (Buddhism rescue). All children are pipeline-tolerant — no shared file conflicts, can run in parallel.\n\n## Out of scope\n\n- **Pistis Sophia** — added to `docs/corpus-expansion-candidates.md` §4.12 on 2026-06-03; user is reviewing; do NOT include here.\n- **Tier 2 sources** (Masnavi II–VI, Attar, Shabistari, Gilgamesh, Adapa, Platform Sutra, Cloud of Unknowing, Theologia Germanica, Porphyry, Proclus, SBE11 Suttas) — separate ticket later.\n- **Upanishads bulk acquire** — separate ticket, paused per `[[project_upanishads_bulk_deferred]]` memory.\n\n## References\n\n- `docs/corpus-expansion-candidates.md` §3 (full per-source detail)\n- `sources/manifest.toml` (append target)\n- `chunking/{platonism,christian_mysticism,neoplatonism,buddhism}/` (config target)"
+  "description": "## Goal\n\nSource four taxonomy concepts that are **defined-but-floating** in the corpus today (no primary source backing them):\n\n| Floating concept | Source that fixes it | Child |\n|---|---|---|\n| `demiurge`, `numerical_mysticism` | Plato — Timaeus | 1 |\n| `anamnesis`, `body_as_obstacle`, `soul_migration` | Plato — Phaedo | 2 |\n| `divine_madness`, `ladder_of_love`, `spiritual_ascent` | Plato — Phaedrus | 3 |\n| (cross-tradition illusion/awakening node) | Plato — Republic VI–VII (Cave + Good) | 4 |\n| `apophatic_theology` | Pseudo-Dionysius — Mystical Theology + Divine Names | 5 |\n| `theurgy`, `cosmic_sympathy` | Iamblichus — On the Mysteries | 6 |\n| `sunyata_emptiness` | Heart Sutra | 7 |\n| (broad ethical-psychological backbone) | Dhammapada | 8 |\n\n## Net corpus effect\n\n- platonism: 1 → 5 sources\n- christian_mysticism: gains its apophatic urtext (upstream of Eckhart already held)\n- neoplatonism: gains its theurgy primary (the pro-theurgy answer to anti-theurgy Plotinus already held)\n- buddhism: 1 → 3 sources (Diamond Sutra + Heart Sutra + Dhammapada)\n\n## Sequence\n\nThe 4 Plato children share the Jowett translation pattern → do them as a block. Then Dionysius + Iamblichus (apophatic + theurgy bridge). Then Heart Sutra + Dhammapada (Buddhism rescue). All children are pipeline-tolerant — no shared file conflicts, can run in parallel.\n\n## Out of scope\n\n- **Pistis Sophia** — added to `docs/corpus-expansion-candidates.md` §4.12 on 2026-06-03; user is reviewing; do NOT include here.\n- **Tier 2 sources** (Masnavi II–VI, Attar, Shabistari, Gilgamesh, Adapa, Platform Sutra, Cloud of Unknowing, Theologia Germanica, Porphyry, Proclus, SBE11 Suttas) — separate ticket later.\n- **Upanishads bulk acquire** — separate ticket, paused per `[[project_upanishads_bulk_deferred]]` memory.\n\n## References\n\n- `docs/corpus-expansion-candidates.md` §3 (full per-source detail)\n- `sources/manifest.toml` (append target)\n- `chunking/{platonism,christian_mysticism,neoplatonism,buddhism}/` (config target)",
+  "relationships": {
+    "children": [
+      "ae2b6323",
+      "6689fda7",
+      "a096de86",
+      "77ffce7d",
+      "d7c3ccef",
+      "d02d2ec8",
+      "320d958a",
+      "62b5d6c1"
+    ]
+  }
 }

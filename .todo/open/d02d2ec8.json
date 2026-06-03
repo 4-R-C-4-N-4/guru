@@ -1,0 +1,29 @@
+{
+  "id": "d02d2ec8",
+  "type": "feature",
+  "state": "open",
+  "summary": "Iamblichus: On the Mysteries — source for theurgy and cosmic_sympathy",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-03T18:45:33.627Z",
+  "updated_at": "2026-06-03T18:45:33.660Z",
+  "files": [
+    {
+      "path": "docs/corpus-expansion-candidates.md",
+      "lines": [
+        99,
+        103
+      ]
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "manifest",
+    "neoplatonism"
+  ],
+  "relationships": {
+    "parent": "2b142a91"
+  },
+  "description": "**Parent:** Corpus Expansion Tier 1 (child 6 of 8)\n\n## Source\n\n- **Translator / license:** Thomas Taylor, Dobell ed. 1895. Project Gutenberg states \"Public domain in the USA.\" Clean.\n- **URL:** Gutenberg #72815 — https://www.gutenberg.org/cache/epub/72815/pg72815-images.html (single HTML file).\n- **Structure:** Porphyry's *Letter to Anebo* + Iamblichus's reply in 10 sections/\"books,\" each with numbered chapters.\n- **Format:** `html`\n- **Chunking:** `regex-section-split` on the section/chapter heads (`SECTION` / `CHAP.` / Roman-numeral book markers). Tune to actual Gutenberg markup at acquire-time.\n- **Pre-strip:** Gutenberg header/license/back-matter (standard pattern, see kalevala chunking config for precedent).\n\n## Concept payload\n\n**THE primary source for `theurgy` and `cosmic_sympathy`** — the canonical pro-theurgy answer to anti-theurgy Plotinus. Resolves the unsupported-concept problem in the Neoplatonism holdings single-handedly.\n\n## Pairs with\n\nTier 2 §4.9 (Porphyry — Select Works incl. Sententiae, Gutenberg #77014) would capture the actual Porphyry-vs-Iamblichus theurgy debate. Defer to Tier 2.\n\n## Ref\n\n`docs/corpus-expansion-candidates.md` §3.6"
+}
