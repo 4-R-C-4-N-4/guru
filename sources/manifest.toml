@@ -925,6 +925,16 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). The prime non-Abrahamic creator-craftsman + world-soul source — direct backing for `demiurge` (upstream of the Gnostic demiurge already in corpus), `numerical_mysticism`, and Hermetic/Neoplatonic cosmogony. Single-file HTML, one continuous <PRE> block, no in-line section markers. todo:ae2b6323."
 
+[[source]]
+id = "plato-phaedo"
+tradition = "platonism"
+label = "Plato: Phaedo"
+url = "https://sacred-texts.com/cla/plato/phaedo.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). Socrates' last day; immortality of the soul, anamnesis (recollection), body-as-tomb. Bridges Orphic/Pythagorean transmigration (already in greek_mystery) to Gnostic soul-imprisonment. Single-file HTML, continuous dialogue. todo:6689fda7."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)

@@ -1,0 +1,7 @@
+tradition = "platonism"
+text_id = "plato-phaedo"
+text_name = "Plato: Phaedo"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/phaedo.htm"
+sections_format = "section"
+chunk_count = 44

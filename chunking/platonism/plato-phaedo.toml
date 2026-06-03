@@ -1,0 +1,19 @@
+# Mirrors plato-symposium.toml — same translator (Jowett 1871), same
+# sacred-texts.com single-<PRE> shape, same paragraph-group strategy.
+# Phaedo has no in-line section markers (continuous Socratic dialogue);
+# paragraph-group is the only viable strategy.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+pre_strip_patterns = [
+    "^Sacred Texts Classics Plato\\s+",
+    "-THE END-\\s*$",
+]
+
+[metadata]
+tradition = "platonism"
+text_name = "Plato: Phaedo"
+translator = "Benjamin Jowett"
+sections_format = "section"

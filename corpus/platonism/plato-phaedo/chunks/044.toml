@@ -1,0 +1,15 @@
+[chunk]
+id = "platonism.plato-phaedo.044"
+tradition = "platonism"
+text_name = "Plato: Phaedo"
+section = "Section 1"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/phaedo.htm"
+token_count = 150
+
+[content]
+body = "He was beginning to grow cold about the groin, when he uncovered his face, for he had covered himself up, and said (they were his last words)-he said: Crito, I owe a cock to Asclepius; will you remember to pay the debt?\n\nThe debt shall be paid, said Crito; is there anything else?\n\nThere was no answer to this question; but in a minute or two a movement was heard, and the attendants uncovered him; his eyes were set, and Crito closed his eyes and mouth.\n\nSuch was the end, Echecrates, of our friend, whom I may truly call the wisest, and justest, and best of all the men whom I have ever known."
+
+[annotations]
+concepts = []
+related_chunks = []
