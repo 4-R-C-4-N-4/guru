@@ -1,0 +1,28 @@
+# Iamblichus' De Mysteriis — Gutenberg #72815, Taylor 1895, single file
+# (~660KB). Structure: ADVERTISEMENT + INTRODUCTION + 10 SECTIONs each
+# with numbered CHAPs (SECTION I has CHAP. I..XXI, etc.). Splitting on
+# CHAP gives chapter-level chunks (~100+ total).
+#
+# The body extraction collapses to one line (Gutenberg `<br>`→`\n` then
+# normalization), so ^-anchored patterns won't fire. The CHAP. marker
+# has no straightforward TOC-vs-body discriminator (unlike Kalevala's
+# all-caps subtitle), but Gutenberg #72815 has no TOC-with-chapter-titles
+# above the body — chapter heads appear once in body context.
+[chunking]
+strategy = "regex-section-split"
+pattern = 'CHAP\.\s+([IVXLC]+)\.'
+section_label_format = "Chapter {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Project Gutenberg header — through START marker.
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    # Trailing license block — END marker through EOF.
+    '\*\*\*\s*END OF .*',
+]
+
+[metadata]
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+translator = "Thomas Taylor"
+sections_format = "chapter"

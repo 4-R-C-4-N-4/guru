@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.013"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter IXb"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 171
+
+[content]
+body = "For in things which are of a kindred nature, according to essence and power, or which are, in a certain respect, of the same species, or homogeneous, a certain comprehension, or conservation, may be discovered.\n\nBut in such things as are entirely exempt from all mundane wholes, what opposing circumstance, or transition through all things, or partible circumscription, or local comprehension, or any thing 48 else of this kind can justly be perceived?\n\nI think, therefore, that the several participants of the divinities are of such a nature, that some partake of them etherially, others aerially, and others aquatically; which also, the art of divine works perceiving, employs adaptations and invocations, conformable to such a division.\n\nAnd thus much concerning the distribution of the more excellent genera into the world."
+
+[annotations]
+concepts = []
+related_chunks = []

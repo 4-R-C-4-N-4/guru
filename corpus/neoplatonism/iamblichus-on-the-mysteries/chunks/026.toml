@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.026"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter XVIIIb"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 187
+
+[content]
+body = "A certain thing of this kind also may take 71 place in the harmony and crasis of the universe: for the same things may be the salvation of the whole, through the perfection of the things inherent and the recipients; but may be noxious to the parts, through their partible privation of symmetry.\n\nIn the motion, therefore, of the universe, all the circulations preserve the whole world invariably the same; but some one of the parts is frequently injured by another part, which we see is sometimes the case in a dance.\n\nAgain, therefore, corruptibility and mutability are passions connascent with partial natures.\n\nBut it is not proper to ascribe these to wholes and first causes, either as if they existed in them, or as if they proceeded to terrestrial substances from them.\n\nHence, through these things it is demonstrated, that neither the celestial Gods, nor their gifts, are effective of evil."
+
+[annotations]
+concepts = []
+related_chunks = []

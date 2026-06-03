@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.101"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter VI"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 154
+
+[content]
+body = "But the greatest thing in sacrifices, viz. their efficacious power, and why especially they are so very beneficial that without them we are neither liberated from pestilence, nor famine, nor sterility of fruits, nor obtain seasonable showers of rain, nor things of much greater consequence than these, I mean such as contribute to the purification of the soul, or an emancipation from generation; these are not at all indicated by such modes of sacrifices as you adduce. Hence no one can justly approve of them, because they assign a cause of the works performed in sacrifices unadapted to their dignity. And if some one should approve of them it will be only in a secondary way, and as suspended from primary, more ancient, and venerable causes."
+
+[annotations]
+concepts = []
+related_chunks = []

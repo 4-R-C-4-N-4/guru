@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.015"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter Xb"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 70
+
+[content]
+body = "This, therefore, rather pertains to some other genus, than to that which always exists, and is suspended from the Gods, and which, in conjunction with them, observes the same order, and accomplishes the same period.\n\nHence dæmons are impassive, and all the more excellent genera, which follow them [and the Gods]."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.106"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter Xb"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 42
+
+[content]
+body = "If, therefore, it is impossible that we should be the primordial causes of dæmons, it is, for the same reason, impossible that we should be the causes of their nutriment.\n\n245"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.125"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter II"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 180
+
+[content]
+body = "After another manner, also, this doubt may be dissolved. For in men, indeed, who are detained in matter, bodies deprived of life produce a certain stain; because that which is not alive inserts a certain defilement in that which is living, in the same manner as the impure in that which is pure, and that which is in privation in that which is in habit; and also because that which is dead produces a certain pollution, through a physical aptitude to a worse condition, in consequence of having possessed the power of dying. But a dead body cannot produce any defilement in a dæmon who is perfectly incorporeal, and does not receive any corruption. For it is necessary that 277 he should transcend a corruptible body, and not participate of any representation of corruption from it. And thus much in answer to the contrariety of the doubt."
+
+[annotations]
+concepts = []
+related_chunks = []

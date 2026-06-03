@@ -990,6 +990,17 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871. The full Book VII on one sacred-texts page (~71KB). Opens with the Allegory of the Cave (514a-520a) — den/shadows/prisoners/chained imagery confirmed. The canonical cross-tradition illusion/awakening node: wires to Gnostic 'sleep', Buddhist ignorance, Ouspensky's mechanical_humanity (western_esoteric). todo:77ffce7d."
 
+# Tier 1 — Iamblichus theurgy primary (neoplatonism deepening alongside Plotinus)
+[[source]]
+id = "iamblichus-on-the-mysteries"
+tradition = "neoplatonism"
+label = "Iamblichus: On the Mysteries (Taylor)"
+url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+format = "html"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "Gutenberg #72815 (Taylor 1895, single-file ~660KB). THE primary source for theurgy + cosmic_sympathy — the canonical pro-theurgy answer to anti-theurgy Plotinus already in corpus. Structure: ADVERTISEMENT + INTRODUCTION + Porphyry's Letter to Anebo + Iamblichus's reply in 10 Sections each with numbered Chapters (CHAP. I..XXI etc.). Regex-section-split on the CHAP markers. todo:d02d2ec8."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)
