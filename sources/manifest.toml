@@ -945,6 +945,51 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). The charioteer myth (246a-254e) + the four divine madnesses (244a-245c). Pairs with the Symposium already held and with Bruno's Eroici Furori (heroic_furor) in renaissance_hermeticism. Single-file HTML. todo:a096de86."
 
+# Republic, Book VI–VII targeted ingest — scoped to the Cave allegory
+# (Book VII opening, 514a-520a) + the Form of the Good discussion
+# (Book VI, 504-518 ≈ 'idea of good'). One [[source]] per sacred-texts
+# page, matching the Yasna/Upanishads precedent (one URL = one source_id).
+# Full Republic deferred — narrative-heavy and outside the concept payload.
+[[source]]
+id = "plato-republic-6-0"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 1)"
+url = "https://sacred-texts.com/cla/plato/rep/rep0600.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Book VI opening; the philosopher-king theme leading into the Form of the Good. Sacred-texts page rep0600 — uses real <p> tags (not single-<PRE> like the standalone dialogues). todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-6-1"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 2) — Form of the Good"
+url = "https://sacred-texts.com/cla/plato/rep/rep0601.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Form of the Good + the Sun analogy + the Divided Line. Direct source for the canonical illusion/awakening cross-tradition node. Confirmed 'idea of good' keyword on page. todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-6-2"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 3)"
+url = "https://sacred-texts.com/cla/plato/rep/rep0602.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Continuation of Book VI, transition into the Cave allegory of Book VII. todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-7-0"
+tradition = "platonism"
+label = "Plato: Republic Book VII — Allegory of the Cave"
+url = "https://sacred-texts.com/cla/plato/rep/rep0700.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. The full Book VII on one sacred-texts page (~71KB). Opens with the Allegory of the Cave (514a-520a) — den/shadows/prisoners/chained imagery confirmed. The canonical cross-tradition illusion/awakening node: wires to Gnostic 'sleep', Buddhist ignorance, Ouspensky's mechanical_humanity (western_esoteric). todo:77ffce7d."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)

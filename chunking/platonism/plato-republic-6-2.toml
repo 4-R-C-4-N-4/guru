@@ -1,0 +1,17 @@
+# Republic Book VI/VII targeted ingest. Jowett 1871 via sacred-texts.com.
+# Unlike the standalone Plato dialogues, the Republic pages use real <p>
+# tags (not single-<PRE>), so paragraph-group works cleanly.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+pre_strip_patterns = [
+    "^Sacred Texts Classics Plato\\s+",
+]
+
+[metadata]
+tradition = "platonism"
+text_name = "Plato: Republic"
+translator = "Benjamin Jowett"
+sections_format = "section"
