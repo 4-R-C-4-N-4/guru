@@ -1001,6 +1001,27 @@ license = "public_domain"
 translator = "Thomas Taylor"
 notes = "Gutenberg #72815 (Taylor 1895, single-file ~660KB). THE primary source for theurgy + cosmic_sympathy — the canonical pro-theurgy answer to anti-theurgy Plotinus already in corpus. Structure: ADVERTISEMENT + INTRODUCTION + Porphyry's Letter to Anebo + Iamblichus's reply in 10 Sections each with numbered Chapters (CHAP. I..XXI etc.). Regex-section-split on the CHAP markers. todo:d02d2ec8."
 
+# Tier 1 — Heart Sutra (sunyata_emptiness primary, two recensions)
+[[source]]
+id = "heart-sutra-smaller"
+tradition = "buddhism"
+label = "The Heart Sutra (Smaller Prajña-pâramitâ-hridaya)"
+url = "https://www.sacred-texts.com/bud/sbe49/sbe4931.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE49 (Müller 1894). Smaller recension — the standard form, ~10KB. Single most concentrated sunyata_emptiness source; the 'form is emptiness' formula + the gate gate mantra. todo:320d958a."
+
+[[source]]
+id = "heart-sutra-larger"
+tradition = "buddhism"
+label = "The Heart Sutra (Larger Prajña-pâramitâ-hridaya)"
+url = "https://www.sacred-texts.com/bud/sbe49/sbe4930.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE49 (Müller 1894). Larger recension — fuller narrative framing around the same emptiness teaching, ~12KB. todo:320d958a."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)
