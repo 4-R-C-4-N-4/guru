@@ -935,6 +935,16 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). Socrates' last day; immortality of the soul, anamnesis (recollection), body-as-tomb. Bridges Orphic/Pythagorean transmigration (already in greek_mystery) to Gnostic soul-imprisonment. Single-file HTML, continuous dialogue. todo:6689fda7."
 
+[[source]]
+id = "plato-phaedrus"
+tradition = "platonism"
+label = "Plato: Phaedrus"
+url = "https://sacred-texts.com/cla/plato/phaedrus.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The charioteer myth (246a-254e) + the four divine madnesses (244a-245c). Pairs with the Symposium already held and with Bruno's Eroici Furori (heroic_furor) in renaissance_hermeticism. Single-file HTML. todo:a096de86."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)

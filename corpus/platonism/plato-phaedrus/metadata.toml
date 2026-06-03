@@ -1,0 +1,7 @@
+tradition = "platonism"
+text_id = "plato-phaedrus"
+text_name = "Plato: Phaedrus"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/phaedrus.htm"
+sections_format = "section"
+chunk_count = 38

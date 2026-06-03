@@ -1,0 +1,15 @@
+[chunk]
+id = "platonism.plato-phaedrus.038"
+tradition = "platonism"
+text_name = "Plato: Phaedrus"
+section = "Section 1"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/phaedrus.htm"
+token_count = 112
+
+[content]
+body = "By all means.\n\nSoc.\n\nBeloved Pan, and all ye other gods who haunt this place, give me beauty in the inward soul; and may the outward and inward man be at one.\n\nMay I reckon the wise to be the wealthy, and may I have such a quantity of gold as a temperate man and he only can bear and carry.-Anything more?\n\nThe prayer, I think, is enough for me.\n\nPhaedr.\n\nAsk the same for me, for friends should have all things in common.\n\nSoc.\n\nLet us go."
+
+[annotations]
+concepts = []
+related_chunks = []
