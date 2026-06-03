@@ -1,0 +1,15 @@
+[chunk]
+id = "buddhism.dhammapada-chapter-04.003"
+tradition = "Buddhism"
+text_name = "The Dhammapada"
+section = "Chapter IV, Section 1c"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1006.htm"
+token_count = 20
+
+[content]
+body = "Beal, Dhammapada, p.\n\n76.] Next: Chapter V.\n\nThe Fool."
+
+[annotations]
+concepts = []
+related_chunks = []

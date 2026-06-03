@@ -1,0 +1,15 @@
+[chunk]
+id = "buddhism.dhammapada-chapter-15.003"
+tradition = "Buddhism"
+text_name = "The Dhammapada"
+section = "Chapter XV, Section 1c"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1017.htm"
+token_count = 63
+
+[content]
+body = "Childers translates, 'the best kinsman is a man you can trust.' 205.\n\nCf.\n\nSuttanipâta, v.\n\n256 .\n\n208.\n\nI should like to read sukho k a dhîrasa m vâso.] Next: Chapter XVI.\n\nPleasure."
+
+[annotations]
+concepts = []
+related_chunks = []

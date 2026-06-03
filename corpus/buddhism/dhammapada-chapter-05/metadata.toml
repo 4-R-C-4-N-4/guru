@@ -1,0 +1,7 @@
+tradition = "Buddhism"
+text_id = "dhammapada-chapter-05"
+text_name = "The Dhammapada"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1007.htm"
+sections_format = "chapter"
+chunk_count = 2

@@ -3172,3 +3172,267 @@ license = "public_domain"
 translator = "C.E. Rolt"
 notes = "Rolt 1920. Divine Names ch. 13 (file iv.xiv). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
 
+
+# Tier 1 — Dhammapada (Müller SBE10, 1881). 26 chapters across
+# sbe1003..sbe1028; one [[source]] per chapter (Yasna precedent).
+# todo:62b5d6c1.
+
+[[source]]
+id = "dhammapada-chapter-01"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter I"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1003.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter I (file sbe1003.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-02"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter II"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1004.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter II (file sbe1004.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-03"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter III"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1005.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter III (file sbe1005.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-04"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter IV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1006.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter IV (file sbe1006.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-05"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter V"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1007.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter V (file sbe1007.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-06"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1008.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VI (file sbe1008.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-07"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1009.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VII (file sbe1009.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-08"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1010.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VIII (file sbe1010.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-09"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter IX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1011.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter IX (file sbe1011.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-10"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter X"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1012.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter X (file sbe1012.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-11"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1013.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XI (file sbe1013.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-12"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1014.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XII (file sbe1014.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-13"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1015.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIII (file sbe1015.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-14"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1016.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIV (file sbe1016.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-15"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1017.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XV (file sbe1017.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-16"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1018.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVI (file sbe1018.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-17"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1019.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVII (file sbe1019.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-18"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1020.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVIII (file sbe1020.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-19"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1021.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIX (file sbe1021.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-20"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1022.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XX (file sbe1022.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-21"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1023.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXI (file sbe1023.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-22"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1024.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXII (file sbe1024.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-23"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1025.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXIII (file sbe1025.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-24"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXIV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1026.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXIV (file sbe1026.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-25"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1027.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXV (file sbe1027.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-26"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXVI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1028.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXVI (file sbe1028.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."

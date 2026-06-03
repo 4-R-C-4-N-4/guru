@@ -1,0 +1,15 @@
+[chunk]
+id = "buddhism.dhammapada-chapter-26.005"
+tradition = "Buddhism"
+text_name = "The Dhammapada"
+section = "Chapter XXVI, Section 1e"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1028.htm"
+token_count = 135
+
+[content]
+body = "Him I call indeed a Brâhma n a who calls nothing his own, whether it be before, behind, or between, who is poor, and free from the love of the world.\n\n422.\n\nHim I call indeed a Brâhma n a, the manly, the noble, the hero, the great sage, the conqueror, the impassible, the accomplished, the awakened.\n\n423.\n\nHim I call indeed a Brâhma n a who knows his former abodes, who sees heaven and hell, has reached the end of births, is perfect in knowledge, a sage, and whose perfections are all perfect.\n\nNext: Title Page"
+
+[annotations]
+concepts = []
+related_chunks = []
