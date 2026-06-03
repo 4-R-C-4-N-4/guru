@@ -915,6 +915,16 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). The Diotima speech (201d-212c) is the canonical statement of ascent from love of beautiful bodies to the Form of Beauty itself — direct source for Plotinus I.6 (already in corpus) and Bruno's Eroici Furori. Single-file HTML."
 
+[[source]]
+id = "plato-timaeus"
+tradition = "platonism"
+label = "Plato: Timaeus"
+url = "https://sacred-texts.com/cla/plato/timaeus.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The prime non-Abrahamic creator-craftsman + world-soul source — direct backing for `demiurge` (upstream of the Gnostic demiurge already in corpus), `numerical_mysticism`, and Hermetic/Neoplatonic cosmogony. Single-file HTML, one continuous <PRE> block, no in-line section markers. todo:ae2b6323."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)
