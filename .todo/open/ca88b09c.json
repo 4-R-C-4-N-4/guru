@@ -1,0 +1,33 @@
+{
+  "id": "ca88b09c",
+  "type": "bug",
+  "state": "open",
+  "summary": "SBE downloader patch landed in wrong module — never invoked for format=html sources (regression of 5a794b5e)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-04T12:17:47.333Z",
+  "updated_at": "2026-06-04T12:17:53.833Z",
+  "files": [
+    {
+      "path": "scripts/acquire.py",
+      "lines": [
+        33,
+        55
+      ]
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "downloader",
+    "sbe",
+    "regression",
+    "dispatch"
+  ],
+  "description": "## Discovery\n\nSurfaced 2026-06-04 during the dry-run of 79801268 (SBE Zoroastrian re-acquire).\nThe dry-run was supposed to show chunk-shift diffs between legacy and re-acquired\nYasna raws. Instead it showed **byte-identical** output: legacy `yasna-30.txt` was\n24,575 bytes; re-acquired `yasna-30.txt` was also 24,575 bytes (sha256 match).\n\nDirect test of `sacred_texts.extract_text_page()` on the live sbe31008.htm HTML\nproves the patch DOES work when invoked: 42,004-char input → 11,498-char output,\nall `Footnotes` apparatus + `<FONT SIZE=\"1\">` inline refs stripped.\n\nThe patch just isn't being called.\n\n## Root cause\n\n`acquire.load_downloader(format, url)` resolves the downloader module via:\n\n    scripts/acquire.py:33-55\n\n    FORMAT_DISPATCH: dict[str, str] = {\n        \"html\":       \"generic_html\",   # ← all html sacred-texts URLs land here\n        \"html_multi\": \"sacred_texts\",   # ← only html_multi reaches the patched code\n        \"sefaria_api\": \"sefaria\",\n        \"access_to_insight\": \"access_to_insight\",\n    }\n    DOMAIN_DISPATCH: dict[str, str] = {\n        \"gnosis.org\": \"gnosis_org\",\n        # sacred-texts.com intentionally not here\n    }\n\nSo when a manifest entry uses `format = \"html\"` (every Yasna, Bundahishn, Heart\nSutra, Dhammapada, etc.), the extractor is `generic_html.py` — which has no\nfont/sup/footnote handling. The patch (todo:5a794b5e) was applied to\n`sacred_texts.py::extract_text_page`, which is only invoked for `format =\n\"html_multi\"` sources (Aradia, Yoruba, the deferred Upanishads bulk acquire).\n\nConfirmed via dispatch test (2026-06-04):\n\n    html         sacred-texts.com/zor/sbe31/sbe31008.htm  → generic_html\n    html         sacred-texts.com/bud/sbe49/sbe4931.htm   → generic_html\n    html_multi   sacred-texts.com/pag/aradia/index.htm    → sacred_texts ✓\n\n## Affected sources\n\n| Source set | Acquired via | Has bug? |\n|---|---|---|\n| Legacy Yasnas, Bundahishn (pre-session)      | generic_html  | YES — artifacts present  |\n| Heart Sutra (this branch, todo:320d958a)     | generic_html  | YES — Müller `[1. ...]` apparatus survives |\n| Dhammapada (this branch, todo:62b5d6c1)      | generic_html  | YES — 6× `[1.` per chapter |\n| Plato dialogs (this branch)                  | generic_html  | N/A — Jowett doesn't use SBE apparatus |\n| Iamblichus (Gutenberg)                       | generic_html  | N/A — different host markup |\n| Dionysius (CCEL)                             | generic_html  | N/A — different host markup |\n| Aradia, Yoruba (html_multi, this branch)     | sacred_texts ✓ | patch active and working |\n\nThe Müller SBE10/SBE49 convention (`[1. text]` bracketed) is less disruptive\nthan the Mills SBE31 convention (bare-digit `<FONT SIZE=\"1\">` glued to words),\nso the Heart Sutra and Dhammapada are \"dirty but usable.\" The Yasnas are the\nworst case.\n\n## Why the test missed it\n\n`tests/downloaders/test_sacred_texts_sbe.py` tests `sacred_texts.extract_text_page`\ndirectly — bypassing the dispatch. In production the dispatch routes the URL\nelsewhere. A pipeline-integration test (`acquire one source, assert artifact\nabsent`) would have caught the routing immediately.\n\n## Scope (proposed fix)\n\n1. **Move the patch from `sacred_texts.extract_text_page` to\n   `generic_html.extract_text`.** The selectors are CSS-attribute-precise\n   (`font[size=\"1\"]`, h3 with text `Footnotes`); non-SBE pages don't carry that\n   markup and pass through unaffected.\n2. **Keep the patch in `sacred_texts.py` too OR remove it there.** The\n   `html_multi` sources currently benefit from the same logic; either duplicate\n   (small risk of drift) or extract to a shared helper. Recommendation:\n   shared helper `scripts/downloaders/_sbe_strip.py` with a `strip_sbe_apparatus(soup)`\n   function called by both modules.\n3. **Add an integration test** that uses the actual `acquire.load_downloader()`\n   dispatch path. Probably most natural via a mocked HTTP layer: fixture HTML\n   on disk, mock `requests.get` to return it, run `acquire.process_source()`\n   end-to-end, assert artifacts absent in the written raw. This is the test\n   shape that would have caught this bug.\n4. **Move or duplicate the 2 existing tests** in\n   `tests/downloaders/test_sacred_texts_sbe.py` so generic_html is covered.\n\n## Dependencies\n\n- **Blocks todo:79801268** (SBE Zoroastrian re-acquire dry-run). That ticket\n  cannot proceed meaningfully until this fix lands — re-acquiring without the\n  patch active produces byte-identical legacy output (proven 2026-06-04).\n- **Affects the Tier 1 Heart Sutra + Dhammapada raws** (committed to this\n  branch). Those are \"dirty but usable\" today. Once this patch is fixed, those\n  two need re-acquire + re-chunk + re-embed for cleanliness; minor impact\n  because the existing apparatus is already lightly bracketed rather than\n  glued-to-words.\n\n## Forensics evidence\n\nDry-run 2026-06-04, snapshot `/tmp/sbe-reacquire-20260604-080108`:\n\n- Forced re-acquire of yasna-30 via `rm raw/zoroastrianism/yasna-30.txt && python3 scripts/acquire.py --only yasna-30 --tradition zoroastrianism`\n- Result: `Wrote /home/ivy/Work/guru/raw/zoroastrianism/yasna-30.txt (24286 chars)`\n- sha256 vs legacy: **identical** (1d8847479fda)\n- Direct Python invocation of `sacred_texts.extract_text_page()` on same HTML: 11,498 chars, all artifacts removed\n\nRollback completed cleanly; raw/zoroastrianism + corpus/zoroastrianism restored\nto pre-dry-run state; DB embeddings count unchanged at 152 zoroastrian rows.\n\n## Files\n\n- `scripts/acquire.py:33-55` (dispatch tables — root cause site)\n- `scripts/downloaders/sacred_texts.py:138-204` (current patch home)\n- `scripts/downloaders/generic_html.py::extract_text` (patch destination)\n- `tests/downloaders/test_sacred_texts_sbe.py` (test that passes despite the bug)\n- `docs/corpus-expansion/sbe-downloader-patch-assessment.md` (assessment doc — needs an addendum noting the routing issue)",
+  "relationships": {
+    "blocks": [
+      "79801268"
+    ]
+  }
+}
