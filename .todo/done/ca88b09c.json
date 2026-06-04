@@ -1,13 +1,13 @@
 {
   "id": "ca88b09c",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "SBE downloader patch landed in wrong module — never invoked for format=html sources (regression of 5a794b5e)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-06-04T12:17:47.333Z",
-  "updated_at": "2026-06-04T12:17:53.833Z",
+  "updated_at": "2026-06-04T12:23:50.281Z",
   "files": [
     {
       "path": "scripts/acquire.py",
@@ -29,5 +29,19 @@
     "blocks": [
       "79801268"
     ]
+  },
+  "work": {
+    "branch": "corpus-expansion-tickets",
+    "base_branch": "main",
+    "started_at": "2026-06-04T12:18:57.874Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9943369ecba5eb3ee63b6e50f1731592d069c60a",
+    "resolved_at": "2026-06-04T12:23:50.281Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/downloaders/test_generic_html_sbe.py",
+    "test_function": "test_acquire_pipeline_routes_sbe_url_through_patched_extractor",
+    "note": "Patch logic extracted to scripts/downloaders/_sbe_strip.py and now applied in BOTH generic_html (where format=html sacred-texts URLs land) AND sacred_texts (unchanged for format=html_multi). 4 new tests cover the dispatch path the original patch missed. Smoke-tested: yasna-30 raw drops from 24,575 → 11,512 bytes (53% reduction, all apparatus + inline refs stripped); Müller's Buddhist SBE pages correctly unaffected (different markup convention)."
   }
 }
