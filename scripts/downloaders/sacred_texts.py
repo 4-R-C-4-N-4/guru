@@ -16,6 +16,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+import _sbe_strip
+
 logger = logging.getLogger(__name__)
 
 
@@ -179,36 +181,13 @@ def extract_text_page(html: str, source_id: str) -> str:
         logger.warning(f"[{source_id}] No content container found")
         return ""
 
-    # SBE-volume sacred-texts.com pages (e.g. Müller's Upanishads SBE15,
-    # Mills' Gathas SBE31) use inline `<font size="1">` for footnote-ref
-    # superscripts and a trailing `<h3 align="CENTER">Footnotes</h3>` block
-    # for the apparatus, rather than the class-based containers handled
-    # below. Without these strips, get_text() flattens the superscripts to
-    # bare digits glued to surrounding words ("Svetâsva 1", "neuter 1 .")
-    # and concatenates the full Footnotes apparatus onto the translation.
-    # The selectors are CSS-attribute-precise and SBE-shaped; non-SBE
-    # sacred-texts pages (and gnosis.org-style pages) carry no `font[size="1"]`
-    # or "Footnotes" h3, so they pass through unaffected.
-
-    # 1. Strip inline <font size="1"> and <sup> elements before get_text().
-    for element in main.select('font[size="1"]'):
-        element.decompose()
-    for element in main.find_all("sup"):
-        element.decompose()
-
-    # Decompose now-empty <a> anchors that wrapped only an inline footnote
-    # ref (the <font size="1"> was their sole child).
-    for anchor in main.find_all("a"):
-        if not anchor.get_text(strip=True) and not anchor.find(True):
-            anchor.decompose()
-
-    # 2. Drop the trailing apparatus block: <h3 align="CENTER">Footnotes</h3>
-    #    and every following sibling within the same parent.
-    for h3 in main.find_all("h3"):
-        if h3.get_text(strip=True).lower() == "footnotes":
-            for sibling in list(h3.find_next_siblings()):
-                sibling.decompose()
-            h3.decompose()
+    # SBE-volume sacred-texts.com pages use inline `<font size="1">` for
+    # footnote-ref superscripts and a trailing `<h3>Footnotes</h3>` block
+    # for the apparatus. The strip logic lives in the shared _sbe_strip
+    # helper so generic_html.py applies the same treatment for the
+    # `format = "html"` sources it owns (most SBE entries). See
+    # todo:ca88b09c for the routing-gap that surfaced this.
+    _sbe_strip.strip_sbe_apparatus(main)
 
     # Remove footnotes (often in div.footnotes or similar)
     for element in main.find_all(class_=["footnotes", "notes", "fn"]):

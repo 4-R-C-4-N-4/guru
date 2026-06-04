@@ -14,6 +14,8 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
+import _sbe_strip
+
 logger = logging.getLogger(__name__)
 
 
@@ -89,12 +91,21 @@ def extract_text(html: str, source_id: str) -> str:
         Cleaned plaintext content
     """
     soup = BeautifulSoup(html, "html.parser")
-    
+
     # Remove unwanted elements
     unwanted_tags = ["script", "style", "nav", "footer", "header", "aside", "iframe"]
     for element in soup(unwanted_tags):
         element.decompose()
-    
+
+    # SBE-volume sacred-texts.com pages (Mills SBE31 Yasnas, Müller SBE10/15/49,
+    # West SBE5 Bundahishn, etc.) reach generic_html via `format = "html"` in
+    # the manifest — see scripts/acquire.py::FORMAT_DISPATCH. They carry
+    # inline `<font size="1">` footnote-ref superscripts and a trailing
+    # `<h3>Footnotes</h3>` apparatus block. Strip both via the shared helper;
+    # the selectors are SBE-shaped and pass through non-SBE pages unaffected.
+    # Routing-bug origin: todo:ca88b09c.
+    _sbe_strip.strip_sbe_apparatus(soup)
+
     # Remove common ad and navigation classes
     ad_classes = ["ad", "advertisement", "adsense", "sidebar", "menu", "navigation"]
     for cls in ad_classes:
