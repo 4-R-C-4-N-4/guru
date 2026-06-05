@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.123"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXIe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 472
+
+[content]
+body = "Spake again wise Wainamoinen, When his wonder-tales had ended: \"l have little worth or power, Am a bard of little value, Little consequence my singing, Mine abilities as nothing, If but Ukko, my Creator, Should intone his wisdom-sayings, Sing the source of good and evil, Sing the origin of matter, Sing the legends of omniscience, Sing his songs in full perfection.\n\nGod could sing the floods to honey, Sing the sands to ruddy berries, Sing the pebbles into barley, Sing to beer the running waters, Sing to salt the rocks of ocean, Into corn-fields sing the forests, Into gold the forest-fruitage, Sing to bread the hills and mountains, Sing to eggs the rounded sandstones; He could touch the springs of magic, He could turn the keys of nature, And produce within thy pastures, Hurdles filled with sheep and reindeer, Stables filled with fleet-foot stallions, Kine in every field and fallow; Sing a fur-robe for the bridegroom, For the bride a coat of ermine, For the hostess, shoes of silver, For the hero, mail of copper.\n\n\"Grant O Ukko, my Creator, God of love, and truth, and justice, Grant thy blessing on our feasting, Bless this company assembled, For the good of Sariola, For the happiness of Northland!\n\nMay this bread and beer bring joyance, May they come in rich abundance, May they carry full contentment To the people of Pohyola, To the cabin and the mansion; May the hours we spend in singing, In the morning, in the evening, Fill our hearts with joy and gladness!\n\nHear us in our supplications, Grant to us thy needed blessings, Send enjoyment, health, and comfort, To the people here assembled, To the host and to the hostess, To the bride and to the bridegroom, To the sons upon the waters, To the daughters at their weavings, To the hunters on the mountains, To the shepherds in the fenlands, That our lives may end in honor, That we may recall with pleasure Ilmarinen's magic marriage To the Maiden of the Rainbow, Snow-white virgin of the Northland.\""
+
+[annotations]
+concepts = []
+related_chunks = []

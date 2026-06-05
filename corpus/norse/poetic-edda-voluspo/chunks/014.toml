@@ -1,0 +1,15 @@
+[chunk]
+id = "norse.poetic-edda-voluspo.014"
+tradition = "norse"
+text_name = "The Poetic Edda: Voluspo"
+section = "Section 1n"
+translator = "Henry Adams Bellows"
+source_url = "https://sacred-texts.com/neu/poe/poe03.htm"
+token_count = 770
+
+[content]
+body = "Of Byleist (or Byleipt) no more is known.\n\n52.\n\nSurt : the ruler of the fire-world.\n\nThe scourge of branches : fire.\n\nThis is one of the relatively rare instances in the Eddic poems of the type of poetic diction which characterizes the skaldic verse.\n\n53.\n\nHlin : apparently another name for Frigg, Othin's wife.\n\nAfter losing her son Baldr, she is fated now to see Othin slain by the wolf Fenrir.\n\nBeli's slayer : the god Freyr, who killed the giant Beli with his fist; cf.\n\nSkirnismol , 16 and note.\n\nOn Freyr, who belonged to the race of the Wanes, and was the brother of Freyja, see especially Skirnismol , passim .\n\nThe Joy of Frigg : Othin.] p.\n\n23 54.\n\nThen comes Sigfather's | mighty son, Vithar, to fight | with the foaming wolf; In the giant's son | does he thrust his sword Full to the heart: | his father is avenged.\n\n55.\n\nHither there comes | the son of Hlothyn, The bright snake gapes | to heaven above; .\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\nAgainst the serpent | goes Othin's son.\n\n56.\n\nIn anger smites | the warder of earth,-- Forth from their homes | must all men flee;- Nine paces fares | the son of Fjorgyn, And, slain by the serpent, | fearless he sinks.\n\n[54.\n\nAs quoted by Snorri the first line of this stanza runs: \"Fares Othin's son | to fight with the wolf.\" Sigfather (\"Father of Victory\"): Othin.\n\nHis son, Vithar, is the silent god, famed chiefly for his great shield, and his strength, which is little less than Thor's.\n\nHe survives the destruction.\n\nThe giant's son : Fenrir.\n\n55.\n\nThis and the following stanza are clearly in bad shape.\n\nIn Regius only lines I and 4 are found, combined with stanza 56 as a single stanza.\n\nLine I does not appear in the Hauksbok version, the stanza there beginning with line 2.\n\nSnorri, in quoting these two stanzas, omits 55, 2-4, and 56, 3, making a single stanza out of 55, I, and 56, 4, 2, I, in that order.\n\nMoreover, the Hauksbok manuscript at this point is practically illegible.\n\nThe lacuna (line 3) is, of course, purely conjectural, and all sorts of arrangements of the lines have been attempted by editors, Hlothyn : another name for Jorth (\"Earth\"), Thor's mother; his father was Othin.\n\nThe snake : Mithgarthsorm; cf.\n\nstanza 5c and note.\n\nOthin's son : Thor.\n\nThe fourth line in Regius reads \"against the wolf,\" but if this line refers to Thor at all, and not to Vithar, the Hauksbok reading, \"serpent,\" is correct.\n\n56.\n\nThe warder of earth : Thor.\n\nThe son of Fjorgyn : again [fp.\n\n24] Thor, who, after slaying the serpent, is overcome by his venomous breath, and dies.\n\nFjorgyn appears in both a masculine and a feminine form.\n\nin the masculine 1t is a name for Othin; in the feminine, as here and in Harbarthsljoth , 56, it apparently refers to Jorth.] p.\n\n24 57."
+
+[annotations]
+concepts = []
+related_chunks = []

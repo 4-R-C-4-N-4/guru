@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.082"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVi"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 363
+
+[content]
+body = "Northland's ugly hostess, Louhi, Will not give to me her daughter, Fairest maiden of Pohyola, Till I kill the swan of Mana, With my bow and but one arrow, In the river of Tuoni.\n\nLemminkainen's mother answers, In the sacred stream and whirlpool.\n\n\"Let the swan swim on in safety, Give the water-bird his freedom, In the river of Manala, In the whirlpool of Tuoni; Leave the maiden in the Northland., With her charms and fading beauty; With thy fond and faithful mother, Go at once to Kalevala, To thy native fields and fallows.\n\nPraise thy fortune, all sufficient, Praise, above all else, thy Maker.\n\nUkko gave thee aid when needed, Thou wert saved by thy Creator, From thy long and hopeless slumber, In the waters of Tuoni, In the chambers of Manala.\n\nI unaided could not save thee, Could not give the least assistance; God alone, omniscient Ukko, First and last of the creators, Can revive the dead and dying, Can protect his worthy people From the waters of Manala, .\n\nFrom the fatal stream and whirlpool, In the kingdom of Tuoni.\" Lemminkainen, filled with wisdom, With his fond and faithful mother, Hastened straightway on his journey To his distant home and kindred, To the Wainola fields and meadows, To the plains of Kalevala.\n\n* * * * * Here I leave my Kaukomieli, Leave my hero Lemminkainen, Long I leave him from my singing, Turn my song to other heroes, Send it forth on other pathways, Sing some other golden legend."
+
+[annotations]
+concepts = []
+related_chunks = []

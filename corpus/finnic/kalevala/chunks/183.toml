@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.183"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 254
+
+[content]
+body = "These the words my father uttered, These the thoughts his son advances: 'Guard us, thou O great Creator, Shield us, thou O God of mercy, With thine arms of grace protect us, Help us with thy strength and wisdom, Guide the minds of all thy heroes, Keep aright the thoughts of women, Keep the old from speaking evil, Keep the young from sin and folly, Be to us a help forever, Be our Guardian and our Father, That our children may not wander From the ways of their Creator, From the path that God has given!'\" Then the hero Lemminkainen, Made from cares the fleetest racers, Sable racers from his sorrows, Reins he made from days of evil, From his sacred pains made saddles.\n\nTo the saddle, quickly springing, Galloped he away from trouble, To his dear and aged mother; And his comrade, faithful Tiera, Galloped to his Island-dwelling.\n\nNow departs wild Lemminkainen, Brave and reckless Kaukomieli, From these ancient songs and legends; Only guides his faithful Kura To his waiting bride and kindred, While these lays and incantations Shall be turned to other heroes."
+
+[annotations]
+concepts = []
+related_chunks = []

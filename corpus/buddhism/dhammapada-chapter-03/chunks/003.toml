@@ -1,0 +1,15 @@
+[chunk]
+id = "buddhism.dhammapada-chapter-03.003"
+tradition = "Buddhism"
+text_name = "The Dhammapada"
+section = "Chapter III, Section 1c"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1005.htm"
+token_count = 127
+
+[content]
+body = "I translate it therefore in a more general sense, let him not return or turn away from the battle, let him watch Mâra, even after he is vanquished, let him keep up a constant fight against the adversary, without being attached to anything or anybody.] p.\n\n15 an enemy to an enemy, a wrongly-directed mind will do us greater mischief.\n\n43.\n\nNot a mother, not a father will do so much, nor any other relative; a well-directed mind will do us greater service.\n\n[43.\n\nSee Beal, Dhammapada, p.\n\n73.] Next: Chapter IV.\n\nFlowers."
+
+[annotations]
+concepts = []
+related_chunks = []

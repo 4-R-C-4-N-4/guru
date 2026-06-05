@@ -1,0 +1,23 @@
+# Chamberlain's Kojiki Section I — single sacred-texts.com page, with
+# a trailing "Footnotes" block (SBE-style apparatus). The pre_strip
+# pattern drops that block; the baseline sacred-texts strip removes
+# the nav header. Paragraph-group at ~4 paras keeps each chunk dense.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 4
+max_tokens = 800
+pre_strip_patterns = [
+    # Drop the trailing "Footnotes" apparatus through end of body. The raw
+    # extraction collapses to a single line, so we cannot anchor on
+    # start-of-line — match the inline "Footnotes" boundary token. The
+    # apparatus pattern "<page>:<num> ..." (e.g. "15:1", "15:6") never
+    # occurs in scripture body, so the boundary is unambiguous.
+    '\bFootnotes\s+\d+:\d+\b[\s\S]*$',
+]
+
+[metadata]
+tradition = "shinto"
+text_name = "The Kojiki: The Beginning of Heaven and Earth"
+translator = "Basil Hall Chamberlain"
+sections_format = "section"

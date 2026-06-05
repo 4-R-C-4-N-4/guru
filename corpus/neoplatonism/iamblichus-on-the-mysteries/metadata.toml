@@ -1,0 +1,7 @@
+tradition = "neoplatonism"
+text_id = "iamblichus-on-the-mysteries"
+text_name = "Iamblichus: On the Mysteries"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+sections_format = "chapter"
+chunk_count = 218

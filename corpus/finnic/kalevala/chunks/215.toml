@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.215"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXVIIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 57
+
+[content]
+body = "These the words of Ilmarinen: \"I have changed the hateful virgin To a sea-gull on the ocean; Now she calls above the waters, Screeches from the ocean-islands; On the rocks she calls and murmurs Vainly calling for a suitor.\""
+
+[annotations]
+concepts = []
+related_chunks = []

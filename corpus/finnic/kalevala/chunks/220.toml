@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.220"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXIXe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 433
+
+[content]
+body = "Dost not know him at the rudder, Nor the hero at the row-locks?\" Spake the wizard, Lemminkainen: \"Well I know the helm-director, And I recognize the rower; Wainamoinen, old and trusty, At the helm directs the vessel; Ilmarinen does the rowing.\n\nWhither is the vessel sailing, Whither wandering, my heroes?\n\nSpake the ancient Wainamoinen: \"We are sailing to the Northland, There to gain the magic Sampo, There to get the lid in colors, From the stone-berg of Pohyola, From the copper-bearing mountain.\" Spake the evil Lemminkainen: \"O, thou good, old Wainamoinen, Take me with thee to Pohyola, Make me third of magic heroes, Since thou goest for the Sampo, Goest for the lid in colors; I shall prove a valiant soldier, When thy wisdom calls for fighting; I am skilled in arts of warfare!\" Wainamoinen, ancient minstrel, Gave assent to Ahti's wishes; Thereupon wild Lemminkainen Hastened to Wainola's war-ship, Bringing floats of aspen-timber, To the ships of Wainamoinen.\n\nThus the hero of the Northland Speaks to reckless Lemminkainen: \"There is aspen on my vessel, Aspen-floats in great abundance, And the boat is heavy-laden.\n\nWherefore dost thou bring the aspen To the vessel of Wainola?\" Lemminkainen gave this answer: \"Not through caution sinks a vessel, Nor a hay-stack by its proppings; Seas abound in hidden dangers, Heavy storms arise and threaten Fell destruction to the sailor That would brave the angry billows.\" Spake the good, old Wainamoinen: \"Therefore is this warlike vessel Built of trusty steel and copper, Trimmed and bound in toughest iron, That the winds may, not destroy it, May not harm my ship of magic.\""
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.053"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale PEREDUR THE SON OF EVRAWC~"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 314
+
+[content]
+body = "And I came with the bloody head in the salver, and with the lance that streamed with blood from the point to the hand, all along the shaft; and the head was thy cousin’s, and he was killed by the sorceresses of Gloucester, who also lamed thine uncle; and I am thy cousin.\n\nAnd there is a prediction that thou art to avenge these things.” Then Peredur and Gwalchmai took counsel, and sent to Arthur and his household, to beseech them to come against the sorceresses.\n\nAnd they began to fight with them; and one of the sorceresses slew one of Arthur’s men before Peredur’s face, and Peredur bade her forbear.\n\nAnd the sorceress slew a man before Peredur’s face a second time, and a second time he forbad her.\n\nAnd the third time the sorceress slew a man before the face of Peredur; and then Peredur drew his sword, and smote the sorceress on the helmet; and all her head-armour was split in two parts.\n\nAnd she set up a cry, and desired the other sorceresses to flee, and told them that this was Peredur, the man who had learnt Chivalry with them, and by whom they were destined to be slain.\n\nThen Arthur and his household fell upon the sorceresses, and slew the sorceresses of Gloucester every one.\n\nAnd thus is it related concerning the Castle of Wonders."
+
+[annotations]
+concepts = []
+related_chunks = []

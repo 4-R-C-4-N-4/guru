@@ -1,0 +1,43 @@
+# Guest's Mabinogion — Gutenberg #5160, single-file HTML. 13 titled
+# tales, not numbered. The Gutenberg extraction collapses to a single
+# very long line (no \n between paragraphs), so the line-based
+# "heading" strategy cannot find tale boundaries. Use
+# regex-section-split with an explicit alternation over the 13 tale
+# titles — these appear as all-caps phrases at body-section boundaries
+# in the source.
+#
+# Strip Gutenberg header/license boilerplate so the alternation cannot
+# match table-of-contents or back-matter mentions of the titles.
+[chunking]
+strategy = "regex-section-split"
+# Alternation over the 13 tale title strings as they appear in the body
+# (verified against the extracted raw). Each capture group has one
+# alternative; the regex_splitter only uses the matched text — the {n}
+# placeholder in section_label_format is the index of the section, and
+# the matched header is concatenated to the body. The TOC stripper
+# below removes the contents-list copy of these strings so only the
+# in-body occurrences match.
+pattern = '\b(INTRODUCTION|THE LADY OF THE FOUNTAIN|PEREDUR THE SON OF EVRAWC|GERAINT THE SON OF ERBIN|KILHWCH AND OLWEN|THE DREAM OF RHONABWY|PWYLL PRINCE OF DYVED|BRANWEN THE DAUGHTER OF LLYR|MANAWYDDAN THE SON OF LLYR|MATH THE SON OF MATHONWY|THE DREAM OF MAXEN WLEDIG|THE STORY OF LLUDD AND LLEVELYS|TALIESIN)\b'
+section_label_format = "Tale {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Project Gutenberg header block — match through the START marker.
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    # Trailing license block — END marker through EOF.
+    '\*\*\*\s*END OF .*',
+    # TOC block: "CONTENTS Introduction The Lady of the Fountain ...
+    # Taliesin" appears immediately before the body. Strip from "CONTENTS"
+    # through the last TOC title ("Taliesin") so the body-side tale names
+    # are the only matches for the section-split pattern. The TOC uses
+    # title case ("The Lady of the Fountain"), while the body uses all-
+    # caps ("THE LADY OF THE FOUNTAIN"), so this can also be omitted —
+    # but stripping is cleaner.
+    'CONTENTS\s+Introduction\s+The Lady of the Fountain.*?Taliesin\s+',
+]
+
+[metadata]
+tradition = "celtic"
+text_name = "The Mabinogion"
+translator = "Lady Charlotte Guest"
+sections_format = "tale"

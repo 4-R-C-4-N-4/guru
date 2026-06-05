@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.051"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIa"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 481
+
+[content]
+body = "'S LAMENT.\n\nThis the time to sing of Ahti, Son of Lempo, Kaukomieli, Also known as Lemminkainen.\n\nAhti was the king of islands, Grew amid the island-dwellings, At the site of his dear mother, On the borders of the ocean, On the points of promontories.\n\nAhti fed upon the salmon, Fed upon the ocean whiting, Thus became a mighty hero, In his veins the blood of ages, Read erect and form commanding, Growth of mind and body perfect But alas!\n\nhe had his failings, Bad indeed his heart and morals, Roaming in unworthy places, Staying days and nights in sequences At the homes of merry maidens, At the dances of the virgins, With the maids of braided tresses.\n\nUp in Sahri lived a maiden, Lived the fair and winsome Kulli, Lovely as a summer-flower, From a kingly house descended, Grew to perfect form and beauty, Living in her father's cottage, Home of many ancient heroes, Beautiful was she and queenly, Praised throughout the whole of Ehstland; From afar men came to woo her, To the birthplace of the virgin, To the household of her mother.\n\nFor his son the Day-star wooes her, But she will not go to Sun-land, Will not shine beside the Day-star, In his haste to bring the summer.\n\nFor her son, the bright Moon wooes her, But she will not go to Moon-land, By the bright Moon will not glimmer, Will not run through boundless ether.\n\nFor his son the Night-star wooes her, But she will not go to Star-land, Will not twinkle in the starlight, Through the dreary nights in winter.\n\nLovers come from distant Ehstlaud, Others come from far-off Ingern, But they cannot win the maiden, This the answer that she gives them \"Vainly are your praises lavished Vainly is your silver offered, Wealth and praise are no temptation; Never shall I go to Ehstland, Never shall I go a-rowing On the waters of the Ingern, Shall not cross the Sahri-waters, Never eat the fish of Ehstland, Never taste the Ehstland viands."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.026"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune Vc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 616
+
+[content]
+body = "Finally the ancient minstrel, Mind depressed, and heart discouraged, Spake these words, immersed in sorrow: \"Fool am I, and great my folly, Having neither wit nor judgment; Surely once I had some knowledge, Had some insight into wisdom, Had at least a bit of instinct; But my virtues all have left me In these mournful days of evil, Vanished with my youth and vigor, Insight gone, and sense departed, All my prudence gone to others!\n\nAino, whom I love and cherish, All these years have sought to honor, Aino, now Wellamo's maiden, Promised friend of mine when needed, Promised bride of mine forever, Once I had within my power, Caught her in Wellamo's grottoes, Led her to my boat of copper, With my fish-line made of silver; But alas!\n\nI could not keep her, Did not know that I had caught her Till too late to woo and win her; Let her slip between my fingers To the home of water-maidens, To the kingdom of Wellamo.\" Wainamoinen then departed, Empty-handed, heavy-hearted, Straightway hastened to his country, To his home in Kalevala, Spake these words upon his journey: \"What has happened to the cuckoo, Once the cuckoo bringing gladness, In the morning, in the evening, Often bringing joy at noontide?\n\nWhat has stilled the cuckoo's singing, What has changed the cuckoo's calling?\n\nSorrow must have stilled his singing, And compassion changed his calling, As I hear him sing no longer, For my pleasure in the morning, For my happiness at evening.\n\nNever shall I learn the secret, How to live and how to prosper, How upon the earth to rest me, How upon the seas to wander!\n\nOnly were my ancient mother Living on the face of Northland, Surely she would well advise me, What my thought and what my action, That this cup of grief might pass me, That this sorrow might escape me, And this darkened cloud pass over.\" In the deep awoke his mother, From her tomb she spake as follows: \"Only sleeping was thy mother, Now awakes to give thee answer, What thy thought and what thine action, That this cup of grief may pass thee, That this sorrow may escape thee, And this darkened cloud pass over.\n\nHie thee straightway to the Northland, Visit thou the Suomi daughters; Thou wilt find them wise and lovely, Far more beautiful than Aino, Far more worthy of a husband, Not such silly chatter-boxes, As the fickle Lapland maidens.\n\nTake for thee a life-companion, From the honest homes of Suomi, One of Northland's honest daughters; She will charm thee with her sweetness, Make thee happy through her goodness, Form perfection, manners easy, Every step and movement graceful, Full of wit and good behavior, Honor to thy home and kindred.\""
+
+[annotations]
+concepts = []
+related_chunks = []

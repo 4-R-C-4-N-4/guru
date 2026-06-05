@@ -1,0 +1,7 @@
+tradition = "platonism"
+text_id = "plato-timaeus"
+text_name = "Plato: Timaeus"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/timaeus.htm"
+sections_format = "section"
+chunk_count = 50

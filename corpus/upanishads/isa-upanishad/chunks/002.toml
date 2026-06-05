@@ -1,0 +1,15 @@
+[chunk]
+id = "upanishads.isa-upanishad.002"
+tradition = "Upanishads"
+text_name = "Îsâ-Upanishad"
+section = "Îsâ, Section 1b"
+translator = "F. Max Müller"
+source_url = "https://sacred-texts.com/hin/sbe01/sbe01243.htm"
+token_count = 71
+
+[content]
+body = "Remember thy deeds 5 !\n\n18.\n\nAgni, lead us on to wealth (beatitude) by a good path, thou, O God, who knowest all things!\n\np.\n\n314 [paragraph continues] Keep far from us crooked evil, and we shall offer thee the fullest praise!\n\n(Rv.\n\nI, 189, 1.)"
+
+[annotations]
+concepts = []
+related_chunks = []

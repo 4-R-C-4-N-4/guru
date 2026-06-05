@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.083"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale GERAINT THE SON OF ERBIN~"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 87
+
+[content]
+body = "And all the hosts came together, and they all became reconciled to each other.\n\nAnd the Earl invited Geraint and the Little King to stay with him that night.\n\nAnd the next morning they separated.\n\nAnd Geraint went towards his own dominions; and thenceforth he reigned prosperously, and his warlike fame and splendour lasted with renown and honour both to him and to Enid from that time forth."
+
+[annotations]
+concepts = []
+related_chunks = []

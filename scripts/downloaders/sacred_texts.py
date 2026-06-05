@@ -16,6 +16,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+import _sbe_strip
+
 logger = logging.getLogger(__name__)
 
 
@@ -178,7 +180,15 @@ def extract_text_page(html: str, source_id: str) -> str:
     if not main:
         logger.warning(f"[{source_id}] No content container found")
         return ""
-    
+
+    # SBE-volume sacred-texts.com pages use inline `<font size="1">` for
+    # footnote-ref superscripts and a trailing `<h3>Footnotes</h3>` block
+    # for the apparatus. The strip logic lives in the shared _sbe_strip
+    # helper so generic_html.py applies the same treatment for the
+    # `format = "html"` sources it owns (most SBE entries). See
+    # todo:ca88b09c for the routing-gap that surfaced this.
+    _sbe_strip.strip_sbe_apparatus(main)
+
     # Remove footnotes (often in div.footnotes or similar)
     for element in main.find_all(class_=["footnotes", "notes", "fn"]):
         element.decompose()

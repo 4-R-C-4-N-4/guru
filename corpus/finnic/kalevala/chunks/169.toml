@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.169"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXVIIIc"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 591
+
+[content]
+body = "Whither wilt thou go, my hero, Whither will my loved one hasten, To escape thy fierce pursuers, To escape from thy misdoings, From thy sins to bide in safety, From thy crimes and misdemeanors, That thy head be not endangered, That thy body be not mangled, That thy locks be not outrooted?\" Spake the reckless Lemminkainen: \"Know I not a spot befitting, Do not know a place of safety, Where to hide from my pursuers, That will give me sure protection From the crimes by me committed.\n\nHelpful mother of my being, Where to flee wilt thou advise me?\" This the answer of the mother: \"I do not know where I can send thee; Be a pine-tree on the mountain, Or a juniper in lowlands?\n\nThen misfortune may befall thee; Often is the mountain pine-tree Cut in splints for candle-lighters; And the juniper is often Peeled for fence-posts for the pastures.\n\nGo a birch-tree to the valleys, Or an elm-tree to the glenwood?\n\nEven then may trouble find thee, Misery may overtake thee; Often is the lowland birch-tree Cut to pieces in the ware-house; Often is the elm-wood forest Cleared away for other plantings.\n\nBe a berry on the highlands, Cranberry upon the heather, Strawberry upon the mountains, Blackberry along the fences?\n\nEven there will trouble find thee, There misfortune overtake thee, For the berry-maids would pluck thee, Silver-tinselled girls would get thee.\n\nBe a pike then in the ocean, Or a troutlet in the rivers?\n\nThen would trouble overtake thee, Would become thy life-companion; Then the fisherman would catch thee, Catch thee in his net of flax-thread, Catch thee with his cruel fish-hook.\n\nBe a wolf then in the forest, Or a black-bear in the thickets?\n\nEven then would trouble find thee, And disaster cross thy pathway; Sable hunters of the Northland Have their spears and cross-bows ready To destroy the wolf and black-bear.\" Spake the reckless Lemminkainen: \"Know I well the worst of places, Know where Death will surely follow, Where misfortune's eye would find me; Since thou gavest me existence, Gavest nourishment in childhood, Whither shall I flee for safety, Whither hide from death and danger?\n\nIn my view is fell destruction, Dire misfortune hovers o'er me; On the morrow come the spearmen, Countless warriors from Pohya, Ahti's head their satisfaction.\" This the answer of the mother: \"I can name a goodly refuge, Name a land of small dimensions, Name a distant ocean-island, Where my son may live in safety."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.179"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale THE STORY OF LLUDD AND LLEVELYSd"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 223
+
+[content]
+body = "And a fierce encounter was between them, so that the glittering fire flew out from their arms.\n\nAnd at the last Lludd grappled with him, and fate bestowed the victory on Lludd.\n\nAnd he threw the plague to the earth.\n\nAnd after he had overcome him by strength and might, he besought his mercy.\n\n“How can I grant thee mercy,” said the king, “after all the many injuries and wrongs that thou hast done me?” “All the losses that ever I have caused thee,” said he, “I will make thee atonement for, equal to what I have taken.\n\nAnd I will never do the like from this time forth.\n\nBut thy faithful vassal will I be.” And the king accepted this from him.\n\nAnd thus Lludd freed the Island of Britain from the three plagues.\n\nAnd from thenceforth until the end of his life, in prosperous peace did Lludd the son of Beli rule the Island of Britain.\n\nAnd this Tale is called the Story of Lludd and Llevelys.\n\nAnd thus it ends."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.088"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale KILHWCH AND OLWENe"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 666
+
+[content]
+body = "I seek it from Kai, and Bedwyr, and Greidawl Galldonyd, and Gwythyr the son of Greidawl, and Greid the son of Eri, and Kynddelig Kyvarwydd, and Tathal Twyll Goleu, and Maelwys the son of Baeddan, and Crychwr the son of Nes, and Cubert the son of Daere, and Percos the son of Poch, and Lluber Beuthach, and Corvil Bervach, and Gwynn the son of Nudd, and Edeyrn the son of Nudd, and Gadwy the son of Geraint, and Prince Fflewddur Fflam, and Ruawn Pebyr the son of Dorath, and Bradwen the son of Moren Mynawc, and Moren Mynawc himself, and Dalldav the son of Kimin Côv, and the son of Alun Dyved, and the son of Saidi, and the son of Gwryon, and Uchtryd Ardywad Kad, and Kynwas Curvagyl, and Gwrhyr Gwarthegvras, and Isperyr Ewingath, and Gallcoyt Govynynat, and Duach, and Grathach, and Nerthach, the sons of Gwawrddur Kyrvach (these men came forth from the confines of hell), and Kilydd Canhastyr, and Canastyr Kanllaw, and Cors Cant-Ewin, and Esgeir Gulhwch Govynkawn, and Drustwrn Hayarn, and Glewlwyd Gavaelvawr, and Lloch Llawwynnyawc, and Aunwas Adeiniawc, and Sinnoch the son of Seithved, and Gwennwynwyn the son of Naw, and Bedyw the son of Seithved, and Gobrwy the son of Echel Vorddwyttwll, and Echel Vorddwyttwll himself, and Mael the son of Roycol, and Dadweir Dallpenn, and Garwyli the son of Gwythawc Gwyr, and Gwythawc Gwyr himself, and Gormant the son of Ricca, and Menw the son of Teirgwaedd, and Digon the son of Alar, and Selyf the son of Smoit, and Gusg the son of Atheu, and Nerth the son of Kedarn, and Drudwas the son of Tryffin, and Twrch the son of Perif, and Twrch the son of Annwas, and Iona king of France, and Sel the son of Selgi, and Teregud the son of Iaen, and Sulyen the son of Iaen, and Bradwen the son of Iaen, and Moren the son of Iaen, and Siawn the son of Iaen, and Cradawc the son of Iaen."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.192"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale TALIESINm"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 214
+
+[content]
+body = "containing the Graal in Welsh, as early as the time of Henry I.\n\nI had hoped to have added this to the present collection; but the death of Col.\n\nVaughan, to whom I applied, and other subsequent circumstances, have prevented me from obtaining access to it.\n\n[2] Hades.\n\n[3] The word “Pryder” or “Pryderi” means anxiety.\n\n[4] The version in the Greal adds, “And their coin was fairy money;” literally, dwarf’s money: that is, money which, when received, appeared to be good coin, but which, if kept, turned into pieces of fungus, &c.\n\n[5] This dialogue consists of a series of repartees with a play upon words, which it is impossible to follow in the translation.\n\n[6] Taliesin.\n\n[7] The mention of Gwyddno Garanhir instead of Elphin ab Gwyddno in this place is evidently an error of some transcriber of the MS."
+
+[annotations]
+concepts = []
+related_chunks = []

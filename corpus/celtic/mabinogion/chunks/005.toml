@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.005"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale INTRODUCTIONe"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 364
+
+[content]
+body = "We find that Geoffrey of Monmouth, Layamon, and other early British and Anglo-Saxon historians, and minstrels, on the one hand, transmitted to Europe the rudiments of its after romance, much of which, on the other hand, they drew from Wales.\n\nIV.\n\nCrossing into Wales we find, in the Mabinogion, the evident counterpart of the Celtic portion of the continental romance, mixed up, indeed, with various reflex additions from beyond the border, but still containing ample internal evidence of a Welsh original.\n\nV.\n\nLooking at the connexion between divers of the more ancient Mabinogion, and the topographical nomenclature of part of the country, we find evidence of the great, though indefinite, antiquity of these tales, and of an origin, which, if not indigenous, is certainly derived from no European nation.\n\nIt was with a general belief in some of these conclusions, that I commenced my labours, and I end them with my impressions strongly confirmed.\n\nThe subject is one not unworthy of the talents of a Llwyd or a Prichard.\n\nIt might, I think, be shown, by pursuing the inquiry, that the Cymric nation is not only, as Dr.\n\nPrichard has proved it to be, an early offshoot of the Indo-European family, and a people of unmixed descent, but that when driven out of their conquests by the later nations, the names and exploits of their heroes, and the compositions of their bards, spread far and wide among the invaders, and affected intimately their tastes and literature for many centuries, and that it has strong claims to be considered the cradle of European Romance.\n\nC.\n\nE.\n\nG.\n\nD OWLAIS , August 29th , 1848 ."
+
+[annotations]
+concepts = []
+related_chunks = []

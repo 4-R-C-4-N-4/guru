@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.dionysius-divine-names-2.016"
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Divine Names"
+section = "Chapter 2, Section 1p"
+translator = "C.E. Rolt"
+source_url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iii.html"
+token_count = 256
+
+[content]
+body = "224 These two phrases well express the meaning of the title “Beyond things and supernally infusing Unity” (ὑπερηνωμένη), which I have generally translated, like ἡνωμένη, as “Undifferenced.” 225 τῇ ἐξ αὐτοῦ θεώσει .\n\n.\n\n.\n\nθεῶν πολλῶν γιγνομένων.\n\nSee Intr., p.\n\n43.\n\n226 Cf.\n\np.\n\n71, n.\n\n1.\n\n227 The fullness of God’s Unity is manifested, (1) in all the multiplicity of the material world, (2) after a higher manner in the deified souls of men and in angels.\n\n228 Each deified soul is a differentiation of God (cf.\n\np.\n\n71, n.\n\ni); yet the Unity of God transcends them all, even after God has thus poured Himself into them.\n\n229 i.\n\ne.\n\nThese active Manifestations whereby God enters into each part of the universe, yet without loss of Unity.\n\n230 See the beginning of this chapter."
+
+[annotations]
+concepts = []
+related_chunks = []

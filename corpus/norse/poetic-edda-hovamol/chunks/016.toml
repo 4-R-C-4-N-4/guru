@@ -1,0 +1,15 @@
+[chunk]
+id = "norse.poetic-edda-hovamol.016"
+tradition = "norse"
+text_name = "The Poetic Edda: Hovamol"
+section = "Section 1p"
+translator = "Henry Adams Bellows"
+source_url = "https://sacred-texts.com/neu/poe/poe04.htm"
+token_count = 213
+
+[content]
+body = "An eighteenth I know, | that ne'er will I tell To maiden or wife of man,-- The best is what none | but one's self doth know, So comes the end of the songs,-- Save only to her | in whose arms I lie, Or who else my sister is.\n\n[163.\n\nSome editors have combined these two lines with stanza 164.\n\nOthers have assumed that the gap follows the first half-line, making \"so that-from me\" the end of the stanza.\n\n164.\n\nThis stanza is almost certainly an interpolation, and seems to have been introduced after the list of charms and the Loddfafnismol (stanzas 111-138) were combined in a single poem, for there is no other apparent excuse for the reference to Loddfafnir at this point.\n\nThe words \"if thou mightest get them\" are a conjectural emendation.\n\n165.\n\nThis stanza is almost totally obscure.\n\nThe third and fourth lines look like interpolations.] Next: Vafthruthnismol"
+
+[annotations]
+concepts = []
+related_chunks = []

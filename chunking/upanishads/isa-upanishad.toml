@@ -1,0 +1,21 @@
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Îsâ, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+# Drop everything from Müller's verse-by-verse commentary tail onward.
+# The sacred-texts page renders the HTML <hr> between verse 18 and the
+# commentary as a long underscore run; that's the only such marker in
+# the page, so it's a clean cut-point. The fallback patterns handle
+# any future raw shifts (e.g. if the <hr> ever drops out).
+# DOTALL is applied by chunk.py so '.*' spans the rest of the file.
+pre_strip_patterns = [
+    '_{5,}.*$',
+    '(?m)^Footnotes\b.*$',
+]
+
+[metadata]
+tradition = "Upanishads"
+text_name = "Îsâ-Upanishad"
+translator = "F. Max Müller"
+sections_format = "section"

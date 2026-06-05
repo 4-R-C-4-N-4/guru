@@ -1,0 +1,41 @@
+{
+  "id": "ae2b6323",
+  "type": "feature",
+  "state": "done",
+  "summary": "Plato: Timaeus — source for demiurge and numerical_mysticism",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-03T18:45:33.241Z",
+  "updated_at": "2026-06-03T19:52:36.144Z",
+  "files": [
+    {
+      "path": "docs/corpus-expansion-candidates.md",
+      "lines": [
+        69,
+        73
+      ]
+    }
+  ],
+  "tags": [
+    "corpus-expansion",
+    "manifest",
+    "platonism"
+  ],
+  "relationships": {
+    "parent": "2b142a91"
+  },
+  "description": "**Parent:** Corpus Expansion Tier 1 (child 1 of 8)\n\n## Source\n\n- **Translator / license:** Benjamin Jowett, 1871. Clean US-PD.\n- **URL:** https://www.sacred-texts.com/cla/plato/timaeus.htm\n- **Structure:** single HTML page, ~188KB, one continuous `<PRE>` block of speaker-tagged prose. No in-line section markers.\n- **Format:** `html`\n- **Chunking:** `paragraph-group`, `paragraphs_per_chunk = 6-8`, `max_tokens = 800`. `regex-section-split` is NOT viable — no numbered markers exist in the body.\n- **Pre-strip:** trailing `[N]` footnote block.\n\n## Concept payload\n\n`demiurge` (the canonical creator-craftsman source), `numerical_mysticism`, world-soul, cosmogony. Upstream of the Gnostic demiurge already in corpus.\n\n## Done contract\n\n`acquire.py --only plato-timaeus` produces clean raw; `chunk.py` writes `corpus/platonism/plato-timaeus/chunks/*.toml`; smoke-test one chunk reads as substantive Timaeus prose, not boilerplate.\n\n## Ref\n\n`docs/corpus-expansion-candidates.md` §3.1",
+  "work": {
+    "branch": "corpus-expansion-tickets",
+    "base_branch": "main",
+    "started_at": "2026-06-03T19:51:25.828Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "869327472f70f7cf9e16c3a843c2a026d21f750f",
+    "resolved_at": "2026-06-03T19:52:36.144Z",
+    "resolved_by": "unknown",
+    "note": "Acquired 178,613 chars from sacred-texts.com; chunked to 50 paragraph-group chunks (avg 762 tokens). Manifest entry + chunking config landed; same shape as plato-symposium. Sources floating concepts demiurge + numerical_mysticism. Embed deferred to a bulk-pass alongside other Tier 1 children."
+  }
+}

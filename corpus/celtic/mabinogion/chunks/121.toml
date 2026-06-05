@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.121"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale THE DREAM OF RHONABWYi"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 394
+
+[content]
+body = "Wrathfully came the knight to the place where Arthur was, and he told him that the Ravens had slain his household and the sons of the chief men of this island, and he besought him to cause Owain to forbid his Ravens.\n\nAnd Arthur besought Owain to forbid them.\n\nThen Arthur took the golden chessmen that were upon the board, and crushed them until they became as dust.\n\nThen Owain ordered Gwres the son of Rheged to lower his banner.\n\nSo it was lowered, and all was peace.\n\nThen Rhonabwy inquired of Iddawc who were the first three men that came to Owain, to tell him his Ravens were being slain.\n\nSaid Iddawc, “They were men who grieved that Owain should suffer loss, his fellow-chieftains and companions, Selyv the son of Kynan Garwyn of Powys, and Gwgawn Gleddyvrudd, and Gwres the son of Rheged, he who bears the banner in the day of battle and strife.” “Who,” said Rhonabwy, “were the last three men who came to Arthur, and told him that the Ravens were slaughtering his men?” “The best of men,” said Iddawc, “and the bravest, and who would grieve exceedingly that Arthur should have damage in aught; Blathaon the son of Mawrheth, and Rhuvawn Pebyr the son of Prince Deorthach, and Hyveidd Unllenn.” And with that behold four-and-twenty knights came from Osla Gyllellvawr, to crave a truce of Arthur for a fortnight and a month.\n\nAnd Arthur rose and went to take counsel.\n\nAnd he came to where a tall, auburn, curly-headed man was a little way off, and there he assembled his counsellors."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.060"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 571
+
+[content]
+body = "Spake the stout-heart, Lemminkainen: \"Rise ye heroes of the broadsword, Ye, the earth's eternal heroes, From the deeps, ye sickle-bearers, From the brooks, ye crossbow-shooters, Come, thou forest, with thine archers, Come, ye thickets, with your armies, Mountain spirits, with your powers, Come, fell Hisi, with thy horrors, Water-mother, with thy dangers, Come, Wellamo, with thy mermaids, Come, ye maidens from the valleys, Come, ye nymphs from winding rivers, Be protection to this hero, Be his day-and-night companions, Body-guard to Lemminkainen, Thus to blunt the spears of wizards, Thus to dull their pointed arrows, That the spears of the enchanters, That the arrows of the archers, That the weapons of the foemen, May not harm this bearded hero.\n\n\"Should this force be insufficient, I can call on other powers, I can call the gods above me, Call the great god of the heavens, Him who gives the clouds their courses, Him who rules through boundless ether, Who directs the march of storm-winds.\n\n\"Ukko, thou O God above me, Thou the father of creation, Thou that speakest through the thunder, Thou whose weapon is the lightning, Thou whose voice is borne by ether, Grant me now thy mighty fire-sword, Give me here thy burning arrows, Lightning arrows for my quiver, Thus protect me from all danger, Guard me from the wiles of witches, Guide my feet from every evil, Help me conquer the enchanters, Help me drive them from the Northland; Those that stand in front of battle, Those that fill the ranks behind me, Those around me, those above me, Those beneath me, help me banish,.\n\nWith their knives, and swords, and cross-bows, With their spears of keenest temper, With their tongues of evil magic; Help me drive these Lapland wizards To the deepest depths of ocean, There to wrestle with Wellamo.\" Then the reckless Lemminkainen Whistled loudly for his stallion, Called the racer from the hurdles, Called his brown steed from the pasture, Threw the harness on the courser, Hitched the fleet-foot to the snow-sledge, Leaped upon the highest cross-bench, Cracked his whip above the racer, And the steed flies onward swiftly, Bounds the sleigh upon its journey, And the golden plain re-echoes; Travels one day, then a second, Travels all the next day northward, Till the third day evening brings him To a sorry Northland village, On the dismal shores of Lapland."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.138"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXIIIi"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 468
+
+[content]
+body = "'Bring thou beer to give my sister, Quench her thirst and cheer her spirits.' \"Full of envy, brought the sister Only water filled with evil, Water for the infant's eyelids, Soap and water from the bath-room.\n\n\"To his wife the brother whispered, Whispered thus unto the housewife: 'Bring thou salmon for my sister, For my sister so long absent, Thus to still her pangs of hunger.' \"Thereupon the wife obeying, Brought, in envy, only cabbage That the children had been eating, And the house-dogs had been licking, Leavings of the black-dog's breakfast.\n\n\"Then I left my brother's dwelling, Hastened to the ancient homestead, To my mother's home deserted; Onward, onward did I wander, Hastened onward by the cold-sea, Dragged my body on in anguish, To the cottage-doors of strangers, To the unfamiliar portals, For the care of the neglected, For the needy of the village, For the children poor and orphaned.\n\n\"There are many wicked people, Many slanderers of women, Many women evil-minded, That malign their sex through envy.\n\nMany they with lips of evil, That belie the best of maidens, Prove the innocent are guilty Of the worst of misdemeanors, Speak aloud in tones unceasing, Speak, alas!\n\nwith wicked motives, Spread the follies of their neighbors Through the tongues of self-pollution.\n\nVery few, indeed, the people That will feed the poor and hungry, That will bid the stranger welcome; Very few to treat her kindly, Innocent, and lone, and needy, Few to offer her a shelter From the chilling storms of winter, When her skirts with ice are stiffened, Coats of ice her only raiment!\n\n\"Never in my days of childhood, Never in my maiden life-time, Never would believe the story Though a hundred tongues had told Though a thousand voices sang it, That such evil things could happen, That such misery could follow, Such misfortune could befall one Who has tried to do her duty, Who has tried to live uprightly, Tried to make her people happy.\" Thus the young bride was instructed, Beauteous Maiden of the Rainbow, Thus by Osmotar, the teacher."
+
+[annotations]
+concepts = []
+related_chunks = []

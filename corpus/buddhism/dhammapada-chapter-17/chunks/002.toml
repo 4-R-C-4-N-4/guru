@@ -1,0 +1,15 @@
+[chunk]
+id = "buddhism.dhammapada-chapter-17.002"
+tradition = "Buddhism"
+text_name = "The Dhammapada"
+section = "Chapter XVII, Section 1b"
+translator = "F. Max Müller"
+source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1019.htm"
+token_count = 24
+
+[content]
+body = "25; Burnouf, Introduction, pp.\n\n134, 184.] Next: Chapter XVIII.\n\nImpurity."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.175"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale THE DREAM OF MAXEN WLEDIGf"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 159
+
+[content]
+body = "Then spoke Kynan unto Adeon his brother, “Whether wilt thou rather,” said he, “tarry in this land, or go back into the land whence thou didst come forth?” Now he chose to go back to his own land, and many with him.\n\nBut Kynan tarried there with the other part and dwelt there.\n\nAnd they took counsel and cut out the tongues of the women, lest they should corrupt their speech.\n\nAnd because of the silence of the women from their own speech, the men of Armorica are called Britons.\n\nFrom that time there came frequently, and still comes, that language from the Island of Britain.\n\nAnd this dream is called the Dream of Maxen Wledig, emperor of Rome.\n\nAnd here it ends.\n\nHERE IS"
+
+[annotations]
+concepts = []
+related_chunks = []

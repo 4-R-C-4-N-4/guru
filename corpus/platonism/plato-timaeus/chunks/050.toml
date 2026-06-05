@@ -1,0 +1,15 @@
+[chunk]
+id = "platonism.plato-timaeus.050"
+tradition = "platonism"
+text_name = "Plato: Timaeus"
+section = "Section 1"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/timaeus.htm"
+token_count = 248
+
+[content]
+body = "And the most foolish of them, who trail their bodies entirely upon the ground and have no longer any need of feet, he made without feet to crawl upon the earth.\n\nThe fourth class were the inhabitants of the water: these were made out of the most entirely senseless and ignorant of all, whom the transformers did not think any longer worthy of pure respiration, because they possessed a soul which was made impure by all sorts of transgression; and instead of the subtle and pure medium of air, they gave them the deep and muddy sea to be their element of respiration; and hence arose the race of fishes and oysters, and other aquatic animals, which have received the most remote habitations as a punishment of their outlandish ignorance.\n\nThese are the laws by which animals pass into one another, now, as ever, changing as they lose or gain wisdom and folly.\n\nWe may now say that our discourse about the nature of the universe has an end.\n\nThe world has received animals, mortal and immortal, and is fulfilled with them, and has become a visible animal containing the visible-the sensible God who is the image of the intellectual, the greatest, best, fairest, most perfect-the one only begotten heaven."
+
+[annotations]
+concepts = []
+related_chunks = []

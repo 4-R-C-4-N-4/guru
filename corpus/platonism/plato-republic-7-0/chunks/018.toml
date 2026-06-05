@@ -1,0 +1,15 @@
+[chunk]
+id = "platonism.plato-republic-7-0.018"
+tradition = "platonism"
+text_name = "Plato: Republic"
+section = "Section 1r"
+translator = "Benjamin Jowett"
+source_url = "https://sacred-texts.com/cla/plato/rep/rep0700.htm"
+token_count = 350
+
+[content]
+body = "There you are right, he said, since we have made them to share in all things like the men.\n\nWell, I said, and you would agree (would you not?) that what has been said about the State and the government is not a mere dream, and although difficult not impossible, but only possible in the way which has been supposed; that is to say, when the true philosopher kings are born in a State, one or more of them, despising the honours of this present world which they deem mean and worthless, esteeming above all things right and the honour that springs from right, and regarding justice as the greatest and most necessary of all things, whose ministers they are, and whose principles will be exalted by them when they set in order their own city?\n\nHow will they proceed?\n\nThey will begin by sending out into the country all the inhabitants of the city who are more than ten years old, and will take possession of their children, who will be unaffected by the habits of their parents; these they will train in their own habits and laws, I mean in the laws which we have given them: and in this way the State and constitution of which we were speaking will soonest and most easily attain happiness, and the nation which has such a constitution will gain most.\n\nYes, that will be the best way.\n\nAnd I think, Socrates, that you have very well described how, if ever, such a constitution might come into being.\n\nEnough then of the perfect State, and of the man who bears its image-- there is no difficulty in seeing how we shall describe him.\n\nThere is no difficulty, he replied; and I agree with you in thinking that nothing more need be said.\n\nNext: BOOK VIII"
+
+[annotations]
+concepts = []
+related_chunks = []

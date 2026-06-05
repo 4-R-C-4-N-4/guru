@@ -1,0 +1,17 @@
+# Mirrors plato-symposium.toml — same translator, same single-<PRE> shape,
+# same strategy. Phaedrus has no in-line section markers.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+max_tokens = 800
+group_size = 2
+pre_strip_patterns = [
+    "^Sacred Texts Classics Plato\\s+",
+    "-THE END-\\s*$",
+]
+
+[metadata]
+tradition = "platonism"
+text_name = "Plato: Phaedrus"
+translator = "Benjamin Jowett"
+sections_format = "section"

@@ -1,0 +1,16 @@
+# Bellows's Poetic Edda Voluspo: single sacred-texts.com page.
+# page-as-chunk per the pagan.md spec — single leaf, no per-page split
+# needed; the whole Voluspo translation is one raw file. Bellows
+# interleaves stanza-numbered commentary in [brackets] which we leave
+# in place as text-critical metadata (cf. Enoch [[ ]] handling).
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 4
+max_tokens = 800
+
+[metadata]
+tradition = "norse"
+text_name = "The Poetic Edda: Voluspo"
+translator = "Henry Adams Bellows"
+sections_format = "section"

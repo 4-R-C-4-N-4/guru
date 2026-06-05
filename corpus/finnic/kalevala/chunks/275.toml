@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.275"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune Lk"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 302
+
+[content]
+body = "The same as Undutar.\n\nUn'to.\n\nThe same as Untamo.\n\nUtu-tyt'to.\n\nThe same as Undutar.\n\nWai'nam-oi'nen (Vainamoinen).\n\nThe chief hero of the Kalevala; the hero of Wainola, whose mother, Ilmatar, fell from the air into the ocean.\n\nWai'no (Vai'no).\n\nThe same as Wainamoinen.\n\nWai-no'la.\n\nThe home of Wainamoinen and his people; a synonym of Kalevala.\n\nWel-la'mo.\n\nThe hostess of the waters.\n\nWet'e-hi'nen.\n\nAn evil god of the sea.\n\nWi-pu'nen (Vipu'nen).\n\nAn old song-giant that swallowed Wainamoinen searching for the \"lost words.\" Wi'ro-kan'nas (Virokan'nas).\n\nRuler of the wilderness; the slayer of the huge bull of Suomi; the priest that baptizes the son of Mariatta.\n\nWo'ya-lan'der (Vuojalan'der).\n\nAn epithet for Laplander.\n\nWuok'sen (Vuo'ksen).\n\nA river in the east of Finland.\n\nWuok'si.\n\nThe same as Wuoksen.\n\nTHE END.\n\nEnd of the Project Gutenberg EBook of Kalevala: the Epic Poem of Finland — Complete, by Elias Lönnrot"
+
+[annotations]
+concepts = []
+related_chunks = []

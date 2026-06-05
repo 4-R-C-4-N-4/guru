@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.166"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXVIIe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 324
+
+[content]
+body = "Quick as lightning, Lemminkainen, With his father's blade of battle, With a single blow of broadsword, With united skill and power, Lopped the head of Pohya's master; As one cleaves the stalks of turnips, As the ear falls from the corn-stalk, As one strikes the fins from salmon, Thus the head rolled from the shoulders Of the landlord of Pohyola, Like a ball it rolled and circled.\n\nIn the yard were pickets standing, Hundreds were the sharpened pillars, And a head on every picket, Only one was left un-headed.\n\nQuick the victor, Lemminkainen, Took the head of Pohya's landlord, Spiked it on the empty picket.\n\nThen the Islander, rejoicing, Handsome hero, Kaukomieli, Quick returning to the chambers, Crave this order to the hostess: \"Evil maiden, bring me water, Wherewithal to cleanse my fingers From the blood of Northland's master, Wicked host of Sariola.\" Ilpotar, the Northland hostess, Fired with anger, threatened vengeance, Conjured men with heavy broadswords, Heroes clad in copper-armor, Hundred warriors with their javelins, And a thousand bearing cross-bows, To destroy the Island-hero, For the death of Lemminkainen.\n\nKaukomieli soon discovered That the time had come for leaving, That his presence was unwelcome At the feasting of Pohyola, At the banquet of her people."
+
+[annotations]
+concepts = []
+related_chunks = []

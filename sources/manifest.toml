@@ -915,6 +915,110 @@ license = "public_domain"
 translator = "Benjamin Jowett"
 notes = "Jowett 1871 (Scribner). The Diotima speech (201d-212c) is the canonical statement of ascent from love of beautiful bodies to the Form of Beauty itself — direct source for Plotinus I.6 (already in corpus) and Bruno's Eroici Furori. Single-file HTML."
 
+[[source]]
+id = "plato-timaeus"
+tradition = "platonism"
+label = "Plato: Timaeus"
+url = "https://sacred-texts.com/cla/plato/timaeus.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The prime non-Abrahamic creator-craftsman + world-soul source — direct backing for `demiurge` (upstream of the Gnostic demiurge already in corpus), `numerical_mysticism`, and Hermetic/Neoplatonic cosmogony. Single-file HTML, one continuous <PRE> block, no in-line section markers. todo:ae2b6323."
+
+[[source]]
+id = "plato-phaedo"
+tradition = "platonism"
+label = "Plato: Phaedo"
+url = "https://sacred-texts.com/cla/plato/phaedo.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). Socrates' last day; immortality of the soul, anamnesis (recollection), body-as-tomb. Bridges Orphic/Pythagorean transmigration (already in greek_mystery) to Gnostic soul-imprisonment. Single-file HTML, continuous dialogue. todo:6689fda7."
+
+[[source]]
+id = "plato-phaedrus"
+tradition = "platonism"
+label = "Plato: Phaedrus"
+url = "https://sacred-texts.com/cla/plato/phaedrus.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871 (Scribner). The charioteer myth (246a-254e) + the four divine madnesses (244a-245c). Pairs with the Symposium already held and with Bruno's Eroici Furori (heroic_furor) in renaissance_hermeticism. Single-file HTML. todo:a096de86."
+
+# Republic, Book VI–VII targeted ingest — scoped to the Cave allegory
+# (Book VII opening, 514a-520a) + the Form of the Good discussion
+# (Book VI, 504-518 ≈ 'idea of good'). One [[source]] per sacred-texts
+# page, matching the Yasna/Upanishads precedent (one URL = one source_id).
+# Full Republic deferred — narrative-heavy and outside the concept payload.
+[[source]]
+id = "plato-republic-6-0"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 1)"
+url = "https://sacred-texts.com/cla/plato/rep/rep0600.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Book VI opening; the philosopher-king theme leading into the Form of the Good. Sacred-texts page rep0600 — uses real <p> tags (not single-<PRE> like the standalone dialogues). todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-6-1"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 2) — Form of the Good"
+url = "https://sacred-texts.com/cla/plato/rep/rep0601.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Form of the Good + the Sun analogy + the Divided Line. Direct source for the canonical illusion/awakening cross-tradition node. Confirmed 'idea of good' keyword on page. todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-6-2"
+tradition = "platonism"
+label = "Plato: Republic Book VI (part 3)"
+url = "https://sacred-texts.com/cla/plato/rep/rep0602.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. Continuation of Book VI, transition into the Cave allegory of Book VII. todo:77ffce7d."
+
+[[source]]
+id = "plato-republic-7-0"
+tradition = "platonism"
+label = "Plato: Republic Book VII — Allegory of the Cave"
+url = "https://sacred-texts.com/cla/plato/rep/rep0700.htm"
+format = "html"
+license = "public_domain"
+translator = "Benjamin Jowett"
+notes = "Jowett 1871. The full Book VII on one sacred-texts page (~71KB). Opens with the Allegory of the Cave (514a-520a) — den/shadows/prisoners/chained imagery confirmed. The canonical cross-tradition illusion/awakening node: wires to Gnostic 'sleep', Buddhist ignorance, Ouspensky's mechanical_humanity (western_esoteric). todo:77ffce7d."
+
+# Tier 1 — Iamblichus theurgy primary (neoplatonism deepening alongside Plotinus)
+[[source]]
+id = "iamblichus-on-the-mysteries"
+tradition = "neoplatonism"
+label = "Iamblichus: On the Mysteries (Taylor)"
+url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+format = "html"
+license = "public_domain"
+translator = "Thomas Taylor"
+notes = "Gutenberg #72815 (Taylor 1895, single-file ~660KB). THE primary source for theurgy + cosmic_sympathy — the canonical pro-theurgy answer to anti-theurgy Plotinus already in corpus. Structure: ADVERTISEMENT + INTRODUCTION + Porphyry's Letter to Anebo + Iamblichus's reply in 10 Sections each with numbered Chapters (CHAP. I..XXI etc.). Regex-section-split on the CHAP markers. todo:d02d2ec8."
+
+# Tier 1 — Heart Sutra (sunyata_emptiness primary)
+# Originally landed as two recensions (smaller + larger, sbe4931 + sbe4930)
+# under todo:320d958a. The larger was CUT 2026-06-05 because its doctrinal
+# core duplicates the smaller (~80% verbatim overlap); the unique 20% is
+# Mahāyāna sūtra-as-event framing (Vulture Peak setting, Sariputra-asks
+# pattern, Buddha approval closing) which the retrieval setup is not
+# tuned to handle without surfacing redundant chunks. The smaller is the
+# canonical chanted recension and carries the doctrinal payload alone.
+[[source]]
+id = "heart-sutra-smaller"
+tradition = "buddhism"
+label = "The Heart Sutra (Smaller Prajña-pâramitâ-hridaya)"
+url = "https://www.sacred-texts.com/bud/sbe49/sbe4931.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE49 (Müller 1894). Smaller recension — the standard form, ~10KB. Single most concentrated sunyata_emptiness source; the 'form is emptiness' formula + the gate gate mantra. todo:320d958a."
+
 
 # ============================================
 # SUFISM (Phase 1 cross-tradition expansion)
@@ -959,3 +1063,2353 @@ format = "html_multi"
 license = "public_domain"
 translator = "R.H. Charles"
 notes = "Charles 1917. 113 chapter files boe000.htm-boe112.htm, contiguous sequential numbering. The Watchers narrative (chs. 1-36) is the proto-Gnostic substrate for archons/emanation_hierarchy material already in corpus. Editorial brackets [[ ]] (Greek-only) and [[[[ ]]]] (Ethiopic-only) preserved in source — treat as text-critical metadata."
+# ============================================================
+# Guru Corpus — Source Manifest ADDITIONS (pagan/folkloric batch)
+# Appended to sources/manifest.toml
+# 7 sources across 5 new traditions; all public domain.
+# All URLs verified 2026-05-31; see docs/corpus-expansion/url-vetting.md.
+# ============================================================
+
+
+# === CONTEMPORARY PAGAN / WITCHCRAFT — REMOVED 2026-06-05 ===
+# Originally added in da3ca85a as Leland's Aradia (1899). Removed
+# on the same editorial principle that cut Yoruba (Ellis) on 2026-06-04:
+# outsider voice on a subaltern tradition, with the would-be informant
+# centering (Maddalena) itself disputed by modern scholarship
+# (Hutton, Mathiesen) which holds that Leland substantially authored
+# the material he attributed to her. Leland was an American man of
+# English descent, raised wealthy in Philadelphia, paying a poor
+# Italian peasant woman to "collect" folklore for him — class-colonial
+# asymmetry parallel to (if gentler than) Ellis-on-Yoruba's
+# imperial-colonial one. The "I employed her... to extract it from
+# those of her kind" framing makes the asymmetry explicit in the text.
+#
+# PD status was clean (1899 pre-1929); the cut is editorial, not legal.
+#
+# Insider-perspective modern witchcraft texts (Doreen Valiente,
+# Starhawk, Sabina Magliocco's ethnography) are all in copyright, so
+# there is no clean PD alternative. The `pagan_witchcraft` tradition
+# stays unrepresented rather than misrepresented.
+#
+# The Diana/Aradia/Lucifer-as-light-bringer emanation pattern that
+# Aradia was meant to surface is already in corpus via the Gospel of
+# Philip and the Hermetica — cross-tradition coverage doesn't depend
+# on this source.
+
+
+# === NORSE / HEATHEN ===
+# The Poetic Edda is the primary storehouse of Norse pagan cosmology.
+# Voluspo (creation->Ragnarok) and Hovamol (Othin's wisdom counsels +
+# the rune-charm catalogue) are the conceptually dense mythological
+# core. The heroic lays (Helgakvitha onward) are narrative-heavy —
+# deferred, like the Orphic Argonautica, unless corpus goes narrative.
+
+[[source]]
+id = "poetic-edda-voluspo"
+tradition = "norse"
+# VERIFIED 2026-05-31 — single page; <title>The Poetic Edda: Voluspo</title>,
+# <h1>THE POETIC EDDA</h1> / <h2>LAYS OF THE GODS</h2> / <h2>VOLUSPO</h2>.
+label = "The Poetic Edda: Voluspo (Bellows)"
+url = "https://sacred-texts.com/neu/poe/poe03.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Adams Bellows"
+notes = "Bellows 1923/1936; PD via non-renewal. The Wise-Woman's Prophecy: cosmogony, world-tree, Ragnarok. Bellows interleaves heavy stanza-numbered commentary in [brackets] — treat bracketed notes as text-critical metadata, mirror the Enoch [[ ]] handling. Chunk on stanza-number groups."
+
+[[source]]
+id = "poetic-edda-hovamol"
+tradition = "norse"
+# VERIFIED 2026-05-31 — single page; <title>The Poetic Edda: Hovamol</title>,
+# <h1>HOVAMOL</h1> with sub-heading "The Ballad of the High One".
+label = "The Poetic Edda: Hovamol (Bellows)"
+url = "https://sacred-texts.com/neu/poe/poe04.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Adams Bellows"
+notes = "Bellows 1923/1936. 'The High One's Words' — Othin's gnomic wisdom (cf. Biblical Proverbs) plus the Loddfafnismol and the rune-charm list (stanzas 111-165). Same bracket-as-metadata handling as Voluspo."
+
+
+# === SHINTO (cosmogonic sections only) ===
+# Kojiki Chamberlain 1919, clean PD. Scoped to the kamiyo ("age of
+# the gods") cosmogony: the first deities of the Plain of High Heaven.
+# The scholarly introduction (kj001-006) and the later imperial-
+# genealogy books are narrative/chronicle-heavy — excluded for
+# conceptual density, matching the narrative-deferral policy above.
+
+[[source]]
+id = "kojiki-beginning-heaven-earth"
+tradition = "shinto"
+# VERIFIED 2026-05-31 — single page; <title>The Kojiki: Volume I: Section I.—
+# The Beginning of Heaven and Earth</title>, <h3>[SECT. I.—THE BEGINNING OF
+# HEAVEN AND EARTH.]</h3>. Page also contains a Footnotes block — same SBE-style
+# apparatus issue documented in extra.md; will need a per-config
+# pre_strip_patterns rule or the downloader patch.
+label = "The Kojiki: The Beginning of Heaven and Earth (Chamberlain)"
+url = "https://sacred-texts.com/shi/kj/kj008.htm"
+format = "html"
+license = "public_domain"
+translator = "Basil Hall Chamberlain"
+notes = "Chamberlain 1919. Section I: the first deities of the Plain of High Heaven, born alone and hidden. Chamberlain's numbered footnote markers ride inline in the text — strip the superscript ordinals but preserve sentence flow. Single leaf page; paragraph-group chunk."
+
+
+# === YORUBA / WEST AFRICAN — REMOVED 2026-06-04 ===
+# Originally added in da3ca85a as Ellis 1894 (Chapman & Hall),
+# Victorian-colonial ethnography of West African religion. Removed
+# because the source's framing is outsider-colonial — patronizing
+# register and no informant centering — which fails the project's
+# stance against colonizer/second-hand perspective on a tradition.
+# PD status is clean (1894); the cut is editorial, not legal.
+# If a clean PD insider-perspective Yoruba/orisha source ever surfaces,
+# re-add the `yoruba` tradition slug then.
+
+
+# === FINNIC (Kalevala) ===
+# The Finnish national epic — Lonnrot's 1849 compilation of Karelian/
+# Finnish/Ingrian oral folk-song. Self-collected indigenous tradition,
+# not outsider ethnography: clean provenance. Saturated with sung magic
+# (the "witch-songs" / incantation layer is the oldest stratum), a
+# cosmic-egg creation myth, and the word-as-power motif (Vainamoinen
+# wins by knowing the true origin-words of things) — strong edges to
+# the logos/naming material in the Hermetica and the rune-charm
+# catalogue in Hovamol. Crawford 1888, the first English translation;
+# explicitly "Public domain in the USA." Single-file HTML, 50 Runos.
+
+[[source]]
+id = "kalevala"
+tradition = "finnic"
+# VERIFIED 2026-05-31 — URL resolves (HTTP 200, ~1.1MB gzipped, ~3MB inflated).
+# Crawford translator confirmed via <meta name="MARCREL.trl">. RUNE I..L
+# table-of-contents confirmed. Note: response is served gzipped; acquire.py
+# must request with Accept-Encoding: gzip or the body will be unreadable
+# binary — check that the downloader sets `--compressed` / requests' default
+# automatic decompression (it does).
+label = "The Kalevala (Crawford)"
+url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+format = "html"
+license = "public_domain"
+translator = "John Martin Crawford"
+notes = "Lonnrot comp. 1849; Crawford tr. 1888 (the first English version). Gutenberg #5186, single-file HTML. Structured as PROEM + RUNE I-L (Roman-numeral canto headings). Chunk regex-section-split on '^RUNE ([IVXLC]+)\\.'. Strip Gutenberg header/license boilerplate and the back-matter (glossary, pronunciation notes) before chunking."
+
+
+# === CELTIC (Welsh primary) ===
+# The Mabinogion is the clean primary anchor: a medieval Welsh
+# manuscript tradition (Red Book of Hergest), Lady Guest's translation
+# working from the actual MS, not a reconstruction. The four branches
+# proper are pre-Christian in substance — the pagan British pantheon
+# (Llyr, Bran, Branwen, Rhiannon, Pwyll, Math, Gwydion) under a light
+# medieval-Christian veneer. Strong sovereignty-goddess and otherworld
+# (Annwn) material.
+# (Irish Mythological Cycle deliberately left unrepresented: no clean
+# PD *primary* English translation exists — Macalister's Lebor Gabala
+# is still in copyright, and the available syntheses (Rolleston/Squire)
+# carry dated authorial framing.)
+
+[[source]]
+id = "mabinogion"
+tradition = "celtic"
+# VERIFIED 2026-05-31 — URL resolves (HTTP 200, ~650KB). <title>The Project
+# Gutenberg eBook of The Mabinogion, by Lady Charlotte Guest</title>,
+# <h1>THE MABINOGION</h1>, <h2>TRANSLATED BY LADY CHARLOTTE GUEST</h2>.
+# Contents TOC and chapter anchors (#chap01..#chap13) confirmed.
+label = "The Mabinogion (Lady Charlotte Guest)"
+url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+format = "html"
+license = "public_domain"
+translator = "Lady Charlotte Guest"
+notes = "Guest tr. 1838-1849, from the Red Book of Hergest. Gutenberg #5160, single-file HTML. NOT numbered — 13 titled tales (Introduction, The Lady of the Fountain, Peredur, Geraint, Kilhwch and Olwen, The Dream of Rhonabwy, Pwyll, Branwen, Manawyddan, Math, Maxen Wledig, Lludd and Llevelys, Taliesin). Chunk on title-heading split, not numeric. The Four Branches (Pwyll/Branwen/Manawyddan/Math) carry the densest pagan-deity content. Guest's extensive footnotes are scholarly apparatus — treat as metadata."
+# ============================================================
+# Guru Corpus — Upanishads (Müller, SBE Vols. 1 & 15)
+# Generated by scripts/gen_upanishads_manifest.py
+# tradition = "upanishads"
+# One [[source]] per SBE page (Yasna precedent).
+# ============================================================
+
+# ---------- Katha-Upanishad (6 files) ----------
+[[source]]
+id = "katha-upanishad-1-1"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), I,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15010.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî I,1. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+[[source]]
+id = "katha-upanishad-1-2"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), I,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15011.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî I,2. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+[[source]]
+id = "katha-upanishad-1-3"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), I,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15012.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî I,3. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+[[source]]
+id = "katha-upanishad-2-4"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), II,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15013.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî II,4. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+[[source]]
+id = "katha-upanishad-2-5"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), II,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15014.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî II,5. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+[[source]]
+id = "katha-upanishad-2-6"
+tradition = "upanishads"
+label = "Katha-Upanishad (Müller), II,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15015.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Vallî II,6. Naciketas/Yama dialogue; the chariot-of-the-self image (I.3.3-9)."
+
+# ---------- Mundaka-Upanishad (6 files) ----------
+[[source]]
+id = "mundaka-upanishad-1-1"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), I,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15016.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 1, Khanda 1. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+[[source]]
+id = "mundaka-upanishad-1-2"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), I,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15017.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 1, Khanda 2. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+[[source]]
+id = "mundaka-upanishad-2-1"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), II,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15018.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 2, Khanda 1. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+[[source]]
+id = "mundaka-upanishad-2-2"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), II,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15019.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 2, Khanda 2. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+[[source]]
+id = "mundaka-upanishad-3-1"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), III,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15020.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 3, Khanda 1. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+[[source]]
+id = "mundaka-upanishad-3-2"
+tradition = "upanishads"
+label = "Mundaka-Upanishad (Müller), III,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15021.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Mundaka 3, Khanda 2. Two-birds-on-one-tree image (III.1.1); parâ/aparâ vidyâ."
+
+# ---------- Taittirîya-Upanishad (31 files) ----------
+[[source]]
+id = "taittiriya-upanishad-1-1"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15022.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,1. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-2"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15023.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,2. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-3"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15024.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,3. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-4"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15025.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,4. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-5"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15026.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,5. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-6"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15027.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,6. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-7"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15028.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,7. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-8"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,8"
+url = "https://sacred-texts.com/hin/sbe15/sbe15029.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,8. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-9"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,9"
+url = "https://sacred-texts.com/hin/sbe15/sbe15030.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,9. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-10"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,10"
+url = "https://sacred-texts.com/hin/sbe15/sbe15031.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,10. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-11"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,11"
+url = "https://sacred-texts.com/hin/sbe15/sbe15032.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,11. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-1-12"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), I,12"
+url = "https://sacred-texts.com/hin/sbe15/sbe15033.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sikshâ-Vallî I,12. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-1"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15034.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,1. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-2"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15035.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,2. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-3"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15036.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,3. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-4"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15037.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,4. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-5"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15038.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,5. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-6"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15039.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,6. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-7"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15040.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,7. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-8"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,8"
+url = "https://sacred-texts.com/hin/sbe15/sbe15041.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,8. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-2-9"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), II,9"
+url = "https://sacred-texts.com/hin/sbe15/sbe15042.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Brahmânanda-Vallî II,9. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-1"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15043.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,1. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-2"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15044.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,2. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-3"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15045.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,3. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-4"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15046.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,4. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-5"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15047.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,5. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-6"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15048.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,6. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-7"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15049.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,7. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-8"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,8"
+url = "https://sacred-texts.com/hin/sbe15/sbe15050.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,8. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-9"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,9"
+url = "https://sacred-texts.com/hin/sbe15/sbe15051.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,9. Pañcakosha (five-sheath) model of the self."
+
+[[source]]
+id = "taittiriya-upanishad-3-10"
+tradition = "upanishads"
+label = "Taittirîya-Upanishad (Müller), III,10"
+url = "https://sacred-texts.com/hin/sbe15/sbe15052.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Bhrigu-Vallî III,10. Pañcakosha (five-sheath) model of the self."
+
+# ---------- Brihadâranyaka-Upanishad (46 files) ----------
+[[source]]
+id = "brihadaranyaka-upanishad-1-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), I,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15053.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-1-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), I,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15054.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-1-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), I,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15055.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-1-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), I,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15056.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-1-6"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), I,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15057.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I, Brâhmana 6. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15058.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15059.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-3"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15060.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 3. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15061.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15062.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-2-6"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), II,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15063.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II, Brâhmana 6. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15064.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15065.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-3"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15066.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 3. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15067.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15068.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-6"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15069.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 6. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-7"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15070.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 7. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-8"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,8"
+url = "https://sacred-texts.com/hin/sbe15/sbe15071.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 8. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-3-9"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), III,9"
+url = "https://sacred-texts.com/hin/sbe15/sbe15072.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III, Brâhmana 9. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15073.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15074.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-3"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15075.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 3. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15076.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15077.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-4-6"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), IV,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15078.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV, Brâhmana 6. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15079.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15080.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-3"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15081.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 3. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15082.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15083.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-6"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15084.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 6. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-7"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15085.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 7. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-8"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,8"
+url = "https://sacred-texts.com/hin/sbe15/sbe15086.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 8. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-9"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,9"
+url = "https://sacred-texts.com/hin/sbe15/sbe15087.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 9. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-10"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,10"
+url = "https://sacred-texts.com/hin/sbe15/sbe15088.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 10. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-11"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,11"
+url = "https://sacred-texts.com/hin/sbe15/sbe15089.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 11. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-12"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,12"
+url = "https://sacred-texts.com/hin/sbe15/sbe15090.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 12. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-13"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,13"
+url = "https://sacred-texts.com/hin/sbe15/sbe15091.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 13. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-14"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,14"
+url = "https://sacred-texts.com/hin/sbe15/sbe15092.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 14. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-5-15"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), V,15"
+url = "https://sacred-texts.com/hin/sbe15/sbe15093.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V, Brâhmana 15. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-6-1"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), VI,1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15094.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI, Brâhmana 1. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-6-2"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), VI,2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15095.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI, Brâhmana 2. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-6-3"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), VI,3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15096.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI, Brâhmana 3. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-6-4"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), VI,4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15097.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI, Brâhmana 4. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+[[source]]
+id = "brihadaranyaka-upanishad-6-5"
+tradition = "upanishads"
+label = "Brihadâranyaka-Upanishad (Müller), VI,5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15099.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI, Brâhmana 5. Yâjñavalkya dialogues; neti neti (II.3.6)."
+
+# ---------- Svetâsvatara-Upanishad (6 files) ----------
+[[source]]
+id = "svetasvatara-upanishad-1"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), I"
+url = "https://sacred-texts.com/hin/sbe15/sbe15100.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya I. The most theistic principal Upanishad; Rudra as Highest Self."
+
+[[source]]
+id = "svetasvatara-upanishad-2"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), II"
+url = "https://sacred-texts.com/hin/sbe15/sbe15101.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya II. The most theistic principal Upanishad; Rudra as Highest Self."
+
+[[source]]
+id = "svetasvatara-upanishad-3"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), III"
+url = "https://sacred-texts.com/hin/sbe15/sbe15102.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya III. The most theistic principal Upanishad; Rudra as Highest Self."
+
+[[source]]
+id = "svetasvatara-upanishad-4"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), IV"
+url = "https://sacred-texts.com/hin/sbe15/sbe15103.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya IV. The most theistic principal Upanishad; Rudra as Highest Self."
+
+[[source]]
+id = "svetasvatara-upanishad-5"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), V"
+url = "https://sacred-texts.com/hin/sbe15/sbe15104.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya V. The most theistic principal Upanishad; Rudra as Highest Self."
+
+[[source]]
+id = "svetasvatara-upanishad-6"
+tradition = "upanishads"
+label = "Svetâsvatara-Upanishad (Müller), VI"
+url = "https://sacred-texts.com/hin/sbe15/sbe15105.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Adhyâya VI. The most theistic principal Upanishad; Rudra as Highest Self."
+
+# ---------- Prasña-Upanishad (6 files) ----------
+[[source]]
+id = "prasna-upanishad-1"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15106.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. First Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+[[source]]
+id = "prasna-upanishad-2"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15107.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Second Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+[[source]]
+id = "prasna-upanishad-3"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15108.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Third Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+[[source]]
+id = "prasna-upanishad-4"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15109.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Fourth Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+[[source]]
+id = "prasna-upanishad-5"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15110.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Fifth Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+[[source]]
+id = "prasna-upanishad-6"
+tradition = "upanishads"
+label = "Prasña-Upanishad (Müller), Question 6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15111.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sixth Question. Six questions to Pippalâda; prâna cosmology, OM meditation."
+
+# ---------- Maitrâyana-Brâhmana-Upanishad (7 files) ----------
+[[source]]
+id = "maitrayana-upanishad-1"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 1"
+url = "https://sacred-texts.com/hin/sbe15/sbe15112.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. First Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-2"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 2"
+url = "https://sacred-texts.com/hin/sbe15/sbe15113.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Second Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-3"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 3"
+url = "https://sacred-texts.com/hin/sbe15/sbe15114.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Third Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-4"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 4"
+url = "https://sacred-texts.com/hin/sbe15/sbe15115.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Fourth Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-5"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 5"
+url = "https://sacred-texts.com/hin/sbe15/sbe15116.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Fifth Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-6"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 6"
+url = "https://sacred-texts.com/hin/sbe15/sbe15117.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Sixth Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+[[source]]
+id = "maitrayana-upanishad-7"
+tradition = "upanishads"
+label = "Maitrâyana-Brâhmana-Upanishad (Müller), Prapâthaka 7"
+url = "https://sacred-texts.com/hin/sbe15/sbe15118.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE15. Seventh Prapâthaka. Sixfold yoga (VI.18); the most yoga-explicit principal Upanishad."
+
+# ---------- Khândogya-Upanishad (57 files) ----------
+[[source]]
+id = "chandogya-upanishad-6-1"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01119.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 1. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-2"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,2"
+url = "https://sacred-texts.com/hin/sbe01/sbe01120.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 2. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-3"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,3"
+url = "https://sacred-texts.com/hin/sbe01/sbe01121.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 3. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-4"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,4"
+url = "https://sacred-texts.com/hin/sbe01/sbe01122.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 4. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-5"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,5"
+url = "https://sacred-texts.com/hin/sbe01/sbe01123.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 5. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-6"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,6"
+url = "https://sacred-texts.com/hin/sbe01/sbe01124.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 6. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-7"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,7"
+url = "https://sacred-texts.com/hin/sbe01/sbe01125.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 7. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-8"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,8"
+url = "https://sacred-texts.com/hin/sbe01/sbe01126.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 8. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-9"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,9"
+url = "https://sacred-texts.com/hin/sbe01/sbe01127.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 9. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-10"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,10"
+url = "https://sacred-texts.com/hin/sbe01/sbe01128.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 10. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-11"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,11"
+url = "https://sacred-texts.com/hin/sbe01/sbe01129.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 11. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-12"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,12"
+url = "https://sacred-texts.com/hin/sbe01/sbe01130.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 12. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-13"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,13"
+url = "https://sacred-texts.com/hin/sbe01/sbe01131.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 13. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-14"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,14"
+url = "https://sacred-texts.com/hin/sbe01/sbe01132.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 14. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-15"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,15"
+url = "https://sacred-texts.com/hin/sbe01/sbe01133.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 15. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-6-16"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VI,16"
+url = "https://sacred-texts.com/hin/sbe01/sbe01134.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VI, Khanda 16. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-1"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01135.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 1. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-2"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,2"
+url = "https://sacred-texts.com/hin/sbe01/sbe01136.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 2. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-3"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,3"
+url = "https://sacred-texts.com/hin/sbe01/sbe01137.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 3. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-4"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,4"
+url = "https://sacred-texts.com/hin/sbe01/sbe01138.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 4. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-5"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,5"
+url = "https://sacred-texts.com/hin/sbe01/sbe01139.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 5. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-6"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,6"
+url = "https://sacred-texts.com/hin/sbe01/sbe01140.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 6. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-7"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,7"
+url = "https://sacred-texts.com/hin/sbe01/sbe01141.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 7. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-8"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,8"
+url = "https://sacred-texts.com/hin/sbe01/sbe01142.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 8. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-9"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,9"
+url = "https://sacred-texts.com/hin/sbe01/sbe01143.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 9. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-10"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,10"
+url = "https://sacred-texts.com/hin/sbe01/sbe01144.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 10. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-11"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,11"
+url = "https://sacred-texts.com/hin/sbe01/sbe01145.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 11. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-12"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,12"
+url = "https://sacred-texts.com/hin/sbe01/sbe01146.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 12. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-13"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,13"
+url = "https://sacred-texts.com/hin/sbe01/sbe01147.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 13. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-14"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,14"
+url = "https://sacred-texts.com/hin/sbe01/sbe01148.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 14. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-15"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,15"
+url = "https://sacred-texts.com/hin/sbe01/sbe01149.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 15. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-16"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,16"
+url = "https://sacred-texts.com/hin/sbe01/sbe01150.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 16. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-17"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,17"
+url = "https://sacred-texts.com/hin/sbe01/sbe01151.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 17. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-18"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,18"
+url = "https://sacred-texts.com/hin/sbe01/sbe01152.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 18. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-19"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,19"
+url = "https://sacred-texts.com/hin/sbe01/sbe01153.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 19. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-20"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,20"
+url = "https://sacred-texts.com/hin/sbe01/sbe01154.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 20. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-21"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,21"
+url = "https://sacred-texts.com/hin/sbe01/sbe01155.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 21. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-22"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,22"
+url = "https://sacred-texts.com/hin/sbe01/sbe01156.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 22. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-23"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,23"
+url = "https://sacred-texts.com/hin/sbe01/sbe01157.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 23. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-24"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,24"
+url = "https://sacred-texts.com/hin/sbe01/sbe01158.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 24. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-25"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,25"
+url = "https://sacred-texts.com/hin/sbe01/sbe01159.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 25. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-7-26"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VII,26"
+url = "https://sacred-texts.com/hin/sbe01/sbe01160.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VII, Khanda 26. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-1"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01161.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 1. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-2"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,2"
+url = "https://sacred-texts.com/hin/sbe01/sbe01162.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 2. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-3"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,3"
+url = "https://sacred-texts.com/hin/sbe01/sbe01163.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 3. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-4"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,4"
+url = "https://sacred-texts.com/hin/sbe01/sbe01164.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 4. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-5"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,5"
+url = "https://sacred-texts.com/hin/sbe01/sbe01165.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 5. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-6"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,6"
+url = "https://sacred-texts.com/hin/sbe01/sbe01166.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 6. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-7"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,7"
+url = "https://sacred-texts.com/hin/sbe01/sbe01167.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 7. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-8"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,8"
+url = "https://sacred-texts.com/hin/sbe01/sbe01168.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 8. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-9"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,9"
+url = "https://sacred-texts.com/hin/sbe01/sbe01169.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 9. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-10"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,10"
+url = "https://sacred-texts.com/hin/sbe01/sbe01170.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 10. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-11"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,11"
+url = "https://sacred-texts.com/hin/sbe01/sbe01171.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 11. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-12"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,12"
+url = "https://sacred-texts.com/hin/sbe01/sbe01172.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 12. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-13"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,13"
+url = "https://sacred-texts.com/hin/sbe01/sbe01173.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 13. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-14"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,14"
+url = "https://sacred-texts.com/hin/sbe01/sbe01174.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 14. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+[[source]]
+id = "chandogya-upanishad-8-15"
+tradition = "upanishads"
+label = "Khândogya-Upanishad (Müller), VIII,15"
+url = "https://sacred-texts.com/hin/sbe01/sbe01175.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Prapâthaka VIII, Khanda 15. Prapâthakas VI-VIII (tat tvam asi, honey-doctrine, Indra/Virocana, Sândilya-vidyâ)."
+
+# ---------- Kena-Upanishad (4 files) ----------
+[[source]]
+id = "kena-upanishad-1"
+tradition = "upanishads"
+label = "Kena-Upanishad (Müller), Khanda 1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01176.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. First Khanda. Brahman as the ground of cognition."
+
+[[source]]
+id = "kena-upanishad-2"
+tradition = "upanishads"
+label = "Kena-Upanishad (Müller), Khanda 2"
+url = "https://sacred-texts.com/hin/sbe01/sbe01177.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Second Khanda. Brahman as the ground of cognition."
+
+[[source]]
+id = "kena-upanishad-3"
+tradition = "upanishads"
+label = "Kena-Upanishad (Müller), Khanda 3"
+url = "https://sacred-texts.com/hin/sbe01/sbe01178.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Third Khanda. Brahman as the ground of cognition."
+
+[[source]]
+id = "kena-upanishad-4"
+tradition = "upanishads"
+label = "Kena-Upanishad (Müller), Khanda 4"
+url = "https://sacred-texts.com/hin/sbe01/sbe01179.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Fourth Khanda. Brahman as the ground of cognition."
+
+# ---------- Aitareya-Upanishad (6 files) ----------
+[[source]]
+id = "aitareya-upanishad-2-4-1"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,4,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01222.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,4,1. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+[[source]]
+id = "aitareya-upanishad-2-4-2"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,4,2"
+url = "https://sacred-texts.com/hin/sbe01/sbe01223.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,4,2. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+[[source]]
+id = "aitareya-upanishad-2-4-3"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,4,3"
+url = "https://sacred-texts.com/hin/sbe01/sbe01224.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,4,3. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+[[source]]
+id = "aitareya-upanishad-2-5-1"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,5,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01225.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,5,1. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+[[source]]
+id = "aitareya-upanishad-2-6-1"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,6,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01226.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,6,1. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+[[source]]
+id = "aitareya-upanishad-2-7-1"
+tradition = "upanishads"
+label = "Aitareya-Upanishad (Müller), II,7,1"
+url = "https://sacred-texts.com/hin/sbe01/sbe01227.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Aitareya-Upanishad II,7,1. Upanishad proper (Âranyaka II.4-7): cosmogony, prajñânam brahma."
+
+# ---------- Îsâ-Upanishad (1 file, includes commentary tail) ----------
+[[source]]
+id = "isa-upanishad"
+tradition = "upanishads"
+label = "Îsâ-Upanishad (Müller)"
+url = "https://sacred-texts.com/hin/sbe01/sbe01243.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE1. Whole text; 18 verses with Müller's commentary tail. Shortest principal Upanishad (18 verses); single sacred-texts page also carries Müller's verse-by-verse commentary tail."
+
+
+# ============================================
+# PSEUDO-DIONYSIUS (Tier 1 child 5/8) — apophatic urtext
+# ============================================
+# Rolt 1920 (SPCK, London); translator d. 1917, clean US-PD.
+# Mystical Theology = the urtext of apophatic_theology; sits between
+# Plotinus (held) and Eckhart (held). Divine Names = a major
+# emanation_hierarchy source.
+# Rolt's introduction (dionysius.iii.* pages) and the Celestial /
+# Ecclesiastical Hierarchies (dionysius.vi.* / vii.*) are intentionally
+# excluded — those go in a separate follow-up ticket per the ticket
+# description.
+# todo:d7c3ccef.
+
+[[source]]
+id = "dionysius-mystical-theology"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Mystical Theology"
+url = "https://www.ccel.org/ccel/rolt/dionysius.v.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Single 60KB CCEL page containing all 5 chapters inline. The urtext of apophatic_theology — 'the Divine Gloom', the via negativa. Regex-section-split on CHAPTER I..V."
+
+[[source]]
+id = "dionysius-divine-names-1"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 1"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.ii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 1 (file iv.ii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-2"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 2"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 2 (file iv.iii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-3"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 3"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.iv.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 3 (file iv.iv). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-4"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 4"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.v.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 4 (file iv.v). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-5"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 5"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.vi.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 5 (file iv.vi). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-6"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 6"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.vii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 6 (file iv.vii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-7"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 7"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.viii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 7 (file iv.viii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-8"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 8"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.ix.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 8 (file iv.ix). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-9"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 9"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.x.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 9 (file iv.x). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-10"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 10"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xi.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 10 (file iv.xi). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-11"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 11"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 11 (file iv.xii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-12"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 12"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xiii.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 12 (file iv.xiii). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+[[source]]
+id = "dionysius-divine-names-13"
+tradition = "christian_mysticism"
+label = "Pseudo-Dionysius: The Divine Names, Chapter 13"
+url = "https://www.ccel.org/ccel/rolt/dionysius.iv.xiv.html"
+format = "html"
+license = "public_domain"
+translator = "C.E. Rolt"
+notes = "Rolt 1920. Divine Names ch. 13 (file iv.xiv). Major emanation_hierarchy source; the divine attributes and how they relate to the One."
+
+
+# Tier 1 — Dhammapada (Müller SBE10, 1881). 26 chapters across
+# sbe1003..sbe1028; one [[source]] per chapter (Yasna precedent).
+# todo:62b5d6c1.
+
+[[source]]
+id = "dhammapada-chapter-01"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter I"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1003.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter I (file sbe1003.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-02"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter II"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1004.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter II (file sbe1004.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-03"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter III"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1005.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter III (file sbe1005.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-04"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter IV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1006.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter IV (file sbe1006.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-05"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter V"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1007.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter V (file sbe1007.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-06"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1008.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VI (file sbe1008.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-07"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1009.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VII (file sbe1009.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-08"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter VIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1010.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter VIII (file sbe1010.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-09"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter IX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1011.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter IX (file sbe1011.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-10"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter X"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1012.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter X (file sbe1012.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-11"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1013.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XI (file sbe1013.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-12"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1014.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XII (file sbe1014.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-13"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1015.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIII (file sbe1015.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-14"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1016.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIV (file sbe1016.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-15"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1017.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XV (file sbe1017.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-16"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1018.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVI (file sbe1018.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-17"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1019.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVII (file sbe1019.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-18"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XVIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1020.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XVIII (file sbe1020.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-19"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XIX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1021.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XIX (file sbe1021.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-20"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XX"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1022.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XX (file sbe1022.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-21"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1023.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXI (file sbe1023.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-22"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1024.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXII (file sbe1024.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-23"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXIII"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1025.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXIII (file sbe1025.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-24"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXIV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1026.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXIV (file sbe1026.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-25"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXV"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1027.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXV (file sbe1027.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+[[source]]
+id = "dhammapada-chapter-26"
+tradition = "buddhism"
+label = "The Dhammapada: Chapter XXVI"
+url = "https://www.sacred-texts.com/bud/sbe10/sbe1028.htm"
+format = "html"
+license = "public_domain"
+translator = "F. Max Müller"
+notes = "SBE10 (Müller 1881). Dhammapada Chapter XXVI (file sbe1028.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."

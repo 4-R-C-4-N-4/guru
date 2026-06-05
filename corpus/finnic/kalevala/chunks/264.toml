@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.264"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLIXe"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 545
+
+[content]
+body = "Then again the wicked Louhi Changed her withered form and features, And became a dove of good-luck; Straightway winged the starry heavens, Over field, and fen, and forest, To the meadows of Wainola, To the plains of Kalevala, To the forge of Ilmarinen.\n\nThis the question of the blacksmith \"Wherefore comest, dove of good-luck, What the tidings that thou bringest?\" Thus the magic bird made answer: \"Wherefore come I to thy smithy?\n\nCome to bring the joyful tidings That the Sun has left his cavern, Left the rock of many colors, Left the stone-berg of Pohyola; That the Moon no more is hidden In the copper-bearing mountains, In the caverns iron-banded.\" Straightway hastened Ilmarinen To the threshold of his smithy, Quickly scanned the far horizon, Saw again the silver sunshine, Saw once more the golden moonlight, Bringing peace, and joy, and plenty, To the homes of Kalevala.\n\nThereupon the blacksmith hastened To his brother, Wainamoinen, Spake these words to the magician: \"O thou ancient bard and minstrel, The eternal wizard-singer See, the Sun again is shining, And the golden Moon is beaming From their long-neglected places, From their stations in the sky-vault!\" Wainamoinen, old and faithful, Straightway hastened to the court-yard, Looked upon the far horizon, Saw once more the silver sunshine, Saw again the golden moonlight, Bringing peace, and joy, and plenty, To the people of the Northland, And the minstrel spake these measures: \"Greetings to thee, Sun of fortune, Greetings to thee, Moon of good-luck, Welcome sunshine, welcome moonlight, Golden is the dawn of morning!\n\nFree art thou, O Sun of silver, Free again, O Moon beloved, As the sacred cuckoo's singing, As the ring-dove's liquid cooings.\n\n\"Rise, thou silver Sun, each Morning, Source of light and life hereafter, Bring us, daily, joyful greetings, Fill our homes with peace and plenty, That our sowing, fishing, hunting, May be prospered by thy coming.\n\nTravel on thy daily journey, Let the Moon be ever with thee; Glide along thy way rejoicing, End thy journeyings in slumber; Rest at evening in the ocean, When the daily cares have ended, To the good of all thy people, To the pleasure Of Wainoloa, To the joy of Kalevala!\""
+
+[annotations]
+concepts = []
+related_chunks = []

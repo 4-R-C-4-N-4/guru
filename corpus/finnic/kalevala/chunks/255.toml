@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.255"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLVIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 635
+
+[content]
+body = "\"Time had gone but little distance, When the gray-pike grew affrighted, Fear befel the lake-trout-eater; Burning pain and writhing torment Seized the reckless trout-devourer; Swam the pike in all directions, Called, and moaned, and swam, and circled, Swam one day, and then a second, Swam the third from morn till even, To the cave of ocean-swallows, To the sand-hills of the sea-gull, Where a hundred islands cluster; And the islands there assembled Thus addressed the fire-devourer: 'There is none within this lakelet, In these narrow Alue-waters, That will eat the fated Fire-fish, That will swallow thee in trouble, In thine agonies and tortures, From the Fire-fish thou hast eaten.'\" Wainamoinen, wise and ancient, With the aid of Ilmarinen, Weaves with skill a mighty fish-net From the juniper and sea-grass; Dyes the net with alder-water, Ties it well with thongs of willow.\n\nStraightway ancient Wainamoinen Called the maidens to the fish-net, And the sisters came as bidden.\n\nWith the netting rowed they onward, Rowed they to the hundred islands, To the grottoes of the salmon, To the caverns of the whiting, To the reeds of sable color, Where the gray-pike rests and watches.\n\nOn they hasten to the fishing, Drag the net in all directions, Drag it lengthwise, sidewise, crosswise, And diagonally zigzag; But they did not catch the Fire-fish.\n\nThen the brothers went a-fishing, Dragged the net in all directions, Backwards, forwards, lengthwise, sidewise, Through the homes of ocean-dwellers, Through the grottoes of the salmon, Through the dwellings of the whiting, Through the reed-beds of the lake-trout, Where the gray-pike lies in ambush; But the fated Fire-fish came not, Came not from the lake's abysses, Came not from the Alue-waters.\n\nLittle fish could not be captured In the large nets of the masters; Murmured then the deep-sea-dwellers, Spake the salmon to the lake-trout, And the lake-trout to the whiting, And the whiting to the gray-pike: Have the heroes of Wainola Died, or have they all departed From these fertile shores and waters?\n\nWhere then are the ancient weavers, Weavers of the nets of flax-thread, Those that frighten us with fish-poles, Drag us from our homes unwilling?\" Hearing this wise Wainamoinen Answered thus the deep-sea-dwellers: \"Neither have Wainola's heroes Died, nor have they all departed From these fertile shores and waters, Two are born where one has perished; Longer poles and finer fish-nets Have the sons of Kalevala!\""
+
+[annotations]
+concepts = []
+related_chunks = []

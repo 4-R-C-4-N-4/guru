@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.dionysius-divine-names-4.039"
+tradition = "christian_mysticism"
+text_name = "Pseudo-Dionysius: The Divine Names"
+section = "Chapter 4, Section 1"
+translator = "C.E. Rolt"
+source_url = "https://www.ccel.org/ccel/rolt/dionysius.iv.v.html"
+token_count = 226
+
+[content]
+body = "Evil things are not entirety bad, but are bad only in some partial aspect.\n\n360 περὶ τὴν ἄληστον του ἀγαθοῦ γνῶσιν.\n\n361 Luke xii.\n\n47 .\n\n362 In the previous section D.\n\nhas maintained that all people ultimately desire the Good.\n\nHence it follows that all sin is due to ignorance; for could we all recognize that which we desire we would follow it.\n\nThis raises the question: What, then, does Scripture mean by speaking of men who sin knowingly?\n\nTo this D.\n\nreplies that wilful sin is wilful ignorance.\n\nIt is the failure to exercise the knowledge we possess: as when we know a fact which yet is not actually present to our minds.\n\nWe know (having been taught it) the desirableness of the Good, but we can shut this desirableness out from our minds and refuse to dwell upon it.\n\nIn such a case we refuse to exercise our knowledge.\n\n363 This treatise is lost."
+
+[annotations]
+concepts = []
+related_chunks = []

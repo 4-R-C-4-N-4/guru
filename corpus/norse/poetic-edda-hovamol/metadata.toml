@@ -1,0 +1,7 @@
+tradition = "norse"
+text_id = "poetic-edda-hovamol"
+text_name = "The Poetic Edda: Hovamol"
+translator = "Henry Adams Bellows"
+source_url = "https://sacred-texts.com/neu/poe/poe04.htm"
+sections_format = "section"
+chunk_count = 16

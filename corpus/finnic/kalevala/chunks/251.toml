@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.251"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLVIg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 279
+
+[content]
+body = "Spake the singer of Wainola: \"Light for me a torch of pine-wood, For the darkness is appearing, That my playing may be joyous And my wisdom-songs find welcome.\" Then the ancient sage and singer, Wise and worthy Wainamoinen, Sweetly sang and played, and chanted, Through the long and dreary evening, Ending thus his incantation: \"Grant, O Ukko, my Creator, That the people of Wainola May enjoy another banquet In the company of Light-foot; Grant that we may long remember Kalevala's feast with Otso!\n\n\"Grant, O Ukko, my Creator, That the signs may guide our footsteps, That the notches in the pine-tree May direct my faithful people To the bear-dens of the woodlands; That great Tapio's sacred bugle May resound through glen and forest; That the wood-nymph's call may echo, May be heard in field and hamlet, To the joy of all that listen!\n\nLet great Tapio's horn for ages Ring throughout the fen and forest, Through the hills and dales of Northland O'er the meadows and the mountains, To awaken song and gladness In the forests of Wainola, On the snowy plains of Suomi, On the meads of Kalevala, For the coming generations.\""
+
+[annotations]
+concepts = []
+related_chunks = []

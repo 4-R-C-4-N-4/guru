@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.224"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLd"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 319
+
+[content]
+body = "Louhi, hostess of the Northland, Took the harp-strings in her fingers; All the youth of Sariola, Youth of every tribe and station, Vainly touched the harp of fish-bone; Could not find the notes of joyance, Dissonance their only pleasure; Shrieked the harp-strings like the whirlwinds, All the tones wore harsh and frightful.\n\nIn a corner slept a blind man, Lay a gray-beard on the oven, Rousing from his couch of slumber, Murmured thus within his corner: \"Cease at once this wretched playing, Make an end of all this discord; It benumbs mine ears for hearing, Racks my brain, despoils my senses, Robs me of the sweets of sleeping.\n\nIf the harp of Suomi's people True delight cannot engender, Cannot bring the notes of pleasure, Cannot sing to sleep the aged, Cast the thing upon the waters, Sink it in the deeps of ocean, Take it back to Kalevala, To the home of him that made it, To the bands of its creator.\" Thereupon the harp made answer, To the blind man sang these measures: \"Shall not fall upon the waters, Shall not sink within the ocean; I will play for my creator, Sing in melody and concord In the fingers of my master.\" Carefully the harp was carried To the artist that had made it To the hands of its creator, To the feet of Wainamoinen."
+
+[annotations]
+concepts = []
+related_chunks = []

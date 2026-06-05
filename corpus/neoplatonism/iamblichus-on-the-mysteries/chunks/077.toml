@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.077"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter XXVIIIb"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 96
+
+[content]
+body = "The variety, however, of such like energies, and the composition of a multitude of material powers, are not only entirely separated from divine fabrication, but also from natural production.\n\nFor nature produces her proper works collectively, and at once, and accomplishes all things by simple and incomposite energies.\n\nHence it remains that a commixture of this kind, about the last and manifest celestial effluxion, and about the things which are moved by a celestial nature, is artificial."
+
+[annotations]
+concepts = []
+related_chunks = []

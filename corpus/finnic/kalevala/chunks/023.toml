@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.023"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune IVg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 417
+
+[content]
+body = "As the tear-drops fall and mingle, Form they streamlets three in number, And their source, the mother's eyelids, Streamlets formed from pearly tear-drops, Flowing on like little rivers, And each streamlet larger growing, Soon becomes a rushing torrent In each rushing, roaring torrent There a cataract is foaming, Foaming in the silver sunlight; From the cataract's commotion Rise three pillared rocks in grandeur; From each rock, upon the summit, Grow three hillocks clothed in verdure; From each hillock, speckled birches, Three in number, struggle skyward; On the summit of each birch-tree Sits a golden cuckoo calling, And the three sing, all in concord: \"Love!\n\nO Love!\n\nthe first one calleth; Sings the second, Suitor!\n\nSuitor!\n\nAnd the third one calls and echoes, \"Consolation!\n\nConsolation!\" He that \"Love!\n\nO Love!\" is calling, Calls three moons and calls unceasing, For the love-rejecting maiden Sleeping in the deep sea-castles.\n\nHe that \"Suitor!\n\nSuitor!\" singeth, Sings six moons and sings unceasing For the suitor that forever Sings and sues without a hearing.\n\nHe that sadly sings and echoes, \"Consolation!\n\nConsolation!\" Sings unceasing all his life long For the broken-hearted mother That must mourn and weep forever.\n\nWhen the lone and wretched mother Heard the sacred cuckoo singing, Spake she thus, and sorely weeping: \"When I hear the cuckoo calling, Then my heart is filled with sorrow; Tears unlock my heavy eyelids, Flow adown my, furrowed visage, Tears as large as silver sea pearls; Older grow my wearied elbows, Weaker ply my aged fingers, Wearily, in all its members, Does my body shake in palsy, When I hear the cuckoo singing, Hear the sacred cuckoo calling.\""
+
+[annotations]
+concepts = []
+related_chunks = []

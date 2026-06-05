@@ -1,0 +1,15 @@
+[chunk]
+id = "celtic.mabinogion.089"
+tradition = "celtic"
+text_name = "The Mabinogion"
+section = "Tale KILHWCH AND OLWENf"
+translator = "Lady Charlotte Guest"
+source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
+token_count = 784
+
+[content]
+body = "(They were men of Caerdathal, of Arthur’s kindred on his father’s side.) Dirmyg the son of Kaw, and Justic the son of Kaw, and Etmic the son of Kaw, and Anghawd the son of Kaw, and Ovan the son of Kaw, and Kelin the son of Kaw, and Connyn the son of Kaw, and Mabsant the son of Kaw, and Gwyngad the son of Kaw, and Llwybyr the son of Kaw, and Coth the son of Kaw, and Meilic the son of Kaw, and Kynwas the son of Kaw, and Ardwyad the son of Kaw, and Ergyryad the son of Kaw, and Neb the son of Kaw, and Gilda the son of Kaw, and Calcas the son of Kaw, and Hueil the son of Kaw (he never yet made a request at the hand of any Lord).\n\nAnd Samson Vinsych, and Taliesin the chief of the bards, and Manawyddan the son of Llyr, and Llary the son of Prince Kasnar, and Ysperni the son of Fflergant king of Armorica, and Saranhon the son of Glythwyr, and Llawr Eilerw, and Annyanniawc the son of Menw the son of Teirgwaedd, and Gwynn the son of Nwyvre, and Fflam the son of Nwyvre, and Geraint the son of Erbin, and Ermid the son of Erbin, and Dyvel the son of Erbin, and Gwynn the son of Ermid, and Kyndrwyn the son of Ermid, and Hyveidd Unllenn, and Eiddon Vawr Vrydic, and Reidwn Arwy, and Gormant the son of Ricca (Arthur’s brother by his mother’s side; the Penhynev of Cornwall was his father), and Llawnrodded Varvawc, and Nodawl Varyf Twrch, and Berth the son of Kado, and Rheidwn the son of Beli, and Iscovan Hael, and Iscawin the son of Panon, and Morvran the son of Tegid (no one struck him in the battle of Camlan by reason of his ugliness; all thought he was an auxiliary devil.\n\nHair had he upon him like the hair of a stag).\n\nAnd Sandde Bryd Angel (no one touched him with a spear in the battle of Camlan because of his beauty; all thought he was a ministering angel).\n\nAnd Kynwyl Sant (the third man that escaped from the battle of Camlan, and he was the last who parted from Arthur on Hengroen his horse).\n\nAnd Uchtryd the son of Erim, and Eus the son of Erim, and Henwas Adeinawg the son of Erim, and Henbedestyr the son of Erim, and Sgilti Yscawndroed the son of Erim.\n\n(Unto these three men belonged these three qualities,—With Henbedestyr there was not any one who could keep pace, either on horseback or on foot; with Henwas Adeinawg, no four-footed beast could run the distance of an acre, much less could it go beyond it; and as to Sgilti Yscawndroed, when he intended to go upon a message for his Lord, he never sought to find a path, but knowing whither he was to go, if his way lay through a wood he went along the tops of the trees."
+
+[annotations]
+concepts = []
+related_chunks = []

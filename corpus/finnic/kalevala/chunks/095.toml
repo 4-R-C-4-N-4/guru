@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.095"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIIg"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 528
+
+[content]
+body = "Spake the hero, Wainamoinen: \"O, thou Antero Wipunen, Open wide thy mouth and fauces, I have found the magic lost-words, I will leave thee now forever, Leave thee and thy wondrous singing, Will return to Kalevala, To Wainola's fields and firesides.\" Thus Wipunen spake in answer: \"Many are the things I've eaten, Eaten bear, and elk, and reindeer, Eaten ox, and wolf, and wild-boar, Eaten man, and eaten hero, Never, never have I eaten Such a thing as Wainamoinen; Thou hast found what thou desirest, Found the three words of the Master; Go in peace, and ne'er returning, Take my blessing on thy going.\" Thereupon the bard Wipunen Opens wide his mouth, and wider; And the good, old Wainamoinen Straightway leaves the wise enchanter, Leaves Wipunen's great abdomen; From the mouth he glides and journeys O'er the hills and vales of Northland, Swift as red-deer or the forest, Swift as yellow-breasted marten, To the firesides of Wainola, To the plains of Kalevala.\n\nStraightway hastes he to the smithy Of his brother, Ilmarinen, Thus the iron-artist greets him: Hast thou found the long-lost wisdom, Hast thou heard the secret doctrine, Hast thou learned the master magic, How to fasten in the ledges, How the stern should be completed, How complete the ship's forecastle?\n\nWainamoinen thus made answer: \"I have learned of words a hundred, Learned a thousand incantations, Hidden deep for many ages, Learned the words of ancient wisdom, Found the keys of secret doctrine, Found the lost-words of the Master.\" Wainamoinen, magic-builder, Straightway journeys to his vessel, To the spot of magic labor, Quickly fastens in the ledges, Firmly binds the stern together And completes the boat's forecastle.\n\nThus the ancient Wainamoinen Built the boat with magic only, And with magic launched his vessel, Using not the hand to touch it, Using not the foot to move it, Using not the knee to turn it, Using nothing to propel it.\n\nThus the third task was completed, For the hostess of Pohyola, Dowry for the Maid of Beauty Sitting on the arch of heaven, On the bow of many colors."
+
+[annotations]
+concepts = []
+related_chunks = []

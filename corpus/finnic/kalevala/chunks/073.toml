@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.073"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XIVf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 425
+
+[content]
+body = "Oh I for three words with my mother, How to live, and bow to suffer, In this time of dire misfortune, How to bear the stings of serpents, Tortures of the reed of waters, From the stream of Tuonela!\n\n\"Ancient mother who hast borne me, Who hast trained me from my childhood, Learn, I pray thee, where I linger, Where alas!\n\nthy son is lying, Where thy reckless hero suffers.\n\nCome, I pray thee, faithful mother, Come thou quickly, thou art needed, Come deliver me from torture, From the death-jaws of Tuoni, From the sacred stream and whirlpool.\" Northland's old and wretched shepherd, Nasshut, the despised protector Of the flocks of Sariola, Throws the dying Lemminkainen, Throws the hero of the islands, Into Tuonela's river, To the blackest stream of death-land, To the worst of fatal whirlpools.\n\nLemminkainen, wild and daring, Helpless falls upon the waters, Floating down the coal-black current, Through the cataract and rapids To the tombs of Tuonela.\n\nThere the blood-stained son of death-land, There Tuoni's son and hero, Cuts in pieces Lemminkainen, Chops him with his mighty hatchet, Till the sharpened axe strikes flint-sparks From the rocks within his chamber, Chops the hero into fragments, Into five unequal portions, Throws each portion to Tuoni, In Manala's lowest kingdom, Speaks these words when he has ended: \"Swim thou there, wild Lemminkainen, Flow thou onward in this river, Hunt forever in these waters, With thy cross-bow and thine arrow, Shoot the swan within this empire, Shoot our water-birds in welcome!\" Thus the hero, Lemminkainen, Thus the handsome Kaukomieli, The untiring suitor, dieth In the river of Tuoni, In the death-realm of Manala."
+
+[annotations]
+concepts = []
+related_chunks = []

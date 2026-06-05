@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.097"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XVIIIb"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 615
+
+[content]
+body = "Sail then farther on thy journey, Point thy prow to other waters.\" It was not her father's vessel, Not a sail-boat from the distance, 'Twas the ship of Wainamoinen, Bark of the eternal singer; Sails within a hailing distance, Swims still nearer o'er the waters, Brings one word and takes another, Brings a third of magic import.\n\nSpeaks the goodly maid, Annikki, Of the Night and Dawn, the daughter, To the sailor of the vessel: \"Whither sailest, Wainamoinen, Whither bound, thou friend of waters, Pride and joy of Kalevala?\" From the vessel Wainamomen Gives this answer to the maiden: \"I have come to catch some sea-trout, Catch the young and toothsome whiting, Hiding in tbese-reeds and rushes.\" This the answer of Annikki: \"Do not speak to me in falsehood, Know I well the times of fishing; Long ago my honored father Was a fisherman in Northland, Came to catch the trout and whiting, Fished within these seas and rivers.\n\nVery well do I remember How the fisherman disposes, How he rigs his fishing vessel, Lines, and gaffs, and poles, and fish-nets; Hast not come a-fishing hither.\n\nWhither goest, Wainamoinen, Whither sailest, friend of waters?\n\nSpake the ancient Wainamoinen: \"I have come to catch some wild-geese, Catch the hissing birds of Suomi, In these far-extending borders, In the Sachsensund dominions.\" Good Annikki gives this answer: \"Know I well a truthful speaker, Easily detect a falsehood; Formerly my aged father Often came a-hunting hither, Came to hunt the hissing wild-geese, Hunt the red-bill of these waters.\n\nVery well do I remember How the hunter rigs his vessel, Bows, and arrows, knives, and quiver, Dogs enchained within the vessel, Pointers hunting on the sea-shore, Setters seeking in the marshes, Tell the truth now Wainamoinen, Whither is thy vessel sailing?\" Spake the hero of the Northland: \"To the wars my ship is sailing, To the bloody fields of battle, Where the streams run scarlet-colored, Where the paths are paved with bodies!' These the words of fair Annikki: \"Know I well the paths to battle.\n\nFormerly my aged father Often sounded war's alarum, Often led the hosts to conquest; In each ship a hundred rowers, And in arms a thousand heroes, Oil the prow a thousand cross-bows, Swords, and spears, and battle-axes; Know I well the ship of battle.\n\nSpeak Do longer fruitless falsehoods, Whither sailest, Wainamoinen, Whither steerest, friend of waters?"
+
+[annotations]
+concepts = []
+related_chunks = []

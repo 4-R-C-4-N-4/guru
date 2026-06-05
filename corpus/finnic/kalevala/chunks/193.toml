@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.193"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXIIf"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 53
+
+[content]
+body = "Then the wife of Ilmarinen, Life-companion of the blacksmith, Opened all her yards and stables, Led her herd across the meadow, Placed them in the herdman's keeping, In the care of Kullerwoinen."
+
+[annotations]
+concepts = []
+related_chunks = []

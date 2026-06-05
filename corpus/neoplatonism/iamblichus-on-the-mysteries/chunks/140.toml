@@ -1,0 +1,15 @@
+[chunk]
+id = "neoplatonism.iamblichus-on-the-mysteries.140"
+tradition = "neoplatonism"
+text_name = "Iamblichus: On the Mysteries"
+section = "Chapter V"
+translator = "Thomas Taylor"
+source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
+token_count = 225
+
+[content]
+body = "This deific and anagogic path Hermes, indeed, narrated, but Bitys, the prophet of King Ammon, [138] explained it, having found it in the adyta of Saïs [139] in Egypt, written in hieroglyphics; 307 and the same prophet also delivered the name of God, which pervades through the whole world. [140] But there are, likewise, many other coarrangements of the same things; so that you do not appear to me to act rightly in referring all things with the Egyptians to physical causes. For there are, according to them, many principles and many essences; and also supermundane powers, which they worship through sacerdotal sanctimony. To me, therefore these things appear to afford common auxiliaries to the solution of all the remaining 308 inquiries. But since it is necessary not to leave any one of them uninvestigated, we shall add them to these problems, and examine them on all sides, in order that we may see where there is any thing futile in your opinions."
+
+[annotations]
+concepts = []
+related_chunks = []

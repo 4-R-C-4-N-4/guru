@@ -1,0 +1,32 @@
+# Crawford's Kalevala — Gutenberg #5186, single-file HTML, ~3MB inflated.
+# Structured as PROEM + RUNE I..L (50 Roman-numeral cantos). Split on
+# the RUNE heading line. Strip Gutenberg header/license boilerplate and
+# the back-matter (glossary, pronunciation notes) before splitting.
+[chunking]
+strategy = "regex-section-split"
+# The Gutenberg extraction collapses to one giant line, so ^-anchoring
+# on start-of-line never matches. The TOC uses title-case ("RUNE I.
+# Birth of Wainamoinen"), while the body uses ALL-CAPS for the subtitle
+# ("RUNE I. BIRTH OF WAINAMOINEN."), giving a clean discriminator.
+# Capture the Roman numeral; require an ALL-CAPS subtitle word after it
+# so TOC entries are ignored.
+pattern = 'RUNE\s+([IVXLC]+)\.\s+[A-Z]{2,}'
+section_label_format = "Rune {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Project Gutenberg header block — match through the START marker.
+    # Non-greedy so it doesn't backtrack past the END marker.
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    # Trailing license block — END marker through EOF.
+    '\*\*\*\s*END OF .*',
+    # Crawford's Glossary and Pronunciation notes form the back-matter
+    # after the last RUNE; drop the GLOSSARY block through to EOF.
+    '(?m)^\s*GLOSSARY\b[\s\S]*$',
+]
+
+[metadata]
+tradition = "finnic"
+text_name = "The Kalevala"
+translator = "John Martin Crawford"
+sections_format = "rune"

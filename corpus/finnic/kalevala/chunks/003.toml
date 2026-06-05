@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.003"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune Ic"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 538
+
+[content]
+body = "Wainamoinen, old and trusty, Lingering within his dungeon Thirty summers altogether, And of winters, also thirty, Peaceful on the waste of waters, On the broad-sea's yielding bosom, Well reflected, long considered, How unborn to live and flourish In the spaces wrapped in darkness, In uncomfortable limits, Where he had not seen the moonlight, Had not seen the silver sunshine.\n\nThereupon these words be uttered, Let himself be heard in this wise: \"Take, O Moon, I pray thee, take me, Take me, thou, O Sun above me, Take me, thou O Bear of heaven, From this dark and dreary prison, From these unbefitting portals, From this narrow place of resting, From this dark and gloomy dwelling, Hence to wander from the ocean, Hence to walk upon the islands, On the dry land walk and wander, Like an ancient hero wander, Walk in open air and breathe it, Thus to see the moon at evening, Thus to see the silver sunlight, Thus to see the Bear in heaven, That the stars I may consider.\" Since the Moon refused to free him, And the Sun would not deliver, Nor the Great Bear give assistance, His existence growing weary, And his life but an annoyance, Bursts he then the outer portals Of his dark and dismal fortress; With his strong, but unnamed finger, Opens he the lock resisting; With the toes upon his left foot, With the fingers of his right hand, Creeps he through the yielding portals To the threshold of his dwelling; On his knees across the threshold, Throws himself head foremost, forward Plunges into deeps of ocean, Plunges hither, plunges thither, Turning with his hands the water; Swims he northward, swims he southward, Swims he eastward, swims he westward, Studying his new surroundings.\n\nThus our hero reached the water, Rested five years in the ocean, Six long years, and even seven years, Till the autumn of the eighth year, When at last he leaves the waters, Stops upon a promontory, On a coast bereft of verdure; On his knees he leaves the ocean, On the land he plants his right foot, On the solid ground his left foot, Quickly turns his hands about him, Stands erect to see the sunshine, Stands to see the golden moonlight, That he may behold the Great Bear, That he may the stars consider.\n\nThus our hero, Wainamoinen, Thus the wonderful enchanter Was delivered from his mother, Ilmatar, the Ether's daughter."
+
+[annotations]
+concepts = []
+related_chunks = []

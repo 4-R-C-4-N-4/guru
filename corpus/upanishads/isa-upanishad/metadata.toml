@@ -1,0 +1,7 @@
+tradition = "Upanishads"
+text_id = "isa-upanishad"
+text_name = "Îsâ-Upanishad"
+translator = "F. Max Müller"
+source_url = "https://sacred-texts.com/hin/sbe01/sbe01243.htm"
+sections_format = "section"
+chunk_count = 2

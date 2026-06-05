@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.208"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XXXVId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 606
+
+[content]
+body = "Bitterly he wept and murmured, Wept one day, and then a second, On the third day spake as follows: \"Faithful mother, fond and tender, Why hast left me here to sorrow In this wilderness of trouble?\n\nBut thou dost not hear my calling, Though I sing in magic accents, Though my tear-drops speak lamenting, Though my heart bemoans thine absence.\n\nFrom her grave awakes the mother, To Kullervo speaks these measures: \"Thou has still the dog remaining, He will lead thee to the forest; Follow thou the faithful watcher, Let him lead thee to the woodlands, To the farthest woodland border, To the caverns of the wood-nymphs; Kullerwoinen's Victory and Death There the forest maidens linger, They will give thee food and shelter, Give my hero joyful greetings.\" Kullerwoinen, with his watch-dog, Hastens onward through the forest, Journeys on through fields and fallows; Journeys but a little distance, Till he comes upon the summit Where he met his long-lost sister; Finds the turf itself is weeping, Finds the glen-wood filled with sorrow, Finds the heather shedding tear-drops, Weeping are the meadow-flowers, O'er the ruin of his sister.\n\nKullerwoinen, wicked wizard, Grasps the handle of his broadsword, Asks the blade this simple question: \"Tell me, O my blade of honor, Dost thou wish to drink my life-blood, Drink the blood of Kullerwoinen?\" Thus his trusty sword makes answer, Well divining his intentions: Why should I not drink thy life-blood, Blood of guilty Kullerwoinen, Since I feast upon the worthy, Drink the life-blood of the righteous?\" Thereupon the youth, Kullervo, Wicked wizard of the Northland, Lifts the mighty sword of Ukko, Bids adieu to earth and heaven; Firmly thrusts the hilt in heather, To his heart he points the weapon, Throws his weight upon his broadsword, Pouring out his wicked life-blood, Ere be journeys to Manala.\n\nThus the wizard finds destruction, This the end of Kullerwoinen, Born in sin, and nursed in folly.\n\nWainamoinen, ancient minstrel, As he hears the joyful tidings, Learns the death of fell Kullervo, Speaks these words of ancient wisdom: \"O, ye many unborn nations, Never evil nurse your children, Never give them out to strangers, Never trust them to the foolish!\n\nIf the child is not well nurtured, Is not rocked and led uprightly, Though he grow to years of manhood, Bear a strong and shapely body, He will never know discretion, Never eat.\n\nthe bread of honor, Never drink the cup of wisdom.\""
+
+[annotations]
+concepts = []
+related_chunks = []

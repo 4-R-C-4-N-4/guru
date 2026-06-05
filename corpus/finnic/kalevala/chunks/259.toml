@@ -1,0 +1,15 @@
+[chunk]
+id = "finnic.kalevala.259"
+tradition = "finnic"
+text_name = "The Kalevala"
+section = "Rune XLVIIId"
+translator = "John Martin Crawford"
+source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
+token_count = 472
+
+[content]
+body = "Come, thou daughter from Pohyola, Come, white virgin of the hoar-frost, Come on shoes of ice from Lapland, Icicles upon thy garments, In one band a cup of white-frost, In the other hand an ice-spoon; Sprinkle snow upon my members, Where the Fire-child has been resting, Let the hoar-frost fall and settle.\n\n\"Should this prayer be unavailing, Come, thou son of Sariola, Come, thou child of Frost from Pohya, Come, thou Long-man from the ice-plains, Of the height of stately pine-trees, Slender as the trunks of lindens, On thy hands the gloves of Hoar-frost, Cap of ice upon thy forehead, On thy waist a white-frost girdle; Bring the ice-dust from Pohyola, From the cold and sunless village.\n\nRain is crystallized in Northland, Ice in Pohya is abundant, Lakes of ice and ice-bound rivers, Frozen smooth, the sea of ether.\n\nBounds the hare in frosted fur-robe, Climbs the bear in icy raiment, Ambles o'er the snowy mountains.\n\nSwans of frost descend the rivers, Ducks of ice in countless numbers Swim upon thy freezing waters, Near the cataract and whirlpool.\n\nBring me frost upon thy snow-sledge, Snow and ice in great abundance, From the summit of the wild-top, From the borders of the mountains.\n\nWith thine ice, and snow, and hoar-frost Cover well mine injured members Where wild Panu has been resting, Where the child of Fire has lingered.\n\n\"Should this call be ineffective, Ukko, God of love and mercy, First and last of the creators, From the east send forth a snow-cloud, From the west despatch a second, Join their edges well together, Let there be no vacant places, Let these clouds bring snow and Lay the healing balm of Ukko On my burning, tortured tissues, Where wild Panu has been resting.\" Thus the blacksmith, Ilmarinen, Stills the pains by fire engendered, Stills the agonies and tortures Brought him by the child of evil, Brought him by the wicked Panu."
+
+[annotations]
+concepts = []
+related_chunks = []
