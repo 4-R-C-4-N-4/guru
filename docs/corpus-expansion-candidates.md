@@ -89,6 +89,14 @@ then cut. **PD status was clean for both — the cuts are editorial, not legal.*
 - For future PD-only ethnographies on traditions the author was not part of: weigh framing as heavily as legality. Ask: did the author identify *with* or speak *for/about* the practitioners?
 - Recorded in memory at `~/.claude/projects/-home-ivy-Work-guru/memory/project_no_outsider_voice_sources.md` so future sessions don't reflexively re-add Ellis or Leland.
 
+**One additional cut on a different axis (not editorial principle):**
+
+| Date | Source | Why cut | Commit |
+|---|---|---|---|
+| 2026-06-05 | Heart Sutra, Larger Prajñāpāramitā-hṛdaya recension (Müller SBE49, 1894) | Doctrinal core duplicates the smaller recension ~80% verbatim (the "form is emptiness" passage, the 18-dhātus negation, the gate-gate mantra). The unique ~20% is sūtra-event framing (Vulture Peak setting, Sariputra-asks-Avalokiteshvara dialogue, Buddha-approval closing). Retrieval-redundancy cut, not a principle cut — the current retrieval setup is not tuned to handle near-duplicate doctrinal chunks. Smaller recension retained (it's the canonical chanted form). | `3a4fdb6` |
+
+PD and authorship status of the larger recension were clean (Müller, 1894). The principle in §0.2 does **not** apply here. Flagged separately so future readers don't conflate the two cut rationales.
+
 ### 0.3 Carried forward (still open)
 
 | Item | Status | Where |
