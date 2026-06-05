@@ -1,37 +1,48 @@
 # ============================================================
 # Guru Corpus — Source Manifest ADDITIONS (this session)
 # Append to sources/manifest.toml
-# 7 sources across 5 new traditions; all public domain.
+# Originally drafted with 7 sources across 6 new traditions; 5 of those
+# 7 landed in sources/manifest.toml. The other two were CUT after
+# review — see docs/corpus-expansion-candidates.md §0.2 for the
+# editorial principle. Cut entries are kept here for the historical
+# record of what was considered, with REMOVED markers.
 # ============================================================
  
  
 # ============================================
-# CONTEMPORARY PAGAN / WITCHCRAFT
+# CONTEMPORARY PAGAN / WITCHCRAFT — REMOVED 2026-06-05 (see commit 395bcae)
 # ============================================
-# Leland's Aradia is the foundational "discovered scripture" of the
-# modern witchcraft revival — the Diana/Lucifer/Aradia emanation myth
-# and the liberation-through-sorcery frame. Strong cross-tradition
-# edges to the Gnostic Lucifer-as-light-bringer and the Mesopotamian
-# descent material already in corpus. ara03.htm = Chapter I; chapters
-# run contiguously. ara00-02 (title/preface/contents) excluded.
-# NOTE: authenticity disputed (Hutton's three theories) — tag as
-# disputed-provenance; it is a real 1899 folklore artifact and a
-# foundational Wicca text, not an authentic ancient survival.
+# REMOVED on the same editorial principle that cut Yoruba on 2026-06-04
+# (see corpus-expansion-candidates.md §0.2): outsider voice on a
+# subaltern tradition, with the would-be informant centering
+# (Maddalena) itself disputed by modern scholarship (Hutton, Mathiesen).
+# Leland was an American man of English descent paying an Italian
+# peasant woman to "extract" lore he then framed and published. The
+# 1899 PD status was clean; the cut is editorial, not legal. There is
+# no clean PD insider-perspective alternative for modern witchcraft —
+# the slug stays unrepresented rather than misrepresented.
+#
+# Original draft preserved below for historical record.
+#
+# [original notes: foundational "discovered scripture" of modern
+# witchcraft revival; Diana/Lucifer/Aradia emanation myth; cross-
+# tradition edges to Gnostic Lucifer-as-light-bringer and Mesopotamian
+# descent material; authenticity disputed (Hutton's three theories);
+# 1899 folklore artifact + foundational Wicca text, not authentic
+# ancient survival]
  
-[[source]]
-id = "aradia-gospel-witches"
-tradition = "pagan_witchcraft"
-# VERIFIED 2026-05-31 — index resolves; ara03.htm = "CHAPTER I — How Diana Gave
-# Birth to Aradia (Herodias)"; chapters run ara03..ara17 contiguously. ara00/01/02
-# are Title/Preface/Contents; ara18 is the Appendix. html_multi downloader skips
-# index but will pull ara00-02 + ara18 alongside the 15 chapters — drop those
-# four post-acquisition (or add them to is_apparatus_chunk targets).
-label = "Aradia, or the Gospel of the Witches (Leland)"
-url = "https://sacred-texts.com/pag/aradia/index.htm"
-format = "html_multi"
-license = "public_domain"
-translator = "Charles Godfrey Leland"
-notes = "Leland 1899 (David Nutt, London); author d. 1903, clean PD. Index links to chapter files ara03.htm (Ch. I) onward. Italian incantations interleaved with English translation — keep both; do not strip the Italian. Chunk paragraph-group within each chapter file."
+# [[source]]
+# id = "aradia-gospel-witches"
+# tradition = "pagan_witchcraft"
+# # VERIFIED 2026-05-31 — index resolves; ara03.htm = "CHAPTER I — How Diana Gave
+# # Birth to Aradia (Herodias)"; chapters run ara03..ara17 contiguously. ara00/01/02
+# # are Title/Preface/Contents; ara18 is the Appendix.
+# label = "Aradia, or the Gospel of the Witches (Leland)"
+# url = "https://sacred-texts.com/pag/aradia/index.htm"
+# format = "html_multi"
+# license = "public_domain"
+# translator = "Charles Godfrey Leland"
+# notes = "Leland 1899 (David Nutt, London); author d. 1903, clean PD."
  
  
 # ============================================
@@ -94,35 +105,38 @@ notes = "Chamberlain 1919. Section I: the first deities of the Plain of High Hea
  
  
 # ============================================
-# YORUBA / WEST AFRICAN
+# YORUBA / WEST AFRICAN — REMOVED 2026-06-04 (see commit de21074)
 # ============================================
-# Ellis 1894 is the unambiguously-PD anchor for Yoruba religion —
-# the orisha system, Ifa divination substrate, the Ife creation
-# material. Strong edges to the emanation-hierarchy and divination
-# concepts already in corpus. Multi-chapter; yor05.htm verified live.
-# NOTE: Victorian colonial ethnography — outsider lens, dated register
-# ("primitive"/"fetish"). Citable for its data, not its framing; tag
-# as colonial-ethnography, not insider/practitioner account.
+# REMOVED on editorial grounds — the source's framing is outsider-
+# colonial (Ellis was a British colonial officer in West Africa), uses
+# patronizing register ("primitive"/"fetish"), and offers no informant
+# centering. Citing it as a primary source for orisha cosmology would
+# give the colonial gaze a voice the corpus shouldn't amplify. PD
+# status was clean (1894 pre-1929); the cut is editorial, not legal.
+#
+# Insider-perspective sources for Yoruba/orisha religion (modern Lukumi
+# writers, Bascom, Drewal, Awolalu) are all under copyright. The
+# `yoruba` slug stays unrepresented until a clean PD insider source
+# surfaces.
+#
+# This cut established the project-wide principle that later removed
+# Aradia (above) — see corpus-expansion-candidates.md §0.2.
+#
+# Original draft preserved below for historical record.
+#
+# [original notes: Ellis 1894 "the unambiguously-PD anchor for Yoruba
+# religion — orisha system, Ifa divination, Ife creation material;
+# chapter pattern yor02..yor13 with X-XII omitted in the archive]
  
-[[source]]
-id = "yoruba-speaking-peoples-ellis"
-tradition = "yoruba"
-# VERIFIED 2026-05-31 — index resolves; chapter pattern is yor02..yor13 (yor02=
-# Chapter I, yor03=Chapter II, etc.). Note: the index file numbering is not
-# perfectly contiguous with Roman-numeral chapters — yor10.htm is Chapter IX,
-# yor11.htm is Chapter XIII (Chapters X-XII appear omitted from the archive,
-# probably the linguistic appendices). Chapters available: I (Introductory),
-# II (Chief Gods), III (Minor Gods), IV (Remarks), V (Priests and Worship),
-# VI (Egungun/Oro/Abiku), VII (In-Dwelling Spirits), VIII (Measurements of
-# Time), IX (Ceremonies at Birth/Marriage/Death), XIII (Proverbs), XIV
-# (Folk-Lore Tales), XV (Conclusions). yor00 (Title) and yor01 (Contents) are
-# front-matter — drop or apparatus-reject.
-label = "The Yoruba-Speaking Peoples (Ellis)"
-url = "https://sacred-texts.com/afr/yor/index.htm"
-format = "html_multi"
-license = "public_domain"
-translator = "A.B. Ellis"
-notes = "Ellis 1894 (Chapman & Hall). Clean PD. Chapters on the orisha pantheon (II), minor gods (III), Egungun/Oro/Abiku (VI), in-dwelling spirits (VII), and folk-lore tales (XIV) carry the highest cross-tradition density. NOTE: sacred-texts' archive of this title appears to omit Chapters X-XII (file numbering jumps from yor10=Ch.IX to yor11=Ch.XIII). Ethnography rather than scripture — tag accordingly. Chunk paragraph-group within chapters."
+# [[source]]
+# id = "yoruba-speaking-peoples-ellis"
+# tradition = "yoruba"
+# label = "The Yoruba-Speaking Peoples (Ellis)"
+# url = "https://sacred-texts.com/afr/yor/index.htm"
+# format = "html_multi"
+# license = "public_domain"
+# translator = "A.B. Ellis"
+# notes = "Ellis 1894 (Chapman & Hall)."
  
  
 # ============================================
