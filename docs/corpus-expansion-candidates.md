@@ -34,9 +34,9 @@ Everything below it is the as-proposed design record.
 | Plato: Republic VI–VII (Cave + Form of the Good, 4 sub-pages) | platonism | Jowett | 1871 | 37 | sacred-texts.com |
 | Pseudo-Dionysius: Mystical Theology + Divine Names (14 entries) | christian_mysticism | C.E. Rolt | 1920 | 134 | ccel.org |
 | Iamblichus: On the Mysteries | neoplatonism | Thomas Taylor | 1895 | 218 | Gutenberg #72815 |
-| Heart Sutra (smaller + larger recensions) | buddhism | Müller | 1894 | 3 | sacred-texts SBE49 |
+| Heart Sutra (smaller recension only) | buddhism | Müller | 1894 | 1 | sacred-texts SBE49 |
 | Dhammapada (26 chapters) | buddhism | Müller | 1881 | 66 | sacred-texts SBE10 |
-| **Tier 1 subtotal** |   |   |   | **590** |   |
+| **Tier 1 subtotal** |   |   |   | **588** |   |
 
 **Pagan / folkloric** (ticket `da3ca85a` minus two later cuts — see §0.2):
 
@@ -63,8 +63,8 @@ Everything below it is the as-proposed design record.
 
 | | Before | After | Δ |
 |---|---:|---:|---:|
-| Total sources | 77 | 308 | +231 (mostly 176 deferred Upanishads stanzas) |
-| Embedded chunks | 3,128 | **4,220** | **+1,092** |
+| Total sources | 77 | 307 | +230 (mostly 176 deferred Upanishads stanzas) |
+| Embedded chunks | 3,128 | **4,218** | **+1,090** |
 | Traditions | 16 | 21 | +5 (`norse`, `shinto`, `finnic`, `celtic`, `upanishads`) |
 
 ### 0.2 What was cut (and the editorial principle)
