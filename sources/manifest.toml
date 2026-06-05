@@ -1156,34 +1156,15 @@ translator = "Basil Hall Chamberlain"
 notes = "Chamberlain 1919. Section I: the first deities of the Plain of High Heaven, born alone and hidden. Chamberlain's numbered footnote markers ride inline in the text — strip the superscript ordinals but preserve sentence flow. Single leaf page; paragraph-group chunk."
 
 
-# === YORUBA / WEST AFRICAN ===
-# Ellis 1894 is the unambiguously-PD anchor for Yoruba religion —
-# the orisha system, Ifa divination substrate, the Ife creation
-# material. Strong edges to the emanation-hierarchy and divination
-# concepts already in corpus. Multi-chapter; yor05.htm verified live.
-# NOTE: Victorian colonial ethnography — outsider lens, dated register
-# ("primitive"/"fetish"). Citable for its data, not its framing; tag
-# as colonial-ethnography, not insider/practitioner account.
-
-[[source]]
-id = "yoruba-speaking-peoples-ellis"
-tradition = "yoruba"
-# VERIFIED 2026-05-31 — index resolves; chapter pattern is yor02..yor13 (yor02=
-# Chapter I, yor03=Chapter II, etc.). Note: the index file numbering is not
-# perfectly contiguous with Roman-numeral chapters — yor10.htm is Chapter IX,
-# yor11.htm is Chapter XIII (Chapters X-XII appear omitted from the archive,
-# probably the linguistic appendices). Chapters available: I (Introductory),
-# II (Chief Gods), III (Minor Gods), IV (Remarks), V (Priests and Worship),
-# VI (Egungun/Oro/Abiku), VII (In-Dwelling Spirits), VIII (Measurements of
-# Time), IX (Ceremonies at Birth/Marriage/Death), XIII (Proverbs), XIV
-# (Folk-Lore Tales), XV (Conclusions). yor00 (Title) and yor01 (Contents) are
-# front-matter — drop or apparatus-reject.
-label = "The Yoruba-Speaking Peoples (Ellis)"
-url = "https://sacred-texts.com/afr/yor/index.htm"
-format = "html_multi"
-license = "public_domain"
-translator = "A.B. Ellis"
-notes = "Ellis 1894 (Chapman & Hall). Clean PD. Chapters on the orisha pantheon (II), minor gods (III), Egungun/Oro/Abiku (VI), in-dwelling spirits (VII), and folk-lore tales (XIV) carry the highest cross-tradition density. NOTE: sacred-texts' archive of this title appears to omit Chapters X-XII (file numbering jumps from yor10=Ch.IX to yor11=Ch.XIII). Ethnography rather than scripture — tag accordingly. Chunk paragraph-group within chapters."
+# === YORUBA / WEST AFRICAN — REMOVED 2026-06-04 ===
+# Originally added in da3ca85a as Ellis 1894 (Chapman & Hall),
+# Victorian-colonial ethnography of West African religion. Removed
+# because the source's framing is outsider-colonial — patronizing
+# register and no informant centering — which fails the project's
+# stance against colonizer/second-hand perspective on a tradition.
+# PD status is clean (1894); the cut is editorial, not legal.
+# If a clean PD insider-perspective Yoruba/orisha source ever surfaces,
+# re-add the `yoruba` tradition slug then.
 
 
 # === FINNIC (Kalevala) ===
