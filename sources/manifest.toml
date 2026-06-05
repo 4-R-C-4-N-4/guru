@@ -1074,31 +1074,30 @@ notes = "Charles 1917. 113 chapter files boe000.htm-boe112.htm, contiguous seque
 # ============================================================
 
 
-# === CONTEMPORARY PAGAN / WITCHCRAFT ===
-# Leland's Aradia is the foundational "discovered scripture" of the
-# modern witchcraft revival — the Diana/Lucifer/Aradia emanation myth
-# and the liberation-through-sorcery frame. Strong cross-tradition
-# edges to the Gnostic Lucifer-as-light-bringer and the Mesopotamian
-# descent material already in corpus. ara03.htm = Chapter I; chapters
-# run contiguously. ara00-02 (title/preface/contents) excluded.
-# NOTE: authenticity disputed (Hutton's three theories) — tag as
-# disputed-provenance; it is a real 1899 folklore artifact and a
-# foundational Wicca text, not an authentic ancient survival.
-
-[[source]]
-id = "aradia-gospel-witches"
-tradition = "pagan_witchcraft"
-# VERIFIED 2026-05-31 — index resolves; ara03.htm = "CHAPTER I — How Diana Gave
-# Birth to Aradia (Herodias)"; chapters run ara03..ara17 contiguously. ara00/01/02
-# are Title/Preface/Contents; ara18 is the Appendix. html_multi downloader skips
-# index but will pull ara00-02 + ara18 alongside the 15 chapters — drop those
-# four post-acquisition (or add them to is_apparatus_chunk targets).
-label = "Aradia, or the Gospel of the Witches (Leland)"
-url = "https://sacred-texts.com/pag/aradia/index.htm"
-format = "html_multi"
-license = "public_domain"
-translator = "Charles Godfrey Leland"
-notes = "Leland 1899 (David Nutt, London); author d. 1903, clean PD. Index links to chapter files ara03.htm (Ch. I) onward. Italian incantations interleaved with English translation — keep both; do not strip the Italian. Chunk paragraph-group within each chapter file."
+# === CONTEMPORARY PAGAN / WITCHCRAFT — REMOVED 2026-06-05 ===
+# Originally added in da3ca85a as Leland's Aradia (1899). Removed
+# on the same editorial principle that cut Yoruba (Ellis) on 2026-06-04:
+# outsider voice on a subaltern tradition, with the would-be informant
+# centering (Maddalena) itself disputed by modern scholarship
+# (Hutton, Mathiesen) which holds that Leland substantially authored
+# the material he attributed to her. Leland was an American man of
+# English descent, raised wealthy in Philadelphia, paying a poor
+# Italian peasant woman to "collect" folklore for him — class-colonial
+# asymmetry parallel to (if gentler than) Ellis-on-Yoruba's
+# imperial-colonial one. The "I employed her... to extract it from
+# those of her kind" framing makes the asymmetry explicit in the text.
+#
+# PD status was clean (1899 pre-1929); the cut is editorial, not legal.
+#
+# Insider-perspective modern witchcraft texts (Doreen Valiente,
+# Starhawk, Sabina Magliocco's ethnography) are all in copyright, so
+# there is no clean PD alternative. The `pagan_witchcraft` tradition
+# stays unrepresented rather than misrepresented.
+#
+# The Diana/Aradia/Lucifer-as-light-bringer emanation pattern that
+# Aradia was meant to surface is already in corpus via the Gospel of
+# Philip and the Hermetica — cross-tradition coverage doesn't depend
+# on this source.
 
 
 # === NORSE / HEATHEN ===
