@@ -159,6 +159,7 @@ aeons = "Divine archetypal beings or eternal attributes dwelling within the Pler
 logos = "The divine reason, word, or ordering principle through which the universe was created; mediates between the transcendent God and the material world."
 sephirot = "The ten attributes or emanations through which the Ein Sof (Infinite) reveals itself and creates the universe in Kabbalistic theology."
 sefirot_tree = "The diagrammatic arrangement of the ten Sephirot as a structured 'Tree of Life' mapping divine and cosmic forces."
+world_tree_axis = "A vertical structure connecting cosmic levels — a tree, pillar, mountain, or ladder linking heaven, earth, and underworld around which the cosmos is organised. Yggdrasil binding the Nine Worlds in Norse cosmology, the Kalevala's Sampo as world-pillar, the Mayan ceiba, the Vedic Aśvattha, the shamanic central tree of Eliade's analyses. Cosmic-structural in character: distinct from sefirot_tree (a kabbalistic emanation diagram) and emanation_hierarchy (an ontological cascade); world_tree_axis is the cosmos's spine rather than the divine's outflow."
 
 [concepts.cosmology.cosmic_agents]
 demiurge = "A secondary creator deity—often ignorant or malevolent—responsible for fashioning the material world, distinct from the supreme transcendent God."
@@ -166,6 +167,7 @@ archons = "Malevolent planetary rulers or demiurgic powers that govern the mater
 ahura_mazda_principle = "The divine ordering principle of truth and light."
 angra_mainyu_principle = "The principle of cosmic disorder and falsity."
 watchers_descent = "The 1 Enoch narrative in which a class of originally-good angelic beings (the Watchers) descends, mates with women, and teaches forbidden arts — the substrate that Gnostic archons inherits and inverts: archons are born malevolent, the Watchers fall through transgression."
+animism = "The doctrine and worldview that natural phenomena, places, and objects possess inherent spirit, soul, or personality — and that the cosmos is populated by countless local, plural, embodied divine agents: kami in mountain and tree, sidhe in cairn and well, landwights in field and stone, nymphs in spring and grove, haltija in forest and lake, lares and penates in household and threshold, Iamblichean daemons in element and place. Distinct from monotheism (single transcendent God), pantheism (one underlying substance), and emanation_hierarchy (cascading single source); animism's signature is the plurality, locality, and embodied-in-landscape character of the divine."
 
 [concepts.cosmology.cosmic_order]
 asha_cosmic_order = "Truth as the fundamental structure of reality."
@@ -181,6 +183,7 @@ tzimtzum = "Luria's doctrine of the divine self-contraction by which Ein Sof wit
 fall_of_sophia = "The Gnostic myth of Wisdom's prolapse from the Pleroma — her unilateral desire or error producing the Demiurge and the entrapment of divine sparks in matter."
 frashokereti = "The final restoration/renovation of the cosmos."
 apocatastasis = "The doctrine of the periodic restoration or recurrence of all things to their original state after vast cycles."
+cosmogony = "Narratives or doctrines of cosmic origin — how heaven, earth, and the primordial deities first came into being. The Kojiki's deities born alone on the Plain of High Heaven, Voluspo's Ginnungagap, Genesis's tohu wa-bohu, the Timaeus's Demiurge fashioning the Receptacle, the Hesiodic Theogony, the Kalevala's egg-cosmogony, Egyptian Nun-and-Atum. Distinct from emanation_hierarchy (structural-ontological cascade), letters_of_creation (mechanism of creation), and apocatastasis/frashokereti (end-state restoration); cosmogony is temporally-narrative beginning."
 
 [concepts.cosmology.soul_cosmology]
 divine_sparks = "Fragments of divine light or spirit trapped inside material bodies, awaiting liberation and return to their source."
@@ -221,6 +224,7 @@ divine_hiddenness = "The supreme God's radical concealment beyond ordinary knowl
 divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
 ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
 anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
+shapeshifting_transformation = "Form-mutability as a constitutional property of divine and preternatural beings — gods, heroes, spirits, and their human practitioners possessing inherent capacity to alter form across human, animal, plant, or elemental states. Loki and Odin's transformations in Norse, Math's pigs and Blodeuwedd's owl-shape and Pwyll's exchange with Arawn in the Mabinogion, the Greek Proteus, the Indian dasavatara, Vainamoinen's bird-flight in the Kalevala, Ovid's metamorphoses, the shamanic and witch's capacity for ritual form-change. Distinct from anthropomorphism (divine taking specific human form, single embodiment) in that anthropomorphism establishes a stable form whereas this concept establishes form's plurality and instability."
 
 [concepts.theology.divine_attributes_and_acts]
 divine_light = "The uncreated luminous quality of the divine, sometimes experienced directly in mystical states; illumination as revelation."
@@ -247,6 +251,8 @@ nature_preservation = "The ethical imperative to live in accordance with one's i
 letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
 permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
 ritual_fire = "Fire as medium of divine presence."
+word_power_incantation = "The doctrine and practice that spoken or sung word carries causal-magical force — that uttering names, formulas, songs, or incantations alters reality directly rather than merely communicating about it. Vainamoinen's runo-songs that move mountains and command iron, Norse galdr, Vedic mantra, Shinto kotodama, the magician's barbarous names in the Greek Magical Papyri, Iamblichean arcane signatures and inexplicable symbols, biblical creation-by-word. Distinct from sacred_names (the ontological power of names themselves) and prayer (address to the divine); word_power_incantation is the magical-causal efficacy of the spoken word as such."
+ancestor_veneration = "Ritual maintenance of relationship with the dead as ongoing presences whose favour is cultivated and whose offence is propitiated. Shinto uji-gami and obon, Norse disir and the alfablot, Celtic samhain and the feast for the deceased, Roman lares and parentalia, Chinese ancestor rites, Vedic śrāddha. Practice-coded rather than belief-coded: distinct from soul_migration (cosmological doctrine of soul-transmigration) and theosis_deification (deification trajectory); ancestor_veneration centres the living's ongoing ritual obligation to the dead."
 funerary_navigation = "Texts and rituals guiding the soul through death."
 theurgy = "Iamblichean ritual practice that engages the gods directly through consecrated material symbols and actions, on the premise that divine power descends into properly prepared matter — distinct from philosophical contemplation alone."
 prayer = "Direct address to the divine, whether petitionary, contemplative, or liturgical; speech and silence offered upward."
