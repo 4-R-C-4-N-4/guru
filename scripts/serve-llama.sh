@@ -23,6 +23,12 @@ CTX_SIZE="32768"
 N_GPU_LAYERS="999"
 THREADS="6"
 BATCH_SIZE="512"
+# --parallel controls how many concurrent requests llama-server will
+# multiplex. Default 1 (serialized) suits the 27B thinking model where
+# each request can consume most of available VRAM. Smaller models can
+# safely run higher — set PARALLEL via the wrapper (see
+# run-qwen-4b-guru.sh).
+PARALLEL="${PARALLEL:-1}"
 
 # --- Sampling defaults (overridable per-request from clients, or via env
 #     from a model-specific wrapper — see run-mistral.sh for an example) ---
@@ -78,7 +84,7 @@ exec "$LLAMA_BIN" \
     --threads "$THREADS" \
     --batch-size "$BATCH_SIZE" \
     --ubatch-size "$BATCH_SIZE" \
-    --parallel 1 \
+    --parallel "$PARALLEL" \
     --temp "$TEMP" \
     --top-p "$TOP_P" \
     --top-k "$TOP_K" \
