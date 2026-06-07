@@ -1,0 +1,35 @@
+# Horner's Pistis Sophia — Gutenberg #76266, single-file HTML ~815KB.
+# Structured as five "Document" sections under <h2> headers, with PREFACE,
+# CONTENTS, INTRODUCTION (Legge essay) preceding and INDEX OF PSALMS + INDEX
+# trailing. Splits on the "THE <ORDINAL> DOCUMENT" header line. Strip Gutenberg
+# boilerplate AND the front-matter and back-matter apparatus before splitting
+# so that only the five primary documents reach the chunker. Each document is
+# 18-178KB so regex-section-split's subsplit() will break them at max_tokens.
+[chunking]
+strategy = "regex-section-split"
+# Match the document header line. After HTML→text conversion, the <h2>
+# becomes a plain line containing "THE FIRST DOCUMENT" (etc.). Capture the
+# ordinal so each chunk's section_label gets it.
+pattern = 'THE\s+(FIRST|SECOND|THIRD|FOURTH|FIFTH)\s+DOCUMENT'
+section_label_format = "Document {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Gutenberg machine header through START marker.
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    # Gutenberg trailing license block.
+    '\*\*\*\s*END OF .*',
+    # Front matter: PREFACE, CONTENTS, Legge INTRODUCTION — everything from
+    # the start of the cleaned text up to but not including "THE FIRST
+    # DOCUMENT". Apparatus per project policy.
+    '^[\s\S]*?(?=THE FIRST DOCUMENT)',
+    # Back matter: INDEX OF PSALMS AND ODES + INDEX through end of cleaned
+    # text. Apparatus per project policy.
+    'INDEX OF PSALMS AND ODES[\s\S]*$',
+]
+
+[metadata]
+tradition = "gnosticism"
+text_name = "Pistis Sophia"
+translator = "George Horner"
+sections_format = "document"

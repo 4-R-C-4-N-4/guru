@@ -26,6 +26,25 @@ license = "public_domain"
 translator = "Willis Barnstone"
 notes = "Full Coptic-to-English translation. Extract main content div."
 
+[[source]]
+id = "pistis-sophia"
+tradition = "gnosticism"
+# VERIFIED 2026-06-06 — Gutenberg #76266 (HTTP 200, 815KB inflated). Title
+# tag "Pistis Sophia | Project Gutenberg" confirmed. Five div.chapter blocks
+# of primary text under h2 headers "THE FIRST DOCUMENT" through "THE FIFTH
+# DOCUMENT"; PREFACE/CONTENTS/INTRODUCTION (Legge intro) precede, INDEX OF
+# PSALMS + INDEX follow — all stripped via pre_strip.
+# Mead 1896 (gnosis.org) was the candidates-doc §4.12 recommendation but
+# requires either 148 single-page manifest entries OR multi-page support
+# added to gnosis_org.py — see Mandaean John-Book precedent. Horner via
+# Gutenberg is the cleaner single-entry kalevala-pattern ingest.
+label = "Pistis Sophia (Horner translation, with Francis Legge introduction)"
+url = "https://www.gutenberg.org/cache/epub/76266/pg76266-images.html"
+format = "html"
+license = "public_domain"
+translator = "George Horner"
+notes = "Horner 1924 Coptic→English with Francis Legge introduction. Single ~815KB HTML; primary text in five Documents (Pistis Sophia Books I-II = Documents 1-2; Books of the Saviour fragments = Documents 3-4; trailing fragment = Document 5). Pre-strip removes Gutenberg boilerplate, Legge intro, and indexes; regex-section-split on Document headers, sub-split by max_tokens. Estimated ~150-200 chunks."
+
 # ============================================
 # HERMETICISM (sacred-texts.com + gnosis.org)
 # ============================================
