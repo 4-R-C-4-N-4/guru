@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.pistis-sophia.160"
+tradition = "gnosticism"
+text_name = "Pistis Sophia"
+section = "Document FIFTHf"
+translator = "George Horner"
+source_url = "https://www.gutenberg.org/cache/epub/76266/pg76266-images.html"
+token_count = 141
+
+[content]
+body = "Otherwise we did sin, we also, our Lord and our Light....\n\n( Seven lines vacant ) [355 ] the righteous (one).\n\nThey came out (by) three (and) three unto the four regions of the heaven, they preached the evangel of the Kingdom in all the world, the Christ working with them in the word of the strengthening and the signs which follow them and the wonders.\n\nAnd thus they knew the kingdom of the God in all the earth and in all the world of the Israel, unto witness to all the nations, these who become from the places of rising to place of setting: (two lines of ornament, two lines erasure, and two more lines of ornament.) 201"
+
+[annotations]
+concepts = []
+related_chunks = []

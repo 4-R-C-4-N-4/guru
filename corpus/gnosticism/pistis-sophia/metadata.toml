@@ -1,0 +1,7 @@
+tradition = "gnosticism"
+text_id = "pistis-sophia"
+text_name = "Pistis Sophia"
+translator = "George Horner"
+source_url = "https://www.gutenberg.org/cache/epub/76266/pg76266-images.html"
+sections_format = "document"
+chunk_count = 160
