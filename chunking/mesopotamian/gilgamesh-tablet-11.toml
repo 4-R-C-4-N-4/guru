@@ -1,0 +1,14 @@
+# Epic of Gilgamesh, Tablet XI — Thompson 1928 verse rendering.
+# Per-tablet manifest entry (one page each). Continuous verse ->
+# paragraph-group; long tablets sub-split at max_tokens.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Tablet XI, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet XI — The Flood"
+translator = "R. Campbell Thompson"
+sections_format = "tablet"

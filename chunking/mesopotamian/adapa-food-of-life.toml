@@ -1,0 +1,13 @@
+# Adapa and the Food of Life — Rogers 1912. Single short page (~12.5KB),
+# continuous prose -> paragraph-group, 1-2 chunks expected.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+
+[metadata]
+tradition = "Mesopotamian"
+text_name = "Adapa and the Food of Life"
+translator = "Robert William Rogers"
+sections_format = "section"

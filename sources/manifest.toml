@@ -824,6 +824,142 @@ license = "public_domain"
 translator = "L.W. King"
 notes = "Babylonian creation epic, ~1500 BCE. Tiamat/Marduk cosmic combat. Parallels with Tiamat-as-primordial-chaos in later cosmologies, and with the Gnostic Sophia/Demiurge narratives via shared ancient Near Eastern substrate."
 
+[[source]]
+id = "adapa-food-of-life"
+tradition = "mesopotamian"
+label = "Adapa and the Food of Life"
+url = "https://sacred-texts.com/ane/adapa.htm"
+format = "html"
+license = "public_domain"
+translator = "Robert William Rogers"
+notes = "Rogers 1912 (Cuneiform Parallels to the Old Testament). Adapa is offered the bread and water of eternal life by Anu but, warned by Ea, refuses — losing immortality through deception. Direct parallel to the Gilgamesh failed-immortality quest and the Eden/forbidden-food motif (separation_from_source). Single short page — paragraph-group."
+
+# ---- EPIC OF GILGAMESH (Thompson 1928; one entry per tablet for clean
+#      per-tablet citation, mirroring Dhammapada/Corpus Hermeticum) ----
+# Index ane/eog/index.htm: eog00-02 = front matter (excluded); eog03-eog14 =
+# the twelve tablets. license_us_pre_1929 because Thompson's verse rendering
+# is 1928 (PD in the US from 2024-01-01), same as Tertium Organum (1920).
+
+[[source]]
+id = "gilgamesh-tablet-01"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: First Tablet — The Tyranny of Gilgamish and the Creation of Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog03.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928 verse rendering. Tablet I (eog03.htm). The tyrant-king and the wild man Enkidu shaped from clay. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-02"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Second Tablet — The Meeting of Gilgamish and Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog04.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet II (eog04.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-03"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Third Tablet — The Expedition against Humbaba"
+url = "https://sacred-texts.com/ane/eog/eog05.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet III (eog05.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-04"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Fourth Tablet — The Arrival at the Gate of the Forest"
+url = "https://sacred-texts.com/ane/eog/eog06.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet IV (eog06.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-05"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Fifth Tablet — The Fight with Humbaba"
+url = "https://sacred-texts.com/ane/eog/eog07.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet V (eog07.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-06"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Sixth Tablet — Ishtar and the Bull of Heaven"
+url = "https://sacred-texts.com/ane/eog/eog08.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VI (eog08.htm). Ishtar's spurned love and the Bull of Heaven — direct tie to the Descent of Ishtar already held. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-07"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Seventh Tablet — The Death of Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog09.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VII (eog09.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-08"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Eighth Tablet — The Mourning of Gilgamish"
+url = "https://sacred-texts.com/ane/eog/eog10.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VIII (eog10.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-09"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Ninth Tablet — Gilgamish in Terror of Death Seeks Eternal Life"
+url = "https://sacred-texts.com/ane/eog/eog11.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet IX (eog11.htm). The quest for immortality begins — separation_from_source / fear-of-death core. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-10"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Tenth Tablet — How Gilgamish Reached Uta-Napishtim"
+url = "https://sacred-texts.com/ane/eog/eog12.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet X (eog12.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-11"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Eleventh Tablet — The Flood"
+url = "https://sacred-texts.com/ane/eog/eog13.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet XI (eog13.htm). The Utnapishtim flood narrative and the lost plant of immortality — flood parallels Enuma Elish and Genesis; failed immortality parallels Adapa. Longest tablet; paragraph-group, max_tokens 800 (sub-splits)."
+
+[[source]]
+id = "gilgamesh-tablet-12"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Twelfth Tablet — Gilgamish Enquires of the Dead"
+url = "https://sacred-texts.com/ane/eog/eog14.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet XII (eog14.htm). The Sumerian appendix: Enkidu's shade is summoned from the underworld and reports on the fate of the dead — psychopomp_journey / underworld parallel to the Descent of Ishtar and the Egyptian funerary material. paragraph-group, max_tokens 800."
+
 
 # ============================================
 # WESTERN ESOTERIC / CONSCIOUSNESS STUDIES

@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.adapa-food-of-life.003"
+tradition = "Mesopotamian"
+text_name = "Adapa and the Food of Life"
+section = "Section 1c"
+translator = "Robert William Rogers"
+source_url = "https://sacred-texts.com/ane/adapa.htm"
+token_count = 54
+
+[content]
+body = "\"Adapa, before the King Anu thou shalt go Fail not the order, keep my word When thou comest up to heaven, and approachest the door of Anu, Tammuz and Gishzida at the door of Anu are standing."
+
+[annotations]
+concepts = []
+related_chunks = []

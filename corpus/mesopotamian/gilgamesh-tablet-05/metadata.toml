@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-05"
+text_name = "Epic of Gilgamesh: Tablet V — The Fight with Humbaba"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog07.htm"
+sections_format = "tablet"
+chunk_count = 3

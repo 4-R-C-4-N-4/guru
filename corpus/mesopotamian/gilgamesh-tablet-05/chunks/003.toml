@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.gilgamesh-tablet-05.003"
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet V — The Fight with Humbaba"
+section = "Tablet V, Section 1c"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog07.htm"
+token_count = 200
+
+[content]
+body = "Wherefore to Gilgamish spake (thus) Humbaba: \"O Gilgamish, (pr’y thee), Stay, (now, thy hand): be [thou] now my [master], and I'll be thy henchman: [O disregard] (all) [the words which I spake [(so) boastfull against thee, 25.\n\nWeighty .\n\n.\n\n.\n\nI would lay me down .\n\n.\n\n.\n\nand the Palace.\n\nThereat to [Gilgamish] Enkidu [spake]: \"[Of the rede which] Humbaba [Maketh to thee] thou darest in nowise offer acceptance.\n\n(Aye, for) Humbaba [must] not [remain alive] .\n\n.\n\n.\n\n.\" ( The Hittite Version here breaks off.\n\nThe Assyrian Version ends with six badly mutilated lines of which the last tells the successful issue of the expedition ).\n\n.\n\n.\n\n.\n\n.\n\n[they cut off] the head of Humbaba."
+
+[annotations]
+concepts = []
+related_chunks = []

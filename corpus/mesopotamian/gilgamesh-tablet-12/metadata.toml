@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-12"
+text_name = "Epic of Gilgamesh: Tablet XII — Gilgamish Enquires of the Dead"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog14.htm"
+sections_format = "tablet"
+chunk_count = 3

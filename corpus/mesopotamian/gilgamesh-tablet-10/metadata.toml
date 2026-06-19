@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-10"
+text_name = "Epic of Gilgamesh: Tablet X — How Gilgamish Reached Uta-Napishtim"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog12.htm"
+sections_format = "tablet"
+chunk_count = 5

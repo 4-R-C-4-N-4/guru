@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-01"
+text_name = "Epic of Gilgamesh: Tablet I — The Tyranny of Gilgamish and the Creation of Enkidu"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog03.htm"
+sections_format = "tablet"
+chunk_count = 6

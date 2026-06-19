@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.gilgamesh-tablet-01.006"
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet I — The Tyranny of Gilgamish and the Creation of Enkidu"
+section = "Tablet I, Section 1f"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog03.htm"
+token_count = 676
+
+[content]
+body = "[She] who knoweth all wisdom, to Gilgamish (thus) did she answer: '(Lo), by the stars of the heavens are represented thy [comrades], [That which was like unto] Anu's [own self], which fell on thy shoulders, [Which thou didst heave, but he was, o’erstrong for thee, [(aye), though his grapple Thou didst unloose], but to shake him from off thee thou wert [un] able, 45.\n\n[So didst present] him low at my feet, [that] as thine own equal [I might] account him—[and thou to thy breast like a woman] didst hold him: Column VI .\n\n[This is a stoutheart, a] friend, one ready to stand by [a comrade], One whose strength [is the greatest, (the length and breadth) of the country], [Like to a double of Anu's own self his] strength is enormous.\n\n[(Now), since thou] to thy breast didst hold him [the way of a woman], 5.\n\n[This is a sign that] thou art the one he will [never] abandon: [This] of thy dream is the [meaning].' [Again he spake] to his mother, '[Mother], a second dream [did I] see: [Into Erech, the high-wall'd], 10.\n\nHurtled an axe, and they gather’d about it: [the meanwhile, from Erech] [People] were standing about it, [the people] (all) thronging before it, [Artisans pressing] behind it, [while] I at thy feet did present it, 15.\n\n[I], like a woman I held it to me [that] thou might’st account it, As mine own equal.' [She the [all]-wise, who knoweth all wisdom, (thus) answer’d her offspring, [She the all-wise] who knoweth all wisdom, to Gilgamish answer'd: '(Lo, that) [Axe] thou didst see (is) a Man; like a woman didst hold him, 20.\n\nUnto thy breast, [that] as thine own equal I might account him, [This] is a stoutheart, a friend, one ready to stand by a comrade, One whose strength is the [greatest (the length and breadth) of the country], (Like to a double of] Anu's [own self], his strength is enormous.' [Gilgamish open’d his mouth, and] addressing his mother, (thus spake he): '[Though] great [danger (?)] befall, [a friend (?)] shall I have .\n\n.\n\n.\n\n'\" ( The Assyrian Edition of the seventh century has three more lines on the First Tablet, which correspond with Column II, l.\n\n3 of the Second Tablet of the Old Babylonian Edition.\n\nThis latter has already begun with the episode of the two dreams, approximately Column V, l.\n\n24 of the Assyrian First Tablet, and the text is so similar in both that I have not repeated it here.\n\nThe Old Babylonian Edition here takes up the story, repeating one or two details )."
+
+[annotations]
+concepts = []
+related_chunks = []
