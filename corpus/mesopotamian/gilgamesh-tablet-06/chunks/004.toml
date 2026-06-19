@@ -5,10 +5,10 @@ text_name = "Epic of Gilgamesh: Tablet VI — Ishtar and the Bull of Heaven"
 section = "Tablet VI, Section 1d"
 translator = "R. Campbell Thompson"
 source_url = "https://sacred-texts.com/ane/eog/eog08.htm"
-token_count = 343
+token_count = 146
 
 [content]
-body = "Gilgamish call’d to the masters of craft, the artists, (yea), all of them, That at the size of its horns (all) the guilds of the crafts speak their praises Each had of azure in weight thirty minas to be as their setting, Two fingers their .\n\n...\n\n...\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n175.\n\nBoth of them held six measures of oil; to his god Lugal-banda He for (his) unguent devoting, brought in, and (thus) let them hang (there), (There) in the shrine of his forbears.\n\n(And now) in the River Euphrates Washing their hands, they start (on their progress) and come (to the city); (Now) are they striding the highway of Erech, the heroes of Erech 180.\n\nThronging (about them) to see them.\n\n(Then) Gilgamish utter’d a riddle Unto the notables (?): Who, pr’ythee, is most splendid of heroes , Who, pr’ythee, is most famous of giants?\n\nGilgamish—he is most splendid of heroes , 185.\n\n[ Enkidu—he is most ] famous of giants .\n\n( Three mutilated lines follow .) ________________________________ 190.\n\nSo in his palace did Gilgamish hold high revel: (thereafter), (While all) the heroes asleep, on their nightly couches were lying Enkidu, too, was asleep, and a vision beheld, and (so) coming Enkidu (now) his dream to reveal: (thus) spake he unto his comrade."
+body = "(Then) Gilgamish utter’d a riddle Unto the notables (?): Who, pr’ythee, is most splendid of heroes , Who, pr’ythee, is most famous of giants?\n\nGilgamish—he is most splendid of heroes , 185.\n\n[ Enkidu—he is most ] famous of giants .\n\n________________________________ 190.\n\nSo in his palace did Gilgamish hold high revel: (thereafter), (While all) the heroes asleep, on their nightly couches were lying Enkidu, too, was asleep, and a vision beheld, and (so) coming Enkidu (now) his dream to reveal: (thus) spake he unto his comrade."
 
 [annotations]
 concepts = []

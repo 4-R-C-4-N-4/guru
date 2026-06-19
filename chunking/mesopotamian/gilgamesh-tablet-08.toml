@@ -1,11 +1,29 @@
 # Epic of Gilgamesh, Tablet VIII — Thompson 1928 verse rendering.
 # Per-tablet manifest entry (one page each). Continuous verse ->
 # paragraph-group; long tablets sub-split at max_tokens.
+# pre_strip removes translator apparatus (nav byline, Column markers,
+# lacuna/manuscript notes, scene-heading captions) that would otherwise
+# pollute concept tagging — verified zero false positives against
+# Thompson's inline (gloss) and [reconstruction] markup, which are kept.
 [chunking]
 strategy = "paragraph-group"
 section_label_format = "Tablet VIII, Section {n}"
 paragraphs_per_chunk = 3
 max_tokens = 800
+pre_strip_patterns = [
+    # nav byline residue ("The Epic of Gilgamish , tr. by ... at sacred-texts.com")
+    'The Epic of Gilgamish\s*,\s*tr\.\s*by\b[^\n]*?at sacred-texts\.com\s*',
+    # standalone column markers ("Column I .")
+    '\bColumn\s+[IVXLC]+\s*\.',
+    # editorial lacuna / manuscript-criticism notes (keyword-anchored, tolerant of inner "(?)")
+    '\((?:[^()]|\([^()]*\))*?\b(?:lines?|ll\.|wanting|mutilated|missing|gap|lost|broken|fragmentary|fragment|Columns?|Tablet|Version|Edition|interpolated|restored?|supplied|Boghaz|Assyrian|Babylonian|Hittite|Semitic|breaks)\b(?:[^()]|\([^()]*\))*\)',
+    # translator scene-heading captions ("( The Creation of Enkidu )", "( How the dead haunt the living )")
+    '\(\s*(?:The|How)\s+\w(?:[^()]|\([^()]*\))*\)',
+    # scene headings led by a character name ("( Gilgamish meets Siduri )")
+    '\(\s*(?:Enkidu|Gilgamish|Ishtar|Shamash|Humbaba|Siduri)\b(?:[^()]|\([^()]*\))*\)',
+    # He/But-led headings naming a character ("( He reaches Uta-Napishtim )")
+    '\(\s*(?:He|But)\b(?:[^()]|\([^()]*\))*?\b(?:Enkidu|Gilgamish|Ishtar|Shamash|Humbaba|Siduri|Uta-Napishtim)\b(?:[^()]|\([^()]*\))*\)',
+]
 
 [metadata]
 tradition = "Mesopotamian"

@@ -5,10 +5,10 @@ text_name = "Epic of Gilgamesh: Tablet IV — The Arrival at the Gate of the For
 section = "Tablet IV, Section 1b"
 translator = "R. Campbell Thompson"
 source_url = "https://sacred-texts.com/ane/eog/eog06.htm"
-token_count = 428
+token_count = 138
 
 [content]
-body = "Call’d he to Gilgamish, .\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n\"(O but), my comrade, .\n\n.\n\n.\n\nhateth me .\n\n.\n\nbecause within Erech I was afraid of the combat, and .\n\n.\n\n.\n\nMy friend, who in battle .\n\n.\n\n.\" ( A small gap in which Gilgamish has answered.\n\nEnkidu replies ): 26.\n\n[Enkidu open’d] his [mouth] and spake [unto Gilgamish, saying]: (\"Nay, but), [my friend, let us no wise] go down [to the depths of the Forest], (For) ’tis my hands [have grown weak], and [my arms] are stricken with palsy.\" ________________________________ Gilgamish open’d his mouth and spake [unto Enkidu], saying: 30.\n\n\"Shall we, O friend, [play] the coward?\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\n.\n\nthou shalt surpass them all(?) .\n\n.\n\n.\n\n.\n\n[Thou, O] my friend, art cunning in warfare, art [shrewd(?)] in the battle, (So) shalt thou touch the .\n\n.\n\n.\n\nand of [death] have no terror, ( Two difficult and mutilated lines ).\n\n[So that] the palsy (now striking) thine arms [may] depart, and the weakness Pass [from thy hands]!\n\n[Be brave(?)] and resist!\n\nO my comrade, together We will go down—let the combat [in no wise diminish(?)] thy courage!\n\n40.\n\nO forget death, and be fearful(?) of nothing(?) .\n\n.\n\n(for he who is) [valiant(?)], Cautious (and) careful, by leading [the way] hath his own body guarded, (He ’tis) will safeguard a comrade.\" A name by their [valour(?)] .\n\n.\n\nThey will establish.\n\n(And now) they together arrive at the barrier(?), [Still’d into silence(?)] their speech, and they themselves (suddenly) stopping."
+body = "[Be brave(?)] and resist!\n\nO my comrade, together We will go down—let the combat [in no wise diminish(?)] thy courage!\n\n40.\n\nO forget death, and be fearful(?) of nothing(?) .\n\n.\n\n(for he who is) [valiant(?)], Cautious (and) careful, by leading [the way] hath his own body guarded, (He ’tis) will safeguard a comrade.\" A name by their [valour(?)] .\n\n.\n\nThey will establish.\n\n(And now) they together arrive at the barrier(?), [Still’d into silence(?)] their speech, and they themselves (suddenly) stopping."
 
 [annotations]
 concepts = []

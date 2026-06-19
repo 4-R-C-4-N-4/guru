@@ -5,10 +5,10 @@ text_name = "Epic of Gilgamesh: Tablet XI — The Flood"
 section = "Tablet XI, Section 1g"
 translator = "R. Campbell Thompson"
 source_url = "https://sacred-texts.com/ane/eog/eog13.htm"
-token_count = 432
+token_count = 196
 
 [content]
-body = "(But here was) a serpent who snuff’d the plant's fragrance, Darted he up [from the water (?)], and snatch’d the plant, uttering malison 290.\n\nAs he drew back.\n\nThen Gilgamish sate him, (and) burst into weeping.\n\nOver his cheeks flow’d his tears: to the boatman Ur -Shanabi [spake he(?)] \"(Pr’ythee), [for] whom have toiléd mine arms, O Ur-Shanabi, (tell me), 295.\n\n(Pr’ythee), for whom hath my heart's blood been spent?\n\n(yea), not for mine own self, Have I the guerdon achieved; (no), ’tis for an earth-lion (only) Have I the guerdon secured—(and) now at the fortieth hour (Such an) one reiveth (it)—O, when I open’d the sluice and .\n\n.\n\n.ed the attachment, (Aye), I noted the sign (?) which to me was vouchsafed as a warning, 300.\n\nWould I had turn’d and abandon’d the boat at the marge (of the ocean)!\" Broke they their fast at the fortieth hour: at the sixtieth rested, (So in the end) to the middle of Erech, the high-wall’d, arrivéd.\n\n________________________________ ( The Pride of the Architect ).\n\nGilgamish spake to him, (yea), to the boatman Ur-Shanabi (this wise): \"Do thou, Ur-Shanabi, go up and walk on the ramparts of Erech, Look on its base, and take heed of its bricks, if its bricks be not kiln-burnt, 305.\n\n(Aye), and its ground-work be not bitumen, e’en seven courses, One shar the city, (and) one shar the gardens, and one shar the (2) .\n\n.\n\n.\n\n.\n\nthe Temple of Ishtar, amass’d I three shar and .\n\n.\n\n.\n\n(?) of Erech ."
+body = "Would I had turn’d and abandon’d the boat at the marge (of the ocean)!\" Broke they their fast at the fortieth hour: at the sixtieth rested, (So in the end) to the middle of Erech, the high-wall’d, arrivéd.\n\n________________________________ .\n\nGilgamish spake to him, (yea), to the boatman Ur-Shanabi (this wise): \"Do thou, Ur-Shanabi, go up and walk on the ramparts of Erech, Look on its base, and take heed of its bricks, if its bricks be not kiln-burnt, 305.\n\n(Aye), and its ground-work be not bitumen, e’en seven courses, One shar the city, (and) one shar the gardens, and one shar the (2) .\n\n.\n\n.\n\n.\n\nthe Temple of Ishtar, amass’d I three shar and .\n\n.\n\n.\n\n(?) of Erech ."
 
 [annotations]
 concepts = []
