@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-33.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XXXIII — Of the Seals and Characters of Natural Things"
+section = "Chapter XXXIII, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm42.htm"
+token_count = 93
+
+[content]
+body = "It is sufficient here to shew from HERE FOLLOW THE FIGURES OF DIVINE LETTERS: The Letters or Characters of Saturn.\n\nThe Letters or Characters of Jupiter.\n\nThe Letters or Characters of Mars.\n\nThe Letters or Characters of the Sun.\n\nThe Letters or Characters of Venus.\n\nThe Letters or Characters of Mercury.\n\nThe Letters or Characters of the Moon.\n\nwhence the Characters of Nature have their original source, and in what things they are to be enquired after."
+
+[annotations]
+concepts = []
+related_chunks = []

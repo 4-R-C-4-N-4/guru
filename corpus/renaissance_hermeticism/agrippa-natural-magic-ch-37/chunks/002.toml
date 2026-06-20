@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-37.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XXXVII — How, By Some Certain Natural and Artificial Preparations, We May Attract Certain Celestial and Vital Gifts"
+section = "Chapter XXXVII, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm46.htm"
+token_count = 153
+
+[content]
+body = "For this is the band and continuity of Nature, that all superior virtue doth flow through every inferior with a long and continued series, dispersing its rays even to the very last things; and inferiors, through their superiors, come to the very Supreme of all.\n\nFor so inferiors are successively joined to their superiors, that there proceeds an influence from their head, the First Cause, as a certain string stretched out to the lowermost things of all; of which string, if one end be touched the whole doth presently shake, and such a touch doth sound to the other end; and at the motion of an inferior the superior also is moved, to which the other doth answer, as strings in a lute well tuned."
+
+[annotations]
+concepts = []
+related_chunks = []

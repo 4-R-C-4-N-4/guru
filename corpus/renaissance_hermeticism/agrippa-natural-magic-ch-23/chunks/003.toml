@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-23.003"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XXIII — How We Shall Know What Stars Natural Things Are Under, and What Things Are Under the Sun, Which Are Called Solary"
+section = "Chapter XXIII, Section 1c"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm32.htm"
+token_count = 255
+
+[content]
+body = "Also, amongst birds, these are Solary: The phœnix, being but one of that kind; and the eagle, the queen of birds; also the vulture, the swan, and those which sing at the rising Sun and, as it were, call upon it to rise, as the cock and crow; also the hawk, which because it, in the divinity of the Egyptians, is an emblem of the spirit and light, is by Porphyrius reckoned amongst the Solary birds.\n\nMoreover, all such things as have some resemblance of the works of the Sun, as worms shining in the night, and the beetle.\n\nAlso, according to Appious’ interpretation, such things whose eyes are changed according to the course of the Sun are accounted Solary; and things which come of them.\n\nAnd amongst fish, the sea-calf is chiefly Solary, who doth resist lightning; also shell-fish and the fish called Pulmo, both of which shine in the night; and the fish called stella, for his parching heat; and the fish called strombi that follow their king; and margari, which also have a king, and, being dried, are hardened into a stone of a golden color."
+
+[annotations]
+concepts = []
+related_chunks = []

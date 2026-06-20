@@ -1,0 +1,21 @@
+# Agrippa, Philosophy of Natural Magic (Book I), Chapter XI — de Laurence 1913.
+# Per-chapter manifest entry (one sacred-texts page). paragraph-group; short
+# chapters yield 1 chunk, long ones sub-split at max_tokens. pre_strip drops the
+# pnm10 title-page block and the trailing Next:/Previous: footer (apparatus).
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Chapter XI, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+pre_strip_patterns = [
+    # pnm10 book half-title block before Chapter I (no-op on other chapters)
+    'Title Page of \d{4}\b.*?_{3,}\s*',
+    # trailing 'Next:/Previous:' footer nav pointer (injects the next chapter title)
+    '\s*\b(?:Next|Previous):\s.*$',
+]
+
+[metadata]
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XI — How Occult Virtues are Infused into the Several Kinds of Things by Ideas Through the Help of the Soul of the World, And Rays of the Stars; and what Things Abound Most with this Virtue"
+translator = "Henry Morley; L. W. de Laurence ed."
+sections_format = "chapter"

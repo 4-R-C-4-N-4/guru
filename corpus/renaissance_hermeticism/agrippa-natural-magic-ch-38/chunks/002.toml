@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-38.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XXXVIII — How We May Draw Not Only Celestial and Vital, but Also Certain Intellectual and Divine Gifts From Above"
+section = "Chapter XXXVIII, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm47.htm"
+token_count = 54
+
+[content]
+body = "They say that if the fish echeneis be cut into pieces and cast into the sea, the parts will within a little time come together and live.\n\nAlso we know that the pelican doth restore her young to life, being killed, with her own blood."
+
+[annotations]
+concepts = []
+related_chunks = []

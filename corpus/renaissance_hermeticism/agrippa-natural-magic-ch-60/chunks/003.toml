@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-60.003"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter LX — Of Madness, and Divinations which are made when men are awake, and of the Power of a Melancholy Humor, by which Spirits are sometimes induced into Men's Bodies"
+section = "Chapter LX, Section 1c"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm69.htm"
+token_count = 122
+
+[content]
+body = "There are also some prognostics which are in the middle, betwixt natural and supernatural divination, as in those who are near to death, and, being weakened with old age, do sometimes foresee things to come, because, as saith Plato, by how much the more men are less hindered by their sense, so much the more accurately they understand, and because they are nearer to the place whither they must go (and their bonds being, as it were, a little loosed, seeing they are no more subject to the body) easily perceive the light of divine revelation."
+
+[annotations]
+concepts = []
+related_chunks = []
