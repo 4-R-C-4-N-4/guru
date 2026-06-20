@@ -1,0 +1,7 @@
+tradition = "Renaissance Hermeticism"
+text_id = "paracelsus-treasure-of-treasures"
+text_name = "Paracelsus: The Treasure of Treasures for Alchemists"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/alc/paracel1.htm"
+sections_format = "section"
+chunk_count = 5

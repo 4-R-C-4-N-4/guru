@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.paracelsus-treasure-of-treasures.005"
+tradition = "Renaissance Hermeticism"
+text_name = "Paracelsus: The Treasure of Treasures for Alchemists"
+section = "Section 1e"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/alc/paracel1.htm"
+token_count = 216
+
+[content]
+body = "But this kind differs from what is more commonly called Balsam, in that the one is conservative of the living, and the other of the dead.\n\n- C hirurgia Magna , Pt.\n\nII., Tract II., c 3.\n\nThe confection of Balsam requires special knowledge of chemistry, and it was first discovered by the Alchemists.\n\n- Ibid.\n\n, Pt.\n\nI., Tract II., c.\n\n4.\n\n6 It is difficult to identify the treatise to which reference is made here.\n\nIt does not seem to be the seventh book concerning The Nature of Things, nor the ensuing tract on Cements.\n\nThe general question of natural and artificial weight is discussed in the Aurora of the Philosophers .\n\nNo detached work on Transmutations has come down to us.\n\n7 Know that the Phoenix is the soul of the Iliaster (that is, the first chaos of the matter of all things).\n\n...\n\nIt is also the Iliastic soul in man.\n\n- Liber Azoth , S.\n\nV., Practica Lineae Vitae ."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,7 @@
+tradition = "Renaissance Hermeticism"
+text_id = "paracelsus-aurora-of-philosophers"
+text_name = "Paracelsus: The Aurora of the Philosophers"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/alc/paracel3.htm"
+sections_format = "section"
+chunk_count = 22

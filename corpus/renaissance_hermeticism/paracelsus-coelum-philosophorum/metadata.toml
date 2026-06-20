@@ -1,0 +1,7 @@
+tradition = "Renaissance Hermeticism"
+text_id = "paracelsus-coelum-philosophorum"
+text_name = "Paracelsus: Coelum Philosophorum, or Book of Vexations"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/alc/coelum.htm"
+sections_format = "section"
+chunk_count = 14
