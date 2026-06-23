@@ -1,0 +1,31 @@
+{
+  "id": "2957d758",
+  "type": "chore",
+  "state": "open",
+  "summary": "Strip whole-page apparatus from page-as-chunk SBE texts (Plotinus, Zhuangzi)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-23T17:38:26.322Z",
+  "updated_at": "2026-06-23T17:38:45.425Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "apparatus",
+    "pipeline",
+    "chunking"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-06-23T17:38:45.425Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Two page-as-chunk SBE texts bundle whole apparatus PAGES as chunks (not in-chunk apparatus like Yasna, so pre_strip can't fix it — needs a whole-chunk DROP):\n\n- plotinus-select-works-index (716 raw pages -> 828 chunks): Porphyry's 'Life of Plotinus' biography + MacKenna's tractate TOC/summaries interleaved with the Ennead 'Section N' primary text.\n- zhuangzi-inner-chapters-index (141 raw pages -> 294 chunks): Legge's per-book editorial prefaces ('BOOK N. TITLE. ...'), patriarch-history notes, Babylonian comparative notes, philological glosses; ALSO the Tao Te Ching is duplicated here (TTC chapters appear both under tao-te-ching-legge AND inside this id).\n\nFix: extend is_apparatus_chunk() in scripts/chunk.py (the existing whole-chunk drop test) to recognize these apparatus page-types with false-positive guards (dropping real scripture would be bad). Separately dedupe the TTC (decide canonical id; likely drop the zhuangzi-bundled TTC copy).\n\nRe-ingest implication (same as Yasna fix ca2bc29): after re-chunk, clear stale nodes/embeddings/staged_edges/staged_tags/edges for the affected ids, then graph_bootstrap + embed_corpus + tag_concepts + propose_edges. Yasna footprint for reference was 148 chunks -> 1148 staged_edges + 1936 staged_tags + 1991 live edges, all apparatus-polluted.",
+      "confidence": "high"
+    }
+  ]
+}
