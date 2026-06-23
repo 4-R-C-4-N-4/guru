@@ -3,6 +3,10 @@ strategy = "paragraph-group"
 section_label_format = "Spenta Mainyu Gatha, Yasna XLVIII, Section {n}"
 paragraphs_per_chunk = 3
 max_tokens = 800
+pre_strip_patterns = [
+    '.*?\bTranslation\.\s*',
+    '\bFootnotes\b.*',
+]
 
 [metadata]
 tradition = "Zoroastrianism"
