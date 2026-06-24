@@ -117,6 +117,53 @@ def _apply_pre_strip(content: str, patterns: list[str]) -> str:
     return content.strip()
 
 
+def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, int]:
+    """Order-aware whole-chunk drops for page-as-chunk corpora where entire
+    pages are apparatus that pre_strip cannot touch (front matter, dividers).
+
+    Unlike pre_strip (which removes text within a chunk) and is_apparatus_chunk
+    (a generic per-chunk test), this is per-text config and sees chunk order, so
+    it can drop a contiguous leading block. Two keys under [chunking]:
+
+      drop_before_marker  : regex; drop every chunk preceding the first whose
+                            body matches it (e.g. a title-page + biography + TOC
+                            front block ahead of the first real section).
+      drop_chunk_patterns : list of regex (re.search, DOTALL); drop any chunk
+                            whose body matches — for self-identifying divider or
+                            boilerplate pages. Anchor + length-bound these so
+                            they cannot match a long primary page that merely
+                            shares an opening word.
+
+    A no-op (returns chunks unchanged) when neither key is set. Validated on
+    plotinus-select-works-index (todo:2957d758): drops 17 front-matter + 59
+    tractate/ennead dividers = 76, keeps 752, 0 false-positives.
+    """
+    marker = cfg.get("drop_before_marker")
+    pats = [re.compile(p, re.DOTALL) for p in cfg.get("drop_chunk_patterns", [])]
+    if not marker and not pats:
+        return chunks, 0
+
+    start = 0
+    if marker:
+        mre = re.compile(marker)
+        hit = next((i for i, c in enumerate(chunks) if mre.search(c.body)), None)
+        if hit is None:
+            logger.warning(
+                f"[{source_id}] drop_before_marker /{marker}/ never matched — "
+                f"keeping all chunks"
+            )
+        else:
+            start = hit
+
+    kept, dropped = [], 0
+    for i, c in enumerate(chunks):
+        if i < start or any(p.search(c.body) for p in pats):
+            dropped += 1
+        else:
+            kept.append(c)
+    return kept, dropped
+
+
 def load_chunking_config(tradition: str, source_id: str) -> dict | None:
     path = CHUNKING_DIR / tradition / f"{source_id}.toml"
     if not path.exists():
@@ -256,6 +303,12 @@ def process_source(
     if dropped:
         final_chunks = [c for c in final_chunks if not is_apparatus_chunk(c.body)]
         logger.info(f"[{source_id}] dropped {len(dropped)} apparatus chunk(s)")
+
+    # Per-text whole-page apparatus drops (front matter, dividers) — order-aware,
+    # so it must run on the assembled list, not per-chunk like the test above.
+    final_chunks, n_cfg_drop = _apply_config_drops(final_chunks, cfg, source_id)
+    if n_cfg_drop:
+        logger.info(f"[{source_id}] dropped {n_cfg_drop} config-marked apparatus chunk(s)")
 
     logger.info(f"[{source_id}] → {len(final_chunks)} chunks")
 

@@ -3,6 +3,17 @@ strategy = "page-as-chunk"
 section_label_format = "Select Works, Section {n}"
 number_source = "filename"
 max_tokens = 800
+# Whole-page apparatus drops (todo:2957d758). The SBE volume opens with a
+# title page + Porphyry's "Life of Plotinus" + a tractate table-of-contents
+# (a contiguous front block before the Enneads), and the Ennead text is broken
+# up by short "Nth TRACTATE. TITLE. Next: Section 1" / "THE Nth ENNEAD Next:"
+# divider pages. Neither is primary text. Validated: drops 17 front-matter + 59
+# dividers = 76, keeps 752 (incl. 98 mid-tractate continuation pages that don't
+# start with "Section N"), 0 false positives.
+drop_before_marker = '^THE FIRST ENNEAD\b'
+drop_chunk_patterns = [
+    '^(?:THE [A-Z]+ ENNEAD|[A-Z]+(?: [A-Z]+){0,2} TRACTATE\b)[^\n]{0,140}Next:[^\n]{0,40}\s*$',
+]
 
 [metadata]
 tradition = "Neoplatonism"

@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.390"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 324"
+section = "Select Works, Section 368 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 339
+token_count = 247
 
 [content]
-body = "Section 4 4. In that realm it has also vision, through the Intellectual-Principle, of The Good which does not so hold to itself as not to reach the soul; what intervenes between them is not body and therefore is no hindrance- and, indeed, where bodily forms do intervene there is still access in many ways from the primal to the tertiaries. If, on the contrary, the soul gives itself to the inferior, the same principle of penetration comes into play, and it possesses itself, by memory and imagination, of the thing it desired: and hence the memory, even dealing with the highest, is not the highest. Memory, of course, must be understood not merely of what might be called the sense of remembrance, but so as to include a condition induced by the past experience or vision. There is such a thing as possessing more powerfully without consciousness than in full knowledge; with full awareness the possession is of something quite distinct from the self; unconscious possession runs very close to identity, and any such approach to identification with the lower means the deeper fall of the soul. If the soul, on abandoning its place in the Supreme, revives its memories of the lower, it must have in some form possessed them even there though the activity of the beings in that realm kept them in abeyance: they could not be in the nature of impressions permanently adopted- a notion which would entail absurdities- but were no more than a potentiality realized after return. When that energy of the Intellectual world ceases to tell upon the soul, it sees what it saw in the earlier state before it revisited the Supreme. Next: Section 5"
+body = "And, further, once we reject the theory that these images reach us by way of some outstreaming from the objects seen, there is no reason to think of the air being affected and passing on to us, in a progression of impression, what has been impressed upon itself.\n\nIf our perception is to depend upon previous impressions made upon the air, then we have no direct knowledge of the object of vision, but know it only as through an intermediary, in the same way as we are aware of warmth where it is not the distant fire itself that warms us, but the warmed intervening air.\n\nThat is a matter of contact; but sight is not produced by contact: the application of an object to the eye would not produce sight; what is required is the illumination of the intervening medium; for the air in itself is a dark substance: If it were not for this dark substance there would probably be no reason for the existence of light: the dark intervening matter is a barrier, and vision requires that it be overcome by light.\n\nPerhaps also the reason why an object brought close to the eye cannot be seen is that it confronts us with a double obscuration, its own and that of the air.\n\nNext: Section 3"
 
 [annotations]
 concepts = []
