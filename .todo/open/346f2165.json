@@ -1,0 +1,22 @@
+{
+  "id": "346f2165",
+  "type": "bug",
+  "state": "open",
+  "summary": "guru-review API serves stale chunk body after re-chunk (ChunkBodyCache never invalidated)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-24T23:39:07.698Z",
+  "updated_at": "2026-06-24T23:39:23.866Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/chunkBody.ts"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "cache",
+    "corpus"
+  ],
+  "description": "ChunkBodyCache is a 5000-entry LRU (guru-review/server/src/chunkBody.ts) that only clears on server restart or explicit clear(). After a chunk's corpus toml is re-chunked, GET /api/chunks can return the OLD cached body. Hit during tag review: zoroastrianism.yasna-31.002 served Mills' third-person commentary via the API while the corpus toml + staged_tags were primary Gatha verse — nearly caused 23 valid tags to be rejected as scholarly apparatus. The toml and tags were correct; only the in-process API cache was stale. Repro: load a chunk via /api/chunks, re-chunk its toml, request again -> stale body persists until restart. Fix options: invalidate the cache entry on re-chunk, watch corpus file mtimes and reload on change, or expose a cache-bust signal. Workaround used during review: read bodies directly from corpus/*/chunks/NNN.toml instead of the API."
+}
