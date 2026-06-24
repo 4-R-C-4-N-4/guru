@@ -3,6 +3,16 @@ strategy = "page-as-chunk"
 section_label_format = "Book {n}"
 number_source = "filename"
 max_tokens = 800
+# Whole-page apparatus + scope trim (todo:2957d758). The sbe39 acquisition
+# grabbed Legge's entire "Texts of Taoism" volume: title/TOC/Introduction, the
+# complete Tao Te Ching (duplicates tao-te-ching-legge), his per-book "Brief
+# Notices" prefaces, and Zhuangzi Books I-XVII. The manifest scopes this text to
+# the Inner Chapters (Books I-VII) only. The real Zhuangzi translation is a
+# contiguous block headed "BOOK <n>. PART <n>. SECTION <n>."; keep Book I's
+# first section through to just before Book VIII. Validated: keeps 57 pages
+# (Books I-VII), drops everything else, 0 false-positives.
+drop_before_marker = 'BOOK I\.\s+PART I\.\s+SECTION I\b'
+drop_after_marker = 'BOOK VIII\.\s+PART II\.\s+SECTION I\b'
 
 [metadata]
 tradition = "Taoism"

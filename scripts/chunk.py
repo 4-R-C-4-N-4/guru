@@ -128,36 +128,53 @@ def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, 
       drop_before_marker  : regex; drop every chunk preceding the first whose
                             body matches it (e.g. a title-page + biography + TOC
                             front block ahead of the first real section).
+      drop_after_marker   : regex; drop the first chunk at/after the kept start
+                            whose body matches it, and everything after (e.g. a
+                            trailing appendix, or out-of-scope later sections —
+                            used to keep a contiguous slice between two markers).
       drop_chunk_patterns : list of regex (re.search, DOTALL); drop any chunk
                             whose body matches — for self-identifying divider or
                             boilerplate pages. Anchor + length-bound these so
                             they cannot match a long primary page that merely
                             shares an opening word.
 
-    A no-op (returns chunks unchanged) when neither key is set. Validated on
-    plotinus-select-works-index (todo:2957d758): drops 17 front-matter + 59
-    tractate/ennead dividers = 76, keeps 752, 0 false-positives.
+    A no-op (returns chunks unchanged) when no key is set. Validated on
+    plotinus-select-works-index (76 front-matter+dividers dropped, 752 kept) and
+    zhuangzi-inner-chapters-index (front matter + duplicated TTC + outer chapters
+    dropped, 57 Inner-Chapter pages kept) — todo:2957d758, 0 false-positives.
     """
     marker = cfg.get("drop_before_marker")
+    after = cfg.get("drop_after_marker")
     pats = [re.compile(p, re.DOTALL) for p in cfg.get("drop_chunk_patterns", [])]
-    if not marker and not pats:
+    if not marker and not after and not pats:
         return chunks, 0
 
     start = 0
     if marker:
-        mre = re.compile(marker)
-        hit = next((i for i, c in enumerate(chunks) if mre.search(c.body)), None)
+        hit = next((i for i, c in enumerate(chunks) if re.search(marker, c.body)), None)
         if hit is None:
             logger.warning(
                 f"[{source_id}] drop_before_marker /{marker}/ never matched — "
-                f"keeping all chunks"
+                f"keeping from the start"
             )
         else:
             start = hit
 
+    end = len(chunks)
+    if after:
+        hit = next((i for i, c in enumerate(chunks)
+                    if i >= start and re.search(after, c.body)), None)
+        if hit is None:
+            logger.warning(
+                f"[{source_id}] drop_after_marker /{after}/ never matched — "
+                f"keeping to the end"
+            )
+        else:
+            end = hit
+
     kept, dropped = [], 0
     for i, c in enumerate(chunks):
-        if i < start or any(p.search(c.body) for p in pats):
+        if i < start or i >= end or any(p.search(c.body) for p in pats):
             dropped += 1
         else:
             kept.append(c)
