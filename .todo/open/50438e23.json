@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-06-25T15:50:46.307Z",
-  "updated_at": "2026-06-25T17:02:22.933Z",
+  "updated_at": "2026-06-25T17:31:14.876Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -89,6 +89,13 @@
       "supporting_evidence": [
         6
       ]
+    },
+    {
+      "timestamp": "2026-06-25T17:31:14.876Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "ROLLOUT DRY-RUN (queue now empty — user applied the 300 verdicts, so blocker #1 is cleared). Re-chunked all 17 CH sources in a scratch working tree with the validated patterns and diffed vs HEAD:\n\nGOOD NEWS — blocker #2 (remap) is UNFOUNDED: re-chunk changes 0 chunk-ids (0 added, 0 removed); only 46 chunk BODIES shift (CH-01..13; CH-14..17 use the 'p.N CORPUS HERMETICUM' header form, untouched by these patterns). IDs stable => NO chunk-id remap/migration needed; every edge/tag/embedding keeps a valid referent. Sermons preserved (CH-03 'The Sacred Sermon 1. The Glory of all things is God...', CH-07 'The Greatest Ill... 1. Whither stumble ye, sots...'). DB follow-up would be just: re-embed the 46 changed chunks + sync node bodies.\n\nNEW BLOCKER (real) — re-chunk exposes a paragraph-group TAIL bug: tests/test_chunking.py::test_round_trip fails on corpus-hermeticum-11.006. Positional trace of the re-stripped raw shows chunk 005 spans 12491..15559 and chunk 006 spans 15292..15559 — i.e. 006's whole 267-char body is the TAIL of 005 (overlapping/duplicated content). HEAD round-trips green, so the strip introduces it by shifting paragraph parity, tripping the paragraph-group chunker's tail handling (likely scripts/chunkers paragraph grouping when the last group is a leftover single paragraph). This is a CHUNKER defect, independent of the apparatus patterns, and must be fixed before re-chunk can land cleanly. Reverted scratch changes; tree clean, suite green.\n\nREVISED rollout: (1) fix the paragraph-group tail/parity overlap in the chunker (add a guard + a round-trip-style regression on an odd-paragraph source); (2) land the 2 BASELINE patterns + the drafted unit test; (3) re-chunk 17 CH sources; (4) re-embed the 46 changed chunks + sync node bodies (no id remap); (5) round-trip + unit test green. Plus CH-01-style unsigned intro + the other per-source sources + child c59758f3 as before.",
+      "confidence": "high"
     }
   ],
   "work": {
