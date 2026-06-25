@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-06-25T15:50:46.307Z",
-  "updated_at": "2026-06-25T18:26:47.635Z",
+  "updated_at": "2026-06-25T19:08:23.734Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -110,6 +110,17 @@
       "type": "evidence",
       "content": "DEPLOY DONE (CH apparatus, the corpus+code+embeddings side):\n- Committed d18a44c: chunk.py (2 Mead/JMG patterns) + test + re-chunked 17 CH sources (46 bodies cleaned, CH-11 6->5). Round-trip + new unit test green (8/8).\n- Re-embedded all 62 hermeticism chunks (embed_corpus --tradition hermeticism --reindex) — apparatus is now OUT of the CH embeddings (the retrieval payoff). DB backed up first (data/guru.db.bak-ch-apparatus-*).\n- Cleaned the orphaned DERIVED rows for the deleted chunk CH-11.006 (chunk_embeddings, tagging_progress). chunk_embeddings (4176) == corpus chunks (4176): consistent.\n\nOPEN DECISION — CH-11.006 verified CURATION orphan (NOT touched; user owns curation): its text folded into new CH-11.005, leaving node=1, EXPRESSES=12 (7 verified), PARALLELS=1 (verified, <- gnosticism.gospel-of-thomas.005), staged_tags=13, staged_edges=1, all referencing the now-deleted chunk-id. Options: (a) re-tag + re-propose CH-11 (faithful pipeline recovery onto new chunks; needs 27B teacher + mistral; produces review work; supersedes orphans) — RECOMMENDED long-term; (b) delete the orphan rows now (lose the verified curation; recoverable by re-tag later); (c) leave it (the verified Thomas edge will show a broken CH-11.006 endpoint). Awaiting user choice.\n\nREMAINING follow-ons unchanged: CH-01-style unsigned intro brackets; iamblichus Greek-fragment (source-scoped); enoch/voluspo/orphic/paracelsus per-source apparatus; child c59758f3 (CH-15/16 dup). Also worth a separate ticket: chunk.py writer should delete stale chunk files on count reduction (the footgun that caused the earlier misdiagnosis).",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T19:08:23.733Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CH APPARATUS SUB-CASE COMPLETE end-to-end (commits d18a44c + ch11_006_remap):\n1. chunk.py: 2 BASELINE_PRE_STRIP patterns strip the Mead credit + Greer '- JMG' notes (0-FP corpus-wide; sermons preserved). + regression test test_baseline_strips_mead_hermetica_apparatus.\n2. Re-chunked all 17 CH sources: 46 bodies cleaned of apparatus; CH-11 collapsed 6->5. Round-trip + suite green (8/8).\n3. Re-embedded all 62 CH chunks (apparatus now OUT of the embeddings — the retrieval payoff). chunk_embeddings == corpus (4176).\n4. CH-11.006 (the one removed chunk) curation REMAPPED onto new .005 via scripts/migrations/ch11_006_remap.py (user chose remap): 7 unique EXPRESSES + the verified PARALLELS to gospel-of-thomas.005 + staged rows re-pointed (5 dups skipped); 006 node dropped. 005 EXPRESSES 10->17, verified Thomas edge preserved, 0 residual 006 refs, 0 dangling CH edge endpoints. DB backed up (data/guru.db.bak-ch-apparatus-*).\n\nTicket stays ACTIVE — the apparatus-leak FAMILY has open follow-ons: CH-01-style unsigned <...> intro brackets; iamblichus untranslated-Greek-fragment (source-scoped drop); enoch-charles editor summaries; voluspo Bellows notes; orphic-hymns Taylor Dissertation; paracelsus-aurora/tincture Waite notes. Plus child c59758f3 (CH-15/16 dup). Separate footgun worth its own ticket: scripts/chunk.py writer leaves stale chunk files on count reduction (caused the earlier overlap misdiagnosis; workaround = rm chunks/*.toml before re-chunk).",
+      "confidence": "high",
+      "supporting_evidence": [
+        9,
+        10
+      ]
     }
   ],
   "work": {
