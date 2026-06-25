@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-06-25T15:50:46.307Z",
-  "updated_at": "2026-06-25T15:50:46.307Z",
+  "updated_at": "2026-06-25T15:51:32.232Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -18,5 +18,14 @@
     "chunking",
     "apparatus",
     "edges"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-06-25T15:51:32.232Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Surfaced during the corpus-wide 0.85 PARALLELS edge review (guru-review-edges). A recurring family of chunks are editorial apparatus, not primary text, and they draw spurious edges — several with hallucinated justifications (the model invents a shared theme present in neither chunk).\n\nSources observed leaking apparatus into retrievable chunks:\n- corpus-hermeticum-*: G.R.S. Mead translator headers/intros (e.g. 'The Corpus Hermeticum translated by G.R.S. Mead. I. Poemandres... <This is the most famous...>') returned instead of the sermon body. (edges ~18716/18723/18725/18757/18762/18793)\n- paracelsus-aurora / paracelsus-tincture: A.E. Waite editorial notes — Aurora authenticity discussion ('genuine work of the Sage of Hohenheim, yet in some respects [spurious]') and pseudo-Hermetic-authorship note ('Among the many writings fabulously attributed to Hermes...'). (edges ~18753-18757, 18792-18794)\n- iamblichus-on-the-mysteries: Thomas Taylor untranslated-Greek footnote fragments (the 'και αετοι μεν, και δρακοντες...' animal-symbols note) and bibliographic citation notes (his Plato translation, Proclus-on-Cratylus scholia). (edges ~18418-18420, 18724)\n- poetic-edda-voluspo: Bellows editorial section-notes (Loki/Lothur, Odin's knowledge-quest) drawing spurious Egyptian<->Norse edges. (edges ~18433-18435)\n- enoch-charles-1917: R.H. Charles section-summaries (scholar's voice, e.g. 'The Apocalyptist prophesies further of the repentance of the Gentiles...').\n- orphic-hymns: Thomas Taylor prefatory 'Dissertation on the Life and Theology of Orpheus' front-matter.\n\nSeparate likely-bug: corpus-hermeticum-15 and corpus-hermeticum-16 returned IDENTICAL body text ('For there are many choirs of daimons round Him...') — possible duplicate chunk across two text_ids; verify and dedup.\n\nFix direction (pipeline-side, not hand-edits): extend scripts/chunk.py is_apparatus_chunk() / per-config drop rules (drop_chunk_patterns, pre_strip_patterns) to catch (a) translator/editor header blocks ('translated by', bracketed editorial notes, section-title+intro), (b) editor's-voice summaries, (c) untranslated-Greek-only fragments, (d) bibliographic citation notes. Same class as the Yasna/Plotinus/Zhuangzi apparatus cleanup (todo:2957d758); after fixing, re-chunk + body-matched remap (scripts/migrations/apparatus_remap.py) to preserve curation.",
+      "confidence": "high"
+    }
   ]
 }
