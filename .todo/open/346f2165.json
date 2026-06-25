@@ -1,13 +1,13 @@
 {
   "id": "346f2165",
   "type": "bug",
-  "state": "open",
+  "state": "active",
   "summary": "guru-review API serves stale chunk body after re-chunk (ChunkBodyCache never invalidated)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-06-24T23:39:07.698Z",
-  "updated_at": "2026-06-24T23:39:23.866Z",
+  "updated_at": "2026-06-25T12:58:32.080Z",
   "files": [
     {
       "path": "guru-review/server/src/chunkBody.ts"
@@ -18,5 +18,35 @@
     "cache",
     "corpus"
   ],
-  "description": "ChunkBodyCache is a 5000-entry LRU (guru-review/server/src/chunkBody.ts) that only clears on server restart or explicit clear(). After a chunk's corpus toml is re-chunked, GET /api/chunks can return the OLD cached body. Hit during tag review: zoroastrianism.yasna-31.002 served Mills' third-person commentary via the API while the corpus toml + staged_tags were primary Gatha verse — nearly caused 23 valid tags to be rejected as scholarly apparatus. The toml and tags were correct; only the in-process API cache was stale. Repro: load a chunk via /api/chunks, re-chunk its toml, request again -> stale body persists until restart. Fix options: invalidate the cache entry on re-chunk, watch corpus file mtimes and reload on change, or expose a cache-bust signal. Workaround used during review: read bodies directly from corpus/*/chunks/NNN.toml instead of the API."
+  "description": "ChunkBodyCache is a 5000-entry LRU (guru-review/server/src/chunkBody.ts) that only clears on server restart or explicit clear(). After a chunk's corpus toml is re-chunked, GET /api/chunks can return the OLD cached body. Hit during tag review: zoroastrianism.yasna-31.002 served Mills' third-person commentary via the API while the corpus toml + staged_tags were primary Gatha verse — nearly caused 23 valid tags to be rejected as scholarly apparatus. The toml and tags were correct; only the in-process API cache was stale. Repro: load a chunk via /api/chunks, re-chunk its toml, request again -> stale body persists until restart. Fix options: invalidate the cache entry on re-chunk, watch corpus file mtimes and reload on change, or expose a cache-bust signal. Workaround used during review: read bodies directly from corpus/*/chunks/NNN.toml instead of the API.",
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-25T12:57:52.460Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-06-25T12:58:17.347Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Reproduced 2026-06-25 on buddhism.diamond-sutra.001 (yasna-31.002's tags were applied, so it no longer surfaces via /api/chunks). Sequence: GET /api/chunks (caches body) -> insert sentinel into the toml body on disk (verified present, 1 occurrence) -> GET /api/chunks again returns the OLD body with no sentinel. Disk changed, API did not. Trap-restored from backup; git clean, cache then == disk. Confirms staleness is purely the in-process LRU, not the toml or DB."
+    },
+    {
+      "timestamp": "2026-06-25T12:58:17.385Z",
+      "author": "Hermes Agent",
+      "type": "blame",
+      "content": "Cache introduced in b5a3974 (P4 read endpoints). chunkBody.ts:1 comment: 'Port of guru/corpus.py:resolve_chunk_path with LRU cache.' load() (lines 57-76) keys only on chunkId and returns the cached CacheEntry verbatim on hit (line 58-59) with no freshness check. Constructed once at server start (index.ts:34, new ChunkBodyCache(corpusDir), capacity 5000) and called per-chunk-per-response (chunks.ts:211, edges.ts:98/105). Re-chunk pipeline (chunk.py) is a separate process that rewrites corpus/*/chunks/NNN.toml; the long-lived server never learns the file changed, so a stale entry survives until restart or clear()."
+    },
+    {
+      "timestamp": "2026-06-25T12:58:32.080Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "FIX: stat-on-load (mtime-validated cache) in chunkBody.ts. Stamp each CacheEntry with the file's mtimeMs at read time; on a cache hit, fs.statSync(file).mtimeMs and reload if it differs from the stamped value. Concretely: in load(), after resolveChunkPath, do const st = fs.statSync(file); const cached = this.cache.get(chunkId); if (cached && cached.mtimeMs === st.mtimeMs) return cached; then read+tomlParse and cache with mtimeMs: st.mtimeMs. This preserves the cache's actual benefit (skipping fs.readFileSync + tomlParse on the hot path) while guaranteeing freshness — a statSync is ~order-of-magnitude cheaper than read+parse, and the per-request cost is one stat per chunk (<=20/page), negligible for a local single-user review tool. Re-chunking rewrites the file, bumping mtime, so the next request reloads.\\n\\nRejected alternatives: (a) fs.watch invalidation — zero per-request cost but Linux fs.watch isn't reliably recursive, needs chokidar/per-dir watchers, coalesces/drops events over a large corpus tree; too much machinery and footgun risk for the benefit. (b) Drop the cache entirely (always read+parse) — simplest and correct, defensible for a single-user tool, but needlessly re-parses on every hit; mtime-check keeps the parse-avoidance for free. (c) TTL expiry — bounds but does not eliminate staleness; not a correctness fix. (d) explicit cache-bust endpoint the pipeline POSTs on re-chunk — cross-process coupling that's easy to forget; brittle.\\n\\nEdge note: if mtime resolution ever masks a same-millisecond rewrite, also compare st.size as a cheap tiebreaker. Hands off to todo-implement.",
+      "supporting_evidence": [
+        0,
+        1
+      ]
+    }
+  ]
 }
