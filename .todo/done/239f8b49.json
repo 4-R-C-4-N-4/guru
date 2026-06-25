@@ -1,13 +1,13 @@
 {
   "id": "239f8b49",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "chunk.py writer leaves stale chunk files when a re-chunk reduces the chunk count (orphaned NNN.toml masquerade as duplicate/overlapping chunks)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-06-25T19:15:28.227Z",
-  "updated_at": "2026-06-25T19:15:41.491Z",
+  "updated_at": "2026-06-25T20:00:45.693Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -26,5 +26,19 @@
       "content": "Surfaced during todo:50438e23 (CH apparatus re-chunk). scripts/chunk.py writes chunk files corpus/<trad>/<src>/chunks/NNN.toml as 001..00N for the N chunks it produces, but does NOT remove pre-existing higher-numbered files when a re-run produces FEWER chunks. So when corpus-hermeticum-11 re-chunked 6 -> 5 (apparatus removal shrank the token count below a sub-split boundary), the old 006.toml was left behind: corpus then had fresh 001-005 + a stale 006 whose body overlapped the new 005 (it was the old tail). This looked exactly like a chunker producing overlapping/duplicate chunks and caused a misdiagnosis ('paragraph-group tail bug') before I traced it to the stale file. Current workaround: 'rm -f corpus/<trad>/<src>/chunks/*.toml' before re-chunking any source whose count may drop.\n\nIMPACT: silent corpus corruption (duplicate/overlapping chunk on any re-chunk that reduces count); breaks the round-trip invariant; the stale chunk-id lingers in the DB (node/edges/tags/embedding) as a phantom. The module docstring even claims 'Idempotent: re-runs produce identical output' — false on a count reduction.\n\nFIX DIRECTION: before writing, clear the chunks dir (or after writing 001..00N, delete any chunks/*.toml with index > N). Then re-affirm idempotency. Add a regression: chunk a source to N files, re-chunk a variant that yields N-1, assert no stale file 00N remains. Note: a true fix would also let chunk.py drive its own re-chunk cleanly (no manual rm), which the apparatus rollouts (todo:2957d758, todo:50438e23) currently work around by hand.",
       "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-25T19:57:04.997Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "fc94451d5d5ba3043fe40791218920ff6a27f3e0",
+    "resolved_at": "2026-06-25T20:00:45.693Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunking.py",
+    "test_function": "test_rechunk_prunes_stale_chunk_files",
+    "note": "Writer now prunes orphaned higher-numbered chunk files after a re-chunk; re-runs idempotent on count reduction. Verified 0 non-NNN tomls corpus-wide so prune only ever removes stale chunk files."
+  }
 }
