@@ -371,6 +371,24 @@ def process_source(
         write_chunk_file(chunk_path, chunk_data, dry_run=dry_run)
         total_tokens += chunk.token_count
 
+    # Prune stale chunk files left by a PRIOR run that produced MORE chunks
+    # (todo:239f8b49). The writer emits 001..00N; without this, a re-chunk that
+    # yields fewer chunks (e.g. apparatus removal pushing a source below a
+    # sub-split boundary) leaves orphaned higher-numbered *.toml behind. Those
+    # masquerade as duplicate/overlapping chunks, break the round-trip invariant,
+    # and linger as phantom chunk-ids in the DB. Removing every *.toml not in the
+    # just-written set keeps re-runs truly idempotent on a count reduction.
+    written = {f"{i + 1:03d}.toml" for i in range(len(final_chunks))}
+    if chunk_dir.exists():
+        stale = [p for p in sorted(chunk_dir.glob("*.toml")) if p.name not in written]
+        for p in stale:
+            if dry_run:
+                logger.info(f"  [dry-run] Would remove stale chunk file {p}")
+            else:
+                p.unlink()
+        if stale:
+            logger.info(f"[{source_id}] removed {len(stale)} stale chunk file(s)")
+
     # Write text-level metadata
     metadata = {
         "tradition": tradition_val,
