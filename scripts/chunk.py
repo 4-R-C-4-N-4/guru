@@ -78,6 +78,8 @@ BASELINE_PRE_STRIP: list[str] = [
     # sacred-texts.com" (todo:16255216 / C4a). Bounded by the closing marker;
     # title/translator are non-newline-bounded so it can't span into content.
     r'[^\n]{0,80}?,\s*by\s+[^\n,]{2,40}?,\s*\[\d{3,4}\],\s*at sacred-texts\.com\s*',
+    r'The Corpus Hermeticum translated by G\.R\.S\.\s*Mead\s+[IVXLC]+\.\s*',
+    r'<[^<>]*?-\s*JMG>\s*',
 ]
 
 

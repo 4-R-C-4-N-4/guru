@@ -339,3 +339,25 @@ def test_is_apparatus_chunk_drops_only_pure_apparatus():
     assert not is_apparatus_chunk("The next stage of the soul's ascent is union.")
     # KEEP: a long body that starts with 'Next:' but is clearly content (length guard)
     assert not is_apparatus_chunk("Next: " + "and the soul ascends through the spheres " * 10)
+
+
+def test_baseline_strips_mead_hermetica_apparatus():
+    """BASELINE_PRE_STRIP removes the Corpus Hermeticum / Mead-Greer apparatus
+    (todo:50438e23): the per-libellus translator credit and J.M. Greer's signed
+    "- JMG" editorial notes, WITHOUT touching the sermon text that follows them
+    in the same chunk (CH-03/-07 are single-chunk libelli — a drop would destroy
+    the primary text, so this must strip)."""
+    strip = lambda b: _apply_pre_strip(b, BASELINE_PRE_STRIP)
+    ch03 = ("The Corpus Hermeticum translated by G.R.S. Mead III. The Sacred "
+            "Sermon <This brief text recounts the creation in cyclic terms. - JMG> "
+            "1. The Glory of all things is God, Godhead and Godly Nature.")
+    out = strip(ch03)
+    assert "translated by G.R.S. Mead" not in out
+    assert "- JMG>" not in out and "<This brief" not in out
+    assert "1. The Glory of all things is God" in out
+    assert "translated by" not in strip(
+        "The Corpus Hermeticum translated by G.R.S.\n\nMead VII.\n\n"
+        "The Greatest Ill <diatribe - JMG> 1. Whither stumble ye, sots")
+    keep = ("The book was translated by a monk; next we read on p. 222 that "
+            "<the lacuna here> Ἔκ γὰρ τῆς εἵμαρτο.")
+    assert strip(keep) == keep
