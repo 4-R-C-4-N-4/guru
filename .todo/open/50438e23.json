@@ -1,0 +1,22 @@
+{
+  "id": "50438e23",
+  "type": "bug",
+  "state": "open",
+  "summary": "Apparatus-leak: editorial front-matter chunked as primary text across multiple sources (Mead/Waite/Bellows/Charles/Taylor headers, notes, untranslated-Greek fragments), polluting retrieval and drawing spurious staged_edges",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-25T15:50:46.307Z",
+  "updated_at": "2026-06-25T15:50:46.307Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "chunking",
+    "apparatus",
+    "edges"
+  ]
+}
