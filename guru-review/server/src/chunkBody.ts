@@ -1,4 +1,5 @@
-// Port of guru/corpus.py:resolve_chunk_path (commit 21c5541) with LRU cache.
+// Port of guru/corpus.py:resolve_chunk_path (commit 21c5541) with an
+// mtime+size-validated LRU cache (re-chunking the toml invalidates the entry).
 // chunk_id format: "<TraditionDisplay>.<text_id>.<NNN>".
 // Tradition segment is the display name ("Christian Mysticism") while
 // directories are snake_case ("christian_mysticism"), so we try both.
@@ -21,6 +22,11 @@ export function resolveChunkPath(chunkId: string, corpusDir: string): string | n
 interface CacheEntry {
   body: string;
   meta: Record<string, unknown>;
+  // File identity at read time. A cached entry is only reused while the toml's
+  // mtime AND size both still match on disk, so a re-chunk (which rewrites the
+  // file) is picked up on the next request instead of being served stale.
+  mtimeMs: number;
+  size: number;
 }
 
 class LruCache<K, V> {
@@ -55,13 +61,19 @@ export class ChunkBodyCache {
   constructor(private readonly corpusDir: string) {}
 
   load(chunkId: string): { body: string; meta: Record<string, unknown> } {
-    const cached = this.cache.get(chunkId);
-    if (cached) return cached;
     const file = resolveChunkPath(chunkId, this.corpusDir);
     if (!file) {
-      const empty = { body: '', meta: {} };
-      this.cache.set(chunkId, empty);
-      return empty;
+      // Missing chunk: don't cache — the file may appear later (e.g. after a
+      // re-chunk), and resolveChunkPath is cheap (an existsSync probe).
+      return { body: '', meta: {} };
+    }
+    // stat is ~an order of magnitude cheaper than read + tomlParse, so paying
+    // it on every hit keeps the cache's real benefit while guaranteeing the
+    // body reflects the current file.
+    const stat = fs.statSync(file);
+    const cached = this.cache.get(chunkId);
+    if (cached && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
+      return cached;
     }
     const parsed = tomlParse(fs.readFileSync(file, 'utf8')) as {
       content?: { body?: string };
@@ -70,6 +82,8 @@ export class ChunkBodyCache {
     const entry: CacheEntry = {
       body: parsed?.content?.body ?? '',
       meta: parsed?.chunk ?? {},
+      mtimeMs: stat.mtimeMs,
+      size: stat.size,
     };
     this.cache.set(chunkId, entry);
     return entry;
