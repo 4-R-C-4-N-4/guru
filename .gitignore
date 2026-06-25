@@ -75,6 +75,7 @@ raw/
 data/
 export/
 logs/
+guru.db
 
 # guru-review (TypeScript subproject)
 guru-review/**/node_modules/
@@ -90,3 +91,6 @@ data/guru-shadow*
 .claude
 .codex
 .hermes
+
+# Deploy script — contains VPS host/credentials, keep out of GitHub
+scripts/sync_corpus.sh
