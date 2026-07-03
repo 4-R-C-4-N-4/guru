@@ -62,11 +62,23 @@ def get_vector_store():
 # Bump this whenever SYSTEM_PROMPT or build_pair_prompt changes shape.
 # Stored in staged_edges.prompt_version so future re-runs can be filtered
 # (or re-evaluated) against the prompt revision that produced them.
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 SYSTEM_PROMPT = """\
 You are a comparative religion scholar. Given two passages from different mystical
 traditions, classify their relationship. Respond ONLY with valid JSON.
+
+A genuine PARALLEL can be conceptual (the same insight in different words) OR
+structural — a shared narrative structure / mytheme carried by different
+characters, names, and wording. Recurring cross-tradition mythemes count as
+PARALLELS, not surface_only: the flood / deluge survivor, katabasis (descent to
+and return from the underworld), the quest for immortality or the plant/food of
+life, the dying-and-rising figure, theomachy (combat with a chaos-monster at
+creation), judgment of the dead in the afterlife, the world-tree / axis mundi,
+and the psychopomp who guides souls. Different tradition, different proper nouns,
+and different surface vocabulary do NOT by themselves make a pair surface_only;
+reserve surface_only for pairs whose only link is an incidental shared word or
+image with no shared conceptual OR structural content.
 """
 
 def _body_for_prompt(body: str, max_body_chars: int | None) -> str:

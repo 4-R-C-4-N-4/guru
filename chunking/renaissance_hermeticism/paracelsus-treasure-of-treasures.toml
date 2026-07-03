@@ -1,0 +1,20 @@
+# Paracelsus, The Treasure of Treasures for Alchemists — Waite 1894 (sacred-texts /alc/paracel1.htm).
+# Single-page treatise -> paragraph-group; sub-splits at max_tokens.
+# pre_strip drops the Sacred-Texts nav/byline header and any trailing footer.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+pre_strip_patterns = [
+    # Sacred-Texts nav header + duplicated title/byline ('...Next <Title> by Paracelsus')
+    'Sacred-Texts\b.*?\bby Paracelsus\s+',
+    # trailing Next:/Previous: footer nav pointer
+    '\s*\b(?:Next|Previous):\s.*$',
+]
+
+[metadata]
+tradition = "Renaissance Hermeticism"
+text_name = "Paracelsus: The Treasure of Treasures for Alchemists"
+translator = "Arthur Edward Waite"
+sections_format = "section"

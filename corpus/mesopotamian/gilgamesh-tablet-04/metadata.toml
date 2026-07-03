@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-04"
+text_name = "Epic of Gilgamesh: Tablet IV — The Arrival at the Gate of the Forest"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog06.htm"
+sections_format = "tablet"
+chunk_count = 2

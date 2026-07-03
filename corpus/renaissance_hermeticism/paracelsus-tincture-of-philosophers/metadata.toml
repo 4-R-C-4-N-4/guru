@@ -1,0 +1,7 @@
+tradition = "Renaissance Hermeticism"
+text_id = "paracelsus-tincture-of-philosophers"
+text_name = "Paracelsus: The Book Concerning the Tincture of the Philosophers"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/alc/paracel2.htm"
+sections_format = "section"
+chunk_count = 13

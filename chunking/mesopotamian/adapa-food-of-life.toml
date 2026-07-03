@@ -1,0 +1,20 @@
+# Adapa and the Food of Life — Rogers 1912. Single short page,
+# continuous prose -> paragraph-group. pre_strip removes the sacred-texts
+# "Return to ... index" nav, the [from "..." by ...] attribution, and the
+# editorial [Summary: ...] plot synopsis (apparatus that corrupts tagging).
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+pre_strip_patterns = [
+    'Return to Main index Return to Ancient Near East index\s*',
+    '\[from\b[^\]]*\]\s*',
+    '\[Summary:[^\]]*\]\s*',
+]
+
+[metadata]
+tradition = "Mesopotamian"
+text_name = "Adapa and the Food of Life"
+translator = "Robert William Rogers"
+sections_format = "section"

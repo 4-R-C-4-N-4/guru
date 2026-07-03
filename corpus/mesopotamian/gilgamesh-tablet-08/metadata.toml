@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-08"
+text_name = "Epic of Gilgamesh: Tablet VIII — The Mourning of Gilgamish"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog10.htm"
+sections_format = "tablet"
+chunk_count = 1

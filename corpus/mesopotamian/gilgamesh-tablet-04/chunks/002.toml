@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.gilgamesh-tablet-04.002"
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet IV — The Arrival at the Gate of the Forest"
+section = "Tablet IV, Section 1b"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog06.htm"
+token_count = 138
+
+[content]
+body = "[Be brave(?)] and resist!\n\nO my comrade, together We will go down—let the combat [in no wise diminish(?)] thy courage!\n\n40.\n\nO forget death, and be fearful(?) of nothing(?) .\n\n.\n\n(for he who is) [valiant(?)], Cautious (and) careful, by leading [the way] hath his own body guarded, (He ’tis) will safeguard a comrade.\" A name by their [valour(?)] .\n\n.\n\nThey will establish.\n\n(And now) they together arrive at the barrier(?), [Still’d into silence(?)] their speech, and they themselves (suddenly) stopping."
+
+[annotations]
+concepts = []
+related_chunks = []

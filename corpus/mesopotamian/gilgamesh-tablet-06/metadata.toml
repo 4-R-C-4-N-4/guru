@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-06"
+text_name = "Epic of Gilgamesh: Tablet VI — Ishtar and the Bull of Heaven"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog08.htm"
+sections_format = "tablet"
+chunk_count = 4

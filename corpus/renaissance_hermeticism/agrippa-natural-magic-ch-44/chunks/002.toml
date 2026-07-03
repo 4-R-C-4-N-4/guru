@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-44.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XLIV — The Composition of Some Fumes Appropriated to the Planets"
+section = "Chapter XLIV, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm53.htm"
+token_count = 82
+
+[content]
+body = "But Hermes describes the most powerful fume to be that which is compounded of the Seven Aromatics, according to the powers of the Seven Planets—for it receives from Saturn, pepper-wort; from Jupiter, nutmeg; from Mars, lignum aloes; from the Sun, mastic; from Venus, saffron; from Mercury, cinnamon; and from the Moon, the myrtle."
+
+[annotations]
+concepts = []
+related_chunks = []

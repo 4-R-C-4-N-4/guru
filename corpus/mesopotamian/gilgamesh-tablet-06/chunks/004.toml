@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.gilgamesh-tablet-06.004"
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet VI — Ishtar and the Bull of Heaven"
+section = "Tablet VI, Section 1d"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog08.htm"
+token_count = 146
+
+[content]
+body = "(Then) Gilgamish utter’d a riddle Unto the notables (?): Who, pr’ythee, is most splendid of heroes , Who, pr’ythee, is most famous of giants?\n\nGilgamish—he is most splendid of heroes , 185.\n\n[ Enkidu—he is most ] famous of giants .\n\n________________________________ 190.\n\nSo in his palace did Gilgamish hold high revel: (thereafter), (While all) the heroes asleep, on their nightly couches were lying Enkidu, too, was asleep, and a vision beheld, and (so) coming Enkidu (now) his dream to reveal: (thus) spake he unto his comrade."
+
+[annotations]
+concepts = []
+related_chunks = []

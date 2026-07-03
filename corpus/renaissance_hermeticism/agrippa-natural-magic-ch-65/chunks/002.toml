@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-65.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter LXV — How the Passions of the Mind can Work of Themselves Upon Another's Body"
+section = "Chapter LXV, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm74.htm"
+token_count = 179
+
+[content]
+body = "For as the smell of musk doth penetrate, so something of either bad or good is derived from anything bad or good by those that are nigh to them; which may continue a long time.\n\nNow, if the foresaid passions have so great a power in the phantasy, they have certainly a greater power in the reason, in as much as the reason is more excellent than the phantasy; and, lastly, they have much greater power in the mind; for this, when it is fixed upon God for any good with its whole intention, doth oftentimes affect another's body, as well as its own, with some divine gift.\n\nBy this means we read that many miracles were done by Apollonius, Pythagoras, Empedocles, Philolaus, and many prophets and holy men of our religion, which things we shall now consider."
+
+[annotations]
+concepts = []
+related_chunks = []

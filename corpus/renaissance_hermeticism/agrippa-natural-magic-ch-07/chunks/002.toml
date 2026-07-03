@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-07.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter VII — Of the Kinds of Compounds, what Relation They Stand in to the Elements, and What Relation There Is Betwixt the Elements Themselves and the Soul, Senses and Dispositions of Men"
+section = "Chapter VII, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm16.htm"
+token_count = 83
+
+[content]
+body = "The earth signifies a slow and firm motion; the water signifies fearfulness and sluggishness, and remissness in working; air signifies cheerfulness and an amiable disposition; but fire a fierce, quick and angry disposition.\n\nThe Elements, therefore, are the first of all things, and all things, are of and according to them, and they are in all things, and diffuse their virtues through all things."
+
+[annotations]
+concepts = []
+related_chunks = []

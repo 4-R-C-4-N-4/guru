@@ -21,6 +21,23 @@ import _sbe_strip
 logger = logging.getLogger(__name__)
 
 
+def _fix_encoding(response) -> None:
+    """Correct the response encoding when the server omits a charset.
+
+    sacred-texts.com is UTF-8 but intermittently serves pages without a
+    `charset` in the Content-Type header. When that happens `requests` falls
+    back to ISO-8859-1, mis-decoding UTF-8 bytes into mojibake (e.g. the
+    /alc/ Paracelsus pages: en-dash "–" -> "â\\x80\\x93", nbsp -> "Â "). Only
+    override when the header lacks a charset, using content detection — a no-op
+    when the server DID declare one, so pages already decoding cleanly are
+    untouched.
+    """
+    if "charset=" not in response.headers.get("Content-Type", "").lower():
+        detected = response.apparent_encoding
+        if detected:
+            response.encoding = detected
+
+
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace in extracted text."""
     # Collapse multiple spaces
@@ -93,6 +110,7 @@ def fetch_index(url: str) -> list[dict]:
     
     response = requests.get(url, headers=headers, timeout=30)
     response.raise_for_status()
+    _fix_encoding(response)
     soup = BeautifulSoup(response.text, "html.parser")
     
     # Find all text links (usually in a list or specific container)
@@ -266,6 +284,7 @@ def download(source: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
             try:
                 response = requests.get(text_url, headers=headers, timeout=30)
                 response.raise_for_status()
+                _fix_encoding(response)
                 
                 # Extract text
                 clean_text = extract_text_page(response.text, source_id)
@@ -313,6 +332,7 @@ def download(source: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
         try:
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
+            _fix_encoding(response)
             
             # Extract text
             clean_text = extract_text_page(response.text, source_id)

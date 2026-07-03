@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.543"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 456"
+section = "Select Works, Section 519 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 383
+token_count = 159
 
 [content]
-body = "Section 3 3. Thus we have here one identical Principle, the Intellect, which is the universe of authentic beings, the Truth: as such it is a great god or, better, not a god among gods but the Godhead entire. It is a god, a secondary god manifesting before there is any vision of that other, the Supreme which rests over all, enthroned in transcendence upon that splendid pediment, the Nature following close upon it. The Supreme in its progress could never be borne forward upon some soulless vehicle nor even directly upon the soul: it will be heralded by some ineffable beauty: before the great King in his progress there comes first the minor train, then rank by rank the greater and more exalted, closer to the King the kinglier; next his own honoured company until, last among all these grandeurs, suddenly appears the Supreme Monarch himself, and all- unless indeed for those who have contented themselves with the spectacle before his coming and gone away- prostrate themselves and hail him. In that royal progress the King is of another order from those that go before him, but the King in the Supreme is no ruler over externs; he holds that most just of governances, rooted in nature, the veritable kingship, for he is King of Truth, holding sway by all reason over a dense offspring his own, a host that shares his divinity, King over a king and over kings and even more justly called father of Gods. [Interpolation: Zeus (Universal Soul) is in this a symbol of him, Zeus who is not content with the contemplation of his father (Kronos, divine Intellect) but looks to that father's father (to Ouranos, the Transcendent) as what may be called the divine energy working to the establishment of a real being.] Next: Section 4"
+body = "And even if Ideal Forms of qualities are not posited, yet once the term \"habit\" is used in reference to Intellect, the question arises whether there is anything common to that habit and the habit we know in the lower.\n\nWisdom too is generally admitted to exist There.\n\nObviously, if it shares only its name with our wisdom, it is not to be reckoned among things of this sphere; if, however, the import is in both cases the same, then Quality is common to both realms- unless, of course, it be maintained that everything There, including even intellection, is Substance.\n\nThis question, however, applies to all the categories: are the two spheres irreconcilable, or can they be co-ordinated with a unity?\n\nNext: Section 13"
 
 [annotations]
 concepts = []

@@ -1,0 +1,29 @@
+{
+  "id": "3d1eae65",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add Mesopotamian sources: Epic of Gilgamesh (Thompson 1928, 12 tablets) + Adapa and the Food of Life (1912)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-19T00:02:18.017Z",
+  "updated_at": "2026-06-19T12:35:52.097Z",
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-19T00:02:23.495Z",
+    "started_by": "Hermes Agent"
+  },
+  "relationships": {
+    "linked_commits": [
+      "db32e5f48cc7a820e320c5b15892d7d32a9bdc37",
+      "4b33d1bd11a551c3fe1a57b647a66863d4934ae1"
+    ]
+  },
+  "resolution": {
+    "commit": "db32e5f48cc7a820e320c5b15892d7d32a9bdc37",
+    "resolved_at": "2026-06-19T00:07:04.597Z",
+    "resolved_by": "unknown",
+    "note": "Added Epic of Gilgamesh (12 tablets, Thompson 1928) + Adapa (Rogers 1912) to the mesopotamian corpus via the pipeline (acquire/chunk/graph_bootstrap/embed). 49 new chunks embedded; validate_index passes; retrieval smoke test surfaces gilgamesh-tablet-11 as top hit for the plant-of-immortality query. Concept tagging + edge proposals deferred to the next review-gated LLM batch."
+  }
+}

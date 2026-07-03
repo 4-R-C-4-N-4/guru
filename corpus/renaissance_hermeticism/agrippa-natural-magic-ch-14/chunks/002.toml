@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-14.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XIV — Of the Spirit of the World, What It Is, and How by Way of Medium It Unites Occult Virtues to Their Subjects"
+section = "Chapter XIV, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm23.htm"
+token_count = 78
+
+[content]
+body = "And we know how to do that, and have seen it done; but we could make no more Gold than the weight of that was out of which we extracted the Spirit; for seeing that [ gold ] is an extense form, and not intense, it cannot beyond its own bounds change an imperfect body into a perfect; which I deny not, but may be done by another way."
+
+[annotations]
+concepts = []
+related_chunks = []

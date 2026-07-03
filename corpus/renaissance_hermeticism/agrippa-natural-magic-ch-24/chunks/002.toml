@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-24.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XXIV — What Things Are Lunary, or Under the Power of the Moon"
+section = "Chapter XXIV, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm33.htm"
+token_count = 143
+
+[content]
+body = "But most Lunary of all is the two-horned beetle, horned after the manner of a bull, which digs under cow-dung and there remains for the space of twenty-eight days (in which time the Moon measures the whole Zodiac), and in the twenty-ninth day, when it thinks there will be a conjunction of their brightness, it opens the dung and casts it into water, from whence then come beetles.\n\nAmongst fish, these are Lunary: Ælurus, whose eyes are changed according to the course of the Moon, and whatsoever observes the motion of the Moon, as the tortoise, the echeneis, crabs, oysters, cockles and frogs."
+
+[annotations]
+concepts = []
+related_chunks = []

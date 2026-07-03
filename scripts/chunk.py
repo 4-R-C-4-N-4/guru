@@ -78,6 +78,8 @@ BASELINE_PRE_STRIP: list[str] = [
     # sacred-texts.com" (todo:16255216 / C4a). Bounded by the closing marker;
     # title/translator are non-newline-bounded so it can't span into content.
     r'[^\n]{0,80}?,\s*by\s+[^\n,]{2,40}?,\s*\[\d{3,4}\],\s*at sacred-texts\.com\s*',
+    r'The Corpus Hermeticum translated by G\.R\.S\.\s*Mead\s+[IVXLC]+\.\s*',
+    r'<[^<>]*?-\s*JMG>\s*',
 ]
 
 
@@ -115,6 +117,70 @@ def _apply_pre_strip(content: str, patterns: list[str]) -> str:
     for pat in patterns:
         content = re.sub(pat, "", content, flags=re.DOTALL)
     return content.strip()
+
+
+def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, int]:
+    """Order-aware whole-chunk drops for page-as-chunk corpora where entire
+    pages are apparatus that pre_strip cannot touch (front matter, dividers).
+
+    Unlike pre_strip (which removes text within a chunk) and is_apparatus_chunk
+    (a generic per-chunk test), this is per-text config and sees chunk order, so
+    it can drop a contiguous leading block. Two keys under [chunking]:
+
+      drop_before_marker  : regex; drop every chunk preceding the first whose
+                            body matches it (e.g. a title-page + biography + TOC
+                            front block ahead of the first real section).
+      drop_after_marker   : regex; drop the first chunk at/after the kept start
+                            whose body matches it, and everything after (e.g. a
+                            trailing appendix, or out-of-scope later sections —
+                            used to keep a contiguous slice between two markers).
+      drop_chunk_patterns : list of regex (re.search, DOTALL); drop any chunk
+                            whose body matches — for self-identifying divider or
+                            boilerplate pages. Anchor + length-bound these so
+                            they cannot match a long primary page that merely
+                            shares an opening word.
+
+    A no-op (returns chunks unchanged) when no key is set. Validated on
+    plotinus-select-works-index (76 front-matter+dividers dropped, 752 kept) and
+    zhuangzi-inner-chapters-index (front matter + duplicated TTC + outer chapters
+    dropped, 57 Inner-Chapter pages kept) — todo:2957d758, 0 false-positives.
+    """
+    marker = cfg.get("drop_before_marker")
+    after = cfg.get("drop_after_marker")
+    pats = [re.compile(p, re.DOTALL) for p in cfg.get("drop_chunk_patterns", [])]
+    if not marker and not after and not pats:
+        return chunks, 0
+
+    start = 0
+    if marker:
+        hit = next((i for i, c in enumerate(chunks) if re.search(marker, c.body)), None)
+        if hit is None:
+            logger.warning(
+                f"[{source_id}] drop_before_marker /{marker}/ never matched — "
+                f"keeping from the start"
+            )
+        else:
+            start = hit
+
+    end = len(chunks)
+    if after:
+        hit = next((i for i, c in enumerate(chunks)
+                    if i >= start and re.search(after, c.body)), None)
+        if hit is None:
+            logger.warning(
+                f"[{source_id}] drop_after_marker /{after}/ never matched — "
+                f"keeping to the end"
+            )
+        else:
+            end = hit
+
+    kept, dropped = [], 0
+    for i, c in enumerate(chunks):
+        if i < start or i >= end or any(p.search(c.body) for p in pats):
+            dropped += 1
+        else:
+            kept.append(c)
+    return kept, dropped
 
 
 def load_chunking_config(tradition: str, source_id: str) -> dict | None:
@@ -257,6 +323,12 @@ def process_source(
         final_chunks = [c for c in final_chunks if not is_apparatus_chunk(c.body)]
         logger.info(f"[{source_id}] dropped {len(dropped)} apparatus chunk(s)")
 
+    # Per-text whole-page apparatus drops (front matter, dividers) — order-aware,
+    # so it must run on the assembled list, not per-chunk like the test above.
+    final_chunks, n_cfg_drop = _apply_config_drops(final_chunks, cfg, source_id)
+    if n_cfg_drop:
+        logger.info(f"[{source_id}] dropped {n_cfg_drop} config-marked apparatus chunk(s)")
+
     logger.info(f"[{source_id}] → {len(final_chunks)} chunks")
 
     # Write chunk files
@@ -298,6 +370,24 @@ def process_source(
         chunk_path = chunk_dir / f"{idx + 1:03d}.toml"
         write_chunk_file(chunk_path, chunk_data, dry_run=dry_run)
         total_tokens += chunk.token_count
+
+    # Prune stale chunk files left by a PRIOR run that produced MORE chunks
+    # (todo:239f8b49). The writer emits 001..00N; without this, a re-chunk that
+    # yields fewer chunks (e.g. apparatus removal pushing a source below a
+    # sub-split boundary) leaves orphaned higher-numbered *.toml behind. Those
+    # masquerade as duplicate/overlapping chunks, break the round-trip invariant,
+    # and linger as phantom chunk-ids in the DB. Removing every *.toml not in the
+    # just-written set keeps re-runs truly idempotent on a count reduction.
+    written = {f"{i + 1:03d}.toml" for i in range(len(final_chunks))}
+    if chunk_dir.exists():
+        stale = [p for p in sorted(chunk_dir.glob("*.toml")) if p.name not in written]
+        for p in stale:
+            if dry_run:
+                logger.info(f"  [dry-run] Would remove stale chunk file {p}")
+            else:
+                p.unlink()
+        if stale:
+            logger.info(f"[{source_id}] removed {len(stale)} stale chunk file(s)")
 
     # Write text-level metadata
     metadata = {

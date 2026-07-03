@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-11"
+text_name = "Epic of Gilgamesh: Tablet XI — The Flood"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog13.htm"
+sections_format = "tablet"
+chunk_count = 7

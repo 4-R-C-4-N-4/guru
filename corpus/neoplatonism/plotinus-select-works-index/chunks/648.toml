@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.648"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 553"
+section = "Select Works, Section 622"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 300
+token_count = 244
 
 [content]
-body = "Section 15 15. How then do the four genera complete Substance without qualifying it or even particularizing it? It has been observed that Being is primary, and it is clear that none of the four- Motion, Stability, Difference, Identity- is distinct from it. That this Motion does not produce Quality is doubtless also clear, but a word or two will make it clearer still. If Motion is the Act of Substance, and Being and the Primaries in general are its Act, then Motion is not an accidental attribute: as the Act of what is necessarily actual [what necessarily involves Act], it is no longer to be considered as the complement of Substance but as Substance itself. For this reason, then, it has not been assigned to a posterior class, or referred to Quality, but has been made contemporary with Being. The truth is not that Being first is and then takes Motion, first is and then acquires Stability: neither Stability nor Motion is a mere modification of Being. Similarly, Identity and Difference are not later additions: Being did not grow into plurality; its very unity was a plurality; but plurality implies Difference, and unity-in-plurality involves Identity. Substance [Real Being] requires no more than these five constituents; but when we have to turn to the lower sphere, we find other principles giving rise no longer to Substance (as such) but to quantitative Substance and qualitative: these other principles may be regarded as genera but not primary genera. Next: Section 16"
+body = "Section 2 2. What, then, of the \"Number of the Infinite\"? To begin with, how is Number consistent with infinity? Objects of sense are not unlimited and therefore the Number applying to them cannot be so. Nor is an enumerator able to number to infinity; though we double, multiply over and over again, we still end with a finite number; though we range over past and future, and consider them, even, as a totality, we still end with the finite. Are we then to dismiss absolute limitlessness and think merely that there is always something beyond? No; that more is not in the reckoner's power to produce; the total stands already defined. In the Intellectual the Beings are determined and with them Number, the number corresponding to their total; in this sphere of our own- as we make a man a multiple by counting up his various characteristics, his beauty and the rest- we take each image of Being and form a corresponding image of number; we multiply a non-existent in and so produce multiple numbers; if we number years we draw on the numbers in our own minds and apply them to the years; these numbers are still our possession. Next: Section 3"
 
 [annotations]
 concepts = []

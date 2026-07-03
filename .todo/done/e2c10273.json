@@ -1,0 +1,31 @@
+{
+  "id": "e2c10273",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add Paracelsus: 4 Waite 1894 alchemical treatises to renaissance_hermeticism; fix sacred-texts UTF-8 encoding fallback",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-20T19:45:07.879Z",
+  "updated_at": "2026-06-20T19:45:15.296Z",
+  "tags": [
+    "corpus"
+  ],
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-20T19:45:07.930Z",
+    "started_by": "Hermes Agent"
+  },
+  "relationships": {
+    "linked_commits": [
+      "bf228495232a76394c9dc856a24c3bee56f24cc9"
+    ]
+  },
+  "resolution": {
+    "commit": "bf228495232a76394c9dc856a24c3bee56f24cc9",
+    "resolved_at": "2026-06-20T19:45:15.296Z",
+    "resolved_by": "unknown",
+    "note": "Added 4 Waite 1894 Paracelsus treatises (54 chunks) to renaissance_hermeticism; nav-stripped, embedded, retrieval-verified (tops 'alchemical tincture' query). Also fixed an intermittent UTF-8->Latin-1 mojibake bug in the sacred-texts downloader (charset-header fallback) surfaced by the /alc/ pages. validate_index + 275 tests pass."
+  }
+}

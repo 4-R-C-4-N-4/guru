@@ -1,0 +1,137 @@
+{
+  "id": "50438e23",
+  "type": "bug",
+  "state": "active",
+  "summary": "Apparatus-leak: editorial front-matter chunked as primary text across multiple sources (Mead/Waite/Bellows/Charles/Taylor headers, notes, untranslated-Greek fragments), polluting retrieval and drawing spurious staged_edges",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-25T15:50:46.307Z",
+  "updated_at": "2026-06-25T19:08:23.734Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "chunking",
+    "apparatus",
+    "edges"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-06-25T15:51:32.232Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Surfaced during the corpus-wide 0.85 PARALLELS edge review (guru-review-edges). A recurring family of chunks are editorial apparatus, not primary text, and they draw spurious edges — several with hallucinated justifications (the model invents a shared theme present in neither chunk).\n\nSources observed leaking apparatus into retrievable chunks:\n- corpus-hermeticum-*: G.R.S. Mead translator headers/intros (e.g. 'The Corpus Hermeticum translated by G.R.S. Mead. I. Poemandres... <This is the most famous...>') returned instead of the sermon body. (edges ~18716/18723/18725/18757/18762/18793)\n- paracelsus-aurora / paracelsus-tincture: A.E. Waite editorial notes — Aurora authenticity discussion ('genuine work of the Sage of Hohenheim, yet in some respects [spurious]') and pseudo-Hermetic-authorship note ('Among the many writings fabulously attributed to Hermes...'). (edges ~18753-18757, 18792-18794)\n- iamblichus-on-the-mysteries: Thomas Taylor untranslated-Greek footnote fragments (the 'και αετοι μεν, και δρακοντες...' animal-symbols note) and bibliographic citation notes (his Plato translation, Proclus-on-Cratylus scholia). (edges ~18418-18420, 18724)\n- poetic-edda-voluspo: Bellows editorial section-notes (Loki/Lothur, Odin's knowledge-quest) drawing spurious Egyptian<->Norse edges. (edges ~18433-18435)\n- enoch-charles-1917: R.H. Charles section-summaries (scholar's voice, e.g. 'The Apocalyptist prophesies further of the repentance of the Gentiles...').\n- orphic-hymns: Thomas Taylor prefatory 'Dissertation on the Life and Theology of Orpheus' front-matter.\n\nSeparate likely-bug: corpus-hermeticum-15 and corpus-hermeticum-16 returned IDENTICAL body text ('For there are many choirs of daimons round Him...') — possible duplicate chunk across two text_ids; verify and dedup.\n\nFix direction (pipeline-side, not hand-edits): extend scripts/chunk.py is_apparatus_chunk() / per-config drop rules (drop_chunk_patterns, pre_strip_patterns) to catch (a) translator/editor header blocks ('translated by', bracketed editorial notes, section-title+intro), (b) editor's-voice summaries, (c) untranslated-Greek-only fragments, (d) bibliographic citation notes. Same class as the Yasna/Plotinus/Zhuangzi apparatus cleanup (todo:2957d758); after fixing, re-chunk + body-matched remap (scripts/migrations/apparatus_remap.py) to preserve curation.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T15:57:48.409Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "DUPLICATION confirmed (acquisition-level, distinct from apparatus): corpus-hermeticum-15 and corpus-hermeticum-16 share 5 of 6 byte-identical chunk bodies. Both contain libellus XVI ('CORPUS HERMETICUM (XVI.) THE DEFINITIONS OF ASCLEPIUS UNTO KING AMMON'), yet their configs/metadata are mislabeled — chunking/corpus-hermeticum-15 says 'CH 15: The Hymn of Hermes' and -16 says 'CH 16: The Secret Sermon on the Mountain'. So the true CH-15 (Hymn) and CH-XIII (Secret Sermon) texts are missing/replaced by a duplicate XVI. Root cause is upstream in acquire.py / the manifest (wrong source URL or duplicate scrape), NOT chunk.py.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T15:57:48.451Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Apparatus-leak mechanism confirmed by direct test. The two gates that drop apparatus — BASELINE_PRE_STRIP (chunk.py:72) and is_apparatus_chunk (chunk.py:84) — were tuned for sacred-texts.com boilerplate and both return FALSE on the leaking chunks:\n- BASELINE_PRE_STRIP nav regex is anchored to 'Sacred Texts <Collection> Index Previous Next ...'. Mead's edition emits 'Index Previous Next Thrice-Greatest Hermes - Volume 2 by G.R.S. Mead p. 266 ...' (no 'Sacred Texts' prefix) -> no match (CH-16/001). The standalone translator credit 'The Corpus Hermeticum translated by G.R.S. Mead I. Poemandres ... <This is the most famous ...>' also -> no match (CH-01/001).\n- is_apparatus_chunk only drops (a) Errata blocks and (b) short 'Next:/Previous:' footers (<=200 chars). The Mead headers are neither -> kept as primary chunks.\n- paracelsus-aurora chunk 020.toml IS the Waite authenticity commentary ('genuine work of the Sage of Hohenheim, yet in some respects...'); the config's pre_strip_patterns only strip the leading nav/byline header, so interspersed editor's-voice commentary paragraphs survive as body.\nThese sources are non-sacred-texts editions (Mead/Hermes, Waite/Paracelsus, Taylor/Iamblichus+Orpheus, Bellows/Edda, Charles/Enoch) whose apparatus forms differ from the boilerplate the gates recognise.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T15:57:48.489Z",
+      "author": "Hermes Agent",
+      "type": "hypothesis",
+      "content": "Two independent root causes, not one: (A) CHUNKING apparatus scope-gap — is_apparatus_chunk + BASELINE_PRE_STRIP recognise only sacred-texts.com apparatus, so non-sacred-texts editorial forms (translator-credit headers, 'Index Previous Next <Volume> by <ed>' nav, editorial bracket-notes <...>, editor's-voice section-summaries, interspersed commentary paragraphs, untranslated-Greek-only fragments) pass both gates. (B) ACQUISITION duplication — CH-15/-16 both scraped libellus XVI with mislabeled metadata.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T15:57:48.524Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Confirmed two distinct fixes:\n(A) Chunking (scripts/chunk.py): broaden the apparatus gates beyond sacred-texts boilerplate. Add to BASELINE_PRE_STRIP a non-prefixed 'Index Previous Next <...> by <editor> p. N' nav strip and a '<Work> translated by <Translator>' credit strip; extend is_apparatus_chunk to drop whole chunks that are (i) a translator/editor header + bracketed <...> intro with little/no primary body, (ii) editor's-voice summary ('The Apocalyptist prophesies...'), (iii) untranslated-Greek-only fragments. Preserve the keep-substantive-body rule (feedback_tag_reject_preface_chunks): only drop when the body really is apparatus, length-independent. Validate 0-false-positive corpus-wide like prior apparatus work. Then re-chunk affected sources and run scripts/migrations/apparatus_remap.py (body-matched) to preserve curation — same pattern as todo:2957d758 (Yasna/Plotinus/Zhuangzi).\n(B) Acquisition (acquire.py / manifest): re-acquire corpus-hermeticum-15 (true Hymn of Hermes) and the mislabeled -16 so both hold their correct libellus; verify no other CH source-ids collide. This is independent of (A) and could be split into a child ticket.\nAffected sources to re-chunk after (A): all 17 corpus-hermeticum-*, paracelsus-aurora-of-philosophers, paracelsus-tincture-of-philosophers, iamblichus-on-the-mysteries, poetic-edda-voluspo, enoch-charles-1917, orphic-hymns.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "timestamp": "2026-06-25T16:00:10.324Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "SCOPE SPLIT: root cause (B) — the CH-15/-16 acquisition duplication — is now tracked separately in child ticket c59758f3 (irregular sacred-texts th2 page->libellus mapping). This parent is hereby scoped to (A) only: broadening the chunk.py apparatus gates (is_apparatus_chunk / BASELINE_PRE_STRIP) for non-sacred-texts editorial forms, then re-chunk + body-matched remap. The two fixes are independent and can land in either order.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T16:53:33.295Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CORRECTED SPEC (supersedes entry [4] for the global-gate part). A corpus-wide dry-run (4177 chunks) of the proposed GLOBAL detectors found unacceptable false-positives, so global gates are the wrong fix:\n- 'Greek-script-dominant => drop' flags 91 chunks, almost all pythagorean-golden-verses, which legitimately carries the GREEK ORIGINAL (Hesiod Theogony). Greek-dominance is apparatus ONLY in English-translation sources (Iamblichus), not universally.\n- 'Index/Previous/Next ... p.N => nav' matches real prose: tertium-organum 'Next we suppose ourselves to be in another p.222', egyptian-heaven-and-hell 'Next is the p.151' ('Next' is a common word; 'p.N' is a legit citation).\nTherefore the BASELINE_PRE_STRIP / is_apparatus_chunk global approach is rejected for these forms. CORRECT approach = per-source / per-edition rules, each validated 0-false-positive against its own source, exactly like the Yasna/Plotinus/Zhuangzi configs (todo:2957d758):\n- Corpus Hermeticum (all 17, Mead/th2 edition): tight LITERAL anchors that are unique corpus-wide — strip the 'Index Previous Next Thrice-Greatest Hermes - Volume 2 by G.R.S. Mead p.N' nav, and drop the translator-credit/intro chunk beginning 'The Corpus Hermeticum translated by G.R.S. Mead'. (Highest-volume leak; cleanest case — implementing this one now.)\n- Iamblichus: source-scoped untranslated-Greek-fragment drop (safe only because this source is an English translation).\n- enoch-charles-1917 (Charles editor summaries), poetic-edda-voluspo (Bellows notes), orphic-hymns (Taylor Dissertation), paracelsus-aurora/tincture (Waite notes): per-source pre_strip/drop_chunk patterns, each dry-run-validated.\nLive rollout (re-chunk affected sources + scripts/migrations/apparatus_remap.py body-matched remap) is GATED on the user — it mutates live curation and there are 300 unapplied edge verdicts in the queue.",
+      "confidence": "high",
+      "supporting_evidence": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "timestamp": "2026-06-25T17:02:22.933Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "IMPLEMENTATION STATUS: fix built + validated for the Corpus Hermeticum sub-case (highest-volume leak); deliberately NOT landed — landing is gated on a sequenced rollout.\n\nREADY-TO-APPLY (validated 0-false-positive across 4177 chunks; 0 content-loss — sermons preserved). Add to scripts/chunk.py BASELINE_PRE_STRIP:\n    r'The Corpus Hermeticum translated by G\\.R\\.S\\.\\s*Mead\\s+[IVXLC]+\\.\\s*',\n    r'<[^<>]*?-\\s*JMG>\\s*',\nThese strip the Mead-Greer translator credit + J.M. Greer's signed '- JMG' editorial notes. STRIP (not drop) because CH-03/CH-07 are single-chunk libelli where the credit+note PREFIX the sermon in the same chunk — a whole-chunk drop would destroy primary text. Regression test (unit, on _apply_pre_strip+BASELINE_PRE_STRIP) drafted: asserts credit+signed-note removed, sermon '1. The Glory...' preserved, and 0-FP on 'translated by' mid-sentence / unsigned <...> / 'Next ... p.N' / Greek text.\n\nWHY GATED (two blockers):\n1) tests/test_chunking.py::test_round_trip enforces committed-corpus == chunker output, so the change cannot land without RE-CHUNKING the 17 CH sources.\n2) Re-chunking CH MODIFIES chunk bodies (strips a prefix) rather than dropping whole chunks, so the byte-identical scripts/migrations/apparatus_remap.py does NOT cleanly remap — the changed CH chunks would lose tags/edges unless a body-aware remap or re-tag is used. AND re-chunking would change chunk-ids referenced by the 300 unapplied agent-claude edge verdicts currently in review_actions (incl. CH daimon-administration accepts 18636/18637 and CH-header 'unrelated' rows).\n\nROLLOUT SEQUENCE (do in this order, gated on user):\n  a. User applies (or discards) the 300-edge queue so no in-flight verdicts reference CH chunks.\n  b. Land the 2 BASELINE patterns + the regression test.\n  c. Re-chunk the 17 CH sources (scripts/chunk.py --only corpus-hermeticum-*).\n  d. Body-AWARE remap (extend apparatus_remap to fuzzy/prefix-tolerant matching, or re-tag the changed CH chunks) + re-embed changed CH chunks (embed_corpus.py).\n  e. Run test_round_trip (must pass) + the new unit test.\n\nREMAINING beyond CH (per-source follow-on, each dry-run-validated): CH-01-style UNSIGNED intro brackets; iamblichus untranslated-Greek-fragment drop (source-scoped — global Greek-drop rejected, hits the Greek-original Golden Verses); enoch-charles editor summaries; voluspo Bellows notes; orphic-hymns Taylor Dissertation; paracelsus-aurora/tincture Waite notes. Plus the CH-15/-16 duplication in child c59758f3.",
+      "confidence": "high",
+      "supporting_evidence": [
+        6
+      ]
+    },
+    {
+      "timestamp": "2026-06-25T17:31:14.876Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "ROLLOUT DRY-RUN (queue now empty — user applied the 300 verdicts, so blocker #1 is cleared). Re-chunked all 17 CH sources in a scratch working tree with the validated patterns and diffed vs HEAD:\n\nGOOD NEWS — blocker #2 (remap) is UNFOUNDED: re-chunk changes 0 chunk-ids (0 added, 0 removed); only 46 chunk BODIES shift (CH-01..13; CH-14..17 use the 'p.N CORPUS HERMETICUM' header form, untouched by these patterns). IDs stable => NO chunk-id remap/migration needed; every edge/tag/embedding keeps a valid referent. Sermons preserved (CH-03 'The Sacred Sermon 1. The Glory of all things is God...', CH-07 'The Greatest Ill... 1. Whither stumble ye, sots...'). DB follow-up would be just: re-embed the 46 changed chunks + sync node bodies.\n\nNEW BLOCKER (real) — re-chunk exposes a paragraph-group TAIL bug: tests/test_chunking.py::test_round_trip fails on corpus-hermeticum-11.006. Positional trace of the re-stripped raw shows chunk 005 spans 12491..15559 and chunk 006 spans 15292..15559 — i.e. 006's whole 267-char body is the TAIL of 005 (overlapping/duplicated content). HEAD round-trips green, so the strip introduces it by shifting paragraph parity, tripping the paragraph-group chunker's tail handling (likely scripts/chunkers paragraph grouping when the last group is a leftover single paragraph). This is a CHUNKER defect, independent of the apparatus patterns, and must be fixed before re-chunk can land cleanly. Reverted scratch changes; tree clean, suite green.\n\nREVISED rollout: (1) fix the paragraph-group tail/parity overlap in the chunker (add a guard + a round-trip-style regression on an odd-paragraph source); (2) land the 2 BASELINE patterns + the drafted unit test; (3) re-chunk 17 CH sources; (4) re-embed the 46 changed chunks + sync node bodies (no id remap); (5) round-trip + unit test green. Plus CH-01-style unsigned intro + the other per-source sources + child c59758f3 as before.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T18:22:34.515Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "CORRECTION to entry [8]: the 'paragraph-group tail overlap' was a MISDIAGNOSIS. subsplit() is correct — fed CH-11's stripped mega-chunk it yields 5 clean, disjoint sub-chunks. The apparent overlap was a STALE-FILE artifact: re-chunking CH-11 reduces it 6->5 chunks, and scripts/chunk.py's writer does NOT delete the now-orphaned 006.toml (known footgun — must 'rm -f chunks/*.toml' before a re-chunk that reduces count). With a clean re-chunk (rm first) the round-trip + new unit test PASS (8/8 green).\n\nTRUE blast radius (clean re-chunk of all 17 CH): removed-ids=1 (only hermeticism.corpus-hermeticum-11.006), added=0, bodies-changed=46. CH-11.006's DB footprint: node=1, live edges=14, staged_edges=1, staged_tags=13, embedding=1, tagging_progress=1 — its TEXT folds into the new CH-11.005, so those rows are orphaned (the chunk-id ceases to exist). The 46 changed-body chunks have STALE embeddings (computed from apparatus-laden bodies). DEPLOY = re-embed 46 + sync nodes + drop the orphaned CH-11.006 rows (stale; re-tag CH-11 later to recover its concepts onto 005). NOTE: consider fixing chunk.py's writer to clear stale chunk files on reduction (separate footgun).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T18:26:47.635Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "DEPLOY DONE (CH apparatus, the corpus+code+embeddings side):\n- Committed d18a44c: chunk.py (2 Mead/JMG patterns) + test + re-chunked 17 CH sources (46 bodies cleaned, CH-11 6->5). Round-trip + new unit test green (8/8).\n- Re-embedded all 62 hermeticism chunks (embed_corpus --tradition hermeticism --reindex) — apparatus is now OUT of the CH embeddings (the retrieval payoff). DB backed up first (data/guru.db.bak-ch-apparatus-*).\n- Cleaned the orphaned DERIVED rows for the deleted chunk CH-11.006 (chunk_embeddings, tagging_progress). chunk_embeddings (4176) == corpus chunks (4176): consistent.\n\nOPEN DECISION — CH-11.006 verified CURATION orphan (NOT touched; user owns curation): its text folded into new CH-11.005, leaving node=1, EXPRESSES=12 (7 verified), PARALLELS=1 (verified, <- gnosticism.gospel-of-thomas.005), staged_tags=13, staged_edges=1, all referencing the now-deleted chunk-id. Options: (a) re-tag + re-propose CH-11 (faithful pipeline recovery onto new chunks; needs 27B teacher + mistral; produces review work; supersedes orphans) — RECOMMENDED long-term; (b) delete the orphan rows now (lose the verified curation; recoverable by re-tag later); (c) leave it (the verified Thomas edge will show a broken CH-11.006 endpoint). Awaiting user choice.\n\nREMAINING follow-ons unchanged: CH-01-style unsigned intro brackets; iamblichus Greek-fragment (source-scoped); enoch/voluspo/orphic/paracelsus per-source apparatus; child c59758f3 (CH-15/16 dup). Also worth a separate ticket: chunk.py writer should delete stale chunk files on count reduction (the footgun that caused the earlier misdiagnosis).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-25T19:08:23.733Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CH APPARATUS SUB-CASE COMPLETE end-to-end (commits d18a44c + ch11_006_remap):\n1. chunk.py: 2 BASELINE_PRE_STRIP patterns strip the Mead credit + Greer '- JMG' notes (0-FP corpus-wide; sermons preserved). + regression test test_baseline_strips_mead_hermetica_apparatus.\n2. Re-chunked all 17 CH sources: 46 bodies cleaned of apparatus; CH-11 collapsed 6->5. Round-trip + suite green (8/8).\n3. Re-embedded all 62 CH chunks (apparatus now OUT of the embeddings — the retrieval payoff). chunk_embeddings == corpus (4176).\n4. CH-11.006 (the one removed chunk) curation REMAPPED onto new .005 via scripts/migrations/ch11_006_remap.py (user chose remap): 7 unique EXPRESSES + the verified PARALLELS to gospel-of-thomas.005 + staged rows re-pointed (5 dups skipped); 006 node dropped. 005 EXPRESSES 10->17, verified Thomas edge preserved, 0 residual 006 refs, 0 dangling CH edge endpoints. DB backed up (data/guru.db.bak-ch-apparatus-*).\n\nTicket stays ACTIVE — the apparatus-leak FAMILY has open follow-ons: CH-01-style unsigned <...> intro brackets; iamblichus untranslated-Greek-fragment (source-scoped drop); enoch-charles editor summaries; voluspo Bellows notes; orphic-hymns Taylor Dissertation; paracelsus-aurora/tincture Waite notes. Plus child c59758f3 (CH-15/16 dup). Separate footgun worth its own ticket: scripts/chunk.py writer leaves stale chunk files on count reduction (caused the earlier overlap misdiagnosis; workaround = rm chunks/*.toml before re-chunk).",
+      "confidence": "high",
+      "supporting_evidence": [
+        9,
+        10
+      ]
+    }
+  ],
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-25T15:55:37.344Z",
+    "started_by": "Hermes Agent"
+  },
+  "relationships": {
+    "children": [
+      "c59758f3"
+    ]
+  }
+}

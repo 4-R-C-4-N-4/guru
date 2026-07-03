@@ -22,8 +22,13 @@ TAXONOMY = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 EXPECTED_DOMAINS = {
     "cosmology", "soteriology", "theology", "praxis", "anthropology", "ethics"
 }
-# 88 original + 7 ex-orphan concepts placed into mirror families (backfill pass).
-TOTAL_CONCEPTS = 95
+# Regression floor for the concept count. 95 = 88 original + 7 ex-orphan placed
+# into mirror families (backfill pass). The taxonomy grows over time as new
+# sources surface new concepts, so the tests below derive the EXPECTED concept
+# set from taxonomy.toml itself and assert every loader reproduces it (design.md
+# §13 no-op invariant). Only this floor is pinned — it guards against a
+# catastrophic shrink without breaking each time a concept is added.
+CONCEPT_FLOOR = 95
 
 
 def _load() -> dict:
@@ -99,7 +104,23 @@ def test_concepts_grouped_three_tier():
 
 
 def test_total_concept_count_preserved():
-    assert len(_flat_concepts(_load())) == TOTAL_CONCEPTS
+    """Concept ids are unique, every concept sits at the canonical
+    concepts.DOMAIN.FAMILY depth (the permissive any-depth walk agrees with the
+    strict two-level walk — nothing stranded deeper or shallower), and the count
+    never drops below the floor. No exact count is pinned: the taxonomy grows."""
+    data = _load()
+    strict = [
+        cid
+        for families in data["concepts"].values()
+        for members in families.values() if isinstance(members, dict)
+        for cid, defn in members.items() if isinstance(defn, str)
+    ]
+    dupes = sorted({c for c in strict if strict.count(c) > 1})
+    assert not dupes, f"duplicate concept ids across families: {dupes}"
+    assert set(_flat_concepts(data)) == set(strict), \
+        "a concept sits at a non-canonical nesting depth"
+    assert len(strict) >= CONCEPT_FLOOR, \
+        f"concept count {len(strict)} dropped below floor {CONCEPT_FLOOR}"
 
 
 def test_concept_aliases_section_exists():
@@ -132,7 +153,8 @@ def test_retriever_loader_reads_all_concepts():
     from guru.retriever import _load_taxonomy_labels
 
     labels = _load_taxonomy_labels()
-    assert len(labels) == TOTAL_CONCEPTS
+    assert set(labels) == set(_flat_concepts(_load())), \
+        "retriever loader dropped or added concepts vs the canonical taxonomy"
     assert all(isinstance(v, str) for v in labels.values())
 
 
@@ -145,7 +167,10 @@ def test_tag_concepts_loader_reads_all_concepts():
     spec.loader.exec_module(tc)
 
     concepts = tc.load_taxonomy()
-    assert len(concepts) == TOTAL_CONCEPTS
+    expected = set(_flat_concepts(_load()))
+    assert {c["id"] for c in concepts} == expected, \
+        "tag_concepts loader dropped or added concepts vs the canonical taxonomy"
+    assert len(concepts) == len(expected), "duplicate concept-id collision"
     # Tagging is concept-driven (flat v1 prompt); load_taxonomy returns the bare
     # concept shape, not family-enriched dicts. The grouped v2 prompt was benched
     # and reverted — see docs/concept-hierarchy/bench-v1-vs-v2.md.

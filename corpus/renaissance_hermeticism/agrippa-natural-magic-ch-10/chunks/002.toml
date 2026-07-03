@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-10.002"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter X — Of the Occult Virtues of Things"
+section = "Chapter X, Section 1b"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm19.htm"
+token_count = 75
+
+[content]
+body = "Hierome reporteth, spake once unto holy Antonius the Hermit, and condemned the error of the Gentiles in worshiping such poor creatures as they were, and desired him that he would pray unto the true God for him; also he affirms that there was one of these Satyrs shewed openly alive, and afterwards sent to Constantine the Emperor."
+
+[annotations]
+concepts = []
+related_chunks = []

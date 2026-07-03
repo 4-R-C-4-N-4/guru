@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-02"
+text_name = "Epic of Gilgamesh: Tablet II — The Meeting of Gilgamish and Enkidu"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog04.htm"
+sections_format = "tablet"
+chunk_count = 2

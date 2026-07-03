@@ -1,0 +1,15 @@
+[chunk]
+id = "renaissance_hermeticism.agrippa-natural-magic-ch-49.003"
+tradition = "Renaissance Hermeticism"
+text_name = "Agrippa: The Philosophy of Natural Magic, Chapter XLIX — Of Light, Colors, Candles and Lamps, and to What Stars, Houses and Elements Several Colors Are Ascribed"
+section = "Chapter XLIX, Section 1c"
+translator = "Henry Morley; L. W. de Laurence ed."
+source_url = "https://sacred-texts.com/eso/pnm/pnm58.htm"
+token_count = 45
+
+[content]
+body = "Now, all colors are more prevalent when they be in silk, or in metals, or in perspicuous substances, or in precious stones, and in those things which resemble celestial bodies in color, especially in living things."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,33 @@
+{
+  "id": "c59758f3",
+  "type": "bug",
+  "state": "open",
+  "summary": "corpus-hermeticum-15/-16 acquired as duplicate libellus XVI (Definitions of Asclepius); manifest labels disagree with chunking-config labels — sacred-texts 'th2' page->libellus mapping is irregular and needs re-mapping",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-25T15:59:59.142Z",
+  "updated_at": "2026-06-25T15:59:59.186Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "acquire",
+    "hermeticism"
+  ],
+  "relationships": {
+    "parent": "50438e23"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-06-25T15:59:59.186Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Evidence (parent 50438e23, split B):\n- Bodies: corpus-hermeticum-15 and -16 share 5/6 byte-identical chunk bodies; both are 'CORPUS HERMETICUM (XVI.) THE DEFINITIONS OF ASCLEPIUS UNTO KING AMMON'.\n- Label disagreement: sources/manifest.toml says id=corpus-hermeticum-15 label='Corpus Hermeticum XV: The Definitions of Asclepius unto King Ammon' (url th231.htm) and id=corpus-hermeticum-16 (url th233.htm); but chunking/.../corpus-hermeticum-15.toml metadata says 'CH 15: The Hymn of Hermes' and -16 says 'CH 16: The Secret Sermon on the Mountain'. Manifest also has corpus-hermeticum-13 = 'XIII: The Secret Sermon on the Mountain'.\n- Cause: sacred-texts.com 'th2' (Mead, Thrice-Greatest Hermes Vol.2) pages are NOT 1:1 with libelli; th231/th233 both resolve to / over-capture the Definitions of Asclepius. So the true CH-15 (Hymn of Hermes) and the chunking-config-labelled texts are missing, and metadata is internally inconsistent (Mead's own numbering vs the chunk-config numbering).\nTODO for this ticket: (1) map each th2.htm page to its actual libellus from the Mead TOC; (2) fix manifest urls/labels + chunking metadata to agree; (3) re-acquire so each CH source-id holds its correct, distinct libellus; (4) re-chunk + verify no duplicate bodies across CH source-ids. Independent of the chunk.py apparatus fix in the parent.",
+      "confidence": "high"
+    }
+  ]
+}

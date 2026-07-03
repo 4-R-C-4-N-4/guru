@@ -1,0 +1,15 @@
+[chunk]
+id = "mesopotamian.gilgamesh-tablet-03.005"
+tradition = "Mesopotamian"
+text_name = "Epic of Gilgamesh: Tablet III — The Expedition against Humbaba"
+section = "Tablet III, Section 1e"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog05.htm"
+token_count = 280
+
+[content]
+body = "\"Why didst thou give (this) restlessness of spirit With which didst dower Gilgamish, [my] son?\n\nThat now thou touchest him, and (straight) he starteth A journey far to where Humbaba (dwelleth), To counter warfare which he knoweth not, Follow a pathway which he knoweth not, 15.\n\n(Aye), from the very day on which he starteth, Till he return, till to the Cedar Forest He reach; till he o’erthrow the fierce Humbaba, And from the land destroy all evil things Which thou abhor’st; the day which [thou hast set] 20.\n\nAs term, of (that) strong man (who) feareth thee, May Aa , (thy) bride, be [thy] remembrancer.\n\nHe the night-watches .\n\n.\n\n.\n\n.\n\n.\" : \"(Aye, such an one) [would deliver his person] from out of the pitfalls.\n\n10.\n\n[We, O King], in our conclave [have paid deep heed to thy welfare], (Now), O King, in thy turn with an (equal) heed] shalt requite us.\" Enkidu [open'd] his mouth [and spake unto Gilgamish, saying]: \"Turn, O my friend .\n\n.\n\n.\n\n.\n\na road not .\n\n.\n\n.\n\n.\""
+
+[annotations]
+concepts = []
+related_chunks = []

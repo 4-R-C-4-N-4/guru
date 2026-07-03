@@ -2,13 +2,13 @@
 id = "neoplatonism.plotinus-select-works-index.001"
 tradition = "Neoplatonism"
 text_name = "Select Works of Plotinus"
-section = "Select Works, Section 1"
+section = "Select Works, Section 5"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 108
+token_count = 233
 
 [content]
-body = "THE SIX ENNEADS 250 AD by Plotinus translated by Stephen MacKenna and B. S. Page London, P.L. Warner, publisher to the Medici Society [1917-1930] HTML formatting at sacred-texts.com by J.B. Hare, December 2003. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact Next: Porphyry: On the Life of Plotinus and the Arrangement of his Work"
+body = "Section 1 1. Pleasure and distress, fear and courage, desire and aversion, where have these affections and experiences their seat? Clearly, either in the Soul alone, or in the Soul as employing the body, or in some third entity deriving from both. And for this third entity, again, there are two possible modes: it might be either a blend or a distinct form due to the blending. And what applies to the affections applies also to whatsoever acts, physical or mental, spring from them. We have, therefore, to examine discursive-reason and the ordinary mental action upon objects of sense, and enquire whether these have the one seat with the affections and experiences, or perhaps sometimes the one seat, sometimes another. And we must consider also our acts of Intellection, their mode and their seat. And this very examining principle, which investigates and decides in these matters, must be brought to light. Firstly, what is the seat of Sense-Perception? This is the obvious beginning since the affections and experiences either are sensations of some kind or at least never occur apart from sensation. Next: Section 2"
 
 [annotations]
 concepts = []

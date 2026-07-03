@@ -1,0 +1,31 @@
+{
+  "id": "d12418fd",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add Agrippa: Philosophy of Natural Magic (Book I, 74 chapters pnm10-83, de Laurence 1913) to renaissance_hermeticism",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-06-20T15:48:18.639Z",
+  "updated_at": "2026-06-20T19:44:56.202Z",
+  "tags": [
+    "corpus"
+  ],
+  "work": {
+    "branch": "corpus/mesopotamian-deepening",
+    "base_branch": "main",
+    "started_at": "2026-06-20T15:48:18.675Z",
+    "started_by": "Hermes Agent"
+  },
+  "relationships": {
+    "linked_commits": [
+      "fbfb1c6c127727547caa3d9dc5e514bbe44fae7e"
+    ]
+  },
+  "resolution": {
+    "commit": "fbfb1c6c127727547caa3d9dc5e514bbe44fae7e",
+    "resolved_at": "2026-06-20T19:44:56.202Z",
+    "resolved_by": "unknown",
+    "note": "Added Agrippa Philosophy of Natural Magic Book I (74 chapters, de Laurence 1913) to renaissance_hermeticism via the pipeline. 126 chunks, scoped to numbered chapters (front matter + de Laurence padding excluded), apparatus-stripped (title-page + Next: footer), embedded; validate_index + 275 tests pass. Acquire required throttling around sacred-texts Cloudflare 429s."
+  }
+}

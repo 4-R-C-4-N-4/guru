@@ -4,4 +4,4 @@ text_name = "Avesta (Gathas)"
 translator = "L.H. Mills"
 source_url = "https://sacred-texts.com/zor/sbe31/sbe31014.htm"
 sections_format = "yasna_chapter"
-chunk_count = 12
+chunk_count = 3

@@ -1,0 +1,7 @@
+tradition = "Mesopotamian"
+text_id = "gilgamesh-tablet-07"
+text_name = "Epic of Gilgamesh: Tablet VII — The Death of Enkidu"
+translator = "R. Campbell Thompson"
+source_url = "https://sacred-texts.com/ane/eog/eog09.htm"
+sections_format = "tablet"
+chunk_count = 2

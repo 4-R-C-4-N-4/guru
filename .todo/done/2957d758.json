@@ -1,0 +1,51 @@
+{
+  "id": "2957d758",
+  "type": "chore",
+  "state": "done",
+  "summary": "Strip whole-page apparatus from page-as-chunk SBE texts (Plotinus, Zhuangzi)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-23T17:38:26.322Z",
+  "updated_at": "2026-06-24T15:08:02.285Z",
+  "files": [
+    {
+      "path": "scripts/chunk.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "apparatus",
+    "pipeline",
+    "chunking"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-06-23T17:38:45.425Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Two page-as-chunk SBE texts bundle whole apparatus PAGES as chunks (not in-chunk apparatus like Yasna, so pre_strip can't fix it — needs a whole-chunk DROP):\n\n- plotinus-select-works-index (716 raw pages -> 828 chunks): Porphyry's 'Life of Plotinus' biography + MacKenna's tractate TOC/summaries interleaved with the Ennead 'Section N' primary text.\n- zhuangzi-inner-chapters-index (141 raw pages -> 294 chunks): Legge's per-book editorial prefaces ('BOOK N. TITLE. ...'), patriarch-history notes, Babylonian comparative notes, philological glosses; ALSO the Tao Te Ching is duplicated here (TTC chapters appear both under tao-te-ching-legge AND inside this id).\n\nFix: extend is_apparatus_chunk() in scripts/chunk.py (the existing whole-chunk drop test) to recognize these apparatus page-types with false-positive guards (dropping real scripture would be bad). Separately dedupe the TTC (decide canonical id; likely drop the zhuangzi-bundled TTC copy).\n\nRe-ingest implication (same as Yasna fix ca2bc29): after re-chunk, clear stale nodes/embeddings/staged_edges/staged_tags/edges for the affected ids, then graph_bootstrap + embed_corpus + tag_concepts + propose_edges. Yasna footprint for reference was 148 chunks -> 1148 staged_edges + 1936 staged_tags + 1991 live edges, all apparatus-polluted.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-23T17:42:01.628Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CHARACTERIZED (precise drop targets):\n\nPLOTINUS (clean — chunk-filter fixable): 828 chunks = 76 apparatus + 752 primary.\n  - front-matter block = chunks 1..17 (everything before first 'THE FIRST ENNEAD'): title page + Porphyry 'Life of Plotinus' + tractate TOC.\n  - 59 short divider pages: regex (TRACTATE|ENNEAD) AND contains 'Next:' AND len<200. (len<200 guard is essential: chunk #108 'NINTH TRACTATE...You will not dismiss your Soul' continues into real text and must be KEPT.)\n  - DO NOT use an inverse 'drop if not Section N' rule: 98 primary pages are mid-tractate continuations that don't start with 'Section N' (e.g. 'So with us: it is from the Supreme...').\n\nZHUANGZI (NOT chunk-filter fixable — re-acquire): 294 chunks bundle Legge's whole 2-part 'Texts of Taoism': title+TOC, a long comparative-religion Introduction (Babylonian 'Bel or Enu' notes), the ENTIRE Tao Te Ching (73 'NN. NN.' pages — duplicates tao-te-ching-legge), 48 'BOOK <roman>.' per-book prefaces, 1 web-boilerplate page, plus the actual Zhuangzi. The Introduction prose isn't regex-separable from Zhuangzi parables. Recommend re-acquiring just the Zhuangzi inner-chapters pages (acquire.py) rather than chunk-dropping; drop the bundled TTC duplicate.\n\nRE-INGEST COST NOTE: chunk.py renumbers chunks after a drop (idx+1 sequential), so dropping ANY chunk changes ALL downstream chunk IDs in that text -> the whole text needs re-ingest (clear rows + bootstrap + embed + tag + propose), not just the dropped ones. tag(8080)+propose(mistral) servers must be up.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-06-24T14:21:48.907Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "PLOTINUS: DONE (commit 79e876b). Added chunk.py _apply_config_drops (drop_before_marker + drop_chunk_patterns); re-chunked 828->752 (dropped 17 front-matter + 59 dividers); preserved all curation via body-matched id remap (scripts/migrations/plotinus_apparatus_remap.py) — 10,695/11,272 live edges + 5,609 tags kept, 0 orphans, no re-tag/re-propose needed. Verified: 752 nodes/embeddings/tagging_progress, max chunk #752, 210 Plotinus<->Agrippa PARALLELS intact, 55 chunk tests pass. DB backup: data/guru.db.bak-plotinus-20260624-141645.\n\nREMAINING: Zhuangzi (zhuangzi-inner-chapters-index) — NOT chunk-filter fixable. It's the whole Legge 2-part 'Texts of Taoism' volume mis-acquired under one id (title/TOC/Introduction with Babylonian comparative notes + the entire duplicated Tao Te Ching + 48 BOOK-prefaces + web boilerplate + actual Zhuangzi). Fix = re-acquire just the Zhuangzi inner-chapters pages via acquire.py and drop the bundled TTC duplicate (canonical TTC already exists as tao-te-ching-legge). Bigger job; left open.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "12bd63902a36db1379982426fecbcd98dd22c6f5",
+    "resolved_at": "2026-06-24T15:08:02.285Z",
+    "resolved_by": "unknown",
+    "note": "Both page-as-chunk SBE texts cleaned. Plotinus (79e876b): drop 76 front-matter+divider pages, 828->752, curation preserved via body remap. Zhuangzi (this commit): scope to Inner Chapters I-VII, 294->57, drop apparatus+dup-TTC+outer chapters, curation preserved. chunk.py gained drop_before_marker/drop_after_marker/drop_chunk_patterns + generic apparatus_remap migration. Outer Zhuangzi chapters can be added separately later per manifest."
+  }
+}

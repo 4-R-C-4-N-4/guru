@@ -824,6 +824,142 @@ license = "public_domain"
 translator = "L.W. King"
 notes = "Babylonian creation epic, ~1500 BCE. Tiamat/Marduk cosmic combat. Parallels with Tiamat-as-primordial-chaos in later cosmologies, and with the Gnostic Sophia/Demiurge narratives via shared ancient Near Eastern substrate."
 
+[[source]]
+id = "adapa-food-of-life"
+tradition = "mesopotamian"
+label = "Adapa and the Food of Life"
+url = "https://sacred-texts.com/ane/adapa.htm"
+format = "html"
+license = "public_domain"
+translator = "Robert William Rogers"
+notes = "Rogers 1912 (Cuneiform Parallels to the Old Testament). Adapa is offered the bread and water of eternal life by Anu but, warned by Ea, refuses — losing immortality through deception. Direct parallel to the Gilgamesh failed-immortality quest and the Eden/forbidden-food motif (separation_from_source). Single short page — paragraph-group."
+
+# ---- EPIC OF GILGAMESH (Thompson 1928; one entry per tablet for clean
+#      per-tablet citation, mirroring Dhammapada/Corpus Hermeticum) ----
+# Index ane/eog/index.htm: eog00-02 = front matter (excluded); eog03-eog14 =
+# the twelve tablets. license_us_pre_1929 because Thompson's verse rendering
+# is 1928 (PD in the US from 2024-01-01), same as Tertium Organum (1920).
+
+[[source]]
+id = "gilgamesh-tablet-01"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: First Tablet — The Tyranny of Gilgamish and the Creation of Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog03.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928 verse rendering. Tablet I (eog03.htm). The tyrant-king and the wild man Enkidu shaped from clay. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-02"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Second Tablet — The Meeting of Gilgamish and Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog04.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet II (eog04.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-03"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Third Tablet — The Expedition against Humbaba"
+url = "https://sacred-texts.com/ane/eog/eog05.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet III (eog05.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-04"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Fourth Tablet — The Arrival at the Gate of the Forest"
+url = "https://sacred-texts.com/ane/eog/eog06.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet IV (eog06.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-05"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Fifth Tablet — The Fight with Humbaba"
+url = "https://sacred-texts.com/ane/eog/eog07.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet V (eog07.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-06"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Sixth Tablet — Ishtar and the Bull of Heaven"
+url = "https://sacred-texts.com/ane/eog/eog08.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VI (eog08.htm). Ishtar's spurned love and the Bull of Heaven — direct tie to the Descent of Ishtar already held. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-07"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Seventh Tablet — The Death of Enkidu"
+url = "https://sacred-texts.com/ane/eog/eog09.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VII (eog09.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-08"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Eighth Tablet — The Mourning of Gilgamish"
+url = "https://sacred-texts.com/ane/eog/eog10.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet VIII (eog10.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-09"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Ninth Tablet — Gilgamish in Terror of Death Seeks Eternal Life"
+url = "https://sacred-texts.com/ane/eog/eog11.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet IX (eog11.htm). The quest for immortality begins — separation_from_source / fear-of-death core. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-10"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Tenth Tablet — How Gilgamish Reached Uta-Napishtim"
+url = "https://sacred-texts.com/ane/eog/eog12.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet X (eog12.htm). paragraph-group, max_tokens 800."
+
+[[source]]
+id = "gilgamesh-tablet-11"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Eleventh Tablet — The Flood"
+url = "https://sacred-texts.com/ane/eog/eog13.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet XI (eog13.htm). The Utnapishtim flood narrative and the lost plant of immortality — flood parallels Enuma Elish and Genesis; failed immortality parallels Adapa. Longest tablet; paragraph-group, max_tokens 800 (sub-splits)."
+
+[[source]]
+id = "gilgamesh-tablet-12"
+tradition = "mesopotamian"
+label = "Epic of Gilgamesh: Twelfth Tablet — Gilgamish Enquires of the Dead"
+url = "https://sacred-texts.com/ane/eog/eog14.htm"
+format = "html"
+license = "public_domain_us_pre_1929"
+translator = "R. Campbell Thompson"
+notes = "Thompson 1928. Tablet XII (eog14.htm). The Sumerian appendix: Enkidu's shade is summoned from the underworld and reports on the fate of the dead — psychopomp_journey / underworld parallel to the Descent of Ishtar and the Egyptian funerary material. paragraph-group, max_tokens 800."
+
 
 # ============================================
 # WESTERN ESOTERIC / CONSCIOUSNESS STUDIES
@@ -881,6 +1017,800 @@ format = "html"
 license = "public_domain_us_pre_1929"
 translator = "L. Williams"
 notes = "Second part of Williams' translation, London 1889. Project Gutenberg ebook #19833."
+
+# ============================================
+# RENAISSANCE HERMETICISM (Agrippa — Philosophy of Natural Magic, Book I)
+# De Laurence 1913 ed. (after Freake 1651). 74 chapters, eso/pnm/pnm10-83.
+# Scoped to the numbered chapters only: front matter (pnm00-09) and de
+# Laurence's appended non-Agrippa padding (pnm84-96, e.g. 'The Hindu Magic
+# Mirror') are excluded by design.
+# ============================================
+
+[[source]]
+id = "agrippa-natural-magic-ch-01"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter I — How Magicians Collect Virtues from the Three-Fold World is Declared in these Three Books"
+url = "https://sacred-texts.com/eso/pnm/pnm10.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter I of LXXIV (pnm10.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-02"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter II — What Magic Is, What Are the Parts Thereof, and How the Professors Thereof Must Be Qualified"
+url = "https://sacred-texts.com/eso/pnm/pnm11.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter II of LXXIV (pnm11.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-03"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter III — Of the Four Elements, Their Qualities, and Mutual Mixtions"
+url = "https://sacred-texts.com/eso/pnm/pnm12.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter III of LXXIV (pnm12.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-04"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter IV — Of a Three-Fold Consideration of the Elements"
+url = "https://sacred-texts.com/eso/pnm/pnm13.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter IV of LXXIV (pnm13.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-05"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter V — Of the Wonderful Natures of Fire and Earth"
+url = "https://sacred-texts.com/eso/pnm/pnm14.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter V of LXXIV (pnm14.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-06"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter VI — Of the Wonderful Natures of Water, Air and Winds"
+url = "https://sacred-texts.com/eso/pnm/pnm15.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter VI of LXXIV (pnm15.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-07"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter VII — Of the Kinds of Compounds, what Relation They Stand in to the Elements, and What Relation There Is Betwixt the Elements Themselves and the Soul, Senses and Dispositions of Men"
+url = "https://sacred-texts.com/eso/pnm/pnm16.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter VII of LXXIV (pnm16.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-08"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter VIII — How the Elements Are in the Heavens, in Stars, in Devils, in Angels, and lastly in God Himself"
+url = "https://sacred-texts.com/eso/pnm/pnm17.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter VIII of LXXIV (pnm17.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-09"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter IX — Of the Virtues of Things Natural, Depending Immediately upon Elements"
+url = "https://sacred-texts.com/eso/pnm/pnm18.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter IX of LXXIV (pnm18.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-10"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter X — Of the Occult Virtues of Things"
+url = "https://sacred-texts.com/eso/pnm/pnm19.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter X of LXXIV (pnm19.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-11"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XI — How Occult Virtues are Infused into the Several Kinds of Things by Ideas Through the Help of the Soul of the World, And Rays of the Stars; and what Things Abound Most with this Virtue"
+url = "https://sacred-texts.com/eso/pnm/pnm20.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XI of LXXIV (pnm20.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-12"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XII — How It Is That Particular Virtues Are Infused into Particular Individuals, even of the Same Species"
+url = "https://sacred-texts.com/eso/pnm/pnm21.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XII of LXXIV (pnm21.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-13"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XIII — Whence the Occult Virtues of Things Proceed"
+url = "https://sacred-texts.com/eso/pnm/pnm22.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XIII of LXXIV (pnm22.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-14"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XIV — Of the Spirit of the World, What It Is, and How by Way of Medium It Unites Occult Virtues to Their Subjects"
+url = "https://sacred-texts.com/eso/pnm/pnm23.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XIV of LXXIV (pnm23.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-15"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XV — How We Must Find Out and Examine the Virtues of Things by Way of Similitude"
+url = "https://sacred-texts.com/eso/pnm/pnm24.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XV of LXXIV (pnm24.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-16"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XVI — How the Operations of Several Virtues Pass from One Thing Into Another, and Are Communicated One to the Other"
+url = "https://sacred-texts.com/eso/pnm/pnm25.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XVI of LXXIV (pnm25.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-17"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XVII — How by Enmity and Friendship the Virtues of Things Are to be Tried and Found Out"
+url = "https://sacred-texts.com/eso/pnm/pnm26.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XVII of LXXIV (pnm26.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-18"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XVIII — Of the Inclinations of Enmities"
+url = "https://sacred-texts.com/eso/pnm/pnm27.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XVIII of LXXIV (pnm27.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-19"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XIX — How the Virtues of Things Are to Be Tried and Found Out, Which Are in Them Specially, or in Any One Individual by Way of Special Gift"
+url = "https://sacred-texts.com/eso/pnm/pnm28.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XIX of LXXIV (pnm28.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-20"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XX — The Natural Virtues Are in Some Things Throughout Their Whole Substance, and in Other Things in Certain Parts and Members"
+url = "https://sacred-texts.com/eso/pnm/pnm29.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XX of LXXIV (pnm29.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-21"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXI — Of the Virtues of Things Which Are in Them Only in Their Life Time, and Such as Remain in Them Even After Their Death"
+url = "https://sacred-texts.com/eso/pnm/pnm30.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXI of LXXIV (pnm30.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-22"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXII — How Inferior Things Are Subjected to Superior Bodies, and How the Bodies, the Actions, and Dispositions of Men Are Ascribed to Stars and Signs"
+url = "https://sacred-texts.com/eso/pnm/pnm31.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXII of LXXIV (pnm31.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-23"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXIII — How We Shall Know What Stars Natural Things Are Under, and What Things Are Under the Sun, Which Are Called Solary"
+url = "https://sacred-texts.com/eso/pnm/pnm32.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXIII of LXXIV (pnm32.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-24"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXIV — What Things Are Lunary, or Under the Power of the Moon"
+url = "https://sacred-texts.com/eso/pnm/pnm33.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXIV of LXXIV (pnm33.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-25"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXV — What Things Are Saturnine, or Under the Power of Saturn"
+url = "https://sacred-texts.com/eso/pnm/pnm34.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXV of LXXIV (pnm34.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-26"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXVI — What Things Are Under the Power of Jupiter, and Are Called Jovial"
+url = "https://sacred-texts.com/eso/pnm/pnm35.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXVI of LXXIV (pnm35.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-27"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXVII — What Things Are Under the Power of Mars, and Are Called Martial"
+url = "https://sacred-texts.com/eso/pnm/pnm36.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXVII of LXXIV (pnm36.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-28"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXVIII — What Things Are Under the Power of Venus, and Are Called Venereal"
+url = "https://sacred-texts.com/eso/pnm/pnm37.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXVIII of LXXIV (pnm37.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-29"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXIX — What Things Are Under the Power of Mercury, and Are Called Mercurial"
+url = "https://sacred-texts.com/eso/pnm/pnm38.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXIX of LXXIV (pnm38.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-30"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXX — That the Whole Sublunary World, and Those Things Which Are in It, Are Distributed to Planets"
+url = "https://sacred-texts.com/eso/pnm/pnm39.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXX of LXXIV (pnm39.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-31"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXI — How Provinces and Kingdoms Are Distributed to Planets"
+url = "https://sacred-texts.com/eso/pnm/pnm40.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXI of LXXIV (pnm40.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-32"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXII — What Things Are Under the Signs, the Fixed Stars, and Their Images"
+url = "https://sacred-texts.com/eso/pnm/pnm41.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXII of LXXIV (pnm41.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-33"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXIII — Of the Seals and Characters of Natural Things"
+url = "https://sacred-texts.com/eso/pnm/pnm42.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXIII of LXXIV (pnm42.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-34"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXIV — How, by Natural Things and Their Virtues, We May Draw Forth and Attract the Influences and Virtues of Celestial Bodies"
+url = "https://sacred-texts.com/eso/pnm/pnm43.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXIV of LXXIV (pnm43.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-35"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXV — Of the Mixtions of Natural Things, One With Another, and Their Benefit"
+url = "https://sacred-texts.com/eso/pnm/pnm44.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXV of LXXIV (pnm44.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-36"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXVI — Of the Union of Mixed Things, and the Introduction of a More Noble Form and the Senses of Life"
+url = "https://sacred-texts.com/eso/pnm/pnm45.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXVI of LXXIV (pnm45.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-37"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXVII — How, By Some Certain Natural and Artificial Preparations, We May Attract Certain Celestial and Vital Gifts"
+url = "https://sacred-texts.com/eso/pnm/pnm46.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXVII of LXXIV (pnm46.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-38"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXVIII — How We May Draw Not Only Celestial and Vital, but Also Certain Intellectual and Divine Gifts From Above"
+url = "https://sacred-texts.com/eso/pnm/pnm47.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXVIII of LXXIV (pnm47.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-39"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XXXIX — That We May, By Some Certain Matters of the World, Stir Up the Gods of the World and Their Ministering Spirits"
+url = "https://sacred-texts.com/eso/pnm/pnm48.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XXXIX of LXXIV (pnm48.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-40"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XL — Of Bindings; What Sort They Are Of, and in What Ways They Are Wont to Be Done"
+url = "https://sacred-texts.com/eso/pnm/pnm49.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XL of LXXIV (pnm49.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-41"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLI — XLI. Of Sorceries, and Their Power"
+url = "https://sacred-texts.com/eso/pnm/pnm50.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLI of LXXIV (pnm50.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-42"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLII — Of the Wonderful Virtues of Some Kinds of Sorceries"
+url = "https://sacred-texts.com/eso/pnm/pnm51.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLII of LXXIV (pnm51.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-43"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLIII — Of Perfumes or Suffumigations; Their Manner and Power"
+url = "https://sacred-texts.com/eso/pnm/pnm52.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLIII of LXXIV (pnm52.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-44"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLIV — The Composition of Some Fumes Appropriated to the Planets"
+url = "https://sacred-texts.com/eso/pnm/pnm53.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLIV of LXXIV (pnm53.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-45"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLV — Of Collyries, Unctions, Love-Medicines, and Their Virtues"
+url = "https://sacred-texts.com/eso/pnm/pnm54.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLV of LXXIV (pnm54.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-46"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLVI — Of Natural Alligations and Suspensions"
+url = "https://sacred-texts.com/eso/pnm/pnm55.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLVI of LXXIV (pnm55.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-47"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLVII — Of Magical Rings and Their Compositions"
+url = "https://sacred-texts.com/eso/pnm/pnm56.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLVII of LXXIV (pnm56.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-48"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLVIII — Of the Virtue of Places, and What Places Are Suitable to Every Star"
+url = "https://sacred-texts.com/eso/pnm/pnm57.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLVIII of LXXIV (pnm57.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-49"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter XLIX — Of Light, Colors, Candles and Lamps, and to What Stars, Houses and Elements Several Colors Are Ascribed"
+url = "https://sacred-texts.com/eso/pnm/pnm58.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter XLIX of LXXIV (pnm58.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-50"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter L — Of Fascination, and the Art Thereof"
+url = "https://sacred-texts.com/eso/pnm/pnm59.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter L of LXXIV (pnm59.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-51"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LI — Of Certain Observations, Producing Wonderful Virtues"
+url = "https://sacred-texts.com/eso/pnm/pnm60.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LI of LXXIV (pnm60.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-52"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LII — Of the Countenance and Gesture, the Habit and the Figure Of The Body, and to What Stars Any of These Do Answer&#8212;Whence Physiognomy, and Metoposcopy, and Chiromancy, Arts of Divination, Have Their Grounds"
+url = "https://sacred-texts.com/eso/pnm/pnm61.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LII of LXXIV (pnm61.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-53"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LIII — Of Divinations, and the Kinds Thereof"
+url = "https://sacred-texts.com/eso/pnm/pnm62.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LIII of LXXIV (pnm62.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-54"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LIV — Of Divers Certain Animals, and Other Things, Which Have a Signification in Auguries"
+url = "https://sacred-texts.com/eso/pnm/pnm63.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LIV of LXXIV (pnm63.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-55"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LV — How Auspicias Are Verified by the Light of Natural Instinct, and of Some Rules of Finding It Out"
+url = "https://sacred-texts.com/eso/pnm/pnm64.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LV of LXXIV (pnm64.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-56"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LVI — Of the Soothsayings of Flashes and Lightnings, and how Monstrous and Prodigious Things are to be Interpreted"
+url = "https://sacred-texts.com/eso/pnm/pnm65.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LVI of LXXIV (pnm65.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-57"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LVII — Of Geomancy, Hydromancy, Aeromancy, and Pyromancy, Four Divinations of Elements"
+url = "https://sacred-texts.com/eso/pnm/pnm66.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LVII of LXXIV (pnm66.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-58"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LVIII — Of the Reviving of the Dead, and of Sleeping or Hibernating (Wanting Victuals) Many Years Together"
+url = "https://sacred-texts.com/eso/pnm/pnm67.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LVIII of LXXIV (pnm67.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-59"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LIX — Of Divination by Dreams"
+url = "https://sacred-texts.com/eso/pnm/pnm68.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LIX of LXXIV (pnm68.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-60"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LX — Of Madness, and Divinations which are made when men are awake, and of the Power of a Melancholy Humor, by which Spirits are sometimes induced into Men's Bodies"
+url = "https://sacred-texts.com/eso/pnm/pnm69.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LX of LXXIV (pnm69.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-61"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXI — Of the Forming of Man, of the External Senses, also those Inward, and the Mind; and of the Three-Fold Appetite of the Soul, and Passions of the Will"
+url = "https://sacred-texts.com/eso/pnm/pnm70.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXI of LXXIV (pnm70.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-62"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXII — Of the Passions of the Mind, their Original Source, Differences, and Kinds"
+url = "https://sacred-texts.com/eso/pnm/pnm71.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXII of LXXIV (pnm71.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-63"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXIII — How the Passions of the Mind Change the Proper Body by Changing Its Accidents and Moving the Spirit"
+url = "https://sacred-texts.com/eso/pnm/pnm72.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXIII of LXXIV (pnm72.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-64"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXIV — How the Passions of the Mind Change the Body by Way of Imitation From Some Resemblance; of the Transforming and Translating of Men, and What Force the Imaginative Power Hath, Not Only Over the Body But the Soul"
+url = "https://sacred-texts.com/eso/pnm/pnm73.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXIV of LXXIV (pnm73.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-65"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXV — How the Passions of the Mind can Work of Themselves Upon Another's Body"
+url = "https://sacred-texts.com/eso/pnm/pnm74.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXV of LXXIV (pnm74.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-66"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXVI — That The Passions Of The Mind Are Helped By A Celestial Season, And How Necessary The Constancy Of The Mind Is In Every Work"
+url = "https://sacred-texts.com/eso/pnm/pnm75.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXVI of LXXIV (pnm75.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-67"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXVII — How the Mind of Man May Be Joined With the Mind of the Stars, and Intelligences of the Celestials, and, Together With Them, Impress Certain Wonderful Virtues Upon Inferior Things"
+url = "https://sacred-texts.com/eso/pnm/pnm76.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXVII of LXXIV (pnm76.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-68"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXVIII — How Our Mind Can Change and Bind Inferior Things to the Ends Which We Desire"
+url = "https://sacred-texts.com/eso/pnm/pnm77.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXVIII of LXXIV (pnm77.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-69"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXIX — Of Speech, and the Occult Virtue of Words"
+url = "https://sacred-texts.com/eso/pnm/pnm78.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXIX of LXXIV (pnm78.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-70"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXX — Of the Virtue of Proper Names"
+url = "https://sacred-texts.com/eso/pnm/pnm79.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXX of LXXIV (pnm79.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-71"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXXI — Of Many Words Joined Together, as in Sentences and Verses; and of the Virtues and Astrictions of Charms"
+url = "https://sacred-texts.com/eso/pnm/pnm80.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXXI of LXXIV (pnm80.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-72"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXXII — Of the Wonderful Power of Enchantments"
+url = "https://sacred-texts.com/eso/pnm/pnm81.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXXII of LXXIV (pnm81.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-73"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXXIII — Of the Virtue of Writing, and of Making Imprecations, and Inscriptions"
+url = "https://sacred-texts.com/eso/pnm/pnm82.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXXIII of LXXIV (pnm82.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+[[source]]
+id = "agrippa-natural-magic-ch-74"
+tradition = "renaissance_hermeticism"
+label = "Agrippa: The Philosophy of Natural Magic, Chapter LXXIV — Of the Proportion, Correspondency, and Reduction of Letters to the Celestial Signs and Planets, According to Various Tongues, and a Table Thereof"
+url = "https://sacred-texts.com/eso/pnm/pnm83.htm"
+format = "html"
+license = "public_domain"
+translator = "Henry Morley; L. W. de Laurence ed."
+notes = "De Laurence 1913 (after the 1651 J. Freake English translation). Book I (Natural Magic) of De Occulta Philosophia, chapter LXXIV of LXXIV (pnm83.htm). Per-chapter entry; front-matter and de Laurence's appended non-Agrippa material (pnm84-96) deliberately excluded."
+
+# ============================================
+# RENAISSANCE HERMETICISM (Paracelsus — Waite 1894 alchemical treatises)
+# 4 treatises from Waite's 2-vol Hermetic & Alchemical Writings, sacred-texts /alc/.
+# Primary-source Paracelsus; the rest of Waite's set is not hosted there.
+# ============================================
+
+[[source]]
+id = "paracelsus-coelum-philosophorum"
+tradition = "renaissance_hermeticism"
+label = "Paracelsus: Coelum Philosophorum, or Book of Vexations"
+url = "https://sacred-texts.com/alc/coelum.htm"
+format = "html"
+license = "public_domain"
+translator = "Arthur Edward Waite"
+notes = "Waite 1894, The Hermetic and Alchemical Writings of Paracelsus (alc/coelum.htm). Primary-source treatise, no editorial commentary interleaved. paragraph-group; pre_strip removes the Sacred-Texts nav/byline header."
+
+[[source]]
+id = "paracelsus-treasure-of-treasures"
+tradition = "renaissance_hermeticism"
+label = "Paracelsus: The Treasure of Treasures for Alchemists"
+url = "https://sacred-texts.com/alc/paracel1.htm"
+format = "html"
+license = "public_domain"
+translator = "Arthur Edward Waite"
+notes = "Waite 1894, The Hermetic and Alchemical Writings of Paracelsus (alc/paracel1.htm). Primary-source treatise, no editorial commentary interleaved. paragraph-group; pre_strip removes the Sacred-Texts nav/byline header."
+
+[[source]]
+id = "paracelsus-tincture-of-philosophers"
+tradition = "renaissance_hermeticism"
+label = "Paracelsus: The Book Concerning the Tincture of the Philosophers"
+url = "https://sacred-texts.com/alc/paracel2.htm"
+format = "html"
+license = "public_domain"
+translator = "Arthur Edward Waite"
+notes = "Waite 1894, The Hermetic and Alchemical Writings of Paracelsus (alc/paracel2.htm). Primary-source treatise, no editorial commentary interleaved. paragraph-group; pre_strip removes the Sacred-Texts nav/byline header."
+
+[[source]]
+id = "paracelsus-aurora-of-philosophers"
+tradition = "renaissance_hermeticism"
+label = "Paracelsus: The Aurora of the Philosophers"
+url = "https://sacred-texts.com/alc/paracel3.htm"
+format = "html"
+license = "public_domain"
+translator = "Arthur Edward Waite"
+notes = "Waite 1894, The Hermetic and Alchemical Writings of Paracelsus (alc/paracel3.htm). Primary-source treatise, no editorial commentary interleaved. paragraph-group; pre_strip removes the Sacred-Texts nav/byline header."
 
 # ============================================
 # NOTES ON DEFERRED ADDITIONS

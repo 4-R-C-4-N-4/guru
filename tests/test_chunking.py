@@ -339,3 +339,64 @@ def test_is_apparatus_chunk_drops_only_pure_apparatus():
     assert not is_apparatus_chunk("The next stage of the soul's ascent is union.")
     # KEEP: a long body that starts with 'Next:' but is clearly content (length guard)
     assert not is_apparatus_chunk("Next: " + "and the soul ascends through the spheres " * 10)
+
+
+def test_rechunk_prunes_stale_chunk_files(tmp_path, monkeypatch):
+    """A re-chunk that produces FEWER chunks must not leave stale higher-numbered
+    NNN.toml behind (todo:239f8b49). Orphaned files masquerade as duplicate/
+    overlapping chunks, break the round-trip invariant, and linger as phantom
+    chunk-ids in the DB. Mirrors the CH-11 6->5 collapse from todo:50438e23."""
+    import chunk as chunkmod
+
+    corpus, raw, chunking = tmp_path / "corpus", tmp_path / "raw", tmp_path / "chunking"
+    monkeypatch.setattr(chunkmod, "CORPUS_DIR", corpus)
+    monkeypatch.setattr(chunkmod, "RAW_DIR", raw)
+    monkeypatch.setattr(chunkmod, "CHUNKING_DIR", chunking)
+    trad, src = "t", "s"
+    (chunking / trad).mkdir(parents=True)
+    (chunking / trad / f"{src}.toml").write_text(
+        '[chunking]\nstrategy = "paragraph-group"\ngroup_size = 1\nmax_tokens = 800\n'
+        '[metadata]\ntradition = "t"\ntext_name = "S"\n'
+    )
+    (raw / trad).mkdir(parents=True)
+    raw_file = raw / trad / f"{src}.txt"
+    chunk_dir = corpus / trad / src / "chunks"
+
+    # First run: 3 paragraphs -> 3 chunks (001-003).
+    raw_file.write_text("Alpha one.\n\nBeta two.\n\nGamma three.")
+    chunkmod.process_source(trad, src)
+    first = sorted(p.name for p in chunk_dir.glob("*.toml"))
+    assert len(first) == 3, first
+    # Belt-and-braces: also seed a far stale file a prior larger run could leave.
+    (chunk_dir / "099.toml").write_text("stale")
+
+    # Re-chunk a SHORTER source -> 2 chunks. The old 003.toml and the seeded
+    # 099.toml must both be pruned.
+    raw_file.write_text("Alpha one.\n\nBeta two.")
+    chunkmod.process_source(trad, src)
+    after = sorted(p.name for p in chunk_dir.glob("*.toml"))
+
+    assert after == ["001.toml", "002.toml"], f"stale file(s) survived: {after}"
+    assert "003.toml" not in after and "099.toml" not in after
+
+
+def test_baseline_strips_mead_hermetica_apparatus():
+    """BASELINE_PRE_STRIP removes the Corpus Hermeticum / Mead-Greer apparatus
+    (todo:50438e23): the per-libellus translator credit and J.M. Greer's signed
+    "- JMG" editorial notes, WITHOUT touching the sermon text that follows them
+    in the same chunk (CH-03/-07 are single-chunk libelli — a drop would destroy
+    the primary text, so this must strip)."""
+    strip = lambda b: _apply_pre_strip(b, BASELINE_PRE_STRIP)
+    ch03 = ("The Corpus Hermeticum translated by G.R.S. Mead III. The Sacred "
+            "Sermon <This brief text recounts the creation in cyclic terms. - JMG> "
+            "1. The Glory of all things is God, Godhead and Godly Nature.")
+    out = strip(ch03)
+    assert "translated by G.R.S. Mead" not in out
+    assert "- JMG>" not in out and "<This brief" not in out
+    assert "1. The Glory of all things is God" in out
+    assert "translated by" not in strip(
+        "The Corpus Hermeticum translated by G.R.S.\n\nMead VII.\n\n"
+        "The Greatest Ill <diatribe - JMG> 1. Whither stumble ye, sots")
+    keep = ("The book was translated by a monk; next we read on p. 222 that "
+            "<the lacuna here> Ἔκ γὰρ τῆς εἵμαρτο.")
+    assert strip(keep) == keep
