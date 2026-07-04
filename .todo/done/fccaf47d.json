@@ -1,13 +1,13 @@
 {
   "id": "fccaf47d",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "V8 corpus hygiene: chunk-level boilerplate clean + re-embed, upstream of dossier generation",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-04T17:02:54.453Z",
-  "updated_at": "2026-07-04T17:03:23.228Z",
+  "updated_at": "2026-07-04T17:36:26.374Z",
   "tags": [
     "corpus",
     "apparatus",
@@ -28,5 +28,11 @@
       "c59758f3",
       "79801268"
     ]
+  },
+  "resolution": {
+    "commit": "fc3d2b9a092b2da40b38a8de9f724ffc71f4b5ed",
+    "resolved_at": "2026-07-04T17:36:26.374Z",
+    "resolved_by": "unknown",
+    "note": "All 5 children closed. Corpus cleaned in place (1,048 chunks, -6,602 boilerplate tokens, ids preserved), re-embedded (4,176x768d, 0 errors), patterns synced to guru-web, audit + design doc updated. Whole-chunk items handed to 50438e23. Dossier generation unblocked."
   }
 }
