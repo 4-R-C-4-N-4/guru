@@ -1,0 +1,32 @@
+{
+  "id": "9ff92786",
+  "type": "investigation",
+  "state": "done",
+  "summary": "V8 audit: sample chunks from every manifest source domain; catalog un-stripped boilerplate patterns into docs/summary/boilerplate-audit.md",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.787Z",
+  "updated_at": "2026-07-04T17:26:12.431Z",
+  "tags": [
+    "corpus",
+    "apparatus",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d"
+  },
+  "description": "For each distinct source domain in sources/manifest.toml (sacred-texts.com, gnosis.org, gutenberg.org, ...): sample N chunks per domain from the corpus TOMLs, eyeball for nav headers, page markers, translator credits, 'more complete etext' lines, Gutenberg license fragments, footnote apparatus. Include the confirmed sacred-texts misses: hyphenated 'Sacred-Texts' prefix, header-without-Previous/Next form. Output: docs/summary/boilerplate-audit.md with a per-domain pattern table (pattern, regex candidate, est. chunk count affected, risk of eating real text). Pure-apparatus WHOLE chunks found during sampling get listed and handed to 50438e23, not stripped here.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T17:24:02.211Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "e4ef6ed9173183143d9c81fb7a6a30a869df5efe",
+    "resolved_at": "2026-07-04T17:26:12.431Z",
+    "resolved_by": "unknown",
+    "note": "Audit complete: docs/summary/boilerplate-audit.md. ~290/4,176 chunks residual (prior cleanups removed the 32%-era bulk). 6 strip classes P1-P6 defined with regexes and risk notes; ccel.org clean; 3 whole-chunk candidates + split-word artifacts + golden-verses.034 Hesiod membership handed to 50438e23; PAGE_MARKER confirmed vestigial (0 matches)."
+  }
+}
