@@ -1,0 +1,23 @@
+{
+  "id": "29a7116e",
+  "type": "chore",
+  "state": "open",
+  "summary": "G5 templates + generation loop: prompts/dossier/*-v1.md + build_dossiers.py --generate (resumable, contract-validated)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.562Z",
+  "updated_at": "2026-07-04T21:48:50.918Z",
+  "tags": [
+    "summary",
+    "generation"
+  ],
+  "relationships": {
+    "parent": "229e2592",
+    "depends_on": [
+      "ce885242",
+      "83b0639e"
+    ]
+  },
+  "description": "10 template files verbatim from design §1.3.2-3 (work-level wording), filename = prompt_version. Generate mode: DAG order over frozen plan; skip existing (work,field,span,model,prompt_version) rows; validate contracts (§1.1 JSON shapes; prose stages token-band ±20%); reject-retry x3; accepted-upstream inputs only; residual nav-clean imported from clean_bodies. Done: pilot run over one degenerate + one grouped + one large work produces contract-valid staged rows, resumably."
+}

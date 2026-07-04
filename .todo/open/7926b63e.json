@@ -1,0 +1,22 @@
+{
+  "id": "7926b63e",
+  "type": "chore",
+  "state": "open",
+  "summary": "G7 export v4: SCHEMA_VERSION=4, works/work_dossiers/summary_nodes emitters, schema append (guru side)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.694Z",
+  "updated_at": "2026-07-04T21:48:50.992Z",
+  "tags": [
+    "summary",
+    "export"
+  ],
+  "relationships": {
+    "parent": "229e2592",
+    "depends_on": [
+      "66e9e5a2"
+    ]
+  },
+  "description": "corpus-schema.sql v4 append per §2 + §6.1 (works table, texts.work_id, work_dossiers, summary_nodes w/ inline VECTOR(768)) — DO NOT push guru side ahead of the paired guru-web copy (CI hash). export.py: copy_esc_array(), three emitters after texts/chunks, emit_indexes hnsw + text_id, §3.3 validation (coverage reported not enforced), corpus_metadata dossier_model last. Done: full export against local DB; dump loads into scratch Postgres (or SQL-order assertions) and emitted validation passes."
+}
