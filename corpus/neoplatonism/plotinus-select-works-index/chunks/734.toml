@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 700 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 20
+token_count = 15
 
 [content]
-body = "Thus we must speak of God since we cannot tell Him as we would.\n\nNext: Section 19"
+body = "Thus we must speak of God since we cannot tell Him as we would."
 
 [annotations]
 concepts = []

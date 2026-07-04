@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 351 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 91
+token_count = 86
 
 [content]
-body = "It is not to be thought that such beings engage themselves in human affairs in the sense of making men thieves, slave-dealers, burglars, temple-strippers, or debased effeminates practising and lending themselves to disgusting actions: that is not merely unlike gods; it is unlike mediocre men; it is, perhaps, beneath the level of any existing being where there is not the least personal advantage to be gained.\n\nNext: Section 32"
+body = "It is not to be thought that such beings engage themselves in human affairs in the sense of making men thieves, slave-dealers, burglars, temple-strippers, or debased effeminates practising and lending themselves to disgusting actions: that is not merely unlike gods; it is unlike mediocre men; it is, perhaps, beneath the level of any existing being where there is not the least personal advantage to be gained."
 
 [annotations]
 concepts = []
