@@ -1,0 +1,44 @@
+{
+  "id": "29a7116e",
+  "type": "chore",
+  "state": "done",
+  "summary": "G5 templates + generation loop: prompts/dossier/*-v1.md + build_dossiers.py --generate (resumable, contract-validated)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.562Z",
+  "updated_at": "2026-07-04T22:40:30.916Z",
+  "tags": [
+    "summary",
+    "generation"
+  ],
+  "relationships": {
+    "parent": "229e2592",
+    "depends_on": [
+      "ce885242",
+      "83b0639e"
+    ]
+  },
+  "description": "10 template files verbatim from design §1.3.2-3 (work-level wording), filename = prompt_version. Generate mode: DAG order over frozen plan; skip existing (work,field,span,model,prompt_version) rows; validate contracts (§1.1 JSON shapes; prose stages token-band ±20%); reject-retry x3; accepted-upstream inputs only; residual nav-clean imported from clean_bodies. Done: pilot run over one degenerate + one grouped + one large work produces contract-valid staged rows, resumably.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T22:20:40.235Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-07-04T22:40:30.880Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Pilot findings: (1) claude-code content filter deterministically blocks enuma-elish Part 1 L1 output ('400 Output blocked by content filtering policy', persists across retries) — engine now skips such nodes resumably; campaign gap-fill options: anthropic API provider or local provider for blocked nodes. (2) Span-label audit found collisions in 4 works (plotinus base-collapse from over-aggressive Section-tail strip; generic 'Section 1' across CH/republic/dionysius members) — fixed: lettered-only tail strip, merged-label prefix trim, cross-member disambiguation via member text_name (CH TOC now shows tractate titles). Plan re-frozen pre-campaign at 622 spans; only john-baptizer pilot rows were affected and were wiped + regenerated under the final plan.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "124e5fd4765686c7b6cfe2e875c71a65114d8e25",
+    "resolved_at": "2026-07-04T22:40:30.916Z",
+    "resolved_by": "unknown",
+    "note": "10 templates + generate mode complete. Pilot: full DAG exercised over heart-sutra-smaller (degenerate L2 path), gnostic-john-baptizer (grouped, 8 spans, all stages through reading_notes), enuma-elish (bare-format; Part 1 content-blocked and skipped resumably, Part 2 + structure generated, L2 correctly deferred at 1/2 L1s). Contract validation, reject-retry, idempotent re-runs, and accepted-upstream gating all demonstrated. ~45 staged rows produced."
+  }
+}
