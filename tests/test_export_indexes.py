@@ -61,7 +61,7 @@ def test_emits_exactly_ten_indexes():
     # 5 original (chunks×3, edges×2) + 5 concept-hierarchy (one is UNIQUE).
     import re
     out = _emit_to_string()
-    assert len(re.findall(r"CREATE (?:UNIQUE )?INDEX", out)) == 10
+    assert len(re.findall(r"CREATE (?:UNIQUE )?INDEX", out)) == 14  # +4 v4 document-knowledge
 
 
 def test_no_create_index_anywhere_else_in_module():

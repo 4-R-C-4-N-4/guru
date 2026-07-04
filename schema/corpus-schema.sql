@@ -24,6 +24,8 @@
 --   v3 (2026-05-27) Concept hierarchy: concept_families / concept_family_membership
 --                     / concept_aliases / family_aliases tables + concepts.family_id.
 --                     Indexes remain in export.py:emit_indexes per the rule above.
+--   v4 (2026-07-04) Document-knowledge layer: works + texts.work_id +
+--                     work_dossiers + summary_nodes (see v4 block at end).
 
 CREATE EXTENSION IF NOT EXISTS vector;
 
@@ -159,3 +161,65 @@ ALTER TABLE concepts ADD COLUMN family_id TEXT REFERENCES concept_families(id);
 
 COMMENT ON COLUMN concepts.family_id IS 'Denormalised primary family for two-way-join filters. Maintained by export.py from concept_family_membership WHERE is_primary; do not edit at runtime.';
 COMMENT ON COLUMN concepts.domain IS 'Derived from concept_families.parent_id of the row pointed at by family_id. Set by export.py only; do not edit at runtime. May be removed in a follow-on migration once src/lib/ queries no longer reference it.';
+
+-- ─── v4: document-knowledge layer ────────────────────────────────────
+-- v4 (2026-07-04) Works layer + document-knowledge: works, texts.work_id,
+--                 work_dossiers, summary_nodes. Dossiers are PK-fetched (no
+--                 embedding); summary_nodes are retrievable and share the
+--                 768-dim space with chunks. Indexes remain in
+--                 export.py:emit_indexes per the rule above.
+
+-- ─── works ───────────────────────────────────────────────────────────
+-- The dossier and level-2 summary unit (V10, guru docs/summary/
+-- work-grouping.md): 9 grouped works absorb 168 serialization-shard texts;
+-- every other text is a singleton work. member_text_ids is reading order.
+CREATE TABLE works (
+    id              TEXT PRIMARY KEY,
+    tradition       TEXT NOT NULL REFERENCES traditions(id),
+    label           TEXT NOT NULL,
+    member_text_ids TEXT[] NOT NULL
+);
+
+-- Every text belongs to exactly one work (singleton work_id = text id).
+-- Table is empty at DDL time (fresh corpus_new), so NOT NULL is safe.
+ALTER TABLE texts ADD COLUMN work_id TEXT NOT NULL REFERENCES works(id);
+
+-- ─── work_dossiers ───────────────────────────────────────────────────
+-- One precomputed knowledge object per work. Injected into study-mode
+-- prompts by PK lookup (text → texts.work_id → work_dossiers); never
+-- retrieved, so no embedding column. Coverage is optional per work: a
+-- missing dossier means "study mode without the dossier block", not an
+-- error.
+CREATE TABLE work_dossiers (
+    work_id        TEXT PRIMARY KEY REFERENCES works(id),
+    summary        TEXT NOT NULL,
+    context        TEXT NOT NULL,
+    structure      JSONB NOT NULL,
+    key_figures    JSONB NOT NULL,
+    key_terms      JSONB NOT NULL,
+    themes         JSONB NOT NULL,
+    reading_notes  TEXT,
+    manifest_notes TEXT,
+    generated_by   TEXT NOT NULL
+);
+
+-- ─── summary_nodes ───────────────────────────────────────────────────
+-- Hierarchical summaries (level 1 = section span, level 2 = whole work).
+-- `tradition` is denormalized like chunks so buildScopeFilter() applies
+-- verbatim. text_id is NULL on level-2 rows of multi-member works.
+-- child_chunk_ids keeps every summary expandable to primary chunks — the
+-- citation contract's escape hatch (no FK: Postgres can't FK array
+-- elements; integrity is validated at export). NOT graph nodes: nothing
+-- in edges may reference a summary id.
+CREATE TABLE summary_nodes (
+    id              TEXT PRIMARY KEY,
+    work_id         TEXT NOT NULL REFERENCES works(id),
+    text_id         TEXT REFERENCES texts(id),
+    tradition       TEXT NOT NULL REFERENCES traditions(id),
+    level           SMALLINT NOT NULL CHECK (level IN (1, 2)),
+    section_span    TEXT,
+    child_chunk_ids TEXT[] NOT NULL,
+    body            TEXT NOT NULL,
+    token_count     INTEGER NOT NULL,
+    embedding       VECTOR(768) NOT NULL
+);
