@@ -169,11 +169,74 @@ def call_openai(model: str, system: str, prompt: str, max_tokens: int, timeout: 
     return resp.choices[0].message.content
 
 
+class ProviderBusy(RuntimeError):
+    """Provider hit a usage/rate limit; caller should sleep and resume.
+
+    Staged rows make every generation node idempotent (design §1.3.6), so
+    the correct response is back off and re-run, never model substitution.
+    """
+
+    def __init__(self, message: str, retry_after: float = 300.0):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+_CLAUDE_BUSY_MARKERS = ("usage limit", "rate limit", "overloaded", "429")
+
+
+def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+    """Headless Claude Code on the subscription (design §1.3.6).
+
+    Shells to `claude -p --output-format json` with the prompt on stdin and
+    the template's system block via --system-prompt. --model is always pinned
+    explicitly: the configured string is provenance (staged rows' `model`).
+    max_tokens is accepted for signature parity but not enforceable through
+    the CLI; field contracts bound output length instead. Tools are disabled
+    — generation nodes are pure text completion.
+    """
+    import subprocess
+
+    cmd = [
+        "claude", "-p",
+        "--model", model,
+        "--output-format", "json",
+        "--system-prompt", system,
+        "--disallowedTools", "*",
+    ]
+    try:
+        proc = subprocess.run(
+            cmd, input=prompt, capture_output=True, text=True, timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as e:
+        raise RuntimeError(f"claude-code timed out after {timeout}s") from e
+    out = (proc.stdout or "").strip()
+    err = (proc.stderr or "").strip()
+    if proc.returncode != 0:
+        low = (out + " " + err).lower()
+        if any(m in low for m in _CLAUDE_BUSY_MARKERS):
+            raise ProviderBusy(f"claude-code busy: {err or out[:200]}")
+        raise RuntimeError(f"claude-code exit {proc.returncode}: {err or out[:200]}")
+    try:
+        envelope = json.loads(out)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"claude-code returned non-JSON envelope: {out[:200]}") from e
+    if envelope.get("is_error"):
+        low = str(envelope.get("result", "")).lower()
+        if any(m in low for m in _CLAUDE_BUSY_MARKERS):
+            raise ProviderBusy(f"claude-code busy: {envelope.get('result', '')[:200]}")
+        raise RuntimeError(f"claude-code error result: {envelope.get('result', '')[:200]}")
+    result = envelope.get("result")
+    if not isinstance(result, str) or not result.strip():
+        raise RuntimeError("claude-code envelope had empty result")
+    return result
+
+
 PROVIDERS = {
     "llamacpp": call_llamacpp,
     "ollama": call_ollama,
     "anthropic": call_anthropic,
     "openai": call_openai,
+    "claude-code": call_claude_code,
 }
 
 
