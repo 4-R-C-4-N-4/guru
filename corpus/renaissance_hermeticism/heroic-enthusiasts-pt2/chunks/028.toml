@@ -5,10 +5,10 @@ text_name = "The Heroic Enthusiasts, Part II (Gli Eroici Furori)"
 section = "Second Dialogueh"
 translator = "L. Williams"
 source_url = "https://www.gutenberg.org/files/19833/19833-h/19833-h.htm"
-token_count = 17
+token_count = 12
 
 [content]
-body = "Now it is time to return home.\n\nMar.\n\nWell.\n\n[Pg 70]"
+body = "Now it is time to return home.\n\nMar.\n\nWell."
 
 [annotations]
 concepts = []
