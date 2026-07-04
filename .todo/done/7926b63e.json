@@ -1,0 +1,34 @@
+{
+  "id": "7926b63e",
+  "type": "chore",
+  "state": "done",
+  "summary": "G7 export v4: SCHEMA_VERSION=4, works/work_dossiers/summary_nodes emitters, schema append (guru side)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.694Z",
+  "updated_at": "2026-07-04T23:07:18.496Z",
+  "tags": [
+    "summary",
+    "export"
+  ],
+  "relationships": {
+    "parent": "229e2592",
+    "depends_on": [
+      "66e9e5a2"
+    ]
+  },
+  "description": "corpus-schema.sql v4 append per §2 + §6.1 (works table, texts.work_id, work_dossiers, summary_nodes w/ inline VECTOR(768)) — DO NOT push guru side ahead of the paired guru-web copy (CI hash). export.py: copy_esc_array(), three emitters after texts/chunks, emit_indexes hnsw + text_id, §3.3 validation (coverage reported not enforced), corpus_metadata dossier_model last. Done: full export against local DB; dump loads into scratch Postgres (or SQL-order assertions) and emitted validation passes.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T22:43:52.236Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "d7eb6a81614f73c17452b54ed47d9c989042c615",
+    "resolved_at": "2026-07-04T23:07:18.496Z",
+    "resolved_by": "unknown",
+    "note": "v4 export complete and proven: artifact builds (18.4MB), loads into scratch pgvector Postgres in one transaction with all v4 validation passing (52 works, 211 texts w/ work_id, 2 dossiers, 10 summary_nodes; coverage NOTICE 2/52; atomic swap COMMIT). Vector sanity: nearest summary to a john-baptizer chunk is its own span's L1. Side quest: round-trip test exposed residual orphan-title boilerplate -> P1c refinement, 63 chunks, re-embedded. Suite 299/299. Guru-side schema append must not push before Phase W pairs it."
+  }
+}
