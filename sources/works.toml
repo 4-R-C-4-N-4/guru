@@ -1,0 +1,236 @@
+# Guru works layer — V10 resolution (docs/summary/work-grouping.md).
+# Maps serialization-shard text_ids to their parent WORK: the dossier and
+# level-2 summary unit. Any text not listed here is implicitly a singleton
+# work with work_id = text_id. Pure mapping — no text/chunk ids change.
+# Members are in reading order. Every work must be single-tradition.
+
+[[work]]
+id = "agrippa-natural-magic"
+label = "Occult Philosophy, Book I: Natural Magic (Agrippa)"
+tradition = "renaissance_hermeticism"
+members = [
+    "agrippa-natural-magic-ch-01",
+    "agrippa-natural-magic-ch-02",
+    "agrippa-natural-magic-ch-03",
+    "agrippa-natural-magic-ch-04",
+    "agrippa-natural-magic-ch-05",
+    "agrippa-natural-magic-ch-06",
+    "agrippa-natural-magic-ch-07",
+    "agrippa-natural-magic-ch-08",
+    "agrippa-natural-magic-ch-09",
+    "agrippa-natural-magic-ch-10",
+    "agrippa-natural-magic-ch-11",
+    "agrippa-natural-magic-ch-12",
+    "agrippa-natural-magic-ch-13",
+    "agrippa-natural-magic-ch-14",
+    "agrippa-natural-magic-ch-15",
+    "agrippa-natural-magic-ch-16",
+    "agrippa-natural-magic-ch-17",
+    "agrippa-natural-magic-ch-18",
+    "agrippa-natural-magic-ch-19",
+    "agrippa-natural-magic-ch-20",
+    "agrippa-natural-magic-ch-21",
+    "agrippa-natural-magic-ch-22",
+    "agrippa-natural-magic-ch-23",
+    "agrippa-natural-magic-ch-24",
+    "agrippa-natural-magic-ch-25",
+    "agrippa-natural-magic-ch-26",
+    "agrippa-natural-magic-ch-27",
+    "agrippa-natural-magic-ch-28",
+    "agrippa-natural-magic-ch-29",
+    "agrippa-natural-magic-ch-30",
+    "agrippa-natural-magic-ch-31",
+    "agrippa-natural-magic-ch-32",
+    "agrippa-natural-magic-ch-33",
+    "agrippa-natural-magic-ch-34",
+    "agrippa-natural-magic-ch-35",
+    "agrippa-natural-magic-ch-36",
+    "agrippa-natural-magic-ch-37",
+    "agrippa-natural-magic-ch-38",
+    "agrippa-natural-magic-ch-39",
+    "agrippa-natural-magic-ch-40",
+    "agrippa-natural-magic-ch-41",
+    "agrippa-natural-magic-ch-42",
+    "agrippa-natural-magic-ch-43",
+    "agrippa-natural-magic-ch-44",
+    "agrippa-natural-magic-ch-45",
+    "agrippa-natural-magic-ch-46",
+    "agrippa-natural-magic-ch-47",
+    "agrippa-natural-magic-ch-48",
+    "agrippa-natural-magic-ch-49",
+    "agrippa-natural-magic-ch-50",
+    "agrippa-natural-magic-ch-51",
+    "agrippa-natural-magic-ch-52",
+    "agrippa-natural-magic-ch-53",
+    "agrippa-natural-magic-ch-54",
+    "agrippa-natural-magic-ch-55",
+    "agrippa-natural-magic-ch-56",
+    "agrippa-natural-magic-ch-57",
+    "agrippa-natural-magic-ch-58",
+    "agrippa-natural-magic-ch-59",
+    "agrippa-natural-magic-ch-60",
+    "agrippa-natural-magic-ch-61",
+    "agrippa-natural-magic-ch-62",
+    "agrippa-natural-magic-ch-63",
+    "agrippa-natural-magic-ch-64",
+    "agrippa-natural-magic-ch-65",
+    "agrippa-natural-magic-ch-66",
+    "agrippa-natural-magic-ch-67",
+    "agrippa-natural-magic-ch-68",
+    "agrippa-natural-magic-ch-69",
+    "agrippa-natural-magic-ch-70",
+    "agrippa-natural-magic-ch-71",
+    "agrippa-natural-magic-ch-72",
+    "agrippa-natural-magic-ch-73",
+    "agrippa-natural-magic-ch-74",
+]
+
+[[work]]
+id = "corpus-hermeticum"
+label = "Corpus Hermeticum (Mead)"
+tradition = "hermeticism"
+members = [
+    "corpus-hermeticum-01",
+    "corpus-hermeticum-02",
+    "corpus-hermeticum-03",
+    "corpus-hermeticum-04",
+    "corpus-hermeticum-05",
+    "corpus-hermeticum-06",
+    "corpus-hermeticum-07",
+    "corpus-hermeticum-08",
+    "corpus-hermeticum-09",
+    "corpus-hermeticum-10",
+    "corpus-hermeticum-11",
+    "corpus-hermeticum-12",
+    "corpus-hermeticum-13",
+    "corpus-hermeticum-14",
+    "corpus-hermeticum-15",
+    "corpus-hermeticum-16",
+    "corpus-hermeticum-17",
+]
+
+[[work]]
+id = "dhammapada"
+label = "The Dhammapada"
+tradition = "buddhism"
+members = [
+    "dhammapada-chapter-01",
+    "dhammapada-chapter-02",
+    "dhammapada-chapter-03",
+    "dhammapada-chapter-04",
+    "dhammapada-chapter-05",
+    "dhammapada-chapter-06",
+    "dhammapada-chapter-07",
+    "dhammapada-chapter-08",
+    "dhammapada-chapter-09",
+    "dhammapada-chapter-10",
+    "dhammapada-chapter-11",
+    "dhammapada-chapter-12",
+    "dhammapada-chapter-13",
+    "dhammapada-chapter-14",
+    "dhammapada-chapter-15",
+    "dhammapada-chapter-16",
+    "dhammapada-chapter-17",
+    "dhammapada-chapter-18",
+    "dhammapada-chapter-19",
+    "dhammapada-chapter-20",
+    "dhammapada-chapter-21",
+    "dhammapada-chapter-22",
+    "dhammapada-chapter-23",
+    "dhammapada-chapter-24",
+    "dhammapada-chapter-25",
+    "dhammapada-chapter-26",
+]
+
+[[work]]
+id = "dionysius-divine-names"
+label = "On the Divine Names (Pseudo-Dionysius)"
+tradition = "christian_mysticism"
+members = [
+    "dionysius-divine-names-1",
+    "dionysius-divine-names-2",
+    "dionysius-divine-names-3",
+    "dionysius-divine-names-4",
+    "dionysius-divine-names-5",
+    "dionysius-divine-names-6",
+    "dionysius-divine-names-7",
+    "dionysius-divine-names-8",
+    "dionysius-divine-names-9",
+    "dionysius-divine-names-10",
+    "dionysius-divine-names-11",
+    "dionysius-divine-names-12",
+    "dionysius-divine-names-13",
+]
+
+[[work]]
+id = "gathas"
+label = "The Gathas of Zarathushtra (Yasna 28-34, 43-51, 53)"
+tradition = "zoroastrianism"
+members = [
+    "yasna-28",
+    "yasna-29",
+    "yasna-30",
+    "yasna-31",
+    "yasna-32",
+    "yasna-33",
+    "yasna-34",
+    "yasna-43",
+    "yasna-44",
+    "yasna-45",
+    "yasna-46",
+    "yasna-47",
+    "yasna-48",
+    "yasna-49",
+    "yasna-50",
+    "yasna-51",
+    "yasna-53",
+]
+
+[[work]]
+id = "gilgamesh"
+label = "The Epic of Gilgamesh"
+tradition = "mesopotamian"
+members = [
+    "gilgamesh-tablet-01",
+    "gilgamesh-tablet-02",
+    "gilgamesh-tablet-03",
+    "gilgamesh-tablet-04",
+    "gilgamesh-tablet-05",
+    "gilgamesh-tablet-06",
+    "gilgamesh-tablet-07",
+    "gilgamesh-tablet-08",
+    "gilgamesh-tablet-09",
+    "gilgamesh-tablet-10",
+    "gilgamesh-tablet-11",
+    "gilgamesh-tablet-12",
+]
+
+[[work]]
+id = "gnostic-john-baptizer"
+label = "The Gnostic John the Baptizer (Mandaean John-Book)"
+tradition = "mandaean"
+members = [
+    "gnostic-john-baptizer-1",
+    "gnostic-john-baptizer-2",
+    "gnostic-john-baptizer-3",
+]
+
+[[work]]
+id = "heroic-enthusiasts"
+label = "The Heroic Enthusiasts (Gli Eroici Furori, Bruno)"
+tradition = "renaissance_hermeticism"
+members = [
+    "heroic-enthusiasts-pt1",
+    "heroic-enthusiasts-pt2",
+]
+
+[[work]]
+id = "plato-republic"
+label = "Republic, Books VI-VII (Plato)"
+tradition = "platonism"
+members = [
+    "plato-republic-6-0",
+    "plato-republic-6-1",
+    "plato-republic-6-2",
+    "plato-republic-7-0",
+]
