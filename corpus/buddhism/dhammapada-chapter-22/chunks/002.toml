@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter XXII, Section 1b"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1024.htm"
-token_count = 147
+token_count = 141
 
 [content]
-body = "They who fear when they ought not to fear, and fear not when they ought to fear, such men, embracing false doctrines, enter the evil path.\n\n[313.\n\nAs to ra g a meaning 'dust' and 'passion,' see Buddhaghosha's Parables, pp.\n\n65, 66.] p.\n\n76 318.\n\nThey who forbid when there is nothing to be forbidden, and forbid not when there is something to be forbidden, such men, embracing false doctrines, enter the evil path.\n\n319.\n\nThey who know what is forbidden as forbidden, and what is not forbidden as not forbidden, such men, embracing the true doctrine, enter the good path.\n\nNext: Chapter XXIII.\n\nThe Elephant."
+body = "They who fear when they ought not to fear, and fear not when they ought to fear, such men, embracing false doctrines, enter the evil path.\n\n[313.\n\nAs to ra g a meaning 'dust' and 'passion,' see Buddhaghosha's Parables, pp.\n\n65, 66.] p.\n\n76 318.\n\nThey who forbid when there is nothing to be forbidden, and forbid not when there is something to be forbidden, such men, embracing false doctrines, enter the evil path.\n\n319.\n\nThey who know what is forbidden as forbidden, and what is not forbidden as not forbidden, such men, embracing the true doctrine, enter the good path.\n\nThe Elephant."
 
 [annotations]
 concepts = []

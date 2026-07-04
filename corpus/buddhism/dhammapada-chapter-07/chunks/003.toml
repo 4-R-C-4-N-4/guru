@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter VII, Section 1c"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1009.htm"
-token_count = 245
+token_count = 240
 
 [content]
-body = "In the mischief done by the eye, we have, perhaps, the first indication of the evil eye.\n\n(Mahâbh.\n\nXII, 3417.\n\nSee Dhammapada, vv.\n\n231-234 .) On the technical meaning of tâdi, see Childers, s.v.\n\nD'Alwis (p.\n\n78) has evidently received the right interpretation, but has not understood it.\n\nMâd ri sa also is used very much like tâd ris a, and from it mâriso, a venerable person, in Sanskrit mârsha.] p.\n\n29 97.\n\nThe man who is free from credulity, but knows the uncreated, who has cut all ties, removed all temptations, renounced all desires, he is the greatest of men.\n\np.\n\n30 98.\n\nIn a hamlet or in a forest, in the deep water or on the dry land, wherever venerable persons (Arhanta) dwell, that place is delightful.\n\n99.\n\nForests are delightful; where the world finds no delight, there the passionless will find delight, for they look not for pleasures.\n\nNext: Chapter VIII.\n\nThe Thousands."
+body = "In the mischief done by the eye, we have, perhaps, the first indication of the evil eye.\n\n(Mahâbh.\n\nXII, 3417.\n\nSee Dhammapada, vv.\n\n231-234 .) On the technical meaning of tâdi, see Childers, s.v.\n\nD'Alwis (p.\n\n78) has evidently received the right interpretation, but has not understood it.\n\nMâd ri sa also is used very much like tâd ris a, and from it mâriso, a venerable person, in Sanskrit mârsha.] p.\n\n29 97.\n\nThe man who is free from credulity, but knows the uncreated, who has cut all ties, removed all temptations, renounced all desires, he is the greatest of men.\n\np.\n\n30 98.\n\nIn a hamlet or in a forest, in the deep water or on the dry land, wherever venerable persons (Arhanta) dwell, that place is delightful.\n\n99.\n\nForests are delightful; where the world finds no delight, there the passionless will find delight, for they look not for pleasures.\n\nThe Thousands."
 
 [annotations]
 concepts = []
