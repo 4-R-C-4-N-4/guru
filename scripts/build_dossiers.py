@@ -87,17 +87,34 @@ def load_text_chunks(tradition: str, text_id: str) -> list[Chunk]:
 # ── span planning ─────────────────────────────────────────────────────────────
 
 _PART_SUFFIX = re.compile(r"([0-9IVXLCivxlc])[a-z]$")
-_SECTION_TAIL = re.compile(r",\s*Section\s+\d+[a-z]?$", re.I)
+# Only a LETTERED ', Section Na' tail is a sub-part marker ('Chapter II,
+# Section 1a' → 'Chapter II'). An unlettered ', Section N' is real section
+# identity — Plotinus is 'Select Works, Section 1..326' — and must survive.
+_SECTION_TAIL = re.compile(r",\s*Section\s+\d+[a-z]$", re.I)
+_PARENS_PART = re.compile(r"\s*\(part \d+\)$", re.I)
 
 
 def base_section(section: str | None) -> str:
-    """Collapse part-letter suffixes: 'Rune Ia'→'Rune I', '1b'→'1',
-    'Chapter II, Section 1a'→'Chapter II'."""
+    """Collapse part markers: 'Rune Ia'→'Rune I', '1b'→'1',
+    'Chapter II, Section 1a'→'Chapter II',
+    'Select Works, Section 19 (part 2)'→'Select Works, Section 19'."""
     if not section:
         return ""
-    s = _SECTION_TAIL.sub("", section.strip())
+    s = _PARENS_PART.sub("", section.strip())
+    s = _SECTION_TAIL.sub("", s)
     s = _PART_SUFFIX.sub(r"\1", s)
     return s.strip()
+
+
+def _merged_label(first: str, last: str) -> str:
+    """'Select Works, Section 5' + 'Select Works, Section 12'
+    → 'Select Works, Section 5 – 12' (trim shared word-prefix on the right)."""
+    fw, lw = first.split(" "), last.split(" ")
+    i = 0
+    while i < min(len(fw), len(lw)) - 1 and fw[i] == lw[i]:
+        i += 1
+    tail = " ".join(lw[i:])
+    return f"{first} – {tail}" if tail else f"{first} – {last}"
 
 
 def slugify(label: str) -> str:
@@ -146,7 +163,7 @@ def plan_text_spans(text_id: str, chunks: list[Chunk], span_target: int) -> list
         if len(acc) == 1:
             label = acc[0][0] or text_id
         else:
-            label = f"{acc[0][0]} – {acc[-1][0]}"
+            label = _merged_label(acc[0][0], acc[-1][0])
         cs = [c for _, grp in acc for c in grp]
         spans.append(Span(text_id, label, slugify(label),
                           [c.id for c in cs], sum(c.token_count for c in cs)))
@@ -219,6 +236,38 @@ class WorkPlan:
         return self.l1_calls
 
 
+def _text_name(tradition: str, text_id: str) -> str:
+    meta = tomllib.load(open(CORPUS_DIR / tradition / text_id / "metadata.toml", "rb"))
+    return meta.get("text_name", text_id)
+
+
+def _disambiguate_labels(w: Work, spans: list[Span]) -> None:
+    """Span labels are reader-facing structure_json section_spans AND the
+    staged join key — they must be unique per work. Generic per-member labels
+    ('Section 1' in all 17 CH tractates) are replaced with the member's
+    text_name, which is also the better TOC entry (tractate/chapter title)."""
+    from collections import Counter
+    dup = {k for k, v in Counter(s.label for s in spans).items() if v > 1}
+    if not dup:
+        return
+    per_text = Counter(s.text_id for s in spans)
+    for s in spans:
+        if s.label in dup:
+            name = _text_name(w.tradition, s.text_id)
+            s.label = name if per_text[s.text_id] == 1 else f"{name} — {s.label}"
+            s.slug = slugify(f"{s.text_id}-{s.label}") if per_text[s.text_id] > 1 else slugify(s.label)
+    # final guarantee
+    seen: dict[str, int] = {}
+    for s in spans:
+        key = s.label
+        if key in seen:
+            seen[key] += 1
+            s.label = f"{s.label} ({seen[key]})"
+            s.slug = f"{s.slug}-{seen[key]}"
+        else:
+            seen[key] = 1
+
+
 def plan_campaign(cfg: dict, works: dict[str, Work] | None = None) -> list[WorkPlan]:
     works = works or load_works()
     span_target = cfg["span_target"]
@@ -228,6 +277,7 @@ def plan_campaign(cfg: dict, works: dict[str, Work] | None = None) -> list[WorkP
         spans: list[Span] = []
         for member in w.members:
             spans.extend(plan_text_spans(member, load_text_chunks(w.tradition, member), span_target))
+        _disambiguate_labels(w, spans)
         total = sum(s.token_count for s in spans)
         degenerate = len(spans) == 1
         folds = 0

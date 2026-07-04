@@ -184,6 +184,11 @@ class ProviderBusy(RuntimeError):
 _CLAUDE_BUSY_MARKERS = ("usage limit", "rate limit", "overloaded", "429")
 
 
+class ContentBlocked(RuntimeError):
+    """Safety classifier declined the request/output. May be transient
+    (retry once) or deterministic for a given input (skip the node)."""
+
+
 def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Headless Claude Code on the subscription (design §1.3.6).
 
@@ -211,19 +216,24 @@ def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, time
         raise RuntimeError(f"claude-code timed out after {timeout}s") from e
     out = (proc.stdout or "").strip()
     err = (proc.stderr or "").strip()
-    if proc.returncode != 0:
+    # The CLI exits nonzero for API-level errors but still writes the JSON
+    # envelope to stdout — always try the envelope first.
+    envelope = None
+    try:
+        envelope = json.loads(out)
+    except json.JSONDecodeError:
+        pass
+    if envelope is None:
         low = (out + " " + err).lower()
         if any(m in low for m in _CLAUDE_BUSY_MARKERS):
             raise ProviderBusy(f"claude-code busy: {err or out[:200]}")
         raise RuntimeError(f"claude-code exit {proc.returncode}: {err or out[:200]}")
-    try:
-        envelope = json.loads(out)
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"claude-code returned non-JSON envelope: {out[:200]}") from e
     if envelope.get("is_error"):
-        low = str(envelope.get("result", "")).lower()
-        if any(m in low for m in _CLAUDE_BUSY_MARKERS):
+        result_low = str(envelope.get("result", "")).lower()
+        if any(m in result_low for m in _CLAUDE_BUSY_MARKERS):
             raise ProviderBusy(f"claude-code busy: {envelope.get('result', '')[:200]}")
+        if "content filtering" in result_low or "blocked" in result_low:
+            raise ContentBlocked(f"claude-code content filter: {envelope.get('result', '')[:200]}")
         raise RuntimeError(f"claude-code error result: {envelope.get('result', '')[:200]}")
     result = envelope.get("result")
     if not isinstance(result, str) or not result.strip():
