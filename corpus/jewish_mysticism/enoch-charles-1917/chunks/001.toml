@@ -5,10 +5,10 @@ text_name = "The Book of Enoch (1 Enoch, Charles translation)"
 section = "Page 1"
 translator = "R.H. Charles"
 source_url = "https://sacred-texts.com/bib/boe/boe000.htm"
-token_count = 98
+token_count = 50
 
 [content]
-body = "THE BOOK OF ENOCH TRANSLATED BY R. H. CHARLES, D.LITT., D.D. WITH AN INTRODUCTION BY W. O. E. OESTERLEY, D.D. London Society for Promoting Christian Knowledge [1917] Scanned at sacred-texts.com, June 2004. Proofed and formatted by John Bruno Hare. This text is in the public domain in the United States because it was published prior to 1923."
+body = "THE BOOK OF ENOCH TRANSLATED BY R. H. CHARLES, D.LITT., D.D. WITH AN INTRODUCTION BY W. O. E. OESTERLEY, D.D. London Society for Promoting Christian Knowledge"
 
 [annotations]
 concepts = []
