@@ -97,8 +97,7 @@ Files: `scripts/build_dossiers.py` (plan mode).*
 - Span/summary ids: L2 `sum:{work_id}`; L1 `sum:{text_id}:{span_slug}`;
   `span_slug` = section string lowercased, non-alphanumerics → `-`, collapsed;
   `(part n)` → `-part-n`. Slugs must be unique per text (assert).
-- Output (the **freeze artifact**, committed): `data/span_plan_c1.json`
-  (machine) + `docs/summary/span-plan-c1.md` (human: per-work spans, call
+- Output (the **freeze artifact**, committed): `docs/summary/span-plan-c1.json` (machine) + `docs/summary/span-plan-c1.md` (human: per-work spans, call
   counts, degenerate/fold flags, totals). V9: regenerating this file with
   different totals after generation has begun = new campaign, full stop.
 - Test: `tests/test_span_plan.py` — every chunk in exactly one span; span
