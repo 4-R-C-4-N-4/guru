@@ -788,8 +788,11 @@ Each is cheap; several will change the span plan or a template.
 **Status legend:** ✅ verified/decided 2026-07-04 against `data/guru.db` +
 chunk TOMLs; ⬜ still open. V3 and V10 are decided (works layer — §6.1,
 `work-grouping.md`); V7 is rescoped to `local` campaigns only (§1.3.6 — the
-first campaign runs on `claude-code`). The one item still blocking generation:
-the V8 regex hardening + per-domain sample.
+first campaign runs on `claude-code`); V8 is resolved at chunk level
+(todo:fccaf47d — corpus cleaned in place and re-embedded). **Nothing on this
+checklist blocks generation any more**; remaining pre-campaign work is
+c59758f3 (CH member fix, blocks the corpus-hermeticum work only) and the
+v3_007 + works-layer implementation itself.
 
 **V1 — Section-string audit (blocks span packing).** ✅ **Run; mostly good, one
 trap.** `sections_format` is populated for 211/211 texts (11 formats, zero NULL).
@@ -852,13 +855,20 @@ effectively unbounded and no rig tuning exists to do. If a later campaign uses t
 model's tokenizer — `chunk.token_count` came from the *pipeline's* tokenizer.
 
 **V8 — Boilerplate audit beyond sacred-texts (feeds the LEAK rubric).**
-⬜ **Open, and upgraded from "audit" to "known gap":** the ported regexes
-already fail on sacred-texts itself — Enuma Elish chunk 001's header
-(`"Sacred-Texts Ancient Near East …"`, hyphenated, no `Previous Next` marker)
-survives all three patterns untouched (§1.2). Harden the sacred-texts patterns
-*and* sample chunks from every other source domain in the manifest before L1
-generation — un-stripped apparatus is the likeliest source of `LEAK`/`GROUND`
-failures.
+✅ **RESOLVED 2026-07-04 — and resolved at the chunk level, not summary-build
+time** (todo:fccaf47d; full findings in `docs/summary/boilerplate-audit.md`).
+Corpus-wide audit of all 4 source domains found ~1,000 chunks with residual
+boilerplate in 6 pattern classes (the "~32%" era was already over — prior
+cleanup passes did the bulk; the biggest remaining class was 650 Plotinus
+chunks with trailing `Next: Section N` glued to content). `clean_bodies.py`
+stripped them in place (id-preserving; 1,048 chunks, −6,602 tokens; shrink
+guard + independently reviewed removed-segments report), token counts
+recomputed, full corpus re-embedded (4,176 × 768d, 0 errors). The hardened
+pattern set is synced to guru-web `retriever.ts` as defense-in-depth. §1.2's
+build-time strip in `build_dossiers.py` stays specced as a residual layer.
+Handed to 50438e23: whole-chunk apparatus candidates (incl.
+`enoch-charles-1917.140`, errata-only), `[Pg N]` split-word ingest artifacts,
+and the `golden-verses.034` Hesiod-membership question.
 
 **V9 — Span-plan stability rule (process, not code).** Span identity is the string
 join key between `staged_summaries` and `staged_dossier_fields.structure_entry`,
