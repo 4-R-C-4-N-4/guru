@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter X, Section 1d"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1012.htm"
-token_count = 9
+token_count = 6
 
 [content]
-body = "appabodhati.]\n\nOld Age."
+body = "appabodhati.]"
 
 [annotations]
 concepts = []

@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter XIII, Section 1b"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1015.htm"
-token_count = 118
+token_count = 110
 
 [content]
-body = "(4) Arhat, the venerable, the perfect, who has reached the highest stage that can be reached, and from which Nirvâ n a is perceived (sukkhavipassanâ, Lotus, p.\n\n849).\n\nSee Hardy, Eastern Monachism, p.\n\n280; Burnouf, Introduction, p.\n\n209; Köppen, p.\n\n398; D'Alwis, Attanugaluvansa, p.\n\ncxxiv; Feer, Sutra en 42 articles, p.\n\n6.]\n\nThe Buddha (The Awakened)."
+body = "(4) Arhat, the venerable, the perfect, who has reached the highest stage that can be reached, and from which Nirvâ n a is perceived (sukkhavipassanâ, Lotus, p.\n\n849).\n\nSee Hardy, Eastern Monachism, p.\n\n280; Burnouf, Introduction, p.\n\n209; Köppen, p.\n\n398; D'Alwis, Attanugaluvansa, p.\n\ncxxiv; Feer, Sutra en 42 articles, p.\n\n6.]"
 
 [annotations]
 concepts = []

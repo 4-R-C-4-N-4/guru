@@ -101,12 +101,26 @@ def clean_body(body: str) -> str:
 
     paras = PARA_SEP.split(body)
     kept = []
-    for p in paras:
+    prev_was_nav = False
+    for idx, p in enumerate(paras):
         s = p.strip()
         if not s:
             continue
         if P1_NAV_PARA.match(s):
+            prev_was_nav = True
             continue
+        # P1c: orphaned next-chapter TITLE — chunking splits the nav line
+        # "Next: Chapter II. On Earnestness." into a nav paragraph plus a
+        # title paragraph (at chunk ends AND at mid-chunk page boundaries,
+        # e.g. boehme). A title-short paragraph directly after dropped nav is
+        # part of the nav — the real heading follows in the source text.
+        if prev_was_nav and len(s) <= 60 \
+                and len(s.split()) <= 10 and not s.endswith(":"):
+            # stay armed: nav apparatus can chain ('Next: X.' / 'I.' /
+            # '<title>') — disarms at the first paragraph that fails the
+            # title guards
+            continue
+        prev_was_nav = False
         if len(s) <= P2_MAX_LEN and P2_HEADER_PARA.match(s):
             continue
         if len(s) <= P6_MAX_LEN and P6_ERRATA_PARA.match(s):
@@ -114,10 +128,17 @@ def clean_body(body: str) -> str:
         for pat in P3_SENTENCES:
             s = pat.sub(" ", s)
         s = P4_PG_MARKER.sub(" ", s)
+        before_tail = s
         s = P1B_NAV_TAIL.sub("", s)
+        # an inline nav tail also arms P1c: the orphaned next-chapter title
+        # can follow a paragraph that merely ENDED in the nav pointer
+        prev_was_nav = s != before_tail
         s = re.sub(r"[ \t]{2,}", " ", s).strip()
         if s:
             kept.append(s)
+        else:
+            # paragraph vanished entirely under strips — also arms P1c
+            prev_was_nav = True
     return "\n\n".join(kept)
 
 

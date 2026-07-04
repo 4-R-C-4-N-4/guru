@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter IV, Section 1c"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1006.htm"
-token_count = 15
+token_count = 12
 
 [content]
-body = "Beal, Dhammapada, p.\n\n76.]\n\nThe Fool."
+body = "Beal, Dhammapada, p.\n\n76.]"
 
 [annotations]
 concepts = []
