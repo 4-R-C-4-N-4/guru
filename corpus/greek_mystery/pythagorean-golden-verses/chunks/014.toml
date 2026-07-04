@@ -5,10 +5,10 @@ text_name = "The Golden Verses of Pythagoras"
 section = "Section 7 (part 3)"
 translator = "Florence M. Firth"
 source_url = "https://sacred-texts.com/cla/gvp/gvp00.htm"
-token_count = 22
+token_count = 12
 
 [content]
-body = "32:1 And this is the case with intellectual good.\n\nNext: The Similitudes of Demophilus"
+body = "32:1 And this is the case with intellectual good."
 
 [annotations]
 concepts = []
