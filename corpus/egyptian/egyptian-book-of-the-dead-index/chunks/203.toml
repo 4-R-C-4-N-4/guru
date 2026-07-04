@@ -5,10 +5,10 @@ text_name = "The Egyptian Book of the Dead (Papyrus of Ani)"
 section = "Chapter 31 (part 2)"
 translator = "E.A. Wallis Budge"
 source_url = "https://sacred-texts.com/egy/ebod/ebod00.htm"
-token_count = 66
+token_count = 60
 
 [content]
-body = "I, Osiris Ani, triumphant, come even as one who is equipped for the journey.\n\nThou raisest up [right and truth] (2 1) for those who love them.\n\nI am a shining one clothed in power, mightier than any other shining one.\" Next: Plate XXV."
+body = "I, Osiris Ani, triumphant, come even as one who is equipped for the journey.\n\nThou raisest up [right and truth] (2 1) for those who love them.\n\nI am a shining one clothed in power, mightier than any other shining one.\""
 
 [annotations]
 concepts = []
