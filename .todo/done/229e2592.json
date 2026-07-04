@@ -1,13 +1,13 @@
 {
   "id": "229e2592",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Implement document-knowledge layer (guru): works layer, v3_007, claude-code provider, dossier pipeline, export v4",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-04T21:48:22.179Z",
-  "updated_at": "2026-07-04T21:48:50.694Z",
+  "updated_at": "2026-07-04T23:07:18.548Z",
   "tags": [
     "summary",
     "dossiers",
@@ -24,5 +24,11 @@
       "66e9e5a2",
       "7926b63e"
     ]
+  },
+  "resolution": {
+    "commit": "3b97561c0e26ec72a641de0d5130e9a852027903",
+    "resolved_at": "2026-07-04T23:07:18.548Z",
+    "resolved_by": "unknown",
+    "note": "G1-G7 all closed on feature/summary. Works layer, v3_007 migration, claude-code provider (smoke-tested), frozen span plan c1 (52 works/622 spans), templates + resumable generation (pilot: 3 works through the full DAG incl. content-filter skip handling), review CLI + promotion + embeddings (E2E: 2 dossiers live), export v4 (scratch-Postgres-loaded, validated). Campaign 1 execution is G8 ops per implementation-guru.md runbook; c59758f3 still gates the CH work only."
   }
 }
