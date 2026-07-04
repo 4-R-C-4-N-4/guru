@@ -1,0 +1,35 @@
+{
+  "id": "88a28e67",
+  "type": "chore",
+  "state": "done",
+  "summary": "scripts/clean_bodies.py: hardened in-place strip patterns (id-preserving) with dry-run diff mode",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.852Z",
+  "updated_at": "2026-07-04T17:31:05.660Z",
+  "tags": [
+    "corpus",
+    "apparatus",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d",
+    "depends_on": [
+      "9ff92786"
+    ]
+  },
+  "description": "Implement from the audit's pattern table. Operates on corpus/*/*/chunks/*.toml bodies AND live nodes rows in data/guru.db; never renumbers or drops chunks. Must have: --dry-run emitting unified diffs per text for review; recomputes chunk.token_count after strip; refuses any strip that removes >X% of a body (tunable guard against pattern overreach). Supersedes a straight port of retriever.ts NAV_PREFIX/PAGE_MARKER/APPARATUS_DROP.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T17:26:12.485Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "47457c8e943851da842c9145b977dae83ed6fb07",
+    "resolved_at": "2026-07-04T17:31:05.660Z",
+    "resolved_by": "unknown",
+    "note": "scripts/clean_bodies.py implements audit classes P1-P6 plus P1B (inline trailing nav — 650 Plotinus chunks the audit probe missed because the nav is glued to paragraph ends). Dry-run mode emits unified diffs; shrink guard (default 25%) correctly refuses 7 chunks incl. enoch-charles-1917.140 which would empty (whole-chunk errata -> 50438e23). Domain-dot bug in scanned-at pattern found and fixed during dry-run iteration."
+  }
+}
