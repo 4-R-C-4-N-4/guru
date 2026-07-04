@@ -8,8 +8,8 @@ nothing here touches `edges`, `nodes`, or the tag/tier machinery.
 > (`data/guru.db` @ 2197d2a) and the chunk TOMLs. Results are recorded inline
 > per item. Corpus figures in §1.3.5 are remeasured — the draft's numbers were
 > stale (pre-dating the Plotinus apparatus strip 79e876b and the Zhuangzi
-> rescope 12bd639) and counted texts at the wrong granularity (see V10, the
-> one new blocking item).
+> rescope 12bd639) and counted texts at the wrong granularity (see V10 —
+> added by the audit, decided 2026-07-04: the works layer, §6.1).
 
 Two deliberate reductions from the proposal draft:
 
@@ -446,13 +446,13 @@ The uniform 800-token chunk cap makes the whole thing **plannable before generat
 `build_dossiers.py` computes each text's full DAG — spans, folds, call count —
 deterministically from chunk counts, then executes it resumably per node.
 
-**Single-span degenerate case (most of the corpus).** 169/211 texts fit one
-span, so a literal reading of the DAG would generate an L2 that restates its
-only L1 verbatim-ish. Rule: a text whose plan yields exactly one span gets **one
-summary staged directly at level 2** (`sum:{text_id}`, `child_chunk_ids` = all
+**Single-span degenerate case.** 169/211 texts fit one span — but the
+degenerate unit is the **work** (§6.1): after V10 grouping, 14 of 52 works are
+single-span. Rule: a work whose plan yields exactly one span gets **one
+summary staged directly at level 2** (`sum:{work_id}`, `child_chunk_ids` = all
 chunks) under the `l1-v1` template's grounding rules; no separate L1 row, no
 structure entry beyond the single natural section. The plan step decides this
-per text before generation, so call counts and review samples reflect it.
+per work before generation, so call counts and review samples reflect it.
 
 **Span packing (fixes L1).** Spans are built by packing chunks in corpus order:
 natural section boundaries first (parsed from `section` per `sections_format`, since
@@ -501,8 +501,8 @@ Call-count reality check: L1 calls and structure entries are **1:1 per span**;
 2.56M tokens / ~6k budget bounds packed spans at ~430, and natural-section
 granularity on small texts pushes the real number somewhat higher — call it
 **~450–600 spans** (× 2 calls each: L1 + structure), ~15 folds, one summary +
-D1/D2 per dossier unit (~211 as sharded, ~102 if V10 groups shards — V10 must
-settle before this number means anything), and map–reduce passes for the ~12
+D1/D2 per dossier unit (**52 works** — V10 decided, §6.1 and
+`work-grouping.md`), and map–reduce passes for the ~12
 large texts. An overnight-scale local
 batch, re-runnable per stage as templates revise. The exact span count falls out of
 the plan step (§ above) before any generation runs — the agent should print the plan
@@ -711,8 +711,10 @@ summary rows into fake chunks — the missing columns are the point.
 
 Items the agent must verify locally **before** implementation, in dependency order.
 Each is cheap; several will change the span plan or a template.
-**Status legend:** ✅ verified 2026-07-04 against `data/guru.db` + chunk TOMLs;
-⬜ still open. Two decisions remain open (V3, V10) plus the rig-bound V7.
+**Status legend:** ✅ verified/decided 2026-07-04 against `data/guru.db` +
+chunk TOMLs; ⬜ still open. V3 and V10 are decided (works layer — §6.1,
+`work-grouping.md`); remaining open: V7 (rig-bound) and the V8 regex
+hardening + per-domain sample.
 
 **V1 — Section-string audit (blocks span packing).** ✅ **Run; mostly good, one
 trap.** `sections_format` is populated for 211/211 texts (11 formats, zero NULL).
@@ -732,14 +734,14 @@ runs `Rune Ia` → `Rune Lk` monotonically across all 275 chunks; Enuma Elish
 `child_chunk_ids` order can be trusted corpus-wide.
 
 **V3 — `-index` aggregates decision (blocks the plan for the top texts).**
-⬜ **Decision still open, but the scope shrank.** Zhuangzi was already rescoped
-to the Inner Chapters (12bd639) — now 42k tokens, no longer a collection
-problem. Plotinus is 373.6k/752 chunks post-apparatus-strip (79e876b). The
-split-vs-keep decision now concerns `plotinus-select-works-index` (373.6k) and
-`egyptian-book-of-the-dead-index` (261k). Decide: split per-treatise in the
-manifest (changes text_ids — ripples to chunks, tags, edges) vs. keep whole with
-one dossier each. Still **upstream of the span plan**; decide jointly with V10
-(same question from opposite ends).
+✅ **DECIDED 2026-07-04: keep whole.** (Scope had already shrunk: Zhuangzi was
+rescoped to the Inner Chapters in 12bd639 — 42k, no longer a collection problem;
+Plotinus is 373.6k/752 chunks post-79e876b.) `plotinus-select-works-index` and
+`egyptian-book-of-the-dead-index` each stay one text = one singleton work with
+one dossier; folds absorb the size and `structure_json` provides per-treatise
+navigation. Splitting would ripple through 4,176 chunk ids, 35k edges, and all
+accepted tags for a benefit the dossier already delivers. Rationale + revisit
+condition in `docs/summary/work-grouping.md`.
 
 **V4 — `manifest_notes` coverage (shapes context-v1).** ✅ **Resolved: coverage
 is total.** All 399/399 `[[source]]` entries in `sources/manifest.toml` carry
@@ -755,9 +757,10 @@ Tiers present: `verified` 24,180, `proposed` 11,085, `inferred` **0** — the
 weighting must tolerate missing tiers. Per-text coverage: median 15 edges,
 but 79/211 texts have <10, 56 have <5, and 4 have zero (three
 `agrippa-natural-magic-ch-*` shards + `zoroastrianism.bundahishn`). Thin
-`themes_json` affects over a third of texts as sharded; set the floor (min N
-tags or empty array) — and note V10 grouping would largely dissolve this,
-since shards pool their parents' tags.
+`themes_json` affects over a third of texts as sharded — but V10's work
+grouping pools member tags, collapsing the tail to 3 works (`bundahishn` 0,
+`gathas-introduction` 2, `kojiki-beginning-heaven-earth` 5). **Floor decided:**
+works with <5 accepted tags export `themes = []`.
 
 **V6 — id formats (blocks the summary_id scheme).** ✅ **Confirmed.** All 4,176
 chunk ids are uniformly `{tradition}.{text}.{NNN}`; Postgres `texts.id` is the
@@ -787,20 +790,58 @@ the span plan is **frozen per template-generation campaign** — a budget/strate
 change is treated like an `l1` template bump (full regenerate), never a partial one.
 
 **V10 — Shard-grouping decision (blocks the dossier unit; NEW, from the corpus
-audit).** ⬜ **Open — the inverse of V3, and the bigger structural question.**
-The draft assumed text dir ≈ work (120 texts, median ~4.4k tokens). Reality:
-**211 text dirs, median 1.5k tokens, because ~115 dirs are chapter/tablet
-shards of ~102 base works** — `dhammapada-chapter-01…26`,
-`gilgamesh-tablet-01…12`, ~60 `agrippa-natural-magic-ch-*`, 17 Yasna texts,
-etc. One dossier per `text_id` as-is means one dossier *per chapter*: 26
-Dhammapada context notes, 60+ Agrippa key-figure lists, each L2 summarizing a
-~1–2k-token sliver (110 texts have ≤2 chunks). Decide, per sharded work:
-**(a)** group shards into a parent work for dossier purposes (a `work_id`
-mapping layer over text_ids — dossier keyed on work, `summary_nodes` still
-per-text so `child_chunk_ids` and scope filtering are untouched), **(b)**
-re-manifest shards into single texts (ripples to chunk ids, tags, edges —
-same blast radius as splitting in V3), or **(c)** accept per-shard dossiers
-for v1. This decision is upstream of the span plan, changes the D1/D2 call
-count by ~2×, largely dissolves V5's thin-tags problem, and should be made
-**jointly with V3** — they are the same "what is a text?" question from
-opposite ends of the size distribution.
+audit).** ✅ **DECIDED 2026-07-04: option (a), the works layer.** The draft
+assumed text dir ≈ work (120 texts, median ~4.4k tokens). Reality: **211 text
+dirs, and 168 of them are serialization shards of just 9 works** (the full
+audit found more families than the first estimate: `dhammapada-chapter-*` ×26,
+`agrippa-natural-magic-ch-*` ×74, `corpus-hermeticum-*` ×17, `yasna-*` ×17,
+`dionysius-divine-names-*` ×13, `gilgamesh-tablet-*` ×12, `plato-republic-*`
+×4, `gnostic-john-baptizer-*` ×3, `heroic-enthusiasts-pt*` ×2). One dossier
+per text_id would have meant one dossier per chapter, with each L2
+summarizing a ~1–2k-token sliver (110 texts have ≤2 chunks).
+
+Resolution: shards group into works via a pure mapping layer
+(`sources/works.toml`), no re-manifest, no id churn — **52 works total** (9
+grouped + 43 singleton). The dossier unit and L2 unit become the work; shard
+members become natural sections. Rejected: (b) re-manifest (same blast radius
+V3 rejects), (c) per-shard dossiers (wrong reader-facing unit). Side effect:
+per-work tag pooling collapses V5's thin-tags tail from 79 texts to 3 works.
+Full table, judgment calls (Corpus Hermeticum grouped; Poetic Edda poems,
+Paracelsus treatises, Zoharic texts NOT grouped; translator intros standalone
++ dossier-optional): `docs/summary/work-grouping.md`. Schema consequences:
+§6.1 below.
+
+### 6.1 Works-layer amendments (V3+V10 resolution — deltas to §1 and §2)
+
+The SQL in §1/§2 predates this decision; apply these deltas when writing
+`v3_007` and the v4 schema append. The **work** is the dossier + L2 unit;
+text_ids, chunk ids, tags, and edges are untouched.
+
+- **`sources/works.toml`** (new, pipeline input): `[[work]]` with `id`,
+  `label`, `members` (text_ids in reading order). Any text not listed is
+  implicitly a singleton work with `work_id = text_id`. `build_dossiers.py`
+  materializes the full 52-work map at plan time.
+- **§1 staging/live (SQLite):** `staged_dossier_fields.text_id` →
+  `work_id`; `text_dossiers` → **`work_dossiers`** keyed on `work_id`
+  (`manifest_notes` for a grouped work = concatenated member notes, labeled).
+  `staged_summaries` / `summary_nodes` gain `work_id TEXT NOT NULL`;
+  `text_id` stays for L1 rows (the span lives in one shard text) and is
+  **NULL on level-2 rows of multi-member works** — an L2 spans texts.
+  Summary id scheme: L2 = `sum:{work_id}`, L1 = `sum:{text_id}:{span_slug}`
+  as before.
+- **§2 export (Postgres v4):** new `works(id PK, tradition FK, label,
+  member_text_ids TEXT[])`; `texts` gains `work_id TEXT NOT NULL` (v4 is a
+  fresh schema — no migration concern); `text_dossiers` becomes
+  `work_dossiers(work_id PK REFERENCES works)`; `summary_nodes` gains
+  `work_id NOT NULL REFERENCES works` and `text_id` becomes nullable.
+  `tradition` denormalization is unchanged (every work is single-tradition —
+  holds for all 52), so `buildScopeFilter` still applies verbatim.
+- **§1.3 DAG:** unchanged in shape; "text" reads as "work" for L2/D1–D6.
+  Each grouped-work member is a natural section (structure entry + L1
+  span(s), tiny members merge per span packing). Single-span *works* take the
+  degenerate rule (one summary staged at level 2 directly): 14 of 52.
+- **§5 runtime:** study scope still pins a `text_id`; the dossier fetch
+  becomes `SELECT … FROM work_dossiers WHERE work_id = (SELECT work_id FROM
+  texts WHERE id = $1)` — still a PK-shaped lookup.
+- **Call-count effect:** L2/D1/D2/notes and figures/terms reduce runs are
+  per-work (~52 each, not ~211); L1 + structure stay per-span (~450–600).
