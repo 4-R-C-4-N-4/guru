@@ -10,6 +10,11 @@ nothing here touches `edges`, `nodes`, or the tag/tier machinery.
 > stale (pre-dating the Plotinus apparatus strip 79e876b and the Zhuangzi
 > rescope 12bd639) and counted texts at the wrong granularity (see V10 —
 > added by the audit, decided 2026-07-04: the works layer, §6.1).
+>
+> **Generation backend (decided 2026-07-04):** configurable per campaign
+> (§1.3.6) — `claude-code` (headless Claude Code on the subscription; default
+> for the first campaign) or `local` (the 3090 path the draft assumed). Folds
+> and map–reduce are now provider-conditional; V7 applies to `local` only.
 
 Two deliberate reductions from the proposal draft:
 
@@ -220,7 +225,7 @@ reproducible.
 
 Each field is a **separate prompt with a separate, versioned template** — no one-shot
 dossier generation. Later stages consume *earlier generated artifacts*, not raw chunks,
-which keeps every context window small on the local rig and makes each stage
+which keeps every call small enough for any provider (§1.3.6) and makes each stage
 independently reviewable and regenerable:
 
 ```
@@ -390,7 +395,7 @@ generate batch under {field}-vN
     by tradition and text length; structure entries sampled per-span)
   → classify failures by rubric code
   → failures cluster on a rule?  → revise the TEMPLATE → vN+1 → regenerate
-     (cheap: local 3090, resumable, only the stage + its DAG descendants)
+     (cheap on either provider — §1.3.6 — resumable, only the stage + its DAG descendants)
   → failures idiosyncratic to a text? → fix that row manually as a new staged
      row with model='manual', prompt_version='{field}-manual' — the promoter
      prefers manual rows over any template version, and bulk regeneration
@@ -401,6 +406,18 @@ generate batch under {field}-vN
 Folds participate in the same flow: L2 for a folded text reads only **accepted**
 fold rows, and fold review is folded into L2's sample (a bad fold shows up as an
 L2 `COVERAGE`/`GROUND` failure and is traced down via `child_summary_ids`).
+
+**Frontier-model caveat (applies to `claude-code` campaigns — §1.3.6).** The
+grounding rules were written when the generator was a 27B local model that
+*doesn't know these texts*. Claude does — deeply — and will fluently supply
+correct-sounding dates, transmission history, and context from general knowledge,
+which is exactly what `GROUND`/`LEAK` forbid. Instruction-following is much
+better, so expect `FORMAT` to nearly vanish and `REGISTER`/`HEDGE` to mostly hold
+on v1 templates — but the review sample must specifically probe for
+**plausible world-knowledge claims not supported by the input**, which are harder
+to spot than a small model's confabulations. (If curator judgment later decides
+Claude's knowledge should be *allowed* to enrich `context`, that is a deliberate
+template change — `context-vN` with relaxed grounding — never silent drift.)
 
 Rubric codes (what a reviewer marks, and what template revisions answer to):
 
@@ -437,10 +454,18 @@ Remeasured 2026-07-04 from the chunk TOMLs (`corpus/*/*/chunks/*.toml`,
 | tail | 12 texts > 50k — Plotinus *Select Works* **373.6k** (752 chunks, post-apparatus-strip 79e876b), Book of the Dead 261k, Kalevala 186k, Tertium Organum 165k, Mabinogion 141k, Pistis Sophia 121k, Boehme *Life and Doctrines* 118k, Iamblichus *On the Mysteries* 114k … Zhuangzi was rescoped to the Inner Chapters (12bd639) and is now 42k — **out of the tail and out of V3** |
 | chunk cap | uniformly ≤ 800 tokens (max observed = 800, corpus-wide — confirmed) |
 
-Working figure for the local rig: **`INPUT_BUDGET` ≈ 6–8k tokens** per call
-(template + input + output headroom), set per provider in the build config alongside
-`llm.py`'s provider selection — a 27B-class model at Q4 on the 3090 is comfortable
-there; the budget is config, not architecture.
+**The budget is config, not architecture — and so is the provider (§1.3.6).**
+Two knobs, set per campaign in the build config, with different owners:
+
+| knob | serves | value |
+|---|---|---|
+| `span_target` | **the reader** — structure_json TOC granularity and L1 review size | ~6k tokens, provider-independent |
+| `input_budget` | **the provider** — max tokens per generation call | `local` (3090, 27B @ Q4): 6–8k · `claude-code`: effectively unbounded (1M-class context) |
+
+`span_target` deliberately does NOT scale with provider context: spans are the
+reader-facing sectioning of the text and the join key V9 freezes, so a provider
+switch must not re-cut them. `input_budget` only decides whether the
+*conditional* stages below (folds, map–reduce) activate.
 
 The uniform 800-token chunk cap makes the whole thing **plannable before generation**:
 `build_dossiers.py` computes each text's full DAG — spans, folds, call count —
@@ -456,12 +481,16 @@ per work before generation, so call counts and review samples reflect it.
 
 **Span packing (fixes L1).** Spans are built by packing chunks in corpus order:
 natural section boundaries first (parsed from `section` per `sections_format`, since
-`section_path` is unpopulated — §1.2); a natural section over budget splits into
+`section_path` is unpopulated — §1.2); a natural section over `span_target` splits into
 `{section} (part n)` sub-spans at chunk boundaries; adjacent tiny sections merge up to
-budget. Worst case a span is `⌊budget / 800⌋ ≈ 8–10` chunks — every L1 call fits by
-construction.
+`span_target`. Merging matters more than the draft assumed: section strings are
+per-chunk labels for many texts (verified: Plotinus has 752 distinct "sections" for
+752 chunks), so unmerged natural sections would over-fragment badly. At the ~6k
+target a span is ≤ `⌊span_target / 800⌋ ≈ 8` chunks — every L1 call fits every
+provider by construction.
 
-**Folds (fixes L2).** When a text's accepted L1 bodies exceed the budget (Plotinus:
+**Folds (provider-conditional; fixes L2 on small-context providers only).** When a
+work's accepted L1 bodies exceed `input_budget` (Plotinus:
 ~65 L1s ≈ 13k tokens), they are grouped in reading order into budget-sized batches
 and each batch is summarized by `fold-v1` into a **level-0 fold row**
 (`child_summary_ids` = the batch). Recursive until one batch remains; L2 then reads
@@ -471,6 +500,11 @@ staged only, never promoted, never exported. At promotion, an L2's exported
 `child_chunk_ids` is computed **transitively** (union of descendant L1s' chunk ids,
 corpus order), preserving the invariant that every exported summary expands to
 primary chunks regardless of fold depth.
+
+Under the `claude-code` provider the fold condition **never fires** — every work's
+full L1 set fits one call (largest: Plotinus, ~13k) — so the plan step emits zero
+level-0 rows and `fold-v1` never runs. The machinery stays in the spec because it
+is what makes a `local` campaign possible; it costs nothing when inactive.
 
 **`fold-v1`** (input: a reading-order batch of L1/fold bodies):
 
@@ -485,7 +519,9 @@ in order, preserving proportions across the input summaries.
 OUTPUT: the summary as plain prose. Nothing else.
 ```
 
-**Map–reduce (fixes figures/terms).** For texts whose L1 set exceeds budget, D4/D5
+**Map–reduce (provider-conditional; fixes figures/terms on small-context providers
+only — same trigger as folds, so under `claude-code` D4/D5 are always the plain
+single-call form).** For works whose L1 set exceeds `input_budget`, D4/D5
 run in two passes. *Map*: per-L1 extraction with the `figures-v1`/`terms-v1` frame
 scoped to that summary (tiny calls), staged as `field='key_figures'` rows **with
 `section_span` set** (the CHECK permits this; span-null vs span-set distinguishes
@@ -500,13 +536,50 @@ be lost to one L1's compression.
 Call-count reality check: L1 calls and structure entries are **1:1 per span**;
 2.56M tokens / ~6k budget bounds packed spans at ~430, and natural-section
 granularity on small texts pushes the real number somewhat higher — call it
-**~450–600 spans** (× 2 calls each: L1 + structure), ~15 folds, one summary +
+**~450–600 spans** (× 2 calls each: L1 + structure), one summary +
 D1/D2 per dossier unit (**52 works** — V10 decided, §6.1 and
-`work-grouping.md`), and map–reduce passes for the ~12
-large texts. An overnight-scale local
-batch, re-runnable per stage as templates revise. The exact span count falls out of
-the plan step (§ above) before any generation runs — the agent should print the plan
-totals per text as its first deliverable.
+`work-grouping.md`), plus — `local` campaigns only — ~15 folds and map–reduce
+passes for the ~12 large works (zero of either under `claude-code`).
+An overnight-scale batch on either provider, re-runnable per stage as templates
+revise. Total volume ≈ 3M input / ~300k output tokens per full campaign. The exact
+span count falls out of the plan step (§ above) before any generation runs — the
+agent should print the plan totals per work as its first deliverable.
+
+#### 1.3.6 Generation backend — configurable per campaign
+
+The provider is a campaign parameter, not an architectural commitment. A new
+`config/dossiers.toml` holds the campaign block, and V9 extends to it: **a
+provider/model change is a new campaign** (bump the template versions or accept
+mixed provenance knowingly — the `model` column disambiguates either way).
+
+```toml
+[campaign]
+provider     = "claude-code"        # "claude-code" | "local"
+model        = "claude-opus-4-8"    # recorded verbatim in staged rows' `model`
+span_target  = 6000                 # reader-facing; provider-independent (§1.3.5)
+input_budget = 0                    # 0 = unbounded; local campaigns set 6000–8000
+review_k     = 15                   # rubric sample size per field (§1.3.4)
+```
+
+**`claude-code` provider (default for the first campaign).** A new backend in
+`llm.py` alongside the existing local path: shell out to headless Claude Code —
+`claude -p --model {model} --output-format json` — with the rendered template on
+stdin; parse the result text against the field's contract with the same
+reject-and-retry as `tag_concepts.parse_tags`. Runs on the subscription (zero
+marginal cost; ~3M input tokens per campaign is comfortable overnight on a Max
+plan). Two operational rules: on a usage-limit error, **sleep and resume** — the
+per-(work, field, span) staging already makes every node idempotent, so the driver
+just backs off and continues; and pin `--model` explicitly so the recorded
+provenance never depends on a session default.
+
+**`local` provider.** The existing `llm.py` llama.cpp path, unchanged — 3090,
+6–8k `input_budget`, folds and map–reduce active. V7 applies to these campaigns
+only.
+
+**API/Batch fallback (documented, not built).** The same prompts run unmodified
+through the SDK Batches endpoint at 50% pricing (~$5–15 for a full campaign at
+Sonnet/Opus rates) if subscription quota ever becomes the bottleneck; adding it
+later is a third `llm.py` backend, nothing upstream changes.
 
 ---
 
@@ -639,10 +712,11 @@ f.write(f"CREATE INDEX summary_nodes_text_id ON {schema}.summary_nodes (text_id)
 The existing machinery already handles this end-to-end; v4 rides it unchanged.
 
 ```
-[local rig]
+[local machine]
  1. sqlite3 data/guru.db < scripts/migrations/v3_007_document_knowledge.sql
  2. python scripts/build_dossiers.py          # per-field staged rows (DAG order §1.3.1),
-                                              #   resumable, local 3090
+                                              #   resumable; provider per config/dossiers.toml
+                                              #   (§1.3.6 — claude-code default, local optional)
  3. python scripts/review_dossiers.py         # rubric sample-review loop (§1.3.4):
     (iterate 2↔3 until rubric passes)         #   template revisions → regenerate → bulk-accept
  3b. python scripts/promote_dossiers.py       # assemble accepted fields → live tables;
@@ -713,8 +787,9 @@ Items the agent must verify locally **before** implementation, in dependency ord
 Each is cheap; several will change the span plan or a template.
 **Status legend:** ✅ verified/decided 2026-07-04 against `data/guru.db` +
 chunk TOMLs; ⬜ still open. V3 and V10 are decided (works layer — §6.1,
-`work-grouping.md`); remaining open: V7 (rig-bound) and the V8 regex
-hardening + per-domain sample.
+`work-grouping.md`); V7 is rescoped to `local` campaigns only (§1.3.6 — the
+first campaign runs on `claude-code`). The one item still blocking generation:
+the V8 regex hardening + per-domain sample.
 
 **V1 — Section-string audit (blocks span packing).** ✅ **Run; mostly good, one
 trap.** `sections_format` is populated for 211/211 texts (11 formats, zero NULL).
@@ -768,11 +843,13 @@ middle component (`export.py:322` — e.g. `enuma-elish`), and there are no
 text-slug collisions across traditions. `sum:{text_id}[:{span_slug}]` is safe
 as designed; still need the slug rule for `(part n)` spans.
 
-**V7 — INPUT_BUDGET empirical check (tunes §1.3.5).** ⬜ **Open — needs the rig.**
-On the 3090 with the chosen generation model: confirm comfortable context at 6–8k
-with headroom (KV cache, quality at depth), and note that `chunk.token_count` was
-computed by the *pipeline's* tokenizer — apply a ~15% slack factor against the
-generation model's tokenizer rather than assuming counts transfer.
+**V7 — INPUT_BUDGET empirical check (tunes §1.3.5).** ✅ **Rescoped and deferred:
+applies to `local` campaigns only.** The generation backend is per-campaign config
+(§1.3.6) and the first campaign runs on `claude-code`, where `input_budget` is
+effectively unbounded and no rig tuning exists to do. If a later campaign uses the
+`local` provider: confirm comfortable context at 6–8k on the 3090 with headroom
+(KV cache, quality at depth), and apply a ~15% slack factor against the generation
+model's tokenizer — `chunk.token_count` came from the *pipeline's* tokenizer.
 
 **V8 — Boilerplate audit beyond sacred-texts (feeds the LEAK rubric).**
 ⬜ **Open, and upgraded from "audit" to "known gap":** the ported regexes

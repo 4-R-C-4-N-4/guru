@@ -111,13 +111,20 @@ Bold `work_id` = grouped (n > 1). Token/chunk figures are sums over members.
 ## Notes for the span planner
 
 - Grouped-work members are natural sections: each member ≥ its own L1 span;
-  tiny members (Dhammapada chapters ~1.5k, Gathas ~1.5k) merge up to the
-  input budget as `§1.3.5` span packing already specifies, so member and
-  span are not always 1:1.
+  tiny members (Dhammapada chapters ~1.5k, Gathas ~1.5k) merge up to
+  `span_target` as `§1.3.5` span packing already specifies, so member and
+  span are not always 1:1. Merging does the real work corpus-wide: many
+  texts label sections per-chunk (Plotinus has 752 distinct `section`
+  values for 752 chunks), so unmerged natural sections would over-fragment
+  into ~3,100 spans.
 - "~N spans" is the `ceil(tokens/6k)` lower bound; natural-section
-  boundaries will push the real count somewhat higher. "+ folds" marks the
-  8 works > 100k tokens where a fold layer is *possible*; whether it is
-  *needed* (ΣL1 bodies > budget, roughly > ~30 spans) falls out of the plan
-  step — certain only for Plotinus, Book of the Dead, and Kalevala.
+  boundaries will push the real count somewhat higher. `span_target` is
+  reader-facing (TOC granularity) and provider-independent — it does not
+  change when the generation backend does (design doc §1.3.6).
+- "+ folds" marks the 8 works > 100k tokens where a fold layer is
+  *possible* — but folds are **provider-conditional** (§1.3.6): under the
+  default `claude-code` campaign the condition never fires and the plan
+  emits zero fold rows. The flag matters only for `local` campaigns, and
+  then with certainty only for Plotinus, Book of the Dead, and Kalevala.
 - Works with a single span take the degenerate-case rule (one summary staged
-  at level 2, no separate L1): 14 of 52 works at the 6–8k budget.
+  at level 2, no separate L1): 14 of 52 works at the ~6k `span_target`.
