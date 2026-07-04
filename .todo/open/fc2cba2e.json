@@ -1,0 +1,23 @@
+{
+  "id": "fc2cba2e",
+  "type": "chore",
+  "state": "open",
+  "summary": "Apply body clean across corpus TOMLs + live DB; per-tradition review commits",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.921Z",
+  "updated_at": "2026-07-04T17:03:23.051Z",
+  "tags": [
+    "corpus",
+    "apparatus",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d",
+    "depends_on": [
+      "88a28e67"
+    ]
+  },
+  "description": "Run clean_bodies.py for real after dry-run review. Commit diffs per tradition so review is scoped. Verify: no chunk count change (4,176), no id change, token totals drop by roughly the audit's estimate, spot-check enuma-elish 001 no longer opens with the Sacred-Texts header."
+}

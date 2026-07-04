@@ -1,0 +1,23 @@
+{
+  "id": "5aa95c4c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Re-embed cleaned chunks via embed_corpus.py; verify chunk_embeddings coverage and dim",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.989Z",
+  "updated_at": "2026-07-04T17:03:23.089Z",
+  "tags": [
+    "corpus",
+    "embeddings",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d",
+    "depends_on": [
+      "fc2cba2e"
+    ]
+  },
+  "description": "Re-run embed_corpus.py over all changed chunks (or full corpus if simpler). Verify chunk_embeddings row count == 4,176 and dim == 768 corpus-wide. This is the clean-body re-embed the design doc cites as todo:b80d8d7d (that id is not in this repo's store; this ticket is its realization)."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "fccaf47d",
+  "type": "chore",
+  "state": "open",
+  "summary": "V8 corpus hygiene: chunk-level boilerplate clean + re-embed, upstream of dossier generation",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:02:54.453Z",
+  "updated_at": "2026-07-04T17:03:23.228Z",
+  "tags": [
+    "corpus",
+    "apparatus",
+    "summary",
+    "v8"
+  ],
+  "description": "Per docs/summary/document-knowledge-data-structures.md §1.2/V8 and work-grouping.md: clean chunk bodies at source (not at summary-build time) so embeddings, lexical search, runtime display, and the dossier pipeline all read clean text, and so summary_nodes.children_hash never invalidates a generated summary retroactively. Confirmed reproducer: enuma-elish chunk 001 header ('Sacred-Texts' hyphenated, no Previous/Next marker) survives all three retriever.ts regexes. Scope: in-place, chunk-id-PRESERVING strips only — whole-chunk apparatus drops and re-chunks stay with ticket 50438e23 (id-changing, needs remap machinery). Done when: corpus bodies cleaned, token_counts recomputed, embeddings rebuilt, pattern set synced to guru-web, design-doc V8 marked resolved.",
+  "relationships": {
+    "children": [
+      "9ff92786",
+      "88a28e67",
+      "fc2cba2e",
+      "5aa95c4c",
+      "7d1533a5"
+    ],
+    "related": [
+      "50438e23",
+      "c59758f3",
+      "79801268"
+    ]
+  }
+}

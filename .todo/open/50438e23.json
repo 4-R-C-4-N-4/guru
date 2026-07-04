@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-06-25T15:50:46.307Z",
-  "updated_at": "2026-06-25T19:08:23.734Z",
+  "updated_at": "2026-07-04T17:03:38.519Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -121,6 +121,13 @@
         9,
         10
       ]
+    },
+    {
+      "timestamp": "2026-07-04T17:03:38.518Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Scope boundary set by V8 parent fccaf47d (2026-07-04): in-place, id-preserving marker strips move to fccaf47d/clean_bodies.py; WHOLE-chunk apparatus drops and re-chunks remain here (id-changing, needs remap machinery like plotinus_apparatus_remap.py). The V8 audit child (9ff92786) will hand this ticket a per-domain list of pure-apparatus chunks found while sampling. Note: dossier generation (docs/summary/) treats id-changing fixes from this ticket as upstream of the span-plan freeze for affected works.",
+      "confidence": "high"
     }
   ],
   "work": {
