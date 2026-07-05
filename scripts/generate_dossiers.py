@@ -85,13 +85,24 @@ def _manifest_notes(members: tuple[str, ...] | list[str]) -> str:
 
 # ── contract validators ──────────────────────────────────────────────────────
 
-def _v_prose(raw: str, lo: int, hi: int) -> str:
+def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
     body = raw.strip()
     if not body or body.startswith("```"):
         raise ValueError("empty or fenced output")
     n = count_tokens(body)
     if not (lo * 0.5 <= n <= hi * 2):
         raise ValueError(f"prose length {n} outside sanity band [{lo * 0.5:.0f}, {hi * 2}]")
+    # Echo guard: a "summary" that copies the input verbatim is a GROUND
+    # failure the length band cannot catch (observed: content-filter dodge on
+    # the two blocked spans — the model echoed the passage instead of
+    # transforming it). Any 15-word shingle of output found verbatim in the
+    # source marks an echo.
+    if source:
+        words = body.split()
+        src = " ".join(source.split())
+        for i in range(0, max(1, len(words) - 15), 7):
+            if " ".join(words[i:i + 15]) in src:
+                raise ValueError("verbatim echo of input (15-word shingle match)")
     return body
 
 
@@ -238,10 +249,11 @@ class Generator:
             chunk_ids = [c for s in wp["spans"] for c in s["chunk_ids"]]
             tok = sum(s["token_count"] for s in wp["spans"])
             budget = min(350, max(200, tok // 12))
+            src = _chunk_bodies(chunk_ids)
             prompt = render("l1-v1", section_span=wp["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + _chunk_bodies(chunk_ids)
+                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
-                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2)))
+                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
             if body:
                 self._insert_summary(sid, wp, None if len(set(s["text_id"] for s in wp["spans"])) > 1
                                      else wp["spans"][0]["text_id"], 2, None, chunk_ids, None, body, "l1-v1")
@@ -252,10 +264,11 @@ class Generator:
             if _summary_exists(self.conn, sid, model, "l1-v1"):
                 continue
             budget = min(300, max(80, s["token_count"] // 12))
+            src = _chunk_bodies(s["chunk_ids"])
             prompt = render("l1-v1", section_span=s["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + _chunk_bodies(s["chunk_ids"])
+                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
-                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2)))
+                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
             if body:
                 self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
                                      s["chunk_ids"], None, body, "l1-v1")
