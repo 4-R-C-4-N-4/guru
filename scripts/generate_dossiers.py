@@ -38,6 +38,10 @@ MANIFEST = PROJECT_ROOT / "sources" / "manifest.toml"
 logger = logging.getLogger(__name__)
 
 MAX_ATTEMPTS = 3
+# L1 template version — bumped v1 -> v2 after campaign-c1 review round 1:
+# 5/16 sample failures clustered on COVERAGE (order/proportion) + one GROUND
+# role-inversion; v2 strengthens order, proportion, and action-direction rules.
+L1_TPL = "l1-v2"
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
     "structure": "structure_entry", "summary": "summary", "context": "context",
@@ -154,9 +158,19 @@ def _field_exists(conn, work_id, field, span, model, pv) -> bool:
 
 
 def _accepted_l1s(conn, work_id) -> list[sqlite3.Row]:
-    return conn.execute(
+    """Latest accepted row per summary_id (manual rows outrank any template
+    version) — a template bump can leave multiple accepted generations."""
+    rows = conn.execute(
         "SELECT * FROM staged_summaries WHERE work_id=? AND level=1 AND status='accepted'"
         " ORDER BY id", (work_id,)).fetchall()
+    best: dict[str, sqlite3.Row] = {}
+    for r in rows:
+        cur = best.get(r["summary_id"])
+        r_manual = str(r["prompt_version"]).endswith("-manual")
+        c_manual = cur is not None and str(cur["prompt_version"]).endswith("-manual")
+        if cur is None or (r_manual and not c_manual) or (r_manual == c_manual and r["id"] > cur["id"]):
+            best[r["summary_id"]] = r
+    return sorted(best.values(), key=lambda r: r["id"])
 
 
 def _accepted_l2(conn, work_id) -> sqlite3.Row | None:
@@ -244,34 +258,34 @@ class Generator:
             # single-span work: one summary staged directly at level 2 under
             # l1-v1 grounding rules (design §1.3.5 degenerate case)
             sid = f"sum:{wp['work_id']}"
-            if _summary_exists(self.conn, sid, model, "l1-v1"):
+            if _summary_exists(self.conn, sid, model, L1_TPL):
                 return
             chunk_ids = [c for s in wp["spans"] for c in s["chunk_ids"]]
             tok = sum(s["token_count"] for s in wp["spans"])
             budget = min(350, max(200, tok // 12))
             src = _chunk_bodies(chunk_ids)
-            prompt = render("l1-v1", section_span=wp["label"], work_label=wp["label"],
+            prompt = render(L1_TPL, section_span=wp["label"], work_label=wp["label"],
                             budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
             if body:
                 self._insert_summary(sid, wp, None if len(set(s["text_id"] for s in wp["spans"])) > 1
-                                     else wp["spans"][0]["text_id"], 2, None, chunk_ids, None, body, "l1-v1")
+                                     else wp["spans"][0]["text_id"], 2, None, chunk_ids, None, body, L1_TPL)
                 logger.info(f"  [l1/degenerate→L2] {sid}")
             return
         for s in wp["spans"]:
             sid = f"sum:{s['text_id']}:{s['slug']}"
-            if _summary_exists(self.conn, sid, model, "l1-v1"):
+            if _summary_exists(self.conn, sid, model, L1_TPL):
                 continue
             budget = min(300, max(80, s["token_count"] // 12))
             src = _chunk_bodies(s["chunk_ids"])
-            prompt = render("l1-v1", section_span=s["label"], work_label=wp["label"],
+            prompt = render(L1_TPL, section_span=s["label"], work_label=wp["label"],
                             budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
             if body:
                 self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
-                                     s["chunk_ids"], None, body, "l1-v1")
+                                     s["chunk_ids"], None, body, L1_TPL)
                 logger.info(f"  [l1] {sid}")
 
     def stage_structure(self, wp):
