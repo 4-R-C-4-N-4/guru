@@ -181,7 +181,7 @@ class ProviderBusy(RuntimeError):
         self.retry_after = retry_after
 
 
-_CLAUDE_BUSY_MARKERS = ("usage limit", "rate limit", "overloaded", "429")
+_CLAUDE_BUSY_MARKERS = ("usage limit", "session limit", "rate limit", "overloaded", "429", "resets ")
 
 
 class ContentBlocked(RuntimeError):
