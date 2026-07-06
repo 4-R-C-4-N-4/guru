@@ -93,9 +93,13 @@ def _stage_input(conn, table, row) -> str:
         if row["child_summary_ids"]:
             sids = json.loads(row["child_summary_ids"])
             qs = ",".join("?" for _ in sids)
-            rs = conn.execute(f"SELECT section_span, body FROM staged_summaries"
+            rs = conn.execute(f"SELECT summary_id, section_span, body FROM staged_summaries"
                               f" WHERE summary_id IN ({qs}) AND status='accepted'", sids).fetchall()
-            return "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in rs)
+            # preserve the generator's input order (child_summary_ids is stored
+            # in plan order; an unordered IN-query scrambles remediated rows)
+            by_sid = {r["summary_id"]: r for r in rs}
+            ordered = [by_sid[sid] for sid in sids if sid in by_sid]
+            return "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in ordered)
         return "(input unavailable)"
     field = row["field"]
     if field == "structure_entry":
