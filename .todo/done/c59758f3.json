@@ -1,13 +1,13 @@
 {
   "id": "c59758f3",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "corpus-hermeticum-15/-16 acquired as duplicate libellus XVI (Definitions of Asclepius); manifest labels disagree with chunking-config labels — sacred-texts 'th2' page->libellus mapping is irregular and needs re-mapping",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-06-25T15:59:59.142Z",
-  "updated_at": "2026-07-04T17:03:38.550Z",
+  "updated_at": "2026-07-06T12:52:10.989Z",
   "files": [
     {
       "path": "sources/manifest.toml"
@@ -35,6 +35,27 @@
       "type": "evidence",
       "content": "Elevated by the dossier plan (docs/summary/work-grouping.md): corpus-hermeticum-15/-16 duplicate changes the corpus-hermeticum WORK's member list (17 members as tabled). This is id-changing, so it must resolve BEFORE the span plan freezes for that work — otherwise the CH dossier bakes a duplicate libellus XVI into structure_json and the L2 summary. Blocks CH dossier generation only; rest of campaign 1 unaffected.",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-07-06T12:52:10.952Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Root cause: original acquisition of ch-16/17 used a stale gnosis.org TGH-v2 mirror whose page files are shifted one tractate back from sacred-texts (metadata source_url proved it: ch-16 came from th231.html = the Definitions, duplicating ch-15). Manifest URLs were already correct; labels were shifted (XV/XVI/XVII → true canon XVI/XVII/XVIII; Mead's corpus skips XV). Fix: ids kept as stable acquisition slots, labels corrected to canon, ch-16/17 re-acquired from sacred-texts th233/th235, re-chunked (1+4 chunks), re-embedded; 21 stale staged_tags + 23 stale edges deleted (tagging gap for the 5 new chunks noted — retag in a future graph pass); corpus-hermeticum un-gated and re-planned (all other works structurally identical, token-metadata refresh only).",
+      "confidence": "high"
     }
-  ]
+  ],
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-06T12:39:57.408Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "b96909dadbf62ec74c04284e21100835e392f2ed",
+    "resolved_at": "2026-07-06T12:52:10.989Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_ch_libelli.py",
+    "test_function": "test_th2_texts_hold_distinct_libelli",
+    "note": "CH 15-17 remapped to true Mead libelli; re-acquired, re-chunked, re-embedded, un-gated"
+  }
 }
