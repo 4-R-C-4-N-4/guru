@@ -352,10 +352,15 @@ def main() -> int:
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--plan", action="store_true")
     mode.add_argument("--generate", action="store_true")
+    mode.add_argument("--respin", nargs="*", metavar="SUMMARY_ID",
+                      help="regenerate specific rejected summaries (no ids = all fully-rejected spans);"
+                           " reviewer rejection notes are fed back as corrective prompt addenda")
     ap.add_argument("--stage", choices=["l1", "structure", "l2", "summary", "context",
                                         "figures", "terms", "notes"])
     ap.add_argument("--work", help="limit to one work id")
     ap.add_argument("--limit", type=int, default=0, help="max generation calls this run")
+    ap.add_argument("--provider", help="override campaign provider for --respin")
+    ap.add_argument("--model", help="override campaign model for --respin")
     ap.add_argument("--config", type=Path, default=CONFIG_PATH)
     ap.add_argument("--db", type=Path, default=DEFAULT_DB)
     args = ap.parse_args()
@@ -370,6 +375,26 @@ def main() -> int:
         logger.info(f"works: {len(plans)} · spans: {sum(len(p.spans) for p in plans)}"
                     f" · degenerate: {sum(1 for p in plans if p.degenerate)}"
                     f" · folds: {sum(p.fold_batches for p in plans)}")
+        return 0
+
+    if args.respin is not None:
+        from generate_dossiers import Generator, respin, rejected_targets  # noqa: PLC0415
+        if args.provider:
+            cfg = {**cfg, "provider": args.provider}
+        if args.model:
+            cfg = {**cfg, "model": args.model}
+        plan = json.loads((PROJECT_ROOT / "docs" / "summary" /
+                           f"span-plan-{cfg['campaign_id']}.json").read_text())
+        gen = Generator(cfg, args.db, plan)
+        targets = rejected_targets(gen.conn)
+        if args.respin:  # explicit ids filter
+            wanted = set(args.respin)
+            targets = [(sid, note) for sid, note in targets if sid in wanted]
+            missing = wanted - {sid for sid, _ in targets}
+            for m in missing:
+                logger.warning(f"--respin {m}: span still has a pending/accepted row, or unknown id — skipped")
+        ok = sum(1 for sid, note in targets if respin(gen, sid, note))
+        logger.info(f"respun {ok}/{len(targets)} target(s); rows are PENDING — review before accepting")
         return 0
 
     # --generate lands with G5 (todo:29a7116e)

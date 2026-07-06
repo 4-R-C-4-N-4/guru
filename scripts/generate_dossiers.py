@@ -419,6 +419,86 @@ class LimitReached(Exception):
     pass
 
 
+# ── targeted respin (review remediation, G8 surgery) ─────────────────────────
+#
+# A respin regenerates ONE summary node whose latest row was rejected in
+# review, feeding the reviewer's rejection note back into the prompt as a
+# corrective instruction. Respun rows are ordinary pending rows — they go
+# back through review, never auto-accepted. Provider/model may be overridden
+# per respin (recorded verbatim in `model` — e.g. when the campaign provider
+# content-blocks a span). Stubborn spans (repeat failures) should be fixed
+# as `-manual` rows instead, which the promoter prefers and respins never
+# clobber.
+
+def rejected_targets(conn) -> list[tuple[str, str]]:
+    """(summary_id, latest rejection note) for spans with NO pending/accepted
+    row — i.e. every row for the span is rejected."""
+    rows = conn.execute(
+        "SELECT summary_id, MAX(id) mid FROM staged_summaries GROUP BY summary_id"
+        " HAVING SUM(CASE WHEN status IN ('pending','accepted') THEN 1 ELSE 0 END) = 0"
+    ).fetchall()
+    out = []
+    for r in rows:
+        note = conn.execute("SELECT reviewed_by FROM staged_summaries WHERE id=?",
+                            (r["mid"],)).fetchone()["reviewed_by"]
+        out.append((r["summary_id"], note or ""))
+    return out
+
+
+def respin(gen: "Generator", summary_id: str, feedback: str = "") -> bool:
+    """Regenerate one L1/degenerate-L2 node identified by summary_id."""
+    for wp in gen.plan["works"]:
+        if wp["gated_by"]:
+            continue
+        if wp["degenerate"] and summary_id == f"sum:{wp['work_id']}":
+            target_wp, span = wp, None
+            break
+        hit = [s for s in wp["spans"] if f"sum:{s['text_id']}:{s['slug']}" == summary_id]
+        if hit:
+            target_wp, span = wp, hit[0]
+            break
+    else:
+        logger.error(f"respin: {summary_id} not in plan")
+        return False
+
+    addendum = ""
+    if feedback:
+        addendum = ("
+
+A previous attempt at this summary was REJECTED in review for the"
+                    f" following reason — do not repeat this failure:
+> {feedback}
+"
+                    "Re-check your output against this specific point before finishing.")
+
+    if span is None:
+        chunk_ids = [c for sp in target_wp["spans"] for c in sp["chunk_ids"]]
+        tok = sum(sp["token_count"] for sp in target_wp["spans"])
+        budget = min(350, max(200, tok // 12))
+        label, text_id, level = target_wp["label"], None, 2
+    else:
+        chunk_ids = span["chunk_ids"]
+        budget = min(300, max(80, span["token_count"] // 12))
+        label, text_id, level = span["label"], span["text_id"], 1
+
+    src = _chunk_bodies(chunk_ids)
+    prompt = render(L1_TPL, section_span=label, work_label=target_wp["label"],
+                    budget=budget) + addendum + "
+
+---
+INPUT:
+
+" + src
+    body = gen._attempt(gen._preamble(target_wp), prompt,
+                        lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
+    if body is None:
+        return False
+    gen._insert_summary(summary_id, target_wp, text_id, level,
+                        label if level == 1 else None, chunk_ids, None, body, L1_TPL)
+    logger.info(f"  [respin] {summary_id} ({gen.cfg['model']})")
+    return True
+
+
 def run_generate(args, cfg) -> int:
     plan_path = PROJECT_ROOT / "docs" / "summary" / f"span-plan-{cfg['campaign_id']}.json"
     plan = json.loads(plan_path.read_text())
