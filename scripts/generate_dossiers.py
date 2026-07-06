@@ -42,6 +42,11 @@ MAX_ATTEMPTS = 3
 # 5/16 sample failures clustered on COVERAGE (order/proportion) + one GROUND
 # role-inversion; v2 strengthens order, proportion, and action-direction rules.
 L1_TPL = "l1-v2"
+# structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
+# failures clustered on compression-distortion (blended assignments, loosened
+# conditions); l2 failures on skipped members and world-knowledge injection.
+STRUCT_TPL = "structure-v2"
+L2_TPL = "l2-v2"
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
     "structure": "structure_entry", "summary": "summary", "context": "context",
@@ -157,7 +162,7 @@ def _field_exists(conn, work_id, field, span, model, pv) -> bool:
         (work_id, field, span or "", model, pv)).fetchone() is not None
 
 
-def _accepted_l1s(conn, work_id) -> list[sqlite3.Row]:
+def _accepted_l1s(conn, work_id, span_order: dict | None = None) -> list[sqlite3.Row]:
     """Latest accepted row per summary_id (manual rows outrank any template
     version) — a template bump can leave multiple accepted generations."""
     rows = conn.execute(
@@ -170,6 +175,10 @@ def _accepted_l1s(conn, work_id) -> list[sqlite3.Row]:
         c_manual = cur is not None and str(cur["prompt_version"]).endswith("-manual")
         if cur is None or (r_manual and not c_manual) or (r_manual == c_manual and r["id"] > cur["id"]):
             best[r["summary_id"]] = r
+    if span_order:
+        # plan order, not insertion order: remediated (respun/manual) rows have
+        # late ids and would otherwise scramble the L2's joined input
+        return sorted(best.values(), key=lambda r: (span_order.get(r["section_span"], 10**9), r["id"]))
     return sorted(best.values(), key=lambda r: r["id"])
 
 
@@ -297,32 +306,33 @@ class Generator:
             if l1 is None:
                 continue  # upstream not accepted yet
             if _field_exists(self.conn, wp["work_id"], "structure_entry", s["label"],
-                             self.cfg["model"], "structure-v1"):
+                             self.cfg["model"], STRUCT_TPL):
                 continue
-            prompt = render("structure-v1", section_span=s["label"], work_label=wp["label"]) \
+            prompt = render(STRUCT_TPL, section_span=s["label"], work_label=wp["label"]) \
                 + "\n\n---\nINPUT:\n\n" + l1["body"]
             payload = self._attempt(self._preamble(wp), prompt, _v_structure)
             if payload:
-                self._insert_field(wp, "structure_entry", s["label"], payload, "structure-v1")
+                self._insert_field(wp, "structure_entry", s["label"], payload, STRUCT_TPL)
                 logger.info(f"  [structure] {wp['work_id']} / {s['label']}")
 
     def stage_l2(self, wp):
         if wp["degenerate"]:
             return  # produced by stage_l1
         sid = f"sum:{wp['work_id']}"
-        if _summary_exists(self.conn, sid, self.cfg["model"], "l2-v1"):
+        if _summary_exists(self.conn, sid, self.cfg["model"], L2_TPL):
             return
-        l1s = _accepted_l1s(self.conn, wp["work_id"])
+        l1s = _accepted_l1s(self.conn, wp["work_id"],
+                            {s["label"]: i for i, s in enumerate(wp["spans"])})
         if len(l1s) < len(wp["spans"]):
             logger.info(f"  [l2] {wp['work_id']}: {len(l1s)}/{len(wp['spans'])} L1s accepted — deferred")
             return
         joined = "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in l1s)
-        prompt = render("l2-v1", work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
+        prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
         body = self._attempt(self._preamble(wp), prompt, lambda r: _v_prose(r, 200, 350))
         if body:
             text_ids = {r["text_id"] for r in l1s}
             self._insert_summary(sid, wp, text_ids.pop() if len(text_ids) == 1 else None,
-                                 2, None, None, [r["summary_id"] for r in l1s], body, "l2-v1")
+                                 2, None, None, [r["summary_id"] for r in l1s], body, L2_TPL)
             logger.info(f"  [l2] {sid}")
 
     def _dossier_field(self, wp, stage, template, build_input, validate):
