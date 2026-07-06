@@ -112,8 +112,17 @@ def _stage_input(conn, table, row) -> str:
         from works import load_works
         l2 = conn.execute("SELECT body FROM staged_summaries WHERE work_id=? AND level=2"
                           " AND status='accepted' ORDER BY id DESC LIMIT 1", (row["work_id"],)).fetchone()
-        notes = _manifest_notes(load_works()[row["work_id"]].members)
-        return f"L2 SUMMARY:\n{l2['body'] if l2 else '(missing)'}\n\nCURATOR'S NOTES:\n{notes}"
+        work = load_works()[row["work_id"]]
+        notes = _manifest_notes(work.members)
+        # the generator also passes translator metadata + a tradition-labelled
+        # preamble — show them, or reviewers flag template-sanctioned facts as
+        # GROUND violations (observed: 'E.W. West', 'Finnic work')
+        import tomllib as _t
+        from pathlib import Path as _P
+        meta = _t.load(open(_P("corpus") / work.tradition / work.members[0] / "metadata.toml", "rb"))
+        return (f"WORK METADATA (also given to the generator): tradition={work.tradition},"
+                f" translator={meta.get('translator', 'unknown')}\n\n"
+                f"L2 SUMMARY:\n{l2['body'] if l2 else '(missing)'}\n\nCURATOR'S NOTES:\n{notes}")
     rs = conn.execute("SELECT section_span, body FROM staged_summaries WHERE work_id=?"
                       " AND status='accepted' ORDER BY id", (row["work_id"],)).fetchall()
     return "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in rs)
