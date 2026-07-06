@@ -6,7 +6,7 @@
   "span_target": 6000,
   "input_budget": 0
  },
- "plan_hash": "a69a707cd29b27e1b5c108228771b51470ef0c8583d9d02708b2a46107dd1e69",
+ "plan_hash": "427d758ff1b2e74244b9e190e1c252b69a850e6e19cfa8d147a842fb97c3b225",
  "works": [
   {
    "work_id": "dhammapada",
@@ -27,7 +27,7 @@
       "buddhism.dhammapada-chapter-01.004",
       "buddhism.dhammapada-chapter-01.005"
      ],
-     "token_count": 3198
+     "token_count": 3193
     },
     {
      "text_id": "dhammapada-chapter-02",
@@ -37,7 +37,7 @@
       "buddhism.dhammapada-chapter-02.001",
       "buddhism.dhammapada-chapter-02.002"
      ],
-     "token_count": 1057
+     "token_count": 1055
     },
     {
      "text_id": "dhammapada-chapter-03",
@@ -48,7 +48,7 @@
       "buddhism.dhammapada-chapter-03.002",
       "buddhism.dhammapada-chapter-03.003"
      ],
-     "token_count": 1655
+     "token_count": 1652
     },
     {
      "text_id": "dhammapada-chapter-04",
@@ -59,7 +59,7 @@
       "buddhism.dhammapada-chapter-04.002",
       "buddhism.dhammapada-chapter-04.003"
      ],
-     "token_count": 1603
+     "token_count": 1600
     },
     {
      "text_id": "dhammapada-chapter-05",
@@ -69,7 +69,7 @@
       "buddhism.dhammapada-chapter-05.001",
       "buddhism.dhammapada-chapter-05.002"
      ],
-     "token_count": 1298
+     "token_count": 1290
     },
     {
      "text_id": "dhammapada-chapter-06",
@@ -80,7 +80,7 @@
       "buddhism.dhammapada-chapter-06.002",
       "buddhism.dhammapada-chapter-06.003"
      ],
-     "token_count": 1927
+     "token_count": 1919
     },
     {
      "text_id": "dhammapada-chapter-07",
@@ -91,7 +91,7 @@
       "buddhism.dhammapada-chapter-07.002",
       "buddhism.dhammapada-chapter-07.003"
      ],
-     "token_count": 1812
+     "token_count": 1809
     },
     {
      "text_id": "dhammapada-chapter-08",
@@ -101,7 +101,7 @@
       "buddhism.dhammapada-chapter-08.001",
       "buddhism.dhammapada-chapter-08.002"
      ],
-     "token_count": 1464
+     "token_count": 1461
     },
     {
      "text_id": "dhammapada-chapter-09",
@@ -122,7 +122,7 @@
       "buddhism.dhammapada-chapter-10.003",
       "buddhism.dhammapada-chapter-10.004"
      ],
-     "token_count": 2358
+     "token_count": 2355
     },
     {
      "text_id": "dhammapada-chapter-11",
@@ -133,7 +133,7 @@
       "buddhism.dhammapada-chapter-11.002",
       "buddhism.dhammapada-chapter-11.003"
      ],
-     "token_count": 1954
+     "token_count": 1952
     },
     {
      "text_id": "dhammapada-chapter-12",
@@ -152,7 +152,7 @@
       "buddhism.dhammapada-chapter-13.001",
       "buddhism.dhammapada-chapter-13.002"
      ],
-     "token_count": 895
+     "token_count": 887
     },
     {
      "text_id": "dhammapada-chapter-14",
@@ -163,7 +163,7 @@
       "buddhism.dhammapada-chapter-14.002",
       "buddhism.dhammapada-chapter-14.003"
      ],
-     "token_count": 2074
+     "token_count": 2071
     },
     {
      "text_id": "dhammapada-chapter-15",
@@ -174,7 +174,7 @@
       "buddhism.dhammapada-chapter-15.002",
       "buddhism.dhammapada-chapter-15.003"
      ],
-     "token_count": 1645
+     "token_count": 1641
     },
     {
      "text_id": "dhammapada-chapter-16",
@@ -193,7 +193,7 @@
       "buddhism.dhammapada-chapter-17.001",
       "buddhism.dhammapada-chapter-17.002"
      ],
-     "token_count": 810
+     "token_count": 807
     },
     {
      "text_id": "dhammapada-chapter-18",
@@ -204,7 +204,7 @@
       "buddhism.dhammapada-chapter-18.002",
       "buddhism.dhammapada-chapter-18.003"
      ],
-     "token_count": 1908
+     "token_count": 1905
     },
     {
      "text_id": "dhammapada-chapter-19",
@@ -214,7 +214,7 @@
       "buddhism.dhammapada-chapter-19.001",
       "buddhism.dhammapada-chapter-19.002"
      ],
-     "token_count": 1189
+     "token_count": 1186
     },
     {
      "text_id": "dhammapada-chapter-20",
@@ -224,7 +224,7 @@
       "buddhism.dhammapada-chapter-20.001",
       "buddhism.dhammapada-chapter-20.002"
      ],
-     "token_count": 1201
+     "token_count": 1198
     },
     {
      "text_id": "dhammapada-chapter-21",
@@ -234,7 +234,7 @@
       "buddhism.dhammapada-chapter-21.001",
       "buddhism.dhammapada-chapter-21.002"
      ],
-     "token_count": 1424
+     "token_count": 1418
     },
     {
      "text_id": "dhammapada-chapter-22",
@@ -244,7 +244,7 @@
       "buddhism.dhammapada-chapter-22.001",
       "buddhism.dhammapada-chapter-22.002"
      ],
-     "token_count": 935
+     "token_count": 932
     },
     {
      "text_id": "dhammapada-chapter-23",
@@ -254,7 +254,7 @@
       "buddhism.dhammapada-chapter-23.001",
       "buddhism.dhammapada-chapter-23.002"
      ],
-     "token_count": 1146
+     "token_count": 1143
     },
     {
      "text_id": "dhammapada-chapter-24",
@@ -265,7 +265,7 @@
       "buddhism.dhammapada-chapter-24.002",
       "buddhism.dhammapada-chapter-24.003"
      ],
-     "token_count": 1916
+     "token_count": 1905
     },
     {
      "text_id": "dhammapada-chapter-25",
@@ -275,7 +275,7 @@
       "buddhism.dhammapada-chapter-25.001",
       "buddhism.dhammapada-chapter-25.002"
      ],
-     "token_count": 1360
+     "token_count": 1351
     },
     {
      "text_id": "dhammapada-chapter-26",
@@ -292,7 +292,7 @@
     }
    ],
    "fold_batches": 0,
-   "token_count": 40192,
+   "token_count": 40093,
    "l1_calls": 26,
    "structure_calls": 26
   },
@@ -1248,7 +1248,7 @@
       "christian_mysticism.life-and-doctrines-boehme.012",
       "christian_mysticism.life-and-doctrines-boehme.013"
      ],
-     "token_count": 3996
+     "token_count": 3991
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1263,7 +1263,7 @@
       "christian_mysticism.life-and-doctrines-boehme.019",
       "christian_mysticism.life-and-doctrines-boehme.020"
      ],
-     "token_count": 5365
+     "token_count": 5356
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1280,7 +1280,7 @@
       "christian_mysticism.life-and-doctrines-boehme.028",
       "christian_mysticism.life-and-doctrines-boehme.029"
      ],
-     "token_count": 7068
+     "token_count": 7067
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1295,7 +1295,7 @@
       "christian_mysticism.life-and-doctrines-boehme.035",
       "christian_mysticism.life-and-doctrines-boehme.036"
      ],
-     "token_count": 4675
+     "token_count": 4673
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1314,7 +1314,7 @@
       "christian_mysticism.life-and-doctrines-boehme.046",
       "christian_mysticism.life-and-doctrines-boehme.047"
      ],
-     "token_count": 8486
+     "token_count": 8477
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1333,7 +1333,7 @@
       "christian_mysticism.life-and-doctrines-boehme.057",
       "christian_mysticism.life-and-doctrines-boehme.058"
      ],
-     "token_count": 7944
+     "token_count": 7943
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1363,7 +1363,7 @@
       "christian_mysticism.life-and-doctrines-boehme.071",
       "christian_mysticism.life-and-doctrines-boehme.072"
      ],
-     "token_count": 5214
+     "token_count": 5208
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1381,7 +1381,7 @@
       "christian_mysticism.life-and-doctrines-boehme.081",
       "christian_mysticism.life-and-doctrines-boehme.082"
      ],
-     "token_count": 7001
+     "token_count": 7000
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1400,7 +1400,7 @@
       "christian_mysticism.life-and-doctrines-boehme.092",
       "christian_mysticism.life-and-doctrines-boehme.093"
      ],
-     "token_count": 8060
+     "token_count": 8058
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1440,7 +1440,7 @@
       "christian_mysticism.life-and-doctrines-boehme.108",
       "christian_mysticism.life-and-doctrines-boehme.109"
      ],
-     "token_count": 1103
+     "token_count": 1096
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1459,7 +1459,7 @@
       "christian_mysticism.life-and-doctrines-boehme.119",
       "christian_mysticism.life-and-doctrines-boehme.120"
      ],
-     "token_count": 7862
+     "token_count": 7860
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1487,7 +1487,7 @@
       "christian_mysticism.life-and-doctrines-boehme.131",
       "christian_mysticism.life-and-doctrines-boehme.132"
      ],
-     "token_count": 3785
+     "token_count": 3783
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1518,7 +1518,7 @@
       "christian_mysticism.life-and-doctrines-boehme.146",
       "christian_mysticism.life-and-doctrines-boehme.147"
      ],
-     "token_count": 5975
+     "token_count": 5971
     },
     {
      "text_id": "life-and-doctrines-boehme",
@@ -1550,7 +1550,7 @@
     }
    ],
    "fold_batches": 0,
-   "token_count": 118353,
+   "token_count": 118302,
    "l1_calls": 21,
    "structure_calls": 21
   },
@@ -1869,7 +1869,7 @@
       "egyptian.egyptian-book-of-the-dead-index.140",
       "egyptian.egyptian-book-of-the-dead-index.141"
      ],
-     "token_count": 2731
+     "token_count": 2728
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -1917,7 +1917,7 @@
       "egyptian.egyptian-book-of-the-dead-index.164",
       "egyptian.egyptian-book-of-the-dead-index.165"
      ],
-     "token_count": 3733
+     "token_count": 3730
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -2007,7 +2007,7 @@
       "egyptian.egyptian-book-of-the-dead-index.206",
       "egyptian.egyptian-book-of-the-dead-index.207"
      ],
-     "token_count": 4944
+     "token_count": 4939
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -2021,7 +2021,7 @@
       "egyptian.egyptian-book-of-the-dead-index.212",
       "egyptian.egyptian-book-of-the-dead-index.213"
      ],
-     "token_count": 4162
+     "token_count": 4159
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -2036,7 +2036,7 @@
       "egyptian.egyptian-book-of-the-dead-index.219",
       "egyptian.egyptian-book-of-the-dead-index.220"
      ],
-     "token_count": 4765
+     "token_count": 4761
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -2068,7 +2068,7 @@
       "egyptian.egyptian-book-of-the-dead-index.235",
       "egyptian.egyptian-book-of-the-dead-index.236"
      ],
-     "token_count": 5698
+     "token_count": 5694
     },
     {
      "text_id": "egyptian-book-of-the-dead-index",
@@ -2345,7 +2345,7 @@
     }
    ],
    "fold_batches": 0,
-   "token_count": 260600,
+   "token_count": 260578,
    "l1_calls": 53,
    "structure_calls": 53
   },
@@ -2388,7 +2388,7 @@
       "egyptian.egyptian-heaven-and-hell.016",
       "egyptian.egyptian-heaven-and-hell.017"
      ],
-     "token_count": 8284
+     "token_count": 8273
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2455,7 +2455,7 @@
       "egyptian.egyptian-heaven-and-hell.051",
       "egyptian.egyptian-heaven-and-hell.052"
      ],
-     "token_count": 5957
+     "token_count": 5937
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2470,7 +2470,7 @@
       "egyptian.egyptian-heaven-and-hell.058",
       "egyptian.egyptian-heaven-and-hell.059"
      ],
-     "token_count": 4613
+     "token_count": 4576
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2488,7 +2488,7 @@
       "egyptian.egyptian-heaven-and-hell.068",
       "egyptian.egyptian-heaven-and-hell.069"
      ],
-     "token_count": 5789
+     "token_count": 5754
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2505,7 +2505,7 @@
       "egyptian.egyptian-heaven-and-hell.077",
       "egyptian.egyptian-heaven-and-hell.078"
      ],
-     "token_count": 5342
+     "token_count": 5324
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2523,7 +2523,7 @@
       "egyptian.egyptian-heaven-and-hell.087",
       "egyptian.egyptian-heaven-and-hell.088"
      ],
-     "token_count": 5949
+     "token_count": 5855
     },
     {
      "text_id": "egyptian-heaven-and-hell",
@@ -2539,11 +2539,11 @@
       "egyptian.egyptian-heaven-and-hell.095",
       "egyptian.egyptian-heaven-and-hell.096"
      ],
-     "token_count": 4735
+     "token_count": 4723
     }
    ],
    "fold_batches": 0,
-   "token_count": 62562,
+   "token_count": 62335,
    "l1_calls": 11,
    "structure_calls": 11
   },
@@ -4219,7 +4219,7 @@
    "tradition": "hermeticism",
    "grouped": true,
    "degenerate": false,
-   "gated_by": "c59758f3",
+   "gated_by": null,
    "spans": [
     {
      "text_id": "corpus-hermeticum-01",
@@ -4384,8 +4384,8 @@
     },
     {
      "text_id": "corpus-hermeticum-15",
-     "label": "Corpus Hermeticum 15: The Hymn of Hermes",
-     "slug": "corpus-hermeticum-15-the-hymn-of-hermes",
+     "label": "Corpus Hermeticum XVI: The Definitions of Asclepius unto King Ammon",
+     "slug": "corpus-hermeticum-xvi-the-definitions-of-asclepius-unto-king-ammon",
      "chunk_ids": [
       "hermeticism.corpus-hermeticum-15.001",
       "hermeticism.corpus-hermeticum-15.002",
@@ -4398,30 +4398,28 @@
     },
     {
      "text_id": "corpus-hermeticum-16",
-     "label": "Corpus Hermeticum 16: The Secret Sermon on the Mountain",
-     "slug": "corpus-hermeticum-16-the-secret-sermon-on-the-mountain",
+     "label": "Corpus Hermeticum XVII: Of Asclepius to the King",
+     "slug": "corpus-hermeticum-xvii-of-asclepius-to-the-king",
      "chunk_ids": [
-      "hermeticism.corpus-hermeticum-16.001",
-      "hermeticism.corpus-hermeticum-16.002",
-      "hermeticism.corpus-hermeticum-16.003",
-      "hermeticism.corpus-hermeticum-16.004",
-      "hermeticism.corpus-hermeticum-16.005",
-      "hermeticism.corpus-hermeticum-16.006"
+      "hermeticism.corpus-hermeticum-16.001"
      ],
-     "token_count": 4105
+     "token_count": 353
     },
     {
      "text_id": "corpus-hermeticum-17",
-     "label": "Corpus Hermeticum 17: The Discourse of Hermes to Asclepius",
-     "slug": "corpus-hermeticum-17-the-discourse-of-hermes-to-asclepius",
+     "label": "Corpus Hermeticum XVIII: The Encomium of Kings",
+     "slug": "corpus-hermeticum-xviii-the-encomium-of-kings",
      "chunk_ids": [
-      "hermeticism.corpus-hermeticum-17.001"
+      "hermeticism.corpus-hermeticum-17.001",
+      "hermeticism.corpus-hermeticum-17.002",
+      "hermeticism.corpus-hermeticum-17.003",
+      "hermeticism.corpus-hermeticum-17.004"
      ],
-     "token_count": 514
+     "token_count": 2489
     }
    ],
    "fold_batches": 0,
-   "token_count": 42790,
+   "token_count": 41013,
    "l1_calls": 17,
    "structure_calls": 17
   },
@@ -4912,7 +4910,7 @@
       "mandaean.gnostic-john-baptizer-1.026",
       "mandaean.gnostic-john-baptizer-1.027"
      ],
-     "token_count": 5630
+     "token_count": 5625
     },
     {
      "text_id": "gnostic-john-baptizer-1",
@@ -4943,7 +4941,7 @@
       "mandaean.gnostic-john-baptizer-2.009",
       "mandaean.gnostic-john-baptizer-2.010"
      ],
-     "token_count": 5736
+     "token_count": 5722
     },
     {
      "text_id": "gnostic-john-baptizer-3",
@@ -4995,7 +4993,7 @@
     }
    ],
    "fold_batches": 0,
-   "token_count": 36790,
+   "token_count": 36771,
    "l1_calls": 8,
    "structure_calls": 8
   },
@@ -9667,11 +9665,11 @@
       "zoroastrianism.bundahishn.001",
       "zoroastrianism.bundahishn.002"
      ],
-     "token_count": 1127
+     "token_count": 1120
     }
    ],
    "fold_batches": 0,
-   "token_count": 1127,
+   "token_count": 1120,
    "l1_calls": 0,
    "structure_calls": 0
   },

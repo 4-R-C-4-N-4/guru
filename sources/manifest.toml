@@ -192,7 +192,7 @@ notes = "Fourteenth tractate. Raw html. Extract text between navigation and head
 [[source]]
 id = "corpus-hermeticum-15"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XV: The Definitions of Asclepius unto King Ammon"
+label = "Corpus Hermeticum XVI: The Definitions of Asclepius unto King Ammon"
 url = "https://www.sacred-texts.com/gno/th2/th231.htm"
 format = "html"
 license = "public_domain"
@@ -202,7 +202,7 @@ notes = "Sixteenth tractate. Raw html. Extract text between navigation and heade
 [[source]]
 id = "corpus-hermeticum-16"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVI: Of Asclepius to the King"
+label = "Corpus Hermeticum XVII: Of Asclepius to the King"
 url = "https://www.sacred-texts.com/gno/th2/th233.htm"
 format = "html"
 license = "public_domain"
@@ -212,7 +212,7 @@ notes = "Seventeenth tractate. Raw html. Extract text between navigation and hea
 [[source]]
 id = "corpus-hermeticum-17"
 tradition = "hermeticism"
-label = "Corpus Hermeticum XVII: The Encomium of Kings"
+label = "Corpus Hermeticum XVIII: The Encomium of Kings"
 url = "https://www.sacred-texts.com/gno/th2/th235.htm"
 format = "html"
 license = "public_domain"

@@ -1,0 +1,15 @@
+[chunk]
+id = "hermeticism.corpus-hermeticum-17.004"
+tradition = "hermeticism"
+text_name = "Corpus Hermeticum XVIII: The Encomium of Kings"
+section = "Section 1d"
+translator = "G.R.S. Mead"
+source_url = "https://www.sacred-texts.com/gno/th2/th235.htm"
+token_count = 178
+
+[content]
+body = "It is the virtue of the King, nay, ’tis his name alone, that doth establish peace.\n\nHe has his name of King because he levelleth the summits of dissension with his smooth tread, and is the lord of reason ( logos ) that [makes] for peace.\n\nAnd in as much, in sooth, as he hath made himself the natural protector of the kingdom which is not his native land, his very name [is made] the sign of peace.\n\nFor that, indeed, you know, the appellation of the King has frequently at once restrained the foe.\n\nNay, more, the very statues of the King are peaceful harbours for those most tempest-tossed.\n\nThe likeness of the King alone has to appear to win the victory, and to assure to all the citizens freedom from hurt and fear.\n\n* * * * *"
+
+[annotations]
+concepts = []
+related_chunks = []

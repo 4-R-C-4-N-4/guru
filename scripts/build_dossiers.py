@@ -53,7 +53,8 @@ CONFIG_PATH = PROJECT_ROOT / "config" / "dossiers.toml"
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
 # Works whose span plan is provisional until the named ticket lands.
-GATED_WORKS = {"corpus-hermeticum": "c59758f3"}
+# (c59758f3 resolved 2026-07-06: CH 15-17 remapped to their true libelli.)
+GATED_WORKS: dict[str, str] = {}
 
 
 # ── config ────────────────────────────────────────────────────────────────────
