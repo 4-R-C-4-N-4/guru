@@ -463,13 +463,11 @@ def respin(gen: "Generator", summary_id: str, feedback: str = "") -> bool:
 
     addendum = ""
     if feedback:
-        addendum = ("
-
-A previous attempt at this summary was REJECTED in review for the"
-                    f" following reason — do not repeat this failure:
-> {feedback}
-"
-                    "Re-check your output against this specific point before finishing.")
+        addendum = (
+            "\n\nA previous attempt at this summary was REJECTED in review for the"
+            f" following reason — do not repeat this failure:\n> {feedback}\n"
+            "Re-check your output against this specific point before finishing."
+        )
 
     if span is None:
         chunk_ids = [c for sp in target_wp["spans"] for c in sp["chunk_ids"]]
@@ -482,13 +480,8 @@ A previous attempt at this summary was REJECTED in review for the"
         label, text_id, level = span["label"], span["text_id"], 1
 
     src = _chunk_bodies(chunk_ids)
-    prompt = render(L1_TPL, section_span=label, work_label=target_wp["label"],
-                    budget=budget) + addendum + "
-
----
-INPUT:
-
-" + src
+    prompt = (render(L1_TPL, section_span=label, work_label=target_wp["label"],
+                     budget=budget) + addendum + "\n\n---\nINPUT:\n\n" + src)
     body = gen._attempt(gen._preamble(target_wp), prompt,
                         lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
     if body is None:
