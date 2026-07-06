@@ -123,6 +123,18 @@ def _stage_input(conn, table, row) -> str:
         return (f"WORK METADATA (also given to the generator): tradition={work.tradition},"
                 f" translator={meta.get('translator', 'unknown')}\n\n"
                 f"L2 SUMMARY:\n{l2['body'] if l2 else '(missing)'}\n\nCURATOR'S NOTES:\n{notes}")
+    if field == "reading_notes":
+        # mirror stage_notes: accepted context + structure outline
+        ctx = conn.execute("SELECT payload_json FROM staged_dossier_fields WHERE work_id=?"
+                           " AND field='context' AND status='accepted' ORDER BY id DESC LIMIT 1",
+                           (row["work_id"],)).fetchone()
+        entries = conn.execute("SELECT section_span, payload_json FROM staged_dossier_fields"
+                               " WHERE work_id=? AND field='structure_entry' AND status='accepted'"
+                               " ORDER BY id", (row["work_id"],)).fetchall()
+        outline = "\n".join(f"- {r['section_span']}: {json.loads(r['payload_json'])['title']}"
+                             for r in entries) or "(single section)"
+        body = json.loads(ctx["payload_json"])["body"] if ctx else "(missing)"
+        return f"(1) CONTEXT NOTE:\n{body}\n\n(2) OUTLINE:\n{outline}"
     rs = conn.execute("SELECT section_span, body FROM staged_summaries WHERE work_id=?"
                       " AND status='accepted' ORDER BY id", (row["work_id"],)).fetchall()
     return "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in rs)
