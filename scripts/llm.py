@@ -227,6 +227,10 @@ def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, time
         low = (out + " " + err).lower()
         if any(m in low for m in _CLAUDE_BUSY_MARKERS):
             raise ProviderBusy(f"claude-code busy: {err or out[:200]}")
+        if proc.returncode == 0:
+            # exit 0 with an unparseable envelope is an output problem, not a
+            # process failure — say so, or triage chases the wrong thing
+            raise RuntimeError(f"claude-code exit 0 but non-JSON envelope: {out[:200]!r}")
         raise RuntimeError(f"claude-code exit {proc.returncode}: {err or out[:200]}")
     if envelope.get("is_error"):
         result_low = str(envelope.get("result", "")).lower()

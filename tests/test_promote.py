@@ -137,3 +137,19 @@ def test_degenerate_work_promotes_without_structure(conn):
                                    " WHERE work_id='w2'").fetchone()[0]) == []
     nodes = conn.execute("SELECT level FROM summary_nodes WHERE work_id='w2'").fetchall()
     assert [n["level"] for n in nodes] == [2]
+
+
+def test_echo_guard_catches_trailing_verbatim_tail():
+    """Review finding: the 7-stride shingle loop skipped the final window,
+    letting a verbatim tail (<~21 words) through. The tail window must be
+    checked explicitly."""
+    import sys
+    sys.path.insert(0, "scripts")
+    from generate_dossiers import _v_prose
+    import pytest
+
+    src = " ".join(f"w{i}" for i in enumerate(range(60))) if False else " ".join(f"w{i}" for i in range(60))
+    # 40 original words + the source's last 15 words copied verbatim
+    body = " ".join(f"x{i}" for i in range(40)) + " " + " ".join(f"w{i}" for i in range(45, 60))
+    with pytest.raises(ValueError, match="verbatim echo"):
+        _v_prose(body, 40, 60, src)

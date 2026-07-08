@@ -103,8 +103,12 @@ def _stage_input(conn, table, row) -> str:
         return "(input unavailable)"
     field = row["field"]
     if field == "structure_entry":
+        # manual rows outrank any newer template generation — same preference
+        # the generator applies (_accepted_l1s), else the shown input diverges
+        # from what stage_structure actually consumed.
         r = conn.execute("SELECT body FROM staged_summaries WHERE work_id=? AND section_span=?"
-                         " AND status='accepted' ORDER BY id DESC LIMIT 1",
+                         " AND status='accepted'"
+                         " ORDER BY (prompt_version LIKE '%-manual') DESC, id DESC LIMIT 1",
                          (row["work_id"], row["section_span"])).fetchone()
         return r["body"] if r else "(accepted L1 not found)"
     if field in ("summary", "context"):
@@ -135,9 +139,28 @@ def _stage_input(conn, table, row) -> str:
                              for r in entries) or "(single section)"
         body = json.loads(ctx["payload_json"])["body"] if ctx else "(missing)"
         return f"(1) CONTEXT NOTE:\n{body}\n\n(2) OUTLINE:\n{outline}"
-    rs = conn.execute("SELECT section_span, body FROM staged_summaries WHERE work_id=?"
-                      " AND status='accepted' ORDER BY id", (row["work_id"],)).fetchall()
-    return "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in rs)
+    # figures/terms: mirror the generator (accepted L1s only, manual rows
+    # outrank, PLAN order — not raw id order, and never the L2 appended).
+    from generate_dossiers import _accepted_l1s, _accepted_l2  # noqa: PLC0415
+    span_order = _plan_span_order(row["work_id"])
+    l1s = _accepted_l1s(conn, row["work_id"], span_order)
+    if not l1s:
+        l2 = _accepted_l2(conn, row["work_id"])
+        l1s = [l2] if l2 else []
+    return "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in l1s)
+
+
+def _plan_span_order(work_id: str) -> dict:
+    """Span label -> plan position for the frozen campaign plan."""
+    plan_path = Path(__file__).parent.parent / "docs" / "summary" / "span-plan-c1.json"
+    try:
+        plan = json.loads(plan_path.read_text())
+    except OSError:
+        return {}
+    for w in plan["works"]:
+        if w["work_id"] == work_id:
+            return {sp["label"]: i for i, sp in enumerate(w["spans"])}
+    return {}
 
 
 def cmd_show(conn, args):

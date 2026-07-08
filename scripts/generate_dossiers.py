@@ -109,7 +109,10 @@ def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
     if source:
         words = body.split()
         src = " ".join(source.split())
-        for i in range(0, max(1, len(words) - 15), 7):
+        starts = list(range(0, max(1, len(words) - 14), 7))
+        if len(words) >= 15 and (len(words) - 15) not in starts:
+            starts.append(len(words) - 15)  # stride must not skip the tail window
+        for i in starts:
             if " ".join(words[i:i + 15]) in src:
                 raise ValueError("verbatim echo of input (15-word shingle match)")
     return body
@@ -321,14 +324,14 @@ class Generator:
         sid = f"sum:{wp['work_id']}"
         if _summary_exists(self.conn, sid, self.cfg["model"], L2_TPL):
             return
-        l1s = _accepted_l1s(self.conn, wp["work_id"],
-                            {s["label"]: i for i, s in enumerate(wp["spans"])})
+        l1s = _accepted_l1s(self.conn, wp["work_id"], self._span_order(wp))
         if len(l1s) < len(wp["spans"]):
             logger.info(f"  [l2] {wp['work_id']}: {len(l1s)}/{len(wp['spans'])} L1s accepted — deferred")
             return
         joined = "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in l1s)
         prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
-        body = self._attempt(self._preamble(wp), prompt, lambda r: _v_prose(r, 200, 350))
+        body = self._attempt(self._preamble(wp), prompt,
+                             lambda r: _v_prose(r, 200, 350, joined))
         if body:
             text_ids = {r["text_id"] for r in l1s}
             self._insert_summary(sid, wp, text_ids.pop() if len(text_ids) == 1 else None,
@@ -370,9 +373,12 @@ class Generator:
                     f"(1) CURATOR'S NOTES:\n{notes}\n\n(2) SUMMARY:\n{l2['body']}")
         self._dossier_field(wp, "context", "context-v1", build, _v_body_json)
 
+    def _span_order(self, wp) -> dict:
+        return {sp["label"]: i for i, sp in enumerate(wp["spans"])}
+
     def stage_figures(self, wp):
         def build():
-            l1s = _accepted_l1s(self.conn, wp["work_id"])
+            l1s = _accepted_l1s(self.conn, wp["work_id"], self._span_order(wp))
             src = l1s if l1s else ([_accepted_l2(self.conn, wp["work_id"])] if _accepted_l2(self.conn, wp["work_id"]) else [])
             if not src:
                 return None
@@ -382,7 +388,7 @@ class Generator:
 
     def stage_terms(self, wp):
         def build():
-            l1s = _accepted_l1s(self.conn, wp["work_id"])
+            l1s = _accepted_l1s(self.conn, wp["work_id"], self._span_order(wp))
             src = l1s if l1s else ([_accepted_l2(self.conn, wp["work_id"])] if _accepted_l2(self.conn, wp["work_id"]) else [])
             if not src:
                 return None
