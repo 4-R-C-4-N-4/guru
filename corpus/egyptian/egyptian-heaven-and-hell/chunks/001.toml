@@ -5,10 +5,10 @@ text_name = "The Egyptian Heaven and Hell"
 section = "Chapter 1"
 translator = "E.A. Wallis Budge"
 source_url = "https://sacred-texts.com/egy/ehh/ehh00.htm"
-token_count = 157
+token_count = 119
 
 [content]
-body = "The Egyptian Heaven and Hell by E. A. Wallis Budge London; Kegan, Paul, Trench, Trübner & Co. [1905] Scanned at Sacred-texts.com, May 2003. J.B. Hare, Redactor. This text is in the public domain. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact. Click to view Scene from the Papyrus of Nekht, allowing the deceased and the wife worshipping Osiris in the Other World, and the manner of the house in which they expect to live, and their vineyard and garden with its lake of water. (British Museum, No. 10,471, sheet 21.) Next: Preface"
+body = "The Egyptian Heaven and Hell by E. A. Wallis Budge London; Kegan, Paul, Trench, Trübner & Co. These files may be used for any non-commercial purpose, provided this notice of attribution is left intact. Click to view Scene from the Papyrus of Nekht, allowing the deceased and the wife worshipping Osiris in the Other World, and the manner of the house in which they expect to live, and their vineyard and garden with its lake of water. (British Museum, No. 10,471, sheet 21.)"
 
 [annotations]
 concepts = []

@@ -1,0 +1,49 @@
+{
+  "id": "83b0639e",
+  "type": "chore",
+  "state": "done",
+  "summary": "G4 plan step: build_dossiers.py --plan span packing + committed freeze artifact (span_plan_c1)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.488Z",
+  "updated_at": "2026-07-04T22:20:40.177Z",
+  "tags": [
+    "summary",
+    "plan"
+  ],
+  "relationships": {
+    "parent": "229e2592",
+    "depends_on": [
+      "241430fd",
+      "9139e928"
+    ],
+    "related": [
+      "c59758f3"
+    ]
+  },
+  "description": "Spans: natural sections (trust parsed strings), merge to span_target, split oversized to '(part n)', budget-pack fallback for bare-format texts; degenerate flag for single-span works; fold/map-reduce nodes only when input_budget>0. Slug rules per implementation doc. Output data/span_plan_c1.json + docs/summary/span-plan-c1.md, committed (V9 freeze). CH work's freeze gated by c59758f3. Done: tests/test_span_plan.py (every chunk in exactly one span, corpus order, known cases incl. 14 degenerate works).",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T22:17:42.828Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-07-04T22:17:54.949Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Spec tension: work-grouping.md planner notes say tiny members (Dhammapada chapters ~1.5k) merge up to span_target across member texts, but the design's L1 id scheme sum:{text_id}:{span_slug} requires each span to live in exactly one text, and cross-member spans would also blur structure_json's per-chapter TOC. Resolution: spans NEVER cross member-text boundaries — a tiny member is simply a small span. Cost: ~300 extra small L1 calls corpus-wide, negligible under claude-code; benefit: id integrity, per-chapter structure entries (better reader-facing TOC), simpler plan. Within-text section merging up to span_target still applies.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "ea7a0747a2d68cebcc554b1cbca8b3fb3bfc388e",
+    "resolved_at": "2026-07-04T22:20:40.177Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_span_plan.py",
+    "test_function": "test_every_chunk_in_exactly_one_span",
+    "note": "Plan mode + freeze artifact committed (docs/summary/span-plan-c1.{json,md} — data/ is gitignored so the machine artifact lives beside the md): 52 works, 623 spans, 11 degenerate, 0 folds under claude-code; folds verified to activate under input_budget=6000 (plotinus >=2). corpus-hermeticum flagged GATED by c59758f3 in the artifact. Spec deviation recorded as analysis[0]: spans never cross member texts. 9/9 tests."
+  }
+}

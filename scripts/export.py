@@ -20,6 +20,7 @@ via COPY FROM STDIN, validates inline, then swaps `corpus_new` → `corpus`.
 from __future__ import annotations
 
 import gzip
+import json
 import logging
 import re
 import sqlite3
@@ -43,7 +44,7 @@ TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
 # EXPECTED_SCHEMA_VERSION must advance in the same deploy.
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 EMBEDDING_MODEL = "ollama/nomic-embed-text"
 EMBEDDING_DIM = 768
 
@@ -111,6 +112,18 @@ def copy_esc(s: str | None) -> str:
     if s is None:
         return "\\N"
     return s.translate(_COPY_ESCAPES)
+
+
+def copy_esc_array(items: list[str]) -> str:
+    """Escape a Python list for a Postgres TEXT[] column under COPY:
+    {"a","b"} with element-level quote/backslash escaping, then COPY-level
+    escaping of the whole literal. (The chunks emitter's section_path
+    comment has wanted this since v1 — v4 summary_nodes lands it.)"""
+    elems = []
+    for it in items:
+        e = str(it).replace("\\", "\\\\").replace('"', '\\"')
+        elems.append(f'"{e}"')
+    return copy_esc("{" + ",".join(elems) + "}")
 
 
 # ── validation (local, before export) ─────────────────────────────────
@@ -210,7 +223,37 @@ def load_texts() -> list[dict]:
             "source_url": d.get("source_url"),
             "sections_format": d.get("sections_format"),
         })
+    from works import load_works, work_of
+    mapping = work_of(load_works())
+    for r in rows:
+        r["work_id"] = mapping[r["id"]]
     rows.sort(key=lambda r: r["id"])
+    return rows
+
+
+def load_works_rows() -> list[dict]:
+    """All 52 works (grouped + singletons) from the works layer."""
+    from works import load_works
+    return [{"id": w.id, "tradition": w.tradition, "label": w.label,
+             "members": list(w.members)}
+            for w in sorted(load_works().values(), key=lambda x: x.id)]
+
+
+def load_work_dossiers(conn: sqlite3.Connection) -> list[dict]:
+    return [dict(r) for r in conn.execute(
+        "SELECT * FROM work_dossiers ORDER BY work_id")]
+
+
+def load_summary_nodes(conn: sqlite3.Connection) -> list[dict]:
+    """Live summary rows joined to their embeddings; a summary without an
+    embedding is a pipeline error (run embed_summaries.py), so raise."""
+    rows = [dict(r) for r in conn.execute(
+        "SELECT sn.*, se.vector, se.dim AS emb_dim FROM summary_nodes sn"
+        " LEFT JOIN summary_embeddings se ON se.summary_id = sn.id ORDER BY sn.id")]
+    missing = [r["id"] for r in rows if r["vector"] is None]
+    if missing:
+        raise SystemExit(f"summary_nodes missing embeddings: {missing[:5]}"
+                         f" ({len(missing)} total) — run embed_summaries.py")
     return rows
 
 
@@ -419,14 +462,21 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
         f.write(f"{copy_esc(r['id'])}\t{copy_esc(r['label'])}\t\\N\t\\N\n")
     emit_copy_end(f)
 
+    # works — before texts (texts.work_id FK)
+    emit_copy_start(f, schema, "works", ["id", "tradition", "label", "member_text_ids"])
+    for r in load_works_rows():
+        f.write(f"{copy_esc(r['id'])}\t{copy_esc(r['tradition'])}\t"
+                f"{copy_esc(r['label'])}\t{copy_esc_array(r['members'])}\n")
+    emit_copy_end(f)
+
     # texts
     emit_copy_start(f, schema, "texts",
-                    ["id", "tradition", "label", "translator", "source_url", "sections_format"])
+                    ["id", "tradition", "label", "translator", "source_url", "sections_format", "work_id"])
     for r in load_texts():
         f.write(
             f"{copy_esc(r['id'])}\t{copy_esc(r['tradition'])}\t{copy_esc(r['label'])}\t"
             f"{copy_esc(r['translator'])}\t{copy_esc(r['source_url'])}\t"
-            f"{copy_esc(r['sections_format'])}\n"
+            f"{copy_esc(r['sections_format'])}\t{copy_esc(r['work_id'])}\n"
         )
     emit_copy_end(f)
 
@@ -504,7 +554,39 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
         )
     emit_copy_end(f)
 
-    return len(chunks)
+    # work_dossiers — after works (FK). JSON TEXT columns pass through
+    # copy_esc unchanged: valid JSON text is valid JSONB input under COPY.
+    dossiers = load_work_dossiers(conn)
+    emit_copy_start(f, schema, "work_dossiers",
+                    ["work_id", "summary", "context", "structure", "key_figures",
+                     "key_terms", "themes", "reading_notes", "manifest_notes", "generated_by"])
+    for r in dossiers:
+        f.write(
+            f"{copy_esc(r['work_id'])}\t{copy_esc(r['summary'])}\t{copy_esc(r['context'])}\t"
+            f"{copy_esc(r['structure_json'])}\t{copy_esc(r['key_figures_json'])}\t"
+            f"{copy_esc(r['key_terms_json'])}\t{copy_esc(r['themes_json'])}\t"
+            f"{copy_esc(r['reading_notes'])}\t{copy_esc(r['manifest_notes'])}\t"
+            f"{copy_esc(r['generated_by'])}\n"
+        )
+    emit_copy_end(f)
+
+    # summary_nodes — after chunks (logical child integrity) + works + texts.
+    summaries = load_summary_nodes(conn)
+    emit_copy_start(f, schema, "summary_nodes",
+                    ["id", "work_id", "text_id", "tradition", "level", "section_span",
+                     "child_chunk_ids", "body", "token_count", "embedding"])
+    for r in summaries:
+        vector = vec_to_pg(r["vector"], EMBEDDING_DIM)   # same 768-dim guard as chunks
+        f.write(
+            f"{copy_esc(r['id'])}\t{copy_esc(r['work_id'])}\t{copy_esc(r['text_id'])}\t"
+            f"{copy_esc(r['tradition'])}\t{r['level']}\t{copy_esc(r['section_span'])}\t"
+            f"{copy_esc_array(json.loads(r['child_chunk_ids']))}\t"
+            f"{copy_esc(r['body'])}\t{r['token_count']}\t{vector}\n"
+        )
+    emit_copy_end(f)
+
+    return {"chunks": len(chunks), "works": len(load_works_rows()),
+            "dossiers": len(dossiers), "summaries": len(summaries)}
 
 
 def emit_indexes(f, schema: str) -> None:
@@ -523,17 +605,28 @@ def emit_indexes(f, schema: str) -> None:
     f.write(f"CREATE INDEX idx_concept_family_membership_family ON {schema}.concept_family_membership (family_id);\n")
     f.write(f"CREATE INDEX idx_concept_aliases_alias ON {schema}.concept_aliases (alias);\n")
     f.write(f"CREATE INDEX idx_family_aliases_alias ON {schema}.family_aliases (alias);\n")
+    # v4 document-knowledge indexes
+    f.write(f"CREATE INDEX summary_nodes_embedding_hnsw ON {schema}.summary_nodes "
+            f"USING hnsw (embedding vector_cosine_ops);\n")
+    f.write(f"CREATE INDEX summary_nodes_text_id ON {schema}.summary_nodes (text_id);\n")
+    f.write(f"CREATE INDEX summary_nodes_work_id ON {schema}.summary_nodes (work_id);\n")
+    f.write(f"CREATE INDEX texts_work_id ON {schema}.texts (work_id);\n")
     f.write("\n")
 
 
-def emit_validation(f, schema: str, expected_chunks: int) -> None:
-    """Inline PL/pgSQL validation block. Raises on mismatch → rolls back tx."""
+def emit_validation(f, schema: str, counts: dict) -> None:
+    """Inline PL/pgSQL validation block. Raises on mismatch → rolls back tx.
+    v4 (§3.3): row counts for works/work_dossiers/summary_nodes, every
+    summary child chunk id resolves, exactly one L2 per dossiered work.
+    Dossier COVERAGE is reported, never enforced."""
+    expected_chunks = counts["chunks"]
     f.write("-- ── inline validation ──\n")
     f.write("DO $$\n")
     f.write("DECLARE\n")
     f.write("  v_schema_version INT;\n")
     f.write(f"  v_expected_chunks INT := {expected_chunks};\n")
     f.write("  v_actual_chunks INT;\n")
+    f.write("  v_n INT;\n")
     f.write("BEGIN\n")
     f.write(f"  SELECT value::int INTO v_schema_version "
             f"FROM {schema}.corpus_metadata WHERE key = 'schema_version';\n")
@@ -546,6 +639,31 @@ def emit_validation(f, schema: str, expected_chunks: int) -> None:
     f.write("    RAISE EXCEPTION 'chunk count mismatch: expected %, got %', "
             "v_expected_chunks, v_actual_chunks;\n")
     f.write("  END IF;\n")
+    for table, key in (("works", "works"), ("work_dossiers", "dossiers"),
+                       ("summary_nodes", "summaries")):
+        f.write(f"  SELECT COUNT(*) INTO v_n FROM {schema}.{table};\n")
+        f.write(f"  IF v_n != {counts[key]} THEN\n")
+        f.write(f"    RAISE EXCEPTION '{table} count mismatch: expected "
+                f"{counts[key]}, got %', v_n;\n")
+        f.write("  END IF;\n")
+    # every summary child chunk id resolves against emitted chunks
+    f.write(f"  SELECT COUNT(*) INTO v_n FROM (SELECT unnest(child_chunk_ids) AS cid "
+            f"FROM {schema}.summary_nodes) x LEFT JOIN {schema}.chunks c ON c.id = x.cid "
+            f"WHERE c.id IS NULL;\n")
+    f.write("  IF v_n != 0 THEN\n")
+    f.write("    RAISE EXCEPTION 'summary_nodes reference % unknown chunk ids', v_n;\n")
+    f.write("  END IF;\n")
+    # every dossiered work has exactly one level-2 summary
+    f.write(f"  SELECT COUNT(*) INTO v_n FROM {schema}.work_dossiers d WHERE "
+            f"(SELECT COUNT(*) FROM {schema}.summary_nodes s WHERE s.work_id = d.work_id "
+            f"AND s.level = 2) != 1;\n")
+    f.write("  IF v_n != 0 THEN\n")
+    f.write("    RAISE EXCEPTION '% dossiered works lack exactly one L2 summary', v_n;\n")
+    f.write("  END IF;\n")
+    # coverage is optional per work — report, never fail (§3.3)
+    f.write(f"  SELECT COUNT(*) INTO v_n FROM {schema}.work_dossiers;\n")
+    n_works = counts["works"]
+    f.write(f"  RAISE NOTICE 'dossier coverage: % of {n_works} works', v_n;\n")
     f.write("END $$;\n\n")
 
 
@@ -573,6 +691,13 @@ def emit_swap(f, staging: str, live: str) -> None:
     f.write(f"DROP SCHEMA IF EXISTS {live}_old CASCADE;\n\n")
 
 
+def _dossier_model() -> str | None:
+    cfg_path = PROJECT_ROOT / "config" / "dossiers.toml"
+    if not cfg_path.exists():
+        return None
+    return tomllib.load(open(cfg_path, "rb"))["campaign"].get("model")
+
+
 def emit_metadata(f, schema: str, version: int, commit: str, exported_at: str) -> None:
     """corpus_metadata block. Atomicity comes from the schema swap below
     — live `corpus` is untouched until the swap, so order within the
@@ -587,6 +712,8 @@ def emit_metadata(f, schema: str, version: int, commit: str, exported_at: str) -
         ("exported_at",       exported_at),
         ("source_commit_sha", commit),
     ]
+    if (dm := _dossier_model()):
+        rows.append(("dossier_model", dm))
     for k, v in rows:
         f.write(f"{copy_esc(k)}\t{copy_esc(v)}\n")
     emit_copy_end(f)
@@ -637,7 +764,7 @@ def main() -> None:
         f.write("\n\n")
 
         # 3. Data — COPY blocks in FK order
-        emit_copies(conn, f, STAGING_SCHEMA)
+        counts = emit_copies(conn, f, STAGING_SCHEMA)
 
         # 4. Post-load indexes
         emit_indexes(f, STAGING_SCHEMA)
@@ -649,7 +776,8 @@ def main() -> None:
         emit_grants(f, STAGING_SCHEMA, APP_ROLE)
 
         # 7. Validation + atomic swap
-        emit_validation(f, STAGING_SCHEMA, n_chunks)
+        counts["chunks"] = n_chunks  # pre-export validate() is authoritative
+        emit_validation(f, STAGING_SCHEMA, counts)
         emit_swap(f, STAGING_SCHEMA, LIVE_SCHEMA)
 
         f.write("COMMIT;\n")

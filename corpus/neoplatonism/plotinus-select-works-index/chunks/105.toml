@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 112 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 66
+token_count = 61
 
 [content]
-body = "For the Universe is in truth a thing of blend, and if we separate from it that separable Soul, the residue is little.\n\nThe All is a God when the divine Soul is counted in with it; \"the rest,\" we read, \"is a mighty spirit and its ways are subdivine.\" Next: Section 10"
+body = "For the Universe is in truth a thing of blend, and if we separate from it that separable Soul, the residue is little.\n\nThe All is a God when the divine Soul is counted in with it; \"the rest,\" we read, \"is a mighty spirit and its ways are subdivine.\""
 
 [annotations]
 concepts = []

@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter I, Section 1e"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1003.htm"
-token_count = 82
+token_count = 72
 
 [content]
-body = "It is the negative of the fourth Nidâna, the so-called Upâdâna, which Köppen has well explained by Anhänglichkeit, 'taking to the world, loving the world.' Köppen, Die Religion des Buddha, p.\n\n610.\n\nCf.\n\nSuttanipâta, v.\n\n470 .] Next: Chapter II.\n\nOn Earnestness."
+body = "It is the negative of the fourth Nidâna, the so-called Upâdâna, which Köppen has well explained by Anhänglichkeit, 'taking to the world, loving the world.' Köppen, Die Religion des Buddha, p.\n\n610.\n\nCf.\n\nSuttanipâta, v.\n\n470 .]"
 
 [annotations]
 concepts = []

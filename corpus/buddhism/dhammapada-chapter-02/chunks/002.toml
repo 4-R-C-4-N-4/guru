@@ -5,10 +5,10 @@ text_name = "The Dhammapada"
 section = "Chapter II, Section 1b"
 translator = "F. Max Müller"
 source_url = "https://www.sacred-texts.com/bud/sbe10/sbe1004.htm"
-token_count = 288
+token_count = 281
 
 [content]
-body = "A Bhikshu (mendicant) who delights in earnestness, who looks with fear on thoughtlessness, [25.\n\nChilders explains this island again as the state of an Arhat (arahatta-phalam).\n\n28.\n\nCf.\n\nChilders, Dictionary, Preface, p.\n\nxiv.\n\nSee Vinaya, ed.\n\nOldenberg, vol.\n\ni.\n\np.\n\n5, s.f.\n\n31.\n\nInstead of saha m , which Dr.\n\nFausböll translates by 'vincens,' Dr.\n\nWeber by 'conquering,' I think we ought to read d ahan, 'burning,' which was evidently the reading adopted by Buddhaghosa.\n\nMr.\n\nR.\n\nC.\n\nChilders, whom I requested to see whether the MS.\n\nat the India Office gives saha m or d aha m , writes that the reading d aha m is as clear as possible in that MS.\n\nThe fetters are meant for the senses.\n\nSee verse 370 .] p.\n\n11 moves about like fire, burning all his fetters, small or large.\n\n32.\n\nA Bhikshu (mendicant) who delights in reflection, who looks with fear on thoughtlessness, cannot fall away (from his perfect state)--he is close upon Nirvâ n a.\n\n[1.\n\nSee Childers, Notes, p.\n\n5.] Next: Chapter III.\n\nThought."
+body = "A Bhikshu (mendicant) who delights in earnestness, who looks with fear on thoughtlessness, [25.\n\nChilders explains this island again as the state of an Arhat (arahatta-phalam).\n\n28.\n\nCf.\n\nChilders, Dictionary, Preface, p.\n\nxiv.\n\nSee Vinaya, ed.\n\nOldenberg, vol.\n\ni.\n\np.\n\n5, s.f.\n\n31.\n\nInstead of saha m , which Dr.\n\nFausböll translates by 'vincens,' Dr.\n\nWeber by 'conquering,' I think we ought to read d ahan, 'burning,' which was evidently the reading adopted by Buddhaghosa.\n\nMr.\n\nR.\n\nC.\n\nChilders, whom I requested to see whether the MS.\n\nat the India Office gives saha m or d aha m , writes that the reading d aha m is as clear as possible in that MS.\n\nThe fetters are meant for the senses.\n\nSee verse 370 .] p.\n\n11 moves about like fire, burning all his fetters, small or large.\n\n32.\n\nA Bhikshu (mendicant) who delights in reflection, who looks with fear on thoughtlessness, cannot fall away (from his perfect state)--he is close upon Nirvâ n a.\n\n[1.\n\nSee Childers, Notes, p.\n\n5.]"
 
 [annotations]
 concepts = []

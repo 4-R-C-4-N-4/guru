@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 195 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 32
+token_count = 27
 
 [content]
-body = "Bad men rule by the feebleness of the ruled: and this is just; the triumph of weaklings would not be just.\n\nNext: Section 9"
+body = "Bad men rule by the feebleness of the ruled: and this is just; the triumph of weaklings would not be just."
 
 [annotations]
 concepts = []

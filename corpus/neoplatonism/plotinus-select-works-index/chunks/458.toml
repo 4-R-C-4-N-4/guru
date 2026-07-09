@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 437 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 35
+token_count = 30
 
 [content]
-body = "It possesses self-knowing, thus, on every count; the act is itself; and the object seen in that act- self, is itself.\n\nNext: Section 6"
+body = "It possesses self-knowing, thus, on every count; the act is itself; and the object seen in that act- self, is itself."
 
 [annotations]
 concepts = []

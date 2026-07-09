@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 236 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 74
+token_count = 69
 
 [content]
-body = "The causes originating the movement may be likened to the musician; what is moved is like the strings of his instrument, and once more, the Melodic Principle itself is not affected, but only the strings, though, however much the musician desired it, he could not pluck the strings except under dictation from the principle of Melody.\n\nNext: Section 5"
+body = "The causes originating the movement may be likened to the musician; what is moved is like the strings of his instrument, and once more, the Melodic Principle itself is not affected, but only the strings, though, however much the musician desired it, he could not pluck the strings except under dictation from the principle of Melody."
 
 [annotations]
 concepts = []

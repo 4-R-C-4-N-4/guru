@@ -1,0 +1,61 @@
+{
+  "id": "c59758f3",
+  "type": "bug",
+  "state": "done",
+  "summary": "corpus-hermeticum-15/-16 acquired as duplicate libellus XVI (Definitions of Asclepius); manifest labels disagree with chunking-config labels — sacred-texts 'th2' page->libellus mapping is irregular and needs re-mapping",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-06-25T15:59:59.142Z",
+  "updated_at": "2026-07-06T12:52:10.989Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "acquire",
+    "hermeticism"
+  ],
+  "relationships": {
+    "parent": "50438e23"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-06-25T15:59:59.186Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Evidence (parent 50438e23, split B):\n- Bodies: corpus-hermeticum-15 and -16 share 5/6 byte-identical chunk bodies; both are 'CORPUS HERMETICUM (XVI.) THE DEFINITIONS OF ASCLEPIUS UNTO KING AMMON'.\n- Label disagreement: sources/manifest.toml says id=corpus-hermeticum-15 label='Corpus Hermeticum XV: The Definitions of Asclepius unto King Ammon' (url th231.htm) and id=corpus-hermeticum-16 (url th233.htm); but chunking/.../corpus-hermeticum-15.toml metadata says 'CH 15: The Hymn of Hermes' and -16 says 'CH 16: The Secret Sermon on the Mountain'. Manifest also has corpus-hermeticum-13 = 'XIII: The Secret Sermon on the Mountain'.\n- Cause: sacred-texts.com 'th2' (Mead, Thrice-Greatest Hermes Vol.2) pages are NOT 1:1 with libelli; th231/th233 both resolve to / over-capture the Definitions of Asclepius. So the true CH-15 (Hymn of Hermes) and the chunking-config-labelled texts are missing, and metadata is internally inconsistent (Mead's own numbering vs the chunk-config numbering).\nTODO for this ticket: (1) map each th2.htm page to its actual libellus from the Mead TOC; (2) fix manifest urls/labels + chunking metadata to agree; (3) re-acquire so each CH source-id holds its correct, distinct libellus; (4) re-chunk + verify no duplicate bodies across CH source-ids. Independent of the chunk.py apparatus fix in the parent.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-07-04T17:03:38.550Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Elevated by the dossier plan (docs/summary/work-grouping.md): corpus-hermeticum-15/-16 duplicate changes the corpus-hermeticum WORK's member list (17 members as tabled). This is id-changing, so it must resolve BEFORE the span plan freezes for that work — otherwise the CH dossier bakes a duplicate libellus XVI into structure_json and the L2 summary. Blocks CH dossier generation only; rest of campaign 1 unaffected.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-07-06T12:52:10.952Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Root cause: original acquisition of ch-16/17 used a stale gnosis.org TGH-v2 mirror whose page files are shifted one tractate back from sacred-texts (metadata source_url proved it: ch-16 came from th231.html = the Definitions, duplicating ch-15). Manifest URLs were already correct; labels were shifted (XV/XVI/XVII → true canon XVI/XVII/XVIII; Mead's corpus skips XV). Fix: ids kept as stable acquisition slots, labels corrected to canon, ch-16/17 re-acquired from sacred-texts th233/th235, re-chunked (1+4 chunks), re-embedded; 21 stale staged_tags + 23 stale edges deleted (tagging gap for the 5 new chunks noted — retag in a future graph pass); corpus-hermeticum un-gated and re-planned (all other works structurally identical, token-metadata refresh only).",
+      "confidence": "high"
+    }
+  ],
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-06T12:39:57.408Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "b96909dadbf62ec74c04284e21100835e392f2ed",
+    "resolved_at": "2026-07-06T12:52:10.989Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_ch_libelli.py",
+    "test_function": "test_th2_texts_hold_distinct_libelli",
+    "note": "CH 15-17 remapped to true Mead libelli; re-acquired, re-chunked, re-embedded, un-gated"
+  }
+}

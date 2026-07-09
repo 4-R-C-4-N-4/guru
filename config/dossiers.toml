@@ -1,0 +1,33 @@
+# Guru dossier-generation campaign configuration
+# (design doc §1.3.6; consumed by scripts/build_dossiers.py)
+#
+# The provider is a CAMPAIGN parameter, not architecture. A provider or model
+# change is a NEW campaign (V9): bump campaign_id, re-run the plan step, and
+# treat prior staged rows as a separate provenance line (the `model` column
+# disambiguates).
+
+[campaign]
+# Namespaces the span-plan freeze artifact (data/span_plan_{campaign_id}.json).
+campaign_id = "c1"
+
+# "claude-code" — headless Claude Code on the subscription (default).
+# "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).
+provider = "claude-code"
+
+# Recorded verbatim in staged rows' `model`. Always pinned explicitly —
+# never rely on a session default.
+model = "claude-opus-4-8"
+
+# Reader-facing span size (TOC granularity + L1 review size), in pipeline
+# tokens. Provider-INDEPENDENT: does not change when the backend does,
+# so span identity survives provider switches (V9 / §1.3.5).
+span_target = 6000
+
+# Max tokens per generation call. 0 = effectively unbounded (claude-code).
+# Local campaigns set 6000-8000; folds and figures/terms map-reduce activate
+# only when this is > 0 and a work's L1 set exceeds it.
+input_budget = 0
+
+# Rubric sample size per field for the review loop (§1.3.4): works sampled
+# stratified by tradition and size; structure entries sampled per-span.
+review_k = 15

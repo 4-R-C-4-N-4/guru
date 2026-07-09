@@ -1,0 +1,31 @@
+{
+  "id": "ce885242",
+  "type": "chore",
+  "state": "done",
+  "summary": "G2 migration v3_007_document_knowledge.sql: staging + live tables with works-layer deltas",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T21:48:50.329Z",
+  "updated_at": "2026-07-04T22:15:39.204Z",
+  "tags": [
+    "summary",
+    "schema"
+  ],
+  "relationships": {
+    "parent": "229e2592"
+  },
+  "description": "Design §1 SQL with §6.1 deltas: staged_dossier_fields (work_id, partial-unique pending index), staged_summaries (+work_id, text_id nullable for multi-member L2), work_dossiers (work_id PK), summary_nodes (+work_id, children_hash), summary_embeddings. Idempotent IF NOT EXISTS. Done: applies cleanly to a DB copy then the real DB; re-apply is a no-op.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T22:14:38.506Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "beb69aabfd54c7bf82c2e80b79837e85b3b7045a",
+    "resolved_at": "2026-07-04T22:15:39.204Z",
+    "resolved_by": "unknown",
+    "note": "v3_007 applied: staged_dossier_fields (work_id keyed, partial-unique pending), staged_summaries (+work_id, nullable text_id), work_dossiers, summary_nodes (+children_hash), summary_embeddings. Verified on a DB copy first: idempotent re-apply, partial-unique enforces, integrity ok; then applied to data/guru.db (backed up pre-migration: guru-20260704T221327Z-pre-v3007-dossiers.db)."
+  }
+}

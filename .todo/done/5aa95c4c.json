@@ -1,0 +1,35 @@
+{
+  "id": "5aa95c4c",
+  "type": "chore",
+  "state": "done",
+  "summary": "Re-embed cleaned chunks via embed_corpus.py; verify chunk_embeddings coverage and dim",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.989Z",
+  "updated_at": "2026-07-04T17:33:12.922Z",
+  "tags": [
+    "corpus",
+    "embeddings",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d",
+    "depends_on": [
+      "fc2cba2e"
+    ]
+  },
+  "description": "Re-run embed_corpus.py over all changed chunks (or full corpus if simpler). Verify chunk_embeddings row count == 4,176 and dim == 768 corpus-wide. This is the clean-body re-embed the design doc cites as todo:b80d8d7d (that id is not in this repo's store; this ticket is its realization).",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T17:32:13.803Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "506c558bad8c96a247731d1a0fea5f40b1c8e823",
+    "resolved_at": "2026-07-04T17:33:12.922Z",
+    "resolved_by": "unknown",
+    "note": "Full corpus re-embedded over cleaned bodies via embed_corpus.py --reindex (ollama/nomic-embed-text, local): 4,176/4,176 embedded, 0 errors. Verified chunk_embeddings: 4,176 rows, dim uniformly 768, single model tag. This realizes the 'b80d8d7d clean-body re-embed' the design doc cites."
+  }
+}

@@ -5,10 +5,10 @@ text_name = "Select Works of Plotinus"
 section = "Select Works, Section 349 (part 2)"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/plotenn/enn000.htm"
-token_count = 126
+token_count = 121
 
 [content]
-body = "Here we have to enquire into the nature and being of that vestige of the soul actually present in the living body: if there is truly a soul, then, as a thing never cut off from its total, it will go with soul as soul must: if it is rather to be thought of as belonging to the body, as the life of the body, we have the same question that rose in the case of the vestige of light; we must examine whether life can exist without the presence of soul, except of course in the sense of soul living above and acting upon the remote object.\n\nNext: Section 30"
+body = "Here we have to enquire into the nature and being of that vestige of the soul actually present in the living body: if there is truly a soul, then, as a thing never cut off from its total, it will go with soul as soul must: if it is rather to be thought of as belonging to the body, as the life of the body, we have the same question that rose in the case of the vestige of light; we must examine whether life can exist without the presence of soul, except of course in the sense of soul living above and acting upon the remote object."
 
 [annotations]
 concepts = []

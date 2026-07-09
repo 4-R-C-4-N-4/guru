@@ -1,0 +1,35 @@
+{
+  "id": "fc2cba2e",
+  "type": "chore",
+  "state": "done",
+  "summary": "Apply body clean across corpus TOMLs + live DB; per-tradition review commits",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-04T17:03:15.921Z",
+  "updated_at": "2026-07-04T17:32:13.755Z",
+  "tags": [
+    "corpus",
+    "apparatus",
+    "v8"
+  ],
+  "relationships": {
+    "parent": "fccaf47d",
+    "depends_on": [
+      "88a28e67"
+    ]
+  },
+  "description": "Run clean_bodies.py for real after dry-run review. Commit diffs per tradition so review is scoped. Verify: no chunk count change (4,176), no id change, token totals drop by roughly the audit's estimate, spot-check enuma-elish 001 no longer opens with the Sacred-Texts header.",
+  "work": {
+    "branch": "feature/summary",
+    "base_branch": "main",
+    "started_at": "2026-07-04T17:31:05.714Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "9a970c55ffc3899349538084fc269e6ffbe3c2ea",
+    "resolved_at": "2026-07-04T17:32:13.755Z",
+    "resolved_by": "unknown",
+    "note": "Applied corpus-wide: 1,048 chunks across 16 traditions, 16 per-tradition review commits. Verified: 4,176 chunks (unchanged), all ids consistent, 6,602 boilerplate tokens removed (2,561,102 -> 2,554,500), enuma-elish 001 opens with primary text in both TOML and DB mirror. Removed-segments report independently reviewed (haiku agent): CLEAN, zero content flagged. enoch-charles-1917.140 (would empty) left refused -> 50438e23."
+  }
+}
