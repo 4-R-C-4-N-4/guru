@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-doctrine.050"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+section = "9. Initiationb"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 358
+
+[content]
+body = "He knows the failings of the human heart; he dares make use of them to achieve his work; and he is silent as to his purposes.\n\nHe knows the significance of all symbolisms and of all religions; he dares to practise or abstain from them without hypocrisy and without impiety; and he is silent upon the one dogma of supreme initiation.\n\nHe knows the existence and nature of the Great Magical Agent; he dares perform the acts and give utterance to the words which make it subject to human will, and he is silent upon the mysteries of the Great Arcanum.\n\nSo may you find him often melancholy, never dejected or despairing; often poor, never abject or miserable; persecuted often, never disheartened or conquered.\n\nHe remembers the bereavement and murder of Orpheus, the exile and lonely death of Moses, the martyrdom of the prophets, the tortures of Apollonius, the Cross of the Saviour.\n\nHe knows the desolation in which Agrippa died, whose memory is even now slandered; he knows what labours overcame the great Paracelsus, and all that Raymond Lully was condemned to undergo that he might finish by a violent death.\n\nHe remembers Swedenborg simulating madness and even losing reason in order to excuse his science; Saint-Martin and his hidden life; Cagliostro, who perished forsaken in the cells of the Inquisition; Cazotte, who ascended the scaffold.\n\nInheritor of so many victims, he does not dare the less, but he understands better the necessity for silence.\n\nLet us follow his example; let us learn diligently; when we know, let us have courage, and let us be silent."
+
+[annotations]
+concepts = []
+related_chunks = []

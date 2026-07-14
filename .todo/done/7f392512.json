@@ -1,0 +1,39 @@
+{
+  "id": "7f392512",
+  "type": "chore",
+  "state": "done",
+  "summary": "Chunking config + chunk transcendental-magic into corpus/western_esoteric",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T15:19:24.003Z",
+  "updated_at": "2026-07-14T15:48:30.994Z",
+  "files": [
+    {
+      "path": "chunking/western_esoteric"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "western_esoteric"
+  ],
+  "relationships": {
+    "parent": "bd94d820"
+  },
+  "description": "Create chunking/western_esoteric/transcendental-magic.toml (scaffold via scripts/chunk_init.py, then hand-tune per tertium-organum.toml precedent). Single-page HTML: section-split on headings.\n\nKey issue: Volume One (Dogme) and Volume Two (Rituel) BOTH have Introduction + chapters 1-22 with overlapping chapter numbers (some identical titles, e.g. 'The Great Work', 'Necromancy'). Section labels must disambiguate volume — e.g. 'Doctrine Ch. {n}' vs 'Ritual Ch. {n}' keyed off the h2 volume headers. Decide single text_id with volume-aware labels vs two-part split (Heroic Enthusiasts pt1/pt2 precedent) at implement time; if split into two text_ids, add a [[work]] grouping in sources/works.toml (Agrippa precedent) — single text_id needs no works.toml entry (implicit singleton).\n\nPre-strip: Global Grey site chrome/branding, front matter, and the trailing 'Footnotes' h3 section (decide keep-as-annex vs strip — check clean_bodies/apparatus-leak precedent todo:50438e23 before letting editorial apparatus into chunks). max_tokens per house style (~800).\n\nDone: config committed; python scripts/chunk.py produces corpus/western_esoteric/transcendental-magic*.toml chunks with correct volume-disambiguated citation labels; chunk TOMLs committed; existing corpus untouched.",
+  "analysis": [
+    {
+      "timestamp": "2026-07-14T15:43:32.073Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Two-text_id split chosen (Heroic Enthusiasts/Agrippa precedent): regex-section-split supports one capture group, and volumes share chapter numbers AND titles (12. The Great Work, 13. Necromancy, 14. Transmutations in both) — single-text section labels would be ambiguous in citations. Each source downloads the same GG page; volume isolated via pre_strip. Grouped as one work in works.toml for the dossier stage. Also: extractor duplication bug found and fixed en route (todo:89425b7b).",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "77dd61f848522663911dd7e59c97436adf4b9eb0",
+    "resolved_at": "2026-07-14T15:48:30.994Z",
+    "resolved_by": "unknown",
+    "note": "Two configs (exact-title alternation, 23 markers each verified unique per volume slice). Doctrine 96 chunks/68,504 tok; Ritual 123 chunks/86,032 tok. Boundaries verified: doctrine starts 'Behind the veil', ends before Vol2; ritual starts 'KNOWEST thou', 'THE END ↑ Back to top' stripped; GG footnote apparatus already dropped by _sbe_strip. works.toml + work-grouping.md + test_works.py updated to 53 works/213 texts/170 grouped members. Full suite 306 passed."
+  }
+}

@@ -234,3 +234,12 @@ members = [
     "plato-republic-6-2",
     "plato-republic-7-0",
 ]
+
+[[work]]
+id = "transcendental-magic"
+label = "Transcendental Magic: Its Doctrine and Ritual (Éliphas Lévi)"
+tradition = "western_esoteric"
+members = [
+    "transcendental-magic-doctrine",
+    "transcendental-magic-ritual",
+]

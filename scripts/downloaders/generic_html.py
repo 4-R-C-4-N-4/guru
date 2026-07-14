@@ -131,6 +131,16 @@ def extract_text(html: str, source_id: str) -> str:
             if el:
                 containers.append(el)
     
+    # Drop containers nested inside another collected container — a page laid
+    # out as <main><article>…</article></main> matches both, and concatenating
+    # them duplicates the entire text (todo:89425b7b, Global Grey layout). The
+    # id()-based dedup below only catches the same element, not nesting.
+    container_ids = {id(c) for c in containers}
+    containers = [
+        c for c in containers
+        if not any(id(p) in container_ids for p in c.parents)
+    ]
+
     text = ""
     if containers:
         # Get text from containers, avoiding duplicates

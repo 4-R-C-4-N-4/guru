@@ -1,13 +1,13 @@
 {
   "id": "bd94d820",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Corpus: add Transcendental Magic (Lévi, trans. Waite 1896) — ingest, chunk, essay summary",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-14T15:18:54.185Z",
-  "updated_at": "2026-07-14T15:19:39.541Z",
+  "updated_at": "2026-07-14T16:05:28.235Z",
   "tags": [
     "corpus",
     "western_esoteric",
@@ -18,7 +18,14 @@
     "children": [
       "101ccdd6",
       "7f392512",
-      "91b4c43b"
+      "91b4c43b",
+      "89425b7b"
     ]
+  },
+  "resolution": {
+    "commit": "fcf36fccf5b7312d682472982de70cc6ab8ef8f0",
+    "resolved_at": "2026-07-14T16:05:28.235Z",
+    "resolved_by": "unknown",
+    "note": "All children closed: manifest+acquire (101ccdd6), chunking 96+123 chunks with works-layer grouping (7f392512), extractor nesting bugfix found en route (89425b7b), campaign c2 plan + 29 pending L1 essay summaries (91b4c43b). Next actions live outside this parent: L1 review/accept then remaining dossier stages; embed/tag/edges deferred per scope."
   }
 }

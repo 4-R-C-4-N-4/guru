@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.031"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "5. The Blazing Pentagramc"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 177
+
+[content]
+body = "Need anyone be surprised therefore that every Magus believes in the real influence exercised by this sign over spirits of all hierarchies?\n\nThose who set at naught the Sign of the Cross tremble before the Star of the Microcosm.\n\nOn the contrary, when conscious of failing will, the Magus turns his eyes towards this symbol, takes it in his right hand and feels armed with intellectual omnipotence, provided that he is truly a king, worthy to be led by the star to the cradle of divine realization; provided that he KNOWS, DARES, WILLS and KEEPS SILENT; provided that he is familiar with the usages of the Pentacle, the Cup, the Wand and the Sword; provided, finally, that the intrepid gaze of his soul corresponds to those two eyes which the ascending point of our Pentagram ever presents open."
+
+[annotations]
+concepts = []
+related_chunks = []

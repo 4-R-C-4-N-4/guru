@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.064"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "13. Necromancyg"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 277
+
+[content]
+body = "There are also necromantic processes, comprising the tearing up of earth from graves with the nails, dragging out bones, placing them crosswise on the breast, then assisting at midnight mass on Christmas eve, and flying out of the church at the moment of consecration, crying: “Let the dead rise from their tombs!” Thereafter the procedure involves returning to the graveyard, taking a handful of earth nearest to the coffin, running back to the door of the church, which has been alarmed by the clamour, depositing the two bones crosswise and again shouting: “Let the dead rise from their tombs!” If the operator escapes being seized and shut up in a madhouse, he must retire at a slow pace, and count four thousand five hundred steps in a straight line, which means following a broad road or scaling walls.\n\nHaving traversed this space, he lies down upon the earth, as if in a coffin, and repeats in lugubrious tones: “Let the dead rise from their tombs!” Finally, he calls thrice on the person whose apparition is desired.\n\nNo doubt anyone who is mad enough and wicked enough to abandon himself to such operations is predisposed to all chimeras and all phantoms.\n\nHence the recipe of the Grand Grimoire is most efficacious, but we advise none of our readers to test it."
+
+[annotations]
+concepts = []
+related_chunks = []

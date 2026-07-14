@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-doctrine.082"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+section = "17. Astrologye"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 56
+
+[content]
+body = "In the modern Tarot the plate is entitled the Glittering Star; it is analogous to a number of Hermetic symbols, and is also in correspondence with the Blazing Star of Masonic initiates, which expresses most of the mysteries of Rosicrucian secret doctrine."
+
+[annotations]
+concepts = []
+related_chunks = []

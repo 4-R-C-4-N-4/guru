@@ -1,0 +1,7 @@
+tradition = "western_esoteric"
+text_id = "transcendental-magic-doctrine"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+sections_format = "chapter"
+chunk_count = 96

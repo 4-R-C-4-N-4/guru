@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-doctrine.041"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+section = "6. Magical Equilibriume"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 239
+
+[content]
+body = "For this reason nothing is useless or lost.\n\nEvery utterance and every movement are for or against equilibrium, for or against truth, which is composed of for and against conciliated, or at least equilibrated.\n\nWe shall state in the introduction to the “Ritual” how magical equilibrium should be produced, and why it is necessary to the success of all operations.\n\nOmnipotence is the most absolute liberty; now, absolute liberty cannot exist apart from perfect equilibrium.\n\nMagical equilibrium is hence one of the first conditions of success in the operations of science, and must be sought even in occult chemistry, in learning to combine contraries without neutralizing them by one another.\n\nMagical equilibrium explains the great and primeval mystery of the existence and relative necessity of evil.\n\nThis relative necessity gives, in Black Magic, the measure of the power of demons or impure spirits, to whom virtues practised upon earth are a source of increased rage and apparently of increased power.\n\nAt the epochs when saints and angels work miracles openly, sorcerers and fiends in their turn operate marvels and prodigies.\n\nRivalry often creates success; we lean upon that which resists."
+
+[annotations]
+concepts = []
+related_chunks = []

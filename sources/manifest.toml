@@ -983,6 +983,50 @@ license = "public_domain_us_pre_1929"
 translator = "Nicholas Bessaraboff and Claude Bragdon"
 notes = "Russian original 1912 (2nd ed. 1916); English translation 1920 (Manas Press), revised 1922. Index page links to ~28 sequential chapters (to01.htm through to28.htm)."
 
+# VERIFIED 2026-07-14 — Global Grey complete-text page (HTTP 200 w/ browser
+# UA, 760KB). Structure: h1 title, h2 "Volume One: Dogme" / "Volume Two:
+# Rituel", 47 h3 headings (Introduction + 22 chapters per volume, trailing
+# "Footnotes" h3 — pre-strip candidate). Waite text spot-checked via the
+# Doctrine introduction opening "Behind the veil of all the hieratic and
+# mystical allegories...". Single ~760KB HTML → generic_html, same
+# kalevala/Pistis-Sophia single-entry pattern.
+# License: French original 1854-56 (Lévi d. 1875); Waite translation
+# published 1896 (pre-1930 → PD in US) and Waite d. 1942 (life+70 expired
+# 2013 → PD in UK/EU). Global Grey terms permit redistribution once their
+# branding is removed — ingest strips all GG markup/branding, so compliant.
+# NOT hosted on sacred-texts (grim + eso indexes checked — only Lévi's
+# Paradoxes of the Highest Science) or Gutenberg (no records 2026-07-14).
+# Canonical scan for fidelity disputes: 1896 Redway edition,
+# archive.org/details/transcendentalma00leviuoft.
+
+# Split into two text_ids (todo:7f392512): both volumes carry Introduction +
+# chapters 1-22 with overlapping numbers and some identical titles (The Great
+# Work, Necromancy, Transmutations) — a single text_id cannot produce
+# unambiguous section labels through regex-section-split's one capture group.
+# Each entry downloads the same complete-text page; the chunking config
+# isolates its volume via pre_strip. Grouped as one work in sources/works.toml
+# for the dossier layer (Agrippa / Heroic Enthusiasts precedent).
+
+[[source]]
+id = "transcendental-magic-doctrine"
+tradition = "western_esoteric"
+label = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+format = "html"
+license = "public_domain"
+translator = "A.E. Waite"
+notes = "Volume One (Dogme) of Lévi's Dogme et Rituel de la Haute Magie (1854-56), Waite's complete 1896 translation. Foundational text of the 19th-c. French occult revival — the 22 trump-keyed chapters and the astral light material feed directly into Golden Dawn-era western_esoteric. Chunking pre_strips Volume Two."
+
+[[source]]
+id = "transcendental-magic-ritual"
+tradition = "western_esoteric"
+label = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+format = "html"
+license = "public_domain"
+translator = "A.E. Waite"
+notes = "Volume Two (Rituel) of Lévi's Dogme et Rituel de la Haute Magie — the practical/ceremonial counterpart to Volume One, same 22-chapter trump-keyed structure. Chunking pre_strips Volume One."
+
 
 # ============================================
 # RENAISSANCE HERMETICISM (Bruno)

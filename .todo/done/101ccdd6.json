@@ -1,0 +1,36 @@
+{
+  "id": "101ccdd6",
+  "type": "chore",
+  "state": "done",
+  "summary": "Manifest entry for transcendental-magic (Global Grey HTML) + verified acquire into raw/",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T15:19:08.548Z",
+  "updated_at": "2026-07-14T15:38:29.203Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "western_esoteric"
+  ],
+  "relationships": {
+    "parent": "bd94d820"
+  },
+  "description": "Add [[source]] entry id=transcendental-magic, tradition=western_esoteric, format=html (generic_html downloader — kalevala/Pistis-Sophia single-entry pattern), url=https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html, translator='A.E. Waite' (author is Lévi — Waite is translator only), license=public_domain.\n\nInclude a VERIFIED 2026-07-14 comment in manifest style: HTTP 200 w/ browser UA, 760KB, h2 volume headers + 47 h3 chapter headers, Waite text spot-checked; PD rationale (pre-1930 US, Waite d.1942 life+70 expired 2013); GG terms satisfied because branding/markup stripped at ingest; sacred-texts and Gutenberg checked and do not host it.\n\nDone: manifest entry committed; python scripts/acquire.py downloads clean raw HTML for this source id without disturbing other sources (use whatever single-source filter acquire supports, or verify idempotence).",
+  "work": {
+    "branch": "todo/bd94d820",
+    "base_branch": "main",
+    "started_at": "2026-07-14T15:36:16.077Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "0e8e2c58dfde9f32d04d7190edf0ed6d84217c50",
+    "resolved_at": "2026-07-14T15:38:29.203Z",
+    "resolved_by": "unknown",
+    "note": "Manifest entry + VERIFIED comment added. acquire.py --only transcendental-magic extracts 1.43M chars cleanly (starts 'Volume One: Dogme Introduction Behind the veil...', ends 'THE END'; GG TOC/chrome stripped by container selection; single-line output matches established generic_html format)."
+  }
+}

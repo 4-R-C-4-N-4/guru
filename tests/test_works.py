@@ -15,18 +15,18 @@ def works():
 
 
 def test_totals_match_grouping_table(works):
-    # work-grouping.md: 52 works — 9 grouped + 43 singleton
-    assert len(works) == 52
+    # work-grouping.md: 53 works — 10 grouped + 43 singleton
+    assert len(works) == 53
     grouped = [w for w in works.values() if w.grouped]
-    assert len(grouped) == 9
-    assert sum(len(w.members) for w in grouped) == 168
+    assert len(grouped) == 10
+    assert sum(len(w.members) for w in grouped) == 170
 
 
 def test_every_text_in_exactly_one_work(works):
     texts = _corpus_texts()
     mapping = work_of(works)
     assert set(mapping) == set(texts)          # total coverage, no strays
-    assert len(mapping) == 211
+    assert len(mapping) == 213
     # no double-claims by construction of work_of; assert member disjointness
     all_members = [m for w in works.values() for m in w.members]
     assert len(all_members) == len(set(all_members))
