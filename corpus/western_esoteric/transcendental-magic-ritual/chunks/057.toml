@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.057"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "12. The Great Workd"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 95
+
+[content]
+body = "He created a new metal which resembles gold but is not gold, and hence has no value.\n\nRaymond Lully, Nicholas Flamel and most probably Henry Khun-rath made true gold, nor did they take away their secret with them, for it is enshrined in their symbols, and they have indicated, moreover, the sources from which they drew for its discovery and for the realization of its effects, It is this same secret which we ourselves make public now."
+
+[annotations]
+concepts = []
+related_chunks = []

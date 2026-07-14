@@ -1,0 +1,25 @@
+# Transcendental Magic, Volume Two: The Ritual (Lévi/Waite 1896) —
+# Global Grey complete-text page via generic_html (todo:7f392512).
+# The raw file carries BOTH volumes (single complete-text download shared with
+# transcendental-magic-doctrine); pre_strip isolates Volume Two. See the
+# doctrine config for the exact-title alternation rationale. All 23 markers
+# verified unique within the volume slice.
+[chunking]
+strategy = "regex-section-split"
+pattern = '((?:^Introduction)|(?:\d{1,2}\. (?:Preparations|Magical Equilibrium|The Triangle Of Pantacles|The Conjuration Of The Four|The Blazing Pentagram|The Medium And Mediator|The Septenary Of Talismans|Warning To The Imprudent|The Ceremonial Of Initiates|The Key Of Occultism|The Triple Chain|The Great Work|Necromancy|Transmutations|The Sabbath Of The Sorcerers|Witchcraft And Spells|The Writing Of The Stars|Philtres And Magnetism|The Mastery Of The Sun|The Thaumaturge|The Science Of The Prophets|The Book Of Hermes)))'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Drop Volume One and the volume banner — Volume One is ingested as
+    # transcendental-magic-doctrine.
+    '^[\s\S]*?Volume Two: Rituel ',
+    # Global Grey terminal marker + nav artifact after the last chapter.
+    'THE END\s*↑ Back to top\s*$',
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+translator = "A.E. Waite"
+sections_format = "chapter"

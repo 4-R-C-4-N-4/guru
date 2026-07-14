@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.009"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "Introductioni"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 277
+
+[content]
+body = "Nothing tortures the wicked so much as goodness.\n\nNothing is more odious to madness than reason.\n\nBut if an ignorant operator should make use of these signs without knowing them, he is like a blind man who discourses of light to the blind, an ass who would teach children to read.\n\n“If the blind lead the blind,” said the Great and Divine Hierophant, “both fall into the pot.” And now a final word to recapitulate this entire introduction.\n\nIf you be blind like Samson when you cast down the pillars of the temple, its ruins will crush you.\n\nTo command Nature we must be above Nature, by resistance of her attractions.\n\nIf your mind be perfectly free from all prejudice, superstition and incredulity, you will rule spirits.\n\nIf you do not obey blind forces, they will obey you.\n\nIf you be wise like Solomon, you will perform the works of Solomon; if you be holy like Christ, you will accomplish the works of Christ.\n\nTo direct the currents of the inconstant light, we must be established in the constant light.\n\nTo command the elements, we must have overcome their hurricanes, their lightnings, their abysses, their tempests.\n\nIn order to DARE we must KNOW; in order to WILL, we must DARE; we must WILL to possess empire and to reign we must Be SILENT."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -999,15 +999,33 @@ notes = "Russian original 1912 (2nd ed. 1916); English translation 1920 (Manas P
 # Canonical scan for fidelity disputes: 1896 Redway edition,
 # archive.org/details/transcendentalma00leviuoft.
 
+# Split into two text_ids (todo:7f392512): both volumes carry Introduction +
+# chapters 1-22 with overlapping numbers and some identical titles (The Great
+# Work, Necromancy, Transmutations) — a single text_id cannot produce
+# unambiguous section labels through regex-section-split's one capture group.
+# Each entry downloads the same complete-text page; the chunking config
+# isolates its volume via pre_strip. Grouped as one work in sources/works.toml
+# for the dossier layer (Agrippa / Heroic Enthusiasts precedent).
+
 [[source]]
-id = "transcendental-magic"
+id = "transcendental-magic-doctrine"
 tradition = "western_esoteric"
-label = "Transcendental Magic: Its Doctrine and Ritual (Éliphas Lévi)"
+label = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
 url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
 format = "html"
 license = "public_domain"
 translator = "A.E. Waite"
-notes = "Lévi's Dogme et Rituel de la Haute Magie (1854-56), Waite's complete 1896 translation. Foundational text of the 19th-c. French occult revival — the doctrine/ritual twin structure, the 22 trump-keyed chapters per volume, and the astral light material feed directly into Golden Dawn-era western_esoteric. Both volumes carry Introduction + chapters 1-22 with overlapping numbers and some identical titles — chunking config must disambiguate volume in section labels."
+notes = "Volume One (Dogme) of Lévi's Dogme et Rituel de la Haute Magie (1854-56), Waite's complete 1896 translation. Foundational text of the 19th-c. French occult revival — the 22 trump-keyed chapters and the astral light material feed directly into Golden Dawn-era western_esoteric. Chunking pre_strips Volume Two."
+
+[[source]]
+id = "transcendental-magic-ritual"
+tradition = "western_esoteric"
+label = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+format = "html"
+license = "public_domain"
+translator = "A.E. Waite"
+notes = "Volume Two (Rituel) of Lévi's Dogme et Rituel de la Haute Magie — the practical/ceremonial counterpart to Volume One, same 22-chapter trump-keyed structure. Chunking pre_strips Volume One."
 
 
 # ============================================

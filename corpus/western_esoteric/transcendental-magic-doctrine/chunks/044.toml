@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-doctrine.044"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+section = "7. The Fiery Swordc"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 328
+
+[content]
+body = "The talismans of the seven spirits are engraved either on precious stones, such as the carbuncle, crystal, diamond, emerald, agate, sapphire and onyx, or upon metals, such as gold, silver, iron, copper, fixed mercury, pewter and lead.\n\nThe kabalistic signs of the seven spirits are: for the Sun, a serpent with the head of a lion; for the Moon, a globe divided by two crescents; for Mars, a dragon biting the hilt of a sword; for Venus, a lingam; for Mercury, the Hermetic caduceus and the cynocephalus; for Jupiter, the Blazing Pentagram in the talons or beak of an eagle; for Saturn, a lame and aged man, or a serpent curled about the sun-stone.\n\nAll these symbols are found on engraved stones of the ancients and especially on those talismans of the Gnostic epochs which are known by the name of ABRAXAS.\n\nIn the collection of the talismans of Paracelsus, Jupiter is represented by a priest in ecclesiastical garb, while in the Tarot he appears as a grand hierophant crowned with a triple tiara, holding a three-barred cross in his hands, forming the magical triangle, and representing at once the sceptre and key of the three worlds.\n\nBy collating all that has been said about the unity of the triad and tetrad, we shall find all that remains to be told concerning the septenary, that grand and complete magical unity composed of four and three."
+
+[annotations]
+concepts = []
+related_chunks = []

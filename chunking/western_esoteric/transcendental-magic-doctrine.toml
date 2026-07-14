@@ -1,0 +1,27 @@
+# Transcendental Magic, Volume One: The Doctrine (Lévi/Waite 1896) —
+# Global Grey complete-text page via generic_html (todo:7f392512).
+# The raw file carries BOTH volumes (single complete-text download shared with
+# transcendental-magic-ritual); pre_strip isolates Volume One. Split on the
+# in-body h3 chapter markers — exact-title alternation because bare
+# '\d{1,2}\.' is too loose against collapsed single-line prose, and chapter
+# numbers repeat across volumes. All 23 markers verified unique within the
+# volume slice. Chapters are 8-40KB → subsplit() sentence-level fallback
+# breaks them at max_tokens (raw is one line; no paragraph boundaries).
+[chunking]
+strategy = "regex-section-split"
+pattern = '((?:^Introduction)|(?:\d{1,2}\. (?:The Candidate|The Pillars Of The Temple|The Triangle Of Solomon|The Tetragram|The Pentagram|Magical Equilibrium|The Fiery Sword|Realization|Initiation|The Kabalah|The Magic Chain|The Great Work|Necromancy|Transmutations|Black Magic|Bewitchments|Astrology|Charms And Philtres|The Stone Of The Philosophers – Elagabalus|The Universal Medicine|Divination|Summary And General Key Of The Four Secret Sciences)))'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Drop Volume Two entirely — it is ingested as transcendental-magic-ritual.
+    'Volume Two: Rituel[\s\S]*$',
+    # Volume banner ahead of the Introduction marker.
+    '^Volume One: Dogme ',
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+translator = "A.E. Waite"
+sections_format = "chapter"

@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.123"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "22. The Book Of Hermesp"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 182
+
+[content]
+body = "Magnetism enables us to understand today the miracles of old Magic; the facts of second sight, aspirations, sudden cures, thought-reading, are now admitted and familiar things, even for our children.\n\nBut the tradition of the ancients has been lost; discoveries have been regarded as new; the last word is sought on observed phenomena; minds are agitated over meaningless manifestations; fascinations are experienced without being understood.\n\nWe say, therefore, to table-turners: These prodigies are not novel; you can perform even greater wonders if you study the laws of Nature.\n\nAnd what will follow a new acquaintance with these powers?\n\nA new career opened to the activity and intelligence of man, the battle of life reorganized with arms more perfect and opportunity restored to the flower of intelligence of becoming once more the masters of all destinies, by providing true priests and great kings for the world to come!"
+
+[annotations]
+concepts = []
+related_chunks = []
