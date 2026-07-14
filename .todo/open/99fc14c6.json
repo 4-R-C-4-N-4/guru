@@ -2,12 +2,12 @@
   "id": "99fc14c6",
   "type": "chore",
   "state": "open",
-  "summary": "Promote transcendental-magic staged tags: auto_promote score 2/3; queue score 1 for review",
+  "summary": "Review transcendental-magic staged tags via /guru-review-tags queue flow (no auto-promote)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-14T16:15:00.767Z",
-  "updated_at": "2026-07-14T16:15:00.805Z",
+  "updated_at": "2026-07-14T16:25:49.622Z",
   "files": [
     {
       "path": "scripts/auto_promote.py"
@@ -20,5 +20,5 @@
   "relationships": {
     "parent": "34c91dbc"
   },
-  "description": "python3 scripts/auto_promote.py (dry-run default) — inspect summary, then --apply. Per docs/autopromote/design.md: score 3 and score 2 -> tier='proposed'; do NOT pass --score 1; verified tier stays behind the human gate. Backup DB before --apply if c1's backup is stale.\n\nScore-1 remainder stays in staged_tags for the operator's review pass (review_tags.py CLI or the guru-review web app — the /guru-review-tags flow). Do not accept/reject score-1 rows in this ticket.\n\nDone: promoted-row count and remaining score-1 queue size recorded in close note; live edges for the two texts exist at tier proposed; no verified-tier writes."
+  "description": "Run the /guru-review-tags skill flow over the new staged_tags for transcendental-magic-doctrine/-ritual: queue accept / reject / reassign decisions through the guru-review web app HTTP API WITHOUT applying. Cover ALL score tiers (1, 2, and 3) — per standing policy (2026-07-14) auto_promote.py is never run, at any tier; scripts/auto_promote.py and auto_promote_edges.py are off the table.\n\nThe operator retains the final apply gate: this ticket ends with a fully queued decision set and a summary of queued accept/reject/reassign counts by score tier. Applying the decisions is the operator's action in the web app, not part of this ticket.\n\nDone: every transcendental-magic staged_tag has a queued decision in guru-review; counts by tier and decision recorded in close note; zero writes to live edges; no verified-tier writes."
 }
