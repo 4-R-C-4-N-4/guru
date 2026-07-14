@@ -1,13 +1,13 @@
 {
   "id": "7f392512",
   "type": "chore",
-  "state": "open",
+  "state": "active",
   "summary": "Chunking config + chunk transcendental-magic into corpus/western_esoteric",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-14T15:19:24.003Z",
-  "updated_at": "2026-07-14T15:19:24.044Z",
+  "updated_at": "2026-07-14T15:38:41.043Z",
   "files": [
     {
       "path": "chunking/western_esoteric"

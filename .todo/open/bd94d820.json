@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-07-14T15:18:54.185Z",
-  "updated_at": "2026-07-14T15:19:39.541Z",
+  "updated_at": "2026-07-14T15:41:41.130Z",
   "tags": [
     "corpus",
     "western_esoteric",
@@ -18,7 +18,8 @@
     "children": [
       "101ccdd6",
       "7f392512",
-      "91b4c43b"
+      "91b4c43b",
+      "89425b7b"
     ]
   }
 }
