@@ -1,0 +1,17 @@
+{
+  "id": "34c91dbc",
+  "type": "feature",
+  "state": "open",
+  "summary": "Concept-tag transcendental-magic chunks into the live graph (local Qwen3.5-27B)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:14:38.909Z",
+  "updated_at": "2026-07-14T16:14:38.976Z",
+  "tags": [
+    "corpus",
+    "western_esoteric",
+    "tagging"
+  ],
+  "description": "Bring the 219 transcendental-magic chunks (doctrine 96 + ritual 123, ingested under todo:bd94d820 but not yet in the DB) through the tagging pipeline: graph bootstrap -> tag_concepts -> promotion. Provider: llamacpp with the local Qwen3.5-27B server (already running), matching the original corpus tagging provider.\n\nScope: tagging only. embed_corpus and propose_edges stay deferred (embeddings are not a tag_concepts dependency — they feed edge proposals). The work-grouping.md census note 'not yet in DB' gets updated when bootstrap lands.\n\nPromotion path per house policy: auto_promote score 2/3 -> proposed tier without per-row review; score 1 and the verified tier stay behind the human gate (review_tags.py / guru-review web app) — the operator retains the apply gate."
+}
