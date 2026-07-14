@@ -1,0 +1,24 @@
+{
+  "id": "83364c3d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Embed transcendental-magic chunks into chunk_embeddings (ollama/nomic-embed-text)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:27:11.602Z",
+  "updated_at": "2026-07-14T16:27:11.636Z",
+  "files": [
+    {
+      "path": "scripts/embed_corpus.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "embeddings"
+  ],
+  "relationships": {
+    "parent": "f9ab464e"
+  },
+  "description": "Verify ollama is serving nomic-embed-text (ollama pull nomic-embed-text if missing), then python3 scripts/embed_corpus.py --resume --text transcendental-magic-doctrine and --text transcendental-magic-ritual. --resume so existing embeddings are untouched; never --reindex here.\n\nDone: chunk_embeddings has all 219 new rows at 768 dims; pre-existing embedding count unchanged (record before/after counts in close note); corpus_metadata.embedding_model unchanged (still the pinned nomic tag)."
+}
