@@ -1,0 +1,18 @@
+{
+  "id": "f9ab464e",
+  "type": "feature",
+  "state": "open",
+  "summary": "Embed transcendental-magic chunks + cross-tradition edge proposals (Mistral)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:26:49.914Z",
+  "updated_at": "2026-07-14T16:26:49.951Z",
+  "tags": [
+    "corpus",
+    "western_esoteric",
+    "embeddings",
+    "edges"
+  ],
+  "description": "Vector-store and edge-proposal stages for the 219 transcendental-magic chunks (doctrine 96 + ritual 123, todo:bd94d820). Deliberately NOT dependent on the tagging parent (todo:34c91dbc) — the two lines can proceed in parallel; do not wire depends-on links to tagging tickets.\n\nOperational requirement: the edge-proposal stage runs on Mistral-Small-3.2-24B via scripts/run-mistral.sh — it must be started before propose_edges (single 3090: stop the Qwen3.5-27B server first if it is serving; coordinate timing with the tagging run, which needs the Qwen up). Embeddings use the pinned ollama/nomic-embed-text (config/embedding.toml), not the llama.cpp server.\n\nOrdering inside this parent: embeddings before propose_edges (vector similarity is its input). propose_edges also assumes chunk nodes exist in the DB (graph_bootstrap, ticketed under the tagging parent as 2fb963e9) — if that has not run yet when this line starts, run graph_bootstrap first; it is a shared prerequisite, not a tagging dependency.\n\nPromotion path per standing policy (2026-07-14): NO auto_promote_edges, at any confidence tier. All staged edges go through the /guru-review-edges queue-only review flow; the operator retains the final apply gate."
+}
