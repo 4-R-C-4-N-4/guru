@@ -1,0 +1,24 @@
+{
+  "id": "bd94d820",
+  "type": "feature",
+  "state": "open",
+  "summary": "Corpus: add Transcendental Magic (Lévi, trans. Waite 1896) — ingest, chunk, essay summary",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T15:18:54.185Z",
+  "updated_at": "2026-07-14T15:19:39.541Z",
+  "tags": [
+    "corpus",
+    "western_esoteric",
+    "summary"
+  ],
+  "description": "Add Éliphas Lévi's Dogme et Rituel de la Haute Magie in the A.E. Waite 1896 translation (Transcendental Magic: Its Doctrine and Ritual) to the corpus, tradition western_esoteric.\n\nSource (verified 2026-07-14): Global Grey complete-text single HTML, https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html — HTTP 200 with browser UA, 760KB, h1 title + h2 'Volume One: Dogme'/'Volume Two: Rituel' + 47 h3 (Introduction + 22 chapters per volume, trailing 'Footnotes' h3). Waite text confirmed by opening line 'Behind the veil of all the hieratic and mystical allegories...'. NOT on sacred-texts (only Paradoxes of the Highest Science) or Gutenberg (no records).\n\nLicense: public_domain — pre-1930 US publication; Waite d. 1942 so life+70 expired 2013 (UK/EU). Global Grey terms permit redistribution with their branding removed; ingest strips all GG markup/branding. Canonical scan for fidelity disputes: archive.org/details/transcendentalma00leviuoft (1896 Redway).\n\nMilestone scope (this parent): manifest + acquire, chunking config + chunk, essay summary (dossier) stage. Deferred to later tickets: embed_corpus, tag_concepts, propose_edges, and any further new texts.",
+  "relationships": {
+    "children": [
+      "101ccdd6",
+      "7f392512",
+      "91b4c43b"
+    ]
+  }
+}
