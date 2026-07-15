@@ -1,0 +1,30 @@
+{
+  "id": "18c5f1f1",
+  "type": "chore",
+  "state": "done",
+  "summary": "tag_concepts over transcendental-magic (llamacpp Qwen3.5-27B): 219 chunks staged",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:15:00.692Z",
+  "updated_at": "2026-07-15T05:32:50.923Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "tagging"
+  ],
+  "relationships": {
+    "parent": "34c91dbc"
+  },
+  "description": "python3 scripts/tag_concepts.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf --text transcendental-magic-doctrine, then --text transcendental-magic-ritual (or one run per supported invocation). Verify the local server is up before starting; confirm exact --model string against config/model.toml or the running server. Default --resume on is correct (only never-seen chunks); do NOT pass --no-resume.\n\nDone: tagging_progress covers all 219 chunks for the two text_ids; staged_tags rows exist with plausible score distribution (record score 1/2/3 counts and total in close note); zero writes against other texts' chunks.",
+  "resolution": {
+    "commit": "6f25fb28af849ac7f376cfd90beb08088cf79b84",
+    "resolved_at": "2026-07-15T05:32:50.923Z",
+    "resolved_by": "unknown",
+    "note": "219/219 chunks tagged (tagging_progress confirms), 0 errors across both runs. 4,883 staged_tags inserted for transcendental-magic (doctrine 2,281 + ritual 2,602): score 1 = 2,330 (48%), score 2 = 2,090 (43%), score 3 = 463 (9%), avg ~22.3 tags/chunk. Other texts' staged_tags untouched (47,253 before and after; superseded=0 skipped_reviewed=0 conflict=0). Provider llamacpp Qwen3.5-27B-UD-Q4_K_XL.gguf, server verified serving that exact model before start. Review watch-item: hidden_sayings was the top concept mid-run (~92 hits on doctrine) — possibly over-firing on Levi's concealment rhetoric; flag for the /guru-review-tags pass."
+  }
+}
