@@ -1,13 +1,13 @@
 {
   "id": "34c91dbc",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Concept-tag transcendental-magic chunks into the live graph (local Qwen3.5-27B)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-14T16:14:38.909Z",
-  "updated_at": "2026-07-14T16:25:49.657Z",
+  "updated_at": "2026-07-15T16:43:23.013Z",
   "tags": [
     "corpus",
     "western_esoteric",
@@ -20,5 +20,11 @@
       "18c5f1f1",
       "99fc14c6"
     ]
+  },
+  "resolution": {
+    "commit": "7ece22741911cb21b8e3f3ac24a5601e40f5fbe5",
+    "resolved_at": "2026-07-15T16:43:23.013Z",
+    "resolved_by": "unknown",
+    "note": "Tagging line complete: 219 TM chunks bootstrapped into graph (nodes+CONTAINS edges), tag_concepts run via local Qwen3.5-27B (4,883 staged tags), and full /guru-review-tags queue-only pass finished (1,343 accept / 3,533 reject / 7 new-concept skips, reviewer agent-claude). Apply gate with operator. Embed/edges continue separately under f9ab464e."
   }
 }
