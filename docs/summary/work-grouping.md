@@ -2,9 +2,9 @@
 
 Decided 2026-07-04. This table is the **dossier-unit census**: one row per
 work, 53 works over 213 text dirs / 4,395 chunks / 2.72M tokens (totals
-reconcile exactly against the live DB, except transcendental-magic's 219
-chunks, which enter the DB with their deferred embed/tag pass —
-todo:bd94d820). It resolves checklist items V3 and
+reconcile exactly against the live DB; transcendental-magic's 219 chunk
+nodes bootstrapped 2026-07-14 — todo:2fb963e9 — with embed/tag passes
+in flight under todo:34c91dbc / todo:f9ab464e). It resolves checklist items V3 and
 V10 of `document-knowledge-data-structures.md`; the schema consequences are
 in that doc's §6.1.
 
@@ -106,7 +106,7 @@ Bold `work_id` = grouped (n > 1). Token/chunk figures are sums over members.
 | zhuangzi-inner-chapters-index | taoism | The Writings of Chuang Tzu (Inner Chapters) | — | 1 | 57 | 42,007 | ~8 spans |
 | isa-upanishad | upanishads | Îsâ-Upanishad | — | 1 | 2 | 869 | single span |
 | tertium-organum | western_esoteric | Tertium Organum (P.D. Ouspensky) | — | 1 | 225 | 164,937 | ~28 spans + folds |
-| **transcendental-magic** | western_esoteric | Transcendental Magic: Its Doctrine and Ritual (Éliphas Lévi) | `transcendental-magic-doctrine`, `transcendental-magic-ritual` | 2 | 219 | 154,536 | ~26 spans + folds; added 2026-07-14 (todo:bd94d820), not yet in DB — embed/tag deferred; summary campaign c2 |
+| **transcendental-magic** | western_esoteric | Transcendental Magic: Its Doctrine and Ritual (Éliphas Lévi) | `transcendental-magic-doctrine`, `transcendental-magic-ritual` | 2 | 219 | 154,536 | ~26 spans + folds (c2 actual: 29); added 2026-07-14 (todo:bd94d820); chunk nodes in DB (todo:2fb963e9), embed/tag in flight; summary campaign c2 |
 | bundahishn | zoroastrianism | Bundahishn (Creation) | — | 1 | 2 | 1,132 | single span; 0 accepted tags — themes floor case |
 | **gathas** | zoroastrianism | The Gathas of Zarathushtra (Yasna 28-34, 43-51, 53) | `yasna-28` … `yasna-53` (17) | 17 | 39 | 25,269 | ~5 spans |
 | gathas-introduction | zoroastrianism | The Gathas: Translator's Introduction | — | 1 | 2 | 810 | single span; secondary (translator intro) — dossier optional |

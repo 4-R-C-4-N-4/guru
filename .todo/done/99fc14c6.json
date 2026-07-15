@@ -1,0 +1,30 @@
+{
+  "id": "99fc14c6",
+  "type": "chore",
+  "state": "done",
+  "summary": "Review transcendental-magic staged tags via /guru-review-tags queue flow (no auto-promote)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:15:00.767Z",
+  "updated_at": "2026-07-15T16:43:11.741Z",
+  "files": [
+    {
+      "path": "scripts/auto_promote.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "tagging"
+  ],
+  "relationships": {
+    "parent": "34c91dbc"
+  },
+  "description": "Run the /guru-review-tags skill flow over the new staged_tags for transcendental-magic-doctrine/-ritual: queue accept / reject / reassign decisions through the guru-review web app HTTP API WITHOUT applying. Cover ALL score tiers (1, 2, and 3) — per standing policy (2026-07-14) auto_promote.py is never run, at any tier; scripts/auto_promote.py and auto_promote_edges.py are off the table.\n\nThe operator retains the final apply gate: this ticket ends with a fully queued decision set and a summary of queued accept/reject/reassign counts by score tier. Applying the decisions is the operator's action in the web app, not part of this ticket.\n\nDone: every transcendental-magic staged_tag has a queued decision in guru-review; counts by tier and decision recorded in close note; zero writes to live edges; no verified-tier writes.",
+  "resolution": {
+    "commit": "56dcc872e9e706e9d2d063826a9cfeaa05786802",
+    "resolved_at": "2026-07-15T16:43:11.741Z",
+    "resolved_by": "unknown",
+    "note": "All 4,883 transcendental-magic staged_tags (doctrine 2,281 + ritual 2,602) judged chunk-by-chunk and queued in guru-review as reviewer agent-claude. Totals: 1,343 accept / 3,533 reject / 7 skip (27.5% accept). By tier: s3 438a/18r/7skip, s2 833a/1257r, s1 72a/2258r. All 7 skips are is_new_concept proposals (astral_light x3, magical_will x2, sovereign_will, magical_equilibrium) deferred to operator. Server apply/preview confirms 4,883 queued, 0 staged_edges, zero live-edge writes. Apply gate remains with operator per standing no-autopromote policy."
+  }
+}
