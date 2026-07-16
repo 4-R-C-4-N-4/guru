@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.083"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "16. Witchcraft And Spellse"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 132
+
+[content]
+body = "Thomas, that daring innovator who first substituted the absolute law of reason for arbitrary divinity, by formulating an axiom which we cannot repeat too often, since it comes from such a master: “A thing is not just because God wills it, but God wills it because it is just.” The real and serious android of the ancients was a secret which they have kept hidden from all eyes, and Mesmer was the first who dared to divulge it.\n\nIt was the projection of the will of the Magus into another body, organized and served by an elementary spirit; in more modern and intelligible terms, it was a magnetic subject."
+
+[annotations]
+concepts = []
+related_chunks = []

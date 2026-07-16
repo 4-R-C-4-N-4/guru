@@ -1,0 +1,36 @@
+{
+  "id": "89425b7b",
+  "type": "bug",
+  "state": "done",
+  "summary": "generic_html extract_text double-counts nested main>article containers",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T15:41:41.130Z",
+  "updated_at": "2026-07-14T15:42:55.335Z",
+  "files": [
+    {
+      "path": "scripts/downloaders/generic_html.py",
+      "lines": [
+        117,
+        147
+      ]
+    }
+  ],
+  "tags": [
+    "corpus",
+    "pipeline"
+  ],
+  "relationships": {
+    "parent": "bd94d820"
+  },
+  "description": "extract_text collects soup.find_all('main') + find_all('article') into one container list. When <article> nests inside <main> (Global Grey page layout), both are collected and their text concatenated — entire book text duplicated (transcendental-magic raw: 1.43M chars from a 760KB page; every chapter heading appears exactly 2x). The id()-based 'seen' dedup only catches the SAME element, not nesting. The 787681d2 first-tier-wins fix addressed class-tier stacking, not intra-tier nesting. Fix: drop any collected container that is a descendant of another collected container. Existing sources unaffected (Gutenberg/sacred-texts/gnosis pages have no main/article nesting — pistis-sophia char ratio is normal) but re-verify checksums stay stable.",
+  "resolution": {
+    "commit": "19a5d4102dd70f380e6a435f18c6b9196994d8a9",
+    "resolved_at": "2026-07-14T15:42:55.335Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/downloaders/test_generic_html_nested_containers.py",
+    "test_function": "test_nested_main_article_extracted_once",
+    "note": "Filter containers whose ancestor is also collected. Re-acquired transcendental-magic: 715,448 chars (was 1,433,209), all headings now at correct counts. Sibling-container behaviour covered by test_sibling_containers_both_kept; full downloader suite 11 passed."
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "2fb963e9",
+  "type": "chore",
+  "state": "done",
+  "summary": "Graph bootstrap: add 219 transcendental-magic chunk nodes + BELONGS_TO edges",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:15:00.623Z",
+  "updated_at": "2026-07-14T16:30:37.427Z",
+  "files": [
+    {
+      "path": "scripts/graph_bootstrap.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "tagging"
+  ],
+  "relationships": {
+    "parent": "34c91dbc"
+  },
+  "description": "Back up the DB first (scripts/backup_db.sh), then python3 scripts/graph_bootstrap.py --dry-run to confirm it is incremental: expect exactly the 219 new chunk nodes + BELONGS_TO(western_esoteric) edges for transcendental-magic-doctrine/-ritual, zero changes to existing nodes/edges. Then run for real.\n\nAlso update docs/summary/work-grouping.md: the transcendental-magic row and header caveat say 'not yet in DB' — amend to reflect bootstrap (embed still pending).\n\nDone: node/edge counts before/after recorded in close note; chunk node count for the two texts = 219; existing counts unchanged; census caveat updated and committed.",
+  "work": {
+    "branch": "todo/34c91dbc",
+    "base_branch": "main",
+    "started_at": "2026-07-14T16:28:45.403Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-07-14T16:29:56.637Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Spec assumed a functional --dry-run preview; graph_bootstrap.py's --dry-run is a stub (logs 'Dry run — no DB writes' and returns, computing nothing). Incremental safety verified by code-read instead: upsert_node is ON CONFLICT(id) DO UPDATE (idempotent — refreshes to corpus TOML values, which are unchanged for existing texts), upsert_edge is ON CONFLICT DO NOTHING. Verification is before/after count deltas. DB backed up first (guru-20260714T162845Z-manual).",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "9f719b971c8c40964f1040d28548b46ce0636b44",
+    "resolved_at": "2026-07-14T16:30:37.427Z",
+    "resolved_by": "unknown",
+    "note": "DB backed up (guru-20260714T162845Z-manual). graph_bootstrap run over full corpus (idempotent upserts; --dry-run is a stub, see analysis note). Deltas exact: chunk nodes 4174->4393 (+219), BELONGS_TO 4174->4393 (+219); concept/tradition nodes and CONTRASTS/EXPRESSES/PARALLELS edges unchanged. 219 nodes+edges confirmed by id-prefix query. work-grouping.md caveat updated."
+  }
+}

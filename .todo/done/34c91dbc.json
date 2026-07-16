@@ -1,0 +1,30 @@
+{
+  "id": "34c91dbc",
+  "type": "feature",
+  "state": "done",
+  "summary": "Concept-tag transcendental-magic chunks into the live graph (local Qwen3.5-27B)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:14:38.909Z",
+  "updated_at": "2026-07-15T16:43:23.013Z",
+  "tags": [
+    "corpus",
+    "western_esoteric",
+    "tagging"
+  ],
+  "description": "Bring the 219 transcendental-magic chunks (doctrine 96 + ritual 123, ingested under todo:bd94d820 but not yet in the DB) through the tagging pipeline: graph bootstrap -> tag_concepts -> staged-tag review. Provider: llamacpp with the local Qwen3.5-27B server (already running), matching the original corpus tagging provider.\n\nScope: tagging only. embed_corpus and propose_edges stay deferred (embeddings are not a tag_concepts dependency — they feed edge proposals). The work-grouping.md census note 'not yet in DB' gets updated when bootstrap lands.\n\nPromotion path per standing policy (2026-07-14): NO auto_promote, at any score tier. All staged tags go through the /guru-review-tags queue-only review flow (guru-review web app HTTP API); the operator retains the final apply gate.",
+  "relationships": {
+    "children": [
+      "2fb963e9",
+      "18c5f1f1",
+      "99fc14c6"
+    ]
+  },
+  "resolution": {
+    "commit": "7ece22741911cb21b8e3f3ac24a5601e40f5fbe5",
+    "resolved_at": "2026-07-15T16:43:23.013Z",
+    "resolved_by": "unknown",
+    "note": "Tagging line complete: 219 TM chunks bootstrapped into graph (nodes+CONTAINS edges), tag_concepts run via local Qwen3.5-27B (4,883 staged tags), and full /guru-review-tags queue-only pass finished (1,343 accept / 3,533 reject / 7 new-concept skips, reviewer agent-claude). Apply gate with operator. Embed/edges continue separately under f9ab464e."
+  }
+}

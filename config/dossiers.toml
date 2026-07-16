@@ -8,7 +8,12 @@
 
 [campaign]
 # Namespaces the span-plan freeze artifact (data/span_plan_{campaign_id}.json).
-campaign_id = "c1"
+# c2 = c1 + transcendental-magic (todo:91b4c43b). The c1 plan froze at 52
+# works before the transcendental-magic ingest changed totals; per V9 that
+# means a new campaign, never a partial re-plan. Provider/model/span_target
+# unchanged, so the 52 prior works' span ids are identical under c2 and their
+# c1 staged rows satisfy the generate-loop skip/upstream checks unchanged.
+campaign_id = "c2"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).

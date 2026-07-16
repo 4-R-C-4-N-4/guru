@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-doctrine.013"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic I: The Doctrine (Éliphas Lévi)"
+section = "Introductionm"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 240
+
+[content]
+body = "If the pyre of Urban Grandier be extinguished, the sullen proscriptions of silence and of calumny remain., We do not defy but are resigned to them.\n\nWe have not sought the publication of this book of our own will, and we believe that if the time be come to bear witness, it will be borne by us or by others.\n\nWe shall therefore remain calm and shall wait.\n\nOur work is in two parts: in the one we establish the kabalistic and magical doctrine in its entirety; the other is consecrated to the cultus, that is, to Ceremonial Magic.\n\nThe one is that which the ancient sages termed the Clavicle, the other that which people on the country-side still call the Grimoire.\n\nThe numbers and subjects of the chapters which correspond in both parts, are in no sense arbitrary, and are all indicated in the great universal key, of which we give for the first time a complete and adequate explanation.\n\nLet this work now go its way where it will and become what Providence determines; it is finished, and we believe it to be enduring, because it is strong, like all that is reasonable and conscientious."
+
+[annotations]
+concepts = []
+related_chunks = []

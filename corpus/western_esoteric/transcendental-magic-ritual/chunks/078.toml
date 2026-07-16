@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.transcendental-magic-ritual.078"
+tradition = "western_esoteric"
+text_name = "Transcendental Magic II: The Ritual (Éliphas Lévi)"
+section = "15. The Sabbath Of The Sorcerersj"
+translator = "A.E. Waite"
+source_url = "https://www.globalgreyebooks.com/online-ebooks/eliphas-levi_transcendental-magic-its-doctrine-and-ritual_complete-text.html"
+token_count = 58
+
+[content]
+body = "This madman confessed at his trial that Satan had appeared to him frequently, but had always deceived him by promises of treasures which he had never delivered.\n\nIt transpired from the judicial informations that several hundred unfortunate children had fallen victims to the cupidity and atrocious fancies of this monster."
+
+[annotations]
+concepts = []
+related_chunks = []
