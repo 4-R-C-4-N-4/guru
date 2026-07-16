@@ -1,13 +1,13 @@
 {
   "id": "f9ab464e",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Embed transcendental-magic chunks + cross-tradition edge proposals (Mistral)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-14T16:26:49.914Z",
-  "updated_at": "2026-07-14T16:27:11.738Z",
+  "updated_at": "2026-07-16T12:49:35.184Z",
   "tags": [
     "corpus",
     "western_esoteric",
@@ -21,5 +21,11 @@
       "36387ac8",
       "bc562675"
     ]
+  },
+  "resolution": {
+    "commit": "e5b30b934f5da1f990cafa5efee0e39ba6c20d29",
+    "resolved_at": "2026-07-16T12:49:35.184Z",
+    "resolved_by": "unknown",
+    "note": "All subtasks complete: embed (219/219 chunks @768d), propose_edges (2,512 proposals), and full queue-only review of all 1,281 transcendental-magic staged_edges (765a/65c/448s/3u queued as agent-claude; apply gate remains with operator). Tag review ticket 99fc14c6 closed separately earlier."
   }
 }
