@@ -1,0 +1,25 @@
+{
+  "id": "bc562675",
+  "type": "chore",
+  "state": "done",
+  "summary": "Review transcendental-magic staged edges via /guru-review-edges queue flow (no auto-promote)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-14T16:27:11.738Z",
+  "updated_at": "2026-07-16T12:49:22.579Z",
+  "tags": [
+    "corpus",
+    "edges"
+  ],
+  "relationships": {
+    "parent": "f9ab464e"
+  },
+  "description": "Run the /guru-review-edges skill flow over the new staged_edges involving transcendental-magic-doctrine/-ritual: queue accept / reclassify / reject decisions through the guru-review web app HTTP API WITHOUT applying. Per standing policy (2026-07-14) auto_promote_edges.py is never run, at any confidence tier — including the 0.85 tier it would normally sweep.\n\nThe operator retains the final apply gate: this ticket ends with a fully queued decision set and a summary of queued decisions by type and confidence. Applying is the operator's action in the web app, not part of this ticket.\n\nDone: every transcendental-magic staged_edge has a queued decision in guru-review; counts recorded in close note; zero writes to live edges; verified tier untouched.",
+  "resolution": {
+    "commit": "e5b30b934f5da1f990cafa5efee0e39ba6c20d29",
+    "resolved_at": "2026-07-16T12:49:22.579Z",
+    "resolved_by": "unknown",
+    "note": "All 1,281 pending transcendental-magic staged_edges queued via guru-review API as reviewer agent-claude (verified: edge-queued.log = 1,281 lines, 1:1 with safe set; server total_queued 6,170 = 4,889 tag + 1,281 edge). Decisions: 765 accept / 65 reclassify CONTRASTS / 448 reclassify surface_only / 3 reclassify unrelated. Staged types: 1,276 PARALLELS + 5 native CONTRASTS (all 5 accepted, plotinus anti-magic axis). Zero /api/apply calls; zero live-edge writes; verified tier untouched. 18 Budge duplicate-body chunk pairs found (reported to operator, no tickets opened). Full per-batch record in session scratchpad edge-review-state.md."
+  }
+}
