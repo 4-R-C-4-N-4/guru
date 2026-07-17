@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.secret-teachings-of-all-ages.306"
+tradition = "western_esoteric"
+text_name = "The Secret Teachings of All Ages (Manly P. Hall)"
+section = "The Tree of the Sephirothh"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+token_count = 126
+
+[content]
+body = "(See Transcendental Magic .) Of the Great Word, Albert Pike writes: \"The True Word of a Mason is to be found in the concealed and profound meaning of the Ineffable Name of Deity, communicated by God to Moses; and which meaning was long lost by the very precautions taken to conceal it.\n\nThe true pronunciation of that name was in truth a secret, in which, however, was involved the far more profound secret of its meaning.\n\nIn that meaning is included all the truth that can be known by us, in regard to the nature of God.\" (See Morals and Dogma .)"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1027,6 +1027,24 @@ license = "public_domain"
 translator = "A.E. Waite"
 notes = "Volume Two (Rituel) of Lévi's Dogme et Rituel de la Haute Magie — the practical/ceremonial counterpart to Volume One, same 22-chapter trump-keyed structure. Chunking pre_strips Volume One."
 
+# Hall's 1928 folio ('An Encyclopedic Outline of Masonic, Hermetic,
+# Qabbalistic and Rosicrucian Symbolical Philosophy') entered US public
+# domain 2024-01-01 (95-year rule). Synthesist PRIMARY source of the
+# American occult revival (Lévi precedent), not apparatus — but survey
+# character means broad topical overlap with every shelf: edge-staging
+# policy should be stricter for this text (retrieval impact assessed
+# 2026-07-17: bounded by MAX_PER_TRADITION cap + rarity-weighted
+# diversity; displacement lands intra-tradition on Lévi first).
+
+[[source]]
+id = "secret-teachings-of-all-ages"
+tradition = "western_esoteric"
+label = "The Secret Teachings of All Ages (Manly P. Hall)"
+url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+format = "html"
+license = "public_domain"
+notes = "Hall's 1928 encyclopedic survey of Western esotericism — Mysteries, Pythagorean number theory, Qabbalah, Tarot, alchemy, Rosicrucianism, Freemasonry, ceremonial magic. US PD since 2024. Cites Lévi, Agrippa, Paracelsus, Bruno and the Corpus Hermeticum throughout — dense cross-shelf linkage expected; treat edge staging at stricter threshold (genre-magnet profile)."
+
 
 # ============================================
 # RENAISSANCE HERMETICISM (Bruno)
