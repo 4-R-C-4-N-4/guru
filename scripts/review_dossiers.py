@@ -204,6 +204,12 @@ def cmd_bulk_accept(conn, args):
     if args.model:
         q += " AND model=?"
         params.append(args.model)
+    if args.work:
+        # Both staged_summaries and staged_dossier_fields carry work_id; without
+        # this, bulk-accept sweeps EVERY work's pending rows at this
+        # (level/field, prompt_version), so callers had to scope by hand.
+        q += " AND work_id=?"
+        params.append(args.work)
     n = conn.execute(q, params).rowcount
     conn.commit()
     logger.info(f"bulk-accepted {n} rows")
@@ -240,6 +246,7 @@ def main() -> int:
     ba.add_argument("--level", type=int)
     ba.add_argument("--prompt-version", required=True)
     ba.add_argument("--model")
+    ba.add_argument("--work", help="scope to one work_id (else all works at this version)")
     sub.add_parser("status")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(message)s")

@@ -213,7 +213,15 @@ def main() -> int:
     ap.add_argument("--work")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--db", type=Path, default=DEFAULT_DB)
-    ap.add_argument("--campaign", default="c1")
+    # Default the campaign from dossiers.toml so promote validates against the
+    # CURRENT span plan; a hardcoded "c1" silently checked new works against a
+    # stale plan (STAA under c3 had to pass --campaign by hand or misvalidate).
+    try:
+        _campaign_default = tomllib.load(
+            open(PROJECT_ROOT / "config" / "dossiers.toml", "rb"))["campaign"]["campaign_id"]
+    except Exception:
+        _campaign_default = "c1"
+    ap.add_argument("--campaign", default=_campaign_default)
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
