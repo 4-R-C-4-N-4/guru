@@ -200,6 +200,7 @@ def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, time
     — generation nodes are pure text completion.
     """
     import subprocess
+    import time
 
     cmd = [
         "claude", "-p",
@@ -208,41 +209,56 @@ def call_claude_code(model: str, system: str, prompt: str, max_tokens: int, time
         "--system-prompt", system,
         "--disallowedTools", "*",
     ]
-    try:
-        proc = subprocess.run(
-            cmd, input=prompt, capture_output=True, text=True, timeout=timeout,
-        )
-    except subprocess.TimeoutExpired as e:
-        raise RuntimeError(f"claude-code timed out after {timeout}s") from e
-    out = (proc.stdout or "").strip()
-    err = (proc.stderr or "").strip()
-    # The CLI exits nonzero for API-level errors but still writes the JSON
-    # envelope to stdout — always try the envelope first.
-    envelope = None
-    try:
-        envelope = json.loads(out)
-    except json.JSONDecodeError:
-        pass
-    if envelope is None:
-        low = (out + " " + err).lower()
-        if any(m in low for m in _CLAUDE_BUSY_MARKERS):
-            raise ProviderBusy(f"claude-code busy: {err or out[:200]}")
-        if proc.returncode == 0:
-            # exit 0 with an unparseable envelope is an output problem, not a
-            # process failure — say so, or triage chases the wrong thing
-            raise RuntimeError(f"claude-code exit 0 but non-JSON envelope: {out[:200]!r}")
-        raise RuntimeError(f"claude-code exit {proc.returncode}: {err or out[:200]}")
-    if envelope.get("is_error"):
-        result_low = str(envelope.get("result", "")).lower()
-        if any(m in result_low for m in _CLAUDE_BUSY_MARKERS):
-            raise ProviderBusy(f"claude-code busy: {envelope.get('result', '')[:200]}")
-        if "content filtering" in result_low or "blocked" in result_low:
-            raise ContentBlocked(f"claude-code content filter: {envelope.get('result', '')[:200]}")
-        raise RuntimeError(f"claude-code error result: {envelope.get('result', '')[:200]}")
-    result = envelope.get("result")
-    if not isinstance(result, str) or not result.strip():
-        raise RuntimeError("claude-code envelope had empty result")
-    return result
+    # A well-formed envelope with an empty result, or an exit-0 non-JSON
+    # envelope, is a transient output glitch (not a process/API failure). Retry
+    # a few times in-function, then escalate to ProviderBusy so the caller's
+    # backoff loop sleeps and resumes rather than the whole run dying — staged
+    # rows make every node idempotent (design §1.3.6). Before this, the empty
+    # result raised a bare RuntimeError that killed unattended stage runs.
+    last_transient = None
+    for _attempt in range(3):
+        try:
+            proc = subprocess.run(
+                cmd, input=prompt, capture_output=True, text=True, timeout=timeout,
+            )
+        except subprocess.TimeoutExpired as e:
+            raise RuntimeError(f"claude-code timed out after {timeout}s") from e
+        out = (proc.stdout or "").strip()
+        err = (proc.stderr or "").strip()
+        # The CLI exits nonzero for API-level errors but still writes the JSON
+        # envelope to stdout — always try the envelope first.
+        envelope = None
+        try:
+            envelope = json.loads(out)
+        except json.JSONDecodeError:
+            pass
+        if envelope is None:
+            low = (out + " " + err).lower()
+            if any(m in low for m in _CLAUDE_BUSY_MARKERS):
+                raise ProviderBusy(f"claude-code busy: {err or out[:200]}")
+            if proc.returncode == 0:
+                # exit 0 with an unparseable envelope is a transient output glitch
+                last_transient = f"exit 0 non-JSON envelope: {out[:200]!r}"
+                time.sleep(1.5)
+                continue
+            raise RuntimeError(f"claude-code exit {proc.returncode}: {err or out[:200]}")
+        if envelope.get("is_error"):
+            result_low = str(envelope.get("result", "")).lower()
+            if any(m in result_low for m in _CLAUDE_BUSY_MARKERS):
+                raise ProviderBusy(f"claude-code busy: {envelope.get('result', '')[:200]}")
+            if "content filtering" in result_low or "blocked" in result_low:
+                raise ContentBlocked(f"claude-code content filter: {envelope.get('result', '')[:200]}")
+            raise RuntimeError(f"claude-code error result: {envelope.get('result', '')[:200]}")
+        result = envelope.get("result")
+        if not isinstance(result, str) or not result.strip():
+            # well-formed envelope, empty result — transient; retry then escalate
+            last_transient = "envelope had empty result"
+            time.sleep(1.5)
+            continue
+        return result
+    raise ProviderBusy(
+        f"claude-code transient after 3 tries: {last_transient}", retry_after=15.0
+    )
 
 
 PROVIDERS = {

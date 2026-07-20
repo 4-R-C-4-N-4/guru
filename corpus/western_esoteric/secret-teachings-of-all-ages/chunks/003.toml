@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.secret-teachings-of-all-ages.003"
+tradition = "western_esoteric"
+text_name = "The Secret Teachings of All Ages (Manly P. Hall)"
+section = "Prefacec"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+token_count = 54
+
+[content]
+body = "And so, in the words of John Bunyan: I penned It down, until at last it came to be, For length and breadth, the bigness which you see.\n\nMANLY P.\n\nHALL.\n\nLos Angeles, California May 28,1928"
+
+[annotations]
+concepts = []
+related_chunks = []

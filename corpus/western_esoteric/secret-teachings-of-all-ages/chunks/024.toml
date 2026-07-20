@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.secret-teachings-of-all-ages.024"
+tradition = "western_esoteric"
+text_name = "The Secret Teachings of All Ages (Manly P. Hall)"
+section = "Introductionu"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+token_count = 57
+
+[content]
+body = "But, lest these secret processes fall into uncultured hands and be perverted, the Great Arcanum was always concealed in symbol or allegory; and those who can today discover its lost keys may open with them a treasure house of philosophic, scientific, and religious truths."
+
+[annotations]
+concepts = []
+related_chunks = []

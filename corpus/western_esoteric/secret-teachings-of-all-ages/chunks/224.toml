@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.secret-teachings-of-all-ages.224"
+tradition = "western_esoteric"
+text_name = "The Secret Teachings of All Ages (Manly P. Hall)"
+section = "Fishes, Insects, Animals, Reptiles and Birdsv"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+token_count = 52
+
+[content]
+body = "The siege of Troy is a symbolic account of the abduction of the human soul (Helena) by the personality (Paris) and its final redemption, through persevering struggle, by the secret doctrine--the Greek army under the command of Agamemnon."
+
+[annotations]
+concepts = []
+related_chunks = []

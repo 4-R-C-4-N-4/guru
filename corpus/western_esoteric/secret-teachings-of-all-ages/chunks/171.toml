@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.secret-teachings-of-all-ages.171"
+tradition = "western_esoteric"
+text_name = "The Secret Teachings of All Ages (Manly P. Hall)"
+section = "Pythagorean Mathematicsn"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/manly-p-hall_secret-teachings-of-all-ages_complete-text.html"
+token_count = 140
+
+[content]
+body = "It was also called unwearied, because, like God, it was tireless.\n\nThe Pythagoreans divided the heavenly bodies into ten orders.\n\nThey also stated that the decad perfected all numbers and comprehended within itself the nature of odd and even, moved and unmoved, good and ill.\n\nThey associated its power with the following deities: Atlas (for it carried the numbers on its shoulders), Urania, Mnemosyne, the Sun, Phanes, and the One God.\n\nThe decimal system can probably be traced back to the time when it was customary to reckon on the fingers, these being among the most primitive of calculating devices and still in use among many aboriginal peoples."
+
+[annotations]
+concepts = []
+related_chunks = []

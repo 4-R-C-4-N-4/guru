@@ -13,7 +13,12 @@
 # means a new campaign, never a partial re-plan. Provider/model/span_target
 # unchanged, so the 52 prior works' span ids are identical under c2 and their
 # c1 staged rows satisfy the generate-loop skip/upstream checks unchanged.
-campaign_id = "c2"
+# c3 = c2 + secret-teachings-of-all-ages (STAA, 530 chunks → 71 new spans).
+# The c2 plan froze at 53 works before the STAA pipeline pass completed; per
+# V9 that is a new campaign, never a partial re-plan. Provider/model/span_target
+# unchanged, so the 53 prior works' span ids are identical under c3 and their
+# c2 staged rows satisfy the generate-loop skip/upstream checks unchanged.
+campaign_id = "c3"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).

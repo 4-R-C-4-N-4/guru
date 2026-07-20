@@ -94,6 +94,30 @@ def _manifest_notes(members: tuple[str, ...] | list[str]) -> str:
 
 # ── contract validators ──────────────────────────────────────────────────────
 
+# Scaffold-leak guard: neither the length band nor the verbatim-echo guard can
+# catch a model that reproduces prompt scaffolding, planning text, or markup
+# instead of clean output. These markers showed up on ~10% of the STAA L1 batch
+# (# Summary / INPUT: / OUTPUT: / INPUT ENDS / <br> / leading --- or *** /
+# "Let me write ..."), passing the length-only contract silently. Folding the
+# check into the validators turns each into an automatic in-loop reject so
+# _attempt regenerates it with corrective feedback.
+_SCAFFOLD_MARKERS = re.compile(
+    r"#\s*Summary\b|\bINPUT\s*:|\bOUTPUT\s*:|\bINPUT\s+ENDS?\b|</?[a-zA-Z][^>]*>"
+    r"|\bLet me (?:write|produce|summariz)|\bhere is (?:the|a) summ",
+    re.IGNORECASE,
+)
+
+
+def _v_no_scaffold(text: str, *, prose: bool = False) -> None:
+    t = (text or "").strip()
+    if _SCAFFOLD_MARKERS.search(t):
+        raise ValueError("scaffold/template leak in output")
+    if t.startswith(("---", "***", "#")):
+        raise ValueError("leading markdown/rule artifact")
+    if prose and t[:1].islower():
+        raise ValueError("prose starts mid-sentence (lowercase)")
+
+
 def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
     body = raw.strip()
     if not body or body.startswith("```"):
@@ -115,6 +139,7 @@ def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
         for i in starts:
             if " ".join(words[i:i + 15]) in src:
                 raise ValueError("verbatim echo of input (15-word shingle match)")
+    _v_no_scaffold(body, prose=True)
     return body
 
 
@@ -126,6 +151,8 @@ def _v_body_json(raw: str, allow_null: bool = False) -> dict:
         raise ValueError("body is null")
     if obj["body"] is not None and not str(obj["body"]).strip():
         raise ValueError("body is empty")
+    if obj["body"] is not None:
+        _v_no_scaffold(str(obj["body"]), prose=True)
     return {"body": obj["body"]}
 
 
@@ -135,6 +162,8 @@ def _v_structure(raw: str) -> dict:
         raise ValueError("expected {\"title\", \"synopsis\"}")
     if not (1 <= len(str(obj["title"]).split()) <= 8):
         raise ValueError("title word count out of range")
+    _v_no_scaffold(str(obj["title"]))
+    _v_no_scaffold(str(obj["synopsis"]), prose=True)
     return {"title": obj["title"], "synopsis": obj["synopsis"]}
 
 
@@ -146,6 +175,9 @@ def _v_listing(raw: str, key: str, item_keys: tuple[str, ...], max_n: int) -> di
     for it in items:
         if not isinstance(it, dict) or any(k not in it for k in item_keys):
             raise ValueError(f"item missing keys {item_keys}")
+        for k in item_keys:
+            if isinstance(it[k], str):
+                _v_no_scaffold(it[k])
     return {key: items}
 
 

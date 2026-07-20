@@ -347,6 +347,10 @@ def run_tagging(
     concepts = load_taxonomy()
     conn = sqlite3.connect(str(db_path))
     conn.execute("PRAGMA foreign_keys=ON")
+    # WAL allows concurrent readers but one writer; parallel worker runs
+    # (--chunk-ids-from-file shards) need a wait instead of an instant
+    # "database is locked" crash.
+    conn.execute("PRAGMA busy_timeout=30000")
 
     chunks = get_chunks(conn, tradition, text_id, resume, chunk_ids=chunk_ids)
     logger.info(f"Tagging {len(chunks)} chunks with {provider_name}/{model} ...")
