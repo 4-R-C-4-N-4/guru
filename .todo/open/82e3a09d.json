@@ -1,13 +1,13 @@
 {
   "id": "82e3a09d",
   "type": "chore",
-  "state": "open",
+  "state": "active",
   "summary": "Corpus readability cleanup: audit + curate malformed chunk bodies for the public reader",
   "source": {
     "type": "human"
   },
   "created_at": "2026-07-23T15:26:50.639Z",
-  "updated_at": "2026-07-23T15:26:50.681Z",
+  "updated_at": "2026-07-23T15:53:34.847Z",
   "files": [
     {
       "path": "scripts/clean_bodies.py"
@@ -18,5 +18,20 @@
     "cleanup",
     "reader"
   ],
-  "description": "guru-web now serves chunk bodies verbatim to the public at guru-ai.org/read (PR guru-web#106), so pipeline-era formatting artifacts are user-facing: egyptian texts are the known offender (hard-wrapped lines, transliteration noise), likely others. Phase 1 — heuristic audit scanner over corpus TOML bodies: score each chunk on fraction of hard-wrapped short lines, page-number/footnote artifacts ([p. 143], ^1), ALL-CAPS header runs, bracket noise, broken end-of-line hyphenation; rank texts by damage to size the problem before any hand-curation. Phase 2 — staged_cleanups queue mirroring staged_tags/staged_edges: local 4B/27B models propose per-chunk rewrites on the 3090, human reviews and applies behind the usual gate (no auto-promote), then re-export. Best done before Google indexes the ugly versions."
+  "description": "guru-web now serves chunk bodies verbatim to the public at guru-ai.org/read (PR guru-web#106), so pipeline-era formatting artifacts are user-facing: egyptian texts are the known offender (hard-wrapped lines, transliteration noise), likely others. Phase 1 — heuristic audit scanner over corpus TOML bodies: score each chunk on fraction of hard-wrapped short lines, page-number/footnote artifacts ([p. 143], ^1), ALL-CAPS header runs, bracket noise, broken end-of-line hyphenation; rank texts by damage to size the problem before any hand-curation. Phase 2 — staged_cleanups queue mirroring staged_tags/staged_edges: local 4B/27B models propose per-chunk rewrites on the 3090, human reviews and applies behind the usual gate (no auto-promote), then re-export. Best done before Google indexes the ugly versions.",
+  "work": {
+    "branch": "todo/82e3a09d",
+    "base_branch": "main",
+    "started_at": "2026-07-23T15:53:25.472Z",
+    "started_by": "Hermes Agent"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-07-23T15:53:34.847Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Ticket bundles two phases of different sizes. This pass implements Phase 1 (heuristic audit scanner + ranked damage report) — the deliverable that sizes the problem. Phase 2 (staged_cleanups review queue with local-model rewrites behind the apply gate) is a schema+queue+review-UI build and is split into its own ticket, linked on close.",
+      "confidence": "high"
+    }
+  ]
 }
