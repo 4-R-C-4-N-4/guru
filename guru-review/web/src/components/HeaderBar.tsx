@@ -11,6 +11,7 @@ export function HeaderBar(): React.ReactElement {
   const [retryCount, setRetryCount] = useState(0);
   const loc = useLocation();
   const onEdges = loc.pathname.startsWith('/edges');
+  const onCleanups = loc.pathname.startsWith('/cleanups');
 
   useEffect(() => subscribeRetry(setRetryCount), []);
 
@@ -32,8 +33,12 @@ export function HeaderBar(): React.ReactElement {
     };
   }, []);
 
-  const pendingCount = onEdges ? stats?.pending_edges : stats?.pending_tags;
-  const pendingLabel = onEdges ? 'edges' : 'tags';
+  const pendingCount = onCleanups
+    ? stats?.pending_cleanups
+    : onEdges
+      ? stats?.pending_edges
+      : stats?.pending_tags;
+  const pendingLabel = onCleanups ? 'cleanups' : onEdges ? 'edges' : 'tags';
 
   return (
     <>
@@ -43,7 +48,7 @@ export function HeaderBar(): React.ReactElement {
             <Link to="/" className="font-bold text-accent">guru-review</Link>
             <Link
               to="/"
-              className={`text-xs ${!onEdges ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`text-xs ${!onEdges && !onCleanups ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               tags
             </Link>
@@ -52,6 +57,12 @@ export function HeaderBar(): React.ReactElement {
               className={`text-xs ${onEdges ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               edges
+            </Link>
+            <Link
+              to="/cleanups"
+              className={`text-xs ${onCleanups ? 'text-zinc-200 underline' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              cleanups
             </Link>
             {retryCount > 0 && (
               <span

@@ -71,6 +71,7 @@ export function Queue(): React.ReactElement {
   // separately. The §6 design calls for a `by_target_table` summary too.
   const tagRows = rows.filter((r): r is Extract<QueueRow, { target_table: 'staged_tags' }> => r.target_table === 'staged_tags');
   const edgeRows = rows.filter((r): r is Extract<QueueRow, { target_table: 'staged_edges' }> => r.target_table === 'staged_edges');
+  const cleanupRows = rows.filter((r): r is Extract<QueueRow, { target_table: 'staged_cleanups' }> => r.target_table === 'staged_cleanups');
   const acceptCount = preview.by_action.accept ?? 0;
 
   return (
@@ -80,6 +81,7 @@ export function Queue(): React.ReactElement {
           {preview.total_queued} queued
           {preview.affected_staged_tags > 0 && ` · ${preview.affected_staged_tags} staged_tags`}
           {preview.affected_staged_edges > 0 && ` · ${preview.affected_staged_edges} staged_edges`}
+          {preview.affected_staged_cleanups > 0 && ` · ${preview.affected_staged_cleanups} staged_cleanups`}
         </div>
         <div className="mt-1 text-xs text-zinc-500">
           {Object.entries(preview.by_action)
@@ -129,6 +131,18 @@ export function Queue(): React.ReactElement {
               </summary>
               <div>
                 {edgeRows.map((r) => (
+                  <ActionRow key={r.client_action_id} row={r} onUndo={(c) => void undo(c)} />
+                ))}
+              </div>
+            </details>
+          )}
+          {cleanupRows.length > 0 && (
+            <details open className="rounded border border-zinc-800 bg-zinc-950">
+              <summary className="cursor-pointer px-3 py-2 text-zinc-300 hover:bg-zinc-900">
+                staged_cleanups <span className="text-zinc-500">({cleanupRows.length})</span>
+              </summary>
+              <div>
+                {cleanupRows.map((r) => (
                   <ActionRow key={r.client_action_id} row={r} onUndo={(c) => void undo(c)} />
                 ))}
               </div>
@@ -195,6 +209,15 @@ function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => vo
             <div className="truncate text-zinc-500">
               {ctx.concept_id}
               {row.action === 'reassign' && row.reassign_to && <span> → {row.reassign_to}</span>}
+            </div>
+          </>
+        ) : ctx.kind === 'cleanup' ? (
+          <>
+            <div className="truncate text-zinc-300">{ctx.section_label ?? ctx.chunk_id}</div>
+            <div className="truncate text-zinc-500">
+              rewrite · wrap {ctx.signal_score?.toFixed(2)}
+              {!ctx.words_preserved && <span className="text-rose-400"> · drifted</span>}
+              {row.action === 'reclassify' && <span> → apparatus</span>}
             </div>
           </>
         ) : (

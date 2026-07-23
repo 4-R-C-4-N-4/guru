@@ -1,16 +1,18 @@
 import type Database from 'better-sqlite3';
 
 const DDL = `
--- Polymorphic review queue. target_id points at staged_tags.id when
--- target_table='staged_tags' and at staged_edges.id when 'staged_edges';
--- no FK because no single FK satisfies both. The CHECK enforces that
--- action is consistent with target_table — reassign is staged_tags-only,
--- reclassify is staged_edges-only.
+-- Polymorphic review queue. target_id points at staged_tags.id /
+-- staged_edges.id / staged_cleanups.id per target_table; no FK because no
+-- single FK satisfies them. The CHECK enforces that action is consistent
+-- with target_table — reassign is staged_tags-only, reclassify serves
+-- staged_edges (new edge_type) and staged_cleanups (apparatus_drop only).
+-- Live DBs get this shape via scripts/migrations/v3_008_cleanup_review.sql;
+-- this declaration covers shadow DBs and fresh boots.
 CREATE TABLE IF NOT EXISTS review_actions (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
     target_id         INTEGER NOT NULL,
     target_table      TEXT NOT NULL DEFAULT 'staged_tags'
-                          CHECK(target_table IN ('staged_tags','staged_edges')),
+                          CHECK(target_table IN ('staged_tags','staged_edges','staged_cleanups')),
     action            TEXT NOT NULL
                           CHECK(action IN ('accept','reject','skip','reassign','reclassify')),
     reassign_to       TEXT,
@@ -28,6 +30,12 @@ CREATE TABLE IF NOT EXISTS review_actions (
       (target_table = 'staged_edges' AND action IN ('accept','reject','skip','reclassify')
                                      AND reassign_to IS NULL
                                      AND ((action='reclassify') = (reclassify_to IS NOT NULL)))
+      OR
+      (target_table = 'staged_cleanups'
+                                     AND action IN ('accept','reject','skip','reclassify')
+                                     AND reassign_to IS NULL
+                                     AND ((action='reclassify') = (reclassify_to IS NOT NULL))
+                                     AND (reclassify_to IS NULL OR reclassify_to = 'apparatus_drop'))
     )
 );
 
@@ -58,6 +66,7 @@ const EXPECTED_TABLES = [
   'edges',
   'nodes',
   'review_actions',
+  'staged_cleanups',
   'staged_concepts',
   'staged_edges',
   'staged_tags',

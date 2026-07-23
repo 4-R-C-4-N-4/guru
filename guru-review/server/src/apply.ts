@@ -9,7 +9,7 @@ import type { PreparedStmts } from './db.js';
 interface QueuedAction {
   id: number;
   target_id: number;
-  target_table: 'staged_tags' | 'staged_edges';
+  target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups';
   action: 'accept' | 'reject' | 'skip' | 'reassign' | 'reclassify';
   reassign_to: string | null;
   reclassify_to: string | null;
@@ -213,6 +213,70 @@ function applyEdgeAction(
 }
 
 
+// ── staged_cleanups branch (todo:b44966d0) ─────────────────────────────
+//
+// Status-only: accept/reject/apparatus flips the staged row; the corpus
+// TOML write happens later via scripts/apply_cleanups.py (the server never
+// edits the corpus). 'apparatus' rows are the reviewer-confirmed hand-off
+// list for whole-chunk drop work (todo:50438e23).
+
+interface StagedCleanup {
+  id: number;
+  chunk_id: string;
+  words_preserved: number;
+  status: string;
+}
+
+function applyCleanupAction(
+  stmts: PreparedStmts,
+  q: QueuedAction,
+  result: ApplyResult,
+): boolean {
+  const cleanup = stmts.selectStagedCleanup.get(q.target_id) as StagedCleanup | undefined;
+
+  if (!cleanup || cleanup.status !== 'pending') {
+    stmts.markActionApplied.run(
+      `staged_cleanup was ${cleanup?.status ?? 'missing'} at apply time`,
+      q.id,
+    );
+    result.skipped_already_resolved++;
+    return true;
+  }
+
+  switch (q.action) {
+    case 'accept': {
+      stmts.updateStagedCleanupStatus.run('accepted', q.reviewer, nowIso(), cleanup.id);
+      break;
+    }
+    case 'reject': {
+      stmts.updateStagedCleanupStatus.run('rejected', q.reviewer, nowIso(), cleanup.id);
+      break;
+    }
+    case 'reclassify': {
+      if (q.reclassify_to !== 'apparatus_drop') {
+        throw new Error(
+          `staged_cleanups reclassify only accepts apparatus_drop (action ${q.id})`,
+        );
+      }
+      stmts.updateStagedCleanupStatus.run('apparatus', q.reviewer, nowIso(), cleanup.id);
+      break;
+    }
+    case 'skip': {
+      break;
+    }
+    default: {
+      throw new Error(
+        `unknown action for staged_cleanups: ${q.action} (action ${q.id})`,
+      );
+    }
+  }
+
+  stmts.markActionApplied.run(null, q.id);
+  result.applied++;
+  return true;
+}
+
+
 // ── transaction wrapper ────────────────────────────────────────────────
 
 export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
@@ -230,6 +294,8 @@ export function buildApply(rw: Database.Database, stmts: PreparedStmts) {
         applyTagAction(stmts, q, result);
       } else if (q.target_table === 'staged_edges') {
         applyEdgeAction(stmts, q, result);
+      } else if (q.target_table === 'staged_cleanups') {
+        applyCleanupAction(stmts, q, result);
       } else {
         throw new Error(
           `unknown target_table: ${String(q.target_table)} (action ${q.id})`,

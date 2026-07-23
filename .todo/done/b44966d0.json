@@ -1,0 +1,31 @@
+{
+  "id": "b44966d0",
+  "type": "feature",
+  "state": "done",
+  "summary": "staged_cleanups queue: model-proposed rewrites for hard-wrapped prose behind the apply gate",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-07-23T15:57:00.175Z",
+  "updated_at": "2026-07-23T19:40:55.902Z",
+  "tags": [
+    "corpus",
+    "cleanup",
+    "review-queue"
+  ],
+  "description": "Phase 2 of todo:82e3a09d, scope narrowed by the audit: after the clean_bodies regex extension and the 50438e23 apparatus work, the remaining damage class is hard-wrapped prose (mandaean gnostic-john-baptizer texts, hard_wrap 0.45-0.86 on worst chunks) which regex cannot safely unwrap. Build staged_cleanups mirroring staged_tags/staged_edges: local 4B/27B models on the 3090 propose per-chunk rewrites (unwrap lines, preserve every word — diff-checkable), reviewer accepts/rejects behind the usual apply gate (no auto-promote), apply writes TOMLs + recomputes token_count like clean_bodies --apply, then re-export. Reuse guru-review UI patterns for the diff view.",
+  "work": {
+    "branch": "todo/b44966d0",
+    "base_branch": "main",
+    "started_at": "2026-07-23T19:10:05.625Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "6cd246c5c81d94f43e05c35b069348ac7200b2d4",
+    "resolved_at": "2026-07-23T19:40:55.902Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_propose_cleanups.py",
+    "test_function": "test_apply_refuses_word_drift_even_if_flag_lied",
+    "note": "Full pipeline shipped: staged_cleanups schema+migration (v3_008), propose_cleanups.py (local model, mechanical words_preserved contract), guru-review /cleanups deck (BEFORE/AFTER cards, apparatus_drop escape hatch to 50438e23), status-only apply gate branch, apply_cleanups.py corpus writer with staleness/drift/ratio guards. 25 clean proposals staged (qwen3:8b), 15 retried on qwen3-coder:30b in flight. Server live on :7314 with the new deck."
+  }
+}

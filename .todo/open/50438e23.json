@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-06-25T15:50:46.307Z",
-  "updated_at": "2026-07-04T17:03:38.519Z",
+  "updated_at": "2026-07-23T19:11:10.656Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -127,6 +127,13 @@
       "author": "Hermes Agent",
       "type": "evidence",
       "content": "Scope boundary set by V8 parent fccaf47d (2026-07-04): in-place, id-preserving marker strips move to fccaf47d/clean_bodies.py; WHOLE-chunk apparatus drops and re-chunks remain here (id-changing, needs remap machinery like plotinus_apparatus_remap.py). The V8 audit child (9ff92786) will hand this ticket a per-domain list of pure-apparatus chunks found while sampling. Note: dossier generation (docs/summary/) treats id-changing fixes from this ticket as upstream of the span-plan freeze for affected works.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-07-23T19:11:10.656Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Readability audit handoff (todo:82e3a09d, docs/summary/readability-audit.md — the audit-child role entry [12] anticipated): new pure-apparatus instances now USER-FACING via the public reader (guru-web /read). (1) mandaean gnostic-john-baptizer-1/2/3: translator footnote BLOCKS chunked as body (worst: -3.021, entire chunk is 'p. 81 / 1 The salt, bitter...' note apparatus; several of the 40 hard_wrap>=0.15 chunks are this class). (2) jewish_mysticism.enoch-charles-1917.140: body is ONLY an errata note ('Errata page 88...') — clean_bodies shrink-guard refuses it at 40->0 chars; needs whole-chunk drop. (3) shinto.kojiki-beginning-heaven-earth.001: body DUPLICATED (same passage twice, one with [16] page-marker variant) + inline p.15/p.16 — acquisition/chunking level. The staged_cleanups review queue (todo:b44966d0, building now) includes a reclassify-as-drop decision that will accumulate reviewer-confirmed apparatus chunk ids for this ticket's drop/re-chunk campaigns.",
       "confidence": "high"
     }
   ],

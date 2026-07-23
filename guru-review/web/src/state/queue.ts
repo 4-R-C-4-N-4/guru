@@ -15,7 +15,7 @@ interface PendingPost {
   target_id: number;
   /** which surface this action belongs to. Defaults to staged_tags for
    * backward compatibility with queue items persisted before edges shipped. */
-  target_table?: 'staged_tags' | 'staged_edges';
+  target_table?: 'staged_tags' | 'staged_edges' | 'staged_cleanups';
   payload: ActionPayload;
   attempts: number;
   next_attempt_at: number; // ms epoch
@@ -55,7 +55,7 @@ export function subscribe(fn: (n: number) => void): () => void {
 export async function enqueue(
   targetId: number,
   payload: ActionPayload,
-  targetTable: 'staged_tags' | 'staged_edges' = 'staged_tags',
+  targetTable: 'staged_tags' | 'staged_edges' | 'staged_cleanups' = 'staged_tags',
 ): Promise<void> {
   const items = await load();
   items.push({
@@ -85,7 +85,10 @@ async function drainOnce(): Promise<void> {
 
   for (const item of due) {
     try {
-      const surface = item.target_table === 'staged_edges' ? 'edges' : 'tags';
+      const surface =
+        item.target_table === 'staged_edges' ? 'edges'
+        : item.target_table === 'staged_cleanups' ? 'cleanups'
+        : 'tags';
       const res = await fetch(`/api/${surface}/${item.target_id}/action`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },

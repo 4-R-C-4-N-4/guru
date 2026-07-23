@@ -110,6 +110,45 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_edges_provenance_unique
     WHERE status = 'pending';
 
 -- ============================================================
+-- STAGING — model-proposed body cleanups (todo:b44966d0)
+-- ============================================================
+-- Rewrites of malformed chunk bodies (hard-wrapped prose the regex
+-- classes in clean_bodies.py cannot safely unwrap). Proposed by
+-- scripts/propose_cleanups.py, reviewed as diffs in guru-review,
+-- applied to the corpus TOMLs by scripts/apply_cleanups.py — the web
+-- apply gate only flips status (the server never writes the corpus).
+-- status 'apparatus' = reviewer reclassified the chunk as whole-chunk
+-- editorial apparatus (drop/merge work, todo:50438e23) — an
+-- accumulating hand-off list, never auto-actioned.
+
+CREATE TABLE IF NOT EXISTS staged_cleanups (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    chunk_id        TEXT NOT NULL REFERENCES nodes(id),
+    original_body   TEXT NOT NULL,
+    proposed_body   TEXT NOT NULL,
+    justification   TEXT,
+    signal_score    REAL NOT NULL DEFAULT 0.0,   -- audit hard_wrap 0..1 at propose time
+    words_preserved INTEGER NOT NULL DEFAULT 0,  -- 1 = char stream identical modulo whitespace/hyphens
+    status          TEXT NOT NULL DEFAULT 'pending'
+                        CHECK(status IN ('pending','accepted','rejected','apparatus')),
+    reviewed_by     TEXT,
+    reviewed_at     TEXT,
+    applied_at      TEXT,                        -- set by apply_cleanups.py when the TOML is written
+    model           TEXT,
+    prompt_version  TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_staged_cleanups_chunk  ON staged_cleanups(chunk_id);
+CREATE INDEX IF NOT EXISTS idx_staged_cleanups_status ON staged_cleanups(status);
+
+-- Partial UNIQUE mirrors staged_edges: re-propose with the same
+-- model+prompt_version no-ops while pending; settled rows can coexist
+-- with fresh proposals from a different run.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_cleanups_provenance_unique
+    ON staged_cleanups(chunk_id, model, prompt_version)
+    WHERE status = 'pending';
+
+-- ============================================================
 -- STAGING — new concept proposals from tagging
 -- ============================================================
 

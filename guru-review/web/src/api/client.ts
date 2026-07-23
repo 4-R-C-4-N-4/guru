@@ -4,10 +4,13 @@ import type {
   ApplyResult,
   Chunk,
   ChunksResponse,
+  CleanupFilterParams,
+  CleanupsResponse,
   ConceptDef,
   EdgeFilterParams,
   EdgesResponse,
   FilterParams,
+  PendingCleanup,
   PendingEdge,
   QueueRow,
   Stats,
@@ -90,6 +93,25 @@ export const api = {
     payload: ActionPayload,
   ): Promise<{ ok: true; queued: boolean; idempotent?: boolean }> =>
     postJson(`/api/edges/${stagedEdgeId}/action`, payload),
+
+  cleanups: (
+    params: CleanupFilterParams & { cursor?: number; limit?: number },
+  ): Promise<CleanupsResponse> => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== undefined && v !== null && v !== '') q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return getJson(`/api/cleanups${qs ? `?${qs}` : ''}`);
+  },
+
+  cleanup: (id: number): Promise<{ cleanup: PendingCleanup }> => getJson(`/api/cleanups/${id}`),
+
+  postCleanupAction: (
+    stagedCleanupId: number,
+    payload: ActionPayload,
+  ): Promise<{ ok: true; queued: boolean; idempotent?: boolean }> =>
+    postJson(`/api/cleanups/${stagedCleanupId}/action`, payload),
 
   deleteQueued: (clientActionId: string): Promise<{ ok: true; deleted: number }> =>
     delJson(`/api/queue/${encodeURIComponent(clientActionId)}`),

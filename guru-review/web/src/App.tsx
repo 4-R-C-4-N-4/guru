@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { HeaderBar } from './components/HeaderBar';
 import { Deck } from './screens/Deck';
 import { EdgeDeck } from './screens/EdgeDeck';
+import { CleanupDeck } from './screens/CleanupDeck';
 import { Queue } from './screens/Queue';
 import { Settings } from './screens/Settings';
 import { ApplyResult } from './screens/ApplyResult';
@@ -17,6 +18,7 @@ export function App(): React.ReactElement {
           <Route path="/" element={<Deck />} />
           <Route path="/edges" element={<EdgeDeck />} />
           <Route path="/edges/filter" element={<EdgeFilter />} />
+          <Route path="/cleanups" element={<CleanupDeck />} />
           <Route path="/queue" element={<Queue />} />
           <Route path="/applied" element={<ApplyResult />} />
           <Route path="/filter" element={<Filter />} />

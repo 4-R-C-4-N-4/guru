@@ -10,6 +10,9 @@ export function statsRouter(ro: Database.Database): Router {
   const totalPendingEdges = ro.prepare(
     "SELECT COUNT(*) AS n FROM staged_edges WHERE status='pending'",
   );
+  const totalPendingCleanups = ro.prepare(
+    "SELECT COUNT(*) AS n FROM staged_cleanups WHERE status='pending'",
+  );
   const queuedTotal = ro.prepare(
     'SELECT COUNT(*) AS n FROM review_actions WHERE applied_at IS NULL',
   );
@@ -29,6 +32,7 @@ export function statsRouter(ro: Database.Database): Router {
     res.json({
       pending_tags: (totalPending.get() as { n: number }).n,
       pending_edges: (totalPendingEdges.get() as { n: number }).n,
+      pending_cleanups: (totalPendingCleanups.get() as { n: number }).n,
       queued_actions: (queuedTotal.get() as { n: number }).n,
       queued_by_action: (queuedByAction.all() as { action: string; n: number }[]).reduce<
         Record<string, number>

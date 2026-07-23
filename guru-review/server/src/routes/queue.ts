@@ -5,7 +5,7 @@ import type { PreparedStmts } from '../db.js';
 interface QueueRow {
   action_id: number;
   client_action_id: string;
-  target_table: 'staged_tags' | 'staged_edges';
+  target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups';
   action: string;
   reassign_to: string | null;
   reclassify_to: string | null;
@@ -26,6 +26,11 @@ interface QueueRow {
   edge_a_tradition_id: string | null;
   edge_b_section_label: string | null;
   edge_b_tradition_id: string | null;
+  cleanup_chunk_id: string | null;
+  cleanup_signal_score: number | null;
+  cleanup_words_preserved: number | null;
+  cleanup_section_label: string | null;
+  cleanup_tradition_id: string | null;
 }
 
 function shapeQueueAction(r: QueueRow): unknown {
@@ -51,6 +56,19 @@ function shapeQueueAction(r: QueueRow): unknown {
         is_new_concept: r.tag_is_new_concept === 1,
         section_label: r.tag_section_label,
         tradition_id: r.tag_tradition_id,
+      },
+    };
+  }
+  if (r.target_table === 'staged_cleanups') {
+    return {
+      ...header,
+      context: {
+        kind: 'cleanup' as const,
+        chunk_id: r.cleanup_chunk_id,
+        signal_score: r.cleanup_signal_score,
+        words_preserved: r.cleanup_words_preserved === 1,
+        section_label: r.cleanup_section_label,
+        tradition_id: r.cleanup_tradition_id,
       },
     };
   }

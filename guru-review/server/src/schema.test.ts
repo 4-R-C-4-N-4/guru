@@ -9,6 +9,7 @@ function seedLiveTables(db: Database.Database): void {
     'chunk_embeddings',
     'edges',
     'nodes',
+    'staged_cleanups',
     'staged_concepts',
     'staged_edges',
     'staged_tags',
@@ -126,5 +127,33 @@ describe('schema', () => {
     db.prepare(
       'INSERT INTO review_actions(target_id, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, ?, NULL, NULL, ?, ?)',
     ).run(1, 'skip', 'test', 'id-8');
+
+    // valid: staged_cleanups + accept → ok (todo:b44966d0)
+    db.prepare(
+      "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_cleanups', 'accept', NULL, NULL, ?, ?)",
+    ).run(1, 'test', 'id-9');
+
+    // valid: staged_cleanups + reclassify (apparatus_drop escape hatch) → ok
+    db.prepare(
+      "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_cleanups', 'reclassify', NULL, 'apparatus_drop', ?, ?)",
+    ).run(1, 'test', 'id-10');
+
+    // staged_cleanups + reclassify to anything else → CHECK fails
+    expect(() =>
+      db
+        .prepare(
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_cleanups', 'reclassify', NULL, 'CONTRASTS', ?, ?)",
+        )
+        .run(1, 'test', 'id-11'),
+    ).toThrow();
+
+    // staged_cleanups + reassign (tags-only action) → CHECK fails
+    expect(() =>
+      db
+        .prepare(
+          "INSERT INTO review_actions(target_id, target_table, action, reassign_to, reclassify_to, reviewer, client_action_id) VALUES (?, 'staged_cleanups', 'reassign', 'gnosis', NULL, ?, ?)",
+        )
+        .run(1, 'test', 'id-12'),
+    ).toThrow();
   });
 });
