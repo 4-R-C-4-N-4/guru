@@ -5,10 +5,10 @@ text_name = "Gnostic John the Baptizer — Some Typical Extracts"
 section = "Section 24"
 translator = "G.R.S. Mead"
 source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
-token_count = 122
+token_count = 107
 
 [content]
-body = "p. 91\n\n1 In a number of\nthe Gnostic systems of the Early Christian period the body of the first man is\nsaid to lie like a log till the light-spark is breathed into him.\n\n2 Sc . the\nheavenly powers.\n\n3 Presumably Adam\n\np. 92\n\n1 The region of\nthe lower world-rulers.\n\np. 93\n\n1 Or \"One of the\nPoor am I,\" Compare the Ebionīm or Poor of early Christianity; the Poor\n(spiritually) are those who have voluntarily renounced this world's goods."
+body = "1 In a number of\nthe Gnostic systems of the Early Christian period the body of the first man is\nsaid to lie like a log till the light-spark is breathed into him.\n\n2 Sc . the\nheavenly powers.\n\n3 Presumably Adam\n\n1 The region of\nthe lower world-rulers.\n\n1 Or \"One of the\nPoor am I,\" Compare the Ebionīm or Poor of early Christianity; the Poor\n(spiritually) are those who have voluntarily renounced this world's goods."
 
 [annotations]
 concepts = []

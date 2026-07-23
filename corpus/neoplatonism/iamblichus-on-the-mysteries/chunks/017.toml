@@ -5,10 +5,10 @@ text_name = "Iamblichus: On the Mysteries"
 section = "Chapter XIb"
 translator = "Thomas Taylor"
 source_url = "https://www.gutenberg.org/cache/epub/72815/pg72815-images.html"
-token_count = 88
+token_count = 85
 
 [content]
-body = "[31] Things of this kind, therefore, are introduced for the sake of our soul, and of the diminution of the evils which adhere to it 55 through generation, and of a solution and liberation from its bonds.\n\nOn this account, also, they are very properly called by Heraclitus remedies , as healing things of a dreadful nature, and saving souls from the calamities with which the realms of generation are replete."
+body = "Things of this kind, therefore, are introduced for the sake of our soul, and of the diminution of the evils which adhere to it 55 through generation, and of a solution and liberation from its bonds.\n\nOn this account, also, they are very properly called by Heraclitus remedies , as healing things of a dreadful nature, and saving souls from the calamities with which the realms of generation are replete."
 
 [annotations]
 concepts = []

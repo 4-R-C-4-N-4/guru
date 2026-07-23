@@ -14,6 +14,15 @@ Strips operate at paragraph / sentence / inline granularity:
   P4  inline [Pg N] page markers
   P5  trailing Project Gutenberg license block
   P6  Errata paragraphs
+  P7  inline {p. roman} page markers, incl. paragraph-split and OCR-digit
+      forms ({p.\n\nxcli}, {p. 1xxv}) — egyptian book-of-the-dead
+  P8  standalone `p. NN` page-number paragraphs — mandaean john-baptizer
+  P9  inline [N] footnote references (notes are not in the corpus; the
+      leaked mandaean note BLOCKS are whole-chunk work, todo:50438e23)
+
+P7-P9 added by the readability audit (todo:d5ad220f / audit report
+docs/summary/readability-audit.md). Reconstruction brackets like
+[comrade] / [offer] are content and MUST survive — P9 matches digits only.
 
 Guard: a chunk whose cleaned body would shrink below (1 - --max-shrink) of the
 original is refused and reported, never written (audit lists the 3 title-page
@@ -92,12 +101,44 @@ P4_PG_MARKER = re.compile(r"\s*\[[Pp]g\.?\s?\d+\]\s*")
 # with the same length cap as P1.
 P1B_NAV_TAIL = re.compile(r"\s*(?:Next|Previous)\s*:\s[^\n]{0,80}$")
 
+# P7: sacred-texts {p. roman} page markers. The marker frequently splits
+# across a paragraph boundary ("…a cake.] {p.\n\nxcli} given unto thee") so
+# it must be stripped BEFORE the paragraph split, like P5. OCR sometimes
+# reads roman 'l' as '1' ({p. 1xxv}), hence digits in the numeral class.
+# The closing brace is optional so a truncated marker still dies.
+P7_PAGE_CURLY = re.compile(r"\s*\{p\.\s*[ivxlcdm0-9]{0,12}\}?\s*", re.I)
+
+# P7b: the orphaned second half of a {p. roman} marker that chunking split
+# ACROSS chunks — the "{p." tail landed at the end of the previous chunk
+# (P7's optional brace eats it) and the body starts "lxvii} supported by…".
+# Anchored to body start; roman/OCR-digit chars + } only.
+P7B_LEAD_ORPHAN = re.compile(r"^\s*[ivxlcdm0-9]{1,12}\}\s*", re.I)
+
+# P8: a paragraph that is nothing but a printed page number ("p. 81").
+P8_PAGE_PARA = re.compile(r"^p\.\s?\d{1,4}$", re.I)
+
+# P9: inline numeric footnote references ("the whole [1]," / "G eta[1]").
+# Digits only — bracketed WORDS are translator reconstructions (gilgamesh
+# "[shall ye listen]", egyptian "[offer]") and are content.
+P9_FOOTNOTE_REF = re.compile(r"\s*\[\d{1,3}\]")
+
+# P9 exclusion: texts where bracketed numbers ARE content. In the Timaeus,
+# [1] [2] [3] [4] [9] [8] [27] gloss the harmonic-proportion values of the
+# world-soul division (the Platonic lambda) — dry-run caught them being
+# stripped as refs (todo:d5ad220f).
+P9_EXCLUDE_TEXTS = {"plato-timaeus"}
+
 PARA_SEP = re.compile(r"\n{2,}")
 
 
-def clean_body(body: str) -> str:
+def clean_body(body: str, *, strip_footnote_refs: bool = True) -> str:
     # P5 first: the license tail may contain paragraphs P1/P2 would then see.
     body = P5_GUTENBERG_TAIL.sub("", body)
+    # P7 before the paragraph split — the {p. roman} marker spans paragraph
+    # boundaries, which no per-paragraph pass can see. A single space keeps
+    # the two rejoined halves from gluing into one word.
+    body = P7_PAGE_CURLY.sub(" ", body)
+    body = P7B_LEAD_ORPHAN.sub("", body, count=1)
 
     paras = PARA_SEP.split(body)
     kept = []
@@ -125,9 +166,13 @@ def clean_body(body: str) -> str:
             continue
         if len(s) <= P6_MAX_LEN and P6_ERRATA_PARA.match(s):
             continue
+        if P8_PAGE_PARA.match(s):
+            continue
         for pat in P3_SENTENCES:
             s = pat.sub(" ", s)
         s = P4_PG_MARKER.sub(" ", s)
+        if strip_footnote_refs:
+            s = P9_FOOTNOTE_REF.sub("", s)
         before_tail = s
         s = P1B_NAV_TAIL.sub("", s)
         # an inline nav tail also arms P1c: the orphaned next-chapter title
@@ -174,7 +219,7 @@ def main() -> int:
     for trad, text, path in iter_chunk_files(args.tradition, args.text):
         data = tomllib.load(open(path, "rb"))
         old = data["content"]["body"]
-        new = clean_body(old)
+        new = clean_body(old, strip_footnote_refs=text not in P9_EXCLUDE_TEXTS)
         if new == old:
             continue
         cid = data["chunk"]["id"]

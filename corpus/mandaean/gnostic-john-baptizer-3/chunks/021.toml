@@ -5,10 +5,10 @@ text_name = "Gnostic John the Baptizer — Some Typical Extracts"
 section = "Section 21"
 translator = "G.R.S. Mead"
 source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
-token_count = 119
+token_count = 109
 
 [content]
-body = "p. 81\n\n1 The salt,\nbitter, water of the sea of death and destruction, as opposed to the fresh,\nsweet water, the living water or water of Life.\n\n2 Equating with\nthe Heavenly Jordan.\n\n3 All symbolic\nobjects in the cult.\n\n4 Sc . the\nknife or sword of the Angel of Death.\n\np. 82\n\n1 This may mean at\na certain period or appointed time.\n\n2 The faithful are\nfigured as birds as well as sheep.\n\n3 An\nuntranslatable idiom.\n\n4 Sc . of\nthis world."
+body = "1 The salt,\nbitter, water of the sea of death and destruction, as opposed to the fresh,\nsweet water, the living water or water of Life.\n\n2 Equating with\nthe Heavenly Jordan.\n\n3 All symbolic\nobjects in the cult.\n\n4 Sc . the\nknife or sword of the Angel of Death.\n\n1 This may mean at\na certain period or appointed time.\n\n2 The faithful are\nfigured as birds as well as sheep.\n\n3 An\nuntranslatable idiom.\n\n4 Sc . of\nthis world."
 
 [annotations]
 concepts = []

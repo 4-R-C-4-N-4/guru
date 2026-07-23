@@ -32,12 +32,14 @@ def normalize_ws(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def normalize_raw(text: str) -> str:
+def normalize_raw(text: str, text_id: str = "") -> str:
     """Raw-side normalization: apply the V8 boilerplate strip (the same
     clean_bodies transform the stored chunk bodies went through, todo:fccaf47d)
     then collapse whitespace — so 'chunk body ⊆ raw' still means 'no invented
-    content' after the clean."""
-    return normalize_ws(clean_body(text))
+    content' after the clean. Mirrors main()'s P9 exclusion (todo:d5ad220f):
+    texts where [N] is content keep their refs on both sides of the check."""
+    from clean_bodies import P9_EXCLUDE_TEXTS
+    return normalize_ws(clean_body(text, strip_footnote_refs=text_id not in P9_EXCLUDE_TEXTS))
 
 
 def find_chunked_texts() -> list[tuple[str, str]]:
@@ -130,7 +132,7 @@ def test_round_trip():
         # (e.g. CCEL '\d+-\d+' page numbers, sacred-texts page nav) the chunker removed.
         # Applied per-page for multi-page sources, matching the chunker exactly.
         raw_text = _load_raw_text(tradition, text_id, pre_strip)
-        raw_norm = normalize_raw(raw_text)
+        raw_norm = normalize_raw(raw_text, text_id)
         cursor = 0
 
         for chunk_file in chunk_files:
