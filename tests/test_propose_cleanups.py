@@ -156,3 +156,32 @@ def test_apply_refuses_word_drift_even_if_flag_lied(tmp_path):
     assert "words_preserved" in res.stderr + res.stdout
     written = tomllib.load(open(tmp_path / "corpus/trad/text-a/chunks/001.toml", "rb"))
     assert written["content"]["body"] == WRAPPED  # untouched
+
+
+def test_apply_is_idempotent(tmp_path):
+    # Second run finds the TOML already in the proposed state: no rewrite,
+    # no refusal, exit 0 (todo:4133d6c1).
+    db = _scratch(tmp_path, WRAPPED, UNWRAPPED)
+    assert _run_apply(tmp_path, db).returncode == 0
+    res = _run_apply(tmp_path, db)
+    assert res.returncode == 0
+    assert "already in desired state: 1" in res.stderr + res.stdout
+    assert "applied: 0" in res.stderr + res.stdout
+
+
+def test_apply_recovers_after_corpus_rebuild(tmp_path):
+    # Catastrophic-recovery contract (todo:4133d6c1): after a from-zero
+    # re-chunk regenerates the original hard-wrapped body, the accepted
+    # rewrite re-applies even though applied_at is already stamped.
+    db = _scratch(tmp_path, WRAPPED, UNWRAPPED)
+    assert _run_apply(tmp_path, db).returncode == 0
+    # Simulate the rebuild: TOML back to the raw-derived original.
+    p = tmp_path / "corpus/trad/text-a/chunks/001.toml"
+    with open(p, "wb") as f:
+        tomli_w.dump({"chunk": {"id": "trad.text-a.001", "token_count": 1},
+                      "content": {"body": WRAPPED}}, f)
+    res = _run_apply(tmp_path, db)
+    assert res.returncode == 0
+    assert "applied: 1" in res.stderr + res.stdout
+    written = tomllib.load(open(p, "rb"))
+    assert written["content"]["body"] == UNWRAPPED

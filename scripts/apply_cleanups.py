@@ -9,9 +9,20 @@ clean_bodies.py --apply: rewrite the chunk TOML, recompute token_count via
 the pipeline tokenizer, mirror the count into nodes.metadata_json, and
 stamp staged_cleanups.applied_at.
 
+Applicability is decided from TOML STATE, not the applied_at stamp
+(todo:4133d6c1) — this is what makes accepted rewrites survive a
+from-zero corpus rebuild:
+  - TOML body == proposed_body  → already applied (stamp if missing);
+  - TOML body == original_body  → applicable — a fresh re-chunk of the
+    raw source regenerates exactly the original hard-wrapped body, so
+    accepted rewrites re-apply mechanically after a rebuild;
+  - anything else               → stale refusal (the body changed under
+    us — clean_bodies re-run, re-chunk drift — human eyes needed).
+applied_at is an audit stamp only. The whole pass is idempotent by
+construction: run it as many times as you like.
+
 Safety gates, all hard-refusals (reported, never written):
-  - staleness: the TOML body must still equal the row's original_body
-    (someone re-ran clean_bodies or re-chunked since the proposal);
+  - the TOML-state check above;
   - words_preserved: recomputed here, not trusted from the row — the
     character stream minus whitespace/hyphens must match exactly;
   - length ratio outside [0.85, 1.15] (whitespace repair barely moves it).
@@ -67,17 +78,20 @@ def main() -> int:
 
     conn = sqlite3.connect(args.db)
     conn.row_factory = sqlite3.Row
+    # ALL accepted rows — applicability is decided per-row from TOML state
+    # below, never from applied_at (rebuild-proof; see docstring).
     rows = conn.execute(
         """SELECT id, chunk_id, original_body, proposed_body
              FROM staged_cleanups
-            WHERE status = 'accepted' AND applied_at IS NULL
+            WHERE status = 'accepted'
             ORDER BY chunk_id"""
     ).fetchall()
     if not rows:
-        logger.info("nothing to apply (no accepted, unapplied cleanups)")
+        logger.info("nothing to apply (no accepted cleanups)")
         return 0
 
     applied, refused = [], []
+    already = 0
     touched_texts: set[tuple[str, str]] = set()
     for r in rows:
         cid = r["chunk_id"]
@@ -85,8 +99,19 @@ def main() -> int:
         data = tomllib.load(open(path, "rb"))
         current = data["content"]["body"]
 
+        if current == r["proposed_body"]:
+            # Already in the desired state; ensure the audit stamp exists.
+            if not args.dry_run:
+                conn.execute(
+                    "UPDATE staged_cleanups SET applied_at = COALESCE(applied_at, "
+                    "strftime('%Y-%m-%dT%H:%M:%SZ','now')) WHERE id = ?",
+                    (r["id"],),
+                )
+                conn.commit()
+            already += 1
+            continue
         if current != r["original_body"]:
-            refused.append((cid, "stale: TOML body changed since proposal"))
+            refused.append((cid, "stale: TOML body matches neither original nor proposed"))
             continue
         if not words_preserved(current, r["proposed_body"]):
             refused.append((cid, "words_preserved recheck failed"))
@@ -130,7 +155,7 @@ def main() -> int:
         touched_texts.add((trad, text_id))
 
     verb = "would apply" if args.dry_run else "applied"
-    logger.info(f"\n{verb}: {len(applied)} · refused: {len(refused)}")
+    logger.info(f"\n{verb}: {len(applied)} · already in desired state: {already} · refused: {len(refused)}")
     for cid, why in refused:
         logger.warning(f"  REFUSED {cid}: {why}")
     if applied and not args.dry_run:
