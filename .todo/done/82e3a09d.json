@@ -1,13 +1,13 @@
 {
   "id": "82e3a09d",
   "type": "chore",
-  "state": "active",
+  "state": "done",
   "summary": "Corpus readability cleanup: audit + curate malformed chunk bodies for the public reader",
   "source": {
     "type": "human"
   },
   "created_at": "2026-07-23T15:26:50.639Z",
-  "updated_at": "2026-07-23T15:53:34.847Z",
+  "updated_at": "2026-07-23T15:57:12.540Z",
   "files": [
     {
       "path": "scripts/clean_bodies.py"
@@ -32,6 +32,21 @@
       "type": "conclusion",
       "content": "Ticket bundles two phases of different sizes. This pass implements Phase 1 (heuristic audit scanner + ranked damage report) — the deliverable that sizes the problem. Phase 2 (staged_cleanups review queue with local-model rewrites behind the apply gate) is a schema+queue+review-UI build and is split into its own ticket, linked on close.",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-07-23T15:57:12.495Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Audit complete (docs/summary/readability-audit.md). Damage is concentrated: 20/214 texts score >=5. Families: (1) mandaean footnote-block apparatus leak, worst at 40.7 — whole-chunk work, routed to existing todo:50438e23; (2) gilgamesh/hermeticism brackets are legitimate reconstruction markers — false positive, no action; (3) egyptian book-of-the-dead {p. roman}/footnote refs — regex-strippable, captured as todo:d5ad220f; (4) hard-wrap unwrapping needs model rewrites — staged_cleanups queue captured as todo:b44966d0. Original assumption that egyptian was worst was wrong; mandaean is.",
+      "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "b37cfaa8f563e80fbdd276e1390911ad195bafee",
+    "resolved_at": "2026-07-23T15:57:12.540Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_audit_readability.py",
+    "test_function": "test_hard_wrapped_prose_fires_hard_wrap",
+    "note": "Phase 1 shipped: audit scanner + ranked report. Phase 2 split to todo:b44966d0 (narrowed by findings); regex fixes to todo:d5ad220f; apparatus chunks to existing todo:50438e23."
+  }
 }
