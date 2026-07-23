@@ -189,6 +189,15 @@ def main() -> int:
             logger.warning(f"  ERROR {cid}: empty proposal")
             errors += 1
             continue
+        # A whitespace repair barely moves length. A big ratio means the model
+        # returned something else entirely — e.g. llm.py's reasoning-transcript
+        # fallback when a thinking model burned max_tokens before answering.
+        # That's a call failure, not a reviewable proposal.
+        ratio = len(proposed) / max(len(body), 1)
+        if not 0.8 <= ratio <= 1.25:
+            logger.warning(f"  ERROR {cid}: length ratio {ratio:.2f} — not a whitespace repair (thinking-fallback?)")
+            errors += 1
+            continue
         ok = words_preserved(body, proposed)
         conn.execute(
             """INSERT INTO staged_cleanups

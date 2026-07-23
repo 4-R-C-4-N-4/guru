@@ -70,6 +70,14 @@ def test_mechanical_justification_reports_score_drop():
     assert "hard_wrap" in j and "->" in j
 
 
+def test_ratio_guard_bounds():
+    # The propose-side ratio guard treats non-repair-shaped output (e.g. a
+    # reasoning transcript several times the body length) as a call error.
+    body, transcript = "short body text", "Thinking Process: " + "analysis " * 50
+    assert not 0.8 <= len(transcript) / len(body) <= 1.25
+    assert 0.8 <= len(UNWRAPPED) / len(WRAPPED) <= 1.25
+
+
 # ── apply_cleanups guards against a scratch corpus + DB ──────────────────────
 
 def _scratch(tmp_path: Path, body: str, proposed: str, status: str = "accepted"):
