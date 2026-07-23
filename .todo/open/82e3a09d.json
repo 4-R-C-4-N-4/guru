@@ -1,0 +1,22 @@
+{
+  "id": "82e3a09d",
+  "type": "chore",
+  "state": "open",
+  "summary": "Corpus readability cleanup: audit + curate malformed chunk bodies for the public reader",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-07-23T15:26:50.639Z",
+  "updated_at": "2026-07-23T15:26:50.681Z",
+  "files": [
+    {
+      "path": "scripts/clean_bodies.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "cleanup",
+    "reader"
+  ],
+  "description": "guru-web now serves chunk bodies verbatim to the public at guru-ai.org/read (PR guru-web#106), so pipeline-era formatting artifacts are user-facing: egyptian texts are the known offender (hard-wrapped lines, transliteration noise), likely others. Phase 1 — heuristic audit scanner over corpus TOML bodies: score each chunk on fraction of hard-wrapped short lines, page-number/footnote artifacts ([p. 143], ^1), ALL-CAPS header runs, bracket noise, broken end-of-line hyphenation; rank texts by damage to size the problem before any hand-curation. Phase 2 — staged_cleanups queue mirroring staged_tags/staged_edges: local 4B/27B models propose per-chunk rewrites on the 3090, human reviews and applies behind the usual gate (no auto-promote), then re-export. Best done before Google indexes the ugly versions."
+}
