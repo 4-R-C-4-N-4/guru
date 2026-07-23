@@ -74,6 +74,29 @@ user-facing surface.
 clean_bodies pattern classes nearly cover; verify and extend rather than
 hand-edit.
 
+## Post-clean results (todo:d5ad220f, applied 2026-07-23)
+
+`clean_bodies.py` gained P7 ({p. roman} split page markers, OCR-digit
+tolerant), P8 (standalone `p. NN` paragraphs) and P9 ([N] footnote refs,
+digits only). Applied to 456 chunks across 7 traditions; changed texts
+re-embedded (1,078 chunks, 0 errors); corpus re-exported.
+
+- **egyptian/egyptian-book-of-the-dead-index (357 chunks, was mean 5.8):
+  off the ≥5 list entirely** — the largest public-surface win.
+- mandaean john-baptizer: means 16.0/15.4/14.5 → 12.8/12.2/12.3, worst
+  chunk 40.7 → 30.0. Dominant signal is now hard_wrap — exactly the
+  staged_cleanups scope (todo:b44966d0). Footnote BLOCKS remain
+  todo:50438e23.
+- Remaining ≥5 list is dominated by gilgamesh/hermeticism bracket false
+  positives (content, no action) plus kojiki-beginning-heaven-earth.001
+  (duplicated body + inline p. NN — apparatus work, todo:50438e23).
+- P9 dry-run caught a true false positive: Timaeus [1]..[27] are the
+  translator's harmonic-proportion glosses (Platonic lambda), now pinned
+  in `P9_EXCLUDE_TEXTS`.
+- Shrink guard: egyptian-heaven-and-hell.078 confirmed via --allow-id
+  (nav apparatus, content survives); enoch-charles-1917.140 stays refused
+  (pure errata chunk → 0 chars; drop-chunk work, todo:50438e23).
+
 ## Recommended order
 
 1. Extend `clean_bodies.py`: `{p. roman}` split-marker class, `p. NN`
