@@ -53,6 +53,11 @@ thin-tags tail from 79 texts (<10 accepted tags) to **3 works**:
 
 ## The 53 works (10 grouped, 43 singleton)
 
+> **2026-07-23:** totals below predate `secret-teachings-of-all-ages`
+> (western_esoteric, 530 chunks, added 2026-07-17), which auto-singletons —
+> current totals are **54 works over 214 texts** (tests/test_works.py pins
+> these).
+
 Bold `work_id` = grouped (n > 1). Token/chunk figures are sums over members.
 
 | work_id | tradition | label | members | n | chunks | tokens | plan |
