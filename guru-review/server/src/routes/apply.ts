@@ -15,7 +15,7 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
 
   r.get('/apply/preview', (_req, res) => {
     const counts = stmts.countQueuedByAction.all() as {
-      target_table: 'staged_tags' | 'staged_edges';
+      target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups';
       action: string;
       n: number;
     }[];
@@ -34,13 +34,14 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
          FROM review_actions WHERE applied_at IS NULL
          GROUP BY target_table`,
       )
-      .all() as { target_table: 'staged_tags' | 'staged_edges'; n: number }[];
+      .all() as { target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups'; n: number }[];
     res.json({
       total_queued: total,
       by_action,
       by_target_table,
       affected_staged_tags: affected.find((a) => a.target_table === 'staged_tags')?.n ?? 0,
       affected_staged_edges: affected.find((a) => a.target_table === 'staged_edges')?.n ?? 0,
+      affected_staged_cleanups: affected.find((a) => a.target_table === 'staged_cleanups')?.n ?? 0,
     });
   });
 

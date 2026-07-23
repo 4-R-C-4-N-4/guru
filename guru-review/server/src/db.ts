@@ -14,11 +14,14 @@ export interface PreparedStmts {
   deleteUnappliedAction: Database.Statement;
   selectStagedTagExists: Database.Statement;
   selectStagedEdgeExists: Database.Statement;
+  selectStagedCleanupExists: Database.Statement;
 
   // apply transaction (rw side — touch staged_tags / staged_edges / edges / nodes)
   selectQueuedActions: Database.Statement;
   selectStagedTag: Database.Statement;
   selectStagedEdge: Database.Statement;
+  selectStagedCleanup: Database.Statement;
+  updateStagedCleanupStatus: Database.Statement;
   ensureConceptNode: Database.Statement;
   upsertEdge: Database.Statement;          // generic — type passed at runtime
   deleteEdge: Database.Statement;          // generic — type passed at runtime
@@ -71,6 +74,10 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
       SELECT id FROM staged_edges WHERE id = ?
     `),
 
+    selectStagedCleanupExists: ro.prepare(`
+      SELECT id FROM staged_cleanups WHERE id = ?
+    `),
+
     selectQueuedActions: rw.prepare(`
       SELECT id, target_id, target_table, action, reassign_to, reclassify_to,
              reviewer, client_action_id, created_at
@@ -92,6 +99,19 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
              justification, status, tier
       FROM staged_edges
       WHERE id = ?
+    `),
+
+    selectStagedCleanup: rw.prepare(`
+      SELECT id, chunk_id, words_preserved, status
+      FROM staged_cleanups
+      WHERE id = ?
+    `),
+
+    // Apply-gate write for cleanups: status only. The corpus TOML write
+    // belongs to scripts/apply_cleanups.py — the server never edits the
+    // corpus (todo:b44966d0).
+    updateStagedCleanupStatus: rw.prepare(`
+      UPDATE staged_cleanups SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?
     `),
 
     ensureConceptNode: rw.prepare(`
@@ -177,13 +197,20 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
         na.label           AS edge_a_section_label,
         na.tradition_id    AS edge_a_tradition_id,
         nb.label           AS edge_b_section_label,
-        nb.tradition_id    AS edge_b_tradition_id
+        nb.tradition_id    AS edge_b_tradition_id,
+        sc.chunk_id        AS cleanup_chunk_id,
+        sc.signal_score    AS cleanup_signal_score,
+        sc.words_preserved AS cleanup_words_preserved,
+        ncl.label          AS cleanup_section_label,
+        ncl.tradition_id   AS cleanup_tradition_id
       FROM review_actions ra
       LEFT JOIN staged_tags st  ON st.id = ra.target_id AND ra.target_table = 'staged_tags'
       LEFT JOIN nodes ntag      ON ntag.id = st.chunk_id
       LEFT JOIN staged_edges se ON se.id = ra.target_id AND ra.target_table = 'staged_edges'
       LEFT JOIN nodes na        ON na.id = se.source_chunk
       LEFT JOIN nodes nb        ON nb.id = se.target_chunk
+      LEFT JOIN staged_cleanups sc ON sc.id = ra.target_id AND ra.target_table = 'staged_cleanups'
+      LEFT JOIN nodes ncl       ON ncl.id = sc.chunk_id
       WHERE ra.applied_at IS NULL
       ORDER BY ra.id DESC
     `),
