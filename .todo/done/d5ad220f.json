@@ -1,13 +1,13 @@
 {
   "id": "d5ad220f",
   "type": "chore",
-  "state": "active",
+  "state": "done",
   "summary": "Extend clean_bodies.py: {p. roman} split page markers, standalone p. NN paragraphs, [N] footnote refs",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-07-23T15:57:00.106Z",
-  "updated_at": "2026-07-23T16:30:35.346Z",
+  "updated_at": "2026-07-23T16:41:52.830Z",
   "files": [
     {
       "path": "scripts/clean_bodies.py"
@@ -24,5 +24,13 @@
     "base_branch": "main",
     "started_at": "2026-07-23T16:30:35.346Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "bd3ed2ad35eb8129d56da06a83d9ff550a604b4d",
+    "resolved_at": "2026-07-23T16:41:52.830Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_clean_bodies.py",
+    "test_function": "test_p7_paragraph_split_curly_marker_rejoins_without_gluing",
+    "note": "P7/P7b/P8/P9 implemented, applied to 466 chunks, texts re-embedded, corpus re-exported (v42). Egyptian book-of-the-dead off the damage list; Timaeus P9 exclusion; remaining hard_wrap → todo:b44966d0."
   }
 }
