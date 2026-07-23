@@ -1,0 +1,30 @@
+{
+  "id": "4133d6c1",
+  "type": "debt",
+  "state": "done",
+  "summary": "apply_cleanups.py: make re-apply idempotent by TOML state, not applied_at (rebuild-proof accepted rewrites)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-23T21:10:24.049Z",
+  "updated_at": "2026-07-23T21:13:43.639Z",
+  "files": [
+    {
+      "path": "scripts/apply_cleanups.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "cleanup",
+    "pipeline"
+  ],
+  "description": "From-zero rebuild gap found while answering 'would we get these bad strings again?': a re-chunk regenerates hard-wrapped bodies, and accepted staged_cleanups rows survive in guru.db with original_body matching the fresh TOMLs — but apply_cleanups.py filters applied_at IS NULL, so previously-applied rewrites silently do not re-apply after a rebuild. Fix: decide applicability from TOML state (TOML==original_body AND status=accepted -> applicable; TOML==proposed_body -> already applied; anything else -> stale refusal) and treat applied_at as an audit stamp only. Idempotent by construction. Note the regex half (clean_bodies P1-P9) is already rebuild-safe: deterministic script + round-trip test enforces stored==clean_body(raw).",
+  "resolution": {
+    "commit": "01fb5eb21d35183b8b0844b4a58a57020c966895",
+    "resolved_at": "2026-07-23T21:13:43.639Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_propose_cleanups.py",
+    "test_function": "test_apply_recovers_after_corpus_rebuild",
+    "note": "TOML-state-driven applicability; idempotent + rebuild-recovery tests"
+  }
+}
