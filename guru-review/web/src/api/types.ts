@@ -67,12 +67,40 @@ export interface EdgeFilterParams {
   tradition_b?: string;
 }
 
+// ── cleanup review (staged_cleanups, todo:b44966d0) ──────────────────
+
+export interface PendingCleanup {
+  target_id: number;
+  chunk_id: string;
+  tradition_id: string;
+  section_label: string;
+  text_id: string | null;
+  original_body: string;
+  proposed_body: string;
+  justification: string;
+  signal_score: number;
+  words_preserved: boolean;
+  model: string;
+}
+
+export interface CleanupsResponse {
+  cleanups: PendingCleanup[];
+  next_cursor: number | null;
+  pending_cleanups_in_filter: number;
+}
+
+export interface CleanupFilterParams {
+  tradition?: string;
+  text?: string;
+  min_signal?: number;
+}
+
 // ── unified queue (polymorphic) ──────────────────────────────────────
 
 export interface QueueRowBase {
   action_id: number;
   client_action_id: string;
-  target_table: 'staged_tags' | 'staged_edges';
+  target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups';
   action: ActionKind;
   reassign_to: string | null;
   reclassify_to: string | null;
@@ -107,13 +135,26 @@ export interface QueueRowEdge extends QueueRowBase {
   };
 }
 
-export type QueueRow = QueueRowTag | QueueRowEdge;
+export interface QueueRowCleanup extends QueueRowBase {
+  target_table: 'staged_cleanups';
+  context: {
+    kind: 'cleanup';
+    chunk_id: string;
+    signal_score: number;
+    words_preserved: boolean;
+    section_label: string;
+    tradition_id: string;
+  };
+}
+
+export type QueueRow = QueueRowTag | QueueRowEdge | QueueRowCleanup;
 
 // ── shared ───────────────────────────────────────────────────────────
 
 export interface Stats {
   pending_tags: number;
   pending_edges: number;
+  pending_cleanups: number;
   queued_actions: number;
   queued_by_action: Record<string, number>;
   applied_today: number;
@@ -134,6 +175,7 @@ export interface ApplyPreview {
   by_target_table: Record<string, number>;
   affected_staged_tags: number;
   affected_staged_edges: number;
+  affected_staged_cleanups: number;
 }
 
 export type ActionKind = 'accept' | 'reject' | 'skip' | 'reassign' | 'reclassify';
@@ -141,7 +183,7 @@ export type ActionKind = 'accept' | 'reject' | 'skip' | 'reassign' | 'reclassify
 export interface ActionPayload {
   action: ActionKind;
   reassign_to?: string;
-  reclassify_to?: EdgeType;
+  reclassify_to?: EdgeType | 'apparatus_drop';
   client_action_id: string;
   reviewer: string;
 }
