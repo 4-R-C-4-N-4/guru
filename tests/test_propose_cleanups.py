@@ -50,6 +50,21 @@ def test_strip_wrapping_removes_think_block_and_fences():
     assert strip_wrapping("repaired text\n") == "repaired text"
 
 
+def test_strip_wrapping_removes_stray_unpaired_think_tags():
+    # qwen3 sometimes emits a bare trailing </think> with no opening tag —
+    # the drift class observed in the first proposal batch.
+    assert strip_wrapping("repaired text\n</think>") == "repaired text"
+    assert strip_wrapping("<think>\nrepaired text") == "repaired text"
+
+
+def test_strip_wrapping_removes_trailing_bare_think_token():
+    # The soft-switch token leaks as PLAIN text too: "… goods. /think"
+    assert strip_wrapping("renounced this world's goods. /think") == "renounced this world's goods."
+    assert strip_wrapping("repaired text /no_think") == "repaired text"
+    # anchored: a mid-text "/think" (however unlikely) survives
+    assert "/think about" in strip_wrapping("do /think about it later")
+
+
 def test_mechanical_justification_reports_score_drop():
     j = mechanical_justification(WRAPPED, UNWRAPPED)
     assert "hard_wrap" in j and "->" in j

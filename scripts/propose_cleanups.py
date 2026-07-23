@@ -68,12 +68,21 @@ hyphens. Repair ONLY the whitespace:
 Output ONLY the repaired text. No preamble, no explanation, no code fences."""
 
 THINK_BLOCK = re.compile(r"\A\s*<think>.*?</think>\s*", re.S)
+STRAY_THINK_TAG = re.compile(r"</?think>")
+# qwen3's soft-switch token can leak as literal trailing text, with or
+# without angle brackets ("… goods. /think"). Anchored to the end so a
+# hypothetical "/think" inside prose could never be eaten.
+TRAILING_THINK_TOKEN = re.compile(r"\s*/(?:no_)?think\s*\Z")
 CODE_FENCE = re.compile(r"\A\s*```[a-z]*\n(.*?)\n```\s*\Z", re.S)
 
 
 def strip_wrapping(raw: str) -> str:
-    """Remove a leading <think> block (thinking models) and code fences."""
+    """Remove a leading <think> block (thinking models), stray unpaired
+    think tags, a trailing bare /think soft-switch token, and code fences.
+    None of these can occur in corpus text, so the strips are safe."""
     raw = THINK_BLOCK.sub("", raw)
+    raw = STRAY_THINK_TAG.sub("", raw)
+    raw = TRAILING_THINK_TOKEN.sub("", raw)
     m = CODE_FENCE.match(raw)
     return (m.group(1) if m else raw).strip()
 
