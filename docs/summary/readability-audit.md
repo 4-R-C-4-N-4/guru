@@ -107,3 +107,38 @@ re-embedded (1,078 chunks, 0 errors); corpus re-exported.
    what survives 1–2 — on this evidence that's the hard-wrap unwrapping in
    mandaean prose, which regex can't safely do.
 4. Gilgamesh et al.: no action; brackets are content.
+
+## Scoring revision (2026-07-24, todo:b6f90bcf)
+
+`caps_runs` is now denominated per 1,000 chars instead of per line: the
+line denominator was coupled to reflow, so the cleanup deck showed audit
+scores INCREASING on strictly-better unwrapped rewrites (the same caps
+headers over 4x fewer lines — reported on gnostic-john-baptizer-1.012,
+13.4 -> 13.8 under the old formula, 12.9 -> 6.6 under this one). Tables
+ABOVE this section were computed with the old formula and are kept as the
+historical record. Current post-clean ranking (>= 5):
+
+| text | chunks | mean | worst (chunk) | dominant signals |
+|---|---|---|---|---|
+| mesopotamian/gilgamesh-tablet-08 | 1 | 13.9 | 13.9 (mesopotamian.gilgamesh-tablet-08.001) | brackets, dot_leaders |
+| shinto/kojiki-beginning-heaven-earth | 1 | 13.3 | 13.3 (shinto.kojiki-beginning-heaven-earth.001) | page_marks, brackets |
+| mesopotamian/gilgamesh-tablet-06 | 4 | 12.8 | 15.3 (mesopotamian.gilgamesh-tablet-06.001) | brackets, dot_leaders, caps_runs |
+| mandaean/gnostic-john-baptizer-3 | 24 | 12.7 | 30.0 (mandaean.gnostic-john-baptizer-3.021) | hard_wrap, brackets, page_marks |
+| mesopotamian/gilgamesh-tablet-04 | 2 | 12.3 | 14.7 (mesopotamian.gilgamesh-tablet-04.001) | brackets, caps_runs, dot_leaders |
+| mesopotamian/gilgamesh-tablet-05 | 2 | 12.3 | 14.7 (mesopotamian.gilgamesh-tablet-05.001) | brackets, caps_runs, dot_leaders |
+| mesopotamian/gilgamesh-tablet-12 | 3 | 12.3 | 13.9 (mesopotamian.gilgamesh-tablet-12.001) | brackets, caps_runs |
+| mandaean/gnostic-john-baptizer-1 | 32 | 12.2 | 24.2 (mandaean.gnostic-john-baptizer-1.023) | hard_wrap, page_marks, brackets |
+| mandaean/gnostic-john-baptizer-2 | 10 | 12.1 | 21.6 (mandaean.gnostic-john-baptizer-2.007) | hard_wrap, brackets, page_marks |
+| mesopotamian/gilgamesh-tablet-10 | 4 | 11.5 | 14.5 (mesopotamian.gilgamesh-tablet-10.001) | brackets, dot_leaders, caps_runs |
+| mesopotamian/gilgamesh-tablet-03 | 5 | 10.4 | 13.8 (mesopotamian.gilgamesh-tablet-03.001) | brackets, caps_runs |
+| mesopotamian/gilgamesh-tablet-07 | 2 | 10.2 | 15.6 (mesopotamian.gilgamesh-tablet-07.001) | brackets, caps_runs, dot_leaders |
+| mesopotamian/gilgamesh-tablet-01 | 6 | 9.2 | 14.0 (mesopotamian.gilgamesh-tablet-01.001) | brackets, caps_runs |
+| zoroastrianism/yasna-47 | 1 | 9.0 | 9.0 (zoroastrianism.yasna-47.001) | page_marks |
+| mesopotamian/gilgamesh-tablet-02 | 2 | 8.6 | 11.0 (mesopotamian.gilgamesh-tablet-02.001) | brackets, caps_runs |
+| mesopotamian/gilgamesh-tablet-11 | 7 | 8.0 | 12.8 (mesopotamian.gilgamesh-tablet-11.001) | brackets, dot_leaders |
+| hermeticism/corpus-hermeticum-16 | 1 | 5.7 | 5.7 (hermeticism.corpus-hermeticum-16.001) | brackets |
+| hermeticism/corpus-hermeticum-17 | 4 | 5.5 | 8.5 (hermeticism.corpus-hermeticum-17.002) | brackets |
+| buddhism/dhammapada-chapter-16 | 1 | 5.4 | 5.4 (buddhism.dhammapada-chapter-16.001) | page_marks, brackets |
+
+(195 texts below --min-score 5 not shown)
+

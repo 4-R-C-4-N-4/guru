@@ -55,6 +55,16 @@ def test_caps_header_lines():
     assert s["caps_runs"] > 0.0
 
 
+def test_caps_runs_invariant_under_reflow():
+    # todo:b6f90bcf — unwrapping must not change caps_runs: same caps
+    # headers, fewer lines. A line denominator made the cleanup deck show
+    # damage INCREASING on strictly better rewrites.
+    wrapped = "A HEADER LINE HERE\n\n" + ("prose text that\nwas hard wrapped\nacross the lines\n" * 4)
+    unwrapped = "A HEADER LINE HERE\n\n" + ("prose text that was hard wrapped across the lines " * 4)
+    assert score_body(wrapped)["caps_runs"] == score_body(unwrapped)["caps_runs"]
+    assert score_body(unwrapped)["score"] < score_body(wrapped)["score"]
+
+
 def test_page_marks_and_bare_number_lines():
     body = "and the scribe Ani says [p. 143] that the heart\n27\nshall be weighed. [Pg 12]"
     s = score_body(body)
