@@ -1,0 +1,29 @@
+{
+  "id": "1265031d",
+  "type": "bug",
+  "state": "done",
+  "summary": "Deck empty-state softlock: stale resume cursor hides re-pooled skipped rows, no reset affordance",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-07-24T12:38:16.568Z",
+  "updated_at": "2026-07-24T12:40:25.105Z",
+  "files": [
+    {
+      "path": "guru-review/web/src/screens/CleanupDeck.tsx"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "ux"
+  ],
+  "description": "After an apply, skipped rows return to the pending pool BEHIND the reviewer's saved resume cursor (IndexedDB, per filter). The deck fetches id > cursor -> empty page, and the empty state ('No more in this filter') renders without the Start-from-top affordance (the resume banner only shows when a card is displayed) — softlock: header count says N pending, deck shows none. The count query ignores the cursor, so remainingInFilter is correct at that moment; use it to render a reset button in the empty state that clears the saved cursor and refetches from the top. Same trap in EdgeDeck (skipped edges); CleanupDeck inherited it. Reported live: 13 pending, empty cleanups deck.",
+  "resolution": {
+    "commit": "2fbc3f55e54c55c5449517da9e444c377b71a740",
+    "resolved_at": "2026-07-24T12:40:25.105Z",
+    "resolved_by": "unknown",
+    "test_file": "guru-review/web/src/screens/deck-softlock.test.ts",
+    "test_function": "empty state",
+    "note": "Reset affordance in all three deck empty states; server restarted on new bundle"
+  }
+}
