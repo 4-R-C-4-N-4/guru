@@ -1,0 +1,36 @@
+{
+  "id": "b6f90bcf",
+  "type": "bug",
+  "state": "done",
+  "summary": "audit_readability caps_runs denominated per line — reflow changes the denominator, before/after deltas mislead",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-07-24T12:29:41.390Z",
+  "updated_at": "2026-07-24T12:32:12.035Z",
+  "files": [
+    {
+      "path": "scripts/audit_readability.py"
+    }
+  ],
+  "tags": [
+    "corpus",
+    "cleanup",
+    "audit"
+  ],
+  "description": "User-reported from the cleanup deck: gnostic-john-baptizer-1.012 shows audit score 13.4 -> 13.8 on a strictly-better rewrite (43 -> 11 lines, hard_wrap 0.21 -> 0.00, words preserved). caps_runs = caps_lines / n_lines, so unwrapping shrinks the denominator and the same caps headers quadruple the rate (0.23 -> 0.91, +6.8 weighted vs hard_wrap's -6.3). Coupling a signal's denominator to line count is wrong when line-wrapping is itself a damage class. Fix: denominate caps_runs per 1,000 chars (like page_marks/footnotes) so it is reflow-invariant; regenerate the audit table in docs/summary/readability-audit.md; refresh justification strings on pending staged_cleanups rows (cosmetic, no status/review changes).",
+  "work": {
+    "branch": "todo/b6f90bcf",
+    "base_branch": "main",
+    "started_at": "2026-07-24T12:29:41.473Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "6001688edc70b7885485435b1ec1b78b9964ace1",
+    "resolved_at": "2026-07-24T12:32:12.035Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_audit_readability.py",
+    "test_function": "test_caps_runs_invariant_under_reflow",
+    "note": "caps_runs per kchar; deck deltas now honest; doc + pending justifications refreshed"
+  }
+}

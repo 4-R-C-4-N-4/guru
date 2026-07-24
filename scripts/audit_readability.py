@@ -126,9 +126,15 @@ def score_body(body: str) -> dict[str, float]:
 
     body_len = len(body)
     signals = {
+        # hard_wrap / hyphen_break stay line-denominated: they MEASURE line
+        # structure. caps_runs is per-kchar (todo:b6f90bcf) — a line
+        # denominator couples it to reflow, so unwrapping a chunk inflated
+        # the rate (same caps headers ÷ 4x fewer lines) and before/after
+        # deltas in the cleanup deck showed damage increasing on strictly
+        # better rewrites.
         "hard_wrap":    min(hard_wraps / n_lines * 3.0, 1.0),
         "hyphen_break": min(hyphen_breaks / n_lines * 10.0, 1.0),
-        "caps_runs":    min(caps / n_lines * 10.0, 1.0),
+        "caps_runs":    _per_kchars(caps, body_len, 2.0),
         "page_marks":   _per_kchars(len(PAGE_MARK.findall(body)) + bare_numbers, body_len, 3.0),
         "footnotes":    _per_kchars(len(FOOTNOTE_MARK.findall(body)), body_len, 5.0),
         "brackets":     _per_kchars(
