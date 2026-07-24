@@ -166,9 +166,33 @@ export function CleanupDeck(): React.ReactElement {
     );
   }
   if (!state.current) {
+    // Softlock guard (todo:1265031d): after an apply, skipped rows return
+    // to the pending pool BEHIND the saved resume cursor — the page is
+    // empty but the filter count (cursor-independent) is not. Offer the
+    // reset here, where the stuck reviewer actually is.
     return (
       <div className="mx-auto max-w-md space-y-4 p-8 mono text-sm text-zinc-400">
-        <p>No more cleanups in this filter.</p>
+        {state.remainingInFilter > 0 ? (
+          <>
+            <p>
+              {state.remainingInFilter} pending in this filter, but they sit behind
+              your saved position (skipped items return to the pool after an apply).
+            </p>
+            <button
+              className="rounded border border-accent bg-accent/10 px-4 py-2 text-accent hover:bg-accent/20"
+              onClick={async () => {
+                await saveCleanupCursor(filters, null);
+                setResumed(false);
+                setState((s) => ({ ...s, current: null, queue: [], cursor: null }));
+                void fetchPage(null);
+              }}
+            >
+              Start from top →
+            </button>
+          </>
+        ) : (
+          <p>No more cleanups in this filter.</p>
+        )}
         <Link className="text-accent" to="/queue">View queue →</Link>
       </div>
     );

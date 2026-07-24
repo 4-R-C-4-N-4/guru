@@ -164,9 +164,32 @@ export function EdgeDeck(): React.ReactElement {
     );
   }
   if (!state.current) {
+    // Softlock guard (todo:1265031d): skipped edges return to the pending
+    // pool behind the saved resume cursor after an apply — same trap as
+    // the cleanup deck. Offer the reset in the empty state.
     return (
       <div className="mx-auto max-w-md space-y-4 p-8 mono text-sm text-zinc-400">
-        <p>No more edges in this filter.</p>
+        {state.remainingInFilter > 0 ? (
+          <>
+            <p>
+              {state.remainingInFilter} pending in this filter, but they sit behind
+              your saved position (skipped items return to the pool after an apply).
+            </p>
+            <button
+              className="rounded border border-accent bg-accent/10 px-4 py-2 text-accent hover:bg-accent/20"
+              onClick={async () => {
+                await saveEdgeCursor(filters, null);
+                setResumed(false);
+                setState((s) => ({ ...s, current: null, queue: [], cursor: null }));
+                void fetchPage(null);
+              }}
+            >
+              Start from top →
+            </button>
+          </>
+        ) : (
+          <p>No more edges in this filter.</p>
+        )}
         <Link className="text-accent" to="/queue">View queue →</Link>
       </div>
     );
