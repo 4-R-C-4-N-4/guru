@@ -197,9 +197,31 @@ export function Deck(): React.ReactElement {
     );
   }
   if (!state.current) {
+    // Softlock guard (todo:1265031d): skipped chunks return to the pending
+    // pool behind the saved resume cursor after an apply. Offer the reset
+    // in the empty state (same fix as the edge/cleanup decks).
     return (
       <div className="mx-auto max-w-md space-y-4 p-8 mono text-sm text-zinc-400">
-        <p>No more chunks in this filter.</p>
+        {state.remainingInFilter > 0 ? (
+          <>
+            <p>
+              {state.remainingInFilter.toLocaleString()} pending in this filter, but they
+              sit behind your saved position (skipped items return to the pool after an apply).
+            </p>
+            <button
+              className="rounded border border-accent bg-accent/10 px-4 py-2 text-accent hover:bg-accent/20"
+              onClick={async () => {
+                await saveCursor(filters, null);
+                setState((s) => ({ ...s, current: null, queue: [], cursor: null }));
+                void fetchPage(null);
+              }}
+            >
+              Start from top →
+            </button>
+          </>
+        ) : (
+          <p>No more chunks in this filter.</p>
+        )}
         <Link className="text-accent" to="/queue">View queue →</Link>
       </div>
     );
