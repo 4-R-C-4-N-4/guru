@@ -1,0 +1,39 @@
+{
+  "id": "f39248b9",
+  "type": "bug",
+  "state": "done",
+  "summary": "Chunk section labels: suffix overflow past 'z' emits {|}~ junk; Zhuangzi labels read 'Book 123'",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-07-25T22:07:54.580Z",
+  "updated_at": "2026-07-25T22:16:55.054Z",
+  "files": [
+    {
+      "path": "scripts/chunkers/regex_splitter.py",
+      "lines": [
+        185,
+        196
+      ]
+    }
+  ],
+  "tags": [
+    "chunker",
+    "labels",
+    "seo"
+  ],
+  "work": {
+    "branch": "todo/f39248b9",
+    "base_branch": "main",
+    "started_at": "2026-07-25T22:07:54.650Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "6d7b5b27",
+    "resolved_at": "2026-07-25T22:16:55.054Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_subsplit_labels.py",
+    "test_function": "test_corpus_has_no_overflow_suffix_labels",
+    "note": "Suffix overflow fixed (bijective base-26) + Zhuangzi book numbers from content. Corpus repaired: 249 chunks relabeled across 10 texts, labels-only diff, ids/bodies untouched. test_round_trip's mandaean failure is pre-existing working-tree WIP, passes with it stashed."
+  }
+}
