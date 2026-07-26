@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.111"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale KILHWCH AND OLWEN|"
+section = "Tale KILHWCH AND OLWENab"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 796

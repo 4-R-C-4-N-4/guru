@@ -118,10 +118,25 @@ def split(text: str, config: dict) -> list[Chunk]:
     return chunks
 
 
+def _letter_suffix(idx: int) -> str:
+    """Bijective base-26 sub-chunk suffix: 0→'a' … 25→'z', 26→'aa', 27→'ab'.
+
+    The old chr(ord('a') + idx) walked past 'z' into ASCII punctuation for
+    texts with >26 sub-chunks per section — Secret Teachings shipped labels
+    like "…Symbolism{" / "…Symbolism~" into headings and <title> tags
+    (todo:f39248b9)."""
+    s = ""
+    n = idx + 1
+    while n:
+        n, r = divmod(n - 1, 26)
+        s = chr(ord("a") + r) + s
+    return s
+
+
 def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
     """
     Split an oversized chunk at paragraph or sentence boundaries,
-    suffixing labels with a/b/c...
+    suffixing labels with a/b/c... z/aa/ab...
 
     Tries paragraph boundaries first (\\n\\n), then falls back to sentence
     boundaries ('. ') for single-line / collapsed prose.
@@ -182,13 +197,13 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
 
     sub_chunks = []
     current_paras: list[str] = []
-    suffix_idx = 0  # 0='a', 1='b', ...
+    suffix_idx = 0  # 0='a', 1='b', ..., 26='aa', 27='ab', ...
 
     def flush():
         nonlocal current_paras, suffix_idx
         if not current_paras:
             return
-        suffix = chr(ord("a") + suffix_idx)
+        suffix = _letter_suffix(suffix_idx)
         label = f"{chunk.section_label}{suffix}"
         body = "\n\n".join(current_paras)
         sub_chunks.append(Chunk(section_label=label, body=body, token_count=count_fn(body)))

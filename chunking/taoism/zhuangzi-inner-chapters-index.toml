@@ -1,7 +1,12 @@
 [chunking]
 strategy = "page-as-chunk"
 section_label_format = "Book {n}"
-number_source = "filename"
+# The book number comes from the page content ("BOOK I. PART I. SECTION I."),
+# not the filename: raw pages are numbered across Legge's whole sbe39 volume,
+# so filename numbering labeled Book I as "Book 123" (todo:f39248b9). Roman
+# numerals as printed in the source.
+number_source = "content"
+number_pattern = 'BOOK ([IVXL]+)\.'
 max_tokens = 800
 # Whole-page apparatus + scope trim (todo:2957d758). The sbe39 acquisition
 # grabbed Legge's entire "Texts of Taoism" volume: title/TOC/Introduction, the
