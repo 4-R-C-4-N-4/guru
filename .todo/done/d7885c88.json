@@ -1,13 +1,13 @@
 {
   "id": "d7885c88",
   "type": "chore",
-  "state": "active",
+  "state": "done",
   "summary": "Smoke test: guru query cites Gita chunks; record chunk/tag/edge counts in ticket",
   "source": {
     "type": "human"
   },
   "created_at": "2026-08-01T14:05:27.241Z",
-  "updated_at": "2026-08-01T16:50:40.420Z",
+  "updated_at": "2026-08-01T16:56:58.580Z",
   "relationships": {
     "parent": "e5b69653"
   },
@@ -27,5 +27,11 @@
       "content": "Edge review complete 2026-08-01: all 146 Gita staged edges judged pair-by-pair via /guru-review-edges. Queued: 81 accept, 3 reclassify PARALLELS->CONTRASTS (23149 Orphic Death-hymn, 23244 atman-vs-anatta Diamond Sutra, 23264 eternal-portion-vs-emptiness Heart Sutra), 62 reclassify->surface_only. Zero applied — user gate. Corpus bug noted: egyptian-book-of-the-dead-index chunks .064 and .300 duplicate the same Unas text.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "3deb851d9192838303c5a65e23899a37bc886689",
+    "resolved_at": "2026-08-01T16:56:58.580Z",
+    "resolved_by": "unknown",
+    "note": "Smoke test passed (retrieval + generation cite Gita cross-tradition). Final live counts after user apply: 369 EXPRESSES tags, 79 PARALLELS + 5 CONTRASTS verified edges, concepts dharma+bhakti created, dossier re-promoted with themes populated."
+  }
 }
