@@ -1,0 +1,21 @@
+{
+  "id": "8b62c74b",
+  "type": "chore",
+  "state": "done",
+  "summary": "Acquire Gita raw HTML via scripts/acquire.py — all chapter pages landed",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.010Z",
+  "updated_at": "2026-08-01T14:32:11.932Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "Run python scripts/acquire.py (targeted at the new hinduism entries if a filter flag exists; otherwise full run is idempotent via content_hash). DONE: raw HTML landed under the corpus raw dir for every Gita chapter, no download errors, _sbe_strip removed footnote apparatus (spot-check one chapter for '<FONT SIZE=1' remnants).",
+  "resolution": {
+    "commit": "1b584fb62f88d010b3d4700e4a23c585c2093b00",
+    "resolved_at": "2026-08-01T14:32:11.932Z",
+    "resolved_by": "unknown",
+    "note": "18/18 chapters acquired to raw/hinduism/ (git-ignored), 0 failed. FONT footnote apparatus stripped (0 remnants in ch02 spot-check). Nav prefix + italic-letter spacing artifacts match landed isa-upanishad precedent; nav handled downstream by clean_bodies P1. No commit-able artifacts beyond ticket state — raw/ is git-ignored, resolution commit is the close commit."
+  }
+}
