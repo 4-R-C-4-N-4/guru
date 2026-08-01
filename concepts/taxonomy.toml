@@ -178,6 +178,7 @@ microcosm_macrocosm = "The human being as a small-scale image of the entire cosm
 cosmic_sympathy = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
 infinite_cosmos = "The doctrine of the universe as boundless and without center or circumference, populated by innumerable worlds — Bruno's rejection of the closed Aristotelian sphere; the divine and the cosmos as ontologically infinite."
 magical_equilibrium = "The balance of two contrary forces as the structural law of cosmos and operation — Lévi's equilibrium, expressed in Kabbalah by the senary: the will of God in its first cause, liberty in man, mathematical equilibrium in matter; the twofold vibration required to direct the Astral Light safely."
+dharma = "The cosmic law that manifests as each being's own duty — right order known not as abstract truth but as the specific obligation of one's nature and station (svadharma), so that maintaining the cosmos and performing one's proper work are one act; the Gita's 'one's own duty, though defective, is better than another's well performed.' Sits beside asha_cosmic_order and maat_cosmic_order as a right-order concept but is distinct in individuating the order into personal vocation; distinct from good_thought_word_deed (ethical triad) in binding duty to cosmic station."
 
 [concepts.cosmology.origin_events]
 letters_of_creation = "The twenty-two Hebrew letters as the building blocks through which God creates and sustains all existence."
@@ -206,6 +207,7 @@ divine_marriage = "The reunification of complementary divine principles (male-fe
 mystical_union = "The merging of the individual soul or self with the divine, transcending personal identity."
 theosis_deification = "The doctrine — central to Eastern Orthodox and Maximian theology — that the human person is progressively transformed into a partaker of the divine nature by grace, not merely justified or united in passing ecstasy."
 fana_annihilation = "Sufi self-effacement in God — the via by which the lover is unmade as a separate ego and recovered as God's act; specifies the practice/event rather than mystical_union's resulting state."
+bhakti = "The path of loving devotion and self-surrender to a personal deity as itself sufficient means of liberation — the Gita's 'to those constantly devoted, I come forward as their deliverer,' Kabir's and the Sant poets' love-religion, the devotional stream that parallels Sufi love-mysticism. Distinct from mystical_union (the resulting state), fana_annihilation (the ego's unmaking at the path's end), ladder_of_love (eros staged toward Beauty), and prayer (the practice of address): bhakti names devotion as the soteriological road itself."
 
 [concepts.soteriology.ecstatic_ascent]
 divine_madness = "Ecstatic irrational rapture — Plato's mania, Bruno's furore — by which the soul transcends ordinary reason and attains direct contact with divine reality; madness reframed as higher knowledge."
@@ -347,6 +349,7 @@ return_to_source = ["reditus"]
 detachment_gelassenheit = ["gelassenheit"]
 heroic_furor = ["eroici furori", "furore"]
 divine_intoxication = ["sukr"]
+dharma = ["svadharma"]
 divine_marriage = ["hieros gamos"]
 divine_madness = ["mania"]
 theosis_deification = ["divinization", "divinisation"]
