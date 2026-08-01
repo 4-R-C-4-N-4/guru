@@ -1,0 +1,15 @@
+{
+  "id": "a2d04102",
+  "type": "chore",
+  "state": "open",
+  "summary": "propose_edges.py targeted at Gita — stage cross-tradition edges; queue-only, review via /guru-review-edges",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.173Z",
+  "updated_at": "2026-08-01T14:06:01.573Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "python scripts/propose_edges.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf, targeted at hinduism if a filter exists (requires embeddings child done). Expected hot edges: Gita ch.2 ↔ Katha Upanishad (verbatim-shared verses), ch.11 theophany ↔ Ezekiel/Revelation-adjacent material, karma-yoga ↔ Analects/wu-wei cluster if present. STAGED ONLY — no auto_promote_edges.py; review via /guru-review-edges, user applies. DONE: staged_edges rows recorded; zero agent-promoted edges."
+}

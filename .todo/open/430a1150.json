@@ -1,0 +1,15 @@
+{
+  "id": "430a1150",
+  "type": "chore",
+  "state": "open",
+  "summary": "embed_corpus.py — embed new Gita chunks into chunk_embeddings",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.109Z",
+  "updated_at": "2026-08-01T14:06:01.508Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "python scripts/embed_corpus.py (nomic-embed-text via ollama, or configured provider). DONE: chunk_embeddings rows exist for every hinduism chunk (count matches), no skips in log. NOTE: 3090 contention — run 'llm stop' first if a llama.cpp model is resident and ollama needs VRAM; ComfyUI must not be running."
+}
