@@ -1,0 +1,34 @@
+# Julian of Norwich, Revelations of Divine Love — Gutenberg #52958, single
+# ~600KB HTML (Warrack 1901). 86 chapters as "CHAPTER <roman>" header lines
+# after extraction (68 anchor-wrapped + 18 bare <h3>, both reduce to plain
+# text). CONTENTS uses roman numerals only, so the split pattern cannot
+# misfire on it — but front matter is stripped before splitting anyway.
+# Footnote divs/pagenums are removed at extraction (generic_html,
+# todo:11cf1630); inline [N] refs fall to clean_bodies P9.
+[chunking]
+strategy = "regex-section-split"
+pattern = 'CHAPTER\s+([IVXLC]+)'
+section_label_format = "Chapter {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Gutenberg machine header through START marker (also removes the
+    # all-caps title mention inside the marker).
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    # Gutenberg trailing license block.
+    '\*\*\*\s*END OF .*',
+    # Warrack front matter: title page, CONTENTS, Notes on MSS, Note as to
+    # two Julians, Introduction I-III — everything through the body-start
+    # heading (unique in all-caps after the START strip).
+    '^[\s\S]*?REVELATIONS OF DIVINE LOVE',
+    # Tail: 15th-c. scribal colophon + Warrack glossary. The Postscript is
+    # period material but not Julian's text; stripping keeps Chapter LXXXVI
+    # clean. Apparatus per project policy.
+    'POSTSCRIPT BY A SCRIBE[\s\S]*$',
+]
+
+[metadata]
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+translator = "Grace Warrack"
+sections_format = "chapter"

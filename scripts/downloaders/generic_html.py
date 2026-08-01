@@ -111,6 +111,17 @@ def extract_text(html: str, source_id: str) -> str:
     for cls in ad_classes:
         for element in soup(class_=cls):
             element.decompose()
+
+    # Project Gutenberg standard apparatus markup: <div class="footnote"> holds
+    # editor/translator footnote definitions ("[6] Manuale ad usum..."), and
+    # <span class="pagenum"> holds print-page anchors. Both are apparatus per
+    # project policy — strip at extraction so the [N]-definition blocks never
+    # reach chunk bodies (clean_bodies P9 only removes inline [N] refs, not
+    # definition text). Selectors are PG-shaped and pass through sacred-texts
+    # pages unaffected. Origin: todo:11cf1630 (Julian #52958, 391 footnotes).
+    for cls in ["footnote", "pagenum"]:
+        for element in soup(class_=cls):
+            element.decompose()
     
     # Extract from main content containers — first tier that matches wins,
     # so we don't stack nested containers and triple-count their text.
