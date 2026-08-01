@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.005"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter IIIb"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 51
+
+[content]
+body = "But in this I desired never bodily sight nor shewing of God, but compassion such as a kind soul might have with our Lord Jesus, that for love would be a mortal man: and therefore I desired to suffer with Him.\n\nTHE FIRST REVELATION"
+
+[annotations]
+concepts = []
+related_chunks = []

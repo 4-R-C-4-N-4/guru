@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.002"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter Ib"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 57
+
+[content]
+body = "The Sixteenth is that the Blissful Trinity, our Maker, in Christ Jesus our Saviour endlessly dwelleth in our soul, worshipfully ruling and protecting all things, us mightily and wisely saving and keeping, for love; and we shall not be overcome of our Enemy."
+
+[annotations]
+concepts = []
+related_chunks = []

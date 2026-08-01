@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.030"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter XXIIb"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 101
+
+[content]
+body = "For which love He said full sweetly these words: If I might suffer more, I would suffer more.\n\nHe said not, If it were needful to suffer more: for though it were not needful, if He might suffer more, He would.\n\nThis deed, and this work about our salvation, was ordained as well as God might ordain it.\n\nAnd here I saw a Full Bliss in Christ: for His bliss should not have been full, if it might any better have been done."
+
+[annotations]
+concepts = []
+related_chunks = []
