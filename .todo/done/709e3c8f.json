@@ -1,0 +1,21 @@
+{
+  "id": "709e3c8f",
+  "type": "chore",
+  "state": "done",
+  "summary": "Chunk Julian + clean_bodies --apply --text; audit_readability; commit corpus chunks",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.748Z",
+  "updated_at": "2026-08-01T20:14:41.427Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "python scripts/chunk.py --only julian-revelations, then clean_bodies.py --apply --text julian-revelations (project rule), then audit_readability.py --text julian-revelations. Expect roughly 100-200 chunks (86 chapters, some long chapters sub-split at max_tokens 800; ch. 51 Lord-and-Servant and ch. 86 'Love was his meaning' are the landmarks to spot-check). DONE: corpus/christian_mysticism/julian-revelations/chunks/*.toml committed, chunk count recorded, no readability flags, Warrack front-matter absent from chunk 001.",
+  "resolution": {
+    "commit": "a0510e5eec91c7d1e65583242fdffb99d196e4c1",
+    "resolved_at": "2026-08-01T20:14:41.427Z",
+    "resolved_by": "unknown",
+    "note": "127 chunks (avg 540 tok), clean_bodies applied to 104, audit signals verified benign (Warrack word-brackets + THE NTH REVELATION headings). Ch.51 Lord-and-Servant and ch.86 spot-checked present."
+  }
+}
