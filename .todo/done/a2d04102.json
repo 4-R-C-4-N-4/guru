@@ -1,0 +1,21 @@
+{
+  "id": "a2d04102",
+  "type": "chore",
+  "state": "done",
+  "summary": "propose_edges.py targeted at Gita — stage cross-tradition edges; queue-only, review via /guru-review-edges",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.173Z",
+  "updated_at": "2026-08-01T15:44:24.437Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "python scripts/propose_edges.py --provider llamacpp --model <mistral gguf name> — USER DIRECTIVE 2026-08-01: run edges on mistral, not the 27B. Swap with 'llm mistral' after tagging completes (model label must match what's serving). Expected hot edges: Gita ch.2 ↔ Katha Upanishad (verbatim-shared verses), ch.11 theophany ↔ Enoch/throne-vision material, ch.15 inverted fig-tree ↔ Yggdrasil/Kabbalistic Tree. STAGED ONLY — no auto_promote_edges.py; review via /guru-review-edges, user applies. DONE: staged_edges rows recorded; zero agent-promoted edges.",
+  "resolution": {
+    "commit": "b283c3b7593186bf021a1121e9484debd3d18ec0",
+    "resolved_at": "2026-08-01T15:44:24.437Z",
+    "resolved_by": "unknown",
+    "note": "146 staged edges (144 PARALLELS avg conf 0.86, 2 CONTRASTS avg 0.82), 0 errors, model Mistral-Small-3.2-24B per user directive. Zero live PARALLELS/CONTRASTS edges touching hinduism — queue-only, user applies via /guru-review-edges. GPU released after run (llm stop; 1GB residual)."
+  }
+}
