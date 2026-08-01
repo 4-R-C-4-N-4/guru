@@ -1,0 +1,7 @@
+tradition = "Hinduism"
+text_id = "bhagavad-gita-chapter-13"
+text_name = "The Bhagavad Gita"
+translator = "Kashinath Trimbak Telang"
+source_url = "https://sacred-texts.com/hin/sbe08/sbe0815.htm"
+sections_format = "chapter"
+chunk_count = 2
