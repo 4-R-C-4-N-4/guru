@@ -1,0 +1,15 @@
+{
+  "id": "277b26c5",
+  "type": "chore",
+  "state": "open",
+  "summary": "Dossier campaign c5: plan + generate (claude) + rubric review + promote + embed_summaries",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.938Z",
+  "updated_at": "2026-08-01T17:56:04.548Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "Campaign c5 = c4 + julian-revelations (V9: bump campaign_id in config/dossiers.toml with comment in house style; prior 55 works' span ids identical). No works.toml entry (singleton work). build_dossiers.py --plan, then --generate --work julian-revelations (provider claude-code/claude-opus-4-8 from campaign config). Rubric-review ALL rows via review_dossiers.py (GROUND/HEDGE/REGISTER/COVERAGE/LEAK/FORMAT) — Gita precedent: expect 1-2 L1 respins; calibrate context-field mechanics-mentions against accepted c1-c4 rows; L2 gates on ALL L1s accepted; context gates on accepted L2 (run --generate again after each acceptance round). Then promote_dossiers.py --work julian-revelations (themes will be [] until user applies tags — expected) + embed_summaries.py. DONE: work_dossier + summary_nodes + embeddings exist; campaign decision documented."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "038c5ed0",
+  "type": "chore",
+  "state": "open",
+  "summary": "propose_edges.py on mistral — stage Julian edges; queue-only via /guru-review-edges",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.906Z",
+  "updated_at": "2026-08-01T17:56:04.505Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "Swap model: llm stop → llm mistral (Mistral-Small-3.2-24B-Instruct-2506-UD-Q5_K_XL). python scripts/propose_edges.py --provider llamacpp --model Mistral-Small-3.2-24B-Instruct-2506-UD-Q5_K_XL.gguf (target julian if a filter exists; requires embed child done). Expected prizes: CONTRASTS Julian no-wrath (chs 45-49) vs Boehme wrath-fire chunks; PARALLELS hazelnut ch 5 ↔ microcosm material; 'all shall be well' ↔ frashokereti/apocatastasis cluster; ground-of-beseeching ↔ Eckhart prayer-in-eternity (eckhart-sermons-field.018 — it was surfaced in the Gita review as 23163 but is a real match HERE). Mistral noise patterns from Gita review: genre-similarity on narrative/hymn chunks, re-pairing the same target chunk repeatedly — prefer surface_only over reject. STAGED ONLY; review via /guru-review-edges; user applies. Release GPU (llm stop) after. DONE: staged counts + verdicts queued, zero live promotion."
+}

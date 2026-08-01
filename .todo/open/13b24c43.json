@@ -1,0 +1,15 @@
+{
+  "id": "13b24c43",
+  "type": "chore",
+  "state": "open",
+  "summary": "Post-apply close-out: themes re-promote, smoke test, export.py, load docker postgres",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.974Z",
+  "updated_at": "2026-08-01T17:56:04.595Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "Gated on user applying tag+edge queues. Then: promote_dossiers.py --work julian-revelations (fills themes_json), smoke test 'python -m guru query' on e.g. 'Is there wrath in God?' or 'all shall be well' — retrieval must cite julian chunks cross-tradition (needs a model on :8080 — GPU gate applies), record live counts, scripts/export.py (bumps corpus_version), load guru-web docker postgres: cd ~/Work/guru-web && zcat ../guru/export/guru-corpus.sql.gz | docker compose exec -T postgres psql -U guru -d guru -v ON_ERROR_STOP=1, verify corpus_version + julian counts in pg. DONE: all counts recorded; close parent."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "11cf1630",
+  "type": "chore",
+  "state": "open",
+  "summary": "Manifest stanza + chunking config for julian-revelations (Gutenberg #52958, generic_html, chapter-split)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.660Z",
+  "updated_at": "2026-08-01T17:56:04.289Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml"
+    }
+  ],
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "Single [[source]] stanza: id=julian-revelations, tradition=christian_mysticism, translator='Grace Warrack', license=public_domain, url=https://www.gutenberg.org/cache/epub/52958/pg52958-images.html, format=html (generic_html — kalevala/Pistis-Sophia single-file pattern). VERIFY the cache URL resolves before committing (only /ebooks/52958 was HTTP-checked in the proposal pass). Chunking config chunking/christian_mysticism/julian-revelations.toml: regex-section-split on the Long Text's chapter headers (86 chapters — inspect actual Gutenberg markup for the header pattern first; Warrack uses 'CHAPTER I' style headings plus her own chapter summaries in italics — decide whether summaries stay (they are Warrack apparatus; lean pre-strip)). pre_strip: Gutenberg header boilerplate + Warrack's ~70pp Introduction + glossary/notes tail (clean_bodies P5 covers the license tail but NOT the front intro). works.toml: NOT needed — single text = implicit singleton work (V10 rule). DONE: stanza + config committed; acquire --dry-run resolves via generic_html and extracts plausible char count."
+}
