@@ -1,0 +1,21 @@
+{
+  "id": "db209e4a",
+  "type": "chore",
+  "state": "done",
+  "summary": "graph_bootstrap.py — hinduism tradition node + Gita chunk nodes + BELONGS_TO edges in guru.db",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.074Z",
+  "updated_at": "2026-08-01T14:33:08.706Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "python scripts/graph_bootstrap.py — creates hinduism tradition node, chunk nodes, BELONGS_TO edges. DONE: guru.db node/edge counts for tradition=hinduism match chunk count from previous child; recorded in ticket. NOTE guru.db is git-ignored — done contract is recorded counts + a query spot-check, not a commit.",
+  "resolution": {
+    "commit": "f25ee4b84c87617b8b70f4345e6915016f173a70",
+    "resolved_at": "2026-08-01T14:33:08.706Z",
+    "resolved_by": "unknown",
+    "note": "graph_bootstrap: tradition node hinduism + 42 chunk nodes + 42 BELONGS_TO edges verified in guru.db (db git-ignored; counts recorded here)"
+  }
+}
