@@ -23,7 +23,12 @@
 # that is a new campaign, never a partial re-plan. Provider/model/span_target
 # unchanged, so the 54 prior works' span ids are identical under c4 and their
 # c3 staged rows satisfy the generate-loop skip/upstream checks unchanged.
-campaign_id = "c4"
+# c5 = c4 + julian-revelations (todo:277b26c5, 127 chunks → 1 work).
+# The c4 plan froze at 55 works before the Julian ingest changed totals; per
+# V9 that is a new campaign, never a partial re-plan. Provider/model/span_target
+# unchanged, so the 55 prior works' span ids are identical under c5 and their
+# c4 staged rows satisfy the generate-loop skip/upstream checks unchanged.
+campaign_id = "c5"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).
