@@ -4424,3 +4424,197 @@ format = "html"
 license = "public_domain"
 translator = "F. Max Müller"
 notes = "SBE10 (Müller 1881). Dhammapada Chapter XXVI (file sbe1028.htm). Aphoristic dhamma verses on craving, impermanence, meditation, the path."
+
+
+# ============================================
+# HINDUISM — Bhagavad Gita
+# Telang translation (SBE Vol. 8, 1882)
+# https://sacred-texts.com/hin/sbe08/index.htm
+#
+# todo:85bf252a — New tradition leg per docs/corpus-expansion/
+# hit-literature-2026-08.md §1.1. Telang/SBE8 chosen over Arnold's
+# Song Celestial for SBE house-style fit (_sbe_strip.py handles the
+# footnote apparatus). Gita = sbe0803..sbe0820 (Chapters I-XVIII).
+# sbe0800-02 (front matter) and sbe0821+ (Sanatsugatiya, Anugita)
+# deliberately excluded — same-volume but not the Gita.
+# ============================================
+
+[[source]]
+id = "bhagavad-gita-chapter-01"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter I"
+url = "https://sacred-texts.com/hin/sbe08/sbe0803.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Arjuna's despondency on the battlefield — the crisis that frames the whole dialogue. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-02"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter II"
+url = "https://sacred-texts.com/hin/sbe08/sbe0804.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Sankhya doctrine: the self is never born, never dies — near-verbatim parallels with Katha Upanishad I.2 (already in corpus). The core chapter. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-03"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter III"
+url = "https://sacred-texts.com/hin/sbe08/sbe0805.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Karma-yoga: action without attachment to fruits. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-04"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter IV"
+url = "https://sacred-texts.com/hin/sbe08/sbe0806.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Jnana-yoga; the doctrine of divine descent (avatara) — 'whenever piety languishes I create myself.' Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-05"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter V"
+url = "https://sacred-texts.com/hin/sbe08/sbe0807.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Renunciation of action vs. renunciation in action. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-06"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter VI"
+url = "https://sacred-texts.com/hin/sbe08/sbe0808.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Dhyana-yoga: posture, discipline, the wavering mind — pairs with Yoga Sutras when that lands. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-07"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter VII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0809.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Knowledge and discernment; the divine and material natures. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-08"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter VIII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0810.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. The imperishable Brahman; departure of the soul at death — psychopomp material, pairs with funerary corpus. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-09"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter IX"
+url = "https://sacred-texts.com/hin/sbe08/sbe0811.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Royal knowledge and royal mystery; universal immanence. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-10"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter X"
+url = "https://sacred-texts.com/hin/sbe08/sbe0812.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Vibhuti: divine manifestations — 'of lights I am the sun.' Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-11"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XI"
+url = "https://sacred-texts.com/hin/sbe08/sbe0813.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. The vishvarupa theophany — cosmic form revealed. Cross-tradition edges to throne-vision material (Enoch, Revelation-adjacent). Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-12"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0814.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Bhakti-yoga: devotion contrasted with knowledge and works. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-13"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XIII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0815.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. The field and the knower of the field (kshetra/kshetrajna). Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-14"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XIV"
+url = "https://sacred-texts.com/hin/sbe08/sbe0816.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. The three gunas (sattva, rajas, tamas). Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-15"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XV"
+url = "https://sacred-texts.com/hin/sbe08/sbe0817.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Purushottama: the cosmic fig-tree, root above, branches below — inverted-tree parallel with Yggdrasil and Kabbalistic Tree. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-16"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XVI"
+url = "https://sacred-texts.com/hin/sbe08/sbe0818.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Divine and demoniac endowments. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-17"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XVII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0819.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Threefold faith, food, sacrifice, and austerity. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+[[source]]
+id = "bhagavad-gita-chapter-18"
+tradition = "hinduism"
+label = "Bhagavad Gita (Telang), Chapter XVIII"
+url = "https://sacred-texts.com/hin/sbe08/sbe0820.htm"
+format = "html"
+license = "public_domain"
+translator = "Kashinath Trimbak Telang"
+notes = "SBE8, 1882. Renunciation and conclusion: 'abandon all duties and come to me alone' — the charama-shloka. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
