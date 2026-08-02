@@ -187,6 +187,7 @@ def run_proposals(
     top_n: int,
     min_similarity: float,
     tradition_filter: str | None,
+    text_filter: str | None,
     delay: float,
     max_body_chars: int | None = None,
 ) -> None:
@@ -204,6 +205,13 @@ def run_proposals(
     if tradition_filter:
         sql += " AND tradition_id=?"
         params.append(tradition_filter)
+    if text_filter:
+        # Chunk node ids are '<tradition>.<text_id>.<nnn>' — scope the sweep to
+        # one text so a fresh ingest can be edge-mined without re-walking the
+        # whole tradition (todo:038c5ed0; the Julian run's Boehme-first sweep
+        # was the motivating case).
+        sql += " AND id LIKE ?"
+        params.append(f"%.{text_filter}.%")
     chunks = conn.execute(sql, params).fetchall()
 
     existing_pairs = get_existing_pairs(conn)
@@ -278,6 +286,10 @@ def main() -> None:
     parser.add_argument("--top-n", type=int, default=5)
     parser.add_argument("--min-similarity", type=float, default=0.75)
     parser.add_argument("--tradition")
+    parser.add_argument("--text",
+                        help="restrict the sweep to one text_id (chunk ids "
+                             "'<tradition>.<text_id>.<nnn>'); combine with "
+                             "--tradition or use alone")
     parser.add_argument("--delay", type=float, default=0.5)
     parser.add_argument("--max-body-chars", type=int, default=0,
                         help="optional cap on per-passage body length sent to "
@@ -300,6 +312,7 @@ def main() -> None:
         top_n=args.top_n,
         min_similarity=args.min_similarity,
         tradition_filter=args.tradition,
+        text_filter=args.text,
         delay=args.delay,
         max_body_chars=args.max_body_chars or None,
     )

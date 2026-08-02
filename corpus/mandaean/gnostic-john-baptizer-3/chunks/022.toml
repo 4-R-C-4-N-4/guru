@@ -5,10 +5,10 @@ text_name = "Gnostic John the Baptizer — Some Typical Extracts"
 section = "Section 22"
 translator = "G.R.S. Mead"
 source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
-token_count = 199
+token_count = 182
 
 [content]
-body = "5 That is, the\nliving water.\n\n6 This is\nconjectural.\n\n1 Lidzbarski (p.\n465) thinks this refers to the Moslim period. Elsewhere we find the parallel\nphrase 'age of Bizbat,' which L. also refers to Muhammad. But Bizbat is\nclearly a corrupt form of Baal-Zebul, and therefore the reference should be\nmore general.\n\n2 Presumably\nstars.\n\n1 Spirit or jinn\n(?)\n\n1 A still more\ndegraded form of cult is mentioned, but the meaning baffles the translator; it\nis referred to those who bow down before Rūhā, here in mockery called 'Holy'\nSpirit.\n\n2 The above is\nobscure, especially the 'pen-demon' reference. The general sense. however,\nseems to be that those who fall away from the Mandæan faith are not to be\nrestrained by force, but let go their way."
+body = "5 That is, the living water.\n\n6 This is conjectural.\n\n1 Lidzbarski (p. 465) thinks this refers to the Moslim period. Elsewhere we find the parallel phrase 'age of Bizbat,' which L. also refers to Muhammad. But Bizbat is clearly a corrupt form of Baal-Zebul, and therefore the reference should be more general.\n\n2 Presumably stars.\n\n1 Spirit or jinn (?)\n\n1 A still more degraded form of cult is mentioned, but the meaning baffles the translator; it is referred to those who bow down before Rūhā, here in mockery called 'Holy' Spirit.\n\n2 The above is obscure, especially the 'pen-demon' reference. The general sense. however, seems to be that those who fall away from the Mandæan faith are not to be restrained by force, but let go their way."
 
 [annotations]
 concepts = []

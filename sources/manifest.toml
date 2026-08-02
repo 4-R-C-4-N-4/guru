@@ -4618,3 +4618,25 @@ format = "html"
 license = "public_domain"
 translator = "Kashinath Trimbak Telang"
 notes = "SBE8, 1882. Renunciation and conclusion: 'abandon all duties and come to me alone' — the charama-shloka. Prose paragraphs with centered speaker markers; inline FONT footnote refs handled by _sbe_strip. paragraph-group, max_tokens 800."
+
+# ============================================
+# CHRISTIAN MYSTICISM — Julian of Norwich
+# Warrack edition (Methuen 1901), Gutenberg #52958
+#
+# todo:11cf1630 — hit-literature-2026-08.md §2. Long Text, 86 chapters,
+# first English book by a woman. Single ~600KB HTML, kalevala/Pistis-
+# Sophia single-entry pattern. Warrack front matter (Notes on MSS, Note
+# as to two Julians, Introduction Parts I-III) and tail (Postscript by
+# a Scribe, Glossary) stripped at chunking; PG footnote divs (391) and
+# pagenum spans stripped at extraction (generic_html, same ticket).
+# ============================================
+
+[[source]]
+id = "julian-revelations"
+tradition = "christian_mysticism"
+label = "Revelations of Divine Love (Julian of Norwich, Warrack edition)"
+url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+format = "html"
+license = "public_domain"
+translator = "Grace Warrack"
+notes = "Warrack 1901 modernization of the Long Text (Sloane MS). 86 chapters under roman-numeral CHAPTER headers; regex-section-split, sub-split at max_tokens 800. Key loci: ch. 5 hazelnut, ch. 27 'sin is behovely / all shall be well', chs. 45-49 no-wrath-in-God, ch. 51 Lord-and-Servant, chs. 58-63 Jesus as Mother, ch. 86 'Love was his meaning'."

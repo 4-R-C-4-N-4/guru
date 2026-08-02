@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.076"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter LIh"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 55
+
+[content]
+body = "Now sitteth the Son, Very God and Man, in His City in rest and peace: which [City] His Father hath adight to Him of His endless purpose; and the Father in the Son; and the Holy Ghost in the Father and in the Son."
+
+[annotations]
+concepts = []
+related_chunks = []

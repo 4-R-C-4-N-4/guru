@@ -1,0 +1,21 @@
+{
+  "id": "13b24c43",
+  "type": "chore",
+  "state": "done",
+  "summary": "Post-apply close-out: themes re-promote, smoke test, export.py, load docker postgres",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.974Z",
+  "updated_at": "2026-08-02T14:34:23.241Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "Gated on user applying tag+edge queues. Then: promote_dossiers.py --work julian-revelations (fills themes_json), smoke test 'python -m guru query' on e.g. 'Is there wrath in God?' or 'all shall be well' — retrieval must cite julian chunks cross-tradition (needs a model on :8080 — GPU gate applies), record live counts, scripts/export.py (bumps corpus_version), load guru-web docker postgres: cd ~/Work/guru-web && zcat ../guru/export/guru-corpus.sql.gz | docker compose exec -T postgres psql -U guru -d guru -v ON_ERROR_STOP=1, verify corpus_version + julian counts in pg. DONE: all counts recorded; close parent.",
+  "resolution": {
+    "commit": "19fa0f2412fc9eb34916e96be4d72a776b40735d",
+    "resolved_at": "2026-08-02T14:34:23.241Z",
+    "resolved_by": "unknown",
+    "note": "Post-apply close-out complete. Themes derived at promote (already post-apply, no re-promote needed): julian themes incl. bhakti, living_god, divine_providence, theosis. Smoke test 'Is there wrath in God?' via python -m guru query on Qwen3.5-27B: Julian cited lead ('I saw no manner of wrath in God', Ch XLIXa), 10 chunks across 8 traditions incl. the designed contrasts (Enoch indignation, PS wrath-psalm, Rumi vengeance+mercy, Boehme wrath-consumes). Live counts: 127 chunks, 720 EXPRESSES, 76 PARALLELS, 15 CONTRASTS, 798 summary_embeddings. export.py → corpus_version 49 (25.74MB, source 19fa0f2412fc). Loaded guru-web docker postgres, verified: v49, 127/720/76/15, dossier=1, summaries=14."
+  }
+}

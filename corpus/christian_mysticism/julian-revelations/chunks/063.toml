@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.063"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter XLVIb"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 74
+
+[content]
+body = "For I saw in the same Shewing that much privity is hid, which may never be known until the time that God of His goodness hath made us worthy to see it; and therewith I am well-content, abiding our Lord's will in this high marvel.\n\nAnd now I yield me to my Mother, Holy Church, as a simple child oweth."
+
+[annotations]
+concepts = []
+related_chunks = []

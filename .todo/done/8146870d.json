@@ -1,0 +1,21 @@
+{
+  "id": "8146870d",
+  "type": "chore",
+  "state": "done",
+  "summary": "graph_bootstrap.py — Julian chunk nodes + BELONGS_TO under existing christian_mysticism",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.786Z",
+  "updated_at": "2026-08-01T20:14:42.444Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "python scripts/graph_bootstrap.py. DONE: chunk nodes + BELONGS_TO edges for julian-revelations counted in guru.db and match the chunk count; christian_mysticism tradition node pre-exists (no new tradition). Counts recorded in ticket (db git-ignored).",
+  "resolution": {
+    "commit": "f1e254e408b22dfd2ce8720e53dfe89ad6055949",
+    "resolved_at": "2026-08-01T20:14:42.444Z",
+    "resolved_by": "unknown",
+    "note": "graph_bootstrap: 127 julian chunk nodes + 127 BELONGS_TO under existing christian_mysticism tradition (counts verified; db git-ignored)."
+  }
+}

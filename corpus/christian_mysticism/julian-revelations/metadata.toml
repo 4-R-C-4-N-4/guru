@@ -1,0 +1,7 @@
+tradition = "Christian Mysticism"
+text_id = "julian-revelations"
+text_name = "Revelations of Divine Love"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+sections_format = "chapter"
+chunk_count = 127

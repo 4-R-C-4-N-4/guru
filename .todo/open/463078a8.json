@@ -1,0 +1,14 @@
+{
+  "id": "463078a8",
+  "type": "chore",
+  "state": "open",
+  "summary": "Dossiers campaign c6 (V9 bump, house-style comment, no works.toml entries - both singletons): plan + generate (claude) + rubric review + promote + embed_summaries",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.733Z",
+  "updated_at": "2026-08-02T14:24:49.733Z",
+  "relationships": {
+    "parent": "df080193"
+  }
+}

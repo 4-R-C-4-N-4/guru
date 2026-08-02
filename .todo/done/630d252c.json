@@ -1,0 +1,30 @@
+{
+  "id": "630d252c",
+  "type": "chore",
+  "state": "done",
+  "summary": "tag_concepts.py 27B no-think — stage Julian tags; queue-only via /guru-review-tags",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.867Z",
+  "updated_at": "2026-08-01T21:52:05.797Z",
+  "relationships": {
+    "parent": "7dc14fc3"
+  },
+  "description": "GPU gate first (ComfyUI queue idle → POST /free). EXTRA_ARGS='--chat-template-kwargs {\"enable_thinking\":false}' llm qwen3.5, then python scripts/tag_concepts.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf --text julian-revelations. STAGED ONLY — no auto_promote; review via /guru-review-tags (user directed this inline last time — run the review pass after staging, all scores are safe pre-promotion), user applies. Watch for: 27B over-applying correspondence/microcosm/cosmic_consciousness (Gita calibration); Julian-specific accepts to expect: evil_as_privation, apocatastasis, divine_providence, love_of_neighbour, kingdom_within, inner_light. DONE: staged counts recorded, zero live EXPRESSES, review verdicts queued.",
+  "resolution": {
+    "commit": "043f22830db4234fc9b207e695bc57bb99f3c819",
+    "resolved_at": "2026-08-01T21:19:04.000Z",
+    "resolved_by": "unknown",
+    "note": "Tagging staged: see counts in log/DB (127/127 chunks, 0 errors). Queue-only; review pass next per ticket. Model Qwen3.5-27B no-think."
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-01T21:52:05.797Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Review pass complete (post-close addendum): all 1409 staged tags judged chunk-by-chunk across 13 API batches, 127/127 chunk bodies read. Queued: 720 accept, 2 reassign (73208 microcosm->kingdom_within soul-as-City; 73302 divine_sparks->inner_light Godly-Will), 687 reject. New concepts: contrition ACCEPTED (taxonomy soteriology.purgation_and_emptiness, def synced); compassion/longing_for_god/sin_as_scourge REJECTED. Flip-candidates for user (strong content in undisplayed tails, rejected per no-tail-judging rule): 73525+73639 body_as_obstacle (ch64 body-as-mire, ch72 weight-of-flesh), 73506 childlike (ch63 'none higher stature than Childhood'), 73097 union (ch46 oned-claim), 73673 (ch74 love-dread brethren). Model patterns matched Gita: over-applies correspondence/microcosm on analogies, logos on any Christ-mention, living_god fired on 122/127 chunks (tightened mid-review). Julian-specific riches: evil_as_privation 20+ accepts (crown: 'sin hath no substance'), dark_night 5 accepts (first primary sources for the concept), frashokereti cross-hit on the Great Deed, apocatastasis on all-shall-be-well, bhakti 40+ accepts validating the new node.",
+      "confidence": "high"
+    }
+  ]
+}

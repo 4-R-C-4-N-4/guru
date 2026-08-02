@@ -1,0 +1,15 @@
+[chunk]
+id = "christian_mysticism.julian-revelations.112"
+tradition = "Christian Mysticism"
+text_name = "Revelations of Divine Love"
+section = "Chapter LXXIIIb"
+translator = "Grace Warrack"
+source_url = "https://www.gutenberg.org/cache/epub/52958/pg52958-images.html"
+token_count = 50
+
+[content]
+body = "For right as by the courtesy of God He forgiveth our sin after the time that we repent us, right so willeth He that we forgive our sin, as anent our unskilful heaviness and our doubtful dreads."
+
+[annotations]
+concepts = []
+related_chunks = []
