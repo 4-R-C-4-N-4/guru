@@ -1,0 +1,20 @@
+{
+  "id": "f84089c0",
+  "type": "chore",
+  "state": "done",
+  "summary": "/guru-review-edges queue-only over all staged edges touching both texts (user keeps apply gate)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.686Z",
+  "updated_at": "2026-08-02T23:29:46.450Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "d02bd6cb56f8288363ed28dd125a3ef9055eabdf",
+    "resolved_at": "2026-08-02T23:29:46.450Z",
+    "resolved_by": "unknown",
+    "note": "NA edge review complete: all 277 staged PARALLELS judged pair-by-pair (bodies read both sides). Verdicts: 45 accept / 146 reclassify surface_only / 25 unrelated / 1 reclassify CONTRASTS (Enoch heavenly tablets vs Eastman Unwritten Scriptures). User's mid-run apply (2026-08-02T21:17Z) landed batches 1-4: 17 PARALLELS live + 43 resolved; 217 actions remain queued for next apply. Prize accepts: Wipunen lost-words<->Uktena Ulunsuti quest (0.90), Kalevala fire-quest<->First Fire (0.90), Tlanuwa<->eagle-pike bird-serpent combat (0.90), Otso<->Little Deer hunting propitiation cluster, Gita XVII dana<->Eastman generosity (0.90), Midewiwin<->Masonic trestleboard, Constant Fire<->Druid perpetual fire, ginseng Little Man<->Agrippa proper names, Crow Dog<->Ali forbearance, Ali/Mohawk stoicism<->Rumi. Noise patterns: mistral over-fans single chunks (mabinogion.148 x15 pairings, 2 real), hallucinated justifications ~25 (worst: 3x fabricated deluge on mis-labeled 'Myth 890a' plate chunk 212). Corpus bugs: egyptian-book-of-the-dead-index.105/.340 identical bodies; mooney chunk 212 label 'Myth 890a' garbled."
+  }
+}
