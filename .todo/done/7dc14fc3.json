@@ -1,0 +1,35 @@
+{
+  "id": "7dc14fc3",
+  "type": "feature",
+  "state": "done",
+  "summary": "Ingest Julian of Norwich, Revelations of Divine Love (Warrack) into christian_mysticism — full pipeline: manifest → dossier → export",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T17:55:20.617Z",
+  "updated_at": "2026-08-02T14:34:23.339Z",
+  "tags": [
+    "corpus-expansion",
+    "julian"
+  ],
+  "relationships": {
+    "children": [
+      "11cf1630",
+      "a9071889",
+      "709e3c8f",
+      "8146870d",
+      "fc682dcd",
+      "630d252c",
+      "038c5ed0",
+      "277b26c5",
+      "13b24c43"
+    ]
+  },
+  "description": "Julian of Norwich, Revelations of Divine Love, Long Text — Grace Warrack edition 1901, Gutenberg #52958 (URL verified live 2026-08-01 during proposal work). Existing tradition christian_mysticism — no new slug, no tradition-node work. Per docs/corpus-expansion/hit-literature-2026-08.md §2. First woman's voice in the corpus. Expected concept hooks: evil_as_privation ('sin hath no manner of substance'), apocatastasis ('all shall be well'), divine_providence, mystical_union, kingdom_within (soul as worshipful city), plus a prize CONTRASTS vs Boehme wrath-theology (no-wrath-in-God, chs 45-49). Standing directives: tags on Qwen3.5-27B no-think, edges on mistral, dossiers via claude (campaign config); tag/edge review queue-only — user applies. GPU: check ComfyUI occupancy before each LLM stage (llm/comfy cannot share the 3090; use /free + queue-idle check, never kill an active render). NOTE: branch stacks on todo/e5b69653 (PR #47) because the .todo store lives there — diff collapses once #47 merges.",
+  "resolution": {
+    "commit": "a616251ac0c27a64bd1ee65d0c4d558ff6a514d1",
+    "resolved_at": "2026-08-02T14:34:23.339Z",
+    "resolved_by": "unknown",
+    "note": "Julian of Norwich, Revelations of Divine Love (Warrack) fully ingested: 127 chunks, 1409 tags reviewed (720 accepted incl. new concept contrition), 332 edges reviewed (83 accepts, 15 CONTRASTS incl. 6-edge Julian-Enoch doctrinal opposition), dossiers campaign c5 complete, corpus v49 exported and live in guru-web postgres. First woman's voice in the corpus."
+  }
+}
