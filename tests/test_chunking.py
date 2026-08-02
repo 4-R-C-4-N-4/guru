@@ -426,6 +426,55 @@ def test_rechunk_prunes_stale_chunk_files(tmp_path, monkeypatch):
     assert "003.toml" not in after and "099.toml" not in after
 
 
+def test_mabinogion_closing_formula_not_split():
+    """The Lady of the Fountain ends by restating its own title in all caps
+    ("And this is the tale of THE LADY OF THE FOUNTAIN."). The section-split
+    alternation must NOT treat that in-sentence occurrence as a tale boundary —
+    it split a spurious 1-token "." chunk and truncated the preceding chunk
+    mid-sentence (todo:1360a074). Uses the real chunking config pattern."""
+    import sys
+    sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "chunkers"))
+    import regex_splitter
+
+    with open(CHUNKING_DIR / "celtic" / "mabinogion.toml", "rb") as f:
+        cfg = tomllib.load(f)["chunking"]
+
+    text = (
+        "THE LADY OF THE FOUNTAIN Owain went forth to the Castle. "
+        "And this is the tale of THE LADY OF THE FOUNTAIN. "
+        "PEREDUR THE SON OF EVRAWC Earl Evrawc owned the Earldom of the North."
+    )
+    chunks = regex_splitter.split(text, cfg)
+    assert len(chunks) == 2, [c.section_label for c in chunks]
+    assert chunks[0].body.endswith("And this is the tale of THE LADY OF THE FOUNTAIN.")
+    assert chunks[1].body.startswith("Earl Evrawc")
+
+
+def test_no_degenerate_chunk_bodies():
+    """No stored chunk body may be pure punctuation/whitespace (e.g. the "."
+    chunk from todo:1360a074). Short chunks are legitimate (9-token logia);
+    wordless ones never are."""
+    if not CORPUS_DIR.exists():
+        return
+    offenders = []
+    for trad_dir in sorted(CORPUS_DIR.iterdir()):
+        if not trad_dir.is_dir() or trad_dir.name.endswith(".toml"):
+            continue
+        for text_dir in sorted(trad_dir.iterdir()):
+            if not text_dir.is_dir():
+                continue
+            chunk_dir = text_dir / "chunks"
+            if not chunk_dir.exists():
+                continue
+            for chunk_file in sorted(chunk_dir.glob("*.toml")):
+                with open(chunk_file, "rb") as f:
+                    d = tomllib.load(f)
+                if not re.search(r"\w", d["content"]["body"]):
+                    offenders.append(d["chunk"]["id"])
+    assert not offenders, f"wordless chunk bodies: {offenders[:5]}"
+    print("  PASS: no wordless chunk bodies")
+
+
 def test_baseline_strips_mead_hermetica_apparatus():
     """BASELINE_PRE_STRIP removes the Corpus Hermeticum / Mead-Greer apparatus
     (todo:50438e23): the per-libellus translator credit and J.M. Greer's signed

@@ -17,7 +17,11 @@ strategy = "regex-section-split"
 # the matched header is concatenated to the body. The TOC stripper
 # below removes the contents-list copy of these strings so only the
 # in-body occurrences match.
-pattern = '\b(INTRODUCTION|THE LADY OF THE FOUNTAIN|PEREDUR THE SON OF EVRAWC|GERAINT THE SON OF ERBIN|KILHWCH AND OLWEN|THE DREAM OF RHONABWY|PWYLL PRINCE OF DYVED|BRANWEN THE DAUGHTER OF LLYR|MANAWYDDAN THE SON OF LLYR|MATH THE SON OF MATHONWY|THE DREAM OF MAXEN WLEDIG|THE STORY OF LLUDD AND LLEVELYS|TALIESIN)\b'
+# The negative lookbehind guards against the closing formula "And this
+# is the tale of THE LADY OF THE FOUNTAIN." — the tale restates its own
+# title in all caps mid-sentence, which split a spurious 1-token "."
+# chunk and truncated the preceding chunk (todo:1360a074).
+pattern = '(?<!tale of )\b(INTRODUCTION|THE LADY OF THE FOUNTAIN|PEREDUR THE SON OF EVRAWC|GERAINT THE SON OF ERBIN|KILHWCH AND OLWEN|THE DREAM OF RHONABWY|PWYLL PRINCE OF DYVED|BRANWEN THE DAUGHTER OF LLYR|MANAWYDDAN THE SON OF LLYR|MATH THE SON OF MATHONWY|THE DREAM OF MAXEN WLEDIG|THE STORY OF LLUDD AND LLEVELYS|TALIESIN)\b'
 section_label_format = "Tale {n}"
 max_tokens = 800
 group_size = 1
