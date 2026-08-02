@@ -18,7 +18,12 @@
 # V9 that is a new campaign, never a partial re-plan. Provider/model/span_target
 # unchanged, so the 53 prior works' span ids are identical under c3 and their
 # c2 staged rows satisfy the generate-loop skip/upstream checks unchanged.
-campaign_id = "c3"
+# c4 = c3 + bhagavad-gita (todo:d95fd3f5, 42 chunks, 18 shards → 1 work).
+# The c3 plan froze at 54 works before the Gita ingest changed totals; per V9
+# that is a new campaign, never a partial re-plan. Provider/model/span_target
+# unchanged, so the 54 prior works' span ids are identical under c4 and their
+# c3 staged rows satisfy the generate-loop skip/upstream checks unchanged.
+campaign_id = "c4"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).

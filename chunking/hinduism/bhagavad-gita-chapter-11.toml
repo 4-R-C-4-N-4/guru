@@ -1,0 +1,18 @@
+# Bhagavad Gita Chapter XI — SBE8 (Telang 1882). Per-chapter manifest
+# entry, katha-upanishad/dhammapada pattern. Prose paragraphs with
+# <P ALIGN=CENTER> speaker markers; belt-and-suspenders Footnotes
+# pre_strip in case the page predates the 5a794b5e re-acquire pass.
+[chunking]
+strategy = "paragraph-group"
+section_label_format = "Chapter XI, Section {n}"
+paragraphs_per_chunk = 3
+max_tokens = 800
+pre_strip_patterns = [
+    "(?m)^Footnotes\\b[\\s\\S]*$",
+]
+
+[metadata]
+tradition = "Hinduism"
+text_name = "The Bhagavad Gita"
+translator = "Kashinath Trimbak Telang"
+sections_format = "chapter"

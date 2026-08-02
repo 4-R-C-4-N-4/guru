@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.bhagavad-gita-chapter-16.002"
+tradition = "Hinduism"
+text_name = "The Bhagavad Gita"
+section = "Chapter XVI, Section 1b"
+translator = "Kashinath Trimbak Telang"
+source_url = "https://sacred-texts.com/hin/sbe08/sbe0818.htm"
+token_count = 87
+
+[content]
+body = "a man works out his own welfare, and then proceeds to the highest goal.\n\nHe who abandoning scripture ordinances, acts under the impulse of desire, does not attain perfection , nor happiness, nor the highest goal.\n\nTherefore in discriminating between w hat should be done and what should not be done, your authority (must.\n\nbe) scripture.\n\nAnd knowing what is declared by the ordinances of scripture, you should perform action in this world."
+
+[annotations]
+concepts = []
+related_chunks = []

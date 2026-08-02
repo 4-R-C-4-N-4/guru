@@ -1,0 +1,37 @@
+{
+  "id": "d7885c88",
+  "type": "chore",
+  "state": "done",
+  "summary": "Smoke test: guru query cites Gita chunks; record chunk/tag/edge counts in ticket",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.241Z",
+  "updated_at": "2026-08-01T16:56:58.580Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "python -m guru query 'What does the Gita teach about action without attachment?' --verbose — DONE: retrieval cites hinduism.gita chunks; record final counts in ticket (chunks, live tags after user apply, live edges after user apply, dossier summaries). This child closes only after the user has applied the tag/edge queues from children fd13d89a/a2d04102.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-01T16:18:59.927Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Smoke test PASS 2026-08-01: 'guru query' on non-attachment retrieves hinduism.bhagavad-gita-chapter-03 chunks (sim 0.647) in a cross-tradition set (Tao Te Ching, Plotinus, Diamond Sutra, Lévi); generated answer cites Gita chunks with correct section labels. Counts: 42 chunks, 42 embeddings, 580 staged tags (369a/211r queued), 146 staged edges, 1 work_dossier + 19 summary_nodes + 19 summary embeddings. Ticket remains open per done contract: closes after user applies tag/edge queues (live tag/edge counts recorded then; themes_json re-promote also pending apply).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-01T16:50:40.420Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Edge review complete 2026-08-01: all 146 Gita staged edges judged pair-by-pair via /guru-review-edges. Queued: 81 accept, 3 reclassify PARALLELS->CONTRASTS (23149 Orphic Death-hymn, 23244 atman-vs-anatta Diamond Sutra, 23264 eternal-portion-vs-emptiness Heart Sutra), 62 reclassify->surface_only. Zero applied — user gate. Corpus bug noted: egyptian-book-of-the-dead-index chunks .064 and .300 duplicate the same Unas text.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "3deb851d9192838303c5a65e23899a37bc886689",
+    "resolved_at": "2026-08-01T16:56:58.580Z",
+    "resolved_by": "unknown",
+    "note": "Smoke test passed (retrieval + generation cite Gita cross-tradition). Final live counts after user apply: 369 EXPRESSES tags, 79 PARALLELS + 5 CONTRASTS verified edges, concepts dharma+bhakti created, dossier re-promoted with themes populated."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "6ea7c8e0",
+  "type": "bug",
+  "state": "open",
+  "summary": "Duplicate chunk bodies: egyptian-book-of-the-dead-index 064 ≡ 300 (Unas cannibal-hymn text under two different section labels)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-01T17:24:53.980Z",
+  "updated_at": "2026-08-01T17:24:54.023Z",
+  "files": [
+    {
+      "path": "corpus/egyptian/egyptian-book-of-the-dead-index/chunks/064.toml"
+    }
+  ],
+  "tags": [
+    "corpus-quality",
+    "egyptian"
+  ],
+  "description": "Found 2026-08-01 during /guru-review-edges on the Gita batch (edges 23228/23229 paired the same text twice). chunks/064.toml (section 'Chapter 6 (part 20)') and chunks/300.toml (section 'Chapter 43 (part 61)') have byte-identical bodies — the Unas cannibal-hymn passage ('The mighty ones in heaven shoot out fire under the caldrons...'). At least one section label is wrong; likely the EBD index crawl visited a page twice or Budge's appendix repeats the passage and the chunker didn't dedupe. Effects: double retrieval weight for this text, duplicate edge proposals, and both chunks carry live tags/edges. Fix path: determine which section genuinely contains the passage in the source (sacred-texts ebod), remove or re-point the other chunk, clean up its edges/embeddings/tags (cleanup_dupes.sh precedent), re-export."
+}

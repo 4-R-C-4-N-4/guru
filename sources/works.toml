@@ -243,3 +243,29 @@ members = [
     "transcendental-magic-doctrine",
     "transcendental-magic-ritual",
 ]
+
+# todo:d95fd3f5 — Gita ingestion (campaign c4). 18 per-chapter shards, one work.
+[[work]]
+id = "bhagavad-gita"
+label = "The Bhagavad Gita (Telang)"
+tradition = "hinduism"
+members = [
+    "bhagavad-gita-chapter-01",
+    "bhagavad-gita-chapter-02",
+    "bhagavad-gita-chapter-03",
+    "bhagavad-gita-chapter-04",
+    "bhagavad-gita-chapter-05",
+    "bhagavad-gita-chapter-06",
+    "bhagavad-gita-chapter-07",
+    "bhagavad-gita-chapter-08",
+    "bhagavad-gita-chapter-09",
+    "bhagavad-gita-chapter-10",
+    "bhagavad-gita-chapter-11",
+    "bhagavad-gita-chapter-12",
+    "bhagavad-gita-chapter-13",
+    "bhagavad-gita-chapter-14",
+    "bhagavad-gita-chapter-15",
+    "bhagavad-gita-chapter-16",
+    "bhagavad-gita-chapter-17",
+    "bhagavad-gita-chapter-18",
+]

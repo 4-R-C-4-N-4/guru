@@ -1,0 +1,21 @@
+{
+  "id": "d95fd3f5",
+  "type": "chore",
+  "state": "done",
+  "summary": "Dossier layer: works.toml Gita entry + build_dossiers.py plan/generate + embed_summaries.py",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-01T14:05:27.208Z",
+  "updated_at": "2026-08-01T16:17:37.531Z",
+  "relationships": {
+    "parent": "e5b69653"
+  },
+  "description": "Add Gita work entry to sources/works.toml (single work grouping the 18 per-chapter sources — Agrippa/Transcendental Magic precedent). USER DIRECTIVE 2026-08-01: dossiers run via claude (build_dossiers.py --provider claude-code or anthropic — check which the script supports and use the claude one). CAUTION: --plan writes the campaign freeze artifact — check docs/summary/implementation-guru.md first; if the current campaign is already generating, adding a work may require a NEW campaign id rather than a re-plan. Then --generate for the Gita work, then embed_summaries.py. DONE: dossier/summary rows exist for the Gita work; summary embeddings present; campaign decision documented in ticket.",
+  "resolution": {
+    "commit": "ad1ca2fae61adce5efd4e8806df94c3adf407851",
+    "resolved_at": "2026-08-01T16:17:37.531Z",
+    "resolved_by": "unknown",
+    "note": "Campaign c4 (c3+bhagavad-gita, V9 precedent): works.toml 18-member entry, span plan 55 works/739 spans. Generated via claude-code (provider from campaign config, user directive). Rubric-reviewed ALL rows myself: 18 L1s (2 rejected FORMAT/REGISTER + respun + re-accepted), L2, 18 structure entries, figures, terms, summary, context — calibrated against c1-c3 accepted rows. Promoted: 1 work_dossiers row, 19 summary_nodes, 784 summary embeddings (19 new). themes_json=[] pending user's tag apply (V5 floor: <5 live tags) — re-promote after apply to populate."
+  }
+}
