@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.060"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 36b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 177
+
+[content]
+body = "When they were all ready the signal was given and the game began, but almost at the first toss the Flying Squirrel caught the ball and carried it up a tree, from which he threw it to the birds, who kept it in the air for some time until it dropped.\n\nThe Bear rushed to get it, but the Martin darted after it and threw it to the Bat, who was flying near the ground, and by his dodging and doubling kept it out of the way of even the Deer, until he finally threw it in between the posts and won the game for the birds.\n\nThe Bear and the Terrapin, who had boasted so of what they would do, never got a chance even to touch the ball.\n\nFor saving the ball when it dropped, the birds afterwards gave the Martin a gourd in which to build his nest, and he still has it."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.004"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 2b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 93
+
+[content]
+body = "“I’ll manage that,” said the Water Spider; so she spun a thread from her body and wove it into a tusti bowl, which she fastened on her back.\n\nThen she crossed over to the island and through the grass to where the fire was still burning.\n\nShe put one little coal of fire into her bowl, and came back with it, and ever since we have had fire, and the Water Spider still keeps her tusti bowl."
+
+[annotations]
+concepts = []
+related_chunks = []

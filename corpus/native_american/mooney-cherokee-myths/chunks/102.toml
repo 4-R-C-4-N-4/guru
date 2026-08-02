@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.102"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 65e"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 64
+
+[content]
+body = "He kept the stone for himself, and calling the people around him he painted them, on face and breast, with the red wâ′dĭ, and whatever each person prayed for while the painting was being done—whether for hunting success, for working skill, or for a long life—that gift was his."
+
+[annotations]
+concepts = []
+related_chunks = []

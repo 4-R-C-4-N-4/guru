@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.213"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 890b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 75
+
+[content]
+body = "Wafford once knew an old woman whose name was Daʻnă-gâ′stă, an abbreviated form for Daʻnăwă-gâsta′yă, “Sharp war,” understood to mean “Sharp ( i.\n\ne., Fierce) warrior.” Several cases of women acting the part of warriors are on record among the Cherokee."
+
+[annotations]
+concepts = []
+related_chunks = []

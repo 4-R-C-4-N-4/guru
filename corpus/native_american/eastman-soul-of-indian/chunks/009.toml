@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.eastman-soul-of-indian.009"
+tradition = "Native American"
+text_name = "The Soul of the Indian"
+section = "Chapter IIe"
+translator = ""
+source_url = "https://www.gutenberg.org/cache/epub/340/pg340-images.html"
+token_count = 42
+
+[content]
+body = "Each is vowed to die for the other, if need be, and nothing is denied the brother-friend, but neither is anything required that is not in accord with the highest conceptions of the Indian mind."
+
+[annotations]
+concepts = []
+related_chunks = []

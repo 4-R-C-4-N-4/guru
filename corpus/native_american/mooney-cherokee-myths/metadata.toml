@@ -1,0 +1,7 @@
+tradition = "Native American"
+text_id = "mooney-cherokee-myths"
+text_name = "Myths of the Cherokee"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+sections_format = "myth"
+chunk_count = 220

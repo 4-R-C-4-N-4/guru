@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.014"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 4c"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 39
+
+[content]
+body = "Even weeds were made for some good purpose, which we must find out for ourselves.\n\nWhen the doctor does not know what medicine to use for a sick man the spirit of the plant tells him."
+
+[annotations]
+concepts = []
+related_chunks = []
