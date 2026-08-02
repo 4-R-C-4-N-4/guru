@@ -1,0 +1,20 @@
+{
+  "id": "8020180d",
+  "type": "chore",
+  "state": "done",
+  "summary": "Acquire + chunking configs + clean_bodies --apply --text for both texts. GATED: no db writes until Julian v48 export is loaded",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.480Z",
+  "updated_at": "2026-08-02T14:39:23.955Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "75e740e3ab25129e8966c8e666a317199a38ace5",
+    "resolved_at": "2026-08-02T14:39:23.955Z",
+    "resolved_by": "unknown",
+    "note": "Both texts acquired (generic_html strips footnote/pagenum), chunked (mooney 220 chunks/124.6k tok, scope verified: starts myth 1 earth-diver, ends myth 126, no sketch/notes bleed; eastman 29 chunks/19.9k tok, 6 chapters), clean_bodies applied. Export gate honored: ran after v49 load."
+  }
+}
