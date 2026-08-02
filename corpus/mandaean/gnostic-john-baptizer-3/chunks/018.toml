@@ -5,10 +5,10 @@ text_name = "Gnostic John the Baptizer — Some Typical Extracts"
 section = "Section 18"
 translator = "G.R.S. Mead"
 source_url = "http://gnosis.org/library/grs-mead/gnostic_john_baptist/gjb-2-3.htm"
-token_count = 141
+token_count = 127
 
 [content]
-body = "1 This section is\nthe most difficult of all to translate owing to the abundance of technical\nfishing terms. In spite of marvellous philological industry and wide-flung\nenquiries L. has been unable to identify a number of words.\n\n2 Sc . the\nfaithful.\n\n1 Sc . the\nSeven.\n\n2 Lit. 'on the\nhigh seas' L. glosses this as meaning that they are not river fish; but this\nseems to me unnecessary, as my rendering suggests.\n\n3 Used apparently\nby the fish-seller for advertising his wares.\n\n1 Evidently a\nwind-instrument of some kind.\n\n2 Presumably a\nwater-bird."
+body = "1 This section is the most difficult of all to translate owing to the abundance of technical fishing terms. In spite of marvellous philological industry and wide-flung enquiries L. has been unable to identify a number of words.\n\n2 Sc . the faithful.\n\n1 Sc . the Seven.\n\n2 Lit. 'on the high seas' L. glosses this as meaning that they are not river fish; but this seems to me unnecessary, as my rendering suggests.\n\n3 Used apparently by the fish-seller for advertising his wares.\n\n1 Evidently a wind-instrument of some kind.\n\n2 Presumably a water-bird."
 
 [annotations]
 concepts = []
