@@ -1,0 +1,27 @@
+# Mooney, Myths of the Cherokee — Gutenberg #45634 (files/ mirror; plain
+# cache URL 404s), BAE 19th Annual Report (1900). INGEST SCOPE per manifest
+# notes: the myths section only. Front-strip everything through the
+# "Cosmogonic Myths" subhead (unique string — drops PG header, contents,
+# and Mooney's ~200-page historical sketch/apparatus in one cut); tail-strip
+# from "NOTES AND PARALLELS" (unique — Mooney's comparative notes, scholar
+# voice, apparatus per project policy). 126 numbered myths as
+# "<h4>N. TITLE</h4>" reduce to plain "N. TITLE" lines after extraction;
+# interior genre subheads (Quadruped Myths etc.) ride as trailing text in
+# the preceding myth's final chunk — accepted noise, P9-visible.
+[chunking]
+strategy = "regex-section-split"
+pattern = '(\d{1,3})\. (?=[A-Z][A-Z])'
+section_label_format = "Myth {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    '\*\*\*\s*END OF .*',
+    '^[\s\S]*?Cosmogonic Myths',
+    'NOTES AND PARALLELS[\s\S]*$',
+]
+
+[metadata]
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+sections_format = "myth"

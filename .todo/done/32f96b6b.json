@@ -1,0 +1,20 @@
+{
+  "id": "32f96b6b",
+  "type": "chore",
+  "state": "done",
+  "summary": "propose_edges on mistral with --text filter per text (NOT --tradition); staged only",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.636Z",
+  "updated_at": "2026-08-02T23:56:04.057Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "fcb4c28f8400c8be933b55cf8743842602fe8cda",
+    "resolved_at": "2026-08-02T23:56:04.057Z",
+    "resolved_by": "unknown",
+    "note": "propose_edges.py run on mistral with --text mooney-cherokee-myths and --text eastman-soul-of-indian filters (never --tradition): 277 PARALLELS staged (6 @0.90 incl. Cherokee-Kalevala earth-diver and Wipunen-Uktena, 264 @0.85, 7 @0.80). Staged only; reviewed under f84089c0, applied by user."
+  }
+}

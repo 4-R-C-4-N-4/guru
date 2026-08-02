@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.135"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 86b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 39
+
+[content]
+body = "When the Cherokee went from Georgia to Indian Territory in 1838 some of them said, “Maybe Yahula has gone there and we shall hear him,” but they have never heard him again."
+
+[annotations]
+concepts = []
+related_chunks = []

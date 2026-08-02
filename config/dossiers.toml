@@ -28,7 +28,13 @@
 # V9 that is a new campaign, never a partial re-plan. Provider/model/span_target
 # unchanged, so the 55 prior works' span ids are identical under c5 and their
 # c4 staged rows satisfy the generate-loop skip/upstream checks unchanged.
-campaign_id = "c5"
+# c6 = c5 + mooney-cherokee-myths + eastman-soul-of-indian (todo:463078a8,
+# 220 + 29 chunks → 2 works). The c5 plan froze at 56 works before the
+# native_american ingest changed totals; per V9 that is a new campaign, never
+# a partial re-plan. Provider/model/span_target unchanged, so the 56 prior
+# works' span ids are identical under c6 and their c5 staged rows satisfy the
+# generate-loop skip/upstream checks unchanged.
+campaign_id = "c6"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).

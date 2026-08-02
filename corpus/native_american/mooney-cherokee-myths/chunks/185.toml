@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.185"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 111b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 198
+
+[content]
+body = "The Cherokee once had a wooden box, nearly square and wrapped up in buckskin, in which they kept the most sacred things of their old religion.\n\nUpon every important expedition two priests carried it in turn and watched over it in camp so that nothing could come near to disturb it.\n\nThe Delawares captured it more than a hundred years ago, and after that the old religion was neglected and trouble came to the Nation.\n\nThey had also a great peace pipe, carved from white stone, with seven stem-holes, so that seven men could sit around and smoke from it at once at their peace councils.\n\nIn the old town of Keowee they had a drum of stone, cut in the shape of a turtle, which was hung up inside the townhouse and used at all the town dances.\n\nThe other towns of the Lower Cherokee used to borrow it, too, for their own dances.\n\nAll the old things are gone now and the Indians are different.\n\nMiscellaneous Myths and Legends"
+
+[annotations]
+concepts = []
+related_chunks = []

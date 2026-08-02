@@ -1,0 +1,20 @@
+{
+  "id": "eaa8f17c",
+  "type": "chore",
+  "state": "done",
+  "summary": "embed_corpus for both texts (ollama nomic-embed-text)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.598Z",
+  "updated_at": "2026-08-02T14:40:00.670Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "99c895b19c1cad08b167552657a8d54eae276ffa",
+    "resolved_at": "2026-08-02T14:40:00.670Z",
+    "resolved_by": "unknown",
+    "note": "embed_corpus --resume: 249 chunks embedded (ollama/nomic-embed-text), 0 errors, chunk_embeddings=5340. Run BEFORE tagging deliberately (SQLite single-writer; embed takes seconds, tagging hours)."
+  }
+}
