@@ -1,0 +1,26 @@
+{
+  "id": "88f223dd",
+  "type": "chore",
+  "state": "done",
+  "summary": "Manifest stanzas: native_american tradition, mooney-cherokee-myths (PG 45634, html, myths section only) + eastman-soul-of-indian (PG 340, html)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.443Z",
+  "updated_at": "2026-08-02T14:36:46.387Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "work": {
+    "branch": "todo/df080193",
+    "base_branch": "main",
+    "started_at": "2026-08-02T14:36:04.944Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "f744474d7edb87451c1be16c7d8ac2eefee43522",
+    "resolved_at": "2026-08-02T14:36:46.387Z",
+    "resolved_by": "unknown",
+    "note": "native_american umbrella tradition (per celtic/finnic precedent); Mooney scoped to myths section only (Sacred Formulas excluded on cultural-sensitivity grounds); Eastman full text. URLs verified working (plain cache URL for 45634 404s — files/ mirror used)."
+  }
+}
