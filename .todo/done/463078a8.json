@@ -1,0 +1,20 @@
+{
+  "id": "463078a8",
+  "type": "chore",
+  "state": "done",
+  "summary": "Dossiers campaign c6 (V9 bump, house-style comment, no works.toml entries - both singletons): plan + generate (claude) + rubric review + promote + embed_summaries",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.733Z",
+  "updated_at": "2026-08-02T23:34:11.461Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "a910707aab6af3ec8d5882391da1f53e32e1930b",
+    "resolved_at": "2026-08-02T23:34:11.461Z",
+    "resolved_by": "unknown",
+    "note": "Campaign c6 dossiers complete for both NA works: 31 L1 spans + 2 L2 summaries + 31 structure entries + key_figures/key_terms/summary/context/reading_notes generated (claude-opus-4-8, 3 passes + notes stage), rubric-reviewed (sampled per template + both L2s and all 4 summary/context rows read in full) and accepted; promoted via promote_dossiers.py (mooney: 26 structure entries, themes=8; eastman: 5 entries, themes=8); 33 summaries embedded via embed_summaries.py --resume (summary_embeddings now 831). eastman reading_notes legitimately null per allow_null contract."
+  }
+}
