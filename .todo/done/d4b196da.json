@@ -1,0 +1,20 @@
+{
+  "id": "d4b196da",
+  "type": "chore",
+  "state": "done",
+  "summary": "Close-out gated on user apply: re-promote themes, smoke test, export.py, docker postgres load",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.773Z",
+  "updated_at": "2026-08-02T23:54:39.809Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "8fcac09c1f1627c47bbefeb6f1a1f03b81988c1e",
+    "resolved_at": "2026-08-02T23:54:39.809Z",
+    "resolved_by": "unknown",
+    "note": "Post-apply close-out complete. User applied full tag+edge queues (final apply drained 217 edge actions; totals: 62 accepts live incl. 17 from mid-run apply, 179 surface_only, 35 unrelated, 1 reclassified CONTRASTS). Smoke tests via python -m guru query on Qwen3.5-27B: (1) 'How should a hunter treat the animal he has killed?' — Little Deer pardon-rite led, Myth 15c cited [native_american lead]; (2) 'Why must sacred knowledge remain unwritten?' — 10 chunks across 7 traditions. Live counts: 249 chunks, 682 EXPRESSES, 62 PARALLELS, 1 CONTRASTS, 2 dossiers, 33 summaries, 831 summary_embeddings. export.py -> corpus_version 50 (26.91MB, source 8fcac09c1f16). Loaded guru-web docker postgres, verified: v50, 249/682/62/1, dossiers=2, summaries=33. Prod sync untouched (user gate)."
+  }
+}
