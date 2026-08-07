@@ -1,0 +1,27 @@
+{
+  "id": "e6ca84ef",
+  "type": "feature",
+  "state": "open",
+  "summary": "Tradition-affinity / novel-cell guard across the tag review pipeline \u2014 prevent recurrence of the v2 false-friend contamination class",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-07T19:28:54.000Z",
+  "tags": [
+    "tag-review",
+    "guard",
+    "guru-web",
+    "rellm",
+    "corpus-quality"
+  ],
+  "files": [
+    {
+      "path": "src/rellm/cli.py"
+    },
+    {
+      "path": "../guru-web (apply-preview component)"
+    }
+  ],
+  "description": "Root cause of the qwen-3-4b-guru v2 regression was a new-tradition review push accepting Greco-philosophical concepts onto finnic/celtic/norse chunks with zero prior presence in that tradition (see rellm docs/qwen-3-4b-v2-regression-autopsy.md and data/quarantine/ for the ~2,600-tag cleanup this triggered, corrected before the v3 retrain). The cleanup was entirely reactive. Three guards were agreed during that investigation but never built:\n\n1. `rellm lint` pre-export gate: flag any (concept, tradition) cell in the export with zero prior accepted tags before this push, so a contaminated batch can't reach a training export unnoticed.\n2. guru-web apply-preview warning: surface the same novel-cell signal (concept established elsewhere, first appearance in this tradition) in the apply-preview UI so the human applying tags sees it before committing.\n3. guru-review-tags skill mini-dossier rule: when a review pass hits a novel cell, pull a couple of comparison quotes from an established tradition automatically rather than relying on the reviewer to notice.\n\nDetection heuristic (from the original quarantine ranking): concept established with n>=20 accepted tags pre-push, zero presence in the target tradition, tags now present post-push. See rellm data/quarantine/suspect-ranking.csv for the concrete cell list this surfaced last time."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "f0487952",
+  "type": "bug",
+  "state": "open",
+  "summary": "Corpus extraction artifacts found during quarantine review (Dhammapada footnotes, Kalevala front-matter/title-clipping, Mabinogion footnote bleed, OCR typos, one thin chunk)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-07T19:28:54.000Z",
+  "tags": [
+    "corpus-quality",
+    "chunking",
+    "apparatus"
+  ],
+  "description": "Same apparatus-leak family as todo:50438e23 (Mead/Waite/Bellows/Charles/Taylor editions), surfaced this time by the qwen-3-4b-guru quarantine review passes (2026-08-05/06) rather than the edge review. New instances, not yet in that ticket's scope:\n\n- Dhammapada: a large fraction of chunks are 50-80% Max Muller translator footnotes rather than verse text (tag-bait \u2014 the footnote prose draws its own spurious tag proposals).\n- Kalevala: chunk 144 leaks Book II front-matter into the body; chunk 271 concatenates the glossary into the preceding chunk (chunker overran); rune/canto titles get clipped at some chunk starts.\n- Mabinogion: chunks 190 and 191 have footnote bleed into the body, same class as the Dhammapada issue.\n- Jowett and W.F. Crawford editions have scattered OCR typos (not systematic apparatus, just transcription noise \u2014 lower priority, may not be worth a dedicated pass).\n- mooney.137 is a thin chunk (very little content), flagged in passing, not yet characterized further.\n\nNone of these were root-caused to specific chunk.py patterns the way todo:50438e23's Mead/Waite cases were \u2014 that diagnostic work is still needed per source before a fix can land."
+}

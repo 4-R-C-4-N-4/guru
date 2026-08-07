@@ -1,0 +1,17 @@
+{
+  "id": "56d6d337",
+  "type": "bug",
+  "state": "open",
+  "summary": "Duplicate pending tags on chunks reviewed by two different model batches",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-07T19:28:54.000Z",
+  "tags": [
+    "corpus-quality",
+    "staged_tags",
+    "dedup"
+  ],
+  "description": "Found during the round-2 quarantine wave-3 review (2026-08-06): sta.097 and sta.304 each carry two sets of pending staged_tags from separate model batches on the same chunk, i.e. duplicate proposals rather than a single reviewable set. Only these two are confirmed; the underlying cause (whatever produced two batches on the same chunk) likely recurs elsewhere in the corpus and hasn't been scanned for. Needs: (1) a query for chunks with >1 batch of pending staged_tags on the same concept, (2) a decision on which batch wins / whether to merge, (3) a dedup pass, similar in spirit to the existing cleanup_dupes.sh precedent used for duplicate chunk bodies."
+}

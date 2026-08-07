@@ -1,0 +1,17 @@
+{
+  "id": "94bb91e1",
+  "type": "investigation",
+  "state": "open",
+  "summary": "Optional: base-vs-finetune entanglement audit using idle homology extraction infra",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-07T19:28:54.000Z",
+  "tags": [
+    "homology",
+    "eval",
+    "optional"
+  ],
+  "description": "The rellm-homology module's residual-stream extraction infra (src/rellm/homology/, tools/homology_extract.py) is sitting idle after the concept-direction-as-edge-source method failed its own gate (see rellm docs/homology/findings.md) \u2014 but the extraction machinery itself still works and merged qwen-3-4b-guru checkpoints exist under out/qwen3-4b-guru*/merged/. A base-vs-finetuned entanglement audit (how much does fine-tuning perturb concept-direction geometry per layer) was floated as a cheap secondary use \u2014 optional, not blocking anything, worth doing only if it's cheap relative to whatever else is queued. Could double as an informal v3 regression-test signal ('did this retrain change the model's internal geometry more than expected') rather than a formal ship gate."
+}
