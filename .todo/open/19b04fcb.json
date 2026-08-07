@@ -1,0 +1,22 @@
+{
+  "id": "19b04fcb",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Taxonomy redundancy pass (merge/split) before the next guru-tagger retrain",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-07T19:28:54.000Z",
+  "tags": [
+    "taxonomy",
+    "concepts",
+    "retrain-prep"
+  ],
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "description": "Two independent signals point at the same next step \u2014 clean up taxonomy redundancy before training another tagger on it:\n\n1. SPLIT candidates from the rellm-homology gold-set adjudication (0-4 depth-graded human verdicts, rellm data/homology/gold/verdicts.json): `sunyata_emptiness`, `fana_annihilation`, and `detachment_gelassenheit` were each flagged as bundling meaningfully distinct senses under one concept id.\n2. MERGE candidates via the rellm-homology direction-geometry infra (src/rellm/homology/, extraction ~3 min/model, states already computed for base + instruct Qwen2.5-7B): a taxonomy redundancy matrix (pairwise concept-direction cosine similarity) was proposed as a cheap secondary use of that infra even though the homology-as-edge-source method itself didn't pass its gate (see rellm docs/homology/findings.md) \u2014 never run.\n\nDo this before v4 of qwen-3-4b-guru or any other retrain: taxonomy changes invalidate the pinned taxonomy.toml a released tagger expects, so it's cheaper to batch this now than to do it again post-hoc."
+}
