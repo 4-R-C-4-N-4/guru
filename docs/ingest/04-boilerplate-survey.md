@@ -17,6 +17,10 @@ python3 scripts/run_contract.py boilerplate-survey \
     --var source_id=<id> --var host=<host>
 ```
 
+For a multi-page source the raw file is `{source-id}-01.txt` and its siblings,
+not `{source-id}.txt` — survey the first and last page rather than one file,
+since each page carries its own header and nav.
+
 The runner keeps the head and tail within a character budget and elides the
 middle, which is correct here: site headers lead, nav lines and licence blocks
 trail. Boilerplate lives at the edges.

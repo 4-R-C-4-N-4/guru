@@ -90,7 +90,9 @@ class Ctx:
 
     @property
     def campaign_id(self) -> str:
-        return self.campaign.get("campaign_id", "?")
+        # Must match the default build_ctx/find_drift use for the plan lookup,
+        # or _p_plan reports a path that was never opened.
+        return self.campaign.get("campaign_id", "")
 
     @property
     def spans(self) -> list[dict]:
@@ -138,6 +140,8 @@ class Node:
 
 
 def _p_plan(ctx: Ctx) -> tuple[bool, str]:
+    if not ctx.campaign_id:
+        return False, "no campaign_id in config/dossiers.toml"
     if ctx.plan is None:
         return False, f"no frozen plan at {plan_path(ctx.campaign_id).relative_to(PROJECT_ROOT)}"
     if ctx.plan_entry is None:
@@ -163,15 +167,18 @@ def _p_generate(ctx: Ctx) -> tuple[bool, str]:
     # Requiring an L1 for it reports every small text as unstarted forever.
     if ctx.degenerate:
         l2 = ctx.count(
-            "SELECT count(*) FROM staged_summaries "
+            "SELECT count(DISTINCT summary_id) FROM staged_summaries "
             "WHERE work_id=? AND level=2 AND status!='rejected'", ctx.work_id)
         if not l2:
             return False, "degenerate work with no L2 summary staged"
         return True, f"degenerate · {fields} field rows · {sums} summary rows"
 
     want = len(ctx.spans)
+    # DISTINCT summary_id: a span regenerated under a bumped template has one
+    # row per version, and counting rows lets 5 regenerated spans stand in for
+    # 10 planned ones.
     l1 = ctx.count(
-        "SELECT count(*) FROM staged_summaries "
+        "SELECT count(DISTINCT summary_id) FROM staged_summaries "
         "WHERE work_id=? AND level=1 AND status!='rejected'", ctx.work_id)
     if want and l1 < want:
         return False, f"{l1} of {want} L1 summaries staged"
@@ -192,7 +199,12 @@ def _p_review(ctx: Ctx) -> tuple[bool, str]:
         if ps:
             parts.append(f"{ps} summary row{'' if ps == 1 else 's'}")
         return False, "pending: " + ", ".join(parts)
-    return True, "nothing pending"
+    total = ctx.count(
+        "SELECT count(*) FROM staged_dossier_fields WHERE work_id=?", ctx.work_id
+    ) + ctx.count("SELECT count(*) FROM staged_summaries WHERE work_id=?", ctx.work_id)
+    if total == 0:
+        return False, "nothing staged to review"
+    return True, f"all {total} staged rows settled"
 
 
 def _p_promote(ctx: Ctx) -> tuple[bool, str]:
@@ -208,8 +220,9 @@ def _p_promote(ctx: Ctx) -> tuple[bool, str]:
     # A promoted work still owes a structure entry per planned span.
     if ctx.spans and not ctx.degenerate:
         got = ctx.count(
-            "SELECT count(*) FROM staged_dossier_fields WHERE work_id=? "
-            "AND field='structure_entry' AND status='accepted'", ctx.work_id)
+            "SELECT count(DISTINCT section_span) FROM staged_dossier_fields "
+            "WHERE work_id=? AND field='structure_entry' AND status='accepted'",
+            ctx.work_id)
         if got < len(ctx.spans):
             return False, f"live, but {got} of {len(ctx.spans)} structure entries accepted"
     return True, "live dossier present"
@@ -258,7 +271,7 @@ NODES: list[Node] = [
 
     Node("D3-review", "Converge the templates", "gate",
          _p_review,
-         command="python3 scripts/review_dossiers.py sample --field <f> --level <n>",
+         command="python3 scripts/review_dossiers.py sample --field <field>",
          contract="prompts/dossier/contracts/review-rubric.md",
          notes=["The converging unit is the TEMPLATE, not the row. Sample K "
                 "works stratified by tradition and size, judge against the "
@@ -377,8 +390,14 @@ def find_drift(db_path: Path = DEFAULT_DB) -> dict:
     plan = load_plan(cid)
     planned = {w.get("work_id") for w in (plan or {}).get("works", [])}
 
-    db = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) if db_path.is_file() else None
-    live = {r[0] for r in db.execute("SELECT work_id FROM work_dossiers")} if db else set()
+    live: set[str] = set()
+    if db_path.is_file():
+        with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as db:
+            try:
+                live = {r[0] for r in db.execute("SELECT work_id FROM work_dossiers")}
+            except sqlite3.Error:
+                # A DB predating the v3_007 migration has no Pass D tables.
+                live = set()
 
     import works as works_mod
     try:
@@ -440,6 +459,8 @@ def cmd_status(args: argparse.Namespace) -> None:
         print(f"  run:  {nxt['command']}")
     if nxt["gate"]:
         print(f"  gate: {nxt['gate']}")
+    if nxt["kind"] == "gate":
+        print("  ── review gate; promotion to live tables is the user's call")
     if nxt["kind"] == "user":
         print("  ── USER GATE: stop here and hand back")
     for note in nxt["notes"]:
@@ -458,7 +479,11 @@ def cmd_survey(args: argparse.Namespace) -> None:
     stuck: dict[str, int] = {}
     for wid in sorted(all_works):
         ctx = build_ctx(wid, db_path)
-        rows = evaluate(ctx)
+        try:
+            rows = evaluate(ctx)
+        finally:
+            if ctx.db is not None:
+                ctx.db.close()
         nxt = next((r for r in rows if r["state"] == READY), None)
         where = nxt["key"] if nxt else "complete"
         stuck[where] = stuck.get(where, 0) + 1
@@ -480,7 +505,20 @@ def cmd_drift(args: argparse.Namespace) -> None:
     print(f"\n  campaign {d['campaign_id']} · {d['planned']} works planned · "
           f"{d['live']} dossiers live")
     if not d["plan_exists"]:
-        print(f"  no frozen plan for campaign {d['campaign_id']}\n")
+        print(f"  no frozen plan for campaign {d['campaign_id'] or '(unset)'}\n")
+        return
+
+    if not d["works_toml_resolves"]:
+        print("\n  CANNOT CLASSIFY — sources/works.toml does not resolve.")
+        print("  Without it there is no way to tell which live dossiers have")
+        print("  texts on disk, so every unplanned work below would be filed")
+        print("  as an orphan and told to be left alone. Fix works.toml first:")
+        print("    python3 -c \'import sys;sys.path.insert(0,\"scripts\");"
+              "import works;works.load_works()\'")
+        print(f"\n  unplanned, unclassified ({len(d['orphaned'])}):")
+        for w in d["orphaned"]:
+            print(f"    {w}")
+        print()
         return
 
     if d["off_plan"]:

@@ -20,10 +20,19 @@ dedicated handling: `sacred_texts.py`, `gnosis_org.py`, `access_to_insight.py`,
 
 ## Output
 
+Single-page sources (`format = "html"` / `"text"`):
+
 - `raw/{tradition}/{source-id}.txt`
 - `raw/{tradition}/{source-id}.meta.toml`
 
-Both git-ignored. They are reproducible from the manifest.
+Multi-page sources (`format = "html_multi"`, 12 entries today) instead land one
+file per page:
+
+- `raw/{tradition}/{source-id}-01.txt`, `-02.txt`, …
+
+`_find_multi_raw_files` in `scripts/chunk.py` is what consumes them, and it is
+the source of truth for the naming. All git-ignored and reproducible from the
+manifest.
 
 ## Gate
 
@@ -31,7 +40,8 @@ Both git-ignored. They are reproducible from the manifest.
 python3 -m guru ingest status <source-id>
 ```
 
-Node 03 flips to `[x]` when the raw file exists and is non-empty.
+Node 03 flips to `[x]` when a non-empty raw artifact exists — either the
+single-page file or at least one `-NN.txt` page.
 
 ## Failure modes
 

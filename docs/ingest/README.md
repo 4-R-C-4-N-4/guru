@@ -63,9 +63,12 @@ inputs and the same output shape either way:
 
 ```sh
 # by a local model, through the existing provider abstraction
-python3 scripts/llm.py --prompt prompts/ingest/chunk-config.md --input raw/celtic/mabinogion.txt
+python3 scripts/run_contract.py chunk-config \
+    --input raw_head=raw/celtic/mabinogion.txt \
+    --var source_id=mabinogion --var tradition=celtic --var text_name="The Mabinogion"
 
-# or by whichever agent is driving — read the contract, produce the same JSON
+# or by whichever agent is driving — same contract, same JSON
+python3 scripts/run_contract.py chunk-config ... --print-prompt
 ```
 
 That equivalence is the point. If a judgement can only be made by the agent

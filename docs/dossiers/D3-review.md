@@ -12,13 +12,17 @@ Staged rows for the work (D2).
 ## Action
 
 ```sh
-python3 scripts/review_dossiers.py sample --field <field> --level <n> --k 15
+python3 scripts/review_dossiers.py sample --field <field> --k 15
+python3 scripts/review_dossiers.py sample --level <n> --k 15
 python3 scripts/review_dossiers.py show <id>
 python3 scripts/review_dossiers.py accept <id>
 python3 scripts/review_dossiers.py reject <id> --code GROUND --note "..."
 python3 scripts/review_dossiers.py bulk-accept --field <f> --prompt-version <v> [--work <w>]
 python3 scripts/review_dossiers.py status
 ```
+
+`sample` takes **exactly one** of `--field` or `--level` and exits with
+`pass exactly one of --field / --level` if you give it both or neither.
 
 Row ids are prefixed: `f…` for `staged_dossier_fields`, `s…` for
 `staged_summaries`.

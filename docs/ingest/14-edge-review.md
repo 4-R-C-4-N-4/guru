@@ -11,8 +11,13 @@ Curate the staged edges. Queue decisions; never apply them.
 ## Action
 
 ```sh
-python3 scripts/review_edges.py --text <source-id> [--min-confidence 0.7]
+python3 scripts/review_edges.py [--min-confidence 0.7] [--edge-type PARALLELS]
+                                [--tradition-a <t>] [--tradition-b <t>]
 ```
+
+Note there is no `--text`: this CLI scopes by tradition pair, edge type and
+confidence, not by text. Per-text scoping is available through the review web
+app, which is what the `guru-review-edges` skill drives.
 
 Or the review web app, which the `guru-review-edges` skill drives. Same
 criteria either way.

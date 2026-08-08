@@ -11,8 +11,9 @@ the same loop:
 
 Every node here is mirrored one-to-one by a workbook file in ``docs/ingest/``.
 Judgement nodes additionally carry a prompt contract in ``prompts/ingest/`` so
-the call can be made either by a local model through ``scripts/llm.py`` or by
-the driving agent — same inputs, same output schema, same rubric.
+the call can be made either by a local model through
+``scripts/run_contract.py`` or by the driving agent — same inputs, same output
+schema, same rubric.
 
 Node kinds
     command    deterministic script; any driver may run it
@@ -32,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sqlite3
 import time
 from dataclasses import dataclass, field
@@ -76,6 +78,16 @@ class Ctx:
     def raw_txt(self) -> Path:
         return RAW_DIR / (self.tradition or "_") / f"{self.source_id}.txt"
 
+    def raw_pages(self) -> list[Path]:
+        """Multi-page raw files, `{id}-NN.txt`, in page order."""
+        d = RAW_DIR / (self.tradition or "_")
+        if not d.is_dir():
+            return []
+        pat = re.compile(rf"^{re.escape(self.source_id)}-(\d+)\.txt$")
+        hits = [(int(m.group(1)), p) for p in d.iterdir()
+                if (m := pat.match(p.name))]
+        return [p for _, p in sorted(hits)]
+
     @property
     def chunk_config(self) -> Path:
         return CHUNKING_DIR / (self.tradition or "_") / f"{self.source_id}.toml"
@@ -87,6 +99,21 @@ class Ctx:
     @property
     def chunk_prefix(self) -> str:
         return f"{self.tradition}.{self.source_id}."
+
+    @property
+    def chunk_like(self) -> str:
+        """`chunk_prefix` as a LIKE pattern, wildcards escaped.
+
+        Tradition ids contain `_` (christian_mysticism, jewish_mysticism),
+        which LIKE reads as a single-character wildcard. Every probe that
+        counts chunks by prefix must escape it or it counts neighbours.
+        Pair with ``ESCAPE '\\'`` in the query.
+        """
+        esc = (self.chunk_prefix
+               .replace("\\", "\\\\")
+               .replace("%", "\\%")
+               .replace("_", "\\_"))
+        return esc + "%"
 
     def chunk_files(self) -> list[Path]:
         d = self.corpus_dir / "chunks"
@@ -150,13 +177,34 @@ def _p_manifest(ctx: Ctx) -> tuple[bool, str]:
 
 
 def _p_acquire(ctx: Ctx) -> tuple[bool, str]:
-    p = ctx.raw_txt
-    if not p.is_file():
-        return False, f"missing {p.relative_to(PROJECT_ROOT)}"
-    size = p.stat().st_size
+    """Single-page sources land as {id}.txt; multi-page as {id}-NN.txt.
+
+    Checking only the single-page name reports every `html_multi` source as
+    unacquired forever — including texts that are chunked, tagged and
+    embedded. The page pattern mirrors `_find_multi_raw_files` in
+    scripts/chunk.py, which is what actually consumes them.
+    """
+    single = ctx.raw_txt
+    pages = ctx.raw_pages()
+
+    if not single.is_file() and not pages:
+        return False, (f"missing {single.relative_to(PROJECT_ROOT)} "
+                       f"(and no {ctx.source_id}-NN.txt pages)")
+
+    if pages and not single.is_file():
+        empty = [p for p in pages if p.stat().st_size == 0]
+        if empty:
+            return False, f"{len(empty)} of {len(pages)} page files are empty"
+        total = sum(p.stat().st_size for p in pages)
+        return True, f"{len(pages)} pages · {total:,} bytes"
+
+    size = single.stat().st_size
     if size == 0:
-        return False, f"{p.relative_to(PROJECT_ROOT)} is empty"
-    return True, f"{p.relative_to(PROJECT_ROOT)} · {size:,} bytes"
+        return False, f"{single.relative_to(PROJECT_ROOT)} is empty"
+    detail = f"{single.relative_to(PROJECT_ROOT)} · {size:,} bytes"
+    if pages:
+        detail += f" (+{len(pages)} page files)"
+    return True, detail
 
 
 def _p_boilerplate(ctx: Ctx) -> tuple[bool, str]:
@@ -186,7 +234,10 @@ def _p_chunk(ctx: Ctx) -> tuple[bool, str]:
         return False, f"missing {meta.relative_to(PROJECT_ROOT)}"
     if not files:
         return False, f"no chunk TOMLs under {ctx.corpus_dir.relative_to(PROJECT_ROOT)}/chunks/"
-    declared = tomllib.loads(meta.read_text()).get("chunk_count")
+    try:
+        declared = tomllib.loads(meta.read_text()).get("chunk_count")
+    except (tomllib.TOMLDecodeError, OSError) as exc:
+        return False, f"metadata.toml does not parse: {exc}"
     if declared is not None and int(declared) != len(files):
         return False, f"metadata.toml says chunk_count={declared} but {len(files)} files on disk"
     return True, f"{len(files)} chunks"
@@ -201,8 +252,8 @@ def _p_readability(ctx: Ctx) -> tuple[bool, str]:
 
 
 def _p_graph(ctx: Ctx) -> tuple[bool, str]:
-    n = ctx.count("SELECT count(*) FROM nodes WHERE type='chunk' AND id LIKE ?",
-                  ctx.chunk_prefix + "%")
+    n = ctx.count("SELECT count(*) FROM nodes WHERE type='chunk' AND id LIKE ? ESCAPE '\\'",
+                  ctx.chunk_like)
     on_disk = len(ctx.chunk_files())
     if n == 0:
         return False, "no chunk nodes in guru.db"
@@ -212,50 +263,63 @@ def _p_graph(ctx: Ctx) -> tuple[bool, str]:
 
 
 def _p_tag(ctx: Ctx) -> tuple[bool, str]:
-    n = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ?",
-                  ctx.chunk_prefix + "%")
+    n = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ? ESCAPE '\\'",
+                  ctx.chunk_like)
     return (n > 0), (f"{n} staged tags" if n else "no staged_tags rows for this text")
 
 
 def _p_tag_review(ctx: Ctx) -> tuple[bool, str]:
-    pend = ctx.count("SELECT count(*) FROM staged_tags WHERE status='pending' AND chunk_id LIKE ?",
-                     ctx.chunk_prefix + "%")
-    total = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ?",
-                      ctx.chunk_prefix + "%")
+    pend = ctx.count("SELECT count(*) FROM staged_tags WHERE status='pending' AND chunk_id LIKE ? ESCAPE '\\'",
+                     ctx.chunk_like)
+    total = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ? ESCAPE '\\'",
+                      ctx.chunk_like)
+    if total == 0:
+        return False, "nothing staged to review"
     if pend:
         return False, f"{pend} of {total} staged tags still pending"
     return True, f"all {total} staged tags reviewed"
 
 
 def _p_embed(ctx: Ctx) -> tuple[bool, str]:
-    n = ctx.count(
-        "SELECT count(*) FROM chunk_embeddings WHERE chunk_id LIKE ?",
-        ctx.chunk_prefix + "%")
-    chunks = ctx.count("SELECT count(*) FROM nodes WHERE type='chunk' AND id LIKE ?",
-                       ctx.chunk_prefix + "%")
-    if n == 0:
-        return False, "no embeddings for this text"
-    if chunks and n < chunks:
-        return False, f"{n} embeddings for {chunks} chunks — run with --resume"
-    return True, f"{n} embeddings"
+    chunks = ctx.count("SELECT count(*) FROM nodes WHERE type='chunk' AND id LIKE ? ESCAPE '\\'",
+                       ctx.chunk_like)
+    if chunks == 0:
+        return False, "no chunk nodes to embed"
+    # Join rather than compare counts: stale embeddings for retired chunk ids
+    # can make the totals agree while current chunks sit unembedded, and node
+    # 13 then proposes edges off a partial vector set.
+    missing = ctx.count(
+        "SELECT count(*) FROM nodes n "
+        "LEFT JOIN chunk_embeddings e ON e.chunk_id = n.id "
+        "WHERE n.type='chunk' AND n.id LIKE ? ESCAPE '\\' AND e.chunk_id IS NULL",
+        ctx.chunk_like)
+    if missing:
+        return False, f"{missing} of {chunks} chunks unembedded — run with --resume"
+    return True, f"{chunks} chunks embedded"
 
 
 def _p_edges(ctx: Ctx) -> tuple[bool, str]:
-    pref = ctx.chunk_prefix + "%"
+    pref = ctx.chunk_like
     n = ctx.count(
-        "SELECT count(*) FROM staged_edges WHERE source_chunk LIKE ? OR target_chunk LIKE ?",
-        pref, pref)
+        "SELECT count(*) FROM staged_edges WHERE source_chunk LIKE ? ESCAPE '\\' "
+        "OR target_chunk LIKE ? ESCAPE '\\'", pref, pref)
     return (n > 0), (f"{n} staged edges touch this text" if n else "no staged_edges for this text")
 
 
 def _p_edge_review(ctx: Ctx) -> tuple[bool, str]:
-    pref = ctx.chunk_prefix + "%"
+    pref = ctx.chunk_like
     pend = ctx.count(
         "SELECT count(*) FROM staged_edges WHERE status='pending' "
-        "AND (source_chunk LIKE ? OR target_chunk LIKE ?)", pref, pref)
+        "AND (source_chunk LIKE ? ESCAPE '\\' OR target_chunk LIKE ? ESCAPE '\\')",
+        pref, pref)
+    total = ctx.count(
+        "SELECT count(*) FROM staged_edges "
+        "WHERE source_chunk LIKE ? ESCAPE '\\' OR target_chunk LIKE ? ESCAPE '\\'", pref, pref)
+    if total == 0:
+        return False, "nothing staged to review"
     if pend:
-        return False, f"{pend} staged edges still pending"
-    return True, "all staged edges reviewed"
+        return False, f"{pend} of {total} staged edges still pending"
+    return True, f"all {total} staged edges reviewed"
 
 
 def _p_publish(ctx: Ctx) -> tuple[bool, str]:
@@ -395,7 +459,7 @@ NODES: list[Node] = [
 
     Node("14-edge-review", "Curate the staged edges", "gate",
          _p_edge_review,
-         command="python3 scripts/review_edges.py --text {id}",
+         command="python3 scripts/review_edges.py --min-confidence 0.7",
          contract="prompts/ingest/edge-review.md",
          notes=["The 0.85-confidence tier left behind by auto_promote_edges "
                 "is the noisy one and the reason this node exists.",
@@ -441,7 +505,10 @@ def save_ledger(source_id: str, ledger: dict) -> None:
 def load_entry(source_id: str) -> dict | None:
     if not MANIFEST.is_file():
         return None
-    data = tomllib.loads(MANIFEST.read_text())
+    try:
+        data = tomllib.loads(MANIFEST.read_text())
+    except (tomllib.TOMLDecodeError, OSError) as exc:
+        raise SystemExit(f"sources/manifest.toml does not parse: {exc}")
     for src in data.get("source", []):
         if src.get("id") == source_id:
             return src
@@ -561,6 +628,8 @@ def cmd_done(args: argparse.Namespace) -> None:
 
 
 def cmd_reset(args: argparse.Namespace) -> None:
+    if args.node not in NODES_BY_KEY:
+        raise SystemExit(f"unknown node {args.node!r}; see `guru ingest nodes`")
     ledger = load_ledger(args.source_id)
     if ledger.get("nodes", {}).pop(args.node, None) is None:
         print(f"no ledger entry for {args.node}")
