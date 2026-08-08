@@ -165,9 +165,10 @@ def main(argv: list[str] | None = None) -> None:
     ip.add_argument("--verbose", "-v", action="store_true")
     ip.set_defaults(func=cmd_interactive)
 
-    # guru ingest status <source-id>
-    from guru import ingest
+    # guru ingest status <source-id> / guru dossier status <work-id>
+    from guru import dossier, ingest
     ingest.register(sub)
+    dossier.register(sub)
 
     args = parser.parse_args(argv)
     args.func(args)

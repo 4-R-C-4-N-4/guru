@@ -2,6 +2,13 @@
 
 How a text gets from a URL to a queryable, citable part of the corpus.
 
+> This is one of two streams. The second,
+> [`docs/dossiers/`](../dossiers/README.md), takes clean chunks to the
+> document-knowledge layer — dossiers and summaries. It operates on **works**
+> rather than texts, which is why it is a separate graph with its own CLI. The
+> two meet at one point: Pass D's first node requires every member text through
+> node 07 here.
+
 This workbook exists because most of that process used to live in two places
 that neither travel nor outlast a session: a person's head, and an agent
 conversation. Fifteen nodes, each one a file in this directory, each one

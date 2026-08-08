@@ -47,6 +47,39 @@ If you find yourself making an ingest judgement that has no contract, that is a
 gap in the workbook. Write the reasoning into
 `docs/ingest/decisions/<source-id>.md` and say so.
 
+## Building dossiers and summaries
+
+The second stream, documented in [`docs/dossiers/`](docs/dossiers/). It runs on
+**works** — the dossier unit, declared in `sources/works.toml`, with unlisted
+texts as implicit singletons — so it has its own graph and its own CLI:
+
+```sh
+python3 -m guru dossier status <work-id>    # where this work is
+python3 -m guru dossier survey              # where every work is stuck
+python3 -m guru dossier drift               # plan vs live tables vs corpus on disk
+```
+
+Six nodes: plan-freeze, generate, review, promote, embed, export. The streams
+meet at one point — D1 requires every member text through ingest node 07.
+
+Three things to know before touching it:
+
+- **The span plan is a freeze artifact.** A corpus change that alters totals
+  means a new campaign — bump `campaign_id` in `config/dossiers.toml` and
+  re-plan. Never a partial re-plan.
+- **The generation backend is a campaign parameter.** `provider` in that same
+  file. Today it is `claude-code`, which is why this stream is normally driven
+  by an agent end to end. Never rely on a session default for the model; the
+  `model` column is the provenance line.
+- **Review converges the template, not the row.** A cluster of one rubric code
+  is a template defect: revise the prompt, bump its version, regenerate.
+
+Run `guru dossier drift` before planning anything. It separates a genuine
+freeze violation from an orphan — a live dossier whose texts are not in
+`corpus/` because `data/guru.db` is git-ignored and shared across branches
+while `corpus/` is tracked. Those rows belong to a checkout you are not on.
+Never delete them to clear the report.
+
 ## Standing constraints
 
 **Never apply your own proposals.** Every LLM proposal in this pipeline lands in

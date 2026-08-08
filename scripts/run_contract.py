@@ -46,7 +46,15 @@ from pathlib import Path
 import tomllib
 
 PROJECT_ROOT = Path(__file__).parent.parent
-CONTRACT_DIR = PROJECT_ROOT / "prompts" / "ingest"
+
+# Judgement contracts, by stream. prompts/dossier/ itself holds the Pass D
+# *generation* templates, which are a different format (single-brace
+# placeholders, no frontmatter, consumed by generate_dossiers.py) — the
+# contracts live in a subdirectory so the two never mix.
+CONTRACT_DIRS = (
+    PROJECT_ROOT / "prompts" / "ingest",
+    PROJECT_ROOT / "prompts" / "dossier" / "contracts",
+)
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -59,9 +67,10 @@ def load_contract(name: str) -> tuple[dict, str]:
     """Return (frontmatter, body) for a contract by id or path."""
     path = Path(name)
     if not path.is_file():
-        path = CONTRACT_DIR / f"{name}.md"
+        path = next((d / f"{name}.md" for d in CONTRACT_DIRS
+                     if (d / f"{name}.md").is_file()), path)
     if not path.is_file():
-        available = sorted(p.stem for p in CONTRACT_DIR.glob("*.md"))
+        available = sorted(p.stem for d in CONTRACT_DIRS for p in d.glob("*.md"))
         raise SystemExit(f"no contract {name!r}; available: {', '.join(available)}")
 
     text = path.read_text()
