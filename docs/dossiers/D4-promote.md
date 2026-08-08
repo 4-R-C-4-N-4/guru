@@ -56,6 +56,12 @@ is the default to reach for — Pass D is the exception, not the template.
 
 ## Failure modes
 
+**Misreading the dry run as an apply.** `--dry-run` prints the honest
+`[dry-run] would promote <work>: …` line and then a summary that says
+`promoted <work>` regardless of mode. It does not write — `promote_work`
+returns before touching the DB — but the output reads as though it did.
+Confirm against `work_dossiers.updated_at` rather than the log line.
+
 **Expecting a partial dossier.** A work promotes only when `summary`, `context`
 and a structure entry for every planned span have accepted rows. Degenerate
 works need no structure. There is no partial state: the work is live or it is
