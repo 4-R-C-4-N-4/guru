@@ -11,11 +11,24 @@ A candidate URL. Nothing else — this is the entry node.
 
 ## Action
 
-Fetch the page, then run the contract:
+Fetch the page. A bare `curl` gets **403 from sacred-texts.com** — it filters on
+User-Agent — so send one. The repo's own downloaders do the same
+(`scripts/downloaders/sacred_texts.py` sets a Chrome UA); a 403 here is almost
+never a dead source.
+
+```sh
+curl -sSL --max-time 30 -A "Mozilla/5.0 (X11; Linux x86_64)" <url> -o /tmp/page.html
+```
+
+Read the heading chain before anything else — `<title>`, then `<h1>`–`<h4>`, then
+the internal links. On sacred-texts the schema.org `author` block is often the
+fastest way to see who actually translated it.
+
+Then run the contract:
 
 ```sh
 python3 scripts/run_contract.py source-vetting \
-    --input page_head=<fetched-page> \
+    --input page_head=/tmp/page.html \
     --var source_id=<id> --var tradition=<t> --var url=<url>
 ```
 
