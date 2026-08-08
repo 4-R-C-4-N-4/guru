@@ -82,10 +82,20 @@ Never delete them to clear the report.
 
 ## Standing constraints
 
-**Never apply your own proposals.** Every LLM proposal in this pipeline lands in
-a `staged_*` table with `status='pending'`. You may queue accept / reject /
-reassign / reclassify decisions. Promotion to the live graph is the user's.
-Never call the review app's `/api/apply`.
+**Never apply your own proposals.** Every LLM proposal in the ingest stream
+lands in a `staged_*` table with `status='pending'`. You may queue accept /
+reject / reassign / reclassify decisions. Promotion to the live graph is the
+user's. Never call the review app's `/api/apply`, and never run `auto_promote`
+at any confidence tier.
+
+That shape — an HTTP API, a queued decision, a human apply — is the default for
+anything that writes to `guru.db`. Reach for it when building a new write path.
+
+**Pass D is the deliberate exception.** `promote_dossiers.py` writes
+`work_dossiers` and `summary_nodes` directly, with no API and no queue, because
+that stream is driven end to end by an agent with the expertise to own it. Do
+not add an apply gate there and do not flag its absence as a defect — but do
+run `--dry-run` first, since it is the only checkpoint that node has.
 
 **Never queue a verdict you did not earn.** Every accept and reject at nodes 11
 and 14 must come from having read the chunk body. Sampling and extrapolating

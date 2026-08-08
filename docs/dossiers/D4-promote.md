@@ -31,17 +31,28 @@ python3 -m guru dossier status <work-id>
 Checks a live row exists and, for a non-degenerate work, that every planned
 span has an accepted structure entry.
 
-## An unresolved question
+## Why this node has no apply gate
 
-This node writes live tables, which in the tag and edge streams is the user's
-action and never a driver's. Here it is not: the whole stream is normally run
-end to end by an agent, and 58 dossiers are live under that practice.
+This node writes live tables directly. Everywhere else in the project that is
+the user's action and never a driver's — `staged_tags` and `staged_edges` are
+queued through the guru-review web app's HTTP API and drained by the user, and
+`auto_promote` is never run on their behalf at any confidence tier.
 
-The difference may well be correct — a dossier is assembled from rows a human
-already accepted at D3, whereas a tag promotion is the first human contact with
-the proposal. But it is currently a difference by habit rather than by
-decision, and it is recorded here so it can be decided rather than inherited.
-Until then, treat `--dry-run` as mandatory.
+Pass D sidesteps that on purpose. The standing preference is for DB writes to
+sit behind an API with a queue-then-apply split; this stream is a deliberate
+exception, justified by the expertise of the agent that drives it end to end.
+It is not an inconsistency waiting to be closed.
+
+Two practical consequences:
+
+- **Do not add an apply gate here, and do not report its absence as a defect.**
+  That decision has been made.
+- **`--dry-run` first, every time.** It is the only checkpoint this node has,
+  which makes skipping it a different kind of mistake than skipping a dry run
+  somewhere that a human reviews the result afterwards.
+
+If a new component ever needs to write to `guru.db`, the API-plus-queue shape
+is the default to reach for — Pass D is the exception, not the template.
 
 ## Failure modes
 
