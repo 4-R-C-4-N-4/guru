@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.018"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 18"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 89
+
+[content]
+body = "When the mind-impressions become visible, there comes an understanding of previous births. This is simple enough if we grasp the truth of rebirth. The fine harvest of past experi ences is drawn into the spiritual nature, forming, indeed, the basis of its development. When the consciousness has been raised to a point above these fine subjective impressions, and can look down upon them from above, this will in itself be a remembering of past births."
+
+[annotations]
+concepts = []
+related_chunks = []

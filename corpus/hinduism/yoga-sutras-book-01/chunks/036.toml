@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.036"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 36"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 116
+
+[content]
+body = "As also will a joyful, radiant spirit. There is no such illusion as gloomy pessimism, and it has been truly said that a man's cheerfulness is the measure of his faith. Gloom, despondency, the pale cast of thought, are very amenable to the will. Sturdy and courageous effort will bring a clear and valorous mind. But it must always be remembered that this is not for solace to the personal man, but is rather an offering to the ideal of spiritual life, a contribution to the universal and universally shared treasure in heaven."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.038"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 38"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 181
+
+[content]
+body = "Or a pondering on the perceptions gained in dreams and dreamless sleep. For the Eastern sages, dreams are, it is true, made up of images of waking life, reflections of what the eyes have seen and the ears heard. But dreams are something more, for the images are in a sense real, objective on their own plane; and the knowledge that there is another world, even a dream-world, lightens the tyranny of material life. Much of poetry and art is such a solace from dreamland. But there is more in dream, for it may image what is above, as well as what is below; not only the children of men, but also the children by the shore of the immortal sea that brought us hither, may throw their images on this magic mirror: so, too, of the secrets of dreamless sleep with its pure vision, in even greater degree."
+
+[annotations]
+concepts = []
+related_chunks = []

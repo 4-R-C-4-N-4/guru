@@ -4657,3 +4657,64 @@ url = "https://www.gutenberg.org/cache/epub/340/pg340-images.html"
 format = "html"
 license = "public_domain"
 notes = "Native-authored interpretation of Dakota (Sioux) spirituality by Charles A. Eastman (Ohiyesa), Santee Dakota, 1911. Six chapters with all-caps section headings: The Great Mystery, The Family Altar, Ceremonial and Symbolic Worship, Barbarism and the Moral Code, The Unwritten Scriptures, On the Borderland of Spirits. Key loci: ch. 1 Wakan Tanka / the Great Mystery and worship in silence and solitude, ch. 1 the hambeday solitary vigil, ch. 3 ceremony and symbol, ch. 5 oral scripture and the moral order, ch. 6 death and the spirit world. Doctrinal register throughout — expect dense hits on apophatic_theology, divine_immanence, sacred_silence, solitude concepts."
+
+# --------------------------------------------
+# YOGA SUTRAS (sacred-texts.com, ysp/)
+# --------------------------------------------
+# VERIFIED 2026-08-08 — Charles Johnston, *The Book of the Spiritual
+# Man: An Interpretation*, 1912 (index <h4>[1912]</h4>, PD). Vetted per
+# docs/ingest/decisions/yoga-sutras.md.
+#
+# NOT html_multi. The edition interleaves Johnston's introductions with
+# the translation — ysp01 'Introduction to Book I', ysp02 'Book I',
+# ysp03 'Introduction to Book II', ysp04 'Book II', ... — and
+# sacred_texts.py follows sequential next-links, so paging from ysp02
+# would ingest every introduction as source text. Four single-page
+# entries name the translation pages explicitly; the odd-numbered
+# apparatus pages are excluded by construction, not by a strip rule.
+# Grouped as work `yoga-sutras` in sources/works.toml (gita pattern).
+#
+# NB the candidate doc (hit-literature-2026-08.md §1.1) paired
+# Johnston's name with hin/yogasutr.htm, which is BonGiovanni's
+# translation, undated and with no PD evidence. Different edition,
+# different URL. Do not re-point these entries at it.
+
+[[source]]
+id = "yoga-sutras-book-01"
+tradition = "hinduism"
+label = "Yoga Sutras of Patanjali (Johnston), Book I"
+url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+format = "html"
+license = "public_domain"
+translator = "Charles Johnston"
+notes = "Book I — the practice of union — concentration, the modifications of the psychic nature, and the means of stilling them. Sutras are numbered headings ('1. OM: Here follows Instruction in Union.') with Johnston's commentary as following prose; a chunk is sutra + commentary."
+
+[[source]]
+id = "yoga-sutras-book-02"
+tradition = "hinduism"
+label = "Yoga Sutras of Patanjali (Johnston), Book II"
+url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+format = "html"
+license = "public_domain"
+translator = "Charles Johnston"
+notes = "Book II — the means of union — purification, the eight limbs of yoga, and the removal of the obstacles. Sutras are numbered headings ('1. OM: Here follows Instruction in Union.') with Johnston's commentary as following prose; a chunk is sutra + commentary."
+
+[[source]]
+id = "yoga-sutras-book-03"
+tradition = "hinduism"
+label = "Yoga Sutras of Patanjali (Johnston), Book III"
+url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+format = "html"
+license = "public_domain"
+translator = "Charles Johnston"
+notes = "Book III — the powers that follow union — perfect concentration and the psychic and spiritual powers it confers. Sutras are numbered headings ('1. OM: Here follows Instruction in Union.') with Johnston's commentary as following prose; a chunk is sutra + commentary."
+
+[[source]]
+id = "yoga-sutras-book-04"
+tradition = "hinduism"
+label = "Yoga Sutras of Patanjali (Johnston), Book IV"
+url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+format = "html"
+license = "public_domain"
+translator = "Charles Johnston"
+notes = "Book IV — spiritual consciousness — liberation, the nature of the seer, and the return to pure being. Sutras are numbered headings ('1. OM: Here follows Instruction in Union.') with Johnston's commentary as following prose; a chunk is sutra + commentary."

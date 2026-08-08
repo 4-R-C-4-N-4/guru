@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.025"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 25"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 87
+
+[content]
+body = "By bending upon them the awakened inner light, there comes a knowledge of things subtle, or concealed, or obscure. As was said at the outset, each consciousness is related to all consciousness; and, through it, has a potential consciousness of all things; whether subtle or concealed or obscure. An understanding of this great truth will come with practice. As one of the wise has said, we have no conception of the power of Meditation."
+
+[annotations]
+concepts = []
+related_chunks = []

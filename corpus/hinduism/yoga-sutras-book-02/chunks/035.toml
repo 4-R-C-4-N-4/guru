@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.035"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 36"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 107
+
+[content]
+body = "When he is perfected in truth, all acts and their fruits depend on him. The commentator thus explains: If he who has attained should say to a man, Become righteous! the man becomes righteous. If he should say, Gain heaven! the man gains heaven. His word is not in vain. Exactly the same doctrine was taught by the Master who said to his disciples: Receive ye the Holy Ghost: whose soever sins ye remit they are remitted unto them; and whose soever sins ye retain, they are retained."
+
+[annotations]
+concepts = []
+related_chunks = []

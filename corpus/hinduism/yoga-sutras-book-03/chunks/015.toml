@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.015"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 15"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 90
+
+[content]
+body = "Difference in stage is the cause of difference in development. This but amplifies what has just been said. The first stage is the sapling, the caterpillar, the animal. The second stage is the growing tree, the chrysalis, the man. The third is the splendid pine, the butterfly, the angel. Difference of stage is the cause of difference of development. So it is among men, and among the races of men."
+
+[annotations]
+concepts = []
+related_chunks = []

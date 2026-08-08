@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.012"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 12"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 86
+
+[content]
+body = "The control of these psychic activities comes through the right use of the will, and through ceasing from self-indulgence. If these psychical powers and energies, even such evil things as passion and hate and fear, are but spiritual powers fallen and perverted, how are we to bring about their release and restoration? Two means are presented to us: the awakening of the spiritual will, and the purification of mind and thought."
+
+[annotations]
+concepts = []
+related_chunks = []

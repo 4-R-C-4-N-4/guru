@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.046"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 46"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 82
+
+[content]
+body = "The above are the degrees of limited and conditioned spiritual consciousness, still containing the seed of separateness. In the four stages of perception above described, the spiritual vision is still working through the mental and psychical, the inner genius is still expressed through the outer, personal man. The spiritual man has yet to come completely to consciousness as himself, in his own realm, the psychical veils laid aside."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.033"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 34"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 217
+
+[content]
+body = "Transgressions are injury, falsehood, theft, incontinence, envy; whether committed, or caused, or assented to, through greed, wrath, or infatuation; whether faint, or middling, or excessive; bearing endless, fruit of ignorance and pain. Therefore must the weight be cast on the other side. Here are the causes of sin: greed, wrath, infatuation, with their effects, ignorance and pain. The causes are to be cured by better wisdom, by a truer understanding of the Self, of Life. For greed cannot endure before the realization that the whole world belongs to the Self, which Self we are; nor can we hold wrath against one who is one with the Self, and therefore with ourselves; nor can infatuation, which is the seeking for the happiness of the All in some limited part of it, survive the knowledge that we are heirs of the All. Therefore let thought and imagination, mind and heart, throw their weight on the other side; the side, not of the world,.but of the Self."
+
+[annotations]
+concepts = []
+related_chunks = []

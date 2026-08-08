@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.051"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 51"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 49
+
+[content]
+body = "When this impression ceases, then, since all impressions have ceased, there arises pure spiritual consciousness, with no seed of separateness left. The last psychic veil is drawn aside, and the spiritual man stands with unveiled vision, pure serene."
+
+[annotations]
+concepts = []
+related_chunks = []

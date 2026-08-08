@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.017"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 18"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 154
+
+[content]
+body = "Things seen have as their property manifestation, action, inertia. They form the basis of the elements and the sense-powers. They make for experience and for liberation. Here is a whole philosophy of life. Things seen, the total of the phenomenal, possess as their property, manifestation, action, inertia: the qualities of force and matter in combination. These, in their grosser form, make the material world; in their finer, more subjective form, they make the psychical world, the world of sense-impressions and mind-images. And through this totality of the phenomenal, the soul gains experience, and is prepared for liberation. In other words, the whole outer world exists for the purposes of the soul, and finds in this its true reason for being."
+
+[annotations]
+concepts = []
+related_chunks = []

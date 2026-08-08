@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.050"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 50"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 164
+
+[content]
+body = "The impress on the consciousness springing from this perception supersedes all previous impressions. Each state or field of the mind, each field of knowledge, so to speak, which is reached by mental and emotional energies, is a psychical state, just as the mind picture of a stage with the actors on it, is a psychical state or field. When the pure vision, as of the poet, the philosopher, the saint, fills the whole field, all lesser views and visions are crowded out. This high consciousness displaces all lesser consciousness. Yet, in a certain sense, that which is viewed as part, even by the vision of a sage, has still an element of illusion, a thin psychical veil, however pure and luminous that veil may be. It is the last and highest psychic state."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-04.013"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+section = "Sutra 13"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+token_count = 139
+
+[content]
+body = "These properties, whether manifest or latent, are of the nature of the Three Potencies. The Three Potencies are the three manifested modifications of the one primal material, which stands opposite to perceiving consciousness. These Three Potencies are called Substance, Force, Darkness; or viewed rather for their moral colouring, Goodness, Passion, Inertness. Every material manifestation is a projection of substance into the empty space of darkness. Every mental state is either good, or passional, or inert. So, whether subjective or objective, latent or manifest, all things that present themselves to the perceiving consciousness are compounded of these three. This is a fundamental doctrine of the Sankhya system."
+
+[annotations]
+concepts = []
+related_chunks = []

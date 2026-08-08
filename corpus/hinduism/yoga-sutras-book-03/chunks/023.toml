@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.023"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 23"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 91
+
+[content]
+body = "By perfectly concentrated Meditation on sympathy, compassion and kindness, is gained the power of interior union with others. Unity is the reality; separateness the illusion. The nearer we come to reality, the nearer we come to unity of heart. Sympathy, compassion, kindness are modes of this unity of heart, whereby we rejoice with those who rejoice, and weep with those who weep. These things are learned by desiring to learn them."
+
+[annotations]
+concepts = []
+related_chunks = []

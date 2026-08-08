@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.016"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 17"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 88
+
+[content]
+body = "The cause of what is to be warded off, is the absorption of the Seer in things seen. Here again we have the fundamental idea of the Sankhya, which is the intellectual counterpart of the Yoga system. The cause of what is to be warded off, the root of misery, is the absorption of consciousness in the psychical man and the things which beguile the psychical man. The cure is liberation."
+
+[annotations]
+concepts = []
+related_chunks = []

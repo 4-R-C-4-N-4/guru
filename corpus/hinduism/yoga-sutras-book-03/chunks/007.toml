@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.007"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 7"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 82
+
+[content]
+body = "This threefold power, of Attention, Meditation, Contemplation, is more interior than the means of growth previously described. Very naturally so; because the means of growth previously described were concerned with the extrication of the spiritual man from psychic bondages and veils; while this threefold power is to be exercised by the spiritual man thus extricated and standing on his feet, viewing life with open eyes."
+
+[annotations]
+concepts = []
+related_chunks = []

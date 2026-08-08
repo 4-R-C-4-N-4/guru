@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.025"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 26"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 170
+
+[content]
+body = "A discerning which is carried on without wavering is the means of liberation. Here we come close to the pure Vedanta, with its discernment between the eternal and the temporal. St. Paul, following after Philo and Plato, lays down the same fundamental principle: the things seen are temporal, the things unseen are eternal. Patanjali means something more than an intellectual assent, though this too is vital. He has in view a constant discriminating in act as well as thought; of the two ways which present themselves for every deed or choice, always to choose the higher way, that which makes for the things eternal: honesty rather than roguery, courage and not cowardice, the things of another rather than one's own, sacrifice and not indulgence. This true discernment, carried out constantly, makes for liberation."
+
+[annotations]
+concepts = []
+related_chunks = []

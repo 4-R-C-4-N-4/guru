@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.006"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 6"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 81
+
+[content]
+body = "These activities are: Sound intellection, unsound intellection, predication, sleep, memory. We have here a list of mental and emotional powers; of powers that picture and observe, and of powers that picture and feel. But the power to know and feel is spiritual and immortal. What is needed is, not to destroy it, but to raise it from the psychical to the spiritual realm."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.009"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 9"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 131
+
+[content]
+body = "Predication is carried on through words or thoughts not resting on an object perceived. The purpose of this Sutra is, to distinguish between the mental process of predication, and observation, induction or testimony. Predication is the attribution of a quality or action to a subject, by adding to it a predicate. In the sentence, 'the man is wise,' 'the man' is the subject; 'is wise' is the predicate. This may be simply an interplay of thoughts, without the presence of the object thought of; or the things thought of may be imaginary or unreal; while observation, induction and testimony always go back to an object."
+
+[annotations]
+concepts = []
+related_chunks = []

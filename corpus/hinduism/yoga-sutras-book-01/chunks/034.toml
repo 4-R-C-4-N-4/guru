@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.034"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 34"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 73
+
+[content]
+body = "Or peace may be reached by the even sending forth and control of the life-breath. Here again we may look for a double meaning: first, that even and quiet breathing which is a part of the victory over bodily restlessness; then the even and quiet tenor of life, without harsh or dissonant impulses, which brings stillness to the heart."
+
+[annotations]
+concepts = []
+related_chunks = []

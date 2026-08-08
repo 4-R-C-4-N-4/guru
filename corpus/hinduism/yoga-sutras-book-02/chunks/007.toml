@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.007"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 8"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 85
+
+[content]
+body = "Hate is the resting in the sense of pain. Pain comes, for the most part, from the strife of personalities, the jarring discords between psychic selves, each of which deems itself supreme. A dwelling on this pain breeds hate, which tears the warring selves yet further asunder, and puts new enmity between them, thus hindering the harmony of the Real, the reconciliation through the Soul."
+
+[annotations]
+concepts = []
+related_chunks = []

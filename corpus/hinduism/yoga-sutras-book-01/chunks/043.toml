@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.043"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 43"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 132
+
+[content]
+body = "When the object dwells in the mind, clear of memory-pictures, uncoloured by the mind, as a pure luminous idea, this is perception without exterior or consideration. We are still considering external, visible objects. Such perception as is here described is of the nature of that penetrating vision whereby Newton, intending his mind on things, made his discoveries, or that whereby a really great portrait painter pierces to the soul of him whom he paints, and makes that soul live on canvas. These stages of perception are described in this way, to lead the mind up to an understanding of the piercing soul-vision of the spiritual man, the immortal."
+
+[annotations]
+concepts = []
+related_chunks = []

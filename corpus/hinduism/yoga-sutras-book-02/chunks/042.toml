@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.042"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 43"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 164
+
+[content]
+body = "The perfection of the powers of the bodily vesture comes through the wearing away of impurities, and through fervent aspiration. This is true of the physical powers, and of those which dwell in the higher vestures. There must be, first, purity; as the blood must be pure, before one can attain to physical health. But absence of impurity is not in itself enough, else would many nerveless ascetics of the cloisters rank as high saints. There is needed, further, a positive fire of the will; a keen vital vigour for the physical powers, and something finer, purer, stronger, but of kindred essence, for the higher powers. The fire of genius is something more than a phrase, for there can be no genius without the celestial fire of the awakened spiritual will."
+
+[annotations]
+concepts = []
+related_chunks = []

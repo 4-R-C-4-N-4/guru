@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.049"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 51"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 105
+
+[content]
+body = "The fourth degree transcends external and internal objects. The inner meaning seems to be that, in addition to the three degrees of control already described, control, that is, over the incoming current of life, over the outgoing current, and over the condition of pause or quiescence, there is a fourth degree of control, which holds in complete mastery both the outer passage of events and the inner currents of thoughts and emotions; a condition of perfect poise and stability in the midst of the flux of things outward and inward."
+
+[annotations]
+concepts = []
+related_chunks = []

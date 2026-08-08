@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.011"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 11"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 114
+
+[content]
+body = "Memory is holding to mind-images of things perceived, without modifying them. Here, as before, the mental power is explained in terms of mind-images, which are the material of which the psychic world is built, Therefore the sages teach that the world of our perception, which is indeed a world of mind-images, is but the wraith or shadow of the real and everlasting world. In this sense, memory is but the psychical inversion of the spiritual, ever-present vision. That which is ever before the spiritual eye of the Seer needs not to be remembered."
+
+[annotations]
+concepts = []
+related_chunks = []

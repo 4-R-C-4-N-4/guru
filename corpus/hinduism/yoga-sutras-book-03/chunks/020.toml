@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.020"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 20"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 85
+
+[content]
+body = "But since that on which the thought in the mind of another rests is not objective to the thought-reader's consciousness, he perceives the thought only, and not also that on which the thought rests. The meaning appears to be simple: One may be able to perceive the thoughts of some one at a distance; one cannot, by that means alone, also perceive the external surroundings of that person, which arouse these thoughts."
+
+[annotations]
+concepts = []
+related_chunks = []

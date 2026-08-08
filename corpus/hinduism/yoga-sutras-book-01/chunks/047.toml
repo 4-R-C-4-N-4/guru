@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.047"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 47"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 114
+
+[content]
+body = "When pure perception without judicial action of the mind is reached, there follows the gracious peace of the inner self. We have instanced certain types of this pure perception: the poet's divination, whereby he sees the spirit within the symbol, likeness in things unlike, and beauty in all things; the pure insight of the true philosopher, whose vision rests not on the appearances of life, but on its realities; or the saint's firm perception of spiritual life and being. All these are far advanced on the way; they have drawn near to the secret dwelling of peace."
+
+[annotations]
+concepts = []
+related_chunks = []

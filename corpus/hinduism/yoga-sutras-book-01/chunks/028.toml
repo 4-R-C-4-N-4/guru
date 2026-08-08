@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.028"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 28"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 79
+
+[content]
+body = "Let there be soundless repetition of OM and meditation thereon. This has many meanings, in ascending degrees. There is, first, the potency of the word itself, as of all words. Then there is the manifold significance of the symbol, as suggested above. Lastly, there is the spiritual realization of the high essences thus symbolized. Thus we rise step by step to the Eternal."
+
+[annotations]
+concepts = []
+related_chunks = []

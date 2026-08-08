@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-04.015"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+section = "Sutra 15"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+token_count = 156
+
+[content]
+body = "The paths of material things and of states of consciousness are distinct, as is manifest from the fact that the same object may produce different impressions in different minds. Having shown that our bodily condition and circumstances depend on Karma, while Karma depends on perception and will, the sage recognizes the fact that from this may be drawn the false deduction that material things are in no wise different from states of mind. The same thought has occurred, and still occurs, to all philosophers; and, by various reasonings, they all come to the same wise conclusion; that the material world is not made by the mood of any human mind, but is rather the manifestation of the totality of invisible Being, whether we call this Mahat, with the ancients, or Ether, with the moderns."
+
+[annotations]
+concepts = []
+related_chunks = []

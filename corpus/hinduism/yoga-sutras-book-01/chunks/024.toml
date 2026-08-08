@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.024"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 24"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 88
+
+[content]
+body = "The Master is the spiritual man, who s free from hindrances, bondage to works, and the fruition and seed of works. The Soul of the Master, the Lord, is of the same nature as the soul in us; but we still bear the burden of many evils, we are in bondage through our former works, we are under the dominance of sorrow. The Soul of the Master is free from sin and servitude and sorrow."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.010"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 11"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 99
+
+[content]
+body = "Their active turnings are to be removed by meditation. Here is, in truth, the whole secret of Yoga, the science of the soul. The active turnings, the strident vibrations, of selfishness, lust and hate are to be stilled by meditation, by letting heart and mind dwell in spiritual life, by lifting up the heart to the strong, silent life above, which rests in the stillness of eternal love, and needs no harsh vibration to convince it of true being."
+
+[annotations]
+concepts = []
+related_chunks = []

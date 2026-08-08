@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.041"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 41"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 173
+
+[content]
+body = "When the perturbations of the psychic nature have all been stilled, then the consciousness, like a pure crystal, takes the colour of what it rests on, whether that be the perceiver, perceiving, or the thing perceived. This is a fuller expression of the last Sutra, and is so lucid that comment can hardly add to it. Everything is either perceiver, perceiving, or the thing perceived; or, as we might say, consciousness, force, or matter. The sage tells us that the one key will unlock the secrets of all three, the secrets of consciousness, force and matter alike. The thought is, that the cordial sympathy of a gentle heart, intuitively understanding the hearts of others, is really a manifestation of the same power as that penetrating perception whereby one divines the secrets of planetary motions or atomic structure."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.018"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 18"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 75
+
+[content]
+body = "After the exercise of the will has stilled the psychic activities, meditation rests only on the fruit of former meditations. In virtue of continued practice and effort, the need of an external object on which to rest the meditation is outgrown. An interior state of spiritual consciousness is reached, which is called 'the cloud of things knowable' (Book IV, 29)."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.019"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 19"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 101
+
+[content]
+body = "By perfectly concentrated Meditation on mind-images is gained the understanding of the thoughts of others. Here, for those who can profit by it, is the secret of thought-reading. Take the simplest case of intentional thought transference. It is the testimony of those who have done this, that the perceiving mind must be stilled, before the mind-image projected by the other mind can be seen. With it comes a sense of the feeling and temper of the other mind and so on, in higher degrees."
+
+[annotations]
+concepts = []
+related_chunks = []

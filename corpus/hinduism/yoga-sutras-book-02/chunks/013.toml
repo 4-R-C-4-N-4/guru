@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.013"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 14"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 119
+
+[content]
+body = "These bear fruits of rejoicing, or of affliction, as they are sprung from holy or unholy works. Since holiness is obedience to divine law, to the law of divine harmony, and obedience to harmony strengthens that harmony in the soul, which is the one true joy, therefore joy comes of holiness: comes, indeed, in no other way. And as unholiness is disobedience, and therefore discord, therefore unholiness makes for pain; and this two-fold law is true, whether the cause take effect in this, or in a yet unmanifested birth."
+
+[annotations]
+concepts = []
+related_chunks = []

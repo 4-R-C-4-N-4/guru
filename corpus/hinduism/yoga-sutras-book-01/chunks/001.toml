@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.001"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 1"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 94
+
+[content]
+body = "OM: Here follows Instruction in Union. Union, here as always in the Scriptures of India, means union of the individual soul with the Oversoul; of the personal consciousness with the Divine Consciousness, whereby the mortal becomes immortal, and enters the Eternal. Therefore, salvation is, first, freedom from sin and the sorrow which comes from sin, and then a divine and eternal well-being, wherein the soul partakes of the being, the wisdom and glory of God."
+
+[annotations]
+concepts = []
+related_chunks = []

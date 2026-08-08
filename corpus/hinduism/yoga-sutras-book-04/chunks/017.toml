@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-04.017"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+section = "Sutra 17"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+token_count = 339
+
+[content]
+body = "An object is perceived, or not perceived, according as the mind is, or is not, tinged with the colour of the object. The simplest manifestation of this is the matter of attention. Our minds apprehend what they wish to apprehend; all else passes unnoticed, or, on the other hand, we perceive what we resent, as, for example, the noise of a passing train; while others, used to the sound, do not notice it at all. But the deeper meaning is, that out of the vast totality of objects ever present in the universe, the mind perceives only those which conform to the hue of its Karma. The rest remain unseen, even though close at hand. This spiritual law has been well expressed by Emerson: 'Through solidest eternal things the man finds his road as if they did not subsist, and does not once suspect their being. As soon as he needs a new object, suddenly he beholds it, and no longer attempts to pass through it, but takes another way. When he has exhausted for the time the nourishment to be drawn from any one person or thing, that object is withdrawn from his observation, and though still in his immediate neighbourhood, he does not suspect its presence. Nothing is dead. Men feign themselves dead, and endure mock funerals and mournful obituaries, and there they stand looking out of the window, sound and well, in some new and strange disguise. Jesus is not dead, he is very well alive: nor John, nor Paul, nor Mahomet, nor Aristotle; at times we believe we have seen them all, and could easily tell the names under which they go.'"
+
+[annotations]
+concepts = []
+related_chunks = []

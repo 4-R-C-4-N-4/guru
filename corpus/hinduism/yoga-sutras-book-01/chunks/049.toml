@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.049"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 49"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 105
+
+[content]
+body = "The object of this perception is other than what is learned from the sacred books, or by sound inference, since this perception is particular. The distinction is a luminous and inspiring one. The Scriptures teach general truths, concerning universal spiritual life and broad laws, and inference from their teaching is not less general. But the spiritual perception of the awakened Seer brings particular truth concerning his own particular life and needs, whether these be for himself or others. He receives defined, precise knowledge, exactly applying to what he has at heart."
+
+[annotations]
+concepts = []
+related_chunks = []

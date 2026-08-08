@@ -1,0 +1,25 @@
+# Yoga Sutras of Patanjali, Book I — Johnston 1912 (sacred-texts ysp).
+# regex-section-split, NOT paragraph-group: the raw is a SINGLE LINE with zero
+# paragraph breaks, so the corpus-default paragraph strategy would emit exactly
+# one chunk for the whole book.
+#
+# The pattern deliberately does not anchor to ^ for the same reason, and does
+# not require a capital after the number — tested, it changes nothing here and
+# would be a silent trap on a book that opens a sutra with a quote.
+#
+# Gaps in the numbering are Johnston's, not the parser's: he merges sutra pairs
+# and says so in the commentary ("Here we have really two Sutras in one") — II.5,
+# II.48 and III.34 have no heading of their own. Labels follow the text as
+# printed, so a reader can check a citation against this edition.
+[chunking]
+strategy = "regex-section-split"
+pattern = '(?:^|\s)(\d+)\.\s'
+section_label_format = "Sutra {n}"
+max_tokens = 800
+group_size = 1
+
+[metadata]
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+translator = "Charles Johnston"
+sections_format = "sutra"

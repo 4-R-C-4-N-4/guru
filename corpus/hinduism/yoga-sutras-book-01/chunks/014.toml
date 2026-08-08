@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.014"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 14"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 88
+
+[content]
+body = "This becomes a firm resting-place, when followed long, persistently, with earnestness. We must seek spiritual life in conformity with the laws of spiritual life, with earnestness, humility, gentle charity, which is an acknowledgment of the One Soul within us all. Only through obedience to that shared Life, through perpetual remembrance of our oneness with all Divine Being, our nothingness apart from Divine Being, can we enter our inheritance."
+
+[annotations]
+concepts = []
+related_chunks = []

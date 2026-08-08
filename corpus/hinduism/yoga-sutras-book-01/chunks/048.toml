@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.048"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 48"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 95
+
+[content]
+body = "In that peace, perception is unfailingly true. The poet, the wise philosopher and the saint not only reach a wide and luminous consciousness, but they gain certain knowledge of substantial reality. When we know, we know that we know. For we have come to the stage where we know things by being them, and nothing can be more true than being. We rest on the rock, and know it to be rock, rooted in the very heart of the world."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.017"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 17"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 128
+
+[content]
+body = "Meditation with an object follows these stages: first, exterior examining, then interior judicial action, then joy, then realization of individual being. In the practice of meditation, a beginning may be made by fixing the attention upon some external object, such as a sacred image or picture, or a part of a book of devotion. In the second stage, one passes from the outer object to an inner pondering upon its lessons. The third stage is the inspiration, the heightening of the spiritual will, which results from this pondering. The fourth stage is the realization of one's spiritual being, as enkindled by this meditation."
+
+[annotations]
+concepts = []
+related_chunks = []

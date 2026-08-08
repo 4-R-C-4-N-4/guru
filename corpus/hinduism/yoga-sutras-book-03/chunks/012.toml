@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.012"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 12"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 197
+
+[content]
+body = "When, following this, the controlled manifold tendency and the aroused one-pointedness are equally balanced parts of the perceiving consciousness, his the development of one-pointedness. This would seem to mean that the insight which is called one-pointedness has two sides, equally balanced. There is, first, the manifold aspect of any object, the sum of all its characteristics and properties. This is to be held firmly in the mind. Then there is the perception of the object as a unity, as a whole, the perception of its essence. First, the details must be clearly perceived; then the essence must be comprehended. When the two processes are equally balanced, the true one-pointedness is attained. Everything has these two sides, the side of difference and the side of unity; there is the individual and there is the genus; the pole of matter and diversity, and the pole of oneness and spirit. To see the object truly, we must see both."
+
+[annotations]
+concepts = []
+related_chunks = []

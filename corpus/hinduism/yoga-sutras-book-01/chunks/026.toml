@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.026"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 26"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 84
+
+[content]
+body = "He is the Teacher of all who have gone before, since he is not limited by Time. From the beginning, the Oversoul has been the Teacher of all souls, which, by their entrance into the Oversoul, by realizing their oneness with the Oversoul, have inherited the kingdom of the Light. For the Oversoul is before Time, and Time, father of all else, is one of His children."
+
+[annotations]
+concepts = []
+related_chunks = []

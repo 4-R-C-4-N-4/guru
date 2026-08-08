@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.044"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 44"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 148
+
+[content]
+body = "The same two steps, when referring to things of finer substance, are said to be with, or without, judicial action of the mind. We now come to mental or psychical objects: to images in the mind. It is precisely by comparing, arranging and superposing these mind-images that we get our general notions or concepts. This process of analysis and synthesis, whereby we select certain qualities in a group of mind-images, and then range together those of like quality, is the judicial action of the mind spoken of. But when we exercise swift divination upon the mind images, as does a poet or a man of genius., then we use a power higher than the judicial, and one nearer to the keen vision of the spiritual man."
+
+[annotations]
+concepts = []
+related_chunks = []

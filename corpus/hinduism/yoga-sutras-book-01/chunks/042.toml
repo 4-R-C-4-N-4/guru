@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.042"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 42"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 220
+
+[content]
+body = "When the consciousness, poised in perceiving, blends together the name, the object dwelt on and the idea, this is perception with exterior consideration. In the first stage of the consideration of an external object, the perceiving mind comes to it, preoccupied by the name and idea conventionally associated with that object. For example, in coming to the study of a book, we think of the author, his period, the school to which he belongs. The second stage, set forth in the next Sutra, goes directly to the spiritual meaning of the book, setting its traditional trappings aside and finding its application to our own experience and problems. The commentator takes a very simple illustration: a cow, where one considers, in the first stage, the name of the cow, the animal itself and the idea of a cow in the mind. In the second stage, one pushes these trappings aside and, entering into the inmost being of the cow, shares its consciousness, as do some of the artists who paint cows. They get at the very life of what they study and paint."
+
+[annotations]
+concepts = []
+related_chunks = []
