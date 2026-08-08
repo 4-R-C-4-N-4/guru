@@ -426,10 +426,18 @@ NODES: list[Node] = [
          gate="python3 -m guru ingest status {id}",
          notes=["Writes to staged_tags with status='pending'. Nothing reaches "
                 "the live graph from this node.",
-                "Needs a llama.cpp server up. scripts/run-qwen.sh serves the "
-                "27B, scripts/run-qwen-4b-guru.sh the fine-tune; confirm which "
-                "mode the script launches before a long run. End with "
-                "`llm stop` — an idle GPU is the resting state."]),
+                "Needs a llama.cpp server that is up AND FREE. `llm status` "
+                "reporting healthy does not mean idle — check for another "
+                "tag_concepts or propose_edges process first "
+                "(`pgrep -af 'tag_concepts|propose_edges'`). Two runs against "
+                "one slot do not fail, they both crawl, which reads exactly "
+                "like a hang.",
+                "scripts/run-qwen.sh serves the 27B, "
+                "scripts/run-qwen-4b-guru.sh the fine-tune; confirm which mode "
+                "the script launches before a long run.",
+                "`llm stop` only a server you started yourself. A server "
+                "started outside `llm` belongs to someone else's session, and "
+                "stopping it destroys their state."]),
 
     Node("11-tag-review", "Curate the staged tags", "gate",
          _p_tag_review,
@@ -455,7 +463,9 @@ NODES: list[Node] = [
                   "--provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf"),
          gate="python3 -m guru ingest status {id}",
          notes=["Requires embeddings (node 12) — candidate pairs come from "
-                "vector similarity above --min-similarity, default 0.75."]),
+                "vector similarity above --min-similarity, default 0.75.",
+                "Same server discipline as node 10: check the slot is free "
+                "before starting, and only stop what you started."]),
 
     Node("14-edge-review", "Curate the staged edges", "gate",
          _p_edge_review,

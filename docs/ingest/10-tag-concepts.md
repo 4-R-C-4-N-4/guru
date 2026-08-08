@@ -11,7 +11,15 @@ Chunk nodes in `guru.db` (node 09), and a taxonomy that covers the text.
 
 ## Action
 
-Start a server, then run the tagger:
+**Check the slot is free before anything else.** `llm status` reporting
+`health: ok` tells you a server is up, not that it is idle.
+
+```sh
+llm status
+pgrep -af 'tag_concepts|propose_edges'      # must be empty
+```
+
+Then start a server if there isn't one, and run the tagger:
 
 ```sh
 scripts/run-qwen.sh            # Qwen3.5-27B-UD-Q4_K_XL.gguf
@@ -21,8 +29,11 @@ python3 scripts/tag_concepts.py --text <source-id> \
     --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf
 ```
 
-Confirm which mode the launcher starts before committing to a long run. End the
-session with `llm stop`; an idle GPU is the resting state.
+Confirm which mode the launcher starts before committing to a long run.
+
+`llm stop` **only a server you started.** One started outside `llm` — which
+`llm status` reports as `model: (started outside llm)` — belongs to another
+session.
 
 ## Output
 
@@ -44,6 +55,14 @@ its whole token budget on reasoning prose and never close the JSON. This lost
 about 12% of chunks on the 2026-05 run before `parse_json_response` learned to
 warn on it. Check the run log for those warnings rather than trusting the row
 count.
+
+**Starting a run on a busy server.** Two `tag_concepts` runs against one
+llama.cpp slot do not error and do not queue visibly. They serialise, both crawl,
+and the newer one logs its opening two lines and then appears to hang — no
+progress output, no rows, because the tagger only logs per chunk after a commit.
+Both also contend for write locks on `guru.db`. Diagnosis is `pgrep -af
+tag_concepts`, not patience: on 2026-08-08 a pilot run sat at zero rows for six
+minutes behind an existing job that had itself reached only chunk 2 of 24.
 
 **Assuming the model is a constant.** The 4B fine-tune and the 27B have
 different failure modes and different id ranges — 4B batches are 70xxx, 27B are

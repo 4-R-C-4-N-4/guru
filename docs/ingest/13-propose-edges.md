@@ -13,14 +13,15 @@ similarity.
 ## Action
 
 ```sh
-scripts/run-qwen.sh
+pgrep -af 'tag_concepts|propose_edges'      # must be empty — see node 10
+scripts/run-qwen.sh                          # only if nothing is serving
 
 python3 scripts/propose_edges.py --text <source-id> \
     --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf \
     --top-n 5 --min-similarity 0.75
 ```
 
-`llm stop` when finished.
+`llm stop` when finished — but only if you started it (node 10).
 
 ## Output
 
