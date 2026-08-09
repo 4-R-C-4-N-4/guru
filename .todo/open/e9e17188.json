@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-09T21:58:27.509Z",
-  "updated_at": "2026-08-09T21:58:27.509Z",
+  "updated_at": "2026-08-09T22:30:33.521Z",
   "files": [
     {
       "path": "docs/ingest/11-tag-review.md"
@@ -17,5 +17,6 @@
     "ingest",
     "node11",
     "gate"
-  ]
+  ],
+  "description": "`insertReassignedTag` in guru-review/server/src/apply.ts marks the donor\n`reassigned` and inserts the new tag at `status='pending'`. The node 11 gate\nis \"no pending rows remain for the text\". So applying a queue that contains N\nreassigns leaves exactly N new pending rows, the gate re-opens, and node 14\nstays blocked behind it.\n\n## Measured on yoga-sutras\n\nThe node 11 queue carried six reassigns. After the user applied it:\n\n  book 01  3 pending (I.15 inner_silence, I.28 sacred_names, I.45 unity_of_being)   gate FAILS\n  book 02  2 pending (II.10 inner_silence, II.43 sacred_names)                      gate FAILS\n  book 03  0 pending                                                                gate PASSES\n  book 04  1 pending (IV.31 unity_of_being)                                         gate FAILS\n\nBook 03 is the only book whose tag pass produced no reassigns. That is the\nentire difference.\n\nThe six `accept` actions that would close those rows (ra90701-ra90706) are\nqueued and unapplied, so a second apply cycle is required.\n\n## Why this is a bug and not just a fact\n\n1. A driver that reports \"node 11 complete\" after queueing is wrong, and the\n   status machine will contradict it later. This happened in the 2026-08-09\n   session.\n2. The two-step is not documented anywhere the reviewer sees it at decision\n   time — the guru-review-tags skill describes reassign as a single verdict.\n3. It compounds: any future node 14 `retarget` (0b21d209) would inherit the\n   same shape.\n\n## Options\n\n- apply could resolve reassign-inserted rows directly (accept them, since the\n  reviewer already asserted the claim by reassigning) — simplest, and matches\n  reviewer intent; the new row's `pending` status arguably encodes a review\n  step nobody asked for\n- or: keep the two-step but make `guru ingest status` distinguish \"pending,\n  never reviewed\" from \"pending, created by an applied reassign\", so the gate\n  message tells the truth\n- or: leave the mechanism and document it (done, node 11 workbook) — but that\n  leaves the gate lying about what is outstanding\n\nWorkbook entry added at docs/ingest/11-tag-review.md under Gate."
 }

@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-09T21:58:27.406Z",
-  "updated_at": "2026-08-09T21:58:27.406Z",
+  "updated_at": "2026-08-09T22:30:33.431Z",
   "files": [
     {
       "path": "docs/ingest/14-edge-review.md"
@@ -17,5 +17,6 @@
     "ingest",
     "node14",
     "review"
-  ]
+  ],
+  "description": "`reclassify` at node 14 changes the edge *type* (PARALLELS / CONTRASTS /\nsurface_only / unrelated). It cannot move an endpoint. So when the proposer\naims a genuinely good pairing at the neighbouring chunk, review can only\ndiscard it.\n\n## Evidence (yoga-sutras node 14 pass, 696 edges)\n\nplotinus-select-works-index.404 was proposed against yoga-sutras-book-04.016\nand belongs against 04.015:\n\n  Plotinus: \"it is impossible, in fact, that the collocation of material\n  entities should produce life, or mindless entities mind\"\n  IV.15 (title claim): \"The paths of material things and of states of\n  consciousness are distinct\"\n  IV.16 (what it was aimed at): matter does not depend on a single mind and\n  is law-governed — anti-idealism, not anti-materialism.\n\nQueued surface_only because there was nothing else to do with it.\n\nThe converse case shows the rate is not negligible: tertium-organum.153 was\nproposed against BOTH 04.015 and 04.016, and only 04.016 earned it. Where the\nproposer happens to fire at both neighbours, review picks the right one; where\nit fires at one, it is luck whether that one is right.\n\n## Why this matters more than it looks\n\nNode 11 has `reassign` and the comparable yoga-sutras tag pass produced six of\nthem — i.e. six claims that review ADDED rather than subtracted. Node 14 has\nno way to add, so its output is structurally subtraction-only and the loss is\ninvisible: nothing in review_actions records \"this was right about the wrong\nchunk\".\n\n## Options (not a recommendation, this needs design)\n\n- a `retarget` action carrying a new source/target chunk pair, validated to\n  exist and not duplicate a live edge\n- or: allow review to queue a NEW staged_edge with reviewer provenance, which\n  mirrors how node 11's reassign inserts a row\n- either way the same two-step problem as node 11's reassign applies (see\n  e9e17188) — the new row lands pending and needs a second apply\n\nRelated: 0b21d209 (this), e9e17188, and the node 14 workbook entry under\n\"Losing a good pairing aimed at the wrong chunk\"."
 }
