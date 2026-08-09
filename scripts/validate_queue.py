@@ -29,6 +29,70 @@ sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.par
 from guru.paths import DEFAULT_DB  # noqa: E402
 
 
+def _validate_edges(conn: sqlite3.Connection) -> list[dict]:
+    """Queued actions against `staged_edges` (node 14).
+
+    Structurally safer than the tag branch: every write is an `upsertEdge` or
+    an UPDATE, never an INSERT, so no unique constraint can fire and no
+    ordering hazard exists. Only two things can go wrong, and the second one
+    is silent.
+    """
+    findings: list[dict] = []
+
+    live_edges = {
+        (r["source_id"], r["target_id"], r["type"])
+        for r in conn.execute("SELECT source_id, target_id, type FROM edges")
+    }
+
+    for q in conn.execute(
+        """
+        SELECT ra.id, ra.action, ra.reclassify_to, ra.target_id,
+               se.source_chunk, se.target_chunk, se.edge_type, se.confidence, se.status
+          FROM review_actions ra
+          LEFT JOIN staged_edges se ON se.id = ra.target_id
+         WHERE ra.applied_at IS NULL AND ra.target_table = 'staged_edges'
+         ORDER BY ra.id DESC
+        """
+    ):
+        if q["source_chunk"] is None:
+            findings.append({
+                "level": "ERROR", "action_id": q["id"], "kind": "orphaned_target",
+                "detail": f"action {q['id']} targets staged_edge {q['target_id']}, which does not exist",
+            })
+            continue
+
+        if q["status"] != "pending":
+            findings.append({
+                "level": "INFO", "action_id": q["id"], "kind": "already_resolved",
+                "detail": f"staged_edge {q['target_id']} is already '{q['status']}'; "
+                          f"this verdict will be skipped",
+            })
+            continue
+
+        if q["action"] == "reclassify" and not q["reclassify_to"]:
+            findings.append({
+                "level": "ERROR", "action_id": q["id"], "kind": "reclassify_missing_target",
+                "detail": f"action {q['id']} is a reclassify with no reclassify_to; apply raises "
+                          f"and rolls back the ENTIRE batch",
+            })
+            continue
+
+        # Both `reject` and `reclassify` call deleteEdge on the OLD type
+        # unconditionally. If that edge is live, the verdict destroys state
+        # someone already promoted — silently, since nothing raises.
+        if q["action"] in ("reject", "reclassify"):
+            edge = (q["source_chunk"], q["target_chunk"], q["edge_type"])
+            if edge in live_edges:
+                findings.append({
+                    "level": "WARN", "action_id": q["id"],
+                    "kind": f"{q['action']}_deletes_live_edge",
+                    "detail": f"{q['action']} on {q['source_chunk']} ─{q['edge_type']}─ "
+                              f"{q['target_chunk']} (conf {q['confidence']:.2f}) deletes a live edge",
+                })
+
+    return findings
+
+
 def validate(conn: sqlite3.Connection) -> list[dict]:
     """Replay the unapplied queue and return findings, worst first."""
     conn.row_factory = sqlite3.Row
@@ -65,6 +129,8 @@ def validate(conn: sqlite3.Connection) -> list[dict]:
          ORDER BY ra.id DESC
         """
     ).fetchall()
+
+    findings.extend(_validate_edges(conn))
 
     for q in queue:
         if q["chunk_id"] is None:
