@@ -329,3 +329,149 @@ over-application here. I.28 had only score-2 rejects available, so its new tag
 carries score 2 rather than 1; noted because score drives the auto-promote
 tier, and the score was left as the donor's rather than adjusted to steer what
 happens downstream.
+
+## 14 · 2026-08-09 · claude (pilot)
+
+696 edges, every one judged against both bodies. Queued, not applied.
+
+| verdict | count | share |
+|---|---:|---:|
+| `accept` → PARALLELS | 210 | 30.2% |
+| `reclassify` → CONTRASTS | 5 | 0.7% |
+| `reclassify` → `surface_only` | 439 | 63.1% |
+| `reclassify` → `unrelated` | 42 | 6.0% |
+
+**31% live.** No `reject` was used: every rejection had a classification that
+carried more information, which is what the node asks for.
+
+### Book III confirms the taxonomy gap from a second direction
+
+| book | edges | live | |
+|---|---:|---:|---|
+| I | 197 | 77 | 39% |
+| II | 165 | 53 | 32% |
+| III | 187 | 40 | 21% |
+| IV | 147 | 45 | 31% |
+
+Book III is the *siddhi* material. It draws proposals at the same rate as the
+others and converts at half. Node 11 reached the same conclusion from the tag
+side. Two independent measurements over the same text agreeing is worth more
+than either alone: the corpus has no vocabulary for powers-attainment, so the
+densest technical book in the text has nothing to attach to. This is a
+taxonomy problem, not a proposer problem — a better model would find the same
+absence.
+
+### What the proposer actually gets wrong
+
+Node 13 emits almost only PARALLELS at 0.85. The 469 non-accepts sort into
+causes, and the useful thing is that most are **mechanical, not interpretive**:
+
+| cause | count | fixable where |
+|---|---:|---|
+| shared topic at high abstraction | ~340 | node 13 prompt |
+| chunk is apparatus, not the named author | 12 | nodes 05–06 |
+| right claim, wrong sutra (neighbour) | ≥3 observed | node 13 / node 14 |
+| chunk is a quotation of another tradition | 2 chunks, ~14 proposals | nodes 05–06 |
+| text expounds a view it then refutes | 4 | node 13 prompt |
+| shared English word, unrelated senses | 1 | nowhere — see below |
+| shared count mistaken for shared structure | 1 | node 13 prompt |
+
+Confidence carried no signal. The single 0.95 was correct; so were several
+0.85s; the only `CONTRASTS` the model proposed was wrong. Confidence orders a
+batch and decides nothing.
+
+### The five CONTRASTS
+
+All five were found by reclassifying a proposed PARALLELS. The model proposed
+one contrast in 696 edges and it was a misread.
+
+| pair | question | stances |
+|---|---|---|
+| Plotinus 402 ↔ I.11 | is memory retention of impressions? | "not a capacity for taking imprint" / "holding to mind-images … without modifying them" |
+| Boehme 024 ↔ I.21 | does intensity of will bring you nearer? | "the more it desires for freedom the greater will be the attraction caused by the desire" / "the kingdom must be taken by force" |
+| Boehme 121 ↔ IV.11 | who accomplishes liberation? | "the soul cannot accomplish by her own power" / "the driving-force is withdrawn" |
+| Bruno pt1.031 ↔ IV.25 | can infinite longing be satisfied? | "excites more than it can appease" / "shall be realized, and ten times more" |
+| Rumi ↔ IV.28 | effort or trust? | "self-exertion is not more noble than trust in God" / "ceaselessly renewing the fight" |
+
+Three of the five are one axis — whether effort avails — approached from
+Lutheran, Sufi and Brunian sides. Patanjali is on the same side each time.
+None was visible from the justification text; each required reading both
+bodies to the end.
+
+### The genealogical problem, stated precisely
+
+Seven accepted edges link authors who share the late-19th-century Theosophical
+milieu rather than traditions that converged. Two structural cases are worse
+than the individual ones:
+
+- **IV.12 argues its own cross-tradition case.** Johnston's commentary quotes
+  John 8:58, Revelation, a Mahatma letter and Björklund inside the chunk. Five
+  edges now radiate from it to Plato, Plotinus and Ouspensky. Each is accurate
+  as a text-to-text match; together they will read in the Atlas as five
+  traditions independently reaching one doctrine, which is not what happened.
+- **The Boehme in this corpus is a Theosophical edition.** Hartmann's note
+  251:2 glosses Boehme as "when the disciple becomes an accepted *Chela*, his
+  evil *Karma* begins to assert itself". Roughly ten accepted Boehme edges come
+  through that lens, and Johnston reads Patanjali through the same one.
+
+Neither is a reason to withhold the edges. It is a reason for the Atlas to be
+able to say *how* two chunks are related, which it currently cannot.
+
+### Node 14 cannot repair a mis-aimed proposal
+
+`plotinus-404` ("it is impossible that the collocation of material entities
+should produce life, or mindless entities mind") was proposed against IV.16 and
+belongs against IV.15. Node 11 would fix this with `reassign`. Node 14 has no
+equivalent — `reclassify` changes the edge *type*, never its endpoints — so the
+pairing was discarded.
+
+The rate is not negligible. `tertium-153` was proposed against both IV.15 and
+IV.16 and only IV.16 earned it; where the proposer happens to fire at both
+neighbours review can pick, and where it fires at one it is luck whether that
+one is right. Node 11's comparable pass produced six reassigns.
+
+### Corpus-quality findings
+
+Twelve chunks were marked `unrelated` because their content is not the named
+author's. By source:
+
+| source | chunks | what they are |
+|---|---:|---|
+| Rolt's *Divine Names* / *Mystical Theology* | 3 | numbered translator's notes; one is notes 54–64 and nothing else |
+| Hartmann's *Boehme* | 2 | page-keyed endnote blocks |
+| *Heroic Enthusiasts* | 3 | the translator's introduction, across pt1.010/011 |
+| *Corpus Hermeticum* | 1 | a modern editor's bracketed headnote, matched directly by the model |
+| others | 3 | contents enumerations, plate captions |
+
+The Rolt Dionysius is the worst single offender and the most expensive: its
+commentary chunk `divine-names-10.003` was proposed three times (IV.10, IV.25,
+IV.33) and is, on content, the *best* partner in the whole corpus for IV.33's
+two-eternities doctrine — "Eternity is Rest and Time is Motion … *Aevum* …
+True Timeless Eternity". It had to be declined three times because it is the
+translator talking. The real Dionysius makes the same point one chunk earlier
+at `divine-names-10.002`, which is now an accepted edge.
+
+**A second category, new here: quotation chunks.** `tertium-organum.156` (ten
+proposals, third-most in the pass) is Ouspensky quoting Plotinus;
+`tertium-organum.188` is Ouspensky quoting *The Voice of the Silence*. Both
+were declined. Partner saturation in this pass correlates with quotation
+density, and the reason is mechanical: a chunk containing another tradition's
+words under this tradition's shelf label matches everything that tradition
+matches.
+
+### Chunk-boundary redundancy
+
+Four cases where one continuous argument spans a section split and both halves
+earned edges to the same sutra: Plotinus 324/325 → I.11, Plotinus 438/440 →
+IV.19, Ouspensky IV.2/IV.5 → IV.12, Lévi 040/055. Every individual edge is
+correct. The Atlas will show near-duplicates.
+
+### Consistency notes against myself
+
+- Contents pages should be `unrelated` per this node. I marked the *Tertium
+  Organum* contents chunk `surface_only` on its seven or eight appearances
+  before noticing, then switched. Both are non-live so the graph is unaffected;
+  the audit trail is inconsistent and was left rather than churned.
+- Three mid-pass reversals were made and reported: Hall 339 over Hall 108 on
+  the radiance sutra, Agrippa over `tertium-189` on the hearing sutra, and
+  Lévi's magnetism passage assigned to III.21 rather than III.19.

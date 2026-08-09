@@ -1,0 +1,21 @@
+{
+  "id": "0b21d209",
+  "type": "chore",
+  "state": "open",
+  "summary": "Node 14 has no reassign: good edge proposed against wrong chunk is unrecoverable",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T21:58:27.406Z",
+  "updated_at": "2026-08-09T21:58:27.406Z",
+  "files": [
+    {
+      "path": "docs/ingest/14-edge-review.md"
+    }
+  ],
+  "tags": [
+    "ingest",
+    "node14",
+    "review"
+  ]
+}

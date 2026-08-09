@@ -138,8 +138,64 @@ sqlite3 data/guru.db "
 
 `scripts/validate_queue.py` reports the same thing as a WARN after the fact.
 
+**Accepting a view the text is about to refute.** The commonest non-obvious
+error, and the only one that can publish a *false* claim rather than a weak
+one. A chunk that expounds a position at length may be setting it up for
+demolition: Ouspensky lays out mechanistic positivism for two pages and closes
+"Such is the teaching of positivism"; Plotinus opens "It remains to notice the
+theory … *alleged* to interweave everything". Four cases in 696 edges on
+yoga-sutras, and the proposer's single `CONTRASTS` in that pass was one of
+them — which is the dangerous direction, since a wrong `PARALLELS` overstates
+agreement but a wrong `CONTRASTS` invents a disagreement the author disowns.
+
+Read to the end of the chunk before accepting. Tells: "it is said that", "the
+theory that", "alleged", "some hold" — and any final sentence that names the
+position as a school's.
+
+**Judging a chunk whose content is not the named author's.** Two kinds, both
+corpus-quality problems that surface here because node 14 is the first node
+that reads bodies adversarially.
+
+*Apparatus* — translator's notes, editorial introductions, contents lists,
+plate captions. Verdict is `unrelated`. Twelve chunks in the yoga-sutras pass;
+the Rolt Dionysius, Hartmann's Boehme and the *Heroic Enthusiasts*
+introduction were the repeat offenders, and one Corpus Hermeticum chunk was
+matched on a modern editor's bracketed headnote.
+
+*Quotation chunks* — the chunk is largely another tradition's words quoted
+under this tradition's label. `tertium-organum.156` is Ouspensky quoting
+Plotinus; `tertium-organum.188` is Ouspensky quoting *The Voice of the
+Silence*. These attract proposals at several times the normal rate, because a
+chunk containing tradition X's words matches everything X matches. An edge
+from one credits the quoting author with the quoted author's claim. Verdict is
+`surface_only`, or `unrelated` if the chunk is nothing but quotation.
+
+If a partner chunk appears unusually often in a pass, check whether it is one
+of these before checking anything else. Partner saturation is a symptom.
+
+**Treating a shared word as a shared concept.** Two translators, working from
+different languages a century apart, can land on the same English word for
+unrelated ideas. MacKenna's Plotinus says "The phases present are those which
+the nature of body demands" (aspects of soul); Johnston's Patanjali says
+perception occurs when vibrations are "in the same phase" (frequency). The
+collision exists only in English and nothing in either body supports the pair.
+Likewise a shared *count* is not a shared structure: three Gnostic syzygies
+(an emanation sequence) against three gunas (a compositional analysis) share
+the number and nothing else.
+
+**Losing a good pairing aimed at the wrong chunk.** `reclassify` changes the
+edge *type*; it cannot move an endpoint. There is no `reassign` at this node,
+so a correct insight proposed against the neighbouring sutra can only be
+discarded. Node 11's comparable pass produced six reassigns, so the loss here
+is real but unmeasured. Log these in the decision record when you spot them —
+that log is the only evidence the gap exists.
+
 **Filtering by `max_confidence` through the API.** That parameter does not
 exist. Filter client-side.
+
+**Reading confidence as quality.** It orders a batch and decides nothing. On
+yoga-sutras the single 0.95 was right, several 0.85s were right, and the one
+proposed `CONTRASTS` — at 0.85, like almost everything else — was wrong.
 
 **Known-noisy pairings accepted on their justification.** Diamond Sutra ↔ Yasna
 Gathas; Pythagorean *Golden Verses* paired with self-will surrender; anything

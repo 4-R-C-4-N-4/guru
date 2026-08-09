@@ -1,0 +1,21 @@
+{
+  "id": "43a62e3f",
+  "type": "chore",
+  "state": "open",
+  "summary": "Detect apparatus and quotation chunks mechanically at chunk time",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T21:58:27.456Z",
+  "updated_at": "2026-08-09T21:58:27.456Z",
+  "files": [
+    {
+      "path": "docs/ingest/06-chunk.md"
+    }
+  ],
+  "tags": [
+    "ingest",
+    "corpus-quality",
+    "node06"
+  ]
+}

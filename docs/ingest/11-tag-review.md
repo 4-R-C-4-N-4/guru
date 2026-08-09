@@ -33,6 +33,22 @@ until the user drains the queue.
 No `pending` rows remain for the text. `guru ingest status` reports the
 remaining count.
 
+**A `reassign` cannot close this gate in one cycle.** `insertReassignedTag`
+marks the donor `reassigned` and inserts the new tag at `status='pending'`, so
+applying a queue that contains reassigns leaves exactly as many new pending
+rows as there were reassigns. The node then reports itself unfinished, and
+node 14 stays blocked behind it, until the reviewer queues a verdict on each
+new row and the user applies a *second* time.
+
+Measured on yoga-sutras: the node 11 queue carried six reassigns. After the
+apply, books 01, 02 and 04 each still showed pending rows and failed the gate;
+book 03 — the only book with no reassigns — passed. The six accepts that would
+close it are queued and unapplied.
+
+Plan for two applies whenever the pass uses `reassign`, and say so when handing
+the queue over. A driver that reports "node 11 complete" after queueing has
+told the user something the status machine will contradict.
+
 Before handing the queue to the user, validate it:
 
 ```sh

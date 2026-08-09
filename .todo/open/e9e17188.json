@@ -1,0 +1,21 @@
+{
+  "id": "e9e17188",
+  "type": "bug",
+  "state": "open",
+  "summary": "Node 11 reassign leaves new pending rows; gate needs two apply cycles",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T21:58:27.509Z",
+  "updated_at": "2026-08-09T21:58:27.509Z",
+  "files": [
+    {
+      "path": "docs/ingest/11-tag-review.md"
+    }
+  ],
+  "tags": [
+    "ingest",
+    "node11",
+    "gate"
+  ]
+}
