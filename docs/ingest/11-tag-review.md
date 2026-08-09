@@ -53,6 +53,27 @@ staged_tags.model, staged_tags.prompt_version` and rolls back the entire batch.
 `insertReassignedTag` in `apply.ts` does not guard against it. Check first, and
 prefer plain `reject` when the better concept is already in play.
 
+**Treating review as subtraction only.** Accept and reject work on what the
+tagger proposed, so it is easy to conclude that a concept the tagger *missed*
+is out of reach at this node and belongs to node 10's recall problem.
+`reassign` is the way in: per `apply.ts` it marks the donor tag `reassigned`,
+deletes its live edge exactly as `reject` would, and then inserts a **new**
+`staged_tag` for the target concept. The donor's fate is identical either way,
+so any queued reject on the same chunk is free capacity — and at an observed
+13.4 tags per chunk there is always one to spare.
+
+Two things this does not do. The new row lands `pending` with no `upsertEdge`,
+so a reassign does not produce a live edge — it puts the missing concept back
+in the queue for a second pass. And `updateStagedTagConcept` overwrites the
+donor's `concept_id` with the target, so the record of what was originally
+proposed there is lost. Pick a donor whose original tag you do not want in the
+over-generation statistics.
+
+The self-collision that looks fatal is not: the reassign path updates the donor
+to `reassigned` *before* inserting, and `idx_staged_tags_provenance_unique` is
+partial (`WHERE status = 'pending'`), so the donor leaves the index first. The
+collision in the failure mode above is with a *different* pending row.
+
 **Mistyped ids in a batch queue.** They are silently rejected. Check the
 accepted count matches what was intended — 4B ids are 70xxx, 27B are 71xxx.
 

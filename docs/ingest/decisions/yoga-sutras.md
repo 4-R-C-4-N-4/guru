@@ -265,3 +265,67 @@ the earlier 4B batch was worth discarding only because Mistral is the documented
 proposer — not because of its type spread.
 
 Both corrections are in `docs/ingest/13-propose-edges.md`.
+
+---
+
+## 11 · 2026-08-09 · claude (pilot)
+
+**2,579 tags on 192 chunks, all reviewed against the chunk body.** Queued
+444 accept / 6 reassign / 2,129 reject — **17.4%**. By book: I 19.4%,
+II 17.6%, III 16.4%, IV 15.1%. Unreviewed remaining: 0. Pending the user's
+apply; nothing here has touched the live graph.
+
+Six tagger failure modes, in rough order of cost:
+
+- **Over-generation.** 13.4 tags per chunk against a ~2.6 accept. Worst case
+  III.24 — 31 tags, 1 accepted. This is the whole of the 82.6% reject rate;
+  the individual judgements are mostly not *wrong* so much as ungrounded.
+- **Stance inversion** (6 cases). The chunk argues against a position and the
+  tag reads it as holding it.
+- **Silent omission** (10 candidates, see below).
+- **Referent mismatch.** The concept fits something the chunk mentions rather
+  than something it claims.
+- **Taxonomy gap.** No concept covers Sankhya metaphysics, the siddhis, or
+  Patanjali's epistemology of the pramanas — the three things Books II–IV
+  spend the most words on. This is the finding most worth acting on, and it is
+  a taxonomy job, not a tagger job.
+- **Empty justification at score 3** (2 cases).
+
+### Silent omission is reviewable, and mostly did not survive review
+
+Recall failures look like node 10's problem, but `reassign` reaches them: it
+disposes of the donor tag exactly as `reject` would and inserts a new
+`staged_tag` for the concept the tagger missed. Mechanics and caveats are in
+node 11's failure modes.
+
+Ten omissions logged during the pass, re-read against the concept definitions
+before queueing. **Five held, one was not an omission at all, four failed:**
+
+| chunk | concept | verdict |
+|---|---|---|
+| I.28 | `sacred_names` | queued — "soundless repetition of OM", "the potency of the word itself" |
+| I.45 | `unity_of_being` | queued — "the partition wall … is broken down and we are all made perfect in the One" |
+| II.10 | `inner_silence` | queued — "stilled by meditation … the strong, silent life above … the stillness" |
+| II.43 | `sacred_names` | queued — "recital of sacred texts, which, in their very sounds, had mystical potencies" |
+| IV.31 | `unity_of_being` | queued — "the soul that is in them is one with the soul that is in thee" |
+| II.9 | `love_of_neighbour` | **not an omission** — the tagger proposed `unity_of_being` here at score 3 and it was already queued accept |
+| II.3 | `love_of_neighbour` | dropped — def requires active care for others; the chunk gives non-separateness |
+| III.2 | `renunciation_of_wealth` | dropped — one borrowed clause ("the deceitfulness of riches") in a chunk about dhyana |
+| III.6 | `dharma` | dropped — duties of one's day, with none of the def's binding of duty to cosmic station |
+| III.29 | `ritual_purity` | dropped — purity as an outcome of redirected force, not a state maintained for encounter |
+| III.48 | `inner_silence` | dropped — "heard the voice of the silence" is an attainment named, not a practice expressed |
+
+The 6-of-10 attrition is the useful number. Omissions logged mid-review are
+recorded on the strength of a phrase; four of them dissolved the moment they
+were tested against the concept definition rather than against the phrase that
+suggested them. **An addition needs a higher burden than a removal** — a reject
+discards one model guess, an accepted reassign asserts a claim in the graph
+under the reviewer's name. The queue carries 6 reassigns, not the 10 the
+mid-review notes implied.
+
+Donors were the queued reject on the same chunk whose original concept was
+least worth keeping — `paradox_as_teaching` in four of five, a persistent
+over-application here. I.28 had only score-2 rejects available, so its new tag
+carries score 2 rather than 1; noted because score drives the auto-promote
+tier, and the score was left as the donor's rather than adjusted to steer what
+happens downstream.
