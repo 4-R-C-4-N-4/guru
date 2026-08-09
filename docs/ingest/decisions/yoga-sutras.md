@@ -183,3 +183,60 @@ the 800 budget.
 **08 readability** — mean **0.0** for all four, worst 1.3 (Book III). Nothing to
 judge: the single-line source has no `hard_wrap`, and the sacred-texts page
 marks were pre-stripped at chunk time. Pass.
+
+---
+
+## 09–12 · 2026-08-08 · claude (pilot)
+
+**09 graph-bootstrap** — 192 chunk nodes. (Written to `guru.db`, which is
+git-ignored and shared across branches: until this branch merges, other
+checkouts see chunk nodes for a text their `corpus/` does not contain. That is
+the condition `guru dossier drift` reports as ORPHANED.)
+
+**10 tag-concepts — the model had to change, and the measurement is the reason.**
+
+| model | per chunk | 192 chunks |
+|---|---|---|
+| `Qwen3.5-27B-UD-Q4_K_XL` (`REASONING=auto`) | **219 s** (~3,200 tokens of reasoning preamble at 32 t/s) | ~11.7 h |
+| `qwen-3-4b-guru-Q4_K_M` (`PARALLEL=4`) | **~6 s** | **~19 min** |
+
+The 27B was left to finish one chunk to get a real number rather than a guess.
+No-think on the 27B was the other candidate, but guru's `scripts/serve-llama.sh`
+has no `EXTRA_ARGS` hook — only the model-runners copy does — so it would have
+meant editing the launcher. The 4B needed no changes and is the fine-tune built
+for this task.
+
+Result: **2,579 tags across all 192 chunks**, score 1/2/3 = 737/1481/354 (before
+the chunk-001 redo).
+
+**Provenance had to be repaired.** The aborted 27B run left 15 tags on
+`book-01.001`, so that one chunk carried different provenance from the other
+191 — different id range at review (70xxx vs 71xxx), different failure modes.
+Deleting those rows was not enough to re-tag it: `--resume` consults the
+separate `tagging_progress` table, which still recorded the chunk complete, so
+the re-run reported "0 chunks tagged". `--chunk-ids-from-file` ignores resume
+and did it.
+
+**12 embed** — 192 embedded, 0 errors.
+
+**Retrieval verified end to end** (the actual proof the ingest worked):
+
+```
+Q: What is the aim of concentration of the mind?
+  0.735  hinduism.yoga-sutras-book-03.001  [Sutra 1]      <- top hit
+  0.675  neoplatonism.plotinus-select-works-index.282
+  0.730  hinduism.yoga-sutras-book-03.019  [Sutra 19]
+```
+
+Book III Sutra 1 is *dharana* — "the binding of the perceiving consciousness to
+a certain region is attention" — so the top hit is the correct sutra, and
+Plotinus arriving alongside it is the cross-tradition behaviour working.
+
+**11 tag-review — a 5-tag sample, not a review.** Read against the bodies:
+`self_knowledge` (score 3) and `mystical_union` (2) look grounded;
+`divine_light` (1) rests on "implying an illumination" with no light in the
+body, and `ritual_purity` (1) on service-to-the-Master, both of which read as
+rejects under rubric rule 2. `hidden_sayings` (1) is on the historically-noisy
+list but does quote real text. Two clear rejects in five, both score 1 —
+consistent with the corpus's known score-1 accept rate. 2,579 pending tags is a
+curation job, not something to queue in one sitting.
