@@ -1,0 +1,32 @@
+{
+  "id": "a8bb7213",
+  "type": "bug",
+  "state": "open",
+  "summary": "reassign overwrites the donor tag's concept_id, destroying its provenance",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T14:03:57.204Z",
+  "updated_at": "2026-08-09T14:04:35.386Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/apply.ts",
+      "lines": [
+        100,
+        114
+      ]
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "provenance",
+    "reassign",
+    "audit-trail"
+  ],
+  "description": "The `reassign` branch of `applyTagAction` runs three writes against the donor\ntag, and the middle one looks purely destructive:\n\n    stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');\n    stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);\n    stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);   // <-- this one\n    stmts.insertReassignedTag.run(tag.chunk_id, q.reassign_to, ...);\n\n`updateStagedTagConcept` is `UPDATE staged_tags SET concept_id=? WHERE id=?`\n(db.ts:147). After it runs, the donor row claims it was a tag for the *target*\nconcept — but the newly inserted row already records the target, with\njustification `Reassigned from ${tag.concept_id}`. So the target is stored\ntwice and the concept the model actually proposed is stored nowhere.\n\n## Why it matters\n\nThe donor row is the only record that the tagger proposed X on that chunk. Lose\nit and the over-generation statistics silently lose a data point, and\n`status='reassigned'` rows can no longer answer \"what did the model get wrong\nhere\" — the question node 11 review exists to accumulate an answer to.\n\nConcretely, from the yoga-sutras pass: five donors were `paradox_as_teaching`\n(four) and `gnosis_direct_knowledge` (one), chosen *because* those were\nover-applications worth recording. Applying the queue erases exactly that.\n\n## Suspected fix\n\nDrop the `updateStagedTagConcept` call. The donor keeps its original\n`concept_id` with `status='reassigned'`, the new row carries the target, and\nthe audit trail reads correctly in both directions.\n\n## Do not fix blind — check these first\n\n1. Does anything read `staged_tags.concept_id` for rows with\n   `status='reassigned'` and depend on it naming the *target*? Check the review\n   UI's history/queue views and any reporting queries.\n2. Existing `reassigned` rows in guru.db already have overwritten concept_ids.\n   The original values are unrecoverable, so a fix is forward-only — decide\n   whether those rows need a marker distinguishing them from correct ones.\n3. Confirm no unique-index interaction: the donor is already out of\n   `idx_staged_tags_provenance_unique` (partial on `status='pending'`) by the\n   time this runs, so leaving concept_id alone cannot reintroduce a collision.\n\nRaised while converting rejects to reassigns for silent-omission repair\n(docs/ingest/decisions/yoga-sutras.md, node 11 section). Not fixed at the time\nbecause it changes the meaning of existing rows.",
+  "relationships": {
+    "linked_commits": [
+      "2bf73c77"
+    ]
+  }
+}
