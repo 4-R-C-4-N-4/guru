@@ -429,7 +429,7 @@ NODES: list[Node] = [
                 "Needs a llama.cpp server that is up AND FREE. `llm status` "
                 "reporting healthy does not mean idle — check for another "
                 "tag_concepts or propose_edges process first "
-                "(`pgrep -af 'tag_concepts|propose_edges'`). Two runs against "
+                "(`pgrep -af '[t]ag_concepts|[p]ropose_edges'`). Two runs against "
                 "one slot do not fail, they both crawl, which reads exactly "
                 "like a hang.",
                 "scripts/run-qwen.sh serves the 27B, "

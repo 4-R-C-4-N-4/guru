@@ -13,7 +13,7 @@ similarity.
 ## Action
 
 ```sh
-pgrep -af 'tag_concepts|propose_edges'      # must be empty — see node 10
+pgrep -af '[t]ag_concepts|[p]ropose_edges'      # must be empty — see node 10
 scripts/run-qwen.sh                          # only if nothing is serving
 
 python3 scripts/propose_edges.py --text <source-id> \

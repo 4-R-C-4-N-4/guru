@@ -16,8 +16,14 @@ Chunk nodes in `guru.db` (node 09), and a taxonomy that covers the text.
 
 ```sh
 llm status
-pgrep -af 'tag_concepts|propose_edges'      # must be empty
+pgrep -af '[t]ag_concepts|[p]ropose_edges'      # must be empty
 ```
+
+The brackets are load-bearing. Written as `'tag_concepts|propose_edges'` the
+pattern matches the shell running it — the command line contains the string —
+so the check reports a competing process forever and the precondition can never
+pass. `[t]ag_concepts` matches the same processes but not the literal text of
+the command itself.
 
 Then start a server if there isn't one, and run the tagger:
 
