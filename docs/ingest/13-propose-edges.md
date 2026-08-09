@@ -14,11 +14,10 @@ similarity.
 
 ```sh
 pgrep -af '[t]ag_concepts|[p]ropose_edges'      # must be empty — see node 10
-scripts/run-qwen.sh                          # only if nothing is serving
+scripts/run-mistral.sh                       # only if nothing is serving
 
 python3 scripts/propose_edges.py --text <source-id> \
-    --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf \
-    --top-n 5 --min-similarity 0.75
+    --provider llamacpp --top-n 5 --min-similarity 0.75
 ```
 
 `llm stop` when finished — but only if you started it (node 10).
@@ -36,7 +35,40 @@ python3 -m guru ingest status <source-id>
 
 Counts staged edges touching this text on either side.
 
+**Serve Mistral, not a tagging model.** `Mistral-Small-3.2-24B-Instruct` is
+`propose_edges.py`'s own default — the `--model` flag exists to *label*
+provenance, and its help text says to start the server with
+`scripts/run-mistral.sh`. That model produced the corpus's 20,898 edge
+proposals. The launcher also sets near-greedy sampling (temp 0.15, top_p 1.0,
+top_k 0, min_p 0, repeat_penalty 1.0), which is what makes it classify rather
+than agree.
+
 ## Failure modes
+
+**Do not judge a fresh batch by its edge-type spread.** The proposer emits
+`PARALLELS` almost exclusively, and that is correct behaviour, not a defect.
+`surface_only`, `unrelated` and most `CONTRASTS` are **review outcomes** — they
+arrive through the reclassify action at node 14, not from this node.
+
+The corpus makes this unambiguous:
+
+| edge_type | status | rows |
+|---|---|---|
+| PARALLELS | accepted / pending | 10,998 / 1,715 |
+| surface_only | **rejected** | 8,338 — every one `reviewed_by` a reviewer |
+| unrelated | **rejected** | 175 — likewise |
+| CONTRASTS | reclassified / accepted | 78 / 24 |
+
+So comparing a new run's spread against the corpus-wide table compares
+unreviewed output to reviewed output and will always look alarming. If you want
+a health signal, compare against `status='pending'` rows only, which are also
+overwhelmingly PARALLELS.
+
+This entry exists because that mistake was made here on 2026-08-08: a 4B run's
+207-of-208 PARALLELS was read as rubber-stamping and the batch was discarded on
+that reasoning. The batch was worth discarding — `propose_edges.py` defaults to
+Mistral for a reason — but the type spread was not the evidence.
+
 
 **Proposals off dirty vectors.** If node 07 was skipped or went stale, the
 candidate pairs are partly boilerplate similarity and the whole proposal set is
