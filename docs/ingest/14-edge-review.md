@@ -94,20 +94,39 @@ interface takes a tier from the reviewer. `guru-web`'s Atlas then shows only
 `edge_type='PARALLELS' AND tier='verified'`, so accept means publish. An
 interpretive reading has no soft landing: it is `surface_only` or `skip`.
 
-The live table shows what this has already done — 11,000 verified PARALLELS
-against 41 proposed. `proposed` is meaningful for `EXPRESSES`, where
-`auto_promote` writes it (27,127 verified / 11,057 proposed), and vestigial
-everywhere a human is the only writer.
+The two-tier design is inert in practice, because `auto_promote` is not part
+of this pipeline — every edge and every tag goes through review. The
+`proposed` rows that exist are residue from two abandoned episodes, not a
+policy:
+
+| type | last `proposed` written | rows |
+|---|---|---|
+| `EXPRESSES` | 2026-05-26 | 11,057 |
+| `PARALLELS` / `CONTRASTS` | 2026-07-03, all in one run | 45 |
+
+Everything written since is `verified` — 11,000 verified PARALLELS against 41
+proposed, and every EXPRESSES edge from June onward. A reviewer has never had
+a tier to choose, so the column records which *tool* wrote a row and in what
+month, not how good anyone judged it.
+
+That has a live cost: `guru-web`'s `retriever.ts` weights `verified` 1.0 and
+`proposed` 0.7, so those 11,057 April–May tags are permanently down-ranked
+against identical work reviewed later, and the 45 July edges are absent from
+the Atlas. Tracked separately; it is not a node 14 decision.
 
 **Rejecting a pair that already has a live edge.** `reject` *and* `reclassify`
 both call `deleteEdge` on the old type unconditionally, so either one silently
 destroys an edge someone already promoted. Nothing raises.
 
-The `guru-review-edges` skill states this as "always skip `confidence >= 0.90`",
-which is a proxy for "already auto-promoted at the 0.9 floor". Prefer the
-direct check, because the proxy is wrong in both directions — it spares a live
-0.85 edge nothing, and on a text `auto_promote_edges` never ran against it
-skips reviewable rows for no reason:
+The `guru-review-edges` skill states this as "always skip `confidence >= 0.90`"
+— a proxy for "already auto-promoted at the 0.9 floor", written when that floor
+was in use. It no longer is, so the rule now skips reviewable rows to guard
+against a tool nobody runs. On yoga-sutras it would have withheld 77 of 696
+edges, none of which is live.
+
+Use the direct check instead. It is the thing the proxy was approximating, it
+stays correct whatever auto-promote does later, and it also catches a live 0.85
+edge, which the confidence rule never did:
 
 ```sh
 sqlite3 data/guru.db "
