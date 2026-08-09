@@ -11,6 +11,10 @@ Chunk nodes in `guru.db` (node 09), and a taxonomy that covers the text.
 
 ## Action
 
+With two GPUs, the tagger belongs on the 4070 and the 24B-class models on the
+3090 — see [gpu-assembly.md](gpu-assembly.md), which also covers running this
+node and node 13 concurrently instead of one after the other.
+
 **Check the slot is free before anything else.** `llm status` reporting
 `health: ok` tells you a server is up, not that it is idle.
 

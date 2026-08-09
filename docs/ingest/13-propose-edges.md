@@ -35,6 +35,8 @@ python3 -m guru ingest status <source-id>
 
 Counts staged edges touching this text on either side.
 
+Pin it to the 3090 — [gpu-assembly.md](gpu-assembly.md).
+
 **Serve Mistral, not a tagging model.** `Mistral-Small-3.2-24B-Instruct` is
 `propose_edges.py`'s own default — the `--model` flag exists to *label*
 provenance, and its help text says to start the server with

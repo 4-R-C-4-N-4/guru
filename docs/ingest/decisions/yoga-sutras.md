@@ -240,3 +240,28 @@ rejects under rubric rule 2. `hidden_sayings` (1) is on the historically-noisy
 list but does quote real text. Two clear rejects in five, both score 1 —
 consistent with the corpus's known score-1 accept rate. 2,579 pending tags is a
 curation job, not something to queue in one sitting.
+
+---
+
+## 13 · 2026-08-08 · claude (pilot)
+
+**696 proposals** — 693 PARALLELS, 3 CONTRASTS — from
+`Mistral-Small-3.2-24B-Instruct-2506-UD-Q5_K_XL`, prompt v2, across all four
+books. Pending, unreviewed. Node 14 is the user's, via `/guru-review-edges`.
+
+Two model mistakes preceded this, both mine. Node 13 documented the 27B because
+I wrote it from the README's Stage-3 example rather than from
+`propose_edges.py`, whose own default is Mistral with help text naming
+`scripts/run-mistral.sh`. Following my own wrong instruction, I then reached for
+the 4B tagging fine-tune when the 27B proved too slow, and discarded its 208
+proposals on the reasoning that an all-PARALLELS batch showed rubber-stamping.
+
+**That reasoning was also wrong.** `surface_only`, `unrelated` and most
+`CONTRASTS` are review outcomes, not proposals — every one of the corpus's 8,338
+`surface_only` rows carries `status='rejected'` and a reviewer. The proposer
+emits PARALLELS by design; reclassify at node 14 is where discrimination
+happens. So this Mistral run's 693-of-696 PARALLELS is the expected shape, and
+the earlier 4B batch was worth discarding only because Mistral is the documented
+proposer — not because of its type spread.
+
+Both corrections are in `docs/ingest/13-propose-edges.md`.
