@@ -33,6 +33,17 @@ until the user drains the queue.
 No `pending` rows remain for the text. `guru ingest status` reports the
 remaining count.
 
+Before handing the queue to the user, validate it:
+
+```sh
+python3 scripts/validate_queue.py        # --json for machines, -v to list all
+```
+
+`POST /api/apply` drains every unapplied action in a single transaction, and
+`GET /api/apply/preview` only counts them. One collision therefore discards a
+whole review pass. The validator replays the queue read-only in the server's
+own order and exits non-zero on anything that would raise.
+
 ## Failure modes
 
 **Queueing blind.** Every accept and reject must come from having read the

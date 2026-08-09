@@ -78,9 +78,19 @@ minutes behind an existing job that had itself reached only chunk 2 of 24.
 different failure modes and different id ranges — 4B batches are 70xxx, 27B are
 71xxx. Node 11 needs to know which produced what.
 
-**`--resume` and `--supersede-pending` interacting badly on a re-run.** Read
-what they do before re-tagging a text that already has pending rows; the
-defaults are not always what a re-run wants.
+**Expecting deleted `staged_tags` to make a chunk re-taggable.** They are
+different tables. `--resume` is on by default and filters on
+`tagging_progress` (`AND n.id NOT IN (SELECT chunk_id FROM tagging_progress)`),
+which is written per chunk as it completes and is never touched by clearing
+`staged_tags`. Wipe the staged rows and the re-run tags nothing at all,
+reporting success. Either `--no-resume`, or delete the matching
+`tagging_progress` rows, or pass `--chunk-ids-from-file`, which takes an
+explicit id list and ignores the resume filter entirely.
+
+`--supersede-pending` is the other half: it defaults on in the batch path and
+deletes a prior pending row of the same provenance rather than colliding with
+it. On a re-run against a text that still has an unreviewed queue, that
+silently discards rows a reviewer may already have queued verdicts against.
 
 **Tagging a text whose concepts are absent from the taxonomy.** Produces a pool
 dominated by `is_new_concept=1` proposals, which is a much harder review than
