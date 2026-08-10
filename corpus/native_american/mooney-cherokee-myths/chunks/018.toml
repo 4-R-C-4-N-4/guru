@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.018"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 6b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 70
+
+[content]
+body = "He climbed higher and higher, but every time he looked up the hole seemed to be farther than before, until at last he was tired and came down again.\n\nWhen he reached home he found his father very weak, but still alive, and one draw at the pipe made him strong again.\n\nThe people planted the seed and have had tobacco ever since."
+
+[annotations]
+concepts = []
+related_chunks = []

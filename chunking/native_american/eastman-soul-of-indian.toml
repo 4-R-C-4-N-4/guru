@@ -1,0 +1,23 @@
+# Eastman (Ohiyesa), The Soul of the Indian — Gutenberg #340 (1911).
+# Six chapters as "<h2>I. THE GREAT MYSTERY</h2>" etc., reducing to
+# "I. TITLE" lines after extraction. Each heading is followed by the
+# author's own argument-summary block (kept: Eastman's text, not
+# apparatus). Front-strip through the TOC's final entry (non-greedy stops
+# at the TOC row for chapter VI, leaving the chapter I heading as the
+# first split point). Tail is only the PG license block.
+[chunking]
+strategy = "regex-section-split"
+pattern = '([IVX]+)\. (?=[A-Z][A-Z])'
+section_label_format = "Chapter {n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    '^.*?\*\*\*\s*START OF .*?\*\*\*',
+    '\*\*\*\s*END OF .*',
+    '^[\s\S]*?VI\. ON THE BORDER-LAND OF SPIRITS',
+]
+
+[metadata]
+tradition = "Native American"
+text_name = "The Soul of the Indian"
+sections_format = "chapter"

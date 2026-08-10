@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.130"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 83c"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 46
+
+[content]
+body = "He went away and the others fasted, until at the end of seven days he came for them and they went with him to Tsuwaʻtel′da, and their friends in the settlement never saw them again."
+
+[annotations]
+concepts = []
+related_chunks = []

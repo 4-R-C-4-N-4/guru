@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.181"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 108b"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 59
+
+[content]
+body = "A leader appearing in the person of the young brave whom we have named, the people rose under his direction and killed every Nicotani, young and old.\n\nThus perished a hereditary secret society, since which time no hereditary privileges have been tolerated among the Cherokees.” 32"
+
+[annotations]
+concepts = []
+related_chunks = []

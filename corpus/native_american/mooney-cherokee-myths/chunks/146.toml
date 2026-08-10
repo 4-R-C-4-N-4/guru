@@ -1,0 +1,15 @@
+[chunk]
+id = "native_american.mooney-cherokee-myths.146"
+tradition = "Native American"
+text_name = "Myths of the Cherokee"
+section = "Myth 775"
+translator = ""
+source_url = "https://www.gutenberg.org/files/45634/45634-h/45634-h.htm"
+token_count = 40
+
+[content]
+body = "BUREAU OF AMERICAN ETHNOLOGY NINETEENTH ANNUAL REPORT PL. XVII PHOTOGRAPH BY AUTHOR, 1888 ANNIE AX (SADAYĬ)"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,20 @@
+{
+  "id": "596e49e0",
+  "type": "chore",
+  "state": "done",
+  "summary": "graph_bootstrap: native_american tradition node + 2 text nodes + chunk nodes",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-02T14:24:49.517Z",
+  "updated_at": "2026-08-02T14:39:43.674Z",
+  "relationships": {
+    "parent": "df080193"
+  },
+  "resolution": {
+    "commit": "602d1da8775b4467e7828abb89891acf8377b52d",
+    "resolved_at": "2026-08-02T14:39:43.674Z",
+    "resolved_by": "unknown",
+    "note": "graph_bootstrap: native_american tradition node + 249 chunk nodes (220 mooney + 29 eastman) + text nodes + BELONGS_TO edges. Corpus totals: 5476 nodes, 55455 edges."
+  }
+}
