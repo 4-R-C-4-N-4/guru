@@ -432,16 +432,16 @@ one is right. Node 11's comparable pass produced six reassigns.
 
 ### Corpus-quality findings
 
-Twelve chunks were marked `unrelated` because their content is not the named
-author's. By source:
+42 `unrelated` verdicts fell on **18 distinct partner chunks** whose content is
+not the named author's. Three editions account for 11 of the 18 and 34 of the
+42:
 
-| source | chunks | what they are |
-|---|---:|---|
-| Rolt's *Divine Names* / *Mystical Theology* | 3 | numbered translator's notes; one is notes 54–64 and nothing else |
-| Hartmann's *Boehme* | 2 | page-keyed endnote blocks |
-| *Heroic Enthusiasts* | 3 | the translator's introduction, across pt1.010/011 |
-| *Corpus Hermeticum* | 1 | a modern editor's bracketed headnote, matched directly by the model |
-| others | 3 | contents enumerations, plate captions |
+| source | chunks | verdicts | what they are |
+|---|---:|---:|---|
+| *Heroic Enthusiasts* | 3 | 13 | the translator's introduction (pt1.010, pt1.011, pt2.001) |
+| Rolt's *Divine Names* / *Mystical Theology* | 5 | 12 | numbered translator's notes; `divine-names-1.012` is notes 54–64 and nothing else |
+| Hartmann's *Boehme* | 3 | 9 | page-keyed endnote blocks |
+| seven others, one chunk each | 7 | 8 | contents enumerations, plate captions, a modern editor's bracketed headnote in *Corpus Hermeticum* |
 
 The Rolt Dionysius is the worst single offender and the most expensive: its
 commentary chunk `divine-names-10.003` was proposed three times (IV.10, IV.25,
@@ -468,10 +468,56 @@ correct. The Atlas will show near-duplicates.
 
 ### Consistency notes against myself
 
-- Contents pages should be `unrelated` per this node. I marked the *Tertium
-  Organum* contents chunk `surface_only` on its seven or eight appearances
-  before noticing, then switched. Both are non-live so the graph is unaffected;
-  the audit trail is inconsistent and was left rather than churned.
+- **Four partner chunks got both `unrelated` and `surface_only` across the
+  pass**, queried after the fact rather than remembered:
+
+  | chunk | unrelated | surface_only |
+  |---|---:|---:|
+  | `dionysius-divine-names-10.003` | 3 | 1 |
+  | `paracelsus-tincture-of-philosophers.012` | 1 | 8 |
+  | `julian-revelations.002` | 1 | 1 |
+  | `dionysius-divine-names-5.002` | 1 | 1 |
+
+  A chunk's apparatus status is a property of the chunk, so it should get the
+  same verdict every time. Both verdicts are non-live, so the graph is
+  identical either way and the queue was left rather than churned — but the
+  audit trail now says two things about four chunks. The `10.003` row is the
+  worst: it is unambiguously Rolt's commentary and was called `surface_only`
+  once out of four.
+
+  The cause is that this distinction was being carried in the reviewer's head
+  across ~50 batches rather than looked up. A mechanical apparatus flag
+  (`43a62e3f`) removes the judgement entirely and with it this whole class of
+  drift.
+
+- The same drift hit the *Tertium Organum* contents chunk, called
+  `surface_only` on its early appearances before I switched to `unrelated`.
 - Three mid-pass reversals were made and reported: Hall 339 over Hall 108 on
   the radiance sutra, Agrippa over `tertium-189` on the hearing sutra, and
   Lévi's magnetism passage assigned to III.21 rather than III.19.
+
+## Post-pass review · 2026-08-09 · claude (pilot)
+
+Reviewing the branch before merge turned up three things the pass itself
+missed. Recorded here because two of them are corrections to entries above.
+
+**The corpus is missing three sutras — II.5, II.48, III.34.** 192 chunks
+against a 195-sutra canon. Markers and body text are both absent from the
+acquired raw, so this is a source defect, not a chunking bug; the sacred-texts
+pages simply skip them. Nothing in nodes 01–08 counts units against a canon,
+which is now a failure mode on node 03. Tracked as `7725dcb1`. No judgement
+made in this pass is affected — every reviewed tag and edge points at a chunk
+that exists and whose text is correct.
+
+**The apparatus table above was wrong on first writing** — it said twelve
+chunks, built from what I could recall rather than from the queue. The real
+figure is 18 distinct chunks across 42 verdicts. Corrected in place.
+
+**Four chunks got both `unrelated` and `surface_only`.** Also corrected in
+place, in the consistency notes.
+
+The common cause of the second and third is the same: end-of-pass summaries
+written from memory over ~50 batches instead of from a query. The queue is the
+record; a decision file that paraphrases it from recollection will drift, and
+drift in the direction of a tidier story than the data supports. Query first,
+then write.

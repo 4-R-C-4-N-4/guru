@@ -40,8 +40,8 @@ Pin it to the 3090 — [gpu-assembly.md](gpu-assembly.md).
 **Serve Mistral, not a tagging model.** `Mistral-Small-3.2-24B-Instruct` is
 `propose_edges.py`'s own default — the `--model` flag exists to *label*
 provenance, and its help text says to start the server with
-`scripts/run-mistral.sh`. That model produced the corpus's 20,898 edge
-proposals. The launcher also sets near-greedy sampling (temp 0.15, top_p 1.0,
+`scripts/run-mistral.sh`. That model produced every edge proposal in the
+corpus. The launcher also sets near-greedy sampling (temp 0.15, top_p 1.0,
 top_k 0, min_p 0, repeat_penalty 1.0), which is what makes it classify rather
 than agree.
 
@@ -52,14 +52,23 @@ than agree.
 `surface_only`, `unrelated` and most `CONTRASTS` are **review outcomes** — they
 arrive through the reclassify action at node 14, not from this node.
 
-The corpus makes this unambiguous:
+The corpus makes this unambiguous (`staged_edges`, 21,673 rows, 2026-08-09):
 
 | edge_type | status | rows |
 |---|---|---|
-| PARALLELS | accepted / pending | 10,998 / 1,715 |
+| PARALLELS | accepted / pending | 10,998 / 2,048 |
 | surface_only | **rejected** | 8,338 — every one `reviewed_by` a reviewer |
 | unrelated | **rejected** | 175 — likewise |
-| CONTRASTS | reclassified / accepted | 78 / 24 |
+| CONTRASTS | reclassified / accepted / pending | 78 / 24 / 10 |
+
+Counts drift with every ingest; the shape does not. Re-derive rather than
+trust the figures, and date any you write down:
+
+```sh
+sqlite3 data/guru.db "
+  SELECT edge_type, status, COUNT(*) FROM staged_edges
+  GROUP BY 1,2 ORDER BY edge_type, 3 DESC;"
+```
 
 So comparing a new run's spread against the corpus-wide table compares
 unreviewed output to reviewed output and will always look alarming. If you want
