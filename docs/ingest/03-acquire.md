@@ -49,28 +49,18 @@ single-page file or at least one `-NN.txt` page.
 fetched as single-page produces a perfectly well-formed file containing one
 chapter. Compare against what node 01 recorded about pagination.
 
-**A complete-looking page can be missing individual units.** Not truncation —
-a gap in the middle, with the surrounding text intact and the numbering simply
-skipping. Nothing downstream notices: the file is well-formed, the chunker
-emits valid chunks, node 08 scores them fine, and the corpus ships a text that
-reads as whole.
+**Do not conclude text is missing from a `grep` that used another
+translation's wording.** Negative evidence about a body of text is only as
+good as the phrase searched for. On yoga-sutras, grepping the raw for
+"impermanent" and "pairs of opposites" — Prabhavananda's phrasing — returned
+nothing and was briefly taken as proof that two sutras were absent. Johnston
+renders the same lines "unenduring, impure, full of pain, not the Soul" and
+"the strength to resist the shocks of infatuation or sorrow". The sutras were
+present throughout.
 
-Found on yoga-sutras only because the edge pass made the chunk count worth
-checking: the sacred-texts Johnston pages lack **II.5, II.48 and III.34** —
-markers *and* body text, verified absent from the raw (`grep` for II.5's
-"impermanent" and II.48's "pairs of opposites" returns nothing). 192 chunks
-against a 195-sutra canon.
-
-When a text has a known unit count — sutras, verses, chapters, hymns — count
-the fetched units against it here, before chunking:
-
-```sh
-grep -oE '(^|[^0-9.])[0-9]{1,3}\. [A-Z]' raw/{tradition}/{id}.txt | wc -l
-```
-
-and check the sequence for gaps, not just the total. A text with no canonical
-count has no cheap check; say so in the decision record rather than implying
-one was done.
+Search for the *number* and read the surrounding text, or diff unit counts
+(node 05). Never conclude absence from a phrase you have not confirmed the
+translator uses.
 
 **Words split across page breaks.** Some sources hyphenate or break words at
 page boundaries, and the break survives extraction: `Pytha [Pg 2] goreans`.

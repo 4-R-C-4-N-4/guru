@@ -501,13 +501,31 @@ correct. The Atlas will show near-duplicates.
 Reviewing the branch before merge turned up three things the pass itself
 missed. Recorded here because two of them are corrections to entries above.
 
-**The corpus is missing three sutras — II.5, II.48, III.34.** 192 chunks
-against a 195-sutra canon. Markers and body text are both absent from the
-acquired raw, so this is a source defect, not a chunking bug; the sacred-texts
-pages simply skip them. Nothing in nodes 01–08 counts units against a canon,
-which is now a failure mode on node 03. Tracked as `7725dcb1`. No judgement
-made in this pass is affected — every reviewed tag and edge points at a chunk
-that exists and whose text is correct.
+**Three sutras are merged into the preceding chunk, not missing.** 192 chunks
+against a 195-sutra canon. My first diagnosis in this review said the text was
+absent from the source; that was wrong, and wrong for an avoidable reason —
+the `grep` that "proved" absence used Prabhavananda's wording ("impermanent",
+"pairs of opposites"), not Johnston's ("unenduring, impure, full of pain, not
+the Soul"). The sutras were there the whole time.
+
+The real cause is node 05's `'(?:^|\s)(\d+)\.\s'`, which requires a period
+after the number. The source omits it three times in 195 — `5 The darkness of
+ignorance is:`, `48 The fruit of right poise`, `34 By perfectly concentrated
+Meditation` — so those boundaries were never seen and each sutra was absorbed
+above:
+
+| chunk | label | actually contains |
+|---|---|---|
+| `book-02.004` | Sutra 4 | 4 + 5 |
+| `book-02.046` | Sutra 47 | 47 + 48 |
+| `book-03.033` | Sutra 33 | 33 + 34 |
+
+No text is lost and every other chunk is correct, but three ids name one sutra
+and deliver two. Tracked as `7725dcb1`, with the options — the awkward one
+being that chunk ids are file ordinals, so re-chunking renumbers 50 chunks in
+book 02 and 22 in book 03 and invalidates the tags and edges already reviewed
+against them. Recorded as a node 05 failure mode with a sequence-gap check
+that would have caught it in seconds.
 
 **The apparatus table above was wrong on first writing** — it said twelve
 chunks, built from what I could recall rather than from the queue. The real
