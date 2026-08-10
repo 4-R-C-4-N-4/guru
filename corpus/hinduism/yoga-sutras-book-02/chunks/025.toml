@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.025"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 26"
+section = "Sutra 25"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 170
+token_count = 101
 
 [content]
-body = "A discerning which is carried on without wavering is the means of liberation. Here we come close to the pure Vedanta, with its discernment between the eternal and the temporal. St. Paul, following after Philo and Plato, lays down the same fundamental principle: the things seen are temporal, the things unseen are eternal. Patanjali means something more than an intellectual assent, though this too is vital. He has in view a constant discriminating in act as well as thought; of the two ways which present themselves for every deed or choice, always to choose the higher way, that which makes for the things eternal: honesty rather than roguery, courage and not cowardice, the things of another rather than one's own, sacrifice and not indulgence. This true discernment, carried out constantly, makes for liberation."
+body = "The bringing of this association to an end, by bringing the darkness of unwisdom to an end, is the great liberation; this is the Seer's attainment of his own pure being. When the spiritual man has, through the psychical, learned all life's lessons, the time has come for him to put off the veil and disguise of the psychical and to stand revealed a King, in the house of the Father. So shall he enter into his kingdom, and go no more out."
 
 [annotations]
 concepts = []

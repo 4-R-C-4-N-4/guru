@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.050"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 52"
+section = "Sutra 50"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 147
+token_count = 164
 
 [content]
-body = "Thereby is worn away the veil which covers up the light. The veil is the psychic nature, the web of emotions, desires, argumentative trains of thought, which cover up and obscure the truth by absorbing the entire attention and keeping the consciousness in the psychic realm. When hopes and fears are reckoned at their true worth, in comparison with lasting possessions of the Soul; when the outer reflections of things have ceased to distract us from inner realities; when argumentative thought no longer entangles us, but yields its place to flashing intuition, the certainty which springs from within; then is the veil worn away, the consciousness is drawn from the psychical to the spiritual, from the temporal to the Eternal. Then is the light unveiled."
+body = "The life-current is either outward, or inward, or balanced; it is regulated according to place, time, number; it is prolonged and subtle. The technical, physical side of this has its value. In the breath, there should be right inbreathing, followed by the period of pause, when the air comes into contact with the blood, and this again followed by right outbreathing, even, steady, silent. Further, the lungs should be evenly filled; many maladies may arise from the neglect and consequent weakening of some region of the lungs. And the number of breaths is so important, so closely related to health, that every nurse's chart records it. But the deeper meaning is concerned with the currents of life; with that which goeth into and cometh out of the heart."
 
 [annotations]
 concepts = []

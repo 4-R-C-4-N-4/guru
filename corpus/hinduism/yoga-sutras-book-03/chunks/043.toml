@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.043"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 44"
+section = "Sutra 43"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 144
+token_count = 184
 
 [content]
-body = "Mastery of the elements comes from perfectly concentrated Meditation on their five forms: the gross, the elemental, the subtle, the inherent, the purposive. These five forms are analogous to those recognized by modern physics: solid, liquid, gaseous, radiant and ionic. When the piercing vision of the awakened spiritual man is directed to the forms of matter, from within, as it were, from behind the scenes, then perfect mastery over the 'beggarly elements' is attained. This is, perhaps, equivalent to the injunction: 'Inquire of the earth, the air, and the water, of the secrets they hold for you. The development of your inner senses will enable you to do this.'"
+body = "When that condition of consciousness s reached, which is far-reaching and not confined to the body, which is outside the body and not conditioned by it, then the veil which conceals the light is worn away. Perhaps the best comment on this is afforded by the words of Paul: 'I knew a man in Christ above fourteen years ago, (whether in the body, I cannot tell; or whether out of the body, I cannot tell: God knoweth;) such a one caught up to the third heaven. And I knew such a man, (whether in the body, or out of the body, I cannot tell: God knoweth;) how that he was caught up into paradise, and heard unspeakable [or, unspoken] words, which it is not lawful for a man to utter.' The condition is, briefly, that of the awakened spiritual man, who sees and hears beyond the veil."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.053"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 54"
+section = "Sutra 53"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 198
+token_count = 115
 
 [content]
-body = "The wisdom which is born of discernment is starlike; it discerns all things, and all conditions of things, it discerns without succession: simultaneously. That wisdom, that intuitive, divining power is starlike, says the commentator, because it shines with its own light, because it rises on high, and illumines all things. Nought is hid from it, whether things past, things present, or things to come; for it is beyond the threefold form of time, so that all things are spread before it together, in the single light of the divine. This power has been beautifully described by Columba: 'Some there are, though very few, to whom Divine grace has granted this: that they can clearly and most distinctly see, at one and the same moment, as though under one ray of the sun, even the entire circuit of the whole world with its surroundings of ocean and sky, the inmost part of their mind being marvellously enlarged.'"
+body = "Hence comes discernment between things which are of like nature, not distinguished by difference of kind, character or position. Here, as also in the preceding Sutra, we are close to the doctrine that distinctions of order, time and space are creations of the mind; the threefold prism through which the real object appears to us distorted and refracted. When the prism is withdrawn, the object returns to its primal unity, no longer distinguishable by the mind, yet clearly knowable by that high power of spiritual discernment, of illumination, which is above the mind."
 
 [annotations]
 concepts = []

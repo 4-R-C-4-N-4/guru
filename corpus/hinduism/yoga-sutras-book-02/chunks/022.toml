@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.022"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 23"
+section = "Sutra 22"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 140
+token_count = 146
 
 [content]
-body = "The association of the Seer with things seen is the cause of the realizing of the nature of things seen, and also of the realizing of the nature of the Seer. Life is educative. All life's infinite variety is for discipline, for the development of the soul. So passing through many lives, the Soul learns the secrets of the world, the august laws that are written in the form of the snow-crystal or the majestic order of the stars. Yet all these laws are but reflections, but projections outward, of the laws of the soul; therefore in learning these, the soul learns to know itself. All life is but the mirror wherein the Soul learns to know its own face."
+body = "Though fallen away from him who has reached the goal, things seen have not altogether fallen away, since they still exist for others. When one of us conquers hate, hate does not thereby cease out of the world, since others still hate and suffer hatred. So with other delusions, which hold us in bondage to material things, and through which we look at all material things. When the coloured veil of illusion is gone, the world which we saw through it is also gone, for now we see life as it is, in the white radiance of eternity. But for others the coloured veil remains, and therefore the world thus coloured by it remains for them, and will remain till they, too, conquer delusion."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.030"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 31"
+section = "Sutra 30"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 162
+token_count = 212
 
 [content]
-body = "The Commandments, not limited to any race, place, time or occasion, universal, are the great obligation. The Commandments form the broad general training of humanity. Each one of them rests on a universal, spiritual law. Each one of them expresses an attribute or aspect of the Self, the Eternal; when we violate one of the Commandments, we set ourselves against the law and being of the Eternal, thereby bringing ourselves to inevitable con fusion. So the first steps in spiritual life must be taken by bringing ourselves into voluntary obedience to these spiritual laws and thus making ourselves partakers of the spiritual powers, the being of the Eternal Like the law of gravity, the need of air to breathe, these great laws know no exceptions They are in force in all lands, throughout al times, for all mankind."
+body = "The Commandments are these: nom injury, truthfulness, abstaining from stealing, from impurity, from covetousness. These five precepts are almost exactly the same as the Buddhist Commandments: not to kill, not to steal, not to be guilty of incontinence, not to drink intoxicants, to speak the truth. Almost identical is St. Paul's list: Thou shalt not commit adultery, thou shalt not kill, thou shalt not steal, thou shalt not covet. And in the same spirit is the answer made to the young map having great possessions, who asked, What shall I do to be saved? and received the reply: Keep the Commandments. This broad, general training, which forms and develops human character, must be accomplished to a very considerable degree, before there can be much hope of success in the further stages of spiritual life. First the psychical, and then the spiritual. First the man, then the angel. On this broad, humane and wise foundation does the system of Patanjali rest."
 
 [annotations]
 concepts = []

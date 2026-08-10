@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.053"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 55"
+section = "Sutra 53"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 124
+token_count = 190
 
 [content]
-body = "Thereupon follows perfect mastery over the powers. When the spiritual condition which we have described is reached, with its purity, poise, and illuminated vision, the spiritual man is coming into his inheritance, and gaining complete mastery of his powers. Indeed, much of the struggle to keep the Commandments and the Rules has been paving the way for this mastery; through this very struggle and sacrifice the mastery has become possible; just as, to use St. Paul's simile, the athlete gains the mastery in the contest and the race through the sacrifice of his long and arduous training. Thus he gains the crown."
+body = "Thence comes the mind's power to hold itself in the light. It has been well said, that what we most need is the faculty of spiritual attention; and in the same direction of thought it has been eloquently declared that prayer does not consist in our catching God's attention, but rather in our allowing God to hold our attention. The vital matter is, that we need to disentangle our consciousness from the noisy and perturbed thraldom of the psychical, and to come to consciousness as the spiritual man. This we must do, first, by purification, through the Commandments and the Rules; and, second, through the faculty of spiritual attention, by steadily heeding endless fine intimations of the spiritual power within us, and by intending our consciousness thereto; thus by degrees transferring the centre of consciousness from the psychical to the spiritual. It is a question, first, of love, and then of attention."
 
 [annotations]
 concepts = []

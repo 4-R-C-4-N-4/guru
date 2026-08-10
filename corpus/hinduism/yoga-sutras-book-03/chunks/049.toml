@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.049"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 50"
+section = "Sutra 49"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 139
+token_count = 180
 
 [content]
-body = "By absence of all self-indulgence at this point, when the seeds of bondage to sorrow are destroyed, pure spiritual being is attained. The seeking of indulgence for the personal self, whether through passion or ambition, sows the seed of future sorrow. For this self indulgence of the personality is a double sin against the real; a sin against the cleanness of life, and a sin against the universal being, which permits no exclusive particular good, since, in the real, all spiritual possessions are held in common. This twofold sin brings its reacting punishment, its confining bondage to sorrow. But ceasing from self-indulgence brings purity, liberation, spiritual life."
+body = "When the spiritual man is perfectly disentangled from the psychic body, he attains to mastery over all things and to a knowledge of all. The spiritual man is enmeshed in the web of the emotions; desire, fear, ambition, passion; and impeded by the mental forms of separateness and materialism. When these meshes are sundered, these obstacles completely overcome, then the spiritual man stands forth in his own wide world, strong, mighty, wise. He uses divine powers, with a divine scope and energy, working together with divine Companions. To such a one it is said: 'Thou art now a disciple, able to stand, able to hear, able to see, able to speak, thou hast conquered desire and attained to self-knowledge, thou hast seen thy soul in its bloom and recognized it, and heard the voice of the silence.'"
 
 [annotations]
 concepts = []

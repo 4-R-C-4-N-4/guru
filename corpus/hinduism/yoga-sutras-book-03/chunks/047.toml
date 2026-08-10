@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.047"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 48"
+section = "Sutra 47"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 105
+token_count = 191
 
 [content]
-body = "Thence comes the power swift as thought, independent of instruments, and the mastery over matter. We are further enumerating the endowments of the spiritual man. Among these is the power to traverse space with the swiftness of thought, so that whatever place the spiritual man thinks of, to that he goes, in that place he already is. Thought has now become his means of locomotion. He is, therefore, independent of instruments, and can bring his force to bear directly, wherever he wills."
+body = "Mastery over the powers of perception and action comes through perfectly concentrated Meditation on their fivefold forms; namely, their power to grasp their distinctive nature, the element of self-consciousness in them, their inherence, and their purposiveness. Take, for example, sight. This possesses, first, the power to grasp, apprehend, perceive; second, it has its distinctive form of perception; that is, visual perception; third, it always carries with its operations self-consciousness, the thought: 'I perceive'; fourth sight has the power of extension through the whole field of vision, even to the utmost star; fifth, it is used for the purposes of the Seer. So with the other senses. Perfectly concentrated Meditation on each sense, a viewing it from behind and within, as is possible for the spiritual man, brings a mastery of the scope and true character of each sense, and of the world on which they report collectively."
 
 [annotations]
 concepts = []

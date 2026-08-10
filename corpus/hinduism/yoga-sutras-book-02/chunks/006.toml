@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.006"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 7"
+section = "Sutra 6"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 140
+token_count = 163
 
 [content]
-body = "Lust is the resting in the sense of enjoyment. This has been explained again and again. Sensation, as, for example, the sense of taste, is meant to be the guide to action; in this case, the choice of wholesome food, and the avoidance of poisonous and hurtful things. But if we rest in the sense of taste, as a pleasure in itself; rest, that is, in the psychical side of taste, we fall into gluttony, and live to eat, instead of eating to live. So with the other great organic power, the power of reproduction. This lust comes into being, through resting in the sensation, and looking for pleasure from that."
+body = "Self-assertion comes from thinking of the Seer and the instrument of vision as forming one self. This is the fundamental idea of the Sankhya philosophy, of which the Yoga is avowedly the practical side. To translate this into our terms, we may say that the Seer is the spiritual man; the instrument of vision is the psychical man, through which the spiritual man gains experience of the outer world. But we turn the servant into the master. We attribute to the psychical man, the personal self, a reality which really belongs to the spiritual man alone; and so, thinking of the quality of the spiritual man as belonging to the psychical, we merge the spiritual man in the psychical; or, as the text says, we think of the two as forming one self."
 
 [annotations]
 concepts = []

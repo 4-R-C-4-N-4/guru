@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.052"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 54"
+section = "Sutra 52"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 200
+token_count = 147
 
 [content]
-body = "The right Withdrawal is the disengaging of the powers from entanglement in outer things, as the psychic nature has been withdrawn and stilled. To understand this, let us reverse the process, and think of the one consciousness, centred in the Soul, gradually expanding and taking on the form of the different perceptive powers; the one will, at the same time, differentiating itself into the varied powers of action. Now let us imagine this to be reversed, so that the spiritual force, which has gone into the differentiated powers, is once more gathered together into the inner power of intuition and spiritual will, taking on that unity which is the hallmark of spiritual things, as diversity is the seal of material things. It is all a matter of love for the quality of spiritual consciousness, as against psychical consciousness, of love and attention. For where the heart is, there will the treasure be also; where the consciousness is, there will the vesture with its powers be developed."
+body = "Thereby is worn away the veil which covers up the light. The veil is the psychic nature, the web of emotions, desires, argumentative trains of thought, which cover up and obscure the truth by absorbing the entire attention and keeping the consciousness in the psychic realm. When hopes and fears are reckoned at their true worth, in comparison with lasting possessions of the Soul; when the outer reflections of things have ceased to distract us from inner realities; when argumentative thought no longer entangles us, but yields its place to flashing intuition, the certainty which springs from within; then is the veil worn away, the consciousness is drawn from the psychical to the spiritual, from the temporal to the Eternal. Then is the light unveiled."
 
 [annotations]
 concepts = []

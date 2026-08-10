@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.019"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 20"
+section = "Sutra 19"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 107
+token_count = 155
 
 [content]
-body = "The Seer is pure vision. Though pure, he looks out through the vesture of the mind. The Seer, as always, is the spiritual man whose deepest consciousness is pure vision, the pure life of the eternal. But the spiritual man, as yet unseeing in his proper person, looks out on the world through the eyes of the psychical man, by whom he is enfolded and enmeshed. The task is, to set this prisoner free, to clear the dust of ages from this buried temple."
+body = "The grades or layers of the Three Potencies are the defined, the undefined, that with distinctive mark, that without distinctive mark. Or, as we might say, there are two strata of the physical, and two strata of the psychical realms. In each, there is the side of form, and the side of force. The form side of the physical is here called the defined. The force side of the physical is the undefined, that which has no boundaries. So in the psychical; there is the form side; that with distinctive marks, such as the characteristic features of mind-images; and there is the force side, without distinctive marks, such as the forces of desire or fear, which may flow now to this mind-image, now to that."
 
 [annotations]
 concepts = []

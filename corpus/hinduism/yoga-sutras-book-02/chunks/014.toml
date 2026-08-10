@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.014"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 15"
+section = "Sutra 14"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 233
+token_count = 119
 
 [content]
-body = "To him who possesses discernment, all personal life is misery, because it ever waxes and wanes, is ever afflicted with restlessness, makes ever new dynamic impresses in the mind; and because all its activities war with each other. The whole life of the psychic self is misery, because it ever waxes and wanes; because birth brings inevitable death; because there is no expectation without its shadow, fear. The life of the psychic self is misery, because it is afflicted with restlessness; so that he who has much, finds not satisfaction, but rather the whetted hunger for more. The fire is not quenched by pouring oil on it; so desire is not quenched by the satisfaction of desire. Again, the life of the psychic self is misery, because it makes ever new dynamic impresses in the mind; because a desire satisfied is but the seed from which springs the desire to find like satisfaction again. The appetite comes in eating, as the proverb says, and grows by what it feeds on. And the psychic self, torn with conflicting desires, is ever the house divided against itself, which must surely fall."
+body = "These bear fruits of rejoicing, or of affliction, as they are sprung from holy or unholy works. Since holiness is obedience to divine law, to the law of divine harmony, and obedience to harmony strengthens that harmony in the soul, which is the one true joy, therefore joy comes of holiness: comes, indeed, in no other way. And as unholiness is disobedience, and therefore discord, therefore unholiness makes for pain; and this two-fold law is true, whether the cause take effect in this, or in a yet unmanifested birth."
 
 [annotations]
 concepts = []

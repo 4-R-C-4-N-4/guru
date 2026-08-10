@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.046"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 47"
+section = "Sutra 46"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 191
+token_count = 118
 
 [content]
-body = "Mastery over the powers of perception and action comes through perfectly concentrated Meditation on their fivefold forms; namely, their power to grasp their distinctive nature, the element of self-consciousness in them, their inherence, and their purposiveness. Take, for example, sight. This possesses, first, the power to grasp, apprehend, perceive; second, it has its distinctive form of perception; that is, visual perception; third, it always carries with its operations self-consciousness, the thought: 'I perceive'; fourth sight has the power of extension through the whole field of vision, even to the utmost star; fifth, it is used for the purposes of the Seer. So with the other senses. Perfectly concentrated Meditation on each sense, a viewing it from behind and within, as is possible for the spiritual man, brings a mastery of the scope and true character of each sense, and of the world on which they report collectively."
+body = "Shapeliness, beauty, force, the temper of the diamond: these are the endowments of that body. The spiritual man is shapely, beautiful strong, firm as the diamond. Therefore it is written: 'These things saith the Son of God, who hath his eyes like unto a flame of fire, and his feet are like fine brass: He that overcometh and keepeth my works unto the end, to him will I give power over the nations: and he shall rule them with a rod of iron; and I will give him the morning star.'"
 
 [annotations]
 concepts = []

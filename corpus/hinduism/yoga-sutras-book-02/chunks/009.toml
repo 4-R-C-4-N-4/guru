@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.009"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 10"
+section = "Sutra 9"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 171
+token_count = 137
 
 [content]
-body = "These hindrances, when they have become subtle, are to be removed by a countercurrent The darkness of unwisdom is to be removed by the light of wisdom, pursued through fervour, spiritual reading of holy teachings and of life itself, and by obedience to the Master. Lust is to be removed by pure aspiration of spiritual life, which, bringing true strength and stability, takes away the void of weakness which we try to fill by the stimulus of sensations. Hate is to be overcome by love. The fear that arises through the sense of separate, warring selves is to be stilled by the realization of the One Self, the one soul in all. This realization is the perfect love that casts out fear. The hindrances are said to have become subtle when, by initial efforts, they have been located and recognized in the psychic nature."
+body = "Attachment is the desire toward life, even in the wise, carried forward by its own energy. The life here desired is the psychic life, the intensely vibrating life of the psychical self. This prevails even in those who have attained much wisdom, so long as it falls short of the wisdom of complete renunciation, complete obedience to each least behest of the spiritual man, and of the Master who guards and aids the spiritual man. The desire of sensation, the desire of psychic life, reproduces itself, carried on by its own energy and momentum; and hence comes the circle of death and rebirth, death and rebirth, instead of the liberation of the spiritual man."
 
 [annotations]
 concepts = []

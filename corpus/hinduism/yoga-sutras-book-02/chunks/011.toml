@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.011"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 12"
+section = "Sutra 11"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 133
+token_count = 99
 
 [content]
-body = "The burden of bondage to sorrow has its root in these hindrances. It will be felt in this life, or in a life not yet manifested. The burden of bondage to sorrow has its root in the darkness of unwisdom, in selfishness, in lust, in hate, in attachment to sensation. All these are, in the last analysis, absorption in the psychical self; and this means sorrow, because it means the sense of separateness, and this means jarring discord and inevitable death. But the psychical self will breed a new psychical self, in a new birth, and so new sorrows in a life not yet manifest."
+body = "Their active turnings are to be removed by meditation. Here is, in truth, the whole secret of Yoga, the science of the soul. The active turnings, the strident vibrations, of selfishness, lust and hate are to be stilled by meditation, by letting heart and mind dwell in spiritual life, by lifting up the heart to the strong, silent life above, which rests in the stillness of eternal love, and needs no harsh vibration to convince it of true being."
 
 [annotations]
 concepts = []

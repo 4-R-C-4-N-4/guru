@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.044"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 45"
+section = "Sutra 44"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 130
+token_count = 189
 
 [content]
-body = "Soul-vision is perfected through perfect obedience to the Master. The sorrow and darkness of life come of the erring personal will which sets itself against the will of the Soul, the one great Life. The error of the personal will is inevitable, since each will must be free to choose, to try and fail, and so to find the path. And sorrow and darkness are inevitable, until the path be found, and the personal will made once more one with the greater Will, wherein it finds rest and power, without losing freedom. In His will is our peace. And with that peace comes light. Soul-vision is perfected through obedience."
+body = "Through spiritual reading, the disciple gains communion with the divine Power on which his heart is set. Spiritual reading meant, for ancient India, something more than it does with us. It meant, first, the recital of sacred texts, which, in their very sounds, had mystical potencies; and it meant a recital of texts which were divinely emanated, and held in themselves the living, potent essence of the divine. For us, spiritual reading means a communing with the recorded teachings of the Masters of wisdom, whereby we read ourselves into the Master's mind, just as through his music one can enter into the mind and soul of the master musician. It has been well said that all true art is contagion of feeling; so that through the true reading of true books we do indeed read ourselves into the spirit of the Masters, share in the atmosphere of their wisdom and power, and come at last into their very presence."
 
 [annotations]
 concepts = []

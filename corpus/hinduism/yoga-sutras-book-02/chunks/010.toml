@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.010"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 11"
+section = "Sutra 10"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 99
+token_count = 171
 
 [content]
-body = "Their active turnings are to be removed by meditation. Here is, in truth, the whole secret of Yoga, the science of the soul. The active turnings, the strident vibrations, of selfishness, lust and hate are to be stilled by meditation, by letting heart and mind dwell in spiritual life, by lifting up the heart to the strong, silent life above, which rests in the stillness of eternal love, and needs no harsh vibration to convince it of true being."
+body = "These hindrances, when they have become subtle, are to be removed by a countercurrent The darkness of unwisdom is to be removed by the light of wisdom, pursued through fervour, spiritual reading of holy teachings and of life itself, and by obedience to the Master. Lust is to be removed by pure aspiration of spiritual life, which, bringing true strength and stability, takes away the void of weakness which we try to fill by the stimulus of sensations. Hate is to be overcome by love. The fear that arises through the sense of separate, warring selves is to be stilled by the realization of the One Self, the one soul in all. This realization is the perfect love that casts out fear. The hindrances are said to have become subtle when, by initial efforts, they have been located and recognized in the psychic nature."
 
 [annotations]
 concepts = []

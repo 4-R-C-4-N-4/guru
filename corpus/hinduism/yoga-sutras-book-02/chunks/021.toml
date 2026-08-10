@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.021"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 22"
+section = "Sutra 21"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 146
+token_count = 88
 
 [content]
-body = "Though fallen away from him who has reached the goal, things seen have not altogether fallen away, since they still exist for others. When one of us conquers hate, hate does not thereby cease out of the world, since others still hate and suffer hatred. So with other delusions, which hold us in bondage to material things, and through which we look at all material things. When the coloured veil of illusion is gone, the world which we saw through it is also gone, for now we see life as it is, in the white radiance of eternity. But for others the coloured veil remains, and therefore the world thus coloured by it remains for them, and will remain till they, too, conquer delusion."
+body = "The very essence of things seen is, that they exist for the Seer. The things of outer life, not only material things, but the psychic man also, exist in very deed for the purposes of the Seer, the Soul, the spiritual man Disaster comes, when the psychical man sets up, so to speak, on his own account, trying to live for himself alone, and taking material things to solace his loneliness."
 
 [annotations]
 concepts = []

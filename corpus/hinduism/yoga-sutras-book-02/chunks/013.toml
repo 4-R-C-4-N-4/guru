@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.013"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 14"
+section = "Sutra 13"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 119
+token_count = 134
 
 [content]
-body = "These bear fruits of rejoicing, or of affliction, as they are sprung from holy or unholy works. Since holiness is obedience to divine law, to the law of divine harmony, and obedience to harmony strengthens that harmony in the soul, which is the one true joy, therefore joy comes of holiness: comes, indeed, in no other way. And as unholiness is disobedience, and therefore discord, therefore unholiness makes for pain; and this two-fold law is true, whether the cause take effect in this, or in a yet unmanifested birth."
+body = "From this root there grow and ripen the fruits of birth, of the life-span, of all that is tasted in life. Fully to comment on this, would be to write a treatise on Karma and its practical working in detail, whereby the place and time of the next birth, its content and duration. are determined; and to do this the present commentator is in no wise fitted. But this much is clearly understood: that, through a kind of spiritual gravitation, the incarnating self is drawn to a home and life-circle which will give it scope and discipline; and its need of discipline is clearly conditioned by its character, its standing, its accomplishment."
 
 [annotations]
 concepts = []

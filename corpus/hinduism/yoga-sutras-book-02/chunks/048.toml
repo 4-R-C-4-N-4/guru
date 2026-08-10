@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.048"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 50"
+section = "Sutra 48"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 164
+token_count = 141
 
 [content]
-body = "The life-current is either outward, or inward, or balanced; it is regulated according to place, time, number; it is prolonged and subtle. The technical, physical side of this has its value. In the breath, there should be right inbreathing, followed by the period of pause, when the air comes into contact with the blood, and this again followed by right outbreathing, even, steady, silent. Further, the lungs should be evenly filled; many maladies may arise from the neglect and consequent weakening of some region of the lungs. And the number of breaths is so important, so closely related to health, that every nurse's chart records it. But the deeper meaning is concerned with the currents of life; with that which goeth into and cometh out of the heart."
+body = "The fruit of right poise is the strength to resist the shocks of infatuation or sorrow. In the simpler physical sense, which is also coveted by the wording of the original, this sentence means that wise effort establishes such bodily poise that the accidents of life cannot disturb it, as the captain remains steady, though disaster overtake his ship. But the deeper sense is far more important. The spiritual man, too, must learn to withstand all shocks, to remain steadfast through the perturbations of external things and the storms and whirlwinds of the psychical world. This is the power which is gained by wise, continuous effort, and by filling the spirit with the atmosphere of the Eternal."
 
 [annotations]
 concepts = []

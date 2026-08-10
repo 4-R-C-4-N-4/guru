@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-03.048"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book III"
-section = "Sutra 49"
+section = "Sutra 48"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
-token_count = 180
+token_count = 105
 
 [content]
-body = "When the spiritual man is perfectly disentangled from the psychic body, he attains to mastery over all things and to a knowledge of all. The spiritual man is enmeshed in the web of the emotions; desire, fear, ambition, passion; and impeded by the mental forms of separateness and materialism. When these meshes are sundered, these obstacles completely overcome, then the spiritual man stands forth in his own wide world, strong, mighty, wise. He uses divine powers, with a divine scope and energy, working together with divine Companions. To such a one it is said: 'Thou art now a disciple, able to stand, able to hear, able to see, able to speak, thou hast conquered desire and attained to self-knowledge, thou hast seen thy soul in its bloom and recognized it, and heard the voice of the silence.'"
+body = "Thence comes the power swift as thought, independent of instruments, and the mastery over matter. We are further enumerating the endowments of the spiritual man. Among these is the power to traverse space with the swiftness of thought, so that whatever place the spiritual man thinks of, to that he goes, in that place he already is. Thought has now become his means of locomotion. He is, therefore, independent of instruments, and can bring his force to bear directly, wherever he wills."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.007"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 8"
+section = "Sutra 7"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 85
+token_count = 140
 
 [content]
-body = "Hate is the resting in the sense of pain. Pain comes, for the most part, from the strife of personalities, the jarring discords between psychic selves, each of which deems itself supreme. A dwelling on this pain breeds hate, which tears the warring selves yet further asunder, and puts new enmity between them, thus hindering the harmony of the Real, the reconciliation through the Soul."
+body = "Lust is the resting in the sense of enjoyment. This has been explained again and again. Sensation, as, for example, the sense of taste, is meant to be the guide to action; in this case, the choice of wholesome food, and the avoidance of poisonous and hurtful things. But if we rest in the sense of taste, as a pleasure in itself; rest, that is, in the psychical side of taste, we fall into gluttony, and live to eat, instead of eating to live. So with the other great organic power, the power of reproduction. This lust comes into being, through resting in the sensation, and looking for pleasure from that."
 
 [annotations]
 concepts = []

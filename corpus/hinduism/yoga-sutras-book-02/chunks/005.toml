@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.005"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 6"
+section = "Sutra 5"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 163
+token_count = 181
 
 [content]
-body = "Self-assertion comes from thinking of the Seer and the instrument of vision as forming one self. This is the fundamental idea of the Sankhya philosophy, of which the Yoga is avowedly the practical side. To translate this into our terms, we may say that the Seer is the spiritual man; the instrument of vision is the psychical man, through which the spiritual man gains experience of the outer world. But we turn the servant into the master. We attribute to the psychical man, the personal self, a reality which really belongs to the spiritual man alone; and so, thinking of the quality of the spiritual man as belonging to the psychical, we merge the spiritual man in the psychical; or, as the text says, we think of the two as forming one self."
+body = "The darkness of ignorance is: holding that which is unenduring, impure, full of pain, not the Soul, to be eternal, pure, full of joy, the Soul. This we have really considered already. The psychic man is unenduring, impure, full of pain, not the Soul, not the real Self. The spiritual man is enduring, pure, full of joy, the real Self. The darkness of unwisdom is, therefore, the self-absorption of the psychical, personal man, to the exclusion of the spiritual man. It is the belief, carried into action, that the personal man is the real man, the man for whom we should toil, for whom we should build, for whom we should live. This is that psychical man of whom it is said: he that soweth to the flesh, shall of the flesh reap corruption."
 
 [annotations]
 concepts = []

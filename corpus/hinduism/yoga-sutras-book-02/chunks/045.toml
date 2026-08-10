@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.045"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 46"
+section = "Sutra 45"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 173
+token_count = 130
 
 [content]
-body = "Right poise must be firm and without strain. Here we approach a section of the teaching which has manifestly a two-fold meaning. The first is physical, and concerns the bodily position of the student, and the regulation of breathing. These things have their direct influence upon soul-life, the life of the spiritual man, since it is always and everywhere true that our study demands a sound mind in a sound body. The present sentence declares that, for work and for meditation, the position of the body must be steady and without strain, in order that the finer currents of life may run their course. It applies further to the poise of the soul, that fine balance and stability which nothing can shake, where the consciousness rests on the firm foundation of spiritual being. This is indeed the house set upon a rock, which the winds and waves beat upon in vain."
+body = "Soul-vision is perfected through perfect obedience to the Master. The sorrow and darkness of life come of the erring personal will which sets itself against the will of the Soul, the one great Life. The error of the personal will is inevitable, since each will must be free to choose, to try and fail, and so to find the path. And sorrow and darkness are inevitable, until the path be found, and the personal will made once more one with the greater Will, wherein it finds rest and power, without losing freedom. In His will is our peace. And with that peace comes light. Soul-vision is perfected through obedience."
 
 [annotations]
 concepts = []

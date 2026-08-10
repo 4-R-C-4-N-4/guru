@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.020"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 21"
+section = "Sutra 20"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 88
+token_count = 107
 
 [content]
-body = "The very essence of things seen is, that they exist for the Seer. The things of outer life, not only material things, but the psychic man also, exist in very deed for the purposes of the Seer, the Soul, the spiritual man Disaster comes, when the psychical man sets up, so to speak, on his own account, trying to live for himself alone, and taking material things to solace his loneliness."
+body = "The Seer is pure vision. Though pure, he looks out through the vesture of the mind. The Seer, as always, is the spiritual man whose deepest consciousness is pure vision, the pure life of the eternal. But the spiritual man, as yet unseeing in his proper person, looks out on the world through the eyes of the psychical man, by whom he is enfolded and enmeshed. The task is, to set this prisoner free, to clear the dust of ages from this buried temple."
 
 [annotations]
 concepts = []

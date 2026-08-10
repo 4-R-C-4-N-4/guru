@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.051"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 53"
+section = "Sutra 51"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 190
+token_count = 105
 
 [content]
-body = "Thence comes the mind's power to hold itself in the light. It has been well said, that what we most need is the faculty of spiritual attention; and in the same direction of thought it has been eloquently declared that prayer does not consist in our catching God's attention, but rather in our allowing God to hold our attention. The vital matter is, that we need to disentangle our consciousness from the noisy and perturbed thraldom of the psychical, and to come to consciousness as the spiritual man. This we must do, first, by purification, through the Commandments and the Rules; and, second, through the faculty of spiritual attention, by steadily heeding endless fine intimations of the spiritual power within us, and by intending our consciousness thereto; thus by degrees transferring the centre of consciousness from the psychical to the spiritual. It is a question, first, of love, and then of attention."
+body = "The fourth degree transcends external and internal objects. The inner meaning seems to be that, in addition to the three degrees of control already described, control, that is, over the incoming current of life, over the outgoing current, and over the condition of pause or quiescence, there is a fourth degree of control, which holds in complete mastery both the outer passage of events and the inner currents of thoughts and emotions; a condition of perfect poise and stability in the midst of the flux of things outward and inward."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.023"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 24"
+section = "Sutra 23"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 70
+token_count = 140
 
 [content]
-body = "The cause of this association is the darkness of unwisdom. The darkness of unwisdom is the absorption of consciousness in the personal life, and in the things seen by the personal life. This is the fall, through which comes experience, the learning of the lessons of life. When they are learned, the day of redemption is at hand."
+body = "The association of the Seer with things seen is the cause of the realizing of the nature of things seen, and also of the realizing of the nature of the Seer. Life is educative. All life's infinite variety is for discipline, for the development of the soul. So passing through many lives, the Soul learns the secrets of the world, the august laws that are written in the form of the snow-crystal or the majestic order of the stars. Yet all these laws are but reflections, but projections outward, of the laws of the soul; therefore in learning these, the soul learns to know itself. All life is but the mirror wherein the Soul learns to know its own face."
 
 [annotations]
 concepts = []

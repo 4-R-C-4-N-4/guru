@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.027"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 28"
+section = "Sutra 27"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 98
+token_count = 218
 
 [content]
-body = "From steadfastly following after the means of Yoga, until impurity is worn away, there comes the illumination of thought up to full discernment. Here, we enter on the more detailed practical teaching of Patanjali, with its sound and luminous good sense. And when we come to detail the means of Yoga, we may well be astonished at their simplicity. There is little in them that is mysterious. They are very familiar. The essence of the matter lies in carrying them out."
+body = "His illuminations is sevenfold, rising in successive stages. Patanjali's text does not tell us what the seven stages of this illumination are. The commentator thus describes them; First, the danger to be escaped is recognized; it need not be recognized a second time. Second, the causes of the danger to be escaped are worn away; they need not be worn away a second time. Third, the way of escape is clearly perceived, by the contemplation which checks psychic perturbation. Fourth, the means of escape, clear discernment, has been developed. This is the fourfold release belonging to insight. The final release from the psychic is three-fold: As fifth of the seven degrees, the dominance of its thinking is ended; as sixth, its potencies, like rocks from a precipice, fall of themselves; once dissolved, they do not grow again. Then, as seventh, freed from these potencies, the spiritual man stands forth in his own nature as purity and light. Happy is the spiritual man who beholds this seven-fold illumination in its ascending stages."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.008"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 9"
+section = "Sutra 8"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 137
+token_count = 85
 
 [content]
-body = "Attachment is the desire toward life, even in the wise, carried forward by its own energy. The life here desired is the psychic life, the intensely vibrating life of the psychical self. This prevails even in those who have attained much wisdom, so long as it falls short of the wisdom of complete renunciation, complete obedience to each least behest of the spiritual man, and of the Master who guards and aids the spiritual man. The desire of sensation, the desire of psychic life, reproduces itself, carried on by its own energy and momentum; and hence comes the circle of death and rebirth, death and rebirth, instead of the liberation of the spiritual man."
+body = "Hate is the resting in the sense of pain. Pain comes, for the most part, from the strife of personalities, the jarring discords between psychic selves, each of which deems itself supreme. A dwelling on this pain breeds hate, which tears the warring selves yet further asunder, and puts new enmity between them, thus hindering the harmony of the Real, the reconciliation through the Soul."
 
 [annotations]
 concepts = []

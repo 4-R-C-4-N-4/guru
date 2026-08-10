@@ -2,13 +2,13 @@
 id = "hinduism.yoga-sutras-book-02.028"
 tradition = "hinduism"
 text_name = "Yoga Sutras of Patanjali, Book II"
-section = "Sutra 29"
+section = "Sutra 28"
 translator = "Charles Johnston"
 source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
-token_count = 131
+token_count = 98
 
 [content]
-body = "The eight means of Yoga are: the Commandments, the Rules, right Poise, right Control of the life-force, Withdrawal, Attention, Meditation, Contemplation. These eight means are to be followed in their order, in the sense which will immediately be made clear. We can get a ready understanding of the first two by comparing them with the Commandments which must be obeyed by all good citizens, and the Rules which are laid on the members of religious orders. Until one has fulfilled the first, it is futile to concern oneself with the second. And so with all the means of Yoga. They must be taken in their order."
+body = "From steadfastly following after the means of Yoga, until impurity is worn away, there comes the illumination of thought up to full discernment. Here, we enter on the more detailed practical teaching of Patanjali, with its sound and luminous good sense. And when we come to detail the means of Yoga, we may well be astonished at their simplicity. There is little in them that is mysterious. They are very familiar. The essence of the matter lies in carrying them out."
 
 [annotations]
 concepts = []
