@@ -53,10 +53,20 @@ thin-tags tail from 79 texts (<10 accepted tags) to **3 works**:
 
 ## The 53 works (10 grouped, 43 singleton)
 
-> **2026-07-23:** totals below predate `secret-teachings-of-all-ages`
-> (western_esoteric, 530 chunks, added 2026-07-17), which auto-singletons —
-> current totals are **54 works over 214 texts** (tests/test_works.py pins
-> these).
+> **2026-08-08:** the totals below are a snapshot of the corpus as it stood
+> when this design was written, and they are now historical — every ingest
+> moves them. Do not update them here and do not pin them in a test; the note
+> that used to sit here cited `tests/test_works.py` as the pin while that test
+> cited this document, so a number neither of them owned drifted in both places
+> at once. For current totals ask the corpus:
+>
+> ```sh
+> python3 -c 'import sys;sys.path.insert(0,"scripts");import works;\
+>   w=works.load_works();print(len(w),"works,",len(works._corpus_texts()),"texts")'
+> ```
+>
+> The table below is kept for the grouping *rationale* — which texts are shards
+> of which work, and why — which is what this document is actually for.
 
 Bold `work_id` = grouped (n > 1). Token/chunk figures are sums over members.
 

@@ -1,0 +1,27 @@
+{
+  "id": "ee0ca4d8",
+  "type": "chore",
+  "state": "open",
+  "summary": "Replace deprecated chunking round-trip with generation-aware source confirmation",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-08T16:03:05.947Z",
+  "updated_at": "2026-08-08T16:03:23.666Z",
+  "files": [
+    {
+      "path": "tests/test_chunking.py",
+      "lines": [
+        99,
+        138
+      ]
+    }
+  ],
+  "tags": [
+    "test",
+    "chunking",
+    "corpus",
+    "round-trip"
+  ],
+  "description": "tests/test_chunking.py::test_round_trip is now @pytest.mark.skip DEPRECATED. Its\ndocstring carries the full write-up; this ticket tracks the replacement.\n\n## Why it was unsound\n\nIt asserted stored chunk bodies are findable in the *current* raw. That only\nholds while corpus and raw were produced by the same generation of the\npipeline. They are not: acquisition now strips footnotes, so chunks built\nbefore that change retain footnote paragraphs the raw no longer contains.\n\nClearest case — mandaean.gnostic-john-baptizer-2.008 is a footnote block\n(\"1 Presumably the Seven. 2 Presumably the End-Sea. ...\") present in NO raw\nfile: not the uncleaned raw, not the clean_body-normalized raw. It cannot be\nfound because it is not there.\n\nThe old test had accumulated epicycles: apparatus-chunk skips, an advisory\ntolerance for paragraphs <=60 chars, per-page pre_strip mirroring, a raw-side\nclean_body call. Each was a real patch for a real divergence, and each widened\nthe tolerance until the test could only fail on cases it had not yet been\ntaught to excuse. A test that must mirror every transform in the pipeline is\ntesting the mirror.\n\n## Scope (measured 2026-08-08)\n\n3 chunks across 2 texts, both mandaean/gnostic-john-baptizer-2 and -3. Narrow —\na design problem, not a corpus emergency.\n\n## What to build\n\nThe invariant is worth keeping: no invented content, no reordering in stored\nchunk bodies. Only the formulation is wrong.\n\n1. Compare at WORD level rather than paragraph level — assert the body's word\n   sequence appears as an in-order subsequence of the raw's, scanning\n   monotonically. Any deletion-only transform (footnote stripping, [Pg N]\n   markers, nav) is then tolerated by construction while invented content and\n   reordering still fail. Subsequence matching alone is too permissive, so\n   guard it: require contiguous runs of N words, or a coverage threshold over\n   substantive sentences.\n\n2. Record the acquisition generation a corpus was built against — a hash or\n   timestamp in corpus/*/metadata.toml against raw/*.meta.toml — so a mismatch\n   reports \"stale raw: re-acquire or re-chunk\" instead of \"invented content\".\n   That distinction is the actual bug this failure was trying to report, and\n   the reason it was misread for so long.\n\n## Separate decision\n\nWhether the 2 mandaean texts should simply be re-chunked against current raw is\na corpus call, not a test one. Doing that would make the old test pass without\nfixing its formulation, so it is not a substitute for the above."
+}

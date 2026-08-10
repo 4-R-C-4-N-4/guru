@@ -1,12 +1,13 @@
 """Invariant tests for the works layer (todo:241430fd, work-grouping.md)."""
 
 import sys
+import tomllib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 import pytest
-from works import Work, load_works, work_of, _corpus_texts
+from works import WORKS_TOML, Work, load_works, work_of, _corpus_texts
 
 
 @pytest.fixture(scope="module")
@@ -14,20 +15,32 @@ def works():
     return load_works()
 
 
-def test_totals_match_grouping_table(works):
-    # work-grouping.md: 53 works — 10 grouped + 43 singleton; +1 singleton
-    # (secret-teachings-of-all-ages, 2026-07-17) = 54 works over 214 texts
-    assert len(works) == 54
-    grouped = [w for w in works.values() if w.grouped]
-    assert len(grouped) == 10
-    assert sum(len(w.members) for w in grouped) == 170
+def test_grouped_works_match_the_toml(works):
+    """Every declared [[work]] resolves, and nothing else claims to be grouped.
+
+    This deliberately asserts no corpus totals. The counts that used to live
+    here (54 works, 10 grouped, 170 members, 214 texts) were a snapshot of a
+    growing corpus, so every ingest broke them and the fix was always to bump
+    the number — which taught nothing and re-armed the trap. work-grouping.md
+    cited this test as the pin for those totals while this test cited the doc;
+    neither owned the number. sources/works.toml and corpus/ do.
+    """
+    declared = tomllib.loads(WORKS_TOML.read_text())["work"]
+    grouped = {w.id for w in works.values() if w.grouped}
+    assert grouped == {d["id"] for d in declared}
+
+    for w in works.values():
+        assert w.members, w.id
+        if w.grouped:
+            assert len(w.members) >= 2, f"{w.id} is grouped but has one member"
+        else:
+            assert w.members == (w.id,), f"singleton {w.id} must map to itself"
 
 
 def test_every_text_in_exactly_one_work(works):
     texts = _corpus_texts()
     mapping = work_of(works)
     assert set(mapping) == set(texts)          # total coverage, no strays
-    assert len(mapping) == 214
     # no double-claims by construction of work_of; assert member disjointness
     all_members = [m for w in works.values() for m in w.members]
     assert len(all_members) == len(set(all_members))
