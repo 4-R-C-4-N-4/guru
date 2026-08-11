@@ -71,7 +71,27 @@ dmypy.json
 *.env.local
 
 # Corpus raw output (large, regenerable)
-raw/
+# ...except the one text that is NOT regenerable. Every other raw comes back
+# from scripts/acquire.py against a URL. apocryphon-of-john is extracted by
+# scripts/pdf_synoptic_extract.py from a local PDF (Zinner/Mattison synoptic,
+# public-domain dedication on page 1 — see sources/manifest.toml), so without
+# that PDF on disk the text cannot be re-chunked at all. Committing the
+# extracted witness is what makes the corpus reproducible from a clean
+# checkout (todo:0888eb07, where its absence cost a carve-out).
+#
+# Only the manifested witness. BG 8502 and Codex III are extracted too but
+# deliberately unmanifested — near-duplicate recensions would put
+# near-identical chunks into chunk_embeddings and have propose_edges draw
+# PARALLELS between the text and itself. See
+# docs/ingest/decisions/apocryphon-of-john.md.
+# Excluding raw/* rather than raw/ is load-bearing: git does not descend into
+# an excluded directory, so a negation under `raw/` can never re-include
+# anything. Each level has to be opened before the next is re-excluded.
+raw/*
+!raw/gnosticism/
+raw/gnosticism/*
+!raw/gnosticism/apocryphon-of-john.txt
+!raw/gnosticism/apocryphon-of-john.meta.toml
 data/
 export/
 logs/

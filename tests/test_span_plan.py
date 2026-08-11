@@ -92,3 +92,60 @@ def test_base_section_and_slug_rules():
     assert base_section("Chapter II, Section 1a") == "Chapter II"
     assert slugify("Tablet IV (part 2)") == "tablet-iv-part-2"
     assert slugify("Rune I – Rune V") == "rune-i-rune-v"
+
+
+# The chunker gained a separator between label and sub-chunk suffix
+# (todo:0888eb07): 'Rune Ia' → 'Rune I-a'. Both forms are live — only the 14
+# texts whose labels fused were re-chunked — so base_section has to read both.
+#
+# These pairs are the actual contract. A span plan is a freeze artifact, so
+# what matters is not that the new form parses but that it groups *identically*
+# to the old one: any label pair that collapsed together before must still, and
+# any that did not must still not. Otherwise the next `dossier plan` renumbers
+# spans that already have promoted summary_nodes behind them.
+# Stems, with the suffixes one subsplit call would emit for them. The
+# invariant is the *partition* — how many base groups a run collapses into —
+# not the base string, which legitimately still contains the separator when a
+# run does not collapse at all.
+LABEL_RUNS = [
+    ("Rune I", ["a", "b", "c"]),
+    ("Rune XXXVIII", ["a", "b"]),
+    ("Chapter VI", ["a", "b", "c"]),
+    ("Section 1", ["a", "b"]),
+    ("Chapter II, Section 1", ["a", "b"]),
+    # Stems the narrow class deliberately does not collapse. The separator
+    # makes these newly *detectable*; collapsing them would be a grouping main
+    # does not have, so each sub-chunk must stay its own group as before.
+    ("Preface", ["a", "b"]),
+    ("Document FIRST", ["a", "b"]),
+    ("Tale KILHWCH AND OLWEN", ["a", "b"]),
+    # Multi-letter suffixes, past the 26th sub-chunk. Never collapsed either.
+    ("Section 1", ["aa", "ab", "ar"]),
+    ("Chapter 4, Section 1", ["al", "am"]),
+]
+
+
+@pytest.mark.parametrize("stem,suffixes", LABEL_RUNS)
+def test_separator_does_not_repartition_a_run(stem, suffixes):
+    fused = {base_section(f"{stem}{s}") for s in suffixes}
+    separated = {base_section(f"{stem}-{s}") for s in suffixes}
+    assert len(separated) == len(fused), (
+        f"{stem!r} collapses to {len(fused)} group(s) fused and "
+        f"{len(separated)} separated — this repartitions spans against a "
+        f"frozen plan")
+
+
+def test_separated_sub_chunks_still_collapse_into_their_section():
+    """The regression the separator introduced: with the suffix detached,
+    _PART_SUFFIX stopped matching and every sub-chunk became its own base
+    group (kalevala 50 → 275, mabinogion 166 → 191, julian 86 → 127)."""
+    assert base_section("Rune I-a") == "Rune I"
+    assert base_section("Chapter II, Section 1-a") == "Chapter II"
+    assert len({base_section(f"Rune I-{c}") for c in "abcde"}) == 1
+
+
+def test_real_section_identity_survives_the_separator():
+    """An unlettered ', Section N' is identity, not a part marker — Plotinus
+    is 'Select Works, Section 1..326'. The looser pattern must not eat it."""
+    assert base_section("Select Works, Section 12") == "Select Works, Section 12"
+    assert base_section("Select Works, Section 19 (part 2)") == "Select Works, Section 19"

@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.153"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale MANAWYDDAN THE SON OF LLYRg"
+section = "Tale MANAWYDDAN THE SON OF LLYR-g"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 689

@@ -13,6 +13,15 @@ control characters (Divine Names ch.4 reached \\x87).
 3. Corpus guard: no stored section label ends in the overflow junk range,
    and the junk pattern provably covers the old generator's full output.
 
+The suffix is also separated from the label (todo:0888eb07). Appended bare it
+fused into the last word — "Preface" -> "Prefacea", "Rune XXXVIII" ->
+"Rune XXXVIIIa" — and `section` is what a citation renders, so those are
+reader-facing strings. Roman numerals were the worst case: "Chapter VIa" is
+ambiguous between VI + "a" and V + "ia".
+
+4. subsplit puts SUB_SEP between label and suffix.
+5. Corpus guard: no stored label fuses a suffix run onto a letter-ending stem.
+
 Run with: pytest tests/test_subsplit_labels.py
 """
 
@@ -25,7 +34,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CORPUS_DIR = PROJECT_ROOT / "corpus"
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "chunkers"))
-from regex_splitter import Chunk, _letter_suffix, subsplit  # noqa: E402
+from regex_splitter import SUB_SEP, Chunk, _letter_suffix, subsplit  # noqa: E402
 
 # Everything the old chr-based generator emitted past 'z': ASCII punctuation
 # {|}~, then DEL and the C1 controls (idx 26..62). Plus the [\]^_` block just
@@ -51,18 +60,52 @@ def test_letter_suffix_always_alphabetic():
     assert all(_letter_suffix(i).isalpha() for i in range(1000))
 
 
-def test_subsplit_labels_stay_alphabetic_past_26_parts():
+def _split_30(label="Symbolism"):
     # 30 paragraphs, each over the token budget on its own, forces 30 flushes.
     body = "\n\n".join(f"paragraph {i} " + "word " * 40 for i in range(30))
-    subs = subsplit(Chunk(section_label="Symbolism", body=body), max_tokens=30,
+    return subsplit(Chunk(section_label=label, body=body), max_tokens=30,
                     count_fn=lambda t: len(t.split()))
+
+
+def test_subsplit_labels_stay_alphabetic_past_26_parts():
+    subs = _split_30()
     assert len(subs) > 26
     labels = [s.section_label for s in subs]
-    assert labels[:2] == ["Symbolisma", "Symbolismb"]
-    assert labels[26] == "Symbolismaa"
+    assert labels[:2] == [f"Symbolism{SUB_SEP}a", f"Symbolism{SUB_SEP}b"]
+    assert labels[26] == f"Symbolism{SUB_SEP}aa"
     for label in labels:
-        suffix = label[len("Symbolism"):]
+        suffix = label[len("Symbolism") + len(SUB_SEP):]
         assert suffix.isalpha(), f"non-alphabetic suffix in {label!r}"
+
+
+def test_subsplit_separates_suffix_from_a_letter_ending_label():
+    """The todo:0888eb07 cases: bare append fused the suffix into the word."""
+    for label, first in [("Preface", "Preface-a"),
+                         ("The Monad", "The Monad-a"),
+                         ("Chapter VI", "Chapter VI-a"),
+                         ("Rune XXXVIII", "Rune XXXVIII-a"),
+                         ("Document FIRST", "Document FIRST-a")]:
+        subs = _split_30(label)
+        assert subs[0].section_label == first
+        # The label survives intact — a reader can still recover the section
+        # it came from by cutting at the last separator.
+        assert subs[5].section_label.rsplit(SUB_SEP, 1)[0] == label
+
+
+def test_subsplit_separator_applies_to_digit_ending_labels_too():
+    """No special case: "Section 1a" read fine, but one convention beats two."""
+    assert _split_30("Section 1")[0].section_label == "Section 1-a"
+
+
+def test_label_is_recoverable_from_a_suffixed_label():
+    """rsplit on the separator is the inverse. Only holds because the suffix
+    is [a-z]+ and the separator is the last one in the string — a label that
+    itself contains SUB_SEP ("Chapter 4, Section 1-2") still cuts correctly."""
+    subs = _split_30("Chapter 4, Section 1-2")
+    for s in subs:
+        stem, suffix = s.section_label.rsplit(SUB_SEP, 1)
+        assert stem == "Chapter 4, Section 1-2"
+        assert suffix.isalpha()
 
 
 def test_junk_tail_covers_old_generator_output():
@@ -78,6 +121,51 @@ def test_junk_tail_covers_old_generator_output():
 
 def test_new_suffixes_never_trip_the_guard():
     assert not any(JUNK_TAIL.search(f"Symbolism{_letter_suffix(i)}") for i in range(1000))
+
+
+def _suffix_runs(labels: list[str]) -> list[tuple[str, int]]:
+    """Consecutive labels forming STEM+a, STEM+b, … — i.e. one subsplit call's
+    output. Detecting the run rather than pattern-matching a single label is
+    what keeps prose section names out of the result: "The Savior Appears"
+    ends in [a-z]+ but nothing follows it ending in 'b' on the same stem."""
+    runs, i = [], 0
+    while i < len(labels):
+        if labels[i].endswith("a"):
+            stem = labels[i][:-1]
+            n = 1
+            while i + n < len(labels) and labels[i + n] == stem + _letter_suffix(n):
+                n += 1
+            if n >= 2:
+                runs.append((stem, n))
+                i += n
+                continue
+        i += 1
+    return runs
+
+
+def test_corpus_has_no_fused_sub_chunk_labels():
+    """Guard on the stored corpus for todo:0888eb07: no suffix run sits
+    directly against a stem ending in a letter. 15 texts / 1,761 chunks were
+    re-chunked to clear this; a new one can only come from a chunker that
+    dropped the separator.
+
+    No allowlist. There was one — apocryphon-of-john could not be re-chunked
+    because its raw is extracted from a local PDF rather than fetched, and
+    raw/ is git-ignored. That raw is now committed (see .gitignore), so the
+    text regenerates from a clean checkout like every other, and the guard
+    covers the whole corpus with no exceptions to keep honest."""
+    fused = []
+    for text_dir in sorted(CORPUS_DIR.glob("*/*/chunks")):
+        text_id = text_dir.parts[-2]
+        labels = []
+        for path in sorted(text_dir.glob("*.toml")):
+            with open(path, "rb") as f:
+                labels.append(tomllib.load(f)["chunk"]["section"])
+        for stem, n in _suffix_runs(labels):
+            if re.search(r"[A-Za-z]$", stem):
+                fused.append(f"{text_id}: {stem!r} x{n}")
+    assert not fused, ("sub-chunk suffixes fused onto the label:\n"
+                       + "\n".join(fused[:20]))
 
 
 def test_corpus_has_no_overflow_suffix_labels():

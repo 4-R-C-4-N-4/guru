@@ -48,6 +48,16 @@ the same text, whose ids no longer exist on disk.
 `scripts/cleanup_stale_embeddings.py` exist for this, and the mismatch is the
 signal that a re-chunk changed ids.
 
+**Counts agreeing while labels disagree.** The probe compares chunk-node count
+to file count, so a re-chunk that only rewrote `section` leaves the node green
+and `nodes.label` wrong — the string the reader is shown in a citation. This is
+what todo:0888eb07 did to 14 texts. The script is an upsert on `id` (`label`
+and `metadata_json` from `excluded`, edges `ON CONFLICT DO NOTHING`), so a
+re-run repairs it without touching the graph; it is the right reflex after any
+label-moving chunker change. It has no `--text` filter — it is whole-corpus,
+and `data/guru.db` is git-ignored and shared across branches, so run it on the
+branch whose `corpus/` you actually want the graph to match.
+
 **Tagging against a taxonomy that lacks the text's concepts.** The tagger can
 propose new concepts with `is_new_concept=1`, but a text whose central ideas
 are entirely absent from the taxonomy produces a tag pool that is mostly

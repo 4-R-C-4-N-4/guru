@@ -59,6 +59,15 @@ tradition = "gnosticism"
 # The raw artifact is produced by scripts/pdf_synoptic_extract.py, which splits
 # the three-column synoptic setting by column geometry. Re-generate with:
 #   python3 scripts/pdf_synoptic_extract.py <pdf> -o raw/gnosticism/
+#   mv raw/gnosticism/apocryphon-of-john-codex-ii.txt \
+#      raw/gnosticism/apocryphon-of-john.txt        # the manifested witness
+#
+# You should not need to. This is the ONE raw that is committed —
+# .gitignore re-includes raw/gnosticism/apocryphon-of-john.{txt,meta.toml} —
+# precisely because it is the one that cannot be re-fetched. The extractor
+# needs pymupdf, which is not a dependency of anything else here. The .meta.toml
+# carries pdf_sha256 (82f50e31…), so a re-extraction can be checked against the
+# committed text rather than trusted.
 label = "The Secret Writing According to John / Apocryphon of John (Codex II, 1; Zinner translation)"
 url = "https://othergospels.com/john"
 format = "pdf"

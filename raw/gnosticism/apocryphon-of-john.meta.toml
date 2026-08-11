@@ -1,0 +1,10 @@
+[provenance]
+source_url = "https://othergospels.com/john"
+source_pdf = "The_Secret_Writing_According_to_John_A_P.pdf"
+pdf_sha256 = "82f50e3138b9c4b67fc9ddcdd1b3a2d7926e6e199a80f6046fafda07c1e135ac"
+format = "pdf"
+extractor = "scripts/pdf_synoptic_extract.py"
+license = "public_domain"
+translator = "Samuel Zinner"
+editor = "Mark M. Mattison"
+witness = "Codex II, 1 (long recension; italicised readings from Codex IV, 1)"
