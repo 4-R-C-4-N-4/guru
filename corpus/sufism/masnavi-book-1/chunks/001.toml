@@ -2,7 +2,7 @@
 id = "sufism.masnavi-book-1.001"
 tradition = "sufism"
 text_name = "The Masnavi, Book I (Rumi)"
-section = "PROLOGUEa"
+section = "PROLOGUE-a"
 translator = "E.H. Whinfield"
 source_url = "https://sacred-texts.com/isl/masnavi/msn01.htm"
 token_count = 793

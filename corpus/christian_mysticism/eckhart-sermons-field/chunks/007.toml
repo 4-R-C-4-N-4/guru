@@ -2,7 +2,7 @@
 id = "christian_mysticism.eckhart-sermons-field.007"
 tradition = "christian_mysticism"
 text_name = "Meister Eckhart's Sermons (Field translation)"
-section = "IIb"
+section = "II-b"
 translator = "Claud Field"
 source_url = "https://ccel.org/ccel/eckhart/sermons.all.html"
 token_count = 788

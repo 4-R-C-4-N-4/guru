@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.055"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale GERAINT THE SON OF ERBINc"
+section = "Tale GERAINT THE SON OF ERBIN-c"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 760

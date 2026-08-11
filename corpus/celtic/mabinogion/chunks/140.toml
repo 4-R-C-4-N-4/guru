@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.140"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale BRANWEN THE DAUGHTER OF LLYRd"
+section = "Tale BRANWEN THE DAUGHTER OF LLYR-d"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 779

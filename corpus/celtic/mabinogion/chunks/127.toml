@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.127"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale PWYLL PRINCE OF DYVEDe"
+section = "Tale PWYLL PRINCE OF DYVED-e"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 786

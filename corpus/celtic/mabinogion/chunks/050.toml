@@ -2,7 +2,7 @@
 id = "celtic.mabinogion.050"
 tradition = "celtic"
 text_name = "The Mabinogion"
-section = "Tale PEREDUR THE SON OF EVRAWCab"
+section = "Tale PEREDUR THE SON OF EVRAWC-ab"
 translator = "Lady Charlotte Guest"
 source_url = "https://www.gutenberg.org/files/5160/5160-h/5160-h.htm"
 token_count = 795

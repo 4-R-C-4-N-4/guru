@@ -2,7 +2,7 @@
 id = "finnic.kalevala.025"
 tradition = "finnic"
 text_name = "The Kalevala"
-section = "Rune Vb"
+section = "Rune V-b"
 translator = "John Martin Crawford"
 source_url = "https://www.gutenberg.org/cache/epub/5186/pg5186.html"
 token_count = 770
