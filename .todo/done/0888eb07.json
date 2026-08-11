@@ -1,13 +1,13 @@
 {
   "id": "0888eb07",
   "type": "bug",
-  "state": "active",
+  "state": "done",
   "summary": "regex_splitter joins the sub-chunk suffix to the label with no separator",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-11T03:34:11.290Z",
-  "updated_at": "2026-08-11T12:38:36.460Z",
+  "updated_at": "2026-08-11T12:39:14.206Z",
   "files": [
     {
       "path": "scripts/chunkers/regex_splitter.py",
@@ -29,5 +29,13 @@
     "base_branch": "main",
     "started_at": "2026-08-11T12:38:36.460Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "f4f8499e761845755434599c7bc9c2dd90f40e8d",
+    "resolved_at": "2026-08-11T12:39:14.206Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_subsplit_labels.py",
+    "test_function": "test_corpus_has_no_fused_sub_chunk_labels",
+    "note": "Separator SUB_SEP='-' in regex_splitter.subsplit; 14 texts / 1,752 chunks re-chunked (labels-only diff, ids stable). apocryphon-of-john (9 chunks) still fused: its raw comes from a local PDF via pdf_synoptic_extract.py and raw/ is git-ignored, so it cannot be re-chunked from a clean checkout — carried as FUSED_BLOCKED_ON_RAW with a test asserting the exception stays earned. DB resync (node 09) deferred to post-merge."
   }
 }
