@@ -1,13 +1,13 @@
 {
   "id": "4264c23f",
   "type": "chore",
-  "state": "active",
+  "state": "done",
   "summary": "ingest status cannot represent 'reviewed, awaiting your apply'",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-09T22:30:53.510Z",
-  "updated_at": "2026-08-11T12:45:38.575Z",
+  "updated_at": "2026-08-11T12:51:53.936Z",
   "files": [
     {
       "path": "guru/ingest.py",
@@ -29,5 +29,13 @@
     "base_branch": "main",
     "started_at": "2026-08-11T12:45:38.575Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "18dba6af",
+    "resolved_at": "2026-08-11T12:51:53.936Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_ingest_status_probes.py",
+    "test_function": "test_edge_review_reports_the_queue_rather_than_an_absence",
+    "note": "Nodes 11 and 14 now report unapplied review_actions depth and name POST /api/apply. Node stays not-done — queued is not applied."
   }
 }
