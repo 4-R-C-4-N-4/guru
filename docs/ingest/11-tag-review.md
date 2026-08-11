@@ -94,14 +94,29 @@ staged_tags.model, staged_tags.prompt_version` and rolls back the entire batch.
 `insertReassignedTag` in `apply.ts` does not guard against it. Check first, and
 prefer plain `reject` when the better concept is already in play.
 
+A reject on the occupying tag *does* clear the way, but only if it is queued
+**before** the reassign. `buildApply` drains `selectQueuedActions`, which is
+`ORDER BY id ASC`, so the queue applies in insertion order: clear the concept
+first, then reassign onto it. Queue them the other way round and the reassign
+applies while the occupant is still `pending`, which is the batch-destroying
+case above. Asserted both directions in
+`guru-review/server/src/apply.test.ts`, 'queue drain order'.
+
+Note that `scripts/validate_queue.py` currently replays the queue in the
+opposite order and will disagree with all of this — it mirrored the queue
+*display* query rather than the apply drain (todo:7a815c05). Until that lands,
+trust the ordering here over the validator's collision findings.
+
 **Treating review as subtraction only.** Accept and reject work on what the
 tagger proposed, so it is easy to conclude that a concept the tagger *missed*
 is out of reach at this node and belongs to node 10's recall problem.
 `reassign` is the way in: per `apply.ts` it marks the donor tag `reassigned`,
 deletes its live edge exactly as `reject` would, and then inserts a **new**
 `staged_tag` for the target concept. The donor's fate is identical either way,
-so any queued reject on the same chunk is free capacity — and at an observed
-13.4 tags per chunk there is always one to spare.
+so any tag on that chunk you were going to reject is a free *donor* — and at an
+observed 13.4 tags per chunk there is always one to spare. (Free as a donor
+only. A reject that has to clear the *target* concept is the ordered case in
+the failure mode above, not free capacity.)
 
 One thing this does not do: the new row lands `pending` with no `upsertEdge`,
 so a reassign does not produce a live edge — it puts the missing concept back
@@ -113,6 +128,15 @@ proposal nowhere, so donor choice had to avoid tags you wanted kept in the
 over-generation statistics. Since todo:a8bb7213 that constraint is gone: a
 `reassigned` row still records what the model proposed, and picking the donor
 is purely a question of which tag you were going to reject anyway.
+
+**`concept_id` therefore means two different things across the `reassigned`
+rows already in `guru.db`.** The 31 rows applied before todo:a8bb7213 store the
+*target*; every row after it stores the *original*, and nothing on the row
+distinguishes them. An over-generation query run today mixes both. The original
+is recoverable — each reassign's spawned row carries
+`justification = 'Reassigned from <original>'`, keyed to the same `chunk_id` —
+so a backfill is possible, but none has been run, and `reviewed_at` is the only
+thing that separates the two populations.
 
 The self-collision that looks fatal is not: the reassign path updates the donor
 to `reassigned` *before* inserting, and `idx_staged_tags_provenance_unique` is
