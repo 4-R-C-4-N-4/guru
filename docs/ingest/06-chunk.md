@@ -86,12 +86,22 @@ it mid-change. `test_corpus_has_no_fused_sub_chunk_labels` will not warn you:
 it only flags stems ending in a letter, which is the defect, not the residue.
 
 **A text whose raw cannot be regenerated.** `raw/` is git-ignored, so a source
-whose raw is not a plain fetch cannot be re-chunked from a fresh checkout.
-`apocryphon-of-john` is the current case — its raw comes from
-`scripts/pdf_synoptic_extract.py` over a local PDF — and it was left out of the
-0888eb07 pass for exactly this reason. A corpus-wide chunker fix will have a
-tail like this; carry the exception in the guarding test with its reason
-attached, rather than dropping the text quietly.
+whose raw is not a plain fetch cannot be re-chunked from a fresh checkout at
+all. `apocryphon-of-john` was the case that proved it — its raw comes from
+`scripts/pdf_synoptic_extract.py` over a local PDF — and it was initially left
+out of the 0888eb07 pass for exactly that reason.
+
+The resolution was to stop treating it as an exception and commit the raw:
+`.gitignore` now re-includes `raw/gnosticism/apocryphon-of-john.{txt,meta.toml}`
+and nothing else. A corpus-wide chunker fix should not have a permanent tail of
+texts it could not reach. If a source's raw is not reproducible by
+`scripts/acquire.py`, committing it is cheaper than carrying an allowlist that
+every future guard has to be taught about.
+
+Check before trusting a raw you did not just produce: re-chunk against the
+*unmodified* chunker and confirm the corpus comes back byte-identical. For this
+text that also confirmed the PDF — `raw/gnosticism/apocryphon-of-john.meta.toml`
+records `pdf_sha256`, and it matched the file on disk.
 
 ## Provenance
 

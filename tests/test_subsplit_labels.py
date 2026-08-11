@@ -143,23 +143,20 @@ def _suffix_runs(labels: list[str]) -> list[tuple[str, int]]:
     return runs
 
 
-# apocryphon-of-john cannot be re-chunked from this checkout: its raw is
-# produced by scripts/pdf_synoptic_extract.py from a local PDF that is not in
-# the repository, and raw/ is git-ignored. Its 9 fused labels clear the next
-# time someone with the PDF re-runs node 05. Tracked on todo:0888eb07.
-FUSED_BLOCKED_ON_RAW = {"apocryphon-of-john"}
-
-
 def test_corpus_has_no_fused_sub_chunk_labels():
     """Guard on the stored corpus for todo:0888eb07: no suffix run sits
-    directly against a stem ending in a letter. 14 texts / 1,752 chunks were
+    directly against a stem ending in a letter. 15 texts / 1,761 chunks were
     re-chunked to clear this; a new one can only come from a chunker that
-    dropped the separator."""
+    dropped the separator.
+
+    No allowlist. There was one — apocryphon-of-john could not be re-chunked
+    because its raw is extracted from a local PDF rather than fetched, and
+    raw/ is git-ignored. That raw is now committed (see .gitignore), so the
+    text regenerates from a clean checkout like every other, and the guard
+    covers the whole corpus with no exceptions to keep honest."""
     fused = []
     for text_dir in sorted(CORPUS_DIR.glob("*/*/chunks")):
         text_id = text_dir.parts[-2]
-        if text_id in FUSED_BLOCKED_ON_RAW:
-            continue
         labels = []
         for path in sorted(text_dir.glob("*.toml")):
             with open(path, "rb") as f:
@@ -169,32 +166,6 @@ def test_corpus_has_no_fused_sub_chunk_labels():
                 fused.append(f"{text_id}: {stem!r} x{n}")
     assert not fused, ("sub-chunk suffixes fused onto the label:\n"
                        + "\n".join(fused[:20]))
-
-
-def test_fused_allowlist_stays_earned():
-    """An allowlisted text must still be genuinely un-chunkable. When the raw
-    reappears, this fails and the entry comes out — the allowlist cannot
-    quietly outlive its reason.
-
-    The glob is `{text_id}*.txt`, not `{text_id}.txt`, because that is not the
-    name the raw arrives under. `pdf_synoptic_extract.py:410` writes
-    `apocryphon-of-john-{codex-ii,bg-8502,codex-iii}.txt` and the manifest's
-    documented command produces exactly those; `chunk.py:269` wants
-    `apocryphon-of-john.txt`, so there is a rename in between. Watching only
-    the post-rename name means the canary stays green through the window where
-    the raw is present and the text is chunkable.
-
-    Machine-dependent by construction: `raw/` is git-ignored, so this can never
-    fire in CI, and it *will* fail on a checkout that legitimately holds the
-    raw. That failure is the message — regenerate the corpus and delete the
-    allowlist entry.
-    """
-    for text_id in FUSED_BLOCKED_ON_RAW:
-        raws = sorted((PROJECT_ROOT / "raw").glob(f"*/{text_id}*.txt"))
-        assert not raws, (
-            f"{text_id} has raw again ({', '.join(p.name for p in raws)}) — "
-            f"rename to {text_id}.txt if needed, re-chunk, and drop it from "
-            f"FUSED_BLOCKED_ON_RAW")
 
 
 def test_corpus_has_no_overflow_suffix_labels():
