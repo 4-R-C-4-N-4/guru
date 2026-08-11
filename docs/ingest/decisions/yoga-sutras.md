@@ -539,3 +539,104 @@ written from memory over ~50 batches instead of from a query. The queue is the
 record; a decision file that paraphrases it from recollection will drift, and
 drift in the direction of a tidier story than the data supports. Query first,
 then write.
+
+---
+
+## 05 (re-run) — the merged-sutra defect · 2026-08-10 · claude (pilot)
+
+**Reported by the user:** "Three sutras are missing — II.5, II.48, III.34."
+
+They were not missing. They were **merged into the preceding chunk**, which is
+a different defect with a different fix and a different blast radius.
+
+### The pattern required a period the print does not always carry
+
+    old:  '(?:^|\s)(\d+)\.\s'
+    new:  '(?:^|\s)(\d+)\.?\s+(?=[A-Z])'
+
+Johnston's edition numbers each sutra, but the period after the numeral is not
+typographically reliable — for II.5, II.48 and III.34 it is absent. The old
+pattern therefore failed to fire, the numeral was swallowed as body text, and
+the sutra was appended to its predecessor. Every sutra was present in
+`corpus/`; three of them just had no chunk of their own and no citable id.
+
+The new pattern makes the period optional and requires whitespace followed by
+a capital, which is what actually distinguishes a sutra opening from a
+restored digit or an intra-sentence numeral.
+
+**After the fix:** 51 / 55 / 55 / 34 chunks for books I–IV. Verified for
+sequence gaps, duplicates, and numbers above each book's canonical sutra count
+— all clean.
+
+### I first reported this as missing source text, and was wrong
+
+The initial investigation grepped the raw file for "impermanent" and "pairs of
+opposites" — Prabhavananda's wording — against Johnston's translation, found
+nothing, and concluded the text had not been fetched. Reading the raw directly
+showed all three sutras present, unpunctuated.
+
+A `grep` that uses another edition's vocabulary cannot distinguish "absent"
+from "worded differently". That is now recorded in
+[03-acquire.md](../03-acquire.md); the sequence-gap check that *would* have
+caught the real defect at node 05 is in [05-chunk-config.md](../05-chunk-config.md).
+Tracked as todo:7725dcb1.
+
+### Cost of the re-chunk: a cascade delete
+
+Re-chunking books II and III renumbered their chunk ids, so every
+`staged_tag`, `staged_edge` and live `edge` pointing into those books had to be
+deleted before nodes 09–13 could be re-run. Done against a verified backup.
+
+Verified 2026-08-11, after the fact: **zero orphaned rows** — no `staged_tags`
+or `staged_edges` anywhere in the corpus reference a `chunk_id` with no
+corresponding node. The cascade neither missed rows nor stranded any.
+
+This is the concrete argument for the sequence-gap check at node 05. Catching
+the defect there costs a re-run of the chunker. Catching it after node 14, as
+happened here, costs the entire tag and edge review for two books.
+
+---
+
+## 11 / 14 (second pass, books II and III) · 2026-08-10 · claude (pilot)
+
+Books II and III were re-proposed and re-reviewed from scratch on the corrected
+chunks. Books I and IV kept their first-pass verdicts.
+
+**Final state, all applied** (195 chunks: 51 / 55 / 55 / 34):
+
+| | accepted | rejected | reassigned | total |
+|---|---|---|---|---|
+| `staged_tags` | 424 | 2,189 | 4 | 2,617 |
+
+| | accepted | rejected / reclassified | total |
+|---|---|---|---|
+| `staged_edges` | 201 PARALLELS | 454 `surface_only`, 43 `unrelated`, 5 CONTRASTS reclassified | 703 |
+
+Live graph: 424 `EXPRESSES`, 201 `PARALLELS`, 5 `CONTRASTS`, 195 `BELONGS_TO`.
+No pending rows remain in either table.
+
+### The re-chunked books are not statistically different
+
+| book | tag accept | edge accept |
+|---|---|---|
+| I | 20% (129/659) | 38% (75/197) |
+| II — re-chunked | 14% (98/712) | 26% (43/168) |
+| III — re-chunked | 16% (125/775) | 21% (41/191) |
+| IV | 15% (72/471) | 29% (42/147) |
+
+Worth recording because it is the null result the re-chunk needed. Book I, the
+untouched control, sits at the top of both ranges and book IV, also untouched,
+sits in the middle. If the merged sutras had been distorting proposals broadly
+— rather than costing three sutras their own ids — the corrected books would
+have separated from the controls. They did not. The defect was real and worth
+fixing, and its measurable effect was local.
+
+### `reassign` and the two-cycle gate, resolved
+
+The first pass queued six reassigns. Four survive in the final data
+(`status='reassigned'`) — three in book I, one in book IV. Book III never had
+any, per the measurement already recorded in
+[11-tag-review.md](../11-tag-review.md), so the missing two were book II's and
+were removed by the cascade. Each surviving reassign required the second apply cycle
+described in [11-tag-review.md](../11-tag-review.md) before the node's gate
+would close. It has now closed: zero pending rows.
