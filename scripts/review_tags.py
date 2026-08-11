@@ -146,12 +146,21 @@ def reassign_tag(conn: sqlite3.Connection, row: dict, new_concept_id: str) -> No
     """Reassign a staged_tag to a different concept_id.
 
     Retracts any auto-promoted edge for the *original* (chunk, concept)
-    pair, mutates the staged_tag's concept_id, and spawns a new pending
-    staged_tag for the corrected concept (carrying provenance forward
-    so the partial UNIQUE on (chunk, concept, model, prompt_version)
-    works correctly and any future fine-tune export filter is clean).
-    The new concept's edge will materialize on the next auto-promote
-    run if the spawned row qualifies.
+    pair, marks the donor 'reassigned', and spawns a new pending staged_tag
+    for the corrected concept (carrying provenance forward so the partial
+    UNIQUE on (chunk, concept, model, prompt_version) works correctly and
+    any future fine-tune export filter is clean). The new concept's edge
+    will materialize on the next auto-promote run if the spawned row
+    qualifies.
+
+    The donor keeps its original concept_id. This used to overwrite it with
+    the target, which stored the target twice — the spawned row already
+    records it — and stored the concept the model actually proposed nowhere.
+    The donor is the only record that the tagger proposed this concept on
+    this chunk, and 'reassigned' rows are how the node accumulates an answer
+    to "what does the model get wrong here" (todo:a8bb7213). The partial
+    index is on status='pending', so the donor leaves it before the insert
+    and its retained concept_id cannot collide.
     """
     original_concept_node_id = f"concept.{row['concept_id']}"
     conn.execute(
@@ -159,9 +168,9 @@ def reassign_tag(conn: sqlite3.Connection, row: dict, new_concept_id: str) -> No
         (row["chunk_id"], original_concept_node_id),
     )
     conn.execute(
-        "UPDATE staged_tags SET status='reassigned', concept_id=?, "
+        "UPDATE staged_tags SET status='reassigned', "
         "reviewed_by=?, reviewed_at=? WHERE id=?",
-        (new_concept_id, REVIEWER, now_iso(), row["id"]),
+        (REVIEWER, now_iso(), row["id"]),
     )
     conn.execute(
         """INSERT INTO staged_tags(chunk_id, concept_id, score,

@@ -284,11 +284,19 @@ def test_reassign_tag_deletes_original_concept_edge(conn: sqlite3.Connection) ->
     ).fetchone()
     assert edge is None, "original-concept edge must be deleted on reassign"
 
-    # Status mutated
+    # Status mutated, concept_id retained.
+    #
+    # This asserted ("reassigned", "demiurge") until todo:a8bb7213. Overwriting
+    # the donor's concept_id stored the target twice — the spawned row below
+    # already carries it, with justification "Reassigned from archon" — and
+    # stored the concept the model actually proposed nowhere. The donor row is
+    # the only record that the tagger proposed "archon" on this chunk, so
+    # 'reassigned' rows could no longer answer "what does the model get wrong
+    # here", which is the question node 11 review exists to accumulate.
     status = conn.execute(
         "SELECT status, concept_id FROM staged_tags WHERE id=?", (row["id"],)
     ).fetchone()
-    assert (status["status"], status["concept_id"]) == ("reassigned", "demiurge")
+    assert (status["status"], status["concept_id"]) == ("reassigned", "archon")
 
 
 def test_reassign_tag_spawns_pending_row_carrying_provenance(conn: sqlite3.Connection) -> None:

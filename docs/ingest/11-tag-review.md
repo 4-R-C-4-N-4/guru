@@ -103,12 +103,16 @@ deletes its live edge exactly as `reject` would, and then inserts a **new**
 so any queued reject on the same chunk is free capacity — and at an observed
 13.4 tags per chunk there is always one to spare.
 
-Two things this does not do. The new row lands `pending` with no `upsertEdge`,
+One thing this does not do: the new row lands `pending` with no `upsertEdge`,
 so a reassign does not produce a live edge — it puts the missing concept back
-in the queue for a second pass. And `updateStagedTagConcept` overwrites the
-donor's `concept_id` with the target, so the record of what was originally
-proposed there is lost. Pick a donor whose original tag you do not want in the
-over-generation statistics.
+in the queue for a second pass.
+
+The donor keeps its original `concept_id`. It used to be overwritten with the
+target (`updateStagedTagConcept`), which stored the target twice and the
+proposal nowhere, so donor choice had to avoid tags you wanted kept in the
+over-generation statistics. Since todo:a8bb7213 that constraint is gone: a
+`reassigned` row still records what the model proposed, and picking the donor
+is purely a question of which tag you were going to reject anyway.
 
 The self-collision that looks fatal is not: the reassign path updates the donor
 to `reassigned` *before* inserting, and `idx_staged_tags_provenance_unique` is

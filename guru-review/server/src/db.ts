@@ -26,7 +26,6 @@ export interface PreparedStmts {
   upsertEdge: Database.Statement;          // generic — type passed at runtime
   deleteEdge: Database.Statement;          // generic — type passed at runtime
   updateStagedTagStatus: Database.Statement;
-  updateStagedTagConcept: Database.Statement;
   insertReassignedTag: Database.Statement;
   updateStagedEdgeStatus: Database.Statement;
   updateStagedEdgeStatusType: Database.Statement;
@@ -142,10 +141,6 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
 
     updateStagedTagStatus: rw.prepare(`
       UPDATE staged_tags SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?
-    `),
-
-    updateStagedTagConcept: rw.prepare(`
-      UPDATE staged_tags SET concept_id=? WHERE id=?
     `),
 
     insertReassignedTag: rw.prepare(`

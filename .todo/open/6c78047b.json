@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-09T14:03:39.452Z",
-  "updated_at": "2026-08-09T14:04:35.346Z",
+  "updated_at": "2026-08-11T12:51:25.098Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/tags.ts"
@@ -27,6 +27,18 @@
     ],
     "linked_commits": [
       "2bf73c77"
+    ],
+    "depends_on": [
+      "7a815c05"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-11T12:51:25.098Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Blocked on todo:7a815c05, found while implementing this.\n\nThis ticket's \"Ordering subtlety worth encoding in the check\" section is built on validate_queue.py's claim that the queue applies ORDER BY ra.id DESC. It does not. buildApply drains selectQueuedActions (ORDER BY id ASC) and iterates it directly; the DESC ordering belongs to selectQueueWithContext, which only feeds the queue display route.\n\nProven in guru-review/server/src/apply.test.ts ('queue drain order') against the real openDb / buildApply: reject-then-reassign applies clean; reassign-then-reject throws UNIQUE constraint failed. Exactly the reverse of what this ticket and tests/test_validate_queue.py assume.\n\nTwo consequences for the design here:\n\n1. The suggested check — look up pending tags for (chunk_id, reassign_to, model, prompt_version) and return 409 — is not sufficient. Under insertion order a newly queued action gets the highest id and so applies LAST, meaning every already-queued action applies before it. The check has to replay the existing queue rather than inspect current state, or it will 409 on a queue an earlier reject would have cleared.\n\n2. The false-positive worry inverts too. Under insertion order the working reviewer flow is the intuitive one — reject the occupant, then reassign onto the freed concept — so a queue-time 409 does not block anything a reviewer would naturally do. That makes the 409 a better idea than this ticket feared, once computed against a correct replay.\n\nNot attempted rather than shipped half-correct: a 409 built on the inverted model would reject valid queues and pass the batch-destroying one.",
+      "confidence": "high"
+    }
+  ]
 }

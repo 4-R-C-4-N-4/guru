@@ -1,0 +1,22 @@
+{
+  "id": "7a815c05",
+  "type": "bug",
+  "state": "open",
+  "summary": "validate_queue.py replays the queue in the wrong order — collision findings are inverted",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-11T12:50:55.418Z",
+  "updated_at": "2026-08-11T12:50:55.456Z",
+  "files": [
+    {
+      "path": "scripts/validate_queue.py"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "review-queue",
+    "validation"
+  ],
+  "description": "`scripts/validate_queue.py` replays the unapplied queue with `ORDER BY ra.id DESC`, commented \"Mirror the server: ORDER BY ra.id DESC\".\n\nThat is not the server's apply order. `buildApply` (guru-review/server/src/apply.ts:295) drains `stmts.selectQueuedActions`, which is `ORDER BY id ASC` (db.ts:80-87), and iterates the array directly. The `ORDER BY ra.id DESC` in db.ts belongs to `selectQueueWithContext` (db.ts:171-211), read only by routes/queue.ts to render the queue newest-first in the UI. The validator mirrored the display query.\n\n## Effect: both error directions\n\nApply is insertion order, so a reject queued BEFORE a reassign applies BEFORE it and does clear the target concept out of the way. The validator, replaying in reverse, sees that reject apply last and reports `reassign_collision` — a false ERROR on a queue that would apply cleanly.\n\nAnd the reverse: a reassign queued before its clearing reject really does collide at apply time, and the validator reports the queue clean. That is the miss that matters, because `buildApply` wraps the whole drain in one transaction, so the UNIQUE violation discards every other verdict in the batch — the failure mode todo:6c78047b exists to prevent.\n\n## Proof\n\nguru-review/server/src/apply.test.ts, 'queue drain order' — two cases against the real openDb / buildApply over a temp database:\n\n- reject queued first, then reassign onto the freed concept: applies clean, no errors.\n- reassign queued first, then the clearing reject: throws UNIQUE constraint failed.\n\ntests/test_validate_queue.py::test_clearing_reject_must_be_queued_after_the_reassign asserts the opposite of both and passes, because it tests the validator against the validator's own model.\n\n## Blocks todo:6c78047b\n\nThe queue-time 409 has to answer \"will the target concept still be pending once every already-queued action has applied\". A new action gets the highest id and therefore applies LAST, so the check must replay the existing queue rather than inspect current state — and it cannot be written against an inverted replay. Fix the ordering first.\n\nAlso worth deciding: whether reassign-then-reject should 409 or be reordered on apply. Under insertion order the intuitive reviewer flow — clear the concept, then reassign onto it — is the one that works, which is a better place to land than the ticket assumed."
+}

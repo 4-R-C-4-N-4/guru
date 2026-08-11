@@ -1,13 +1,13 @@
 {
   "id": "a8bb7213",
   "type": "bug",
-  "state": "open",
+  "state": "active",
   "summary": "reassign overwrites the donor tag's concept_id, destroying its provenance",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-09T14:03:57.204Z",
-  "updated_at": "2026-08-09T14:04:35.386Z",
+  "updated_at": "2026-08-11T12:51:42.252Z",
   "files": [
     {
       "path": "guru-review/server/src/apply.ts",
@@ -28,5 +28,11 @@
     "linked_commits": [
       "2bf73c77"
     ]
+  },
+  "work": {
+    "branch": "fix/review-queue-and-status",
+    "base_branch": "main",
+    "started_at": "2026-08-11T12:51:42.252Z",
+    "started_by": "Hermes Agent"
   }
 }
