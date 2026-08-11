@@ -1,13 +1,13 @@
 {
   "id": "1f6d2c11",
   "type": "bug",
-  "state": "active",
+  "state": "done",
   "summary": "ingest status probes existence, not coverage — node 10/12 report done when most chunks are untagged",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-10T11:58:06.097Z",
-  "updated_at": "2026-08-11T12:45:38.534Z",
+  "updated_at": "2026-08-11T12:51:53.880Z",
   "files": [
     {
       "path": "guru/ingest.py"
@@ -25,5 +25,13 @@
     "base_branch": "main",
     "started_at": "2026-08-11T12:45:38.534Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "18dba6af",
+    "resolved_at": "2026-08-11T12:51:53.880Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_ingest_status_probes.py",
+    "test_function": "test_tag_probe_fails_when_most_chunks_were_never_tagged",
+    "note": "Node 10 now LEFT JOINs tagging_progress. Node 13 deliberately left as an existence probe — similarity-gated proposals mean per-chunk coverage is not the invariant, and propose_edges has no progress record; reasoning left in the probe."
   }
 }
