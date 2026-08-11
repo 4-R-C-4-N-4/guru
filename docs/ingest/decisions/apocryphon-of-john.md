@@ -29,17 +29,25 @@ edition — reads as a contradiction if you only see two of the three facts.
 will fail on this id, by construction rather than by defect. Node 02's artifact
 is produced by `scripts/pdf_synoptic_extract.py` instead.
 
-### The PDF is not retained, and that is a gap
+### The PDF is retained outside the repository, and pins its own hash
 
-The only record of where the artifact came from is the `url` in
-`sources/manifest.toml`. The PDF itself is not in the repository and not on
-the ingesting machine; `raw/gnosticism/apocryphon-of-john*.txt` are the
-extractor's outputs and are git-ignored. If that landing page changes, the
-extraction is not reproducible from anything we hold.
+`raw/gnosticism/apocryphon-of-john.meta.toml` records both the filename and a
+`pdf_sha256`. The artifact is on the ingesting machine at
+`~/Documents/The_Secret_Writing_According_to_John_A_P.pdf` (442,451 bytes), and
+its hash matches the recorded one exactly — verified 2026-08-11. The sibling
+directory `~/Documents/The_Secret_Writing_According_to_John/` holds the
+original extraction working files.
 
-This is tolerable for a public-domain text with a stable-looking host and
-intolerable as a general policy. Flagged rather than fixed — a raw-artifact
-retention rule is a workbook-wide decision, not this text's to make.
+So the extraction is reproducible, and the recorded hash makes any future
+substitution detectable, which is the property that actually matters. What is
+*not* guaranteed is durability: the PDF lives in a user directory outside any
+repository, and `raw/gnosticism/apocryphon-of-john*.txt` — the extractor's
+outputs — are git-ignored. If both that directory and the landing page go, the
+`pdf_sha256` becomes a checksum with nothing to check.
+
+Whether raw artifacts should be retained somewhere the repository knows about
+is a workbook-wide question, not this text's to settle. Recording the hash at
+ingest time, as node 02 did here, is worth doing regardless.
 
 ---
 
@@ -364,6 +372,38 @@ an editor's headnote — and it outranked forty 0.85s of which twenty were right
 Nodes 01–14 complete. Live graph state for this text: 24 chunk nodes, 188
 `EXPRESSES` edges, 34 `PARALLELS`, 1 `CONTRASTS`. Both review queues drained by
 the user; no pending `staged_tags` or `staged_edges` remain.
+
+### Continuity check · 2026-08-11
+
+Re-derived the chunker's input and diffed it against its output, to confirm
+that a PDF-sourced, geometry-split extraction lost nothing:
+
+1. Read `raw/gnosticism/apocryphon-of-john.txt`, applied the config's
+   `pre_strip_patterns`, removed the `== heading ==` delimiters.
+2. Normalised whitespace and diffed word-by-word against the concatenation of
+   all 24 chunk bodies in file order.
+
+**Result: 8,471 source words against 8,435 chunk words, and the only opcode is
+a single deletion at position 0** — the extractor's 36-word file header
+(`The Secret Writing According to John … Witness: Codex II, 1 …`), which the
+splitter drops as everything preceding the first match. No other insertion,
+deletion or reordering anywhere. Every word of the translation survives, in
+order, exactly once.
+
+Supporting checks, all clean:
+
+| check | result |
+|---|---|
+| ordinals | 24 files, `001`–`024`, no gaps, no duplicates, ids match filenames |
+| Codex II pagination | 31 refs, pages 2–32 — none missing, none repeated |
+| Codex IV pagination | 48 refs, pages 2–49 — none missing, none repeated |
+| tokens | 11,803 total, avg 491, max 797, under `max_tokens = 800` |
+
+The pagination result is the one worth keeping. Page markers are the sentinel
+mechanism described under node 02, and a complete unbroken run for both
+witnesses is direct evidence that the sentinel survived extraction, chunking
+and `clean_bodies` without a single marker being eaten by the P9 rule that
+motivated it.
 
 Not done, and deliberately out of scope here: `guru ingest status` reporting
 `[x]` for nodes 10/12/13 on partial coverage (ticket `1f6d2c11`), and the
