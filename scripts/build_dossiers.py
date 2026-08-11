@@ -87,16 +87,29 @@ def load_text_chunks(tradition: str, text_id: str) -> list[Chunk]:
 
 # ── span planning ─────────────────────────────────────────────────────────────
 
-_PART_SUFFIX = re.compile(r"([0-9IVXLCivxlc])[a-z]$")
+# `-?` is regex_splitter.SUB_SEP, optional (todo:0888eb07). The chunker used to
+# append the sub-chunk suffix bare ('Rune Ia') and now separates it
+# ('Rune I-a'); both forms are live, because only the 14 texts whose labels
+# fused were re-chunked. Matching both is not a transition measure — a corpus
+# built before the separator stays valid, and this must keep reading it.
+#
+# The stem class stays exactly as narrow as it was. Widening it to catch
+# 'Preface-a', which the separator makes newly *detectable*, would collapse
+# groups that main does not collapse, and span plans are a freeze artifact:
+# the grouping this function produces has to be identical across the label
+# change or the next `dossier plan` renumbers spans that already have promoted
+# summary_nodes behind them. tests/test_span_plan.py asserts that parity
+# label-pair by label-pair.
+_PART_SUFFIX = re.compile(r"([0-9IVXLCivxlc])-?[a-z]$")
 # Only a LETTERED ', Section Na' tail is a sub-part marker ('Chapter II,
 # Section 1a' → 'Chapter II'). An unlettered ', Section N' is real section
 # identity — Plotinus is 'Select Works, Section 1..326' — and must survive.
-_SECTION_TAIL = re.compile(r",\s*Section\s+\d+[a-z]$", re.I)
+_SECTION_TAIL = re.compile(r",\s*Section\s+\d+-?[a-z]$", re.I)
 _PARENS_PART = re.compile(r"\s*\(part \d+\)$", re.I)
 
 
 def base_section(section: str | None) -> str:
-    """Collapse part markers: 'Rune Ia'→'Rune I', '1b'→'1',
+    """Collapse part markers: 'Rune Ia'/'Rune I-a'→'Rune I', '1b'→'1',
     'Chapter II, Section 1a'→'Chapter II',
     'Select Works, Section 19 (part 2)'→'Select Works, Section 19'."""
     if not section:

@@ -174,11 +174,27 @@ def test_corpus_has_no_fused_sub_chunk_labels():
 def test_fused_allowlist_stays_earned():
     """An allowlisted text must still be genuinely un-chunkable. When the raw
     reappears, this fails and the entry comes out — the allowlist cannot
-    quietly outlive its reason."""
+    quietly outlive its reason.
+
+    The glob is `{text_id}*.txt`, not `{text_id}.txt`, because that is not the
+    name the raw arrives under. `pdf_synoptic_extract.py:410` writes
+    `apocryphon-of-john-{codex-ii,bg-8502,codex-iii}.txt` and the manifest's
+    documented command produces exactly those; `chunk.py:269` wants
+    `apocryphon-of-john.txt`, so there is a rename in between. Watching only
+    the post-rename name means the canary stays green through the window where
+    the raw is present and the text is chunkable.
+
+    Machine-dependent by construction: `raw/` is git-ignored, so this can never
+    fire in CI, and it *will* fail on a checkout that legitimately holds the
+    raw. That failure is the message — regenerate the corpus and delete the
+    allowlist entry.
+    """
     for text_id in FUSED_BLOCKED_ON_RAW:
-        raws = list((PROJECT_ROOT / "raw").glob(f"*/{text_id}.txt"))
-        assert not raws, (f"{text_id} has a raw file again ({raws[0]}) — "
-                          f"re-chunk it and drop it from FUSED_BLOCKED_ON_RAW")
+        raws = sorted((PROJECT_ROOT / "raw").glob(f"*/{text_id}*.txt"))
+        assert not raws, (
+            f"{text_id} has raw again ({', '.join(p.name for p in raws)}) — "
+            f"rename to {text_id}.txt if needed, re-chunk, and drop it from "
+            f"FUSED_BLOCKED_ON_RAW")
 
 
 def test_corpus_has_no_overflow_suffix_labels():

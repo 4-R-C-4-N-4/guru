@@ -69,6 +69,22 @@ first attempt at this pass showed 328 modified files on a plain re-chunk with
 no code change at all, which was node 07 not having been re-run, not a bug in
 the chunker.
 
+**The corpus is on two label conventions, and a re-chunk is where you meet
+it.** The todo:0888eb07 separator is unconditional in the chunker, but only the
+14 texts whose labels actually fused were re-chunked. The other 156 texts with
+sub-chunk runs still store the fused digit-stem form — `dhammapada-chapter-01`
+is `Chapter I, Section 1a…1e`, the plato texts are `Section 1a`, all of which
+read correctly and were left alone deliberately. So the empty-diff check above
+holds for the 14 and not for the rest: re-chunk `dhammapada` for an unrelated
+reason and you will get a label diff you did not ask for, on top of whatever
+you were changing.
+
+That diff is correct and safe to ship — `base_section` in the dossier planner
+reads both forms and groups them identically, asserted in
+`tests/test_span_plan.py` — but decide it deliberately rather than discovering
+it mid-change. `test_corpus_has_no_fused_sub_chunk_labels` will not warn you:
+it only flags stems ending in a letter, which is the defect, not the residue.
+
 **A text whose raw cannot be regenerated.** `raw/` is git-ignored, so a source
 whose raw is not a plain fetch cannot be re-chunked from a fresh checkout.
 `apocryphon-of-john` is the current case — its raw comes from
