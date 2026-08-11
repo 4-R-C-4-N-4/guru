@@ -68,6 +68,16 @@ PY
 A gap means the delimiter is inconsistent in the source, not that the text is
 absent. Go and read the raw at the gap before concluding anything else.
 
+Once you have counted, write the count down. `tests/test_enumerated_text_counts.py`
+holds one row per text whose source numbers its own units — expected count and
+label template, taken from the printed edition rather than from the corpus — and
+asserts both the total and that label tracks file ordinal. The second assertion
+is the one that earns its keep: yoga-sutras book-02 had file 046 labelled
+"Sutra 47" and its last file, 053, labelled "Sutra 55", so the count could look
+plausible while a citation resolved by file position landed on the wrong sutra.
+A one-line addition there is the difference between this check happening once
+and it happening on every run.
+
 **Re-chunking to fix this is not cheap, so find it here.** Chunk ids are file
 ordinals; splitting a merged chunk renumbers every chunk after it, and every
 `staged_tag`, `staged_edge` and `review_action` keyed to those ids goes stale.
