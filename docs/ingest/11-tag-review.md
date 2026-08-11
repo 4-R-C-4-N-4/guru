@@ -62,6 +62,20 @@ own order and exits non-zero on anything that would raise.
 
 ## Failure modes
 
+**Reading "nothing staged to review" as "nobody has looked".** It used to mean
+both. The gate tests live and staged state only, so queued-but-unapplied
+`review_actions` were invisible to it, and the most common intermediate state
+in the pipeline — every judgement made, sitting in the queue waiting for the
+user — rendered exactly like an untouched text. After the yoga-sutras pass,
+2,579 queued verdicts were reported as an absence.
+
+Since todo:4264c23f the gate says `N tag verdicts queued, awaiting your apply
+— POST /api/apply`. The node still reports not-done, because a queued verdict
+is not an applied one; only the message changed, from an absence to a call to
+action. It also makes an agent's hand-off checkable: "node 11 complete" can
+now be verified against the status machine instead of taken on trust, which is
+the reason review and apply are separate in the first place.
+
 **Queueing blind.** Every accept and reject must come from having read the
 chunk body. Not "the model is well calibrated here", not "I read thirty of
 fifty-five and the rest looked similar", not grepping ids out of a batch dump.

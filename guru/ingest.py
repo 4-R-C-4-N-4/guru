@@ -132,6 +132,16 @@ class Ctx:
         except sqlite3.Error:
             return 0
 
+    def has_table(self, name: str) -> bool:
+        """Whether `name` exists, so a probe can tell "nothing missing" from
+        "could not look". ``count`` returns 0 on any sqlite error, and 0 is
+        also what a clean coverage query returns — a probe that cannot
+        distinguish them reports a green node for a database that never
+        answered the question."""
+        return self.count(
+            "SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?",
+            name) > 0
+
 
 # ---------------------------------------------------------------- nodes
 
@@ -263,9 +273,77 @@ def _p_graph(ctx: Ctx) -> tuple[bool, str]:
 
 
 def _p_tag(ctx: Ctx) -> tuple[bool, str]:
+    # Coverage, not existence. Counting staged_tags rows lets a single
+    # surviving chunk satisfy the node: after a partial re-chunk,
+    # yoga-sutras-book-02 reported [x] with 3 of 55 chunks tagged, and because
+    # node 11's gate is "no pending rows remain", 52 untagged chunks made that
+    # trivially true too. Both nodes went green and the text walked to node 12
+    # silently under-tagged (todo:1f6d2c11).
+    #
+    # tagging_progress is the right signal rather than staged_tags, because a
+    # chunk the tagger processed and found nothing in is legitimately tagless.
+    # plotinus-select-works-index has 107 of 752 chunks with no staged_tags and
+    # all 752 in tagging_progress; keying on staged_tags would call that a gap
+    # forever.
+    chunks = ctx.count("SELECT count(*) FROM nodes WHERE type='chunk' AND id LIKE ? ESCAPE '\\'",
+                       ctx.chunk_like)
+    if chunks == 0:
+        return False, "no chunk nodes to tag — node 09 first"
     n = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ? ESCAPE '\\'",
                   ctx.chunk_like)
-    return (n > 0), (f"{n} staged tags" if n else "no staged_tags rows for this text")
+    if not ctx.has_table("tagging_progress"):
+        # Pre-tagging_progress database: say so rather than implying coverage
+        # was checked and passed.
+        return (n > 0), (f"{n} staged tags (no tagging_progress table — "
+                         f"coverage unverified)" if n
+                         else "no staged_tags rows for this text")
+    missing = ctx.count(
+        "SELECT count(*) FROM nodes n "
+        "LEFT JOIN tagging_progress p ON p.chunk_id = n.id "
+        "WHERE n.type='chunk' AND n.id LIKE ? ESCAPE '\\' AND p.chunk_id IS NULL",
+        ctx.chunk_like)
+    if missing:
+        return False, f"{missing} of {chunks} chunks untagged — run with --resume"
+    return True, f"all {chunks} chunks tagged, {n} staged tags"
+
+
+def _queued_tag_actions(ctx: Ctx) -> int:
+    """Unapplied review_actions against this text's staged_tags."""
+    return ctx.count(
+        "SELECT count(*) FROM review_actions ra "
+        "JOIN staged_tags st ON st.id = ra.target_id "
+        "WHERE ra.target_table = 'staged_tags' AND ra.applied_at IS NULL "
+        "AND st.chunk_id LIKE ? ESCAPE '\\'",
+        ctx.chunk_like)
+
+
+def _queued_edge_actions(ctx: Ctx) -> int:
+    """Unapplied review_actions against staged_edges touching this text."""
+    pref = ctx.chunk_like
+    return ctx.count(
+        "SELECT count(*) FROM review_actions ra "
+        "JOIN staged_edges se ON se.id = ra.target_id "
+        "WHERE ra.target_table = 'staged_edges' AND ra.applied_at IS NULL "
+        "AND (se.source_chunk LIKE ? ESCAPE '\\' OR se.target_chunk LIKE ? ESCAPE '\\')",
+        pref, pref)
+
+
+# The queue is invisible to the live/staged tables the gates test, so the most
+# common intermediate state in the pipeline — every judgement made and sitting
+# in review_actions waiting for the user — used to render identically to
+# "nobody has looked at this yet" (todo:4264c23f). After the yoga-sutras node
+# 14 pass, 696 validated verdicts were queued and node 14 said "nothing staged
+# to review". That is the state the user most needs to act on, and it is also
+# what makes an agent's "node 14 complete" checkable rather than something the
+# user has to take on trust — which is the whole point of separating review
+# from apply.
+#
+# It does not change any verdict: a queued action is still not applied, so the
+# node stays not-done. Only the message changes, from an absence to a call to
+# action.
+def _awaiting_apply(queued: int, what: str) -> str:
+    return (f"{queued} {what} verdict{'s' if queued != 1 else ''} queued, "
+            f"awaiting your apply — POST /api/apply")
 
 
 def _p_tag_review(ctx: Ctx) -> tuple[bool, str]:
@@ -273,10 +351,18 @@ def _p_tag_review(ctx: Ctx) -> tuple[bool, str]:
                      ctx.chunk_like)
     total = ctx.count("SELECT count(*) FROM staged_tags WHERE chunk_id LIKE ? ESCAPE '\\'",
                       ctx.chunk_like)
+    queued = _queued_tag_actions(ctx)
     if total == 0:
         return False, "nothing staged to review"
     if pend:
+        if queued:
+            return False, (f"{pend} of {total} staged tags still pending; "
+                           + _awaiting_apply(queued, "tag"))
         return False, f"{pend} of {total} staged tags still pending"
+    if queued:
+        # Reachable: reassign marks the donor 'reassigned' and inserts a new
+        # pending row, so a queue can be non-empty with nothing pending.
+        return False, _awaiting_apply(queued, "tag")
     return True, f"all {total} staged tags reviewed"
 
 
@@ -299,6 +385,19 @@ def _p_embed(ctx: Ctx) -> tuple[bool, str]:
 
 
 def _p_edges(ctx: Ctx) -> tuple[bool, str]:
+    # Deliberately existence, not coverage — unlike nodes 10 and 12.
+    #
+    # todo:1f6d2c11 named this probe alongside them, but the invariant does not
+    # transfer. Candidate pairs come from vector similarity above
+    # --min-similarity, so a chunk with no near neighbour in another tradition
+    # correctly yields no staged_edges; per-chunk coverage would be a gate no
+    # text could pass. Nor is there a propose_edges equivalent of
+    # tagging_progress recording which chunks were considered, so "the run
+    # covered this text" is not answerable from the database at all.
+    #
+    # Adding that record is the prerequisite for a coverage probe here. Until
+    # then this reports what it can actually see, and the count is worth
+    # reading rather than glancing at.
     pref = ctx.chunk_like
     n = ctx.count(
         "SELECT count(*) FROM staged_edges WHERE source_chunk LIKE ? ESCAPE '\\' "
@@ -315,10 +414,20 @@ def _p_edge_review(ctx: Ctx) -> tuple[bool, str]:
     total = ctx.count(
         "SELECT count(*) FROM staged_edges "
         "WHERE source_chunk LIKE ? ESCAPE '\\' OR target_chunk LIKE ? ESCAPE '\\'", pref, pref)
+    queued = _queued_edge_actions(ctx)
     if total == 0:
+        # A queue against zero staged edges cannot happen, but say it rather
+        # than silently reporting an absence over the top of a queue.
+        if queued:
+            return False, _awaiting_apply(queued, "edge")
         return False, "nothing staged to review"
     if pend:
+        if queued:
+            return False, (f"{pend} of {total} staged edges still pending; "
+                           + _awaiting_apply(queued, "edge"))
         return False, f"{pend} of {total} staged edges still pending"
+    if queued:
+        return False, _awaiting_apply(queued, "edge")
     return True, f"all {total} staged edges reviewed"
 
 
