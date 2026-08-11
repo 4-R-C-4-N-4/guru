@@ -118,6 +118,17 @@ def split(text: str, config: dict) -> list[Chunk]:
     return chunks
 
 
+
+# Separator between a section label and its sub-chunk suffix. Without one the
+# suffix fuses into the last word and the label stops being readable as a
+# citation: "Preface" -> "Prefacea", "Rune XXXVIII" -> "Rune XXXVIIIa". Roman
+# numerals are the worst case — "Chapter VIa" is ambiguous between VI + "a"
+# and V + "ia", and nothing tells a reader which part is the chunker's
+# (todo:0888eb07). Digit-ending labels ("Section 1a") read fine either way,
+# but the separator is unconditional: one convention, no special cases.
+SUB_SEP = "-"
+
+
 def _letter_suffix(idx: int) -> str:
     """Bijective base-26 sub-chunk suffix: 0→'a' … 25→'z', 26→'aa', 27→'ab'.
 
@@ -204,7 +215,7 @@ def subsplit(chunk: Chunk, max_tokens: int, count_fn) -> list[Chunk]:
         if not current_paras:
             return
         suffix = _letter_suffix(suffix_idx)
-        label = f"{chunk.section_label}{suffix}"
+        label = f"{chunk.section_label}{SUB_SEP}{suffix}"
         body = "\n\n".join(current_paras)
         sub_chunks.append(Chunk(section_label=label, body=body, token_count=count_fn(body)))
         current_paras = []
