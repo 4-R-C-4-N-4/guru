@@ -317,6 +317,24 @@ def _queued_tag_actions(ctx: Ctx) -> int:
         ctx.chunk_like)
 
 
+# propose_edges.py persists the judge's negative verdicts as settled rows
+# (status='rejected', reviewed_by='model-negative'). They are machine history,
+# not review material: they never enter the review queue, and counting them as
+# reviewable would let a text with no human verdicts report itself reviewed.
+# Every edge probe that asks "how much is there to review" excludes them.
+NOT_MODEL_NEGATIVE = \
+    "NOT (se.status = 'rejected' AND se.reviewed_by = 'model-negative')"
+
+
+def _model_negatives(ctx: Ctx) -> int:
+    pref = ctx.chunk_like
+    return ctx.count(
+        "SELECT count(*) FROM staged_edges se "
+        "WHERE se.status = 'rejected' AND se.reviewed_by = 'model-negative' "
+        "AND (se.source_chunk LIKE ? ESCAPE '\\' OR se.target_chunk LIKE ? ESCAPE '\\')",
+        pref, pref)
+
+
 def _queued_edge_actions(ctx: Ctx) -> int:
     """Unapplied review_actions against staged_edges touching this text."""
     pref = ctx.chunk_like
@@ -395,14 +413,24 @@ def _p_edges(ctx: Ctx) -> tuple[bool, str]:
     # tagging_progress recording which chunks were considered, so "the run
     # covered this text" is not answerable from the database at all.
     #
-    # Adding that record is the prerequisite for a coverage probe here. Until
-    # then this reports what it can actually see, and the count is worth
-    # reading rather than glancing at.
+    # edge_progress (v3_009) now records which chunks a sweep completed, and
+    # under which retrieval regime, so that record finally exists. Gating on
+    # it is still deferred: no sweep before Phase 0 wrote a row, so a coverage
+    # gate would fail every text ingested to date. Wire it once the corpus has
+    # been swept under a recorded regime.
+    #
+    # Until then this stays an existence probe, but counts proposals only —
+    # model negatives are the judge declining a pair, not a proposal, and a
+    # negatives-only sweep should not read as "this text has edges".
     pref = ctx.chunk_like
     n = ctx.count(
-        "SELECT count(*) FROM staged_edges WHERE source_chunk LIKE ? ESCAPE '\\' "
-        "OR target_chunk LIKE ? ESCAPE '\\'", pref, pref)
-    return (n > 0), (f"{n} staged edges touch this text" if n else "no staged_edges for this text")
+        f"SELECT count(*) FROM staged_edges se WHERE {NOT_MODEL_NEGATIVE} "
+        "AND (se.source_chunk LIKE ? ESCAPE '\\' OR se.target_chunk LIKE ? ESCAPE '\\')",
+        pref, pref)
+    neg = _model_negatives(ctx)
+    suffix = f" ({neg} model negatives)" if neg else ""
+    return (n > 0), (f"{n} staged edges touch this text{suffix}" if n
+                     else f"no staged_edges for this text{suffix}")
 
 
 def _p_edge_review(ctx: Ctx) -> tuple[bool, str]:
@@ -411,9 +439,14 @@ def _p_edge_review(ctx: Ctx) -> tuple[bool, str]:
         "SELECT count(*) FROM staged_edges WHERE status='pending' "
         "AND (source_chunk LIKE ? ESCAPE '\\' OR target_chunk LIKE ? ESCAPE '\\')",
         pref, pref)
+    # Review material only. Persisted model negatives are settled machine
+    # history and never reach the queue, so counting them here would both
+    # inflate the denominator and — for a text whose sweep produced only
+    # negatives — let pend=0 report "all N reviewed" over zero human verdicts.
     total = ctx.count(
-        "SELECT count(*) FROM staged_edges "
-        "WHERE source_chunk LIKE ? ESCAPE '\\' OR target_chunk LIKE ? ESCAPE '\\'", pref, pref)
+        f"SELECT count(*) FROM staged_edges se WHERE {NOT_MODEL_NEGATIVE} "
+        "AND (se.source_chunk LIKE ? ESCAPE '\\' OR se.target_chunk LIKE ? ESCAPE '\\')",
+        pref, pref)
     queued = _queued_edge_actions(ctx)
     if total == 0:
         # A queue against zero staged edges cannot happen, but say it rather

@@ -32,56 +32,23 @@ from propose_edges import (  # noqa: E402
     upsert_staged_edge,
 )
 
-MIGRATION_V3_010 = PROJECT_ROOT / "scripts" / "migrations" / "v3_010_model_negative_dedup.sql"
-
-# Live-shape staged_edges: v3_005 table + v3_009 columns.
-SCHEMA = """
-CREATE TABLE nodes (
-    id   TEXT PRIMARY KEY,
-    type TEXT NOT NULL
-);
-CREATE TABLE staged_edges (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    source_chunk    TEXT NOT NULL REFERENCES nodes(id),
-    target_chunk    TEXT NOT NULL REFERENCES nodes(id),
-    edge_type       TEXT NOT NULL CHECK(edge_type IN ('PARALLELS','CONTRASTS','surface_only','unrelated')),
-    confidence      REAL NOT NULL DEFAULT 0.0,
-    justification   TEXT,
-    status          TEXT NOT NULL DEFAULT 'pending'
-                        CHECK(status IN ('pending','accepted','rejected','reclassified')),
-    tier            TEXT NOT NULL DEFAULT 'proposed'
-                        CHECK(tier IN ('verified','proposed')),
-    reviewed_by     TEXT,
-    reviewed_at     TEXT,
-    model           TEXT,
-    prompt_version  TEXT,
-    similarity      REAL,
-    presentation_order TEXT CHECK(presentation_order IN ('ab','ba'))
-);
-CREATE UNIQUE INDEX idx_staged_edges_provenance_unique
-    ON staged_edges(source_chunk, target_chunk, model, prompt_version)
-    WHERE status = 'pending';
-CREATE TABLE edge_progress (
-    chunk_id        TEXT PRIMARY KEY REFERENCES nodes(id),
-    model           TEXT NOT NULL,
-    prompt_version  TEXT NOT NULL,
-    completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
-);
-"""
+SCHEMA_SQL = PROJECT_ROOT / "scripts" / "schema.sql"
 
 
 @pytest.fixture()
 def conn() -> sqlite3.Connection:
+    """Built from scripts/schema.sql — the canonical DDL a fresh checkout uses.
+
+    Deliberately not an inline schema copy. An inline copy is correct on the
+    day it is written and cannot ever notice the real schema drifting away
+    from it, which is precisely how these write paths came to work against
+    every workbench DB while failing on a fresh checkout.
+    """
     c = sqlite3.connect(":memory:")
-    c.executescript(SCHEMA)
-    # Apply v3_010 minus the sqlite3-CLI dot-commands.
-    sql = "\n".join(
-        line for line in MIGRATION_V3_010.read_text().splitlines()
-        if not line.startswith(".")
-    )
-    c.executescript(sql)
+    c.executescript(SCHEMA_SQL.read_text())
     for cid in ("trad_a.text1.001", "trad_b.text2.001"):
-        c.execute("INSERT INTO nodes(id, type) VALUES(?, 'chunk')", (cid,))
+        c.execute("INSERT INTO nodes(id, type, label) VALUES(?, 'chunk', ?)",
+                  (cid, cid))
     yield c
     c.close()
 

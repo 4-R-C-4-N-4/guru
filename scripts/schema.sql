@@ -119,6 +119,18 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_edges_provenance_unique
     ON staged_edges(source_chunk, target_chunk, model, prompt_version)
     WHERE status = 'pending';
 
+-- Dedup for persisted model negatives (propose_edges.py writes the judge's
+-- surface_only/unrelated verdicts as status='rejected',
+-- reviewed_by='model-negative'). Those rows arrive already settled, so the
+-- pending-only index above cannot see them and a re-run would duplicate.
+-- Scoped to the sentinel rather than widening over all rejected rows: the
+-- rationale above still holds for curated rejections, which must stay outside
+-- dedup as frozen audit history. Applied to existing DBs by
+-- scripts/migrations/v3_010_model_negative_dedup.sql.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_edges_model_negative_unique
+    ON staged_edges(source_chunk, target_chunk, model, prompt_version)
+    WHERE status = 'rejected' AND reviewed_by = 'model-negative';
+
 -- ============================================================
 -- STAGING — model-proposed body cleanups (todo:b44966d0)
 -- ============================================================

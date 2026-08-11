@@ -240,12 +240,22 @@ def insert_model_negative(conn: sqlite3.Connection,
 
 
 def mark_edge_progress(conn: sqlite3.Connection, chunk_id: str,
-                       model: str, prompt_version: str) -> None:
-    """Record a completed sweep of one chunk (mirrors tagging_progress)."""
+                       model: str, prompt_version: str,
+                       top_n: int | None = None,
+                       min_similarity: float | None = None) -> None:
+    """Record a completed sweep of one chunk (mirrors tagging_progress).
+
+    Keyed by (chunk_id, model, prompt_version), so a second model's sweep adds
+    a record rather than replacing the first's. top_n / min_similarity record
+    the retrieval regime: without them a chunk swept at `--top-n 5
+    --min-similarity 0.75` is indistinguishable from one swept wide, which is
+    the whole reason this table cannot be backfilled from history.
+    """
     conn.execute(
-        """INSERT OR REPLACE INTO edge_progress(chunk_id, model, prompt_version)
-           VALUES(?,?,?)""",
-        (chunk_id, model, prompt_version),
+        """INSERT OR REPLACE INTO edge_progress
+               (chunk_id, model, prompt_version, top_n, min_similarity)
+           VALUES(?,?,?,?,?)""",
+        (chunk_id, model, prompt_version, top_n, min_similarity),
     )
 
 
@@ -369,10 +379,23 @@ def run_proposals(
         # "Done" only when every neighbour of this chunk got a persisted
         # verdict (or was already settled). An errored pair means the sweep
         # must revisit this chunk, so no progress row.
+        #
+        # An empty neighbour list still marks progress: under a recorded
+        # regime "swept, nothing cleared the floor" is a real and useful
+        # answer, distinct from "never swept". The regime columns are what
+        # make that distinction safe — a later wide sweep reads
+        # min_similarity on the row rather than treating presence as full
+        # coverage.
         if chunk_errors == 0:
-            mark_edge_progress(conn, chunk_id, model, PROMPT_VERSION)
+            mark_edge_progress(conn, chunk_id, model, PROMPT_VERSION,
+                               top_n=top_n, min_similarity=min_similarity)
 
-    conn.commit()
+        # Commit per chunk, not once at the end. These are multi-hour sweeps;
+        # a crash or interrupt at the end of an all-at-once transaction throws
+        # away every verdict and progress row it earned, which defeats the
+        # point of recording progress at all.
+        conn.commit()
+
     conn.close()
     print(f"\nDone: {proposed} proposals written, {negatives} negatives persisted, "
           f"{skipped} pairs skipped, {errors} errors")
