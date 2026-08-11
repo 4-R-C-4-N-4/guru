@@ -11,7 +11,9 @@ Requires the similarity column from v3_009_edge_provenance.sql.
 
 Guarantees, enforced and verified in-script:
   - fills NULL similarity only; never overwrites a non-NULL value
-  - no rows inserted or deleted (asserted on row count before/after)
+  - no rows inserted or deleted — row count and scored count are checked
+    inside the write transaction, which rolls back if either fails, so a
+    failed run leaves the database untouched rather than needing a restore
   - recoverable regardless: the column is derived data, recomputable from
     chunk_embeddings at any time (re-NULL and re-run)
 
@@ -66,6 +68,7 @@ def main() -> None:
         sys.exit(f"DB not found: {args.db}")
 
     conn = sqlite3.connect(str(args.db))
+    conn.isolation_level = None  # explicit BEGIN/COMMIT below, no implicit txn
     cols = {r[1] for r in conn.execute("PRAGMA table_info(staged_edges)")}
     if "similarity" not in cols:
         sys.exit("staged_edges.similarity missing — run "
@@ -100,30 +103,37 @@ def main() -> None:
         conn.close()
         return
 
+    # Verify inside the transaction, commit only if the counts hold — a
+    # failed check rolls back rather than leaving the operator to restore
+    # from backup.
+    conn.execute("BEGIN")
     conn.executemany(
         "UPDATE staged_edges SET similarity = ? WHERE id = ? AND similarity IS NULL",
         updates,
     )
-    conn.commit()
 
-    # ----- post-write verification ------------------------------------------
     total_after = conn.execute("SELECT COUNT(*) FROM staged_edges").fetchone()[0]
     scored_after = conn.execute(
         "SELECT COUNT(*) FROM staged_edges WHERE similarity IS NOT NULL"
     ).fetchone()[0]
     null_after = total_after - scored_after
-    conn.close()
 
     ok_rows = total_after == total_before
     ok_scored = scored_after == already + len(updates)
-    print(f"wrote {len(updates):,} rows")
     print(f"verify: row count {total_before:,} -> {total_after:,} "
           f"({'ok' if ok_rows else 'MISMATCH'})")
     print(f"verify: scored {already:,} -> {scored_after:,}, expected "
           f"{already + len(updates):,} ({'ok' if ok_scored else 'MISMATCH'})")
     print(f"verify: still NULL {null_after:,} (missing-embedding rows)")
+
     if not (ok_rows and ok_scored):
-        sys.exit("VERIFICATION FAILED — restore from backup and investigate")
+        conn.rollback()
+        conn.close()
+        sys.exit("VERIFICATION FAILED — rolled back, nothing written")
+
+    conn.commit()
+    conn.close()
+    print(f"wrote {len(updates):,} rows")
 
 
 if __name__ == "__main__":

@@ -18,12 +18,21 @@
 --      column AB/BA symmetry is permanently unauditable from the store.
 --      NULL on all existing rows — historically unrecoverable by design.
 --
---   3. edge_progress — mirrors tagging_progress, plus (model, prompt_version)
---      since sweep completion is relative to the model and prompt that swept.
---      836 chunks (15%) have never been evaluated and nothing records what
---      has been swept. Seeded EMPTY, deliberately: nothing recorded which
---      chunks a historical sweep actually completed, and inferred "done"
---      markers under the top-5-with-floor regime would suppress exactly the
+--   3. edge_progress — mirrors tagging_progress, keyed by
+--      (chunk_id, model, prompt_version) since sweep completion is only
+--      meaningful relative to the model and prompt that swept: two models
+--      must each be able to hold a record for the same chunk, or "which
+--      chunks has model A covered" — the Phase 2 question — stops being
+--      answerable the moment a second model runs.
+--
+--      top_n / min_similarity record the retrieval regime. Without them a
+--      row written by `--top-n 5 --min-similarity 0.75` is indistinguishable
+--      from one written by a wide sweep, which is the same ambiguity that
+--      makes backfilling this table from history impossible.
+--
+--      Seeded EMPTY, deliberately: nothing recorded which chunks a
+--      historical sweep actually completed, and inferred "done" markers
+--      under the top-5-with-floor regime would suppress exactly the
 --      re-coverage a Phase 2 wide sweep is for. Populate going forward only.
 --
 -- Additive only: no table recreation, no index changes, no rows touched.
@@ -49,11 +58,16 @@ ALTER TABLE staged_edges ADD COLUMN presentation_order TEXT
     CHECK(presentation_order IN ('ab', 'ba'));
 
 CREATE TABLE IF NOT EXISTS edge_progress (
-    chunk_id        TEXT PRIMARY KEY REFERENCES nodes(id),
+    chunk_id        TEXT NOT NULL REFERENCES nodes(id),
     model           TEXT NOT NULL,
     prompt_version  TEXT NOT NULL,
-    completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+    top_n           INTEGER,
+    min_similarity  REAL,
+    completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    PRIMARY KEY (chunk_id, model, prompt_version)
 );
+
+CREATE INDEX IF NOT EXISTS idx_edge_progress_chunk ON edge_progress(chunk_id);
 
 -- ----- verification --------------------------------------------------------
 
@@ -69,6 +83,10 @@ SELECT 'verify: new columns all NULL (no rows touched)' AS check_name,
 SELECT 'verify: edge_progress exists and is empty' AS check_name,
        COUNT(*) AS rows
   FROM edge_progress;
+
+SELECT 'verify: edge_progress PK is (chunk_id, model, prompt_version)' AS check_name;
+SELECT name, pk FROM pragma_table_info('edge_progress')
+ WHERE pk > 0 ORDER BY pk;
 
 SELECT 'verify: staged_edges row count unchanged (compare against manifest)' AS check_name,
        COUNT(*) AS total_rows
