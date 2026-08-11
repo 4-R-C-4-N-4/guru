@@ -1,13 +1,13 @@
 {
   "id": "a8bb7213",
   "type": "bug",
-  "state": "active",
+  "state": "done",
   "summary": "reassign overwrites the donor tag's concept_id, destroying its provenance",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-09T14:03:57.204Z",
-  "updated_at": "2026-08-11T12:51:42.252Z",
+  "updated_at": "2026-08-11T12:51:53.825Z",
   "files": [
     {
       "path": "guru-review/server/src/apply.ts",
@@ -34,5 +34,13 @@
     "base_branch": "main",
     "started_at": "2026-08-11T12:51:42.252Z",
     "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "27685d31ad19a1f791b46a62d7a512601d5170ef",
+    "resolved_at": "2026-08-11T12:51:53.825Z",
+    "resolved_by": "unknown",
+    "test_file": "guru-review/server/src/apply.test.ts",
+    "test_function": "reassign provenance (todo:a8bb7213)",
+    "note": "updateStagedTagConcept dropped from apply.ts and the equivalent concept_id= from review_tags.py; donor keeps its original concept_id with status='reassigned'. Parity preserved (both implementations changed together)."
   }
 }
