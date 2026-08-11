@@ -60,6 +60,36 @@ Reports the staged-tag count for the text.
 
 ## Failure modes
 
+**The gate now counts coverage, not existence — it used to count neither.**
+Until todo:1f6d2c11 the probe asked whether *any* `staged_tags` row existed for
+the text, so one surviving chunk satisfied it. After a partial re-chunk,
+`yoga-sutras-book-02` reported `[x]` with 3 of 55 chunks tagged, and because
+node 11's gate is "no pending rows remain", 52 chunks carrying no tags made
+that trivially true as well: 10 green, 11 green, text walks to node 12
+silently under-tagged. It now reads `N of M chunks untagged — run with
+--resume`.
+
+The signal is `tagging_progress`, one row per chunk the tagger processed, not
+`staged_tags`. A chunk the model read and found nothing in is legitimately
+tagless — `plotinus-select-works-index` has 107 of 752 such chunks with all 752
+processed — so keying the gate on `staged_tags` would call that text incomplete
+forever. Corollary: a tagging run that dies mid-chunk leaves no progress row,
+which is what makes `--resume` correct rather than merely convenient.
+
+**What the coverage gate still cannot see: the failure mode directly below
+it.** `mark_complete` runs after the insert loop whether or not the loop had
+anything to insert, and `parse_tags` returns `[]` rather than raising when a
+thinking model burns its budget without closing the JSON. So an overflowed
+chunk is recorded as processed and the gate reports `all N chunks tagged`. A
+repeat of the 2026-05 run, which lost about 12% of chunks this way, would pass
+cleanly. `tagging_progress` cannot distinguish it, because "processed, no tags"
+is also what a legitimately tagless chunk looks like — and that ambiguity is
+exactly what makes the gate work for plotinus. The discriminator would have to
+come from the parse: skip `mark_complete` when the response failed to parse, as
+opposed to parsing to an empty list. Until then the run log's
+`parse_json_response` warnings are the only signal, and the gate going green
+does not stand in for reading them.
+
 **Thinking-budget overflow producing silent gaps.** A thinking model can spend
 its whole token budget on reasoning prose and never close the JSON. This lost
 about 12% of chunks on the 2026-05 run before `parse_json_response` learned to

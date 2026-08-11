@@ -80,6 +80,19 @@ python3 scripts/validate_queue.py
 
 ## Failure modes
 
+**Reading "nothing staged to review" as "nobody has looked".** Same defect as
+node 11, and this is where it was caught: 696 edge verdicts queued and
+validated clean, and `guru ingest status yoga-sutras-book-01` reported
+
+```
+[-] 14-edge-review    Curate the staged edges  ·gate
+    nothing staged to review
+```
+
+which is indistinguishable from a text where node 13 has just run. Since
+todo:4264c23f the gate reports the queue depth and names the apply call. The
+node stays not-done either way — queued is not applied.
+
 **Accepting shared topic as shared move.** Two mystical texts both using
 "light" is not a parallel. The bar is the same conceptual claim, or opposite
 stances on the same question. Justifications reading "both passages

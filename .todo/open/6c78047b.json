@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-09T14:03:39.452Z",
-  "updated_at": "2026-08-09T14:04:35.346Z",
+  "updated_at": "2026-08-11T13:35:57.595Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/tags.ts"
@@ -27,6 +27,28 @@
     ],
     "linked_commits": [
       "2bf73c77"
+    ],
+    "depends_on": [
+      "7a815c05"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-11T12:51:25.098Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Blocked on todo:7a815c05, found while implementing this.\n\nThis ticket's \"Ordering subtlety worth encoding in the check\" section is built on validate_queue.py's claim that the queue applies ORDER BY ra.id DESC. It does not. buildApply drains selectQueuedActions (ORDER BY id ASC) and iterates it directly; the DESC ordering belongs to selectQueueWithContext, which only feeds the queue display route.\n\nProven in guru-review/server/src/apply.test.ts ('queue drain order') against the real openDb / buildApply: reject-then-reassign applies clean; reassign-then-reject throws UNIQUE constraint failed. Exactly the reverse of what this ticket and tests/test_validate_queue.py assume.\n\nTwo consequences for the design here:\n\n1. The suggested check — look up pending tags for (chunk_id, reassign_to, model, prompt_version) and return 409 — is not sufficient. Under insertion order a newly queued action gets the highest id and so applies LAST, meaning every already-queued action applies before it. The check has to replay the existing queue rather than inspect current state, or it will 409 on a queue an earlier reject would have cleared.\n\n2. The false-positive worry inverts too. Under insertion order the working reviewer flow is the intuitive one — reject the occupant, then reassign onto the freed concept — so a queue-time 409 does not block anything a reviewer would naturally do. That makes the 409 a better idea than this ticket feared, once computed against a correct replay.\n\nNot attempted rather than shipped half-correct: a 409 built on the inverted model would reject valid queues and pass the batch-destroying one.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-11T13:35:57.595Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Blocked, not won't-fix. Sequence it after todo:7a815c05.\n\nThe premise survives entirely. POST /api/apply still drains the whole queue in one transaction, so one colliding reassign still discards every other verdict in the batch — the 2,579-action pass this ticket was written against. validate_queue.py is still a net under a hole, and refusing at queue time still makes the bad state unreachable rather than merely detectable, at the moment the reviewer can still pick a different donor or target. Only the mechanism detail in the \"Ordering subtlety\" section was wrong.\n\nThe correction makes the fix cheaper, not harder. That section worried a queue-time 409 would false-positive on the legitimate reject-after-reassign pattern. Under the real insertion order that pattern is not legitimate — it is the one that collides. The order that works is the intuitive one, reject the occupant then reassign onto the freed concept, so the 409 refuses nothing a reviewer would naturally do. The escape hatch this ticket implied might be needed is not needed.\n\n## What to build, once 7a815c05 lands\n\nNot new collision logic — a second caller of the existing replay. The check cannot ask \"is the target pending right now\", because a newly queued action takes the highest id and therefore applies LAST, after everything already queued. It has to ask \"will (chunk_id, reassign_to, model, prompt_version) still be pending once the existing queue has applied\", which is exactly the `pending` map validate_queue.py maintains. Two implementations of that replay drifting apart is how this class of bug arrives, so prefer one shape over two.\n\nShape: on action === 'reassign', replay the unapplied queue in id ASC order to compute the post-queue pending set, then 409 with the colliding staged_tag id if the new row's key is in it. The 409 body should name the colliding id — the reviewer's next move is to reject that tag first, and telling them which one is most of the fix.\n\n## Order of work\n\n1. todo:7a815c05 — flip validate_queue.py to id ASC, and flip tests/test_validate_queue.py::test_clearing_reject_must_be_queued_after_the_reassign, which currently asserts the inverse of what guru-review/server/src/apply.test.ts demonstrates against the real buildApply. Rename it too: the clearing reject must be queued BEFORE.\n2. This ticket, against a validator that can be trusted.\n\nDoing 2 first would encode the inversion in a third place.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    }
+  ]
 }

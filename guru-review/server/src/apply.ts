@@ -104,7 +104,18 @@ function applyTagAction(
       }
       stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
       stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
-      stmts.updateStagedTagConcept.run(q.reassign_to, tag.id);
+      // The donor keeps its original concept_id. Overwriting it with the
+      // target (the old updateStagedTagConcept call) stored the target twice
+      // — the inserted row below already records it, with justification
+      // "Reassigned from X" — and stored the concept the model actually
+      // proposed nowhere. The donor row is the only record that the tagger
+      // proposed X on this chunk, and status='reassigned' rows are how node
+      // 11 accumulates an answer to "what does the model get wrong here",
+      // which is the question the node exists to answer (todo:a8bb7213).
+      //
+      // Safe against idx_staged_tags_provenance_unique because that index is
+      // partial on status='pending': the donor leaves it on the line above,
+      // before the insert.
       stmts.insertReassignedTag.run(
         tag.chunk_id, q.reassign_to, tag.score,
         `Reassigned from ${tag.concept_id}`,
