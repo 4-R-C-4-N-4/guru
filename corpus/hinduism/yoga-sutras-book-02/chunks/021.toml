@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.021"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 21"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 88
+
+[content]
+body = "The very essence of things seen is, that they exist for the Seer. The things of outer life, not only material things, but the psychic man also, exist in very deed for the purposes of the Seer, the Soul, the spiritual man Disaster comes, when the psychical man sets up, so to speak, on his own account, trying to live for himself alone, and taking material things to solace his loneliness."
+
+[annotations]
+concepts = []
+related_chunks = []

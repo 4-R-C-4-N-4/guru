@@ -94,3 +94,6 @@ data/guru-shadow*
 
 # Deploy script — contains VPS host/credentials, keep out of GitHub
 scripts/sync_corpus.sh
+
+# Local pre-migration database snapshots (large, never shipped)
+backups/

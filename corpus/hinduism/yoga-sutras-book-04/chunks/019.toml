@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-04.019"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+section = "Sutra 19"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+token_count = 150
+
+[content]
+body = "The Mind is not self-luminous, since it can be seen as an object. This is a further step toward overthrowing the tyranny of the 'mind': the psychic nature of emotion and mental measuring. This psychic self, the personality, claims to be absolute, asserting that life is for it and through it; it seeks to impose on the whole being of man its narrow, materialistic, faithless view of life and the universe; it would clip the wings of the soaring Soul. But the Soul dethrones the tyrant, by perceiving and steadily affirming that the psychic self is no true self at all, not self-luminous, but only an object of observation, watched by the serene eyes of the Spiritual Man."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.052"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 52"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 133
+
+[content]
+body = "From perfectly concentrated Meditation on the divisions of time and their succession comes that wisdom which is born of discernment. The Upanishads say of the liberated that 'he has passed beyond the triad of time'; he no longer sees life as projected into past, present and future, since these are forms of the mind; but beholds all things spread out in the quiet light of the Eternal. This would seem to be the same thought, and to point to that clear-eyed spiritual perception which is above time; that wisdom born of the unveiling of Time's delusion. Then shall the disciple live neither in the present nor the future, but in the Eternal."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,32 @@
+{
+  "id": "dd034dc4",
+  "type": "bug",
+  "state": "open",
+  "summary": "Retrieval down-ranks 11k EXPRESSES edges for being promoted in April-May",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T14:19:53.014Z",
+  "updated_at": "2026-08-09T14:19:53.102Z",
+  "files": [
+    {
+      "path": "guru-web/src/lib/retriever.ts",
+      "lines": [
+        371,
+        376
+      ]
+    }
+  ],
+  "tags": [
+    "retrieval",
+    "tier",
+    "guru-web",
+    "data-quality"
+  ],
+  "description": "`retriever.ts:371` weights graph hits by edge tier:\n\n    const TIER_WEIGHTS = { verified: 1.0, proposed: 0.7, inferred: 0.4, summary: 0.4 };\n\nThe intent is a confidence hedge. In practice the corpus has no confidence\nsignal in that column, because auto_promote is not part of the pipeline —\neverything goes through review, and both the review API and review_edges.py\nwrite `verified` unconditionally. A reviewer has never been able to choose a\ntier.\n\nSo `proposed` marks *when and by which tool* a row was written, not quality:\n\n| type | last `proposed` written | rows |\n|---|---|---|\n| EXPRESSES | 2026-05-26 | 11,057 |\n| PARALLELS / CONTRASTS | 2026-07-03, all one run, one timestamp | 45 |\n\nEverything since is verified.\n\n## The live consequence\n\nThose 11,057 EXPRESSES edges are permanently down-ranked at 0.7 against\nidentical work reviewed after May — a retrieval bias produced by a tool that\nwas abandoned, applied to tags no one judged weaker. The 45 PARALLELS/CONTRASTS\nrows are worse off: `atlas.ts` filters `edge_type='PARALLELS' AND\ntier='verified'` in three queries, so they are invisible to the Atlas outright.\n\n## Options, in rough order of appetite\n\n1. Re-tier the residue to `verified` and drop `proposed` from TIER_WEIGHTS.\n   Simplest, and honest about the fact that nothing distinguishes those rows —\n   but it silently upgrades 11k rows no human reviewed, which may be exactly\n   what the tier was protecting against.\n2. Send the residue back through review. Correct, expensive, and the pool is\n   about four times the yoga-sutras tag pass.\n3. Leave the data and stop weighting on it — set proposed to 1.0, keep the\n   column as provenance. Removes the bias without asserting quality.\n4. Keep as is, and treat the tier as \"reviewed after May 2026\". Only defensible\n   if someone believes the April-May work is genuinely weaker.\n\nNeeds a decision on what the tier is *for* before any of these. If it is\nprovenance, retrieval should not weight it; if it is confidence, something has\nto actually write it.\n\n## Related\n\n- docs/ingest/14-edge-review.md, \"Believing there is a tier hedge\".\n- The same commit removed the tier field from prompts/ingest/edge-review.md,\n  which had been asking the judging model to grade a channel that goes nowhere.",
+  "relationships": {
+    "linked_commits": [
+      "33f26081"
+    ]
+  }
+}

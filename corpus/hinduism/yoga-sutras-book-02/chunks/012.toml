@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.012"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 12"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 133
+
+[content]
+body = "The burden of bondage to sorrow has its root in these hindrances. It will be felt in this life, or in a life not yet manifested. The burden of bondage to sorrow has its root in the darkness of unwisdom, in selfishness, in lust, in hate, in attachment to sensation. All these are, in the last analysis, absorption in the psychical self; and this means sorrow, because it means the sense of separateness, and this means jarring discord and inevitable death. But the psychical self will breed a new psychical self, in a new birth, and so new sorrows in a life not yet manifest."
+
+[annotations]
+concepts = []
+related_chunks = []

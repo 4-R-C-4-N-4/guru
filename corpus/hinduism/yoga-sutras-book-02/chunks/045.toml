@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.045"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 45"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 130
+
+[content]
+body = "Soul-vision is perfected through perfect obedience to the Master. The sorrow and darkness of life come of the erring personal will which sets itself against the will of the Soul, the one great Life. The error of the personal will is inevitable, since each will must be free to choose, to try and fail, and so to find the path. And sorrow and darkness are inevitable, until the path be found, and the personal will made once more one with the greater Will, wherein it finds rest and power, without losing freedom. In His will is our peace. And with that peace comes light. Soul-vision is perfected through obedience."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -39,6 +39,41 @@ config is wrong regardless of whether it runs.
 
 ## Failure modes
 
+**A `regex-section-split` silently merges units where the source's delimiter
+slips.** The regex matches what it matches; the units it misses do not error,
+they get absorbed into the preceding chunk, and the output is well-formed and
+plausible all the way through node 14.
+
+On yoga-sutras the pattern was `'(?:^|\s)(\d+)\.\s'` and the sacred-texts
+pages omit the period in exactly three places out of 195 — `5 The darkness of
+ignorance is:`, `48 The fruit of right poise`, `34 By perfectly concentrated
+Meditation`. Result: `book-02.004` is labelled "Sutra 4" and contains sutras 4
+and 5; likewise 47+48 and 33+34. A chunk id that names one unit and delivers
+two is exactly the promise the corpus exists to keep.
+
+**Count emitted chunks against the source's own numbering before passing this
+node.** Not the total — the *sequence*, which is where the gap shows:
+
+```sh
+python3 - <<'PY'
+import tomllib, pathlib, re
+ids = [tomllib.load(open(p,'rb'))['chunk'].get('section','')
+       for p in sorted(pathlib.Path('corpus/{tradition}/{id}/chunks').glob('*.toml'))]
+n = [int(m.group(1)) for s in ids if (m := re.search(r'(\d+)', s))]
+print('emitted', len(n), 'range', min(n), '-', max(n),
+      'missing', [i for i in range(min(n), max(n)+1) if i not in n])
+PY
+```
+
+A gap means the delimiter is inconsistent in the source, not that the text is
+absent. Go and read the raw at the gap before concluding anything else.
+
+**Re-chunking to fix this is not cheap, so find it here.** Chunk ids are file
+ordinals; splitting a merged chunk renumbers every chunk after it, and every
+`staged_tag`, `staged_edge` and `review_action` keyed to those ids goes stale.
+Caught at node 05 it is a one-line regex change. Caught after node 14 it costs
+the review.
+
 **Using the aliases instead of the canonical strategy names.**
 `docs/chunking-schema.md` documents `regex`, `heading` and `paragraph`. Those
 are back-compat aliases. The corpus actually uses `paragraph-group` (379

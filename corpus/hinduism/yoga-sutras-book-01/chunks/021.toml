@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.021"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 21"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 73
+
+[content]
+body = "Spiritual consciousness is nearest to those of keen, intense will. The image used is the swift impetus of the torrent; the kingdom must be taken by force. Firm will comes only through effort; effort is inspired by faith. The great secret is this: it is not enough to have intuitions; we must act on them; we must live them."
+
+[annotations]
+concepts = []
+related_chunks = []

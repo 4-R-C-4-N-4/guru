@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.019"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 19"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 75
+
+[content]
+body = "Subjective consciousness arising from a natural cause is possessed by those who have laid aside their bodies and been absorbed into subjective nature. Those who have died, entered the paradise between births, are in a condition resembling meditation without an external object. But in the fullness of time, the seeds of desire in them will spring up, and they will be born again into this world."
+
+[annotations]
+concepts = []
+related_chunks = []

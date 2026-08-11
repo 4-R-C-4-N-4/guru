@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.023"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 23"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 96
+
+[content]
+body = "Or spiritual consciousness may be gained by ardent service of the Master. If we think of our lives as tasks laid on us by the Master of Life, if we look on all duties as parts of that Master's work, entrusted to us, and forming our life-work; then, if we obey, promptly, loyally, sincerely, we shall enter by degrees into the Master's life and share the Master's power. Thus we shall be initiated into the spiritual will."
+
+[annotations]
+concepts = []
+related_chunks = []

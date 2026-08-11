@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.013"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 13"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 97
+
+[content]
+body = "The right use of the will is the steady, effort to stand in spiritual being. We have thought of ourselves, perhaps, as creatures moving upon this earth, rather helpless, at the mercy of storm and hunger and our enemies. We are to think of ourselves as immortals, dwelling in the Light, encompassed and sustained by spiritual powers. The steady effort to hold this thought will awaken dormant and unrealized powers, which will unveil to us the nearness of the Eternal."
+
+[annotations]
+concepts = []
+related_chunks = []

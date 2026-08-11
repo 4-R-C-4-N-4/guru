@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.017"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 17"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 209
+
+[content]
+body = "The sound and the object and the thought called up by a word are confounded because they are all blurred together in the mind. By perfectly concentrated Meditation on the distinction between them, there comes an understanding of the sounds uttered by all beings. It must be remembered that we are speaking of perception by the spiritual man. Sound, like every force, is the expression of a power of the Eternal. Infinite shades of this power are expressed in the infinitely varied tones of sound. He who, having entry to the consciousness of the Eternal knows the essence of this power, can divine the meanings of all sounds, from the voice of the insect to the music of the spheres. In like manner, he who has attained to spiritual vision can perceive the mind-images in the thoughts of others, with the shade of feeling which goes with them, thus reading their thoughts as easily as he hears their words. Every one has the germ of this power, since difference of tone will give widely differing meanings to the same words, meanings which are intuitively perceived by everyone."
+
+[annotations]
+concepts = []
+related_chunks = []

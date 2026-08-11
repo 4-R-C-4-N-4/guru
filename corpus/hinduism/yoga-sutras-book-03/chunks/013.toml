@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.013"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 13"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 182
+
+[content]
+body = "Through this, the inherent character, distinctive marks and conditions of being and powers, according to their development, are made clear. By the power defined in the preceding sutra, the inherent character, distinctive marks and conditions of beings and powers are made clear. For through this power, as defined, we get a twofold view of each object, seeing at once all its individual characteristics and its essential character, species and genus; we see it in relation to itself, and in relation to the Eternal. Thus we see a rose as that particular flower, with its colour and scent, its peculiar fold of each petal; but we also see in it the species, the family to which it belongs, with its relation to all plants, to all life, to Life itself. So in any day, we see events and circumstances; we also see in it the lesson set for the soul by the Eternal."
+
+[annotations]
+concepts = []
+related_chunks = []

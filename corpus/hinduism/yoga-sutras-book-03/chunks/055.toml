@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.055"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 55"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 78
+
+[content]
+body = "When the vesture and the spiritual man are alike pure, then perfect spiritual life is attained. The vesture, says the commentator, must first be washed pure of all stains of passion and darkness, and the seeds of future sorrow must be burned up utterly. Then, both the vesture and the wearer of the vesture being alike pure, the spiritual man enters into perfect spiritual life."
+
+[annotations]
+concepts = []
+related_chunks = []

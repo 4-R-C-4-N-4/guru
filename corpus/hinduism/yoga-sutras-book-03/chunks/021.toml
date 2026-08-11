@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.021"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 21"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 123
+
+[content]
+body = "By perfectly concentrated Meditation on the form of the body, by arresting the body's perceptibility, and by inhibiting the eye's power of sight, there comes the power to make the body invisible. There are many instances of the exercise of this power, by mesmerists, hypnotists and the like; and we may simply call it an instance of the power of suggestion. Shankara tells us that by this power the popular magicians of the East perform their wonders, working on the mind-images of others, while remaining invisible themselves. It is all a question of being able to see and control the mind-images."
+
+[annotations]
+concepts = []
+related_chunks = []

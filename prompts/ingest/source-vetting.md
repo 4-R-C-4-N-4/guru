@@ -4,6 +4,7 @@ title = "Vet a candidate source URL before it enters the manifest"
 node = "01-source-vetting"
 max_tokens = 4096
 required_keys = ["verdict", "is_translation", "pagination", "rationale"]
+# verdict values: verified | wrong-page | wrong-edition | apparatus | insufficient-evidence
 
 [inputs]
 page_head = "the first ~200 lines of the fetched candidate page"
@@ -45,9 +46,19 @@ heading chain: a translation reads `I, 1`, `FIRST ADHYÂYA`, `First Question`,
 `Logion 3`, `Chapter VII`. Apparatus reads `INTRODUCTION`, `PREFACE`, a Roman
 numeral alone, or the translator's name in the title position.
 
-**2. Is it the text it claims to be?** In a multi-volume series, adjacent file
-numbers hold entirely different works. Confirm the heading names the work in
-`{{source_id}}`, not a neighbour.
+**2. Is it the text — and the *edition* — it claims to be?** Two separate
+checks, and the second is the one that gets skipped.
+
+In a multi-volume series, adjacent file numbers hold entirely different works;
+confirm the heading names the work in `{{source_id}}`, not a neighbour.
+
+Then confirm the **translator and date** match what the candidate proposed. A
+host commonly carries several translations of the same work at different URLs,
+and a candidate list that pairs one translator's name with another's URL looks
+completely correct until you read the page. Report this as `wrong-edition`: the
+work is right, the edition is not the one claimed. It matters because the
+translator and date are what the licence rests on, and because a manifest entry
+that records the wrong translator is a citation the corpus cannot support.
 
 **3. Is it single-page or multi-page?** This is the question most often got
 wrong and the most expensive to get wrong: a multi-page work entered as a
@@ -63,9 +74,14 @@ Return:
 
 ```json
 {
-  "verdict": "verified | wrong-page | apparatus | insufficient-evidence",
+  "verdict": "verified | wrong-page | wrong-edition | apparatus | insufficient-evidence",
   "is_translation": true,
   "actual_work": "the work this page actually contains, per its headings",
+  "actual_edition": {
+    "translator": "as the page names them, not as the candidate claimed",
+    "date": "or null if the page gives none",
+    "matches_claim": true
+  },
   "pagination": {
     "kind": "single | multi",
     "evidence": "what in the page shows this",
@@ -79,6 +95,15 @@ Return:
 }
 ```
 
-A `verified` verdict requires `is_translation: true`, the work matching, and
-positive licence evidence. Anything less is `insufficient-evidence` — that
-verdict is cheap, and a wrong `verified` is not.
+A `verified` verdict requires all four: `is_translation: true`, the work
+matching, the edition matching the claim, and positive licence evidence. Miss
+the edition and it is `wrong-edition` even when everything else passes —
+especially then, because a page that is a real, correctly-licensed translation
+of the right work is exactly the one that slides through.
+
+Anything else unresolved is `insufficient-evidence`. Both verdicts are cheap. A
+wrong `verified` is not.
+
+When you return `wrong-edition`, say in `concerns` where the claimed edition
+actually lives if you found it — that is usually the next URL to vet, and the
+run should not have to rediscover it.

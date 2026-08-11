@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.026"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 26"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 85
+
+[content]
+body = "By perfectly concentrated Meditation on the sun comes a knowledge of the worlds. This has several meanings: First, by a knowledge of the constitution of the sun, astronomers can understand the kindred nature of the stars. And it is said that there is a finer astronomy, where the spiritual man is the astronomer. But the sun also means the Soul, and through knowledge of the Soul comes a knowledge of the realms of life."
+
+[annotations]
+concepts = []
+related_chunks = []

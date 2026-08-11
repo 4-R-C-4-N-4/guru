@@ -1,0 +1,32 @@
+{
+  "id": "6c78047b",
+  "type": "chore",
+  "state": "open",
+  "summary": "Reject colliding reassigns at queue time instead of at apply",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T14:03:39.452Z",
+  "updated_at": "2026-08-09T14:04:35.346Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/tags.ts"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "review-queue",
+    "validation",
+    "reassign"
+  ],
+  "description": "`POST /api/tags/:id/action` validates only the request *shape*. The zod schema\nchecks that a `reassign` carries a non-empty `reassign_to` string and nothing\nelse, so the API will happily queue a reassign that cannot possibly apply.\n\nThe collision it misses: if the target concept already has a `pending`\nstaged_tag on the same chunk at the same `(model, prompt_version)`, the insert\nin `insertReassignedTag` violates `idx_staged_tags_provenance_unique`. Because\n`buildApply` drains the whole queue inside one `rw.transaction`, that raise\nrolls back **every other verdict in the batch** — a 2,579-action review pass\ndiscarded by one bad row.\n\n## Why a 409 at queue time\n\n`scripts/validate_queue.py` (added 2026-08-09) catches this before apply, but\nit is a net under a hole. Refusing the action at queue time makes the bad state\nunreachable rather than merely detectable, and gives the reviewer the error at\nthe moment they can still pick a different donor or target.\n\nSuggested shape: on `action === 'reassign'`, look up pending tags for\n`(chunk_id, reassign_to, model, prompt_version)` and return 409 with the\ncolliding staged_tag id. The lookup is the same one validate_queue.py does.\n\n## Ordering subtlety worth encoding in the check\n\nThe queue applies `ORDER BY ra.id DESC` — reverse insertion order. So a reject\nthat would clear the target concept out of the way only helps if it was queued\n*after* the reassign. A naive queue-time check that just asks \"is the target\npending right now?\" will produce false positives for that legitimate pattern,\nand false negatives if an earlier-queued reject is assumed to clear the way.\nSee `test_clearing_reject_must_be_queued_after_the_reassign` in\ntests/test_validate_queue.py for both directions.\n\n## Related\n\n- Mechanism and caveats: docs/ingest/11-tag-review.md, Failure modes.\n- The partial index (`WHERE status = 'pending'`) is what makes the donor's own\n  row safe; only a *different* pending row can collide.",
+  "relationships": {
+    "related": [
+      "56d6d337",
+      "a8bb7213"
+    ],
+    "linked_commits": [
+      "2bf73c77"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "3003b65c",
+  "type": "chore",
+  "state": "open",
+  "summary": "Atlas cannot distinguish shared-milieu edges from independent convergence",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T21:58:27.548Z",
+  "updated_at": "2026-08-09T22:30:33.560Z",
+  "tags": [
+    "atlas",
+    "provenance",
+    "edges"
+  ],
+  "description": "An accepted PARALLELS edge asserts that two chunks make the same conceptual\nclaim. It does not record WHY they do, and the Atlas presents every edge\nidentically. Three quite different situations render the same:\n\n  (a) genuine independent convergence  (Plato Timaeus <-> yoga-sutras IV.12)\n  (b) shared milieu / common source    (Johnston and Hartmann are both\n                                        Theosophists reading through one lens)\n  (c) one text quoting the other's tradition  (declined here, but only because\n                                        a reviewer noticed - see 43a62e3f)\n\n## Evidence from the yoga-sutras pass\n\nSeven accepted edges were flagged genealogical during review. Two are\nstructural rather than incidental:\n\n1. yoga-sutras IV.12 ARGUES ITS OWN CROSS-TRADITION CASE. Johnston's\n   commentary quotes John 8:58, Revelation, a Mahatma letter and Bjorklund\n   inside the chunk body. Five edges now radiate from it to Plato, Plotinus\n   (x2) and Ouspensky (x2). Every one is accurate as a text-to-text match.\n   Together they will read in the Atlas as five traditions independently\n   arriving at the eternal-Now doctrine. That is not what happened - the\n   comparison is the chunk's content.\n\n2. THE BOEHME IN THIS CORPUS IS A THEOSOPHICAL EDITION. Hartmann's note 251:2\n   glosses Boehme as \"when the disciple becomes an accepted *Chela*, his evil\n   *Karma* begins to assert itself\". Roughly ten accepted Boehme edges come\n   through that lens, and Johnston reads Patanjali through the same one.\n\n## What is wanted\n\nNot withholding these edges - they are true. Something that lets the Atlas (or\na reader) distinguish \"these two traditions independently reached this\" from\n\"these two authors shared a bookshelf\".\n\nPossible shapes:\n- a nullable `relation_basis` on edges: convergent | shared_milieu | quotation\n- or a per-source `milieu` / `edition_lens` field in sources/manifest.toml\n  (Johnston 1912, Hartmann 1891, Mead, Ouspensky/Bragdon 1920 are one network),\n  letting the Atlas compute it rather than asking reviewers to tag each edge\n- the manifest approach is cheaper and less error-prone; reviewers should not\n  be re-deriving publication history per edge\n\nDownstream: this is a presentation/provenance concern, not a reason to change\nnode 14's bar."
+}

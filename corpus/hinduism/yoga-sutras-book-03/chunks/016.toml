@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.016"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 16"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 197
+
+[content]
+body = "Through perfectly concentrated Meditation on the three stages of development comes a knowledge of past and future. We have taken our illustrations from natural science, because, since every true discovery in natural science is a divination of a law in nature, attained through a flash of genius, such discoveries really represent acts of spiritual perception, acts of perception by the spiritual man, even though they are generally not so recognized. So we may once more use the same illustration. Perfectly concentrated Meditation, perfect insight into the chrysalis, reveals the caterpillar that it has been, the butterfly that it is destined to be. He who knows the seed, knows the seed-pod or ear it has come from, and the plant that is to come from it. So in like manner he who really knows today, and the heart of to-day, knows its parent yesterday and its child tomorrow. Past, present and future are all in the Eternal. He who dwells in the Eternal knows all three."
+
+[annotations]
+concepts = []
+related_chunks = []

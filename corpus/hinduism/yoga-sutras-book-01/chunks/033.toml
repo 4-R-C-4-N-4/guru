@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.033"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 33"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 166
+
+[content]
+body = "By sympathy with the happy, compassion for the sorrowful, delight in the holy, disregard of the unholy, the psychic nature moves to gracious peace. When we are wrapped up in ourselves, shrouded with the cloak of our egotism, absorbed in our pains and bitter thoughts, we are not willing to disturb or strain our own sickly mood by giving kindly sympathy to the happy, thus doubling their joy, or by showing compassion for the sad, thus halving their sorrow. We refuse to find delight in holy things, and let the mind brood in sad pessimism on unholy things. All these evil psychic moods must be conquered by strong effort of will. This rending of the veils will reveal to us something of the grace and peace which are of the interior consciousness of the spiritual man."
+
+[annotations]
+concepts = []
+related_chunks = []

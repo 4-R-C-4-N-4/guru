@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.008"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 8"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 52
+
+[content]
+body = "Unsound intellection is false understanding, not resting on a perception of the true nature of things. When the object is not truly perceived, when the observation is inaccurate and faulty. thought or reasoning based on that mistaken perception is of necessity false and unsound."
+
+[annotations]
+concepts = []
+related_chunks = []

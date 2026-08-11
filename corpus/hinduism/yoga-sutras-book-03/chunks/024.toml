@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.024"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 24"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 112
+
+[content]
+body = "By perfectly concentrated Meditation on power, even such power as that of the elephant may be gained. This is a pretty image. Elephants possess not only force, but poise and fineness of control. They can lift a straw, a child, a tree with perfectly judged control and effort. So the simile is a good one. By detachment, by withdrawing into the soul's reservoir of power, we can gain all these, force and fineness and poise; the ability to handle with equal mastery things small and great, concrete and abstract alike."
+
+[annotations]
+concepts = []
+related_chunks = []

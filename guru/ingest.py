@@ -426,10 +426,18 @@ NODES: list[Node] = [
          gate="python3 -m guru ingest status {id}",
          notes=["Writes to staged_tags with status='pending'. Nothing reaches "
                 "the live graph from this node.",
-                "Needs a llama.cpp server up. scripts/run-qwen.sh serves the "
-                "27B, scripts/run-qwen-4b-guru.sh the fine-tune; confirm which "
-                "mode the script launches before a long run. End with "
-                "`llm stop` — an idle GPU is the resting state."]),
+                "Needs a llama.cpp server that is up AND FREE. `llm status` "
+                "reporting healthy does not mean idle — check for another "
+                "tag_concepts or propose_edges process first "
+                "(`pgrep -af '[t]ag_concepts|[p]ropose_edges'`). Two runs against "
+                "one slot do not fail, they both crawl, which reads exactly "
+                "like a hang.",
+                "scripts/run-qwen.sh serves the 27B, "
+                "scripts/run-qwen-4b-guru.sh the fine-tune; confirm which mode "
+                "the script launches before a long run.",
+                "`llm stop` only a server you started yourself. A server "
+                "started outside `llm` belongs to someone else's session, and "
+                "stopping it destroys their state."]),
 
     Node("11-tag-review", "Curate the staged tags", "gate",
          _p_tag_review,
@@ -452,10 +460,22 @@ NODES: list[Node] = [
     Node("13-propose-edges", "Propose cross-tradition edges", "command",
          _p_edges,
          command=("python3 scripts/propose_edges.py --text {id} "
-                  "--provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf"),
+                  "--provider llamacpp"),
          gate="python3 -m guru ingest status {id}",
          notes=["Requires embeddings (node 12) — candidate pairs come from "
-                "vector similarity above --min-similarity, default 0.75."]),
+                "vector similarity above --min-similarity, default 0.75.",
+                "Serve Mistral, not the tagging model: scripts/run-mistral.sh. "
+                "It is propose_edges.py's own default and what built the "
+                "corpus's 20,898 edges. Its near-greedy sampling (temp 0.15, "
+                "top_p 1.0, top_k 0) is why it classifies rather than "
+                "rubber-stamps.",
+                "A fresh batch being almost all PARALLELS is normal, not a "
+                "defect. surface_only / unrelated / most CONTRASTS are REVIEW "
+                "outcomes from node 14's reclassify action — every one of the "
+                "corpus's 8,338 surface_only rows is status='rejected' with a "
+                "reviewer. Do not judge this node's output by its type spread.",
+                "Same server discipline as node 10: check the slot is free "
+                "before starting, and only stop what you started."]),
 
     Node("14-edge-review", "Curate the staged edges", "gate",
          _p_edge_review,

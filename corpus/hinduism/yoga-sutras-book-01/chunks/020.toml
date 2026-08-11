@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.020"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 20"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 115
+
+[content]
+body = "For the others, there is spiritual consciousness, led up to by faith, valour right mindfulness, one-pointedness, perception. It is well to keep in mind these steps on the path to illumination: faith, velour, right mindfulness, one-pointedness, perception. Not one can be dispensed with; all must be won. First faith; and then from faith, velour; from valour, right mindfulness; from right mindfulness, a one-pointed aspiration toward the soul; from this, perception; and finally, full vision as the soul."
+
+[annotations]
+concepts = []
+related_chunks = []

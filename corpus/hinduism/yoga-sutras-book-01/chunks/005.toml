@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.005"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 5"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 153
+
+[content]
+body = "The psychic activities are five; they are either subject or not subject to the five hindrances (Book II, 3). The psychic nature is built up through the image-making power, the power which lies behind and dwells in mind-pictures. These pictures do not remain quiescent in the mind; they are kinetic, restless, stimulating to new acts. Thus the mind-image of an indulgence suggests and invites to a new indulgence; the picture of past joy is framed in regrets or hopes. And there is the ceaseless play of the desire to know, to penetrate to the essence of things, to classify. This, too, busies itself ceaselessly with the mind-images. So that we may classify the activities of the psychic nature thus:"
+
+[annotations]
+concepts = []
+related_chunks = []

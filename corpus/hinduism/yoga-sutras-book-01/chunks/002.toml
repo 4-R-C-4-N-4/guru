@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.002"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 2"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 97
+
+[content]
+body = "Union, spiritual consciousness, is gained through control of the versatile psychic nature. The goal is the full consciousness of the spiritual man, illumined by the Divine Light. Nothing except the obdurate resistance of the psychic nature keeps us back from the goal. The psychical powers are spiritual powers run wild, perverted, drawn from their proper channel. Therefore our first task is, to regain control of this perverted nature, to chasten, purify and restore the misplaced powers."
+
+[annotations]
+concepts = []
+related_chunks = []

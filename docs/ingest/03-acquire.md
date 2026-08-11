@@ -49,6 +49,19 @@ single-page file or at least one `-NN.txt` page.
 fetched as single-page produces a perfectly well-formed file containing one
 chapter. Compare against what node 01 recorded about pagination.
 
+**Do not conclude text is missing from a `grep` that used another
+translation's wording.** Negative evidence about a body of text is only as
+good as the phrase searched for. On yoga-sutras, grepping the raw for
+"impermanent" and "pairs of opposites" — Prabhavananda's phrasing — returned
+nothing and was briefly taken as proof that two sutras were absent. Johnston
+renders the same lines "unenduring, impure, full of pain, not the Soul" and
+"the strength to resist the shocks of infatuation or sorrow". The sutras were
+present throughout.
+
+Search for the *number* and read the surrounding text, or diff unit counts
+(node 05). Never conclude absence from a phrase you have not confirmed the
+translator uses.
+
 **Words split across page breaks.** Some sources hyphenate or break words at
 page boundaries, and the break survives extraction: `Pytha [Pg 2] goreans`.
 Removing the marker later leaves `Pytha goreans`. This is ingest damage, and

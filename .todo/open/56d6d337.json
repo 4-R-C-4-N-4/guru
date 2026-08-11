@@ -7,11 +7,20 @@
     "type": "agent"
   },
   "created_at": "2026-08-07T19:28:54.000Z",
-  "updated_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-09T14:04:49.122Z",
   "tags": [
     "corpus-quality",
     "staged_tags",
     "dedup"
   ],
-  "description": "Found during the round-2 quarantine wave-3 review (2026-08-06): sta.097 and sta.304 each carry two sets of pending staged_tags from separate model batches on the same chunk, i.e. duplicate proposals rather than a single reviewable set. Only these two are confirmed; the underlying cause (whatever produced two batches on the same chunk) likely recurs elsewhere in the corpus and hasn't been scanned for. Needs: (1) a query for chunks with >1 batch of pending staged_tags on the same concept, (2) a decision on which batch wins / whether to merge, (3) a dedup pass, similar in spirit to the existing cleanup_dupes.sh precedent used for duplicate chunk bodies."
+  "description": "Found during the round-2 quarantine wave-3 review (2026-08-06): sta.097 and sta.304 each carry two sets of pending staged_tags from separate model batches on the same chunk, i.e. duplicate proposals rather than a single reviewable set. Only these two are confirmed; the underlying cause (whatever produced two batches on the same chunk) likely recurs elsewhere in the corpus and hasn't been scanned for. Needs: (1) a query for chunks with >1 batch of pending staged_tags on the same concept, (2) a decision on which batch wins / whether to merge, (3) a dedup pass, similar in spirit to the existing cleanup_dupes.sh precedent used for duplicate chunk bodies.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-09T14:04:49.122Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Mechanism found while working on the node 11 reassign path (2026-08-09): these\nduplicates are legal by construction, not a constraint failure.\n\n`idx_staged_tags_provenance_unique` is\n`UNIQUE(chunk_id, concept_id, model, prompt_version) WHERE status = 'pending'`.\nBecause `model` and `prompt_version` are part of the key, two batches from\ndifferent models proposing the same concept on the same chunk produce two\ndistinct index keys and both inserts succeed. Nothing is violated, so nothing\nwarned.\n\nThat means item (1) in this ticket — the query for affected chunks — is exact\nrather than heuristic:\n\n    SELECT chunk_id, concept_id, COUNT(DISTINCT model || '|' || prompt_version) AS batches\n      FROM staged_tags WHERE status = 'pending'\n     GROUP BY chunk_id, concept_id HAVING batches > 1;\n\nIt also constrains item (2): whichever batch loses must be resolved to a\nnon-pending status rather than deleted, since the index is partial on\n'pending' and the loser leaving that state is what makes the pool\nsingle-reviewable again.\n\nRelated: 6c78047b covers the *same* index from the reassign side, where a\ncollision at identical provenance does raise and rolls back the whole apply\ntransaction.",
+      "confidence": "high"
+    }
+  ]
 }

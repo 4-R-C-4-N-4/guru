@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.044"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 44"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 144
+
+[content]
+body = "Mastery of the elements comes from perfectly concentrated Meditation on their five forms: the gross, the elemental, the subtle, the inherent, the purposive. These five forms are analogous to those recognized by modern physics: solid, liquid, gaseous, radiant and ionic. When the piercing vision of the awakened spiritual man is directed to the forms of matter, from within, as it were, from behind the scenes, then perfect mastery over the 'beggarly elements' is attained. This is, perhaps, equivalent to the injunction: 'Inquire of the earth, the air, and the water, of the secrets they hold for you. The development of your inner senses will enable you to do this.'"
+
+[annotations]
+concepts = []
+related_chunks = []

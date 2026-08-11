@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.040"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 40"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 97
+
+[content]
+body = "Thus he masters all, from the atom to the Infinite. Newton was asked how he made his discoveries. By intending my mind on them, he replied. This steady pressure, this becoming one with what we seek to understand, whether it be atom or soul, is the one means to know. When we become a thing, we really know it, not otherwise. Therefore live the life, to know the doctrine; do the will of the Father, if you would know the Father."
+
+[annotations]
+concepts = []
+related_chunks = []

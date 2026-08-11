@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.013"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 13"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 134
+
+[content]
+body = "From this root there grow and ripen the fruits of birth, of the life-span, of all that is tasted in life. Fully to comment on this, would be to write a treatise on Karma and its practical working in detail, whereby the place and time of the next birth, its content and duration. are determined; and to do this the present commentator is in no wise fitted. But this much is clearly understood: that, through a kind of spiritual gravitation, the incarnating self is drawn to a home and life-circle which will give it scope and discipline; and its need of discipline is clearly conditioned by its character, its standing, its accomplishment."
+
+[annotations]
+concepts = []
+related_chunks = []

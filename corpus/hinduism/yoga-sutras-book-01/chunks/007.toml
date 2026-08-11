@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.007"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 7"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 98
+
+[content]
+body = "The elements of sound intellection are: direct observation, inductive reason, and trustworthy testimony. Each of these is a spiritual power, thinly veiled. Direct observation is the outermost form of the Soul's pure vision. Inductive reason rests on the great principles of continuity and correspondence; and these, on the supreme truth that all life is of the One. Trustworthy testimony, the sharing of one soul in the wisdom of another, rests on the ultimate oneness of all souls."
+
+[annotations]
+concepts = []
+related_chunks = []

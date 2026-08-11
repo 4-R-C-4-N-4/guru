@@ -1,0 +1,34 @@
+# Yoga Sutras of Patanjali, Book I — Johnston 1912 (sacred-texts ysp).
+# regex-section-split, NOT paragraph-group: the raw is a SINGLE LINE with zero
+# paragraph breaks, so the corpus-default paragraph strategy would emit exactly
+# one chunk for the whole book.
+#
+# The pattern deliberately does not anchor to ^ for the same reason.
+#
+# The period after the number is OPTIONAL, and this matters. sacred-texts omits
+# it in exactly three places out of 195 — "5 The darkness of ignorance is:",
+# "48 The fruit of right poise", "34 By perfectly concentrated Meditation". A
+# period-requiring pattern misses those boundaries silently and folds each sutra
+# into the chunk above it, which is what the first pass of this corpus did.
+#
+# An earlier revision of this comment claimed those three sutras "have no
+# heading of their own" and that the gaps were Johnston's. That was wrong: the
+# numbers are printed, only the periods are missing. Corrected 2026-08-10 after
+# the node 14 review counted 192 chunks against a 195-sutra canon.
+#
+# The (?=[A-Z]) lookahead guards against splitting on a bare number in prose.
+# Verified against all four books: with or without it the output is identical
+# (51/55/55/34, no gaps, no duplicates), so it costs nothing and bounds the
+# damage if a future edition writes "page 5 of".
+[chunking]
+strategy = "regex-section-split"
+pattern = '(?:^|\s)(\d+)\.?\s+(?=[A-Z])'
+section_label_format = "Sutra {n}"
+max_tokens = 800
+group_size = 1
+
+[metadata]
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+translator = "Charles Johnston"
+sections_format = "sutra"

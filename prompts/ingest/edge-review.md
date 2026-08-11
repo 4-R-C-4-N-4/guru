@@ -85,14 +85,19 @@ Return:
 {
   "verdict": "accept | reclassify | reject | skip",
   "reclassify_to": "PARALLELS | CONTRASTS | surface_only | unrelated",
-  "tier": "verified | proposed",
   "read_bodies": true,
   "shared_move": "the specific claim both passages make, or null if none",
   "rationale": "grounded in both bodies"
 }
 ```
 
-`tier` applies only to an accept: `verified` when the shared move is explicit
-in both bodies, `proposed` when the reading is defensible but interpretive.
-Retrieval hedges on the tier, so an honest `proposed` is more useful than an
-optimistic `verified`.
+**There is no tier hedge.** Both the review API and `review_edges.py` write
+`tier='verified'` on accept, unconditionally — no interface accepts a tier
+from the reviewer, and the live table bears this out at 11,000 verified
+PARALLELS against 41 proposed. `guru-web`'s Atlas then filters
+`edge_type='PARALLELS' AND tier='verified'`, so an accept is a decision to
+publish the pair, not a graded confidence.
+
+So "defensible but interpretive" has nowhere to go. If the shared move is not
+explicit in both bodies, the verdict is `surface_only` or `skip` — never a
+soft accept.

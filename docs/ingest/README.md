@@ -120,6 +120,13 @@ forgotten: **`chunk.py` output is pre-clean, so any re-chunk invalidates
 | 14 | [edge-review](14-edge-review.md) | gate | queued edge decisions |
 | 15 | [publish](15-publish.md) | user | a shipped corpus |
 
+## Running the local models
+
+Nodes 10 and 13 need a llama.cpp server. On a two-GPU box the assignment is
+not incidental — a model split across both cards costs 22% throughput and
+occupies hardware the other node wants. See
+[gpu-assembly.md](gpu-assembly.md).
+
 ## Node file schema
 
 Every node file has the same six sections, in the same order. Keep it that way;

@@ -1,0 +1,7 @@
+tradition = "hinduism"
+text_id = "yoga-sutras-book-04"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+sections_format = "sutra"
+chunk_count = 34

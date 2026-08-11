@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-02.024"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book II"
+section = "Sutra 24"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp04.htm"
+token_count = 70
+
+[content]
+body = "The cause of this association is the darkness of unwisdom. The darkness of unwisdom is the absorption of consciousness in the personal life, and in the things seen by the personal life. This is the fall, through which comes experience, the learning of the lessons of life. When they are learned, the day of redemption is at hand."
+
+[annotations]
+concepts = []
+related_chunks = []

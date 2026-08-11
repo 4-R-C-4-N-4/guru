@@ -33,6 +33,33 @@ until the user drains the queue.
 No `pending` rows remain for the text. `guru ingest status` reports the
 remaining count.
 
+**A `reassign` cannot close this gate in one cycle.** `insertReassignedTag`
+marks the donor `reassigned` and inserts the new tag at `status='pending'`, so
+applying a queue that contains reassigns leaves exactly as many new pending
+rows as there were reassigns. The node then reports itself unfinished, and
+node 14 stays blocked behind it, until the reviewer queues a verdict on each
+new row and the user applies a *second* time.
+
+Measured on yoga-sutras: the node 11 queue carried six reassigns. After the
+apply, books 01, 02 and 04 each still showed pending rows and failed the gate;
+book 03 — the only book with no reassigns — passed. The six accepts that would
+close it are queued and unapplied.
+
+Plan for two applies whenever the pass uses `reassign`, and say so when handing
+the queue over. A driver that reports "node 11 complete" after queueing has
+told the user something the status machine will contradict.
+
+Before handing the queue to the user, validate it:
+
+```sh
+python3 scripts/validate_queue.py        # --json for machines, -v to list all
+```
+
+`POST /api/apply` drains every unapplied action in a single transaction, and
+`GET /api/apply/preview` only counts them. One collision therefore discards a
+whole review pass. The validator replays the queue read-only in the server's
+own order and exits non-zero on anything that would raise.
+
 ## Failure modes
 
 **Queueing blind.** Every accept and reject must come from having read the
@@ -52,6 +79,27 @@ whether the chunk substantively expresses the concept's structural pattern.
 staged_tags.model, staged_tags.prompt_version` and rolls back the entire batch.
 `insertReassignedTag` in `apply.ts` does not guard against it. Check first, and
 prefer plain `reject` when the better concept is already in play.
+
+**Treating review as subtraction only.** Accept and reject work on what the
+tagger proposed, so it is easy to conclude that a concept the tagger *missed*
+is out of reach at this node and belongs to node 10's recall problem.
+`reassign` is the way in: per `apply.ts` it marks the donor tag `reassigned`,
+deletes its live edge exactly as `reject` would, and then inserts a **new**
+`staged_tag` for the target concept. The donor's fate is identical either way,
+so any queued reject on the same chunk is free capacity — and at an observed
+13.4 tags per chunk there is always one to spare.
+
+Two things this does not do. The new row lands `pending` with no `upsertEdge`,
+so a reassign does not produce a live edge — it puts the missing concept back
+in the queue for a second pass. And `updateStagedTagConcept` overwrites the
+donor's `concept_id` with the target, so the record of what was originally
+proposed there is lost. Pick a donor whose original tag you do not want in the
+over-generation statistics.
+
+The self-collision that looks fatal is not: the reassign path updates the donor
+to `reassigned` *before* inserting, and `idx_staged_tags_provenance_unique` is
+partial (`WHERE status = 'pending'`), so the donor leaves the index first. The
+collision in the failure mode above is with a *different* pending row.
 
 **Mistyped ids in a batch queue.** They are silently rejected. Check the
 accepted count matches what was intended — 4B ids are 70xxx, 27B are 71xxx.

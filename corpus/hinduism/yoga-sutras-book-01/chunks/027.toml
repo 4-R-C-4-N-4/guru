@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.027"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 27"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 91
+
+[content]
+body = "His word is OM. OM: the symbol of the Three in One, the three worlds in the Soul; the three times, past, present, future, in Eternity; the three Divine Powers, Creation, Preservation, Transformation, in the one Being; the three essences, immortality, omniscience, joy, in the one Spirit. This is the Word, the Symbol, of the Master and Lord, the perfected Spiritual Man."
+
+[annotations]
+concepts = []
+related_chunks = []

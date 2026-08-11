@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.010"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 10"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 116
+
+[content]
+body = "Sleep is the psychic condition which rests on mind states, all material things being absent. In waking life, we have two currents of perception; an outer current of physical things seen and heard and perceived; an inner current of mind-images and thoughts. The outer current ceases in sleep; the inner current continues, and watching the mind-images float before the field of consciousness, we 'dream.' Even when there are no dreams, there is still a certain consciousness in sleep, so that, on waking, one says, 'I have slept well,' or 'I have slept badly.'"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,7 @@
+tradition = "hinduism"
+text_id = "yoga-sutras-book-01"
+text_name = "Yoga Sutras of Patanjali, Book I"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+sections_format = "sutra"
+chunk_count = 51

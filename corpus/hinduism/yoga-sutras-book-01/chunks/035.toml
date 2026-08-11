@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.035"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 35"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 91
+
+[content]
+body = "Faithful, persistent application to any object, if completely attained, will bind the mind to steadiness. We are still considering how to overcome the wavering and perturbation of the psychic nature, which make it quite unfit to transmit the inward consciousness and stillness. We are once more told to use the will, and to train it by steady and persistent work: by 'sitting close' to our work, in the phrase of the original."
+
+[annotations]
+concepts = []
+related_chunks = []

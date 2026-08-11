@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.025"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 25"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 63
+
+[content]
+body = "In the Master is the perfect seed of Omniscience. The Soul of the Master is in essence one with the Oversoul, and therefore partaker of the Oversoul's all-wisdom and all-power. All spiritual attainment rests on this, and is possible because the soul and the Oversoul are One."
+
+[annotations]
+concepts = []
+related_chunks = []

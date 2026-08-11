@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.003"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 3"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 220
+
+[content]
+body = "When the perceiving consciousness in this meditative is wholly given to illuminating the essential meaning of the object contemplated, and is freed from the sense of separateness and personality, this is contemplation (samadhi). Let us review the steps so far taken. First, the beam of perceiving consciousness is focussed on a certain region or subject, through the effort of attention. Then this attending consciousness is held on its object. Third, there is the ardent will to know its meaning, to illumine it with comprehending thought. Fourth, all personal bias, all desire merely to indorse a previous opinion and so prove oneself right, and all desire for personal profit or gratification must be quite put away. There must be a purely disinterested love of truth for its own sake. Thus is the perceiving consciousness made void, as it were, of all personality or sense of separateness. The personal limitation stands aside and lets the All-consciousness come to bear upon the problem. The Oversoul bends its ray upon the object, and illumines it with pure light."
+
+[annotations]
+concepts = []
+related_chunks = []

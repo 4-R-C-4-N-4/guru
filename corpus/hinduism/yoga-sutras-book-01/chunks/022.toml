@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.022"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 22"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 113
+
+[content]
+body = "The will may be weak, or of middle strength, or intense. Therefore there is a spiritual consciousness higher than this. For those of weak will, there is this counsel: to be faithful in obedience, to live the life, and thus to strengthen the will to more perfect obedience. The will is not ours, but God's, and we come into it only through obedience. As we enter into the spirit of God, we are permitted to share the power of God. Higher than the three stages of the way is the goal, the end of the way."
+
+[annotations]
+concepts = []
+related_chunks = []

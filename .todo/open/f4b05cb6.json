@@ -1,0 +1,31 @@
+{
+  "id": "f4b05cb6",
+  "type": "investigation",
+  "state": "open",
+  "summary": "No mechanical detector for taxonomy gaps in a newly tagged text",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-09T14:04:13.887Z",
+  "updated_at": "2026-08-09T14:04:35.428Z",
+  "files": [
+    {
+      "path": "docs/ingest/10-tag-concepts.md"
+    }
+  ],
+  "tags": [
+    "taxonomy",
+    "tagging",
+    "metrics",
+    "ingest"
+  ],
+  "description": "The yoga-sutras pass surfaced a taxonomy gap the pipeline had no way to report:\nnothing in `concepts/taxonomy.toml` covers Sankhya metaphysics (purusha /\nprakriti / the gunas), the siddhis, or Patanjali's epistemology of the pramanas\n— which are the three subjects Books II-IV spend the most words on.\n\nThe tagger cannot say \"I have no concept for this\". It reaches for the nearest\navailable neighbours instead, which is a large part of why the pass produced\n13.4 tags per chunk against a ~2.6 accept and a 17.4% accept rate. The gap was\nonly visible because a human read 192 chunk bodies.\n\n## Candidate signal\n\nA text whose accept rate sits far below the corpus median is the machine-visible\nsymptom of \"the taxonomy does not cover this text\". Where the corpus runs 15%\non diffuse score-1 pools up to 90% on densely on-concept curated runs, 17.4%\nacross a whole doctrinal text is low for content this dense.\n\nPossible second signal: concentration. If the accepted tags cluster into a\nhandful of generic concepts while the rejects spread across many, the taxonomy\nis probably missing the text's actual subject matter rather than the text being\ngenuinely diffuse.\n\n## Why this is investigation, not chore\n\nOne text is not enough to set a threshold. Doing this properly means computing\nper-text accept rates across the existing reviewed corpus first, seeing what the\ndistribution actually looks like, and finding whether known-good texts and\nknown-gappy ones separate at all. If they do not, the metric is not the signal\nand something else is.\n\nDeliberately not encoded as a gate yet — a threshold guessed from a single data\npoint would fire on the wrong texts and get ignored, which is worse than no\ncheck.\n\n## Where it would live\n\nIf it works: a report from node 11, since that is where the accept rate becomes\nknown. `guru ingest status` could surface it as an advisory, not a blocking\ngate — a low accept rate is a prompt to look at the taxonomy, not a reason to\nstop the ingest.\n\nThe taxonomy work itself (adding the missing concepts, then re-tagging) is\nseparate corpus work and is not in scope here.",
+  "relationships": {
+    "related": [
+      "19b04fcb"
+    ],
+    "linked_commits": [
+      "2bf73c77"
+    ]
+  }
+}

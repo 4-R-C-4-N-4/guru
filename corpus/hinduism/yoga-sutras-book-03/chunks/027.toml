@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-03.027"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book III"
+section = "Sutra 27"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp06.htm"
+token_count = 100
+
+[content]
+body = "By perfectly concentrated Meditation on the moon comes a knowledge of the lunar mansions. Here again are different meanings. The moon is, first, the companion planet, which, each day, passes backward through one mansion of the stars. By watching the moon, the boundaries of the mansion are learned, with their succession in the great time-dial of the sky. But the moon also symbolizes the analytic mind, with its divided realms; and these, too, may be understood through perfectly concentrated Meditation."
+
+[annotations]
+concepts = []
+related_chunks = []

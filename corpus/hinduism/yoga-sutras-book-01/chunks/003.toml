@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-01.003"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book I"
+section = "Sutra 3"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp02.htm"
+token_count = 77
+
+[content]
+body = "Then the Seer comes to consciousness in his proper nature. Egotism is but the perversion of spiritual being. Ambition is the inversion of spiritual power. Passion is the distortion of love. The mortal is the limitation of the immortal. When these false images give place to true, then the spiritual man stands forth luminous, as the sun, when the clouds disperse."
+
+[annotations]
+concepts = []
+related_chunks = []

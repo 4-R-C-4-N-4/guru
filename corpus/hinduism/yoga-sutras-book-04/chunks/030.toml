@@ -1,0 +1,15 @@
+[chunk]
+id = "hinduism.yoga-sutras-book-04.030"
+tradition = "hinduism"
+text_name = "Yoga Sutras of Patanjali, Book IV"
+section = "Sutra 30"
+translator = "Charles Johnston"
+source_url = "https://sacred-texts.com/hin/ysp/ysp08.htm"
+token_count = 133
+
+[content]
+body = "Thereon comes surcease from sorrow and the burden of toil. Such a one, it is said, is free from the bond of Karma, from the burden of toil, from that debt to works which comes from works done in self-love and desire. Free from self-will, he is free from sorrow, too, for sorrow comes from the fight of self-will against the divine will, through the correcting stress of the divine will, which seeks to counteract the evil wrought by disobedience. When the conflict with the divine will ceases, then sorrow ceases, and he who has grown into obedience, thereby enters into joy."
+
+[annotations]
+concepts = []
+related_chunks = []
