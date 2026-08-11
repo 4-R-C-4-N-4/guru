@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.apocryphon-of-john.003"
+tradition = "gnosticism"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+section = "The Savior Comforts John"
+translator = "Samuel Zinner"
+source_url = "https://othergospels.com/john"
+token_count = 210
+
+[content]
+body = "He asked me: “John, John, why do you marvel, and why [do you] fear?\nIs this appearance unknown to all of you?\nI mean, do not [be] of a weak heart.\nI am the one who [is] always [with all of you].\nI [am the Father],\nI am the Mother,\nI am the Son.\nI am the unpolluted and untainted one.\n[I have now come to inform you of] what is, [and what was], and what will [happen],\nso that [you might understand the things]\nthat are not manifest\n[and those things that are manifest,\nand to inform you] of\nthe [unmoving race of] the [Perfect Man].\n[Lift up, therefore] your [face,\nso that] you [might accept] the things I [will tell you] today,\n[and] might [convey them\nto your companion] spirits\n[of] the [unmoving] race\nof the Perfect [Man].”"
+
+[annotations]
+concepts = []
+related_chunks = []

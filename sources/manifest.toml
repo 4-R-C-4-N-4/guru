@@ -45,6 +45,27 @@ license = "public_domain"
 translator = "George Horner"
 notes = "Horner 1924 Coptic→English with Francis Legge introduction. Single ~815KB HTML; primary text in five Documents (Pistis Sophia Books I-II = Documents 1-2; Books of the Saviour fragments = Documents 3-4; trailing fragment = Document 5). Pre-strip removes Gutenberg boilerplate, Legge intro, and indexes; regex-section-split on Document headers, sub-split by max_tokens. Estimated ~150-200 chunks."
 
+[[source]]
+id = "apocryphon-of-john"
+tradition = "gnosticism"
+# VERIFIED 2026-08-08 — local PDF, not a fetch. Zinner/Mattison synoptic
+# translation, published 2025-01-23, dedicated to the public domain by the
+# translator on page 1 of the PDF ("committed to the public domain and may be
+# freely copied and used, changed or unchanged, for any purpose"). The
+# underlying Coptic edition (Waldstein & Wisse, Brill 1995) remains in
+# copyright; the translation made from it is the translator's to dedicate.
+#
+# `format = "pdf"` has no downloader — scripts/acquire.py will fail on this id.
+# The raw artifact is produced by scripts/pdf_synoptic_extract.py, which splits
+# the three-column synoptic setting by column geometry. Re-generate with:
+#   python3 scripts/pdf_synoptic_extract.py <pdf> -o raw/gnosticism/
+label = "The Secret Writing According to John / Apocryphon of John (Codex II, 1; Zinner translation)"
+url = "https://othergospels.com/john"
+format = "pdf"
+license = "public_domain"
+translator = "Samuel Zinner"
+notes = "Three-column synoptic of four witnesses (NHC II,1 // NHC IV,1 // BG 8502 // NHC III,1). Only Codex II, 1 is manifested: it is the complete long recension and carries the Codex IV, 1 readings inline as italics. The BG 8502 and Codex III, 1 witnesses are extracted to raw/gnosticism/apocryphon-of-john-{bg8502,codex-iii}.txt but deliberately left unmanifested — they are recensions of this same treatise, often verbatim identical for paragraphs at a stretch, and ingesting them would put near-duplicate chunks into chunk_embeddings and have propose_edges draw PARALLELS between the text and itself. See docs/ingest/decisions/apocryphon-of-john.md."
+
 # ============================================
 # HERMETICISM (sacred-texts.com + gnosis.org)
 # ============================================

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.apocryphon-of-john.005"
+tradition = "gnosticism"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+section = "The Monadb"
+translator = "Samuel Zinner"
+source_url = "https://othergospels.com/john"
+token_count = 71
+
+[content]
+body = "[How can I speak] with you of him, [given that] his [aeon] is beyond destruction, in repose, and abiding in [silence, resting], existing before [everything, because he] is the leader of [all] aeons, [and] he is the one who grants them strength with his goodness?"
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.apocryphon-of-john.001"
+tradition = "gnosticism"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+section = "Prologue"
+translator = "Samuel Zinner"
+source_url = "https://othergospels.com/john"
+token_count = 370
+
+[content]
+body = "[II, 1; IV 1] The teaching [of the] savior, and [the revelation] of the mysteries, [and the] sayings concealed in silence, [even these sayings that] he taught John, [his] disciple.\n\nIt, [however], came to pass [one day], when John, [the brother] of James\n– they being the sons of Zebedee –\nhad gone up to the temple,\nthat a Pharisee\nnamed Arimanios [came to] him\n[and] said to him: “[Where] is your teacher, [whom] you were following?”\nAnd he [said] to him:\n\n“He has returned to the [place] he [came] from.”\nThe Pharisee [said to him:\n“With deceit this Nazarene] fooled all of you,\nand he filled [your ears with lies],\nand sealed off [your hearts,\nturning you] away from the traditions\n[of your fathers].”\n[When] I, [John], had heard these sayings,\n[I turned] away from the temple\n[toward a place full of mountains and desert],\nand I lamented [much in my heart, asking]:\n[IV, 2] “How [was] the savior [appointed],\nand why was he dispatched [to the world] by [his Father,\nand who is his] Father, who [dispatched him,\nand to what kind] of aeon is [it to which we will go]?\n\n“Because what did he [mean, saying to us]: ‘That aeon to [which you will go is the] kind that is an [indestructible] aeon’? [He, however, did not] inform us about [what kind it is].”"
+
+[annotations]
+concepts = []
+related_chunks = []

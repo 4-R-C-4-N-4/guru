@@ -1,0 +1,7 @@
+tradition = "gnosticism"
+text_id = "apocryphon-of-john"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+translator = "Samuel Zinner"
+source_url = "https://othergospels.com/john"
+sections_format = "section"
+chunk_count = 24

@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.apocryphon-of-john.021"
+tradition = "gnosticism"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+section = "The Destiny of Soulsb"
+translator = "Samuel Zinner"
+source_url = "https://othergospels.com/john"
+token_count = 67
+
+[content]
+body = "Then he said to me: “They will be brought to that place where the angels of destitution go, the place with [IV, 43] no repentance, and they will be detained for the day when those who have blasphemed the Spirit will be tormented, and they will be punished with an age-long punishment.”"
+
+[annotations]
+concepts = []
+related_chunks = []

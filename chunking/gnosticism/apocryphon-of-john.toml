@@ -1,0 +1,37 @@
+# The Secret Writing According to John (Apocryphon of John) — Codex II, 1.
+# Zinner/Mattison synoptic PDF, split by column geometry into one raw text per
+# manuscript witness (scripts/pdf_synoptic_extract.py). This entry is the
+# Codex II long recension, the only complete witness of the four.
+#
+# The print carries 19 editorial section headings shared across all three
+# columns ("Prologue", "The Savior Appears", ... "Conclusion"); the extractor
+# emits them as "== Heading ==" lines. They are the edition's own articulation
+# of the treatise and the units a reader would cite, so they are the section
+# boundaries here.
+[chunking]
+strategy = "regex-section-split"
+# Matches the extractor's heading marker. Single-quoted TOML literal — no
+# backslash escaping needed. regex_splitter passes group(1) through as {n}, so
+# the label is the heading itself ("Prologue", "Yaltabaoth") rather than an
+# index; the marker is consumed as a delimiter and does not enter the body, and
+# the extractor's four-line file header — everything before the first match —
+# is dropped by the splitter.
+pattern = '==\s*([^=\n]+?)\s*=='
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # Translator's notes block at the tail: scholarly apparatus per project
+    # policy (cf. gilgamesh-tablet-*.toml, pistis-sophia.toml). Kept in the raw
+    # file, stripped before chunking.
+    '\n==\s*Translator.s notes\s*==[\s\S]*$',
+    # Inline references to those notes ("...similar to a son.[^1] It was not
+    # a diverse entity..."). Stripped with the block they point at.
+    '\[\^\d+\]',
+]
+
+[metadata]
+tradition = "gnosticism"
+text_name = "The Secret Writing According to John (Apocryphon of John), Codex II, 1"
+translator = "Samuel Zinner"
+sections_format = "section"
