@@ -360,3 +360,93 @@ def edge_partners(conn: sqlite3.Connection, anchors: set[str]) -> list[dict]:
                         "chunk_id": partner, "similarity": 0.0, "tier": tier,
                         "tradition": trad or "", "metadata": {}})
     return list(out.values())
+
+
+# ── score inheritance through PARALLELS ──────────────────────────────────────
+
+def inherited_partners(conn: sqlite3.Connection,
+                       anchor_scores: dict[str, float],
+                       cap: int = 10) -> dict[str, dict]:
+    """Partners of high-confidence anchors, carrying an inheritable score.
+
+    The bet, stated plainly: if anchor A satisfies the query and B PARALLELS
+    A, then B plausibly satisfies the query. Relevance flows through the
+    equivalence relation instead of being hoped for — which is what separates
+    this from the blanket EDGE_LEG traversal, where partners of *anything*
+    retrieved arrive scoreless and inert (4 of 240 final slots in the
+    2026-08-12 measurement).
+
+    PARALLELS only. CONTRASTS asserts opposition on a shared question, which
+    does not transfer "satisfies the query" the same way, and operator
+    experience ranks it well below PARALLELS in usefulness.
+
+    Each pair carries `staged_edges.similarity` (the Phase 0.2 backfill) as a
+    tiebreak among a single anchor's partners — a weak signal (AUC 0.509
+    within the old retrieved band) but free, and it occupies exactly the slot
+    a trained (query, chunk) relevance scorer would later fill. `cap` bounds
+    hub anchors (max live degree is 177).
+
+    Returns {partner_id: {tier, tradition, anchor, anchor_score, pair_sim}}
+    with each partner keeping its best anchor.
+    """
+    if not anchor_scores:
+        return {}
+    ids = list(anchor_scores)
+    raw: list[tuple[str, str, str, str]] = []   # anchor, partner, tier, trad
+    for i in range(0, len(ids), 400):
+        batch = ids[i:i + 400]
+        ph = ",".join("?" for _ in batch)
+        for src, tgt, tier, s_tr, t_tr in conn.execute(
+                f"SELECT e.source_id, e.target_id, e.tier, "
+                f"       ns.tradition_id, nt.tradition_id "
+                f"FROM edges e "
+                f"JOIN nodes ns ON ns.id = e.source_id "
+                f"JOIN nodes nt ON nt.id = e.target_id "
+                f"WHERE e.type = 'PARALLELS' "
+                f"AND (e.source_id IN ({ph}) OR e.target_id IN ({ph}))",
+                batch + batch):
+            for anchor, partner, ptrad, atrad in ((src, tgt, t_tr, s_tr),
+                                                  (tgt, src, s_tr, t_tr)):
+                if (anchor in anchor_scores and partner not in anchor_scores
+                        and ptrad and ptrad != atrad):
+                    raw.append((anchor, partner, tier, ptrad))
+
+    if not raw:
+        return {}
+
+    # Pair similarity from the Phase 0.2 backfill; canonical order, best row.
+    sims: dict[tuple[str, str], float] = {}
+    for i in range(0, len(ids), 400):
+        batch = ids[i:i + 400]
+        ph = ",".join("?" for _ in batch)
+        try:
+            for a, b, s in conn.execute(
+                    f"SELECT source_chunk, target_chunk, similarity "
+                    f"FROM staged_edges WHERE similarity IS NOT NULL "
+                    f"AND (source_chunk IN ({ph}) OR target_chunk IN ({ph}))",
+                    batch + batch):
+                key = (a, b) if a <= b else (b, a)
+                sims[key] = max(sims.get(key, 0.0), s)
+        except sqlite3.Error:
+            break
+
+    def pair_sim(a: str, b: str) -> float:
+        return sims.get((a, b) if a <= b else (b, a), 0.75)
+
+    # Top `cap` partners per anchor by pair similarity.
+    by_anchor: dict[str, list[tuple[float, str, str, str]]] = {}
+    for anchor, partner, tier, trad in raw:
+        by_anchor.setdefault(anchor, []).append(
+            (pair_sim(anchor, partner), partner, tier, trad))
+
+    out: dict[str, dict] = {}
+    for anchor, plist in by_anchor.items():
+        plist.sort(reverse=True)
+        for sim, partner, tier, trad in plist[:cap]:
+            cand = {"tier": tier, "tradition": trad, "anchor": anchor,
+                    "anchor_score": anchor_scores[anchor], "pair_sim": sim}
+            prev = out.get(partner)
+            if (prev is None or cand["anchor_score"] * cand["pair_sim"]
+                    > prev["anchor_score"] * prev["pair_sim"]):
+                out[partner] = cand
+    return out

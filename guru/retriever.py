@@ -316,6 +316,46 @@ class HybridRetriever:
             item["_score"] = score
             scored.append((score, item))
 
+        # Edge score inheritance (EDGE_INHERIT=<weight>, off at 0/unset).
+        # Partners of high-confidence CONCEPT anchors enter with
+        #   inherit_w x anchor_score x pair_similarity
+        # so only partners of chunks the query already confirmed can compete,
+        # and partners of strong anchors outscore partners of weak ones. This
+        # is the anchored alternative to the inert blanket EDGE_LEG: same
+        # graph, but relevance flows through the anchor instead of arriving
+        # scoreless. Anchor = concept-expressed (graph_score > 0) at match
+        # weight >= EDGE_ANCHOR_MIN_MATCH (default 1.0, i.e. direct concept
+        # matches, not family/domain expansions).
+        inherit_w = float(os.environ.get("EDGE_INHERIT") or 0)
+        if inherit_w > 0 and conn is not None:
+            min_match = float(os.environ.get("EDGE_ANCHOR_MIN_MATCH") or 1.0)
+            cap = int(os.environ.get("EDGE_INHERIT_CAP") or 10)
+            anchor_scores = {
+                it["chunk_id"]: sc for sc, it in scored
+                if it.get("graph_score", 0.0) > 0
+                and it.get("match_weight", 0.0) >= min_match}
+            partners = legs.inherited_partners(conn, anchor_scores, cap=cap)
+            by_id = {it["chunk_id"]: n for n, (_, it) in enumerate(scored)}
+            for pid, p in partners.items():
+                if not prefs.is_chunk_allowed(p["tradition"]):
+                    continue
+                p_score = inherit_w * p["anchor_score"] * p["pair_sim"]
+                n = by_id.get(pid)
+                if n is not None:
+                    # Already a candidate through another leg: an inherited
+                    # score can only raise it, never demote.
+                    if p_score > scored[n][0]:
+                        scored[n][1]["_score"] = p_score
+                        scored[n][1]["via_edge"] = p["anchor"]
+                        scored[n] = (p_score, scored[n][1])
+                else:
+                    item = {"chunk_id": pid, "similarity": 0.0,
+                            "tier": p["tier"], "tradition": p["tradition"],
+                            "metadata": {}, "graph_score": 0.0,
+                            "_score": p_score, "via_edge": p["anchor"]}
+                    seen[pid] = item
+                    scored.append((p_score, item))
+
         scored.sort(key=lambda x: -x[0])
         if os.environ.get("RETRIEVAL_TRACE"):
             logger.info("[retrieval-trace] %d candidates (vec_w=%s graph_w=%s "
