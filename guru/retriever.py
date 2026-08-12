@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import os
 import sqlite3
 import sys
@@ -131,7 +132,7 @@ class HybridRetriever:
 
             return self._merge_and_rank(
                 vector_hits, graph_chunks + edge_chunks, user_prefs, k,
-                conn=conn, lexical=lex, summaries=summaries)[:k]
+                conn=conn, lexical=lex, summaries=summaries, query=query)[:k]
         finally:
             conn.close()
 
@@ -213,6 +214,7 @@ class HybridRetriever:
         conn: sqlite3.Connection | None = None,
         lexical: dict[str, float] | None = None,
         summaries: list[dict] | None = None,
+        query: str = "",
     ) -> list[RetrievedChunk]:
         seen: dict[str, dict] = {}
 
@@ -344,6 +346,71 @@ class HybridRetriever:
                 if n is not None:
                     # Already a candidate through another leg: an inherited
                     # score can only raise it, never demote.
+                    if p_score > scored[n][0]:
+                        scored[n][1]["_score"] = p_score
+                        scored[n][1]["via_edge"] = p["anchor"]
+                        scored[n] = (p_score, scored[n][1])
+                else:
+                    item = {"chunk_id": pid, "similarity": 0.0,
+                            "tier": p["tier"], "tradition": p["tradition"],
+                            "metadata": {}, "graph_score": 0.0,
+                            "_score": p_score, "via_edge": p["anchor"]}
+                    seen[pid] = item
+                    scored.append((p_score, item))
+
+        # Thresholded reranker inheritance (EDGE_RERANK=<weight>, off at
+        # 0/unset; do not combine with EDGE_INHERIT). Same anchored candidate
+        # generation, but the per-pair transfer weight is a zero-shot
+        # bge-reranker (query, partner-body) score instead of
+        # staged_edges.similarity — the slot that signal was always holding
+        # (AUC 0.509 vs 0.742). Global score threshold, not per-query quota:
+        # partners below EDGE_RERANK_THRESHOLD (raw logit, default -3.8 = the
+        # judged 63.6%-strict operating point) are dropped entirely, so weak
+        # queries surface nothing. Kept partners transfer at
+        # sigmoid(logit - threshold) in (0.5, 1), the range pair_sim occupied,
+        # times anchor_score as before.
+        rerank_w = float(os.environ.get("EDGE_RERANK") or 0)
+        if rerank_w > 0 and conn is not None:
+            from guru import rerank
+            min_match = float(os.environ.get("EDGE_ANCHOR_MIN_MATCH") or 1.0)
+            # Wider pool than EDGE_INHERIT's: the reranker chooses, so the
+            # pair_sim cap that truncated the pool costs it candidates.
+            cap = int(os.environ.get("EDGE_RERANK_CAP") or 30)
+            thresh = float(os.environ.get("EDGE_RERANK_THRESHOLD") or -3.8)
+            anchor_scores = {
+                it["chunk_id"]: sc for sc, it in scored
+                if it.get("graph_score", 0.0) > 0
+                and it.get("match_weight", 0.0) >= min_match}
+            partners = legs.inherited_partners(conn, anchor_scores, cap=cap)
+            # Global pair budget: cross-encoder CPU cost is ~0.7s/pair fp32,
+            # and hub-heavy queries can gate 600+ candidates through their
+            # anchors (measured 2026-08-12). Keep the highest-anchor-score
+            # candidates; anchor confidence is the only cheap signal that is
+            # not the pair_sim this term exists to replace.
+            max_pairs = int(os.environ.get("EDGE_RERANK_MAX_PAIRS") or 120)
+            keep_ids = sorted(partners,
+                              key=lambda pid: -partners[pid]["anchor_score"])
+            keep_ids = keep_ids[:max_pairs]
+            bodies: dict[str, str] = {}
+            for pid in keep_ids:
+                p = partners[pid]
+                if not prefs.is_chunk_allowed(p["tradition"]):
+                    continue
+                path = resolve_chunk_path(pid)
+                if path is None:
+                    continue
+                with open(path, "rb") as f:
+                    bodies[pid] = tomllib.load(f)["content"]["body"]
+            logits = rerank.score_pairs(query, bodies)
+            by_id = {it["chunk_id"]: n for n, (_, it) in enumerate(scored)}
+            for pid, logit in logits.items():
+                if logit < thresh:
+                    continue
+                p = partners[pid]
+                transfer = 1.0 / (1.0 + math.exp(-(logit - thresh)))
+                p_score = rerank_w * p["anchor_score"] * transfer
+                n = by_id.get(pid)
+                if n is not None:
                     if p_score > scored[n][0]:
                         scored[n][1]["_score"] = p_score
                         scored[n][1]["via_edge"] = p["anchor"]
