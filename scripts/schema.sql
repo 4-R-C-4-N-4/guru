@@ -93,7 +93,17 @@ CREATE TABLE IF NOT EXISTS staged_edges (
     reviewed_by     TEXT,
     reviewed_at     TEXT,
     model           TEXT,
-    prompt_version  TEXT
+    prompt_version  TEXT,
+    -- Retrieval provenance. Applied to existing DBs by
+    -- scripts/migrations/v3_009_edge_provenance.sql.
+    -- similarity: the vector score that triggered the proposal — never
+    --   persisted before v3_009, which is why --min-similarity was not
+    --   tunable against outcomes.
+    -- presentation_order: which passage the judge saw as Passage A, relative
+    --   to the canonical (pair_key) order. The judge flips 21% of verdicts
+    --   under order reversal, so without this AB/BA symmetry is unauditable.
+    similarity      REAL,
+    presentation_order TEXT CHECK(presentation_order IN ('ab','ba'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_staged_edges_source ON staged_edges(source_chunk);
@@ -171,6 +181,36 @@ CREATE TABLE IF NOT EXISTS tagging_progress (
     chunk_id        TEXT PRIMARY KEY REFERENCES nodes(id),
     completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
+
+-- Edge-sweep completion, the propose_edges.py counterpart of
+-- tagging_progress. Applied to existing DBs by
+-- scripts/migrations/v3_009_edge_provenance.sql.
+--
+-- Keyed by provenance, not by chunk alone: "swept" is only meaningful
+-- relative to the model and prompt that swept, so two models can each hold a
+-- record for the same chunk.
+--
+-- top_n / min_similarity record the retrieval regime, without which a row
+-- written by `--top-n 5 --min-similarity 0.75` is indistinguishable from one
+-- written by a wide sweep — the same ambiguity that makes backfilling this
+-- table from history impossible. min_similarity NULL means no floor was
+-- applied (the Phase 2 reranker regime).
+--
+-- Writers use INSERT OR REPLACE, so within one (chunk, model,
+-- prompt_version) the latest sweep wins and its regime is what the row
+-- reports. A narrower re-sweep therefore supersedes a wider earlier one;
+-- read the regime columns rather than assuming presence means full coverage.
+CREATE TABLE IF NOT EXISTS edge_progress (
+    chunk_id        TEXT NOT NULL REFERENCES nodes(id),
+    model           TEXT NOT NULL,
+    prompt_version  TEXT NOT NULL,
+    top_n           INTEGER,
+    min_similarity  REAL,
+    completed_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    PRIMARY KEY (chunk_id, model, prompt_version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_edge_progress_chunk ON edge_progress(chunk_id);
 
 -- ============================================================
 -- CONCEPT HIERARCHY (domain → family → concept)
