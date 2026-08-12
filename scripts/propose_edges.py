@@ -5,7 +5,16 @@ For each chunk, finds top-N nearest neighbours from other traditions via
 the vector store, then asks an LLM to classify the relationship as
 PARALLELS / CONTRASTS / surface_only / unrelated.
 
-Writes proposals to staged_edges. Deduplicates: never re-proposes a pair.
+Writes every verdict to staged_edges: positives (PARALLELS/CONTRASTS) as
+pending rows for review, negatives (surface_only/unrelated) as settled
+status='rejected' rows with reviewed_by='model-negative' — never shown in the
+review queue, but visible to dedup so re-runs stop re-paying for known
+negatives. Deduplicates: never re-proposes a pair. Records per-chunk sweep
+completion in edge_progress (a chunk with any errored pair gets no progress
+row and is revisited next run).
+
+Requires migrations v3_009 (similarity, presentation_order, edge_progress)
+and v3_010 (model-negative dedup index).
 
 NOTE: Requires Stage 4 (embed_corpus.py) to have populated the vector store.
 The VectorStore interface below is wired to scripts/vector_store.py (Stage 4).
@@ -155,13 +164,25 @@ def get_existing_pairs(conn: sqlite3.Connection) -> set[tuple[str, str]]:
     return {pair_key(r[0], r[1]) for r in rows}
 
 
+MODEL_NEGATIVE = "model-negative"
+
+
 def upsert_staged_edge(conn: sqlite3.Connection,
                        source: str, target: str,
                        edge_type: str, confidence: float,
                        justification: str,
                        model: str,
-                       prompt_version: str) -> None:
+                       prompt_version: str,
+                       similarity: float | None = None) -> None:
+    """Stage a positive verdict (PARALLELS/CONTRASTS) as a pending row.
+
+    presentation_order records which passage the model saw as Passage A,
+    relative to the canonical stored order — pair_key() destroys it otherwise,
+    and the judge flips 21% of verdicts under order reversal, so without this
+    AB/BA symmetry is unauditable from the store.
+    """
     a, b = pair_key(source, target)
+    order = "ab" if (a, b) == (source, target) else "ba"
     # ON CONFLICT targets the partial UNIQUE index
     # idx_staged_edges_provenance_unique (source_chunk, target_chunk, model,
     # prompt_version) WHERE status='pending' — a re-propose with the same
@@ -169,12 +190,72 @@ def upsert_staged_edge(conn: sqlite3.Connection,
     conn.execute(
         """INSERT INTO staged_edges
                (source_chunk, target_chunk, edge_type, confidence,
-                justification, model, prompt_version)
-           VALUES(?,?,?,?,?,?,?)
+                justification, model, prompt_version,
+                similarity, presentation_order)
+           VALUES(?,?,?,?,?,?,?,?,?)
            ON CONFLICT(source_chunk, target_chunk, model, prompt_version)
            WHERE status = 'pending'
            DO NOTHING""",
-        (a, b, edge_type, confidence, justification, model, prompt_version),
+        (a, b, edge_type, confidence, justification, model, prompt_version,
+         similarity, order),
+    )
+
+
+def insert_model_negative(conn: sqlite3.Connection,
+                          source: str, target: str,
+                          edge_type: str, confidence: float,
+                          justification: str,
+                          model: str,
+                          prompt_version: str,
+                          similarity: float | None = None) -> None:
+    """Persist a negative verdict (surface_only/unrelated) as settled history.
+
+    status='rejected' + reviewed_by='model-negative': never enters the review
+    queue (the review app filters status='pending' everywhere and apply
+    refuses non-pending rows), distinguishable from curated rejections, and
+    visible to get_existing_pairs() so re-runs stop re-paying for known
+    negatives. Also the easy-negative supply for reranker training.
+
+    ON CONFLICT targets idx_staged_edges_model_negative_unique (v3_010),
+    which is scoped to this sentinel — the pending-only provenance index
+    cannot dedup these rows, and without the scoped index a re-run would
+    silently duplicate them.
+    """
+    a, b = pair_key(source, target)
+    order = "ab" if (a, b) == (source, target) else "ba"
+    conn.execute(
+        """INSERT INTO staged_edges
+               (source_chunk, target_chunk, edge_type, confidence,
+                justification, model, prompt_version,
+                similarity, presentation_order,
+                status, reviewed_by, reviewed_at)
+           VALUES(?,?,?,?,?,?,?,?,?,
+                  'rejected', ?, strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+           ON CONFLICT(source_chunk, target_chunk, model, prompt_version)
+           WHERE status = 'rejected' AND reviewed_by = 'model-negative'
+           DO NOTHING""",
+        (a, b, edge_type, confidence, justification, model, prompt_version,
+         similarity, order, MODEL_NEGATIVE),
+    )
+
+
+def mark_edge_progress(conn: sqlite3.Connection, chunk_id: str,
+                       model: str, prompt_version: str,
+                       top_n: int | None = None,
+                       min_similarity: float | None = None) -> None:
+    """Record a completed sweep of one chunk (mirrors tagging_progress).
+
+    Keyed by (chunk_id, model, prompt_version), so a second model's sweep adds
+    a record rather than replacing the first's. top_n / min_similarity record
+    the retrieval regime: without them a chunk swept at `--top-n 5
+    --min-similarity 0.75` is indistinguishable from one swept wide, which is
+    the whole reason this table cannot be backfilled from history.
+    """
+    conn.execute(
+        """INSERT OR REPLACE INTO edge_progress
+               (chunk_id, model, prompt_version, top_n, min_similarity)
+           VALUES(?,?,?,?,?)""",
+        (chunk_id, model, prompt_version, top_n, min_similarity),
     )
 
 
@@ -215,7 +296,7 @@ def run_proposals(
     chunks = conn.execute(sql, params).fetchall()
 
     existing_pairs = get_existing_pairs(conn)
-    proposed = skipped = errors = 0
+    proposed = negatives = skipped = errors = 0
 
     for chunk_id, tradition_id, label in chunks:
         # Query top-N neighbours from other traditions
@@ -232,6 +313,7 @@ def run_proposals(
             continue
 
         body_a = load_chunk_body(chunk_id)
+        chunk_errors = 0
 
         for nb in neighbours:
             nb_id = nb["chunk_id"]
@@ -249,29 +331,74 @@ def run_proposals(
 
             try:
                 result = call_llm_pair(provider, model, prompt)
-                edge_type = result.get("edge_type", "unrelated")
-                confidence = float(result.get("confidence", 0.0))
+                edge_type = result.get("edge_type")
+                if edge_type not in ("PARALLELS", "CONTRASTS",
+                                     "surface_only", "unrelated"):
+                    # Parse failure or invalid verdict. Persisting nothing is
+                    # deliberate: the old `.get("edge_type", "unrelated")`
+                    # default would turn an unparseable response into a
+                    # permanent model rejection.
+                    logger.error(f"  unparseable verdict for "
+                                 f"{chunk_id}↔{nb_id}: {result!r}")
+                    errors += 1
+                    chunk_errors += 1
+                    continue
+                try:
+                    confidence = float(result.get("confidence", 0.0))
+                except (TypeError, ValueError):
+                    confidence = 0.0
                 justification = result.get("justification", "")
+                sim = nb.get("similarity")
+                sim = float(sim) if sim is not None else None
 
                 if edge_type in ("PARALLELS", "CONTRASTS"):
                     upsert_staged_edge(conn, chunk_id, nb_id,
                                        edge_type, confidence, justification,
                                        model=model,
-                                       prompt_version=PROMPT_VERSION)
-                    existing_pairs.add(key)
+                                       prompt_version=PROMPT_VERSION,
+                                       similarity=sim)
                     proposed += 1
                     logger.info(f"  {chunk_id} ↔ {nb_id}: {edge_type} ({confidence:.2f})")
+                else:
+                    insert_model_negative(conn, chunk_id, nb_id,
+                                          edge_type, confidence, justification,
+                                          model=model,
+                                          prompt_version=PROMPT_VERSION,
+                                          similarity=sim)
+                    negatives += 1
+                existing_pairs.add(key)
 
             except Exception as e:
                 logger.error(f"  LLM failed for {chunk_id}↔{nb_id}: {e}")
                 errors += 1
+                chunk_errors += 1
 
             if delay > 0:
                 time.sleep(delay)
 
-    conn.commit()
+        # "Done" only when every neighbour of this chunk got a persisted
+        # verdict (or was already settled). An errored pair means the sweep
+        # must revisit this chunk, so no progress row.
+        #
+        # An empty neighbour list still marks progress: under a recorded
+        # regime "swept, nothing cleared the floor" is a real and useful
+        # answer, distinct from "never swept". The regime columns are what
+        # make that distinction safe — a later wide sweep reads
+        # min_similarity on the row rather than treating presence as full
+        # coverage.
+        if chunk_errors == 0:
+            mark_edge_progress(conn, chunk_id, model, PROMPT_VERSION,
+                               top_n=top_n, min_similarity=min_similarity)
+
+        # Commit per chunk, not once at the end. These are multi-hour sweeps;
+        # a crash or interrupt at the end of an all-at-once transaction throws
+        # away every verdict and progress row it earned, which defeats the
+        # point of recording progress at all.
+        conn.commit()
+
     conn.close()
-    print(f"\nDone: {proposed} proposals written, {skipped} pairs skipped, {errors} errors")
+    print(f"\nDone: {proposed} proposals written, {negatives} negatives persisted, "
+          f"{skipped} pairs skipped, {errors} errors")
 
 
 def main() -> None:

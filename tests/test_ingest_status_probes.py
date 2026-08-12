@@ -26,16 +26,21 @@ import sqlite3
 
 import pytest
 
-from guru.ingest import Ctx, _p_edge_review, _p_tag, _p_tag_review
+from guru.ingest import Ctx, _p_edge_review, _p_edges, _p_tag, _p_tag_review
 
 SCHEMA = """
 CREATE TABLE nodes (id TEXT PRIMARY KEY, type TEXT);
 CREATE TABLE tagging_progress (chunk_id TEXT PRIMARY KEY);
 CREATE TABLE staged_tags (
     id INTEGER PRIMARY KEY, chunk_id TEXT, status TEXT DEFAULT 'pending');
+-- reviewed_by is load-bearing here, not decoration: the edge probes exclude
+-- persisted model negatives by (status, reviewed_by), and Ctx.count swallows
+-- sqlite3 errors and returns 0 — so a fixture missing this column makes the
+-- exclusion silently count nothing and the probe tests pass for the wrong
+-- reason.
 CREATE TABLE staged_edges (
     id INTEGER PRIMARY KEY, source_chunk TEXT, target_chunk TEXT,
-    status TEXT DEFAULT 'pending');
+    status TEXT DEFAULT 'pending', reviewed_by TEXT);
 CREATE TABLE review_actions (
     id INTEGER PRIMARY KEY, target_id INTEGER, target_table TEXT,
     applied_at TEXT);
@@ -204,3 +209,68 @@ def test_review_queues_do_not_cross_target_tables(ctx):
     queue(ctx, "staged_edges", 1)
     ok, _ = _p_tag_review(ctx)
     assert ok, "an edge verdict must not hold node 11 open"
+
+
+# ── persisted model negatives must not read as review ────────────────────────
+#
+# propose_edges.py writes the judge's surface_only/unrelated verdicts as
+# settled rows (status='rejected', reviewed_by='model-negative'). They never
+# enter the review queue, so any probe that counts them as review material
+# reports work nobody did — which is the exact failure AGENTS.md's "never
+# queue a verdict you did not earn" exists to prevent.
+
+def add_model_negative(ctx, n=1, partner="hinduism.bhagavad-gita-chapter-02.001"):
+    for _ in range(n):
+        ctx.db.execute(
+            "INSERT INTO staged_edges(source_chunk, target_chunk, status, reviewed_by) "
+            "VALUES (?, ?, 'rejected', 'model-negative')",
+            (f"{PREFIX}001", partner))
+
+
+def test_edge_review_does_not_pass_on_model_negatives_alone(ctx):
+    """The regression: a negatives-only sweep left pend=0 against a non-zero
+    total, so node 14 reported every staged edge reviewed with not one human
+    verdict recorded."""
+    add_chunks(ctx, 2)
+    add_model_negative(ctx, 3)
+    ok, msg = _p_edge_review(ctx)
+    assert not ok, "node 14 passed with zero human verdicts"
+    assert "nothing staged to review" in msg
+
+
+def test_edge_review_denominator_excludes_model_negatives(ctx):
+    """Mixed text: the count a reviewer reads must be review material only."""
+    add_chunks(ctx, 2)
+    add_model_negative(ctx, 9)
+    for _ in range(2):
+        ctx.db.execute(
+            "INSERT INTO staged_edges(source_chunk, target_chunk, status) "
+            "VALUES (?, 'hinduism.bhagavad-gita-chapter-02.001', 'pending')",
+            (f"{PREFIX}001",))
+    ok, msg = _p_edge_review(ctx)
+    assert not ok
+    assert "2 of 2 staged edges still pending" in msg
+
+
+def test_edge_review_passes_once_real_verdicts_are_in(ctx):
+    """Negatives alongside settled human verdicts must not block the gate."""
+    add_chunks(ctx, 2)
+    add_model_negative(ctx, 5)
+    ctx.db.execute(
+        "INSERT INTO staged_edges(source_chunk, target_chunk, status, reviewed_by) "
+        "VALUES (?, 'hinduism.bhagavad-gita-chapter-02.001', 'accepted', 'agent-claude')",
+        (f"{PREFIX}001",))
+    ok, msg = _p_edge_review(ctx)
+    assert ok
+    assert "all 1 staged edges reviewed" in msg
+
+
+def test_edge_propose_does_not_count_negatives_as_proposals(ctx):
+    """Node 13 is an existence probe; a sweep that proposed nothing has not
+    given this text edges, however many pairs the judge declined."""
+    add_chunks(ctx, 2)
+    add_model_negative(ctx, 4)
+    ok, msg = _p_edges(ctx)
+    assert not ok
+    assert "no staged_edges for this text" in msg
+    assert "4 model negatives" in msg, "the negatives should still be visible"

@@ -27,7 +27,10 @@ MIGRATIONS_DIR = PROJECT_ROOT / "scripts" / "migrations"
 
 # Migrations that shape staged_edges / edge_progress, in application order.
 # Append future ones here so the drift comparison keeps covering them.
-EDGE_SCHEMA_MIGRATIONS = ["v3_009_edge_provenance.sql"]
+EDGE_SCHEMA_MIGRATIONS = [
+    "v3_009_edge_provenance.sql",
+    "v3_010_model_negative_dedup.sql",
+]
 
 # staged_edges as v3_005 left it — the pre-v3_009 state the migration must
 # upgrade. A frozen historical snapshot: it describes what was, so unlike an
