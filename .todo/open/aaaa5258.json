@@ -1,0 +1,15 @@
+{
+  "id": "aaaa5258",
+  "type": "chore",
+  "state": "open",
+  "summary": "Freeze the staged_edges flow: settle 1,301 pending rows as historical, deprecate propose/review/auto-promote scripts",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.519Z",
+  "updated_at": "2026-08-13T13:20:56.556Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "No new pair proposals. Mark remaining pending staged_edges rows with a terminal historical status (decision recorded, not silently dropped); propose_edges.py, review_edges.py, auto_promote_edges.py get deprecation headers pointing at the derive node; the guru-review edges queue UI section retires. staged_edges table itself stays as the historical record — do not drop it. Legacy live-edge cleanup (the 2,825-edge suspect proposal in rellm runs/edges/curation/2026-08-13-run1) proceeds independently of this ticket and only matters if the owner keeps any legacy edges post-cutover."
+}

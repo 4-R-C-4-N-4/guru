@@ -1,0 +1,15 @@
+{
+  "id": "379722ec",
+  "type": "chore",
+  "state": "open",
+  "summary": "Model artifact + environment: vendor the student checkpoint and the torch dependency as an optional extra",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.283Z",
+  "updated_at": "2026-08-13T13:20:56.325Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "Decide the checkpoint home (models/ dir vs pinned path into rellm runs — recommend copying into guru models/derived-parallels/<version>/ with the training card, so the corpus pipeline is self-contained and versioned). torch+transformers as an optional dependency group used only by derive_parallels; document the CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 pin for the 3090 and the CPU fallback (~7 min GPU / ~6 min 8-thread CPU int8 for the full corpus)."
+}
