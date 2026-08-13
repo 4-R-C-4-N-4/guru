@@ -63,6 +63,16 @@ figures/terms map–reduce exist only to work around a small context window. The
 activate when `input_budget > 0`. Under the current campaign there are zero
 fold rows, and there should be.
 
+**Forgetting that idempotency is version-keyed.** The skip check is
+`(unit, model, prompt_version)`, so bumping a template version makes every
+unpromoted span of every work look ungenerated — a `--generate --stage l1` run
+after a bump regenerates *whole works*, not just the rows the bump was meant to
+fix (the `l1-v2 → l1-v3` bump turned a 1-row fix for
+`egyptian-heaven-and-hell` into 11 calls). For targeted remediation use
+`--respin`, which regenerates only spans whose every row is rejected and feeds
+the rejection note back as a corrective addendum. After a bump, never run the
+bumped stage without deciding which behaviour you want.
+
 **Reading a parse failure as a hard stop.** Contract validation follows the
 `tag_concepts.parse_tags` pattern: reject-and-retry up to a limit, then
 log-skip. The node stays ungenerated and a later run retries it. A skipped node

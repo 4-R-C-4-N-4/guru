@@ -62,10 +62,31 @@ are the ones that read well.
 failure frequently traces down through `child_summary_ids` to a bad L1. Check
 before revising.
 
-**Leaving the queue half-drained.** This is where the corpus actually sits: 17
-of 56 works have pending rows, `iamblichus-on-the-mysteries` (13),
-`pistis-sophia` (11) and `zhuangzi-inner-chapters-index` (9) worst. Those works
-cannot promote, so their dossiers are simply absent from study mode.
+**Judging cluster membership from one work's sample.** `template_defect` is a
+claim about the template, and the evidence for it is cross-work. In the c7 tail
+review, three GROUND failures with the identical mode — naming the work's
+author/translator ("Hall", "Ouspensky", "Taylor") when the input never does —
+sat in three different works, and each looked like a one-off from inside its
+own work. Reviewed per-work, the cluster is invisible; aggregate the codes
+across the whole sample before deciding one-off versus defect. That cluster is
+what bumped `l1-v2 → l1-v3`.
+
+**Blaming the template for a span-boundary artifact.** Two review observations
+that look like template failures and are not: spans consisting entirely of
+translator footnotes (the chunker splits an edition's endnote block into its
+own span — `gnostic-john-baptizer`), and numbered endnotes split mid-note so
+the next span opens with an unnumbered fragment the summary then mis-numbers
+(`iamblichus-on-the-mysteries`, s1557). The first the template handles well —
+it names the span as editorial apparatus; the second produces a real GROUND
+reject, but the fix is upstream in span planning, not in the prompt.
+
+**Leaving the queue half-drained.** For most of c7 this is where the corpus
+actually sat: 17 of 56 works with pending rows — `iamblichus-on-the-mysteries`
+(13), `pistis-sophia` (11), `zhuangzi-inner-chapters-index` (9) worst. Works
+with pending rows cannot promote, so their dossiers are simply absent from
+study mode. The backlog was drained 2026-08-13; what it cost to drain (three
+template bumps, two respins, and a manual-remediation round) is recorded in
+the version-history comments in `generate_dossiers.py`.
 
 ## Provenance
 

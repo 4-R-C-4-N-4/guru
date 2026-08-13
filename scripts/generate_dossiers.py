@@ -41,11 +41,26 @@ MAX_ATTEMPTS = 3
 # L1 template version — bumped v1 -> v2 after campaign-c1 review round 1:
 # 5/16 sample failures clustered on COVERAGE (order/proportion) + one GROUND
 # role-inversion; v2 strengthens order, proportion, and action-direction rules.
-L1_TPL = "l1-v2"
+# Bumped v2 -> v3 after the c7 tail review (2026-08-13): 3 GROUND failures in
+# 3 works, identical mode — the summary names the work's author/translator
+# ("Hall", "Ouspensky", "Taylor") when the name appears nowhere in the input;
+# v3 bans naming the author/translator/annotator unless the input names them.
+L1_TPL = "l1-v3"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
-STRUCT_TPL = "structure-v2"
+# structure bumped v2 -> v3 -> v4 in the c7 tail review (2026-08-13): a
+# 6-row cross-work cluster of titles importing classificatory/genre labels
+# absent from the input ("Restraints and Observances", "Elements",
+# "Physiology", "Transmigration", "Parables", "Myth", received chapter
+# titles); v3 restricts title vocabulary to the input. v4 extends the same
+# rule to the synopsis after the failure migrated there (asserting members
+# of an unenumerated list via "including"). v5 (same day, iamblichus round):
+# a 4-row cluster of titles importing content words with no input lexeme
+# ("source", "divine", "editorial") -> every title content word must appear
+# in the input or span label; plus a ban on reproducing doxologies/colophons
+# verbatim (REGISTER, apocryphon-of-john).
+STRUCT_TPL = "structure-v5"
 L2_TPL = "l2-v2"
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
@@ -425,7 +440,15 @@ class Generator:
             if not src:
                 return None
             return {}, "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in src)
-        self._dossier_field(wp, "terms", "terms-v1", build,
+        # terms bumped v1 -> v2 -> v3 in the c7 yoga-sutras review (2026-08-13):
+        # v2 banned enumerating members of unenumerated lists ("the Rules",
+        # "the eight means") after two rejections; the failure then migrated to
+        # juxtaposition-fusion (glossing the Three Potencies with attributes of
+        # the adjacent "things seen" sutra via the outside guna equation), so
+        # v3 requires glossing a term only from statements about that term.
+        # v4 (same day): the ban text alone failed a third time; v4 adds a
+        # worked negative example and the bare-citation rule.
+        self._dossier_field(wp, "terms", "terms-v4", build,
                             lambda r: _v_listing(r, "terms", ("term", "gloss"), 10))
 
     def stage_notes(self, wp):
