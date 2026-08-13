@@ -58,16 +58,20 @@ appear at all.
 **The span plan is a freeze artifact.** Once generation has begun, a corpus
 change that alters totals means a *new campaign* — bump `campaign_id`, re-plan,
 and the prior works' span ids stay identical so their staged rows carry
-forward. Never a partial re-plan. `c1` through `c5` each exist because one text
-was added.
+forward. Never a partial re-plan. `c1` through `c7` each exist because the
+corpus changed — usually by one text. The carry-forward promise has one known
+break: a span-labeler change renames span ids at the re-plan (see
+[D1-plan-freeze](D1-plan-freeze.md), failure modes).
 
 **The converging unit in review is the template, not the row.** You sample K
 works stratified by tradition and size, judge them against seven rubric codes,
 and on a *cluster* of the same code you revise the prompt template and
 regenerate rather than rejecting rows individually. The version history is the
-evidence this works: `l1-v1 → l1-v2`, `structure-v1 → v2`, `l2-v1 → v2`. The
-reject counts are not waste — 613 rejected structure entries against 773
-accepted is what template convergence looks like from the inside.
+evidence this works: `l1-v1 → v2 → v3`, `structure-v1 → … → v5`,
+`terms-v1 → … → v4`, `l2-v1 → v2` — the live versions are the constants in
+`generate_dossiers.py`. The reject counts are not waste — 613 rejected
+structure entries against 773 accepted in the first round is what template
+convergence looks like from the inside.
 
 ## Judgement contracts
 

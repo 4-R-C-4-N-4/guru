@@ -49,17 +49,20 @@ L1_TPL = "l1-v3"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
-# structure bumped v2 -> v3 -> v4 in the c7 tail review (2026-08-13): a
-# 6-row cross-work cluster of titles importing classificatory/genre labels
-# absent from the input ("Restraints and Observances", "Elements",
-# "Physiology", "Transmigration", "Parables", "Myth", received chapter
-# titles); v3 restricts title vocabulary to the input. v4 extends the same
-# rule to the synopsis after the failure migrated there (asserting members
-# of an unenumerated list via "including"). v5 (same day, iamblichus round):
-# a 4-row cluster of titles importing content words with no input lexeme
-# ("source", "divine", "editorial") -> every title content word must appear
-# in the input or span label; plus a ban on reproducing doxologies/colophons
-# verbatim (REGISTER, apocryphon-of-john).
+# structure bumped v2 -> v3 -> v4 -> v5 in the c7 tail review (2026-08-13),
+# one failure family across three rounds: titles importing classificatory or
+# genre labels absent from the input ("Restraints and Observances",
+# "Elements", "Physiology", "Transmigration", "Parables", "Myth", received
+# chapter titles), the same import migrating into the synopsis ("including"
+# membership in an unenumerated list), then titles importing content words
+# with no input lexeme ("source", "divine", "editorial"). v3 restricts title
+# vocabulary to the input, v4 extends the rule to the synopsis, v5 requires
+# every title content word to appear in the input or span label and bans
+# reproducing doxologies/colophons verbatim.
+# CAUTION: no row has yet been generated at v5 — its round's rejects were
+# fixed via structure-manual rows. Sample a scoped --work run under v5 and
+# review it before any wide regeneration; the 799 spans accepted at v2 are
+# all stale to the version-keyed skip check.
 STRUCT_TPL = "structure-v5"
 L2_TPL = "l2-v2"
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
@@ -233,9 +236,12 @@ def _accepted_l1s(conn, work_id, span_order: dict | None = None) -> list[sqlite3
 
 
 def _accepted_l2(conn, work_id) -> sqlite3.Row | None:
+    # manual rows outrank any template generation — same preference as
+    # _accepted_l1s and the promoter, so fields derive from the L2 that ships
     return conn.execute(
         "SELECT * FROM staged_summaries WHERE work_id=? AND level=2 AND status='accepted'"
-        " ORDER BY id DESC LIMIT 1", (work_id,)).fetchone()
+        " ORDER BY (prompt_version LIKE '%-manual') DESC, id DESC LIMIT 1",
+        (work_id,)).fetchone()
 
 
 # ── the generator ─────────────────────────────────────────────────────────────
@@ -447,7 +453,9 @@ class Generator:
         # the adjacent "things seen" sutra via the outside guna equation), so
         # v3 requires glossing a term only from statements about that term.
         # v4 (same day): the ban text alone failed a third time; v4 adds a
-        # worked negative example and the bare-citation rule.
+        # worked negative example and the bare-citation rule. Live version =
+        # this call site's literal; 62 works' terms accepted at v1 are stale
+        # to the version-keyed skip check, so never run --stage terms unscoped.
         self._dossier_field(wp, "terms", "terms-v4", build,
                             lambda r: _v_listing(r, "terms", ("term", "gloss"), 10))
 

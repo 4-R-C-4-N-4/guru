@@ -68,14 +68,20 @@ shows "no staged rows", run its l1 stage.
 **Reading "generation calls this run: 0" as done.** Zero calls means every
 unit was *skipped*, and there are two very different reasons a unit skips:
 it already has a pending/accepted row at the current template version, or its
-**upstream input is not accepted yet** — `structure`/`l2` read accepted L1s,
-and `summary`/`context`/`figures`/`terms`/`notes` read the accepted L2. A
-field stage run while the L2 is still pending no-ops silently and looks
-identical to success. After any 0-call run, check
-`python3 -m guru dossier status <work-id>`: if the work still shows missing
-rows, the cause is an unaccepted upstream, and the fix is to review upstream
-first, then re-run this stage. The working loop for a non-degenerate work is:
-l1 → review → structure + l2 → review → fields → review.
+**upstream input is not accepted yet**. The upstream map, per stage:
+`structure` and `l2` read accepted L1s; `summary` and `context` read the
+accepted L2; `figures` and `terms` read accepted L1s (falling back to the L2
+only when the work has none, i.e. degenerate); `notes` reads the accepted
+`context` field plus accepted structure entries — not the L2. A stage run
+while its upstream is pending no-ops silently and looks identical to success,
+so after any 0-call run check `python3 -m guru dossier status <work-id>` and
+review the *right* upstream before re-running — for a stuck `notes` that
+means the context row, not the L2. One sharper trap: `figures`/`terms` have
+no completeness check — run them while only *some* L1s are accepted and they
+generate from the partial set, and the resulting row then blocks
+regeneration like any pending row. The working loop for a non-degenerate
+work is: l1 → review → structure + l2 → review → summary/context/figures/terms
+→ review → notes → review.
 
 **Assuming the session's model.** Provider and model come from the campaign
 config and are recorded verbatim in each row. `claude-code` is headless Claude

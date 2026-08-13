@@ -26,7 +26,7 @@ Writes both halves of the freeze artifact:
 If the corpus has changed since the current plan froze, this is a **new
 campaign**, not a re-plan. Bump `campaign_id` in `config/dossiers.toml` first,
 with a comment saying what changed — the existing comments in that file are the
-model, and they are the only record of why `c1`…`c5` exist.
+model, and they are the only record of why `c1`…`c7` exist.
 
 ## Output
 
@@ -65,7 +65,9 @@ as missing. Re-promotion heals the live tables (D4 rebuilds a work's nodes
 wholesale from its staged rows), but staged-row provenance keeps the old ids
 forever. If a label-format change is unavoidable, expect this and check
 whether any not-yet-promoted work has fully-rejected rows under old ids —
-those spans have silently left `--respin`'s reach. It does not. `span_target` is
+those spans have silently left `--respin`'s reach.
+
+**Assuming a provider switch invalidates spans.** It does not. `span_target` is
 in pipeline tokens and is provider-independent by design, precisely so span
 identity survives a backend change. A provider switch is still a new campaign,
 but for provenance reasons — the `model` column disambiguates the lines.
