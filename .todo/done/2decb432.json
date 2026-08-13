@@ -1,0 +1,21 @@
+{
+  "id": "2decb432",
+  "type": "chore",
+  "state": "done",
+  "summary": "Document the post-corpus-update ritual: golden queries -> re-distill -> re-derive",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.593Z",
+  "updated_at": "2026-08-13T13:26:15.489Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "One doc (docs/ or the derive node file) chaining the three rituals with their gates: (1) per-work golden queries ship with the corpus change (guru-web docs/golden-queries.md); (2) student re-distill via the rellm scorer pipeline (~1 GPU-hour scripted; gates: teacher r >= 0.85, gold-eval AUC, ship-gate protocol — rellm docs/edges/thin-scorer-spec.md); (3) re-derive parallels and spot-check panels. State plainly which steps are owner-gated.",
+  "resolution": {
+    "commit": "a5c44e298afdb96a1d345b64bfacdc67a91a376c",
+    "resolved_at": "2026-08-13T13:26:15.489Z",
+    "resolved_by": "unknown",
+    "note": "Relocated to guru-web: the ritual doc extends docs/golden-queries.md's corpus-update hook, which lives there. See guru-web ticket (created 2026-08-13) for the re-distill + re-derive chain."
+  }
+}

@@ -7,9 +7,9 @@
     "type": "human"
   },
   "created_at": "2026-08-13T13:20:56.519Z",
-  "updated_at": "2026-08-13T13:20:56.556Z",
+  "updated_at": "2026-08-13T13:26:15.394Z",
   "relationships": {
     "parent": "c3f479ff"
   },
-  "description": "No new pair proposals. Mark remaining pending staged_edges rows with a terminal historical status (decision recorded, not silently dropped); propose_edges.py, review_edges.py, auto_promote_edges.py get deprecation headers pointing at the derive node; the guru-review edges queue UI section retires. staged_edges table itself stays as the historical record — do not drop it. Legacy live-edge cleanup (the 2,825-edge suspect proposal in rellm runs/edges/curation/2026-08-13-run1) proceeds independently of this ticket and only matters if the owner keeps any legacy edges post-cutover."
+  "description": "No new pair proposals. Mark remaining pending staged_edges rows with a terminal historical status (decision recorded, not silently dropped); propose_edges.py, review_edges.py, auto_promote_edges.py get deprecation headers pointing at the derive node; the guru-review edges queue UI section retires. staged_edges table itself stays as the historical record — do not drop it.\n\nALSO: remove scripts/run-mistral.sh — it exists solely to serve Mistral-Small-24B for Pass C (docs/ingest/13-propose-edges.md names it as the model behind every edge proposal). Update node 13 + docs/ingest/gpu-assembly.md references. The ~/programs/mistral model dir itself is the owner's to delete if nothing else uses it (check the llm swap wrappers in ~/programs/model-runners first).\n\nLegacy live-edge cleanup (the 2,825-edge suspect proposal in rellm runs/edges/curation/2026-08-13-run1) proceeds independently and only matters if the owner keeps any legacy edges post-cutover."
 }
