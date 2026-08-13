@@ -151,11 +151,19 @@ def _stage_input(conn, table, row) -> str:
 
 
 def _plan_span_order(work_id: str) -> dict:
-    """Span label -> plan position for the frozen campaign plan."""
-    plan_path = Path(__file__).parent.parent / "docs" / "summary" / "span-plan-c1.json"
+    """Span label -> plan position for the frozen campaign plan.
+
+    The campaign comes from config/dossiers.toml — a hardcoded plan file
+    silently degrades to insertion-id order for works whose spans were
+    (re)planned in a later campaign, showing the reviewer a differently
+    ordered stage input than the generator saw."""
+    root = Path(__file__).parent.parent
     try:
-        plan = json.loads(plan_path.read_text())
-    except OSError:
+        import tomllib
+        with open(root / "config" / "dossiers.toml", "rb") as f:
+            campaign = tomllib.load(f)["campaign"]["campaign_id"]
+        plan = json.loads((root / "docs" / "summary" / f"span-plan-{campaign}.json").read_text())
+    except (OSError, KeyError):
         return {}
     for w in plan["works"]:
         if w["work_id"] == work_id:

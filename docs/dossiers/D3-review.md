@@ -27,6 +27,40 @@ python3 scripts/review_dossiers.py status
 Row ids are prefixed: `f…` for `staged_dossier_fields`, `s…` for
 `staged_summaries`.
 
+Every reject then needs a remediation, and there are exactly three. Pick by
+what the rejection is:
+
+1. **One-off failure** → regenerate the row. Both paths stamp the *current*
+   template constant, not the rejected row's version — after a bump they are
+   not "the same version" reruns. Summaries:
+   `build_dossiers.py --respin <summary-id>` (feeds your rejection note back
+   as a corrective addendum — write the note so a generator can act on it),
+   which targets only that span. Fields have no respin: re-running the
+   field's `--stage` regenerates the rejected row, but *also* every other
+   span of the work that is stale to the current version — targeted only if
+   the template has not been bumped since the work's rows were generated.
+   For a field one-off after a bump, rung 3 is usually the proportionate
+   path. Review the fresh row like any other.
+2. **Cluster of one code** → revise the template, bump the version, and
+   regenerate the affected rows. Read D2's version-keyed idempotency warning
+   **before** re-running the bumped stage: after a bump, every span of every
+   unpromoted work looks ungenerated to that stage, so an unscoped run
+   regenerates whole works. Decide whether you want that; if not, respin or
+   remediate manually.
+3. **Precisely-diagnosed defect where regeneration is disproportionate** (a
+   two-word fix, or a bump would mass-regenerate a 70-span work) → a
+   **manual row**: insert a corrected copy of the rejected row into the same
+   staged table, `status='pending'`, `prompt_version` set to
+   `<field>-manual` / `l1-manual` / `l2-manual`, `model` naming who authored
+   it. It enters the queue like any generated row and must pass review the
+   same way — have someone other than its author judge it. Manual rows
+   outrank every template version at promotion — but the *generator does not
+   see them*: its skip check matches the current template version exactly, so
+   a later run of that stage will regenerate the manually remediated span and
+   stage a duplicate pending row, which re-blocks this gate until reviewed
+   (reject it citing the manual row). After manual remediation, do not re-run
+   that stage for that work without expecting the duplicate.
+
 ## Output
 
 Accepted and rejected staged rows — and, when a code clusters, a revised prompt
@@ -41,10 +75,12 @@ No `pending` rows remain for the work.
 **Reviewing rows instead of the template.** The unit that converges here is the
 template. A single bad row is a data point; a cluster of the same code is a
 defect, and the fix is to revise `prompts/dossier/<field>-vN.md`, bump the
-version, and regenerate. The version history — `l1-v1 → l1-v2`,
-`structure-v1 → v2`, `l2-v1 → v2` — is what that looks like when it works, and
-the 613 rejected structure entries against 773 accepted are its cost, not its
-failure.
+version, and regenerate. The live versions are the constants in
+`generate_dossiers.py` — read them there, never assume from this file. The
+version history — `l1-v1 → v2 → v3`, `structure-v1 → … → v5`,
+`terms-v1 → … → v4`, `l2-v1 → v2` — is what that looks like when it works,
+and the 613 rejected structure entries against 773 accepted in the first
+convergence round are its cost, not its failure.
 
 **Judging output without its input.** `show` prints the reconstructed stage
 input alongside the output for a reason. With a frontier-model generator the
@@ -62,10 +98,32 @@ are the ones that read well.
 failure frequently traces down through `child_summary_ids` to a bad L1. Check
 before revising.
 
-**Leaving the queue half-drained.** This is where the corpus actually sits: 17
-of 56 works have pending rows, `iamblichus-on-the-mysteries` (13),
-`pistis-sophia` (11) and `zhuangzi-inner-chapters-index` (9) worst. Those works
-cannot promote, so their dossiers are simply absent from study mode.
+**Judging cluster membership from one work's sample.** `template_defect` is a
+claim about the template, and the evidence for it is cross-work. In the c7 tail
+review, three GROUND failures with the identical mode — naming the work's
+author/translator ("Hall", "Ouspensky", "Taylor") when the input never does —
+sat in three different works, and each looked like a one-off from inside its
+own work. Reviewed per-work, the cluster is invisible; aggregate the codes
+across the whole sample before deciding one-off versus defect. That cluster is
+what bumped `l1-v2 → l1-v3`.
+
+**Blaming the template for a span-boundary artifact.** Two review observations
+that look like template failures and are not: spans consisting entirely of
+translator footnotes (the chunker splits an edition's endnote block into its
+own span — `gnostic-john-baptizer`), and numbered endnotes split mid-note so
+the next span opens with an unnumbered fragment the summary then mis-numbers
+(`iamblichus-on-the-mysteries`, s1557). The first the template handles well —
+it names the span as editorial apparatus; the second produces a real GROUND
+reject, but the fix is upstream in span planning, not in the prompt.
+
+**Leaving the queue half-drained.** For most of c7 this is where the corpus
+actually sat: 17 of 56 works with pending rows — `iamblichus-on-the-mysteries`
+(13), `pistis-sophia` (11), `zhuangzi-inner-chapters-index` (9) worst. Works
+with pending rows cannot promote, so their dossiers are simply absent from
+study mode. The backlog was drained 2026-08-13; what it cost to drain — three
+templates revised across seven version steps (`l1-v3`, `structure-v3→v5`,
+`terms-v2→v4`), two respins, and a 19-row manual-remediation round — is
+recorded in the version-history comments in `generate_dossiers.py`.
 
 ## Provenance
 

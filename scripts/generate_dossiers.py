@@ -41,11 +41,29 @@ MAX_ATTEMPTS = 3
 # L1 template version — bumped v1 -> v2 after campaign-c1 review round 1:
 # 5/16 sample failures clustered on COVERAGE (order/proportion) + one GROUND
 # role-inversion; v2 strengthens order, proportion, and action-direction rules.
-L1_TPL = "l1-v2"
+# Bumped v2 -> v3 after the c7 tail review (2026-08-13): 3 GROUND failures in
+# 3 works, identical mode — the summary names the work's author/translator
+# ("Hall", "Ouspensky", "Taylor") when the name appears nowhere in the input;
+# v3 bans naming the author/translator/annotator unless the input names them.
+L1_TPL = "l1-v3"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
-STRUCT_TPL = "structure-v2"
+# structure bumped v2 -> v3 -> v4 -> v5 in the c7 tail review (2026-08-13),
+# one failure family across three rounds: titles importing classificatory or
+# genre labels absent from the input ("Restraints and Observances",
+# "Elements", "Physiology", "Transmigration", "Parables", "Myth", received
+# chapter titles), the same import migrating into the synopsis ("including"
+# membership in an unenumerated list), then titles importing content words
+# with no input lexeme ("source", "divine", "editorial"). v3 restricts title
+# vocabulary to the input, v4 extends the rule to the synopsis, v5 requires
+# every title content word to appear in the input or span label and bans
+# reproducing doxologies/colophons verbatim.
+# CAUTION: no row has yet been generated at v5 — its round's rejects were
+# fixed via structure-manual rows. Sample a scoped --work run under v5 and
+# review it before any wide regeneration; the 799 spans accepted at v2 are
+# all stale to the version-keyed skip check.
+STRUCT_TPL = "structure-v5"
 L2_TPL = "l2-v2"
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
@@ -218,9 +236,12 @@ def _accepted_l1s(conn, work_id, span_order: dict | None = None) -> list[sqlite3
 
 
 def _accepted_l2(conn, work_id) -> sqlite3.Row | None:
+    # manual rows outrank any template generation — same preference as
+    # _accepted_l1s and the promoter, so fields derive from the L2 that ships
     return conn.execute(
         "SELECT * FROM staged_summaries WHERE work_id=? AND level=2 AND status='accepted'"
-        " ORDER BY id DESC LIMIT 1", (work_id,)).fetchone()
+        " ORDER BY (prompt_version LIKE '%-manual') DESC, id DESC LIMIT 1",
+        (work_id,)).fetchone()
 
 
 # ── the generator ─────────────────────────────────────────────────────────────
@@ -425,7 +446,17 @@ class Generator:
             if not src:
                 return None
             return {}, "\n\n".join(f"[{r['section_span'] or 'whole work'}] {r['body']}" for r in src)
-        self._dossier_field(wp, "terms", "terms-v1", build,
+        # terms bumped v1 -> v2 -> v3 in the c7 yoga-sutras review (2026-08-13):
+        # v2 banned enumerating members of unenumerated lists ("the Rules",
+        # "the eight means") after two rejections; the failure then migrated to
+        # juxtaposition-fusion (glossing the Three Potencies with attributes of
+        # the adjacent "things seen" sutra via the outside guna equation), so
+        # v3 requires glossing a term only from statements about that term.
+        # v4 (same day): the ban text alone failed a third time; v4 adds a
+        # worked negative example and the bare-citation rule. Live version =
+        # this call site's literal; 62 works' terms accepted at v1 are stale
+        # to the version-keyed skip check, so never run --stage terms unscoped.
+        self._dossier_field(wp, "terms", "terms-v4", build,
                             lambda r: _v_listing(r, "terms", ("term", "gloss"), 10))
 
     def stage_notes(self, wp):

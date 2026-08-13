@@ -26,7 +26,7 @@ Writes both halves of the freeze artifact:
 If the corpus has changed since the current plan froze, this is a **new
 campaign**, not a re-plan. Bump `campaign_id` in `config/dossiers.toml` first,
 with a comment saying what changed — the existing comments in that file are the
-model, and they are the only record of why `c1`…`c5` exist.
+model, and they are the only record of why `c1`…`c7` exist.
 
 ## Output
 
@@ -51,6 +51,21 @@ row's provenance refers to. Regenerating it with different totals silently
 redefines what existing rows were summarising. Bump the campaign instead — it
 is cheap, and prior works' span ids stay identical so their staged rows carry
 forward unchanged.
+
+**Trusting the carry-forward promise across a labeler change.** "Prior works'
+span ids stay identical" holds only while `slugify(label)` is stable — and the
+slug comes from the span *label*, so a change to how the planner names spans
+(e.g. the suffix-format change in `8d0b00cf`, `VIIIao` → `VIII (ao)`) renames
+the span ids of every letter-suffixed span at the next re-plan. The c7 freeze
+did exactly this to ~180 spans across a dozen works. Nothing breaks loudly:
+the D2/D3 gates count rows rather than match ids, so works still pass — but
+`--respin` cannot find old-id rejected rows in the new plan ("not in plan"),
+and plan-to-DB reconciliation by span id silently reports every renamed span
+as missing. Re-promotion heals the live tables (D4 rebuilds a work's nodes
+wholesale from its staged rows), but staged-row provenance keeps the old ids
+forever. If a label-format change is unavoidable, expect this and check
+whether any not-yet-promoted work has fully-rejected rows under old ids —
+those spans have silently left `--respin`'s reach.
 
 **Assuming a provider switch invalidates spans.** It does not. `span_target` is
 in pipeline tokens and is provider-independent by design, precisely so span

@@ -56,6 +56,20 @@ is the default to reach for — Pass D is the exception, not the template.
 
 ## Failure modes
 
+**Trusting the gate checkmarks over the dry run.** The D2 and D3 gates
+*count* rows — distinct non-rejected summaries against the planned span
+count, pending rows against zero — while promotion *matches*: the assembler
+looks up an accepted structure entry and L1 for each planned span by its
+exact current label. A work that has been re-chunked or re-planned can carry
+enough old-label accepted rows to satisfy the counts and show `[x]` at
+D2/D3 while promotion fails with
+`missing accepted structure_entry for span '<label>'`. That message is
+literal: the *current plan's* span has no accepted row under any version,
+whatever the old rows total. The dry run is the arbiter of
+promote-readiness; when it names a missing span, generate (or manually
+remediate) a row for that exact label — do not reject old rows to make the
+counts look right.
+
 **Misreading the dry run as an apply.** `--dry-run` prints the honest
 `[dry-run] would promote <work>: …` line and then a summary that says
 `promoted <work>` regardless of mode. It does not write — `promote_work`
