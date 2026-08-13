@@ -1,0 +1,35 @@
+[chunking]
+strategy = "regex-section-split"
+# Split on the translator's section headings, which are centered <strong>
+# paragraphs in the HTML — after generic_html extraction they survive as inline
+# text, so split on the title strings (each verified unique, case-sensitive,
+# count=1 in the raw). The captured group (the title) becomes the section label,
+# i.e. the citation. Double-quoted TOML string so the apostrophe in "The
+# Disciples' Vision" is legal; the only escape is the doubled backslash for \s.
+# An earlier pattern used the prefix "The Disciples" + \s+ and SILENTLY missed
+# the section, because after "The Disciples" comes an apostrophe, not whitespace
+# (todo surfaced 2026-08-12) — the whole "The Disciples' Vision" title must be
+# matched verbatim, including its apostrophe.
+pattern = "(Introduction|Jesus Criticizes the Disciples|Another Generation|The Disciples' Vision|Jesus and Judas|Jesus Reveals Everything to Judas|The Betrayal|Notes on Translation)\\s+"
+section_label_format = '{heading}'
+max_tokens = 800
+group_size = 1
+
+# Front matter to strip before chunking: the h1 title + byline, the public-domain
+# notice + translator's book promo, and the Symbols legend ("... ( ) Editorial
+# insertion"). Leaves "Introduction" (the text's real incipit section) as the
+# first section marker. DOTALL is applied by chunk.py.
+pre_strip_patterns = [
+  '^The Gospel of Judas by Mark M\. Mattison\s+.*?\( \)\s+Editorial insertion\s+',
+  # Translator's notes tail: scholarly apparatus per project policy
+  # (cf. apocryphon-of-john.toml, pistis-sophia.toml, gilgamesh-tablet-*.toml).
+  # Kept in the raw file, stripped before chunking. Also removes the empty
+  # "The Gospel of Judas" heading that sits directly before it.
+  '\s+The Gospel of Judas\s+Notes on Translation[\s\S]*$',
+]
+
+[metadata]
+tradition = "gnosticism"
+text_name = "Gospel of Judas"
+translator = "Mark M. Mattison"
+sections_format = "section"

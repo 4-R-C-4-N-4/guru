@@ -34,7 +34,16 @@
 # a partial re-plan. Provider/model/span_target unchanged, so the 56 prior
 # works' span ids are identical under c6 and their c5 staged rows satisfy the
 # generate-loop skip/upstream checks unchanged.
-campaign_id = "c6"
+# c7 = c6 + gospel-of-judas + apocryphon-of-john + yoga-sutras-book-01..04
+# (6 works, all ingested after c6 froze; gospel-of-judas 2026-08-12). Per V9
+# that is a new campaign, never a partial re-plan. Provider/model/span_target
+# unchanged for the corpus stream, so the 58 prior works' span ids are
+# identical under c7 and their c6 staged rows satisfy the generate-loop
+# skip/upstream checks unchanged. gospel-of-judas generation is agent-driven
+# with the driving model recorded verbatim in `model`
+# (hermes-deepseek-v4-flash — the provenance convention applied to dossiers);
+# the other five new works generate under the campaign default.
+campaign_id = "c7"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).

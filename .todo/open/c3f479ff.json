@@ -1,0 +1,24 @@
+{
+  "id": "c3f479ff",
+  "type": "feature",
+  "state": "open",
+  "summary": "Retire Pass C: parallels become a derived table (concept co-expression x thin scorer)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:19.963Z",
+  "updated_at": "2026-08-13T13:20:56.674Z",
+  "description": "Owner decision 2026-08-13: the PARALLELS leg (Pass C LLM pair classification) is measurable GPU cost for net-null benefit — replace it with a derived table. Same edges table shape, new tiny brain: the distilled (query,chunk) scorer grades every chunk against each of its accepted concepts once (~38k scores, ~8 min on GPU per corpus version), and a chunk's partners are the best-graded cross-tradition co-expressors of its concepts. No edge curation needed — the tags are vetted upstream; curation pressure moves to tags and taxonomy where the apply gate already sits.\n\nEvidence + design record: rellm docs/edges/derived-parallels-proposal.md (cost table, 21/24 judged-good partner recovery, losses); prototype rellm tools/derived_parallels.py; snapshot trial verified 2026-08-13 — reader-panel SQL unchanged, panels render with via annotations, all 258 per-work golden assertions + 13/14 legacy gate pass identically (the one failure is pre-existing v50 drift, guru-web todo:e7b40dd5).\n\nStanding constraints: prod untouched by agents (corpus push is the owner's); guru main protected — PR flow; model artifact is rellm runs/edges/scorer/2026-08-13-run1/student-3a2 (22.7M).\n\nRitual after migration: corpus update → per-work golden queries (guru-web ritual) → re-distill student (rellm scorer pipeline, ~1 GPU-hour scripted) → re-derive parallels. Known losses accepted: taxonomy-blind parallels, CONTRASTS as a pipeline (112 rows become curated/frozen).",
+  "relationships": {
+    "children": [
+      "5620391a",
+      "495577b7",
+      "379722ec",
+      "6da4f965",
+      "8d0d657b",
+      "aaaa5258",
+      "2decb432",
+      "9097deed"
+    ]
+  }
+}

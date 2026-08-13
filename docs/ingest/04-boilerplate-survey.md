@@ -5,6 +5,17 @@
 Decide what in the raw file is the archive's packaging and what is the text.
 Produces a strip plan; node 07 executes it.
 
+**Apparatus policy — translator's and editor's apparatus is filtered out
+BEFORE chunking, not kept.** Translation notes, endnotes, editor's
+introductions and prefaces, and indices are scholarly apparatus, not primary
+text. They stay in the raw file (reproducibility) but are removed at chunk
+time via `pre_strip_patterns` (or `drop_*_marker` for whole-chunk regions) —
+see apocryphon-of-john.toml ("Translator's notes … kept in the raw file,
+stripped before chunking"), pistis-sophia.toml (PREFACE/CONTENTS/INTRODUCTION
+and INDEX blocks), gilgamesh-tablet-*.toml. The corpus norm is that a clean
+apparatus tail never becomes chunks. If a text's strip plan leaves a
+translator's-notes block chunked, the plan is wrong.
+
 ## Precondition
 
 `raw/{tradition}/{source-id}.txt` exists (node 03).
@@ -43,9 +54,18 @@ a human.
 **Substring surgery.** A regex that matches mid-paragraph cannot tell a header
 from a quotation of one. Paragraph or sentence granularity, always.
 
-**Dropping chunks.** Chunk ids are citations already issued. The corpus keeps
-apparatus chunks deliberately and leaves them untagged — node 11 rejects tags
-on them rather than the pipeline deleting them.
+**Dropping chunks.** Chunk ids are citations already issued. Do not delete
+chunks that carry primary text. The apparatus distinction is the load-bearing
+one: a cleanly-separable apparatus block (translator's notes, editor's
+preface, index) is STRIPPED before chunking, not kept as chunks — keeping it
+produces chunks that only exist to be rejected at node 11. The corpus does
+deliberately keep SOME apparatus chunks — the residue that could not be
+cleanly separated (interleaved introductions, surviving `*-index` chunks) —
+and node 11 rejects tags on those rather than the pipeline deleting them. The
+rule of thumb is separability: a clean tail strips; interleaved residue stays
+tag-empty. Check the raw's tail for a notes/apparatus block before finalising
+a strip plan — gospel-of-judas (2026-08-12) was initially chunked with its
+"Notes on Translation" tail kept and had to be re-chunked to strip it.
 
 **Over-stripping what is actually content.** Bare `p. NN` references are
 indistinguishable from citations at regex level and are left alone. Translator

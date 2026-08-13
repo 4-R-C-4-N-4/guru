@@ -1,0 +1,15 @@
+{
+  "id": "9097deed",
+  "type": "chore",
+  "state": "open",
+  "summary": "Cutover verification: regenerate on a fresh corpus version, owner ratifies panels, gates green, ship via normal corpus push",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.674Z",
+  "updated_at": "2026-08-13T13:20:56.715Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "The owner gate. On the first corpus version after the port: run the full chain, eyeball ~10 reader panels side by side (local snapshot swap procedure from the 2026-08-13 trial: backup PARALLELS to corpus.edges_passc_backup, load derived, reader SQL unchanged), confirm golden gates green (258/258 per-work + legacy), then the owner ships via their normal corpus push. Agents stop at the artifact — no sync_corpus.sh, no prod."
+}

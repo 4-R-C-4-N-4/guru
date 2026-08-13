@@ -1,0 +1,16 @@
+{
+  "id": "667f1aaf",
+  "type": "chore",
+  "state": "open",
+  "summary": "Node 10 model-selection standard: 4B fine-tune vs 27B teacher routing rule for tag proposals",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T14:04:31.196Z",
+  "updated_at": "2026-08-13T14:04:31.233Z",
+  "tags": [
+    "workbook",
+    "tagging"
+  ],
+  "description": "Owner standard (2026-08-13), to be written into docs/ingest/10-tag-concepts.md as the node rule — rides the same workbook-update wave as the Pass C retirement (c3f479ff child 8d0d657b) but is independent of it.\n\nTHE ROUTING RULE:\n- 4B fine-tune (rellm/out/qwen3-4b-guru-v3-r32, migrating to ~/programs/guru/4b-v3 per todo:379722ec): LARGE texts within EXISTING traditions. Rationale: much faster, server multiplexes 4 concurrent tag_concepts.py instances without VRAM pressure, and it reliably hits the tags it was trained on.\n- 27B teacher (Qwen3.5-27B): anything SMALL, and anything NET-NEW — new traditions, new concept territory, taxonomy expansions. Empirical backing: the 4B v2 failure was exactly a net-new-tradition case (finnic theurgy tag contamination) — the fine-tune generalizes badly off its training distribution. Note 27B serving detail: no-think mode is 6x faster and matches the applied corpus; quality vs think remains UNMEASURED (standing memory) — the node file should state that caveat rather than silently defaulting.\n\nNode-file changes: decision table (text size x tradition novelty -> model), the staged_tags.model identifier convention for each (qwen-3-4b-guru-* / Qwen3.5-27B-*), and a Failure modes entry citing the v2 contamination burn as the reason the net-new rule exists. Thresholds (\"large\" = ?) deliberately owner-tunable — propose a starting line (e.g. >=100 chunks) in the PR and let review settle it."
+}
