@@ -31,7 +31,11 @@ def _load():
         import torch  # noqa: F401
         from transformers import (AutoModelForSequenceClassification,
                                   AutoTokenizer)
-        name = "BAAI/bge-reranker-v2-m3"
+        # EDGE_RERANK_MODEL selects the scorer: default is the zero-shot
+        # teacher; point it at a distilled student checkpoint dir for the
+        # thin-scorer deployment (rellm thin-scorer-spec.md). The calibrated
+        # EDGE_RERANK_THRESHOLD is model-specific — recalibrate when swapping.
+        name = os.environ.get("EDGE_RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
         _TOK = AutoTokenizer.from_pretrained(name)
         _MODEL = AutoModelForSequenceClassification.from_pretrained(
             name, dtype="float32")
