@@ -50,6 +50,9 @@ def score_pairs(query: str, bodies: dict[str, str]) -> dict[str, float]:
         return {}
     tok, model = _load()
     import torch
+    # bge takes 1024; BERT-class students cap at their position table (512).
+    max_len = min(1024, int(getattr(model.config,
+                                    "max_position_embeddings", 1024)))
     ids = list(bodies)
     out: dict[str, float] = {}
     t0 = time.monotonic()
@@ -57,7 +60,7 @@ def score_pairs(query: str, bodies: dict[str, str]) -> dict[str, float]:
         for i in range(0, len(ids), 8):
             batch = ids[i:i + 8]
             enc = tok([[query, bodies[j][:2400]] for j in batch],
-                      padding=True, truncation=True, max_length=1024,
+                      padding=True, truncation=True, max_length=max_len,
                       return_tensors="pt")
             logits = model(**enc).logits.view(-1)
             for j, s in zip(batch, logits.tolist()):
