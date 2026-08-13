@@ -156,6 +156,8 @@ pleroma = "The divine fullness or totality of the highest realm, populated by ae
 kenoma = "The void or emptiness outside the pleroma; the realm of matter, ignorance, and deficiency."
 monad = "The absolutely simple, undivided first principle from which all multiplicity and existence flows."
 aeons = "Divine archetypal beings or eternal attributes dwelling within the Pleroma, often arranged in male-female syzygies."
+barbelo = "The Sethian divine realm of the first emanation — the 'immortal realm of Barbelo' in the Gospel of Judas, the womb or fullness of the supreme Spirit from which the aeons, the Self-Begotten, and the luminaries arise; the threshold between the hidden God and the structured light-world."
+luminaries = "The light-world beings of Sethian cosmology — the twelve androgynous luminaries, expanded to seventy-two and then three hundred sixty in numerical hierarchies — the structured population of the divine realm, each ruling its own aeons and heavens; distinct from aeons (the divine archetypes themselves) in being the administrative light-orders of the pleroma."
 logos = "The divine reason, word, or ordering principle through which the universe was created; mediates between the transcendent God and the material world."
 sephirot = "The ten attributes or emanations through which the Ein Sof (Infinite) reveals itself and creates the universe in Kabbalistic theology."
 sefirot_tree = "The diagrammatic arrangement of the ten Sephirot as a structured 'Tree of Life' mapping divine and cosmic forces."
@@ -177,6 +179,7 @@ maat_cosmic_order = "The Egyptian principle of truth, balance, and right order u
 correspondence = "The Hermetic axiom that the structure of the cosmos is reflected at every scale — 'as above, so below; as within, so without' — making each level a legible map of the others."
 microcosm_macrocosm = "The human being as a small-scale image of the entire cosmos; the body, soul, and intellect mirroring the structure of the heavens and the divine — distinct from correspondence in that it makes the human the privileged mirror."
 cosmic_sympathy = "The Stoic and Plotinian doctrine that all parts of the cosmos are bound by hidden affinities, so that a movement in one part resonates through the whole; the metaphysical basis for astrology, magic, and divination."
+stellar_determinism = "The rule of the stars and planetary powers over mortal destiny — the astrological governors whose spheres bind souls to birth, error, and death; in Sethian gnosis the 'error of the stars' that the savior exposes, and from which the incorruptible generation alone is free. Distinct from cosmic_sympathy (a doctrine of universal affinity) in being a bondage-to-powers claim, and from archons (the rulers as personal beings) in concerning the astral machinery itself."
 infinite_cosmos = "The doctrine of the universe as boundless and without center or circumference, populated by innumerable worlds — Bruno's rejection of the closed Aristotelian sphere; the divine and the cosmos as ontologically infinite."
 magical_equilibrium = "The balance of two contrary forces as the structural law of cosmos and operation — Lévi's equilibrium, expressed in Kabbalah by the senary: the will of God in its first cause, liberty in man, mathematical equilibrium in matter; the twofold vibration required to direct the Astral Light safely."
 dharma = "The cosmic law that manifests as each being's own duty — right order known not as abstract truth but as the specific obligation of one's nature and station (svadharma), so that maintaining the cosmos and performing one's proper work are one act; the Gita's 'one's own duty, though defective, is better than another's well performed.' Sits beside asha_cosmic_order and maat_cosmic_order as a right-order concept but is distinct in individuating the order into personal vocation; distinct from good_thought_word_deed (ethical triad) in binding duty to cosmic station."
@@ -223,11 +226,13 @@ contrition = "Penitential sorrow for sin as the first movement of the soul's hea
 
 [concepts.soteriology.soteric_categories]
 pneumatic_elect = "A spiritual elite who possess the divine spark and are predestined for salvation, contrasted with psychic (faithful) and hylic (material) persons."
+incorruptible_generation = "The strong and holy generation that no star, angel, or ruler can govern — the elect of Sethian soteriology whose souls survive death and ascend, the 'seed' promised the kingdom; in the Gospel of Judas the central soteriological claim, and the fate Judas is told he is excluded from ('you'll become the thirteenth, and will be cursed by the other generations'). Distinct from pneumatic_elect (a classification of persons by spiritual substance) in being a corporate, trans-historical people with a cosmic destiny."
 eschatological_judgment = "Final, collective cosmic judgment as an event in which the wicked are sentenced and the cosmos restored; distinct from psychopomp_journey (individual passage at death) and emphasising verdict where Zoroastrian frashokereti emphasises restoration."
 
 [concepts.theology.divine_nature]
 apophatic_theology = "Describing the divine only by negation—God transcends all positive categories and concepts; the via negativa."
 divine_hiddenness = "The supreme God's radical concealment beyond ordinary knowledge or perception; the Hidden Father."
+self_begotten = "The Self-Begotten (Autogenes) — the great angel and 'God of the Light' who emerges from the luminous cloud at the supreme Spirit's command and organizes the aeons, luminaries, and realms of light; the Sethian first-born of the divine fullness, distinct from the demiurge in being an emanation of light rather than an ignorant creator."
 divine_simplicity = "The doctrine that God has no parts, divisions, or composite attributes; pure undivided being."
 ein_sof = "The infinite, unknowable aspect of the divine prior to and beyond all emanation; the hidden root from which the Sephirot unfold."
 anthropomorphism = "Attributing human characteristics, emotions, or form to the divine; embodied divine imagery."
@@ -258,6 +263,7 @@ nature_preservation = "The ethical imperative to live in accordance with one's i
 letter_meditation = "Contemplative practice focused on Hebrew letters as cosmic symbols or gates of divine power."
 permutation_of_letters = "Combining, transposing, or cycling through letters or names as a meditative or theurgical technique."
 ritual_fire = "Fire as medium of divine presence."
+rejection_of_sacrifice = "The polemic against animal and blood sacrifice as ignorant or demonic worship — the prophetic and gnostic critique that the cult the sacrificers serve is actually the archons' (in the Gospel of Judas, the disciples' offerings are revealed as service to Saklas, and the priests at the altar are the twelve themselves); distinct from ritual_purity (a state of preparation) and theurgy (consecrated engagement with the divine) in being a wholesale repudiation of sacrificial practice."
 word_power_incantation = "The doctrine and practice that spoken or sung word carries causal-magical force — that uttering names, formulas, songs, or incantations alters reality directly rather than merely communicating about it. Vainamoinen's runo-songs that move mountains and command iron, Norse galdr, Vedic mantra, Shinto kotodama, the magician's barbarous names in the Greek Magical Papyri, Iamblichean arcane signatures and inexplicable symbols, biblical creation-by-word. Distinct from sacred_names (the ontological power of names themselves) and prayer (address to the divine); word_power_incantation is the magical-causal efficacy of the spoken word as such."
 ancestor_veneration = "Ritual maintenance of relationship with the dead as ongoing presences whose favour is cultivated and whose offence is propitiated. Shinto uji-gami and obon, Norse disir and the alfablot, Celtic samhain and the feast for the deceased, Roman lares and parentalia, Chinese ancestor rites, Vedic śrāddha. Practice-coded rather than belief-coded: distinct from soul_migration (cosmological doctrine of soul-transmigration) and theosis_deification (deification trajectory); ancestor_veneration centres the living's ongoing ritual obligation to the dead."
 funerary_navigation = "Texts and rituals guiding the soul through death."
@@ -343,7 +349,7 @@ linga_sharira = ["linga-sarira"]        # thin: target has ~1 EXPRESSES edge
 
 # — foreign / technical term the label renames or buries (fires precisely) —
 gnosis_direct_knowledge = ["gnosis"]
-demiurge = ["yaldabaoth"]
+demiurge = ["yaldabaoth", "saklas", "nebro"]
 cosmic_sympathy = ["sympatheia"]
 mystical_union = ["unio mystica"]
 ladder_of_love = ["scala amoris"]

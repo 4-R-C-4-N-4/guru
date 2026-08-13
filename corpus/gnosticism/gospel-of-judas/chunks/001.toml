@@ -1,0 +1,15 @@
+[chunk]
+id = "gnosticism.gospel-of-judas.001"
+tradition = "gnosticism"
+text_name = "Gospel of Judas"
+section = "Introduction"
+translator = "Mark M. Mattison"
+source_url = "https://www.gospels.net/judas"
+token_count = 117
+
+[content]
+body = "33 This is the secret message of judgment Jesus spoke with Judas Iscariot over a period of eight days, three days before he celebrated Passover. When he appeared on earth, he did signs and great wonders for the salvation of humanity. Some [walked] in the way of righteousness, but others walked in their transgression, so the twelve disciples were called. He started to tell them about the mysteries beyond the world and what would happen at the end. Often he didn't reveal himself to his disciples, but you'd find him in their midst as a child."
+
+[annotations]
+concepts = []
+related_chunks = []

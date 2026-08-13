@@ -50,6 +50,17 @@ Promotion to the live graph, and publication to production, are the user's
 decisions. A driver that applies its own proposals has broken the pipeline's
 one real invariant.
 
+**Apparatus is filtered out BEFORE chunking.** Translator's and editor's
+apparatus — translation notes, endnotes, editor's introductions and prefaces,
+indices — is scholarly apparatus, not primary text. It stays in the raw file
+for reproducibility but is stripped at chunk time via `pre_strip_patterns` or
+`drop_*_marker` (cf. apocryphon-of-john.toml, pistis-sophia.toml,
+gilgamesh-tablet-*.toml). A clean apparatus tail never becomes chunks. The
+corpus's tag-empty apparatus chunks (node 11) are only the residue that could
+not be cleanly separated — interleaved introductions, surviving `*-index`
+chunks. If a strip plan would leave a translator's-notes block chunked, that
+is a plan defect, not a node 11 workload.
+
 ## Judgement nodes and their contracts
 
 The judgement nodes are the reason this workbook exists. They were the parts

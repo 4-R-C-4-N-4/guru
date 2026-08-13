@@ -15,8 +15,8 @@ MODEL_DIR="${MODEL_DIR:-$HOME/programs/}"
 MODEL_PATH="$MODEL_DIR/$MODEL_FILE"
 
 # --- Server config ---
-HOST="127.0.0.1"
-PORT="8080"
+HOST="${HOST:-127.0.0.1}"
+PORT="${PORT:-8080}"
 
 # --- Model loading ---
 CTX_SIZE="${CTX_SIZE:-32768}"

@@ -50,8 +50,13 @@ Apply the rubric below. It is calibrated against a 50-chunk score-1 run on
 2026-05-11 and two correction incidents since.
 
 **1. Scholarly apparatus rejects unconditionally, whatever the concept fit.**
-Prefaces, indices, title pages, translator's introductions, biographical
-essays, errata. Recognise by: a chunk id ending `*-index.*`; a section label of
+Cleanly-separable apparatus should never reach you: translation notes,
+editor's prefaces, and indices are stripped before chunking (workbook nodes
+04/06 — cf. apocryphon-of-john.toml, pistis-sophia.toml). What reaches this
+node is the residue that could not be cleanly separated — interleaved
+introductions, surviving `*-index` chunks. Reject all of it: prefaces,
+indices, title pages, translator's introductions, biographical essays, errata.
+Recognise by: a chunk id ending `*-index.*`; a section label of
 `Preface` or `Introduction`; front-matter page numbers; the voice of a
 19th-century editor (Budge, Mathers, Mead, Taylor, Hartmann-on-Boehme,
 Porphyry-on-Plotinus); content that is publication metadata or biography.

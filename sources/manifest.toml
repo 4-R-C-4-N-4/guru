@@ -75,6 +75,26 @@ license = "public_domain"
 translator = "Samuel Zinner"
 notes = "Three-column synoptic of four witnesses (NHC II,1 // NHC IV,1 // BG 8502 // NHC III,1). Only Codex II, 1 is manifested: it is the complete long recension and carries the Codex IV, 1 readings inline as italics. The BG 8502 and Codex III, 1 witnesses are extracted to raw/gnosticism/apocryphon-of-john-{bg8502,codex-iii}.txt but deliberately left unmanifested — they are recensions of this same treatise, often verbatim identical for paragraphs at a stretch, and ingesting them would put near-duplicate chunks into chunk_embeddings and have propose_edges draw PARALLELS between the text and itself. See docs/ingest/decisions/apocryphon-of-john.md."
 
+[[source]]
+id = "gospel-of-judas"
+tradition = "gnosticism"
+# VERIFIED 2026-08-12 — gospels.net single-page HTML, HTTP 200, 77KB. Title tag
+# "Gospel of Judas — Gospels.net"; h1 "The Gospel of Judas"; h3 "by Mark M.
+# Mattison". Real translation of Codex Tchacos 3, not an apparatus page. Public
+# domain by explicit translator dedication: "committed to the public domain and
+# may be freely copied and used, changed or unchanged, for any purpose" — same
+# dedication sentence as the apocryphon-of-john entry. Single-page; the Codex
+# pagination 33–58 is inline bold markers, NOT separate pages. CAUTION: section
+# headings are centered <strong> paragraphs, not heading tags; the page nav menu
+# is emitted twice + footer; "The Gospel of Judas" is both the h1 and a section
+# heading. Host gospels.net is not in the downloader registry → generic_html.
+label = "The Gospel of Judas (Mattison translation)"
+url = "https://www.gospels.net/judas"
+format = "html"
+license = "public_domain"
+translator = "Mark M. Mattison"
+notes = "Full Coptic (Codex Tchacos 3) to English translation. Single page. Section headings are centered <strong> paragraphs (Introduction, Jesus Criticizes the Disciples, ... The Betrayal); strip the doubled site nav + intro book promo; keep the inline page markers (33-58); the Notes on Translation apparatus tail is stripped before chunking (project policy, cf. apocryphon-of-john). Generic html downloader (gospels.net not in registry)."
+
 # ============================================
 # HERMETICISM (sacred-texts.com + gnosis.org)
 # ============================================

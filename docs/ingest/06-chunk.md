@@ -39,6 +39,16 @@ producing a correct chunk. This has been forgotten before, which is why node 07
 and node 08 are marked `stale_on_rechunk` and `guru ingest status` reports `[!]`
 rather than `[x]` when chunk files change underneath them.
 
+**A translator's-notes tail that survived `pre_strip`.** If the raw's apparatus
+tail (translation notes, editor's preface, index) was not stripped by node 04's
+plan, this node silently chunks it — producing apparatus chunks that only exist
+to be rejected at node 11. Scan the raw's tail for an apparatus block before
+running (node 04's survey names it), and strip it via `pre_strip_patterns`
+before this node runs. gospel-of-judas (2026-08-12) chunked its "Notes on
+Translation" tail this way; the fix was a pre_strip pattern
+(`'\s+<Title>\s+Notes on Translation[\s\S]*$'`, the same family as
+apocryphon-of-john's translator's-notes strip) and a re-chunk.
+
 **Re-chunking silently invalidating downstream state.** A re-chunk after
 tagging or embedding leaves `guru.db` holding rows keyed to chunk ids that may
 no longer mean the same thing. If node 09 reports a node-count mismatch against

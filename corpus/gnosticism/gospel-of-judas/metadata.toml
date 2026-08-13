@@ -1,0 +1,7 @@
+tradition = "gnosticism"
+text_id = "gospel-of-judas"
+text_name = "Gospel of Judas"
+translator = "Mark M. Mattison"
+source_url = "https://www.gospels.net/judas"
+sections_format = "section"
+chunk_count = 8
