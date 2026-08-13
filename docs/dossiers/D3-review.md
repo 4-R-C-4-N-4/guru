@@ -27,6 +27,30 @@ python3 scripts/review_dossiers.py status
 Row ids are prefixed: `f…` for `staged_dossier_fields`, `s…` for
 `staged_summaries`.
 
+Every reject then needs a remediation, and there are exactly three. Pick by
+what the rejection is:
+
+1. **One-off failure** → regenerate the row at the same template version.
+   Summaries: `build_dossiers.py --respin <summary-id>` (feeds your rejection
+   note back as a corrective addendum — write the note so a generator can act
+   on it). Fields: re-run that field's `--stage` for the work; rejected rows
+   do not block the skip check. Then review the fresh row like any other.
+2. **Cluster of one code** → revise the template, bump the version, and
+   regenerate the affected rows. Read D2's version-keyed idempotency warning
+   **before** re-running the bumped stage: after a bump, every span of every
+   unpromoted work looks ungenerated to that stage, so an unscoped run
+   regenerates whole works. Decide whether you want that; if not, respin or
+   remediate manually.
+3. **Precisely-diagnosed defect where regeneration is disproportionate** (a
+   two-word fix, or a bump would mass-regenerate a 70-span work) → a
+   **manual row**: insert a corrected copy of the rejected row into the same
+   staged table, `status='pending'`, `prompt_version` set to
+   `<field>-manual` / `l1-manual` / `l2-manual`, `model` naming who authored
+   it. It enters the queue like any generated row and must pass review the
+   same way — have someone other than its author judge it. Manual rows
+   outrank every template version at promotion, and bulk regeneration never
+   targets them (D4).
+
 ## Output
 
 Accepted and rejected staged rows — and, when a code clusters, a revised prompt
