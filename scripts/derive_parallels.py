@@ -260,8 +260,12 @@ def cache_key(concept: str, chunk: str) -> str:
 # ran once, after score_needed_pairs() returned, so an interrupted cold
 # corpus-wide run (Ctrl-C, OOM, one malformed body raising inside
 # rerank.score_pairs) dropped every score computed so far, contradicting the
-# module header's "cached incrementally" contract.
-SCORE_CACHE_FLUSH_EVERY = 20
+# module header's "cached incrementally" contract. Sized for the actual
+# taxonomy (~116 concepts): 5 keeps the worst-case loss to a handful of
+# concepts (~4% of a cold corpus-wide run) and the write is a small JSON,
+# so flushing often costs nothing. The progress print in the loop uses this
+# same constant so tuning it never desyncs the two cadences.
+SCORE_CACHE_FLUSH_EVERY = 5
 
 
 # ── scoring ──────────────────────────────────────────────────────────────
@@ -315,7 +319,7 @@ def score_needed_pairs(
             for ch, s in logits.items():
                 score[(concept, ch)] = s
                 cache[cache_key(concept, ch)] = {"score": s, "hash": h_by_chunk[ch]}
-            if i % 20 == 0:
+            if i % SCORE_CACHE_FLUSH_EVERY == 0:
                 print(f"  scored {i + 1}/{len(todo)} concepts", flush=True)
             if cache_path is not None and (i + 1) % SCORE_CACHE_FLUSH_EVERY == 0:
                 save_score_cache(cache_path, cache)
