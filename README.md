@@ -73,8 +73,19 @@ tagging, retrieval) stays torch-free. Install this group only if you run
 either:
 
 ```bash
-pip install torch transformers
+uv venv                                                              # .venv/, gitignored
+uv pip install -r requirements-derive.txt --index-strategy unsafe-best-match
 ```
+
+Then invoke those two paths with `.venv/bin/python` explicitly — a bare
+`python3` will get partway through a run and die inside `guru.rerank._load()`,
+after the database and taxonomy have already loaded.
+
+The pins are CPU-only on purpose: `guru/rerank.py` does no device placement, so
+this code cannot use a GPU, and the default PyPI torch would add ~6 GB of
+`nvidia-*` wheels it can never touch. The CPU build installs in 901 MB. See the
+header of `requirements-derive.txt` for why the `--index-strategy` flag is not
+optional.
 
 No other script in the repo touches this dependency.
 

@@ -1,0 +1,28 @@
+# Optional dependency group: scripts/derive_parallels.py and the EDGE_RERANK
+# query-time path (both go through guru/rerank.py). Nothing else in the
+# pipeline imports torch — chunking, tagging, and retrieval stay torch-free,
+# and rerank.py lazy-imports, so this group is only needed if you run one of
+# those two.
+#
+#   uv venv                                   # .venv/ — already gitignored
+#   uv pip install -r requirements-derive.txt --index-strategy unsafe-best-match
+#   .venv/bin/python scripts/derive_parallels.py
+#
+# The --index-strategy flag is required: uv's default stops at the first index
+# carrying a package name, finds torch on PyPI, and never reaches the CPU index
+# below. Omitting it is safe — it errors out on the `+cpu` pin rather than
+# silently installing the CUDA build — but it will not work.
+#
+# WHY THE CPU WHEEL, AND WHY THE PIN IS EXACT: guru/rerank.py does no device
+# placement — no .to(), no .cuda() — so this code physically cannot use a GPU
+# (see docs/ingest/gpu-assembly.md). The default PyPI torch is the CUDA build:
+# it drags in ~6 GB of nvidia-* and triton wheels that would sit on disk
+# unused. The CPU wheel is 901 MB installed. The `+cpu` local-version suffix
+# is load-bearing, not decoration — it is the only thing forcing the resolver
+# to the PyTorch index below. Drop it and PyPI wins, silently, and you get the
+# CUDA stack back (verified 2026-08-14).
+--index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.org/simple
+
+torch==2.13.0+cpu
+transformers==5.15.0

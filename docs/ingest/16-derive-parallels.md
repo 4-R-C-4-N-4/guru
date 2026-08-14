@@ -61,7 +61,7 @@ skipped.
 ## Action
 
 ```sh
-python3 scripts/derive_parallels.py \
+OMP_NUM_THREADS=8 .venv/bin/python scripts/derive_parallels.py \
     [--config config/derived_parallels.toml] [--db data/guru.db] \
     [--out data/derived_parallels/<UTC timestamp>] \
     [--limit-concepts N] [--verbose]
@@ -70,7 +70,12 @@ python3 scripts/derive_parallels.py \
 CPU is the only path here, not a fallback of last resort: `guru/rerank.py`
 does no device placement, so this node cannot be routed at either card and a
 CUDA pin on it is inert. Budget ~10 minutes for a cold full-corpus run (measured
-2026-08-14) and give it `OMP_NUM_THREADS=8`. Timings and what adding GPU support would take
+2026-08-14) and give it `OMP_NUM_THREADS=8`.
+
+The interpreter above is not incidental. torch and transformers are an optional
+group this repo installs into `.venv/` (see the README) — a bare `python3` has
+neither, and because `guru/rerank.py` lazy-imports them, the run dies *after*
+loading the database and taxonomy rather than at startup. Timings and what adding GPU support would take
 are in [gpu-assembly.md](gpu-assembly.md) ("derive_parallels: the one CPU-only
 exception") — not duplicated here.
 
