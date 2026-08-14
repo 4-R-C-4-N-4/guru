@@ -67,11 +67,11 @@ python3 scripts/derive_parallels.py \
     [--limit-concepts N] [--verbose]
 ```
 
-CPU is the intended path here, not a fallback of last resort — the model is
-small enough that quantized CPU scoring keeps pace with an unquantized GPU
-pass. Timings, the CUDA pin if you do route it at the 3090, and why this is
-the one node in the pipeline that doesn't touch either GPU are in
-[gpu-assembly.md](gpu-assembly.md) ("derive_parallels: the one CPU-only
+CPU is the only path here, not a fallback of last resort: `guru/rerank.py`
+does no device placement, so this node cannot be routed at either card and a
+CUDA pin on it is inert. Budget ~10–20 minutes for a cold full-corpus run and
+give it `OMP_NUM_THREADS=8`. Timings and what adding GPU support would take
+are in [gpu-assembly.md](gpu-assembly.md) ("derive_parallels: the one CPU-only
 exception") — not duplicated here.
 
 Ranking, in brief (full logic in the script's docstring): a chunk's partners

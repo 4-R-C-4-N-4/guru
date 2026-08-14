@@ -158,19 +158,27 @@ cross-encoder via `guru.rerank.score_pairs` (torch + transformers, an
 optional dependency group — see the README), and that scorer is small enough
 (22.7M params) that CPU is the intended path, not a fallback of last resort:
 
+**There is no GPU path to choose.** `guru/rerank.py` never places the model
+or its tensors on a device — no `.to()`, no `.cuda()` — so scoring runs on
+CPU no matter what the environment says. Its `os.environ.setdefault(
+"CUDA_VISIBLE_DEVICES", "")` only *hides* the cards from torch; overriding it
+with `CUDA_VISIBLE_DEVICES=0` un-hides them and changes nothing else. Setting
+the usual `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0` pin here is
+inert — it will not move the work to the 3090, it will only look as though it
+did.
+
 | path | full corpus |
 |---|---|
-| GPU | ~7 min |
-| CPU, 8 threads, int8 | ~6 min |
+| CPU, 8 threads | ~10–20 min (fp32, as `rerank.py` loads it) |
 
-The CPU run is not slower here — quantized int8 on 8 threads keeps pace with
-an unquantized GPU pass for a model this small, so there is no reason to
-reserve either card for it. If you do route it at a GPU, pin the same way as
-every other model on this rig: **`CUDA_DEVICE_ORDER=PCI_BUS_ID
-CUDA_VISIBLE_DEVICES=0`** selects the 24 GB 3090 (see the naming trap above —
-without `PCI_BUS_ID`, CUDA's default `FASTEST_FIRST` ordering makes `0` an
-unstable reference, and on this host CUDA's un-pinned enumeration order is
-inverted relative to what device 0 means physically).
+Earlier drafts of this file quoted a "~7 min GPU" row beside the CPU one. That
+number was real, but it belonged to the rellm prototype, which did its own GPU
+scoring; the guru port reuses `rerank.py` and inherited none of it. Treat any
+GPU timing for this node as prototype history, not something this script can
+reproduce. Adding GPU support would mean a device argument threaded through
+`_load()`/`score_pairs()` plus an opt-in env var — worth doing only if the
+corpus grows enough that ~15 CPU-minutes per re-derive starts to hurt, since
+the model is small enough that the win is minutes, not hours.
 
 ## Model home
 
