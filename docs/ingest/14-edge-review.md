@@ -1,5 +1,16 @@
 # 14 — edge-review
 
+> **RETIRED 2026-08-13.** Ties to node 13 (also retired): with Pass C gone
+> there are no new `staged_edges` proposals to review — see
+> [16-derive-parallels](16-derive-parallels.md), which needs no review queue
+> because it ranks strictly off already-reviewed EXPRESSES tags. Decision
+> record: todo:c3f479ff. This file is kept for history. The 1,301 pending
+> `staged_edges` rows this node would have reviewed are settled as a
+> historical record, not silently dropped — todo:aaaa5258, still open, is
+> the code-level ticket that settles them and removes this node from
+> `guru/ingest.py`; until it lands the table and this file both remain as
+> they were.
+
 **Kind:** gate · **Contract:** [`prompts/ingest/edge-review.md`](../../prompts/ingest/edge-review.md)
 
 Curate the staged edges. Queue decisions; never apply them.

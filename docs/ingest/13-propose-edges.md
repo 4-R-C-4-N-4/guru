@@ -1,5 +1,14 @@
 # 13 — propose-edges
 
+> **RETIRED 2026-08-13.** Pass C (LLM pair classification) is replaced by a
+> derived table — see [16-derive-parallels](16-derive-parallels.md). Decision
+> record: todo:c3f479ff. This file is kept for history; do not run this node
+> on new texts. The code-level removal of nodes 13/14 from the ingest state
+> machine (`guru/ingest.py`) is tracked separately at todo:aaaa5258, which
+> also deprecates `propose_edges.py` and removes `scripts/run-mistral.sh` —
+> until that lands, `guru ingest status` may still name this node; treat the
+> banner here, not the CLI, as authoritative.
+
 **Kind:** command
 
 Propose cross-tradition relationships between this text's chunks and the rest
