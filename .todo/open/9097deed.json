@@ -7,9 +7,18 @@
     "type": "human"
   },
   "created_at": "2026-08-13T13:20:56.674Z",
-  "updated_at": "2026-08-13T13:20:56.715Z",
+  "updated_at": "2026-08-14T22:07:32.381Z",
   "relationships": {
     "parent": "c3f479ff"
   },
-  "description": "The owner gate. On the first corpus version after the port: run the full chain, eyeball ~10 reader panels side by side (local snapshot swap procedure from the 2026-08-13 trial: backup PARALLELS to corpus.edges_passc_backup, load derived, reader SQL unchanged), confirm golden gates green (258/258 per-work + legacy), then the owner ships via their normal corpus push. Agents stop at the artifact — no sync_corpus.sh, no prod."
+  "description": "The owner gate. On the first corpus version after the port: run the full chain, eyeball ~10 reader panels side by side (local snapshot swap procedure from the 2026-08-13 trial: backup PARALLELS to corpus.edges_passc_backup, load derived, reader SQL unchanged), confirm golden gates green (258/258 per-work + legacy), then the owner ships via their normal corpus push. Agents stop at the artifact — no sync_corpus.sh, no prod.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-14T22:07:32.381Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Ratification run complete — full evidence in docs/summary/derived-parallels-cutover-2026-08-14.md (kept as markdown rather than inlined here; a wall of prose in a JSON ticket field is unreviewable in a diff).\n\nHeadline: golden gates 271/272, and the one failure (enoch-charles-1917) is NOT this cutover — PARALLELS cannot reach the retrieval path at all (0 of 17,244 rows touch a concept node; the failing query traces graphS=0.00 on every candidate; retriever code unchanged since the goldens passed). It is pre-existing v50->v54 vector/lexical drift, tracked against guru-web 31a7fe76 / 418a98c9.\n\nTwo real cutover effects, both reader-facing and independent of each other:\n(a) /atlas renders zero parallels — atlas.ts filters tier='verified' and every derived row is 'inferred'. One predicate, or settle todo:dd034dc4.\n(b) Panel coverage concentrates — 1,560 chunks lose their strip, 462 gain one, 52 texts go fully dark (enuma-elish, diamond-sutra, enoch). Cause is the absolute min_grade floor of -4.415, which is scorer-v1's (query,chunk) calibration applied to (concept-definition,chunk) grading; enuma-elish's best pair scores -4.84 so the whole work is under the floor. Fix is rank-based selection, ~10 CPU-min re-derive plus re-export.\n\nNeither blocks merging code. Both are worth settling before a corpus push.",
+      "confidence": "high"
+    }
+  ]
 }
