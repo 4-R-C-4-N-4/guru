@@ -122,6 +122,38 @@ def load_chunk_traditions(conn: sqlite3.Connection) -> dict[str, str]:
     return dict(conn.execute("SELECT id, tradition_id FROM nodes WHERE type='chunk'"))
 
 
+def load_apparatus_chunks(conn: sqlite3.Connection) -> set[str]:
+    """chunk ids flagged as whole-chunk apparatus (todo:495577b7).
+
+    Gated on status='apparatus' only — the owner-applied terminal state
+    written by the guru-review web app's reclassify->apparatus_drop apply
+    path, or scripts/flag_apparatus.py's queued rows once the owner applies
+    them. status='pending' rows are NOT a fact yet (queue-only; the owner
+    applies), so they must never gate the generator — mirrors the same
+    pending-vs-applied distinction docs/web-review/cleanups.md draws for
+    scripts/apply_cleanups.py.
+    """
+    return {r[0] for r in conn.execute(
+        "SELECT chunk_id FROM staged_cleanups WHERE status = 'apparatus'"
+    )}
+
+
+def exclude_apparatus_chunks(
+    bycon: dict[str, set[str]], bychunk: dict[str, set[str]], apparatus: set[str],
+) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    """Drop apparatus-flagged chunks from both EXPRESSES indexes so they can
+    never anchor a panel or be picked as anyone else's partner. Tag review
+    already keeps apparatus chunks tag-empty in the common case (nothing to
+    drop), but this makes it a chunk-level fact the generator itself
+    enforces rather than an emergent property of the tag queue."""
+    if not apparatus:
+        return bycon, bychunk
+    bycon = {c: (chs - apparatus) for c, chs in bycon.items()}
+    bycon = {c: chs for c, chs in bycon.items() if chs}
+    bychunk = {ch: cs for ch, cs in bychunk.items() if ch not in apparatus}
+    return bycon, bychunk
+
+
 def load_expresses(
     conn: sqlite3.Connection, concept_ids: set[str]
 ) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
@@ -388,7 +420,13 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     conn = open_db_readonly(db_path)
     trad_of = load_chunk_traditions(conn)
     bycon, bychunk = load_expresses(conn, set(defs))
+    apparatus = load_apparatus_chunks(conn)
     conn.close()
+    if apparatus:
+        before = len(bychunk)
+        bycon, bychunk = exclude_apparatus_chunks(bycon, bychunk, apparatus)
+        print(f"apparatus-flagged chunks excluded: {before - len(bychunk)} "
+              f"(of {len(apparatus)} flagged; the rest had no EXPRESSES edges anyway)")
 
     work_map = build_work_map()
 

@@ -14,7 +14,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
-from tag_concepts import get_chunks, read_chunk_ids_file  # noqa: E402
+from tag_concepts import apparatus_chunk_ids, get_chunks, read_chunk_ids_file  # noqa: E402
 
 
 # ── read_chunk_ids_file ──────────────────────────────────────────────────────
@@ -53,7 +53,8 @@ def test_empty_file_returns_empty(tmp_path):
 # ── get_chunks(chunk_ids=...) ────────────────────────────────────────────────
 
 
-def _seed_chunks(conn: sqlite3.Connection, ids: list[str]) -> None:
+def _seed_chunks(conn: sqlite3.Connection, ids: list[str],
+                 apparatus_ids: list[str] | None = None) -> None:
     conn.execute(
         """CREATE TABLE nodes (
               id TEXT PRIMARY KEY,
@@ -69,6 +70,11 @@ def _seed_chunks(conn: sqlite3.Connection, ids: list[str]) -> None:
             (cid, f"label:{cid}", json.dumps({"text_id": "test.text"})),
         )
     conn.execute("CREATE TABLE tagging_progress (chunk_id TEXT PRIMARY KEY)")
+    conn.execute("CREATE TABLE staged_cleanups (chunk_id TEXT, status TEXT)")
+    for cid in apparatus_ids or []:
+        conn.execute(
+            "INSERT INTO staged_cleanups VALUES (?, 'apparatus')", (cid,)
+        )
     conn.commit()
 
 
@@ -100,3 +106,45 @@ def test_chunk_ids_path_ignores_resume_filter():
     result = get_chunks(conn, tradition=None, text_id=None, resume=True,
                         chunk_ids=["a.b.001"])
     assert [r["id"] for r in result] == ["a.b.001"]
+
+
+# ── apparatus skip (todo:495577b7) ───────────────────────────────────────────
+
+
+def test_apparatus_chunk_ids_reads_apparatus_status_only():
+    conn = sqlite3.connect(":memory:")
+    _seed_chunks(conn, ["a.b.001", "a.b.002", "a.b.003"],
+                apparatus_ids=["a.b.002"])
+    conn.execute("INSERT INTO staged_cleanups VALUES ('a.b.003', 'pending')")
+    conn.commit()
+    # 'pending' is queue-only, not a fact yet — must not be treated as apparatus.
+    assert apparatus_chunk_ids(conn) == {"a.b.002"}
+
+
+def test_get_chunks_base_query_excludes_apparatus_flagged_chunks():
+    conn = sqlite3.connect(":memory:")
+    _seed_chunks(conn, ["a.b.001", "a.b.002", "a.b.003"],
+                apparatus_ids=["a.b.002"])
+    result = get_chunks(conn, tradition=None, text_id=None, resume=False)
+    assert [r["id"] for r in result] == ["a.b.001", "a.b.003"]
+
+
+def test_get_chunks_base_query_ignores_pending_cleanup_rows():
+    """A pending (not yet owner-applied) apparatus candidate must still be tagged."""
+    conn = sqlite3.connect(":memory:")
+    _seed_chunks(conn, ["a.b.001", "a.b.002"])
+    conn.execute("INSERT INTO staged_cleanups VALUES ('a.b.002', 'pending')")
+    conn.commit()
+    result = get_chunks(conn, tradition=None, text_id=None, resume=False)
+    assert [r["id"] for r in result] == ["a.b.001", "a.b.002"]
+
+
+def test_get_chunks_explicit_ids_path_also_skips_apparatus(caplog):
+    import logging
+    conn = sqlite3.connect(":memory:")
+    _seed_chunks(conn, ["a.b.001", "a.b.002"], apparatus_ids=["a.b.002"])
+    with caplog.at_level(logging.WARNING, logger="tag_concepts"):
+        result = get_chunks(conn, tradition=None, text_id=None, resume=False,
+                            chunk_ids=["a.b.001", "a.b.002"])
+    assert [r["id"] for r in result] == ["a.b.001"]
+    assert any("flagged apparatus" in r.message for r in caplog.records)

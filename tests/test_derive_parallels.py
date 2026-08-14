@@ -29,6 +29,7 @@ from derive_parallels import (  # noqa: E402
     cache_key,
     chunk_text_id,
     content_hash,
+    exclude_apparatus_chunks,
     first_sentence,
     format_label,
 )
@@ -208,3 +209,54 @@ def test_build_edges_shape_annotation_and_dedup():
             "annotation": "Shared concept: Y — Y def, one sentence. (derived)",
         },
     ]
+
+
+# ── apparatus exclusion (todo:495577b7) ──────────────────────────────────────
+
+
+def test_exclude_apparatus_chunks_drops_from_bychunk():
+    bycon = {"concept.x": {"a.t.001", "a.t.002"}}
+    bychunk = {"a.t.001": {"concept.x"}, "a.t.002": {"concept.x"}}
+    got_bycon, got_bychunk = exclude_apparatus_chunks(bycon, bychunk, {"a.t.001"})
+    assert "a.t.001" not in got_bychunk
+    assert "a.t.002" in got_bychunk
+
+
+def test_exclude_apparatus_chunks_drops_from_bycon_partner_pool():
+    """An apparatus chunk must never be pickable as anyone else's partner,
+    even though it isn't itself an anchor."""
+    bycon = {"concept.x": {"good.t.001", "apparatus.t.001"}}
+    bychunk = {"good.t.001": {"concept.x"}}
+    got_bycon, got_bychunk = exclude_apparatus_chunks(bycon, bychunk, {"apparatus.t.001"})
+    assert got_bycon["concept.x"] == {"good.t.001"}
+
+
+def test_exclude_apparatus_chunks_drops_concept_with_no_survivors():
+    bycon = {"concept.x": {"apparatus.t.001"}}
+    bychunk = {}
+    got_bycon, _ = exclude_apparatus_chunks(bycon, bychunk, {"apparatus.t.001"})
+    assert "concept.x" not in got_bycon
+
+
+def test_exclude_apparatus_chunks_empty_set_is_a_no_op():
+    bycon = {"concept.x": {"a.t.001"}}
+    bychunk = {"a.t.001": {"concept.x"}}
+    got_bycon, got_bychunk = exclude_apparatus_chunks(bycon, bychunk, set())
+    assert got_bycon == bycon
+    assert got_bychunk == bychunk
+
+
+def test_load_apparatus_chunks_gates_on_applied_status_only():
+    """'pending' is queue-only (owner hasn't applied yet) and must not gate
+    the generator; only status='apparatus' is a fact."""
+    import sqlite3
+
+    from derive_parallels import load_apparatus_chunks
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE staged_cleanups (chunk_id TEXT, status TEXT)")
+    conn.execute("INSERT INTO staged_cleanups VALUES ('a.t.001', 'apparatus')")
+    conn.execute("INSERT INTO staged_cleanups VALUES ('a.t.002', 'pending')")
+    conn.execute("INSERT INTO staged_cleanups VALUES ('a.t.003', 'rejected')")
+    conn.commit()
+    assert load_apparatus_chunks(conn) == {"a.t.001"}

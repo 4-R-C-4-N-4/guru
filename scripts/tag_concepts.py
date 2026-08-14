@@ -185,6 +185,19 @@ def read_chunk_ids_file(path: Path) -> list[str]:
     return out
 
 
+def apparatus_chunk_ids(conn: sqlite3.Connection) -> set[str]:
+    """chunk ids flagged as whole-chunk apparatus (todo:495577b7).
+
+    Gated on status='apparatus' only, the owner-applied terminal state —
+    never 'pending', which is queue-only and not a fact yet. Mirrors
+    scripts/derive_parallels.py::load_apparatus_chunks so both consulters
+    of the flag apply the identical rule.
+    """
+    return {r[0] for r in conn.execute(
+        "SELECT chunk_id FROM staged_cleanups WHERE status = 'apparatus'"
+    )}
+
+
 def get_chunks(conn: sqlite3.Connection,
                tradition: str | None,
                text_id: str | None,
@@ -195,7 +208,14 @@ def get_chunks(conn: sqlite3.Connection,
     If chunk_ids is provided, fetches exactly those chunks (in the order given)
     and ignores tradition/text_id/resume. Missing IDs are logged and skipped.
     Otherwise, the tradition/text_id/resume filters apply as before.
+
+    Chunks flagged apparatus (status='apparatus' in staged_cleanups,
+    todo:495577b7) are excluded from both paths — proposing new tags on a
+    chunk the owner has already confirmed is editorial apparatus just
+    refills a queue that review will reject again.
     """
+    apparatus = apparatus_chunk_ids(conn)
+
     if chunk_ids:
         placeholders = ",".join("?" * len(chunk_ids))
         rows = conn.execute(
@@ -210,15 +230,22 @@ def get_chunks(conn: sqlite3.Connection,
                 f"--chunk-ids-from-file: {len(missing)} ID(s) not found in DB; skipping. "
                 f"First few: {missing[:5]}"
             )
+        flagged = [cid for cid in chunk_ids if cid in by_id and cid in apparatus]
+        if flagged:
+            logger.warning(
+                f"--chunk-ids-from-file: {len(flagged)} ID(s) flagged apparatus; skipping. "
+                f"First few: {flagged[:5]}"
+            )
         return [
             {"id": by_id[cid][0], "label": by_id[cid][1], "meta": json.loads(by_id[cid][2])}
-            for cid in chunk_ids if cid in by_id
+            for cid in chunk_ids if cid in by_id and cid not in apparatus
         ]
 
     sql = """
         SELECT n.id, n.label, n.metadata_json
         FROM nodes n
         WHERE n.type = 'chunk'
+          AND n.id NOT IN (SELECT chunk_id FROM staged_cleanups WHERE status = 'apparatus')
     """
     params: list = []
 
