@@ -69,8 +69,8 @@ python3 scripts/derive_parallels.py \
 
 CPU is the only path here, not a fallback of last resort: `guru/rerank.py`
 does no device placement, so this node cannot be routed at either card and a
-CUDA pin on it is inert. Budget ~10–20 minutes for a cold full-corpus run and
-give it `OMP_NUM_THREADS=8`. Timings and what adding GPU support would take
+CUDA pin on it is inert. Budget ~10 minutes for a cold full-corpus run (measured
+2026-08-14) and give it `OMP_NUM_THREADS=8`. Timings and what adding GPU support would take
 are in [gpu-assembly.md](gpu-assembly.md) ("derive_parallels: the one CPU-only
 exception") — not duplicated here.
 

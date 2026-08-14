@@ -169,7 +169,7 @@ did.
 
 | path | full corpus |
 |---|---|
-| CPU, 8 threads | ~10–20 min (fp32, as `rerank.py` loads it) |
+| CPU, 8 threads | ~10 min (measured 2026-08-14: 614 s scoring, 38,452 pairs over 116 concepts, fp32 as `rerank.py` loads it) |
 
 Earlier drafts of this file quoted a "~7 min GPU" row beside the CPU one. That
 number was real, but it belonged to the rellm prototype, which did its own GPU
