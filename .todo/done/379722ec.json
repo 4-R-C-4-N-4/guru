@@ -1,0 +1,37 @@
+{
+  "id": "379722ec",
+  "type": "chore",
+  "state": "done",
+  "summary": "Model artifact + environment: vendor the student checkpoint and the torch dependency as an optional extra",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.283Z",
+  "updated_at": "2026-08-14T02:44:17.261Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "Model home follows the general llm convention: ALL guru fine-tunes live under ~/programs/guru/<model-name>/ (siblings of ~/programs/mistral, ~/programs/gemma4), NOT inside repos — repos carry only the pinned path + sha in config plus a training-card copy.\n\nNaming: <purpose>-v<N>. Seeded 2026-08-13: ~/programs/guru/scorer-v1 (the thin (query,chunk) relevance scorer, 22.7M distill — was \"student-3a2\" in rellm run dirs; training-card.json inside). Future distills: scorer-v2, etc.\n\nThe 4B tagger joins the same home as ~/programs/guru/4b-v3. Version state (verified on disk 2026-08-13): rellm/out holds qwen3-4b-guru (v1), -v2 (the failure — regression traced to tag contamination, not training), and -v3-r32 (latest and greatest, per owner). v3-r32 is the one that migrates. CAUTION when working this: scripts/run-qwen-4b-guru.sh currently serves the v1 dir (rellm/out/qwen3-4b-guru) and staged_tags rows are stamped qwen-3-4b-guru — confirm which version is actually meant to serve before moving, then update MODEL_DIR (one-line diff) and keep the staged_tags model identifier convention intact. Not urgent (owner, 2026-08-13); do alongside the rest of this ticket.\n\ntorch+transformers as an optional dependency group used only by derive_parallels; document the CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 pin and the CPU fallback (~7 min GPU / ~6 min 8-thread CPU int8 full corpus).",
+  "analysis": [
+    {
+      "timestamp": "2026-08-14T02:42:18.849Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "v3-r32 confirmed on disk at rellm/out/qwen3-4b-guru-v3-r32/ (19G total: gguf 9.9G, merged 7.6G, adapter+checkpoints ~1.4G). Serving only needs the Q4_K_M gguf (2.4G) — vendored that plus README.md (as training-card.md, it's already a full model card) and taxonomy.toml (the pinned 110-concept snapshot v3 trained on) to /home/ivy/programs/guru/4b-v3/. Deviation from ticket's 'one-line diff': the v3 gguf filename itself is qwen-3-4b-guru-v3-Q4_K_M.gguf (note the -v3- infix), not qwen-3-4b-guru-Q4_K_M.gguf like v1/v2. run-qwen-4b-guru.sh hardcodes the served filename in its exec line, separate from MODEL_DIR, so a true one-line diff (MODEL_DIR only) would silently keep serving the OLD v1 filename convention while pointing at a directory that doesn't contain that file -- or (if renamed on copy) would make v3-tagged staged_tags rows indistinguishable in the model column from v1 rows, since tag_concepts.py's same-model dedupe logic keys off that exact identifier string. Kept the v3 filename as-is (distinct identifier, still matches qwen-3-4b-guru-* convention) and made a 2-line diff: MODEL_DIR plus the served filename literal. rsync is not installed on this host; used cp -a (verified byte-identical via sha256) instead -- no --delete semantics needed since these are fresh file copies into a new directory, not a directory sync.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-14T02:43:26.239Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Repo has no pyproject.toml, setup.py, setup.cfg, or requirements*.txt anywhere -- confirmed via find. Python deps are declared inline in README.md as plain 'pip install X Y Z' lines (Setup section: tiktoken requests beautifulsoup4 tomli-w numpy) plus a per-provider table for optional ones (LLM Providers: 'pip install anthropic' / 'pip install openai' rows). So there is no [project.optional-dependencies] table to extend. Matched the existing style instead: added a Setup subsection documenting 'pip install torch transformers' as the derive_parallels-only optional group, with the same lazy-import framing guru/rerank.py already uses (only torch-heavy when EDGE_RERANK/derive_parallels actually runs scoring).",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "8c09bc7339beeafdd94d8cc7ff62a4b0af0bf8a5",
+    "resolved_at": "2026-08-14T02:44:17.261Z",
+    "resolved_by": "unknown",
+    "note": "Vendored qwen-3-4b-guru v3-r32 (Q4_K_M gguf, 2.4G) to ~/programs/guru/4b-v3/ with training-card.md + taxonomy.toml; scorer-v1 (already seeded) got a model_sha256 pin in config/derived_parallels.toml; run-qwen-4b-guru.sh now serves 4b-v3 with a distinct qwen-3-4b-guru-v3-* identifier (not a true one-line diff — filename had to change too, see analysis entries); README + gpu-assembly.md document the model-home convention, torch/transformers optional group, CUDA pin, and derive_parallels CPU/GPU timing; 558 passed / 53 skipped / 1 xfailed."
+  }
+}
