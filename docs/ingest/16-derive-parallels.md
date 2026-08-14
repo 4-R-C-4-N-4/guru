@@ -171,6 +171,50 @@ scoring pass on content that is about to change and will be invalidated and
 re-paid for once cleaning lands. Not wrong, just wasted work — run node 07
 first.
 
+**A partial run written to the default location silently replaces the real
+one.** `export.py` selects the lexicographically-latest *complete* run
+directory under `config[export].derived_dir` — it has no notion of how much of
+the corpus a run covered. So a quick `--limit-concepts 3` sanity run, left in
+the default `data/derived_parallels/`, becomes "latest" and ships its few
+hundred PARALLELS rows in place of the full run's seventeen thousand. Nothing
+errors: the artifact is well-formed, fresh, and non-empty, so every guard in
+`load_derived_parallels()` passes. This came within one command of happening
+twice during the port. **Always send a partial run somewhere else** —
+`--out /tmp/.../smoke` — and keep the default path for runs you intend to
+ship. `summary.json`'s `concepts` and `chunks_with_partners` are the fastest
+way to tell afterwards which kind of run produced an artifact.
+
+**A successful re-run proves nothing about the environment.** Once the score
+cache is warm, every pair resolves from disk, `rerank._load()` is never
+reached, and torch/transformers are never imported — so a run that completes
+happily is not evidence that the optional dependency group is installed or
+working. Anyone verifying an environment (new venv, new machine, a dependency
+bump) has to force real scoring: point `config[scoring].score_cache` at a
+throwaway path, or skip the script and score a pair directly —
+`EDGE_RERANK_MODEL=~/programs/guru/scorer-v1 .venv/bin/python -c "from guru
+import rerank; print(rerank.score_pairs('q', {'a': 'body'}))"`. A relevant
+pair should land well above `min_grade` and an unrelated one far below it.
+
+**Pinning this node at a GPU appears to work and does nothing.**
+`guru/rerank.py` performs no device placement anywhere — no `.to()`, no
+`.cuda()` — so the model and its tensors stay on CPU regardless of the
+environment. The `os.environ.setdefault("CUDA_VISIBLE_DEVICES", "")` in
+`_load()` only *hides* the cards; overriding it with the rig's usual
+`CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0` un-hides them and
+changes nothing else. The run then proceeds at exactly CPU speed while the
+command line claims otherwise, and `nvidia-smi` shows an idle card. Historical
+"~7 min GPU" timings for this step belong to the rellm prototype, which had
+its own GPU scoring path; the guru port inherited none of it. See
+[gpu-assembly.md](gpu-assembly.md).
+
+**The wrong interpreter fails minutes in, not at startup.** torch and
+transformers are an optional group living in `.venv/` (README), and
+`guru/rerank.py` imports them lazily inside `_load()`. A bare `python3` run
+therefore opens the database, loads the taxonomy, resolves the cache, prints
+its pair counts, and only *then* dies on `ModuleNotFoundError` — far enough in
+to look like a data problem rather than a missing dependency. Invoke this node
+as `.venv/bin/python`.
+
 **Local retrieval divergence.** `scripts/export.py` sources PARALLELS
 exclusively from this node's output now (see the export hand-off above), but
 `guru/retrieval_legs.py` still queries the live `edges` table's ~11,300
