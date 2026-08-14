@@ -85,8 +85,15 @@ Never delete them to clear the report.
 **Never apply your own proposals.** Every LLM proposal in the ingest stream
 lands in a `staged_*` table with `status='pending'`. You may queue accept /
 reject / reassign / reclassify decisions. Promotion to the live graph is the
-user's. Never call the review app's `/api/apply`, and never run `auto_promote`
-at any confidence tier.
+user's. Never call the review app's `/api/apply`.
+
+There is no unattended promotion path and there is not meant to be one.
+`auto_promote.py` was deleted (todo:68028d8f) rather than left deprecated,
+because agents kept reading its presence in `scripts/` as evidence that
+unreviewed promotion was part of the workflow. It never was — the owner does
+not use it. If you find yourself looking for a way to get proposals into
+`edges` without a human, the answer is that the queue is the way, and the
+apply gate is the user's.
 
 That shape — an HTTP API, a queued decision, a human apply — is the default for
 anything that writes to `guru.db`. Reach for it when building a new write path.

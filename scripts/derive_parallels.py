@@ -16,6 +16,7 @@ below reads every EXPRESSES edge in guru.db regardless of `tier` — it is
 NOT restricted to human-reviewed rows. As of this port, ~29% of that
 supply (11,057 of 38,457 EXPRESSES rows) is `tier='proposed'`, written by
 scripts/auto_promote.py's auto-promotion without per-row human review
+(that script was deleted 2026-08-14, todo:68028d8f; the rows remain)
 before that tool was retired 2026-05-26; the remainder is `tier='verified'`
 via node 11's review queue. Whether this generator should filter to
 `tier='verified'` is a live, deliberately unresolved question tracked at

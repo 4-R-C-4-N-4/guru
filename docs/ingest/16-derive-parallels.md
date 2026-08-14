@@ -33,7 +33,8 @@ skipped.
   does so silently (no per-text readiness check exists here — see Failure
   modes). "Applied," though, is not the same as "human-verified": as of this
   writing ~29% of the live EXPRESSES supply (11,057 of 38,457 rows) is
-  `tier='proposed'` — auto-promoted by `scripts/auto_promote.py` without
+  `tier='proposed'` — auto-promoted by `scripts/auto_promote.py` (deleted
+  2026-08-14, todo:68028d8f) without
   per-row human review, before that tool was retired 2026-05-26. Whether this
   generator should restrict itself to `tier='verified'` is a live, explicitly
   unresolved question tracked at todo:dd034dc4 (the tier-semantics
