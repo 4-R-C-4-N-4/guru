@@ -7,7 +7,7 @@
 # (every edge of that type, any tier — including the ~29% tier='proposed'
 # legacy auto-promoted residue frozen 2026-05-26; NOT restricted to
 # human-reviewed rows. See scripts/derive_parallels.py's module header and
-# guru-web todo:dd034dc4 for the tier-semantics question this deliberately
+# todo:dd034dc4 for the tier-semantics question this deliberately
 # leaves open) x thin-student (concept, chunk) scores: a chunk's PARALLELS
 # partners are the top cross-tradition co-expressors of its concepts,
 # thresholded and ranked by the student's own score. No LLM call, no

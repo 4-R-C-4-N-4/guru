@@ -19,7 +19,7 @@ scripts/auto_promote.py's auto-promotion without per-row human review
 before that tool was retired 2026-05-26; the remainder is `tier='verified'`
 via node 11's review queue. Whether this generator should filter to
 `tier='verified'` is a live, deliberately unresolved question tracked at
-guru-web todo:dd034dc4 (the tier-semantics decision — is tier a confidence
+todo:dd034dc4 (the tier-semantics decision — is tier a confidence
 signal or a provenance timestamp?): if that ticket lands on "confidence
 signal," `load_expresses()`'s query needs `AND tier='verified'` added and
 this note updated; if it lands on "provenance only," this note should say

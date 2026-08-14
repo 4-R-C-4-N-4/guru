@@ -36,7 +36,7 @@ skipped.
   `tier='proposed'` — auto-promoted by `scripts/auto_promote.py` without
   per-row human review, before that tool was retired 2026-05-26. Whether this
   generator should restrict itself to `tier='verified'` is a live, explicitly
-  unresolved question tracked at guru-web todo:dd034dc4 (the tier-semantics
+  unresolved question tracked at todo:dd034dc4 (the tier-semantics
   decision — is `tier` a confidence signal or a provenance timestamp?). This
   node reads every tier today; if that ticket lands on "confidence signal,"
   `load_expresses()` in `scripts/derive_parallels.py` needs `AND
