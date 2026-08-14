@@ -131,3 +131,38 @@ One card holding the model and the other near zero is correct. Both cards
 holding part of one model is the failure this document exists to prevent — and
 it is silent, since a split model serves requests perfectly well, just slower
 and while occupying hardware another stage wants.
+
+## derive_parallels: the one CPU-only exception
+
+`scripts/derive_parallels.py` does not touch either card. It scores
+(concept, chunk) pairs with the vendored `~/programs/guru/scorer-v1`
+cross-encoder via `guru.rerank.score_pairs` (torch + transformers, an
+optional dependency group — see the README), and that scorer is small enough
+(22.7M params) that CPU is the intended path, not a fallback of last resort:
+
+| path | full corpus |
+|---|---|
+| GPU | ~7 min |
+| CPU, 8 threads, int8 | ~6 min |
+
+The CPU run is not slower here — quantized int8 on 8 threads keeps pace with
+an unquantized GPU pass for a model this small, so there is no reason to
+reserve either card for it. If you do route it at a GPU, pin the same way as
+every other model on this rig: **`CUDA_DEVICE_ORDER=PCI_BUS_ID
+CUDA_VISIBLE_DEVICES=0`** selects the 24 GB 3090 (see the naming trap above —
+without `PCI_BUS_ID`, CUDA's default `FASTEST_FIRST` ordering makes `0` an
+unstable reference, and on this host CUDA's un-pinned enumeration order is
+inverted relative to what device 0 means physically).
+
+## Model home
+
+Every guru fine-tune (this includes `derive_parallels`'s vendored scorer)
+lives under `~/programs/guru/<purpose>-v<N>/` — siblings of `~/programs/mistral`
+and `~/programs/gemma4`, never inside a repo checkout. The repo pins the path
+(and, where computed, a sha256 of the weights file) plus a training-card copy:
+`~/programs/guru/scorer-v1` (pinned in `config/derived_parallels.toml`) and
+`~/programs/guru/4b-v3` (pinned as `MODEL_DIR` in
+`scripts/run-qwen-4b-guru.sh`, the current `qwen-3-4b-guru` build — v3-r32,
+see `docs/ingest/decisions/gospel-of-judas.md` for why a text can still call
+for the 27B teacher instead: the finetune is pinned to the taxonomy snapshot
+it trained on).

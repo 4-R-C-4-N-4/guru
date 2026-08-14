@@ -15,9 +15,12 @@
 # the rellm worktree). See training-card.json there for provenance:
 # cross-encoder/ms-marco-MiniLM-L6-v2 student, val_pearson 0.878.
 # training-card.json carries `pairs_sha` (a hash of the TRAINING DATA, not
-# the checkpoint), so there is nothing else to pin — path + training-card.json
-# together are the provenance record.
+# the checkpoint); model_sha256 below is the checkpoint pin itself (sha256 of
+# model.safetensors) — together with the path, that is the full provenance
+# record. Not read by derive_parallels.py; a documentation-only pin to detect
+# drift if the vendored file is ever replaced without bumping the dir name.
 model_path = "/home/ivy/programs/guru/scorer-v1"
+model_sha256 = "be0174a36c98f8a8cd6bd979e2ec913a9365dadea87ad2d14d6399ee9e450fc7"  # model.safetensors
 
 # Set as EDGE_RERANK_MODEL for guru.rerank.score_pairs (guru/rerank.py),
 # which this script reuses for CPU-only scoring. That module already caps
