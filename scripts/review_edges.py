@@ -1,4 +1,13 @@
 """
+DEPRECATED 2026-08-13 — Pass C is retired, and with it node 14. There are no
+new `staged_edges` proposals to review; the 1,301 rows that were pending are
+settled to status='retired_passc' by
+scripts/migrations/v3_011_staged_edges_retire_pending.py. See
+docs/ingest/16-derive-parallels.md and decision record todo:c3f479ff.
+Removal from the ingest state machine and this header: todo:aaaa5258. Kept
+in the tree, not deleted, as the tool that produced the corpus's existing
+edge review history.
+
 review_edges.py — Interactive CLI for reviewing staged cross-tradition edges (Pass C).
 
 Usage:
@@ -289,7 +298,9 @@ def review_edges(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Review staged cross-tradition edges")
+    parser = argparse.ArgumentParser(
+        description="DEPRECATED 2026-08-13 (todo:c3f479ff / todo:aaaa5258, see "
+                     "docs/ingest/16-derive-parallels.md) — Review staged cross-tradition edges")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--edge-type", choices=["PARALLELS", "CONTRASTS"])
     parser.add_argument("--min-confidence", type=float, default=0.0)

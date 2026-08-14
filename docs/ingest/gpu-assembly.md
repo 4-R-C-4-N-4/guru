@@ -39,17 +39,26 @@ therefore ships activations across PCIe on every token, for nothing.
 
 ## The assembly
 
+Node 13 (propose-edges, the Mistral-24B consumer below) is retired —
+todo:c3f479ff / todo:aaaa5258 — so node 10 is the only ingest node left that
+needs a GPU-served local model. The two-server assembly this section
+originally described is kept as history: it explains the PCIe-tax measurement
+below and still applies verbatim if Qwen3.5-27B (node 10's 27B-provenance
+path) is ever run alongside something else that wants the second card.
+
 ```
 CUDA 0 · RTX 3090 · port 8080   the 24B-class model
-                                  Mistral-24B      → node 13 propose-edges
+                                  Mistral-24B      → node 13 propose-edges  (RETIRED)
                                   or Qwen3.5-27B   → node 10, for 27B provenance
 
 CUDA 1 · RTX 4070 · port 8081   qwen-3-4b-guru     → node 10 tag-concepts
 ```
 
 ```sh
-# 3090 — proposer
-CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-mistral.sh
+# 3090 — a 24B-class model (Qwen3.5-27B via scripts/run-qwen.sh today;
+# scripts/run-mistral.sh served this slot for node 13 before its retirement
+# and has been removed)
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-qwen.sh
 
 # 4070 — tagger, on a second port (see the diff below)
 CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 PORT=8081 scripts/run-qwen-4b-guru.sh
@@ -61,13 +70,13 @@ already honours — no code change:
 ```sh
 LLAMACPP_BASE_URL=http://127.0.0.1:8081 python3 scripts/tag_concepts.py --text <id> \
     --provider llamacpp --model qwen-3-4b-guru-Q4_K_M.gguf
-
-python3 scripts/propose_edges.py --text <id> --provider llamacpp   # defaults to :8080
 ```
 
 ## Measured
 
-Decode throughput, Mistral-24B, real edge-proposal traffic:
+Decode throughput, Mistral-24B, real edge-proposal traffic (node 13, before
+its retirement) — kept as the PCIe-tax evidence; the pinning lesson
+transfers to any 24B-class model run on this rig, Qwen3.5-27B included:
 
 | configuration | median | note |
 |---|---|---|
@@ -78,18 +87,27 @@ Decode throughput, Mistral-24B, real edge-proposal traffic:
 
 Two results worth separating. The +22% is the PCIe tax you stop paying. The
 second card going from *half a model* to *a whole second model* is the larger
-win, because it changes what the pipeline can do rather than how fast one step
-runs.
+win — historically that meant nodes 10 and 13 stopped contending for one
+server (see below); today, with 13 retired, it means node 10's two model
+variants (27B and the 4B fine-tune) can run pinned and simultaneously instead
+of trading one server back and forth.
 
-## What this unlocks
+## What this unlocked (historical — node 13 is retired)
 
-Nodes 10 and 13 stop being sequential. Today they contend for one server, so a
-text is tagged, then its edges are proposed. Pinned, they are independent
-services and the corpus can be pipelined:
+This section described why nodes 10 and 13 no longer needed to be
+sequential: pinned to separate cards, a text could be tagged on the 4070
+while the previous text's edges were proposed on the 3090. With node 13
+gone, there is no second GPU-bound ingest node to pipeline against — node 16
+([derive-parallels](16-derive-parallels.md)), Pass C's replacement, is
+CPU-only (see below) and never touches either card. The second card is not
+idle by necessity, though: node 10 alone can still use it, e.g. running the
+27B teacher and the 4B fine-tune on separate pinned servers when a batch
+needs both (see `docs/ingest/decisions/gospel-of-judas.md` for a case that
+called for the 27B specifically).
 
 ```
 book N     tag on 4070  ─┐
-book N-1                 └─→  propose edges on 3090
+book N-1                 └─→  (formerly) propose edges on 3090
 ```
 
 Node 12's embedder (`nomic-embed-text` via Ollama) is small and can share the

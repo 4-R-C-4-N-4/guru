@@ -6,8 +6,14 @@ Ship the corpus. **This node belongs to the user.**
 
 ## Precondition
 
-Nodes 01–14 satisfied, and the review queues applied — which is itself the
-user's action, not a driver's.
+Nodes 01–12 satisfied, and the review queues applied — which is itself the
+user's action, not a driver's. Nodes 13/14 (Pass C) are retired
+(todo:c3f479ff / todo:aaaa5258) and no longer part of this precondition —
+`guru/ingest.py`'s `NODES` list does not include them, so `guru ingest
+status` walks straight from 12-embed to this node. Node 16
+([derive-parallels](16-derive-parallels.md)) is not a per-text precondition
+either: it is corpus-wide and runs independently of any one text's publish
+gate — see that node's file for when to re-run it.
 
 ## Action
 

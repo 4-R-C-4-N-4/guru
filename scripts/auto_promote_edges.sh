@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# DEPRECATED 2026-08-13 — Pass C is retired; auto_promote_edges.py is
+# functionally inert against the current corpus (no status='pending' rows
+# left to promote — see that script's header, docs/ingest/16-derive-parallels.md,
+# and todo:c3f479ff / todo:aaaa5258). Kept, not deleted, for history.
+#
 # auto_promote_edges.sh — wrapper around scripts/auto_promote_edges.py.
 #
 # Dry-run by default. With --apply: takes a labeled snapshot first

@@ -4,12 +4,13 @@
 > there are no new `staged_edges` proposals to review — see
 > [16-derive-parallels](16-derive-parallels.md), which needs no review queue
 > because it ranks strictly off already-reviewed EXPRESSES tags. Decision
-> record: todo:c3f479ff. This file is kept for history. The 1,301 pending
-> `staged_edges` rows this node would have reviewed are settled as a
-> historical record, not silently dropped — todo:aaaa5258, still open, is
-> the code-level ticket that settles them and removes this node from
-> `guru/ingest.py`; until it lands the table and this file both remain as
-> they were.
+> record: todo:c3f479ff. This file is kept for history. The 1,301 rows that
+> were `status='pending'` when this landed are settled to
+> `status='retired_passc'` — a terminal historical status recording that Pass
+> C was retired before they were judged, not a silently dropped queue — by
+> `scripts/migrations/v3_011_staged_edges_retire_pending.py` (todo:aaaa5258).
+> `guru/ingest.py`'s `NODES` list no longer includes this node; `guru ingest
+> status` no longer routes here.
 
 **Kind:** gate · **Contract:** [`prompts/ingest/edge-review.md`](../../prompts/ingest/edge-review.md)
 

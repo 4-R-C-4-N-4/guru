@@ -12,12 +12,17 @@ grades. This is the corpus's PARALLELS supply now — it replaces Pass C
 one `<source-id>` and has a `guru ingest status <source-id>` gate. This one has
 no `--text` flag — it reads the whole `edges` table's `EXPRESSES` rows and
 regrades the corpus in one pass. Run it after a batch of texts clears node 11,
-not once per text. It is also not yet wired into `guru/ingest.py`
-(`NODES_BY_KEY` has no `16-derive-parallels` entry) — that code-level change,
-and the removal of nodes 13/14 from the per-text precondition chain, is
-todo:aaaa5258, still open. Until it lands, `guru ingest status <source-id>`
-may still name node 13 as next; this file, not the CLI, reflects where the
-pipeline is actually going.
+not once per text. It is deliberately **not** wired into `guru/ingest.py`
+(`NODES_BY_KEY` has no `16-derive-parallels` entry, and todo:aaaa5258, which
+removed nodes 13/14 from the per-text precondition chain, left it that way on
+purpose) — the `Ctx`/`evaluate()` machine in that module is built around one
+`<source-id>` at a time, and a corpus-wide, no-`--text`, no-per-source-gate
+step has no natural slot in it. `15-publish`'s precondition now runs straight
+from node 12 to this node's absence: nodes 01–12 satisfied is enough to reach
+publish, and node 16 is run separately, by an operator, on the corpus-wide
+schedule described below. `guru ingest status <source-id>` no longer names
+node 13 either way — it and node 14 are gone from the graph, not merely
+skipped.
 
 ## Precondition
 
@@ -81,8 +86,8 @@ run-directory artifact is the interface to export, below.
 
 ## Gate
 
-No `guru ingest status` entry exists for this node (see the banner above).
-Until todo:aaaa5258 wires one in, treat a run as done when:
+No `guru ingest status` entry exists for this node, by design (see above —
+it does not fit the per-text state machine). Treat a run as done when:
 
 ```sh
 ls -t data/derived_parallels/ | head -1                    # latest run dir

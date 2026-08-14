@@ -1,4 +1,14 @@
 """
+DEPRECATED 2026-08-13 — Pass C is retired, so there are no new
+status='pending' staged_edges rows for this script to find (the 1,301 that
+existed are settled to 'retired_passc' by
+scripts/migrations/v3_011_staged_edges_retire_pending.py) — it is functionally
+inert against the current corpus, not merely discouraged. See
+docs/ingest/16-derive-parallels.md and decision record todo:c3f479ff.
+Removal from the ingest state machine and this header: todo:aaaa5258. Kept in
+the tree, not deleted, as the tool that produced the corpus's existing
+`tier='proposed'` edges.
+
 auto_promote_edges.py — Promote high-confidence LLM-proposed staged_edges
 into the live `edges` table without per-row human review.
 

@@ -135,8 +135,11 @@ forgotten: **`chunk.py` output is pre-clean, so any re-chunk invalidates
 
 Node 16 sits out of numeric order in this table on purpose — it runs where
 13/14 used to, functionally, but it is corpus-wide rather than per-text (no
-`--text` flag, no per-source gate) and isn't yet wired into `guru/ingest.py`'s
-node graph (todo:aaaa5258, open). Read it as "between 12 and 15" rather than
+`--text` flag, no per-source gate) and is deliberately **not** wired into
+`guru/ingest.py`'s node graph — todo:aaaa5258 removed nodes 13/14 from the
+per-text precondition chain and left node 16 out of it for the same reason:
+the graph's `Ctx`/`evaluate()` machine has no slot for a step that isn't
+scoped to one `<source-id>`. Read it as "between 12 and 15" rather than
 "after 15".
 
 ## Running the local models

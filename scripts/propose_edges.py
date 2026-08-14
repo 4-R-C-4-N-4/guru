@@ -1,4 +1,12 @@
 """
+DEPRECATED 2026-08-13 — Pass C is retired. Do not run this script on new
+texts. Cross-tradition PARALLELS now come from a derived table instead —
+see docs/ingest/16-derive-parallels.md. Decision record: todo:c3f479ff.
+Removal of this node from the ingest state machine and this deprecation
+header: todo:aaaa5258. Kept in the tree, not deleted, as a historical record
+of how the corpus's existing edge proposals were produced; the
+`scripts/run-mistral.sh` server this script defaulted to has been removed.
+
 propose_edges.py — Pass C of Stage 3: cross-tradition edge proposals.
 
 For each chunk, finds top-N nearest neighbours from other traditions via
@@ -402,7 +410,9 @@ def run_proposals(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Propose cross-tradition edges")
+    parser = argparse.ArgumentParser(
+        description="DEPRECATED 2026-08-13 (todo:c3f479ff / todo:aaaa5258, see "
+                     "docs/ingest/16-derive-parallels.md) — Propose cross-tradition edges")
     parser.add_argument("--provider", default="llamacpp")
     parser.add_argument("--model",
                         default="Mistral-Small-3.2-24B-Instruct-2506-UD-Q5_K_XL.gguf",

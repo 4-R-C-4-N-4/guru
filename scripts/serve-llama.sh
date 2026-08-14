@@ -30,8 +30,11 @@ BATCH_SIZE="512"
 # run-qwen-4b-guru.sh).
 PARALLEL="${PARALLEL:-1}"
 
-# --- Sampling defaults (overridable per-request from clients, or via env
-#     from a model-specific wrapper — see run-mistral.sh for an example) ---
+# --- Sampling defaults (overridable per-request from clients, or by a
+#     model-specific wrapper exporting TEMP/TOP_P/TOP_K/MIN_P/REPEAT_PENALTY
+#     before calling this script — scripts/run-mistral.sh did this for
+#     Mistral's near-greedy recommendation before Pass C's retirement
+#     removed it; see docs/ingest/13-propose-edges.md) ---
 TEMP="${TEMP:-0.2}"
 TOP_P="${TOP_P:-0.9}"
 TOP_K="${TOP_K:-40}"

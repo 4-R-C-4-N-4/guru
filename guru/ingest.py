@@ -599,33 +599,28 @@ NODES: list[Node] = [
                 "boilerplate into the vectors and node 13 then proposes edges "
                 "off nav-line similarity."]),
 
-    Node("13-propose-edges", "Propose cross-tradition edges", "command",
-         _p_edges,
-         command=("python3 scripts/propose_edges.py --text {id} "
-                  "--provider llamacpp"),
-         gate="python3 -m guru ingest status {id}",
-         notes=["Requires embeddings (node 12) — candidate pairs come from "
-                "vector similarity above --min-similarity, default 0.75.",
-                "Serve Mistral, not the tagging model: scripts/run-mistral.sh. "
-                "It is propose_edges.py's own default and what built the "
-                "corpus's 20,898 edges. Its near-greedy sampling (temp 0.15, "
-                "top_p 1.0, top_k 0) is why it classifies rather than "
-                "rubber-stamps.",
-                "A fresh batch being almost all PARALLELS is normal, not a "
-                "defect. surface_only / unrelated / most CONTRASTS are REVIEW "
-                "outcomes from node 14's reclassify action — every one of the "
-                "corpus's 8,338 surface_only rows is status='rejected' with a "
-                "reviewer. Do not judge this node's output by its type spread.",
-                "Same server discipline as node 10: check the slot is free "
-                "before starting, and only stop what you started."]),
-
-    Node("14-edge-review", "Curate the staged edges", "gate",
-         _p_edge_review,
-         command="python3 scripts/review_edges.py --min-confidence 0.7",
-         contract="prompts/ingest/edge-review.md",
-         notes=["The 0.85-confidence tier left behind by auto_promote_edges "
-                "is the noisy one and the reason this node exists.",
-                "Queue accept / reclassify / reject. Never apply."]),
+    # Nodes 13 (propose-edges) and 14 (edge-review) — Pass C — retired
+    # 2026-08-13, todo:c3f479ff / todo:aaaa5258. Removed from the graph
+    # entirely rather than kept as always-DONE stubs: they are not steps a
+    # driver on a fresh text will ever be routed through again, and the
+    # existing per-text `evaluate()` walk has no notion of an optional node,
+    # only DONE and something-blocks-you-until-it-is. `_p_edges` and
+    # `_p_edge_review` stay in this module — they still describe real
+    # historical state (staged_edges rows this repo already has) and are
+    # exercised directly by tests/test_ingest_status_probes.py — only their
+    # Node() wiring into the per-text precondition chain is gone. Their
+    # workbook files (docs/ingest/13-propose-edges.md,
+    # docs/ingest/14-edge-review.md) stay on disk as history; that is the one
+    # documented exception to the doc/graph 1:1 invariant checked by
+    # tests/test_workbook.py::test_no_orphan_workbook_files.
+    #
+    # Node 16 (derive-parallels) is deliberately NOT added here in their
+    # place: it is corpus-wide (no --text flag, no per-source gate — see
+    # docs/ingest/16-derive-parallels.md), so it does not fit this Ctx's
+    # per-text precondition model at all. It runs after a batch of texts
+    # clears node 11, not once per text, and has no equivalent of `evaluate()`
+    # to plug into. 15-publish's precondition simply no longer waits on 13/14;
+    # node 16 stays a corpus-wide operator step outside this state machine.
 
     Node("15-publish", "Ship the corpus", "user",
          _p_publish,

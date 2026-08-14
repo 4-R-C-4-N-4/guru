@@ -31,6 +31,20 @@ from guru import dossier, ingest  # noqa: E402
 GRAPHS = {"ingest": ingest.NODES, "dossier": dossier.NODES}
 ALL_NODES = [(g, n) for g, nodes in GRAPHS.items() for n in nodes]
 
+# Workbook files that intentionally have no guru.ingest.NODES entry —
+# the on-disk/graph 1:1 invariant the orphan check below enforces has two
+# deliberate exceptions, both from todo:aaaa5258:
+#   - 13-propose-edges, 14-edge-review: Pass C, retired 2026-08-13
+#     (todo:c3f479ff). Removed from NODES outright rather than kept as
+#     always-DONE stubs; the files stay on disk as history.
+#   - 16-derive-parallels: Pass C's replacement. Corpus-wide (no --text
+#     flag, no per-source gate), so it never fit guru.ingest.Ctx's
+#     one-<source-id>-at-a-time model in the first place — see that file's
+#     own "This node is not per-text" section. Not retired, just outside
+#     this particular graph by design.
+RETIRED_INGEST_DOCS = {"13-propose-edges", "14-edge-review"}
+NODELESS_INGEST_DOCS = RETIRED_INGEST_DOCS | {"16-derive-parallels"}
+
 
 # ---------------------------------------------------------------- helpers
 
@@ -76,7 +90,10 @@ def test_no_orphan_workbook_files(graph, subdir):
     pattern = "[0-9]*.md" if graph == "ingest" else "D*.md"
     on_disk = {p.stem for p in (PROJECT_ROOT / subdir).glob(pattern)}
     keys = {n.key for n in GRAPHS[graph]}
-    assert on_disk == keys, f"{subdir}: {on_disk ^ keys} is in one place only"
+    nodeless = NODELESS_INGEST_DOCS if graph == "ingest" else set()
+    assert nodeless <= on_disk, f"{subdir}: expected docs missing from disk: {nodeless - on_disk}"
+    assert (on_disk - nodeless) == keys, (
+        f"{subdir}: {(on_disk - nodeless) ^ keys} is in one place only")
 
 
 @pytest.mark.parametrize("graph,node", ALL_NODES, ids=lambda x: getattr(x, "key", x))
@@ -84,6 +101,31 @@ def test_declared_contract_exists(graph, node):
     if not node.contract:
         pytest.skip("no contract")
     assert (PROJECT_ROOT / node.contract).is_file()
+
+
+def test_pass_c_nodes_are_gone_from_the_precondition_chain():
+    """todo:aaaa5258: nodes 13 (propose-edges) and 14 (edge-review) are
+    removed from guru.ingest.NODES outright, not left in place as
+    always-DONE stubs — see the comment in guru/ingest.py explaining why a
+    stub was rejected in favour of removal. evaluate()'s upstream_ok walk
+    can only be blocked by a node that is actually in the list, so this is
+    the structural proof that 15-publish's precondition no longer waits on
+    them: 12-embed and 15-publish are now adjacent, with nothing — retired
+    or otherwise — sitting between them."""
+    keys = [n.key for n in ingest.NODES]
+    assert "13-propose-edges" not in keys
+    assert "14-edge-review" not in keys
+    assert keys.index("15-publish") == keys.index("12-embed") + 1
+
+
+def test_node_16_is_not_in_the_per_text_graph():
+    """derive-parallels is corpus-wide (no --text flag, no per-source gate —
+    docs/ingest/16-derive-parallels.md) and deliberately has no Node() entry:
+    Ctx/evaluate() model one <source-id> at a time and there is no slot for a
+    step that isn't scoped to one. Documented, not an oversight — this test
+    is a tripwire in case a future change adds a mismatched per-text node 16
+    without updating that reasoning."""
+    assert "16-derive-parallels" not in {n.key for n in ingest.NODES}
 
 
 # ---------------------------------------------------------------- commands
