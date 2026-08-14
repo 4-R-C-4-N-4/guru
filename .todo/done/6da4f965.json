@@ -1,0 +1,21 @@
+{
+  "id": "6da4f965",
+  "type": "chore",
+  "state": "done",
+  "summary": "Wire derived PARALLELS into corpus export; freeze CONTRASTS as a curated list",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.364Z",
+  "updated_at": "2026-08-14T03:09:15.105Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "scripts/export.py emits derived_parallels output as the PARALLELS rows of the corpus dump (replacing staged-edge-promoted rows); the 112 live CONTRASTS become a small frozen/curated list carried through export unchanged. Snapshot-verified target shape: corpus.edges(source, target, edge_type, tier, weight, annotation); reader-panel SQL needs no change (verified 2026-08-13), though ORDER BY weight DESC in getRelatedPassages is a recommended guru-web follow-up since derived rows share one tier.",
+  "resolution": {
+    "commit": "869cea2e2be2efbad379faea8f5c44b6536b9615",
+    "resolved_at": "2026-08-14T03:09:15.105Z",
+    "resolved_by": "unknown",
+    "note": "export.py: PARALLELS sourced solely from the derive_parallels.py artifact (loud fail if missing/stale/empty), CONTRASTS frozen to a 112-row committed snapshot (config/frozen_contrasts.toml); shape unchanged, verified with a real CPU smoke export (17 new tests, full suite 601 passed)."
+  }
+}
