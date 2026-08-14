@@ -1,0 +1,18 @@
+{
+  "id": "5411ae3f",
+  "type": "chore",
+  "state": "open",
+  "summary": "Update node 16, the cutover record and the rellm proposal's threshold claim to state the frame the operating point was derived on; needs 7e19c217",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-14T23:55:18.395Z",
+  "updated_at": "2026-08-14T23:55:18.395Z",
+  "tags": [
+    "docs",
+    "workbook"
+  ],
+  "relationships": {
+    "parent": "7427712c"
+  }
+}

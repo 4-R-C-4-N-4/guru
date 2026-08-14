@@ -1,0 +1,19 @@
+{
+  "id": "404da836",
+  "type": "investigation",
+  "state": "open",
+  "summary": "Establish an operating point on the (concept-definition, chunk) frame: label a stratified sample under the proven judging protocol, or demonstrate a relative rule needs no absolute point — needs the harness from fee2b54a",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-14T23:55:18.288Z",
+  "updated_at": "2026-08-14T23:55:18.288Z",
+  "tags": [
+    "edges",
+    "scoring",
+    "calibration"
+  ],
+  "relationships": {
+    "parent": "7427712c"
+  }
+}
