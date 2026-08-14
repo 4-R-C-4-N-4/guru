@@ -148,13 +148,68 @@ expresses no concepts, but that its register scores lower against
 concept-definition prose than Christian mystical and Neoplatonic text does, and
 one global floor turns that gradient into a cliff.
 
-**Fix:** make selection rank-based rather than absolute. The generator already
-ranks candidates per chunk, so taking each chunk's top-k regardless of an
-absolute floor (optionally with a much lower sanity floor) restores whole-work
-coverage without disturbing the ranking that the 21/24 partner-recovery
-evidence rests on. Alternatives: recalibrate `min_grade` on the
-concept-definition frame, or per-work floors. Cost is ~10 CPU-minutes to
-re-derive plus a re-export.
+### 3c. Digging past the threshold: these are two different bugs
+
+"The floor is too high" explains a gradient, not a work scoring uniformly
+terribly. Pulling on that separated the dark works into two populations that
+need opposite fixes.
+
+**The scorer's ranking is sound.** Each work's top-scoring concept is the right
+one: `sunyata_emptiness` for the Diamond Sutra (−3.88), `wu_wei` for the Tao Te
+Ching (−0.09), `sephirot` for the Lesser Holy Assembly (−5.12), `ritual_fire`
+for Yasna 43 (−4.84). The model identifies what these texts are about. Only the
+absolute values are depressed.
+
+**And the absolute values track chunk length**, which is the actual defect in
+using one global floor:
+
+| body chars | chunks | median best score | clears −4.415 |
+|---|---|---|---|
+| <500 | 303 | −6.67 | 12% |
+| 500–999 | 433 | −5.18 | 31% |
+| 1,000–1,999 | 583 | −4.47 | 48% |
+| 2,000–2,399 | 277 | −3.87 | 58% |
+| ≥2,400 (truncated) | 3,458 | −4.36 | 51% |
+
+A cross-encoder logit scales with how much corroborating evidence the passage
+contains, so an aphoristic verse cannot reach the same score as a discursive
+paragraph even when it is a perfect topical match. Comparing raw logits across
+lengths against one threshold therefore penalises verse and aphorism traditions
+(Taoism, the Dhammapada, the Yasnas) relative to prose ones (Neoplatonism,
+Christian mysticism). 69 of 235 works have their best pair under the floor.
+
+**Enuma Elish is not that.** It is genuinely mis-tagged, and needs the opposite
+treatment — see `todo:743ba79b`. `concept.cosmogony` exists, is applied to 20
+texts across 10 traditions, and was **never proposed** for the corpus's
+paradigmatic creation epic. Its live tags are `covenant`, `prayer`, `theurgy`,
+`living_god` — theology and praxis abstractions — and its best match is
+`theurgy` at −4.84. The scorer is correct that a theomachy is not about
+theurgy. 48 of its 76 live tags were auto-promoted unreviewed at
+`tier='proposed'` while 49 rows still sit pending in the queue.
+
+**Why nobody saw this before:** Pass C proposed pairs by vector adjacency and
+never consulted concepts, so it produced 249 PARALLELS for this text on top of
+tags that do not describe it. The derived generator is the first mechanism that
+makes edge production depend on tag quality. It did not break Enuma Elish; it
+exposed a tagging gap that predates the cutover.
+
+**Fix, split by cause:**
+
+- *Length/scale (the many):* make selection rank-based rather than absolute —
+  the generator already ranks per chunk, so taking each chunk's top-k
+  regardless of an absolute floor (or normalising by length) restores coverage
+  without disturbing the ranking the 21/24 partner-recovery evidence rests on.
+  ~10 CPU-minutes to re-derive plus a re-export.
+- *Mis-tagging (Enuma Elish, possibly `descent-of-inanna`):* re-tag. Rank-based
+  selection here would be actively harmful — it would manufacture panels
+  annotated *"Shared concept: Theurgy. (derived)"* on a Babylonian creation
+  epic, which is worse than an empty strip.
+
+A caveat on using low scores as a mis-tagging detector: the score alone does
+not separate the two populations. `sephirot` topping a Kabbalistic text at
+−5.12 is a correct tag with a low score; `theurgy` topping Enuma Elish at −4.84
+is a wrong tag. Distinguishing them needs a human judging whether the top
+concept is apt — the score only tells you where to look.
 
 ---
 

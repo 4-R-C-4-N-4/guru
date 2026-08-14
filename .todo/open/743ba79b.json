@@ -1,0 +1,30 @@
+{
+  "id": "743ba79b",
+  "type": "bug",
+  "state": "open",
+  "summary": "enuma-elish is not tagged cosmogony: the corpus's paradigmatic creation epic has no origin-events tag, and its best concept match is theurgy (-4.84)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-14T23:03:55.751Z",
+  "updated_at": "2026-08-14T23:04:24.956Z",
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "taxonomy",
+    "corpus-quality"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-08-14T23:04:24.956Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Found while investigating why enuma-elish emits zero derived PARALLELS (todo:9097deed; full record in docs/summary/derived-parallels-cutover-2026-08-14.md).\n\nTHE GAP. concept.cosmogony exists in the taxonomy (cosmology.origin_events, alongside letters_of_creation, tzimtzum, fall_of_sophia, frashokereti, apocatastasis) and is applied across the corpus: 123 EXPRESSES tags over 20 texts in 10 traditions (celtic, christian_mysticism, finnic, gnosticism, hinduism, native_american, norse, shinto, western_esoteric, zoroastrianism). The Enuma Elish -- the paradigmatic ancient Near Eastern creation epic, and arguably the single most cosmogonic text in the corpus -- carries none of it. Nor any other origin_events concept.\n\nIt was never even proposed. staged_tags for mesopotamian.enuma-elish.* contains no row whose concept_id matches cosmogon% in any status. This is not a proposal that review rejected; the tagger never suggested it.\n\nWHAT IT IS TAGGED WITH INSTEAD, and the tier story. 12 chunks, 76 live EXPRESSES: living_god (12), anthropomorphism (11), cosmic_dualism (10), sacred_names (12 across both tiers), divine_providence (6), logos (3), covenant (3), plus ritual_purity, numerical_mysticism, prayer, theurgy. Domain breakdown: almost entirely theology.* and praxis.*, with logos the lone cosmology.* entry -- and that is cosmology.divine_structure, not origin_events. A Babylonian theomachy is being described as covenant, prayer and theurgy.\n\nTier split is 48 proposed / 28 verified. The staged_tags queue still holds 49 pending rows for this text, so most of what is live was written by scripts/auto_promote.py at tier='proposed' without per-row human review, and the review queue for it was never worked. Tagging model was the 27B teacher (Qwen3.5-27B-UD-Q4_K_XL.gguf), not the 4B fine-tune -- so this is not the off-distribution 4B failure mode from todo:667f1aaf, and the node-10 routing standard is not implicated.\n\nHOW IT SURFACED, AND WHY IT WAS INVISIBLE BEFORE. The derived-parallels generator scores (concept definition, chunk body) with the thin scorer and needs a partner clearing config[scoring].min_grade = -4.415. Every one of enuma-elish's 76 pairs falls below that; its BEST match is concept.theurgy at -4.84, and the scorer is right to say a creation narrative is not about theurgy. Zero pairs clear, so zero edges.\n\nPass C never consulted concepts at all -- it proposed pairs by vector adjacency and had an LLM classify them -- so it happily produced 249 PARALLELS for this text on top of tags that do not describe it. The cutover did not break enuma-elish; it is the first mechanism that ever made edge production depend on tag quality, and this text failed that dependency immediately.\n\nCAUTION ON THE OBVIOUS FIX. Do NOT reach for lowering min_grade or rank-based selection to \"restore\" this work's edges. For works whose tags are right but whose scores are low (see the cutover doc: lesser-holy-assembly tops at sephirot, yasna-43 at ritual_fire, bhagavad-gita-chapter-02 at meditation, diamond-sutra at sunyata_emptiness, tao-te-ching at wu_wei) rank-based selection is safe and correct. Here it is actively harmful: it would manufacture panels annotated \"Shared concept: Theurgy. (derived)\" on the Enuma Elish, which is worse than an empty strip. This work needs re-tagging, not a threshold change.\n\nSUGGESTED WORK. Re-run node 10 over mesopotamian.enuma-elish with the 27B and the current taxonomy, specifically checking whether origin_events concepts are reachable for it; work the 49 pending staged_tags rows; then re-derive. Worth checking descent-of-inanna at the same time (35 pairs, best -5.21, top concept funerary_navigation) since it is the other mesopotamian text on the weak list and may share the cause.",
+      "confidence": "high"
+    }
+  ]
+}
