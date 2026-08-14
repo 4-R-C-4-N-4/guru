@@ -1,0 +1,30 @@
+{
+  "id": "495577b7",
+  "type": "chore",
+  "state": "done",
+  "summary": "Populate staged_cleanups.status=apparatus and exclude flagged chunks from derivation + tagging",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.212Z",
+  "updated_at": "2026-08-14T03:02:23.397Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "The rule-parity fix (owner diagnosis 2026-08-13): tag review already keeps apparatus chunks out of the concept surface, but nothing marks them as a chunk-level fact both pipelines can consult. Populate staged_cleanups.status=apparatus from (a) the guru-web todo:6e0c2a63 audit roll-up, (b) the all-rejected tag history (316 chunks with every tag proposal rejected — review each is apparatus vs taxonomy-blind; only apparatus gets the flag). Generator and tag proposals both skip flagged chunks. Queue-only where judgement is involved; owner applies.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-14T02:56:32.669Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Source (a) reality check: todo:6e0c2a63's roll-up is prose, not a structured chunk-id list, and several ranges are approximate ('~25/66 mandaean chunks', 'Budge...in egyptian works' with no ids) — those are left OUT of scope, not fabricated. For the ranges that DO give exact chunk numbers (iamblichus.162-180, gospel-of-philip.001, descent-of-inanna.001, masnavi-book-1.014, heroic-enthusiasts-pt1.001-013, orphic-hymns.001-034, kalevala.273, dionysius-mystical-theology.001 = 71 candidates), cross-checking against staged_tags acceptance history found the roll-up's one-line characterizations describe a contamination PATTERN within the range, not whole-chunk apparatus for every chunk in it: 67/71 already carry reviewer-ACCEPTED EXPRESSES tags (e.g. dionysius-mystical-theology.001 has 16 accepted tags incl. apophatic_theology score 3 — a richly on-topic chunk the roll-up cited only as an example of interleaved OCR/Rolt-commentary damage, not as pure apparatus). Flagging those would have silently dropped human-verified content from derive_parallels.py and blocked future tagging. Adapted: kept only the 4/71 candidates with ZERO accepted/pending/reassigned staged_tags AND independently confirmed apparatus by reading the full body (heroic-enthusiasts-pt1.001-002, orphic-hymns.001, kalevala.273) — all 4 were also already fully tagger-processed (in tagging_progress) with the model itself proposing nothing, or with reviewers rejecting everything. Source (b): the 316 all-rejected-chunk count matches the ticket exactly (query: chunk_id GROUP BY HAVING every staged_tags row status='rejected'). Read full ~700-char excerpts for all 316; classified 74 as apparatus (translator/editor front matter, footnote-numbered scholarly apparatus, TOC, publisher ads, glossaries — dominant clusters: 26 mandaean gnostic-john-baptizer Mead-footnote chunks, matching the roll-up's '~25/66' estimate closely; 20 egyptian-book-of-the-dead-index Budge introduction/footnote chunks; 4 kalevala name-glossary chunks; assorted single-chunk prefaces/TOCs) and 242 as taxonomy-blind (genuine narrative/doctrinal content the taxonomy doesn't happen to score — e.g. the full Mabinogion/Mooney-Cherokee-Myths/Plotinus-Enneads/Yoga-Sutras/Secret-Teachings-of-All-Ages clusters). Total unique chunks queued as apparatus candidates: 75 (74 from source b, plus orphic-hymns.001 unique to source a; 3 of source a's 4 overlap with source b).",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "5d30bb7dc092dea5d92112f988b332849c1ceac4",
+    "resolved_at": "2026-08-14T03:02:23.397Z",
+    "resolved_by": "unknown",
+    "note": "Queue populated, pending only -- owner applies. Counts: source a = 4 chunks\n(of 71 candidates named by todo:6e0c2a63's roll-up; 67 excluded because they\nalready carry reviewer-accepted staged_tags -- see analysis entry 0). Source\nb = 74 apparatus / 242 taxonomy-blind (of the 316 all-rejected chunks, exact\nticket count reproduced). Union unique queued = 75 (3 overlap between a/b).\nTaxonomy-blind list recorded in docs/summary/apparatus-rejected-audit.md, not\ndiscarded. Generator (derive_parallels.py) and tagger (tag_concepts.py) both\ngate on status='apparatus' only, never 'pending' -- currently 0 chunks are\ngated since nothing has gone through the owner's apply gate yet; that's\nintentional, queued != applied. Commit: 5d30bb7d. Tests:\ntests/test_flag_apparatus.py (all-rejected query + skip/idempotency logic,\n14 tests), tests/test_derive_parallels.py (+5 apparatus-exclusion tests),\ntests/test_tag_concepts_chunk_ids.py (+4 apparatus-skip tests). Full\npytest: 584 passed, 53 skipped, 1 xfailed, no regressions."
+  }
+}

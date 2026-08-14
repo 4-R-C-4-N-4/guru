@@ -1,0 +1,31 @@
+{
+  "id": "69682961",
+  "type": "debt",
+  "state": "open",
+  "summary": "Point local retrieval legs at the derived-parallels artifact (retrieval_legs.py still walks live guru.db PARALLELS)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-14T12:20:27.645Z",
+  "updated_at": "2026-08-14T12:20:50.103Z",
+  "files": [
+    {
+      "path": "guru/retrieval_legs.py",
+      "lines": [
+        180,
+        405
+      ]
+    }
+  ],
+  "tags": [
+    "retrieval",
+    "derived-parallels",
+    "divergence"
+  ],
+  "description": "PR #64 (derived-parallels/frozen-CONTRASTS split, todo:6da4f965) review\nfinding 9: after that PR, the shipped corpus and the local dev DB walk\ndifferent PARALLELS sets, and nothing in this repo points that out except\nthis ticket and the doc note that links here.\n\n## What changed\n\nscripts/export.py now excludes PARALLELS (and CONTRASTS) from load_edges()\nand sources PARALLELS exclusively from the latest\nscripts/derive_parallels.py run (load_derived_parallels()) — see\ndocs/ingest/16-derive-parallels.md. The live `edges` table in data/guru.db\nstill carries ~11,300 PARALLELS rows (the old Pass C output), untouched by\nthis change, because nothing deletes them and nothing was asked to.\n\n## The divergence\n\nguru/retrieval_legs.py still queries those live-table PARALLELS rows at\nquery time, in three places:\n\n- line ~180 — the concept<->concept hop: `e.type IN ('PARALLELS',\n  'DERIVES_FROM')` inside the HOP_DEPTH reachability query.\n- line ~353 — the chunk<->chunk partner hop: `e.type IN ('PARALLELS',\n  'CONTRASTS')`.\n- line ~405 — score inheritance through PARALLELS (a chunk that PARALLELS\n  a query-satisfying anchor inherits some of its rank).\n\nNone of these read scripts/derive_parallels.py's output. They are the old\nPass C edge set, produced by a different mechanism (LLM pair\nclassification vs. EXPRESSES x thin-student scoring), at different\nweights, under a different tier.\n\n## Concrete failure scenario\n\nSomeone runs `guru query` locally to tune EDGE_LEG/HOP_DEPTH behavior, or\nbenchmarks retrieval quality against data/guru.db. The results look\nreasonable and get shipped as a tuning change or reported as a quality\nfinding — but production (guru-web, reading the exported corpus) is\nserving a completely different PARALLELS supply built by a different\ngenerator. The local measurement does not transfer, silently, because\nnothing errors: both edge sets are well-formed PARALLELS rows, just from\ndifferent sources.\n\n## Fix directions (either closes this)\n\n1. Point retrieval_legs.py's three PARALLELS reads at the derived-parallels\n   artifact (data/derived_parallels/<latest>/edges_derived.jsonl) instead\n   of the live `edges` table — e.g. load it into an in-memory structure at\n   query-harness startup, matching what export.py already does for the\n   shipped corpus.\n2. Materialize the deferred `derived_parallels` table in guru.db (explicitly\n   called out as a future step in scripts/derive_parallels.py's module\n   docstring and the rellm migration sketch it references) and point\n   retrieval_legs.py at that table instead of `edges`. This is also the\n   natural moment to decide whether the live `edges` PARALLELS rows should\n   be dropped/archived once nothing reads them.\n\nNot urgent — not a regression in PR #64 itself, but a new divergence that\nPR created and didn't close. Reference: PR #64 review finding 9,\ndocs/ingest/16-derive-parallels.md (\"Local retrieval divergence\" note).",
+  "relationships": {
+    "related": [
+      "6da4f965"
+    ]
+  }
+}

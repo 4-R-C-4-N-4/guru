@@ -11,8 +11,9 @@ How a text gets from a URL to a queryable, citable part of the corpus.
 
 This workbook exists because most of that process used to live in two places
 that neither travel nor outlast a session: a person's head, and an agent
-conversation. Fifteen nodes, each one a file in this directory, each one
-readable by a person, an agent, or a script.
+conversation. Sixteen node files in this directory, each one readable by a
+person, an agent, or a script — fourteen live, two retired (13 and 14, Pass C;
+see the node graph below).
 
 ## The driver loop
 
@@ -127,16 +128,28 @@ forgotten: **`chunk.py` output is pre-clean, so any re-chunk invalidates
 | 10 | [tag-concepts](10-tag-concepts.md) | command | `staged_tags` rows |
 | 11 | [tag-review](11-tag-review.md) | gate | queued tag decisions |
 | 12 | [embed](12-embed.md) | command | `chunk_embeddings` rows |
-| 13 | [propose-edges](13-propose-edges.md) | command | `staged_edges` rows |
-| 14 | [edge-review](14-edge-review.md) | gate | queued edge decisions |
+| 13 | ~~[propose-edges](13-propose-edges.md)~~ | **RETIRED** 2026-08-13 | superseded by 16 |
+| 14 | ~~[edge-review](14-edge-review.md)~~ | **RETIRED** 2026-08-13 | superseded by 16 |
+| 16 | [derive-parallels](16-derive-parallels.md) | command | `data/derived_parallels/<run>/edges_derived.jsonl` |
 | 15 | [publish](15-publish.md) | user | a shipped corpus |
+
+Node 16 sits out of numeric order in this table on purpose — it runs where
+13/14 used to, functionally, but it is corpus-wide rather than per-text (no
+`--text` flag, no per-source gate) and is deliberately **not** wired into
+`guru/ingest.py`'s node graph — todo:aaaa5258 removed nodes 13/14 from the
+per-text precondition chain and left node 16 out of it for the same reason:
+the graph's `Ctx`/`evaluate()` machine has no slot for a step that isn't
+scoped to one `<source-id>`. Read it as "between 12 and 15" rather than
+"after 15".
 
 ## Running the local models
 
-Nodes 10 and 13 need a llama.cpp server. On a two-GPU box the assignment is
-not incidental — a model split across both cards costs 22% throughput and
-occupies hardware the other node wants. See
-[gpu-assembly.md](gpu-assembly.md).
+Node 10 needs a llama.cpp server. (Node 13 also did, before Pass C's
+retirement — node 16, its replacement, is CPU-only and touches neither GPU;
+see [gpu-assembly.md](gpu-assembly.md)'s "derive_parallels: the one CPU-only
+exception".) On a two-GPU box the server assignment is not incidental — a
+model split across both cards costs 22% throughput and occupies hardware the
+other node wants. See [gpu-assembly.md](gpu-assembly.md).
 
 ## Node file schema
 
@@ -170,4 +183,7 @@ drain.
   `guru-review-tags` and `guru-review-edges` skills drive nodes 11 and 14
   through the review web app; their judgement criteria are mirrored in
   `prompts/ingest/tag-review.md` and `prompts/ingest/edge-review.md` so a
-  driver without those skills can still do the work.
+  driver without those skills can still do the work. Node 14 is retired —
+  see the node graph above — so `guru-review-edges` now only matters for the
+  historical `staged_edges` queue, not new proposals; node 16 needs no
+  review queue at all.

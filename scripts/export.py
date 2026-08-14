@@ -41,6 +41,16 @@ OUTPUT = PROJECT_ROOT / "export" / "guru-corpus.sql.gz"
 CORPUS_DIR = PROJECT_ROOT / "corpus"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
+# ── derived PARALLELS + frozen CONTRASTS (todo:6da4f965) ───────────────
+# PARALLELS rows in the corpus dump come exclusively from the derived-
+# parallels artifact (scripts/derive_parallels.py), not from the live
+# `edges` table — see load_derived_parallels(). CONTRASTS rows come
+# exclusively from a committed snapshot — see load_frozen_contrasts().
+# load_edges() below now only serves the remaining live-table types
+# (EXPRESSES, BELONGS_TO, DERIVES_FROM).
+DERIVED_PARALLELS_CONFIG = PROJECT_ROOT / "config" / "derived_parallels.toml"
+CONTRASTS_SNAPSHOT = PROJECT_ROOT / "config" / "frozen_contrasts.toml"
+
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
 # EXPECTED_SCHEMA_VERSION must advance in the same deploy.
@@ -378,11 +388,17 @@ def load_chunks(conn: sqlite3.Connection):
 
 
 def load_edges(conn: sqlite3.Connection) -> list[dict]:
-    """SQLite edges → Postgres column names."""
+    """SQLite edges → Postgres column names, for every type EXCEPT the two
+    with their own dedicated source (todo:6da4f965): PARALLELS comes from
+    the derived-parallels artifact (load_derived_parallels) and CONTRASTS
+    from the frozen snapshot (load_frozen_contrasts). Live rows of those
+    two types (if any linger in guru.db, e.g. pre-freeze CONTRASTS or
+    staged-edge-promoted PARALLELS) are deliberately NOT read here."""
     rows = []
     for r in conn.execute(
-        "SELECT source_id, target_id, type, tier, justification "
-        "FROM edges ORDER BY source_id, target_id, type"
+        "SELECT source_id, target_id, type, tier, justification FROM edges "
+        "WHERE type NOT IN ('PARALLELS', 'CONTRASTS') "
+        "ORDER BY source_id, target_id, type"
     ):
         rows.append({
             "source": r[0],
@@ -393,6 +409,184 @@ def load_edges(conn: sqlite3.Connection) -> list[dict]:
             "annotation": r[4],
         })
     return rows
+
+
+def _find_latest_run_dir(base_dir: Path) -> Path:
+    """Lexicographically-latest subdirectory of base_dir (derive_parallels.py
+    names run directories with a zero-padded UTC timestamp, so string sort
+    order is chronological order). Raises SystemExit with a clear cause if
+    there is nothing to pick from — a missing artifact must be loud, never
+    a silent zero-PARALLELS export."""
+    if not base_dir.exists():
+        raise SystemExit(
+            f"No derived-parallels artifact: {base_dir} does not exist. "
+            f"Run scripts/derive_parallels.py first."
+        )
+    candidates = sorted(
+        p for p in base_dir.iterdir()
+        if p.is_dir() and (p / "edges_derived.jsonl").exists() and (p / "summary.json").exists()
+    )
+    if not candidates:
+        raise SystemExit(
+            f"No derived-parallels run found under {base_dir} (expected "
+            f"<timestamp>/edges_derived.jsonl + summary.json). "
+            f"Run scripts/derive_parallels.py first."
+        )
+    return candidates[-1]
+
+
+def load_derived_parallels(
+    config_path: Path = DERIVED_PARALLELS_CONFIG,
+    *,
+    chunk_ids: set[str] | None = None,
+) -> list[dict]:
+    """The sole source of PARALLELS rows in the corpus dump (todo:6da4f965).
+
+    Reads config[export].derived_dir, picks the latest run directory, and
+    refuses to proceed — loudly, via SystemExit — if the artifact is
+    missing, incomplete, older than config[export].max_age_days, or
+    (suspiciously) contains zero rows. Silence here would mean a bad export
+    quietly ships zero PARALLELS instead of failing the build.
+
+    If `chunk_ids` is given (main() always passes the set of chunk ids this
+    run is about to emit), every row's source/target is checked against it
+    and any orphan endpoint is a SystemExit — a re-chunk can shift chunk ids
+    out from under a derived run that was generated against the old set, and
+    an orphan row would otherwise load into Postgres silently (untyped TEXT
+    columns, no FK) and just never match at query time.
+    """
+    if not config_path.exists():
+        raise SystemExit(f"derived-parallels config not found: {config_path}")
+    with open(config_path, "rb") as fp:
+        cfg = tomllib.load(fp)
+    export_cfg = cfg.get("export")
+    if not export_cfg:
+        raise SystemExit(
+            f"{config_path} has no [export] section (derived_dir, max_age_days)"
+        )
+    base_dir = Path(export_cfg["derived_dir"])
+    if not base_dir.is_absolute():
+        base_dir = PROJECT_ROOT / base_dir
+    max_age_days = float(export_cfg["max_age_days"])
+
+    run_dir = _find_latest_run_dir(base_dir)
+
+    with open(run_dir / "summary.json") as fp:
+        summary = json.load(fp)
+    generated_at = datetime.fromisoformat(summary["generated_at"])
+    age_days = (datetime.now(timezone.utc) - generated_at).total_seconds() / 86400
+    if age_days > max_age_days:
+        raise SystemExit(
+            f"Derived-parallels artifact at {run_dir} is stale: generated "
+            f"{age_days:.1f} days ago, max_age_days={max_age_days}. "
+            f"Re-run scripts/derive_parallels.py."
+        )
+
+    rows = []
+    with open(run_dir / "edges_derived.jsonl") as fp:
+        for line_no, line in enumerate(fp, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            row = json.loads(line)
+            for key in ("source", "target", "edge_type", "tier", "weight", "annotation"):
+                if key not in row:
+                    raise SystemExit(
+                        f"{run_dir / 'edges_derived.jsonl'}:{line_no} missing '{key}'"
+                    )
+            if row["edge_type"] != "PARALLELS":
+                raise SystemExit(
+                    f"{run_dir / 'edges_derived.jsonl'}:{line_no} has "
+                    f"edge_type={row['edge_type']!r}, expected 'PARALLELS'"
+                )
+            rows.append(row)
+
+    if not rows:
+        raise SystemExit(
+            f"Derived-parallels artifact at {run_dir} contains zero PARALLELS "
+            f"rows — refusing to export an empty PARALLELS set. If this is "
+            f"genuinely expected, delete this check, don't work around it."
+        )
+
+    if chunk_ids is not None:
+        orphans = sorted({
+            cid for row in rows for cid in (row["source"], row["target"])
+            if cid not in chunk_ids
+        })
+        if orphans:
+            raise SystemExit(
+                f"{run_dir / 'edges_derived.jsonl'}: {len(orphans)} PARALLELS "
+                f"endpoint(s) do not resolve to a chunk in this export "
+                f"(re-chunk drift?): {orphans[:5]}"
+                f"{' ...' if len(orphans) > 5 else ''}. Re-run "
+                f"scripts/derive_parallels.py against the current corpus."
+            )
+
+    logger.info(
+        "derived PARALLELS: %d rows from %s (generated %.1f days ago)",
+        len(rows), run_dir, age_days,
+    )
+    return rows
+
+
+def load_frozen_contrasts(
+    path: Path = CONTRASTS_SNAPSHOT,
+    *,
+    chunk_ids: set[str] | None = None,
+) -> list[dict]:
+    """The sole source of CONTRASTS rows in the corpus dump (todo:6da4f965):
+    a committed snapshot, carried through export unchanged. Editing the
+    live `edges` table's CONTRASTS rows after the freeze has no effect on
+    what ships — see the header comment in config/frozen_contrasts.toml for
+    how to retire the freeze.
+
+    If `chunk_ids` is given, every row's source/target is checked against
+    it and any orphan endpoint is a SystemExit. This snapshot is the one
+    source that cannot self-heal after a re-chunk — CONTRASTS rows here are
+    never regenerated, so a shifted chunk id would otherwise ship a row that
+    quietly never matches in production (see PR #64 review finding 2)."""
+    if not path.exists():
+        raise SystemExit(f"Frozen CONTRASTS snapshot not found: {path}")
+    with open(path, "rb") as fp:
+        data = tomllib.load(fp)
+    rows = data.get("edge", [])
+    if not rows:
+        raise SystemExit(f"{path} has no [[edge]] entries")
+    out = []
+    for i, row in enumerate(rows):
+        for key in ("source", "target", "edge_type", "tier"):
+            if key not in row:
+                raise SystemExit(f"{path} entry {i} missing '{key}'")
+        if row["edge_type"] != "CONTRASTS":
+            raise SystemExit(
+                f"{path} entry {i} has edge_type={row['edge_type']!r}, "
+                f"expected 'CONTRASTS'"
+            )
+        out.append({
+            "source": row["source"],
+            "target": row["target"],
+            "edge_type": row["edge_type"],
+            "tier": row["tier"],
+            "weight": row.get("weight"),
+            "annotation": row.get("annotation"),
+        })
+
+    if chunk_ids is not None:
+        orphans = sorted({
+            cid for row in out for cid in (row["source"], row["target"])
+            if cid not in chunk_ids
+        })
+        if orphans:
+            raise SystemExit(
+                f"{path}: {len(orphans)} CONTRASTS endpoint(s) do not "
+                f"resolve to a chunk in this export (re-chunk drift?): "
+                f"{orphans[:5]}{' ...' if len(orphans) > 5 else ''}. This "
+                f"snapshot cannot self-heal — update the affected rows in "
+                f"{path} to the current chunk ids."
+            )
+
+    logger.info("frozen CONTRASTS: %d rows from %s", len(out), path)
+    return out
 
 
 # ── DDL prefixer ──────────────────────────────────────────────────────
@@ -453,9 +647,27 @@ def emit_copy_end(f) -> None:
     f.write("\\.\n\n")
 
 
-def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
+def emit_copies(
+    conn: sqlite3.Connection,
+    f,
+    schema: str,
+    chunks: list[dict],
+    derived_parallels_rows: list[dict],
+    frozen_contrasts_rows: list[dict],
+) -> dict:
     """Write COPY blocks for traditions, texts, concepts, chunks, edges.
-    Returns chunk count for the validation block."""
+
+    `chunks`, `derived_parallels_rows`, and `frozen_contrasts_rows` are
+    loaded by main() *before* this is called (PR #64 review finding 1) —
+    this function does no loading of its own for those three, only assembly
+    and emission. That hoist is what makes the two PARALLELS/CONTRASTS
+    artifact loaders' SystemExit guards fail-fast: they used to run from
+    inside here, which main() only reaches after next_corpus_version() has
+    already committed a version bump and after OUTPUT has already been
+    truncated by gzip.open() — so a guard tripping mid-emit_copies burned a
+    version number and destroyed the last good dump on the way out.
+
+    Returns per-table counts for the validation block."""
     # traditions
     emit_copy_start(f, schema, "traditions", ["id", "label", "description", "color"])
     for r in load_traditions(conn):
@@ -526,7 +738,6 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
     emit_copy_start(f, schema, "chunks",
                     ["id", "text_id", "tradition", "text_name", "section",
                      "section_path", "translator", "body", "token_count", "embedding"])
-    chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
     for r in chunks:
         # section_path is always None in v1 (TOMLs don't populate it).
         # When that changes, write a copy_esc_array() — esc_array() emits
@@ -542,10 +753,18 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
         )
     emit_copy_end(f)
 
-    # edges
+    # edges — PARALLELS from the derived-parallels artifact and CONTRASTS
+    # from the frozen snapshot (todo:6da4f965), everything else from the
+    # live table. Sorted for a deterministic COPY block, matching the old
+    # single-source ORDER BY. Both artifact loads already happened in
+    # main() before this function was ever called — see the docstring above.
+    edges = (
+        load_edges(conn) + derived_parallels_rows + frozen_contrasts_rows
+    )
+    edges.sort(key=lambda r: (r["source"], r["target"], r["edge_type"]))
     emit_copy_start(f, schema, "edges",
                     ["source", "target", "edge_type", "tier", "weight", "annotation"])
-    for r in load_edges(conn):
+    for r in edges:
         weight = "\\N" if r["weight"] is None else str(r["weight"])
         f.write(
             f"{copy_esc(r['source'])}\t{copy_esc(r['target'])}\t"
@@ -737,6 +956,20 @@ def main() -> None:
     conn.row_factory = sqlite3.Row
 
     n_chunks = validate(conn)
+
+    # Load the chunk set and both PARALLELS/CONTRASTS sources BEFORE
+    # anything is mutated (PR #64 review findings 1 + 2). load_derived_
+    # parallels() and load_frozen_contrasts() are pure validation — they
+    # touch neither `conn` nor the output file — so their SystemExit guards
+    # (missing/stale/empty artifact, orphan endpoints) must all fire here,
+    # before next_corpus_version() commits a version bump and before
+    # gzip.open(OUTPUT, "wt") truncates the last good dump. The chunk id
+    # set doubles as the orphan-endpoint check both loaders run against.
+    chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
+    chunk_ids = {r["id"] for r in chunks}
+    derived_parallels_rows = load_derived_parallels(chunk_ids=chunk_ids)
+    frozen_contrasts_rows = load_frozen_contrasts(chunk_ids=chunk_ids)
+
     version = next_corpus_version(conn)
     commit = git_sha()
     exported_at = datetime.now(timezone.utc).isoformat()
@@ -764,7 +997,8 @@ def main() -> None:
         f.write("\n\n")
 
         # 3. Data — COPY blocks in FK order
-        counts = emit_copies(conn, f, STAGING_SCHEMA)
+        counts = emit_copies(conn, f, STAGING_SCHEMA, chunks,
+                             derived_parallels_rows, frozen_contrasts_rows)
 
         # 4. Post-load indexes
         emit_indexes(f, STAGING_SCHEMA)

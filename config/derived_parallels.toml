@@ -1,0 +1,86 @@
+# Guru derived-parallels configuration
+# Consumed by: scripts/derive_parallels.py
+#
+# Ported from rellm tools/derived_parallels.py (docs/edges/derived-parallels-
+# proposal.md, todo:5620391a / parent c3f479ff — "retire Pass C: parallels
+# become a derived table"). Replaces LLM pair-classification with EXPRESSES
+# (every edge of that type, any tier — including the ~29% tier='proposed'
+# legacy auto-promoted residue frozen 2026-05-26; NOT restricted to
+# human-reviewed rows. See scripts/derive_parallels.py's module header and
+# todo:dd034dc4 for the tier-semantics question this deliberately
+# leaves open) x thin-student (concept, chunk) scores: a chunk's PARALLELS
+# partners are the top cross-tradition co-expressors of its concepts,
+# thresholded and ranked by the student's own score. No LLM call, no
+# staged_edges review queue.
+
+[scoring]
+# Vendored checkpoint, guru-side path (NOT a rellm path — the checkpoint was
+# copied to ~/programs/guru/scorer-v1 for this repo to pin independently of
+# the rellm worktree). See training-card.json there for provenance:
+# cross-encoder/ms-marco-MiniLM-L6-v2 student, val_pearson 0.878.
+# training-card.json carries `pairs_sha` (a hash of the TRAINING DATA, not
+# the checkpoint); model_sha256 below is the checkpoint pin itself (sha256 of
+# model.safetensors) — together with the path, that is the full provenance
+# record. Not read by derive_parallels.py; a documentation-only pin to detect
+# drift if the vendored file is ever replaced without bumping the dir name.
+model_path = "/home/ivy/programs/guru/scorer-v1"
+model_sha256 = "be0174a36c98f8a8cd6bd979e2ec913a9365dadea87ad2d14d6399ee9e450fc7"  # model.safetensors
+
+# Set as EDGE_RERANK_MODEL for guru.rerank.score_pairs (guru/rerank.py),
+# which this script reuses for CPU-only scoring. That module already caps
+# max_length at the checkpoint's own max_position_embeddings (512 for a
+# BERT-family student — the "BERT students cap at 512 positions" gotcha)
+# and truncates bodies to 2400 chars before tokenizing, so those are not
+# separate knobs here.
+
+# Min-leg grade floor: a chunk must itself clear this on a concept for that
+# concept to contribute partners, and a candidate partner must clear it too.
+# Default matches the rellm prototype's --min-grade default, calibrated for
+# THIS config's scorer-v1 student (rellm thin-scorer run 2026-08-13-run1).
+# It is NOT guru/retriever.py's EDGE_RERANK_THRESHOLD (-3.8 by default) —
+# that number is a separate calibration for the bge-reranker-v2-m3 teacher,
+# not this student, and the two should not be reconciled against each other.
+# guru/rerank.py says it plainly: "the calibrated EDGE_RERANK_THRESHOLD is
+# model-specific — recalibrate when swapping." Same rule applies here.
+min_grade = -4.415
+
+# GATHER bound, not a panel ceiling. Via-concept round-robin gathers up to
+# top_k * 2 raw candidates per chunk (ported as-is from the rellm prototype;
+# diffed against rellm tools/derived_parallels.py — same behavior). The
+# per-work cap below then thins that pool, but nothing truncates it back
+# down to top_k afterward: a chunk's PARALLELS panel can carry up to
+# 2 * top_k partners (tests/test_derive_parallels.py's
+# test_build_panels_round_robin_alternates_via_concepts_deterministically
+# demonstrates a 4-partner panel at top_k=2), or fewer than top_k if
+# candidates cluster in one work. This is prototype-faithful, not a bug —
+# ratified by the 2026-08-13 snapshot trial — and is NOT truncated. Do not
+# size a reader panel layout assuming top_k is the maximum partner count.
+top_k = 5
+
+# Incremental (concept, chunk) score cache, keyed on a content hash of the
+# concept definition + chunk body (post 2400-char trim) so a corpus update
+# or a taxonomy definition edit only re-scores what actually changed. Path
+# is relative to the project root; data/ is git-ignored.
+score_cache = "data/derived_parallels_score_cache.json"
+
+[panels]
+# Max partners drawn from any single work (sources/works.toml; texts not
+# listed there are implicit singleton works) in one chunk's panel. Without
+# this, the snapshot trial found single-via, single-work monoculture panels.
+per_work_cap = 2
+
+[export]
+# Consumed by scripts/export.py (todo:6da4f965). derive_parallels.py writes
+# each run to a fresh data/derived_parallels/<UTC timestamp>/ directory
+# (edges_derived.jsonl + summary.json); export.py does not take a run
+# directory on the command line — it picks the lexicographically latest
+# subdirectory of derived_dir (the timestamp format sorts correctly) and
+# uses that run's edges_derived.jsonl as the sole source of PARALLELS rows.
+derived_dir = "data/derived_parallels"
+
+# Guardrail, not a correctness mechanism: if the latest run's summary.json
+# `generated_at` is older than this many days, export.py refuses to run
+# rather than silently shipping a stale panel set. Bump derive_parallels.py
+# and re-run to clear it; there is no override flag by design — a stale
+# artifact should be regenerated, not waved through.
+max_age_days = 30

@@ -87,7 +87,12 @@ CREATE TABLE IF NOT EXISTS staged_edges (
     confidence      REAL NOT NULL DEFAULT 0.0,
     justification   TEXT,
     status          TEXT NOT NULL DEFAULT 'pending'
-                        CHECK(status IN ('pending','accepted','rejected','reclassified')),
+                        -- 'retired_passc': Pass C retired 2026-08-13
+                        -- (todo:c3f479ff) with no reviewer left to render a
+                        -- verdict on it — a terminal historical status, not a
+                        -- verdict. Applied to existing DBs by
+                        -- scripts/migrations/v3_011_staged_edges_retire_pending.py.
+                        CHECK(status IN ('pending','accepted','rejected','reclassified','retired_passc')),
     tier            TEXT NOT NULL DEFAULT 'proposed'
                         CHECK(tier IN ('verified','proposed')),
     reviewed_by     TEXT,
@@ -113,8 +118,9 @@ CREATE INDEX IF NOT EXISTS idx_staged_edges_type   ON staged_edges(edge_type);
 
 -- Partial UNIQUE: only enforce on pending rows so a re-propose against the
 -- same model doesn't dupe-violate, while frozen settled rows
--- (accepted/rejected/reclassified) can coexist with new pending proposals
--- from a different model run. Mirrors v3_001 staged_tags pattern.
+-- (accepted/rejected/reclassified/retired_passc) can coexist with new
+-- pending proposals from a different model run. Mirrors v3_001 staged_tags
+-- pattern.
 CREATE UNIQUE INDEX IF NOT EXISTS idx_staged_edges_provenance_unique
     ON staged_edges(source_chunk, target_chunk, model, prompt_version)
     WHERE status = 'pending';

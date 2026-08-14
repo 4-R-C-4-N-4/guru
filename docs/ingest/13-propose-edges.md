@@ -1,5 +1,14 @@
 # 13 — propose-edges
 
+> **RETIRED 2026-08-13.** Pass C (LLM pair classification) is replaced by a
+> derived table — see [16-derive-parallels](16-derive-parallels.md). Decision
+> record: todo:c3f479ff. This file is kept for history; do not run this node
+> on new texts. `guru/ingest.py`'s `NODES` list no longer includes this node
+> (todo:aaaa5258, landed) — `guru ingest status` walks straight from
+> 12-embed to 15-publish. `propose_edges.py` carries a deprecation header;
+> `scripts/run-mistral.sh`, which served the model behind every proposal
+> below, has been removed (git history has it, if it's ever needed again).
+
 **Kind:** command
 
 Propose cross-tradition relationships between this text's chunks and the rest
@@ -12,9 +21,13 @@ similarity.
 
 ## Action
 
+Retired — do not run. The commands below are kept verbatim as a historical
+record of what this node used to do; `scripts/run-mistral.sh`, which the
+first line depended on, no longer exists in this repo.
+
 ```sh
 pgrep -af '[t]ag_concepts|[p]ropose_edges'      # must be empty — see node 10
-scripts/run-mistral.sh                       # only if nothing is serving
+scripts/run-mistral.sh                       # REMOVED — see banner above
 
 python3 scripts/propose_edges.py --text <source-id> \
     --provider llamacpp --top-n 5 --min-similarity 0.75
@@ -37,13 +50,16 @@ Counts staged edges touching this text on either side.
 
 Pin it to the 3090 — [gpu-assembly.md](gpu-assembly.md).
 
-**Serve Mistral, not a tagging model.** `Mistral-Small-3.2-24B-Instruct` is
-`propose_edges.py`'s own default — the `--model` flag exists to *label*
-provenance, and its help text says to start the server with
+**Serve Mistral, not a tagging model.** (Historical.) `Mistral-Small-3.2-24B-Instruct`
+was `propose_edges.py`'s own default — the `--model` flag exists to *label*
+provenance, and its help text still points at the now-removed
 `scripts/run-mistral.sh`. That model produced every edge proposal in the
-corpus. The launcher also sets near-greedy sampling (temp 0.15, top_p 1.0,
-top_k 0, min_p 0, repeat_penalty 1.0), which is what makes it classify rather
-than agree.
+corpus. The launcher set near-greedy sampling (temp 0.15, top_p 1.0, top_k 0,
+min_p 0, repeat_penalty 1.0), which is what made it classify rather than
+agree. The model dir itself, `~/programs/mistral`, is unaffected by this
+script's removal — see [gpu-assembly.md](gpu-assembly.md)'s "Model home"
+section and todo:aaaa5258's close note for whether anything else in this rig
+still depends on it.
 
 ## Failure modes
 

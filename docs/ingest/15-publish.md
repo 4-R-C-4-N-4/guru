@@ -6,8 +6,19 @@ Ship the corpus. **This node belongs to the user.**
 
 ## Precondition
 
-Nodes 01–14 satisfied, and the review queues applied — which is itself the
-user's action, not a driver's.
+Nodes 01–12 satisfied, and the review queues applied — which is itself the
+user's action, not a driver's. Nodes 13/14 (Pass C) are retired
+(todo:c3f479ff / todo:aaaa5258) and no longer part of this precondition —
+`guru/ingest.py`'s `NODES` list does not include them, so `guru ingest
+status` walks straight from 12-embed to this node. Node 16
+([derive-parallels](16-derive-parallels.md)) is not a *per-text*
+precondition — it has no `--text` flag and no `guru ingest status` gate, so
+it never blocks any one source from reaching this node. But publish itself
+is not independent of it: node 15's action is `scripts/export.py`, which
+refuses to run — loudly, via `SystemExit` — unless a derived-parallels run
+exists under `config[export].derived_dir` and is younger than
+`max_age_days` (default 30). Re-run node 16 before publishing if the last
+run has aged out; see that node's file for the trigger and the command.
 
 ## Action
 
@@ -44,6 +55,20 @@ designed around.
 **Assuming a merged PR is a deployed corpus.** Corpus sync to production rides
 the user's own push. A merged PR and a live corpus are different states —
 `mabinogion`'s re-chunk sat in exactly that gap.
+
+**There is no such thing as a throwaway export.** `next_corpus_version()`
+increments and commits the counter in `_export_state` before a single COPY
+block is written, so an export run "just to see if it works" permanently
+advances the corpus version — and the dump it overwrote is gone, because
+`gzip.open(OUTPUT, "wt")` truncates. Two runs during the Pass C cutover moved
+the counter this way. The version numbers are cheap and gaps are harmless, so
+this is a bookkeeping surprise rather than damage; it is only worth knowing
+before you go looking for who burned v51. Note the ordering guarantee this
+node *does* give you: every guard that can refuse an export — the missing,
+stale, or orphan-endpoint checks on the derived-parallels artifact and the
+frozen CONTRASTS snapshot — runs in `main()` before the bump and before the
+truncation, so a *refused* export costs neither a version number nor the last
+good dump.
 
 ## Provenance
 

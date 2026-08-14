@@ -64,6 +64,43 @@ provider you have (see Configuration below). Embeddings default to
 once to have it available. All vector storage is SQLite (`data/guru.db`
 chunk_embeddings table); no separate vector DB is needed.
 
+### Optional: derive_parallels / EDGE_RERANK (torch + transformers)
+
+`scripts/derive_parallels.py` and the `EDGE_RERANK` query-time path both go
+through `guru.rerank.score_pairs`, which lazy-imports torch + transformers
+only when that code actually runs — the rest of the pipeline (chunking,
+tagging, retrieval) stays torch-free. Install this group only if you run
+either:
+
+```bash
+uv venv                                                              # .venv/, gitignored
+uv pip install -r requirements-derive.txt --index-strategy unsafe-best-match
+```
+
+Then invoke those two paths with `.venv/bin/python` explicitly — a bare
+`python3` will get partway through a run and die inside `guru.rerank._load()`,
+after the database and taxonomy have already loaded.
+
+The pins are CPU-only on purpose: `guru/rerank.py` does no device placement, so
+this code cannot use a GPU, and the default PyPI torch would add ~6 GB of
+`nvidia-*` wheels it can never touch. The CPU build installs in 901 MB. See the
+header of `requirements-derive.txt` for why the `--index-strategy` flag is not
+optional.
+
+No other script in the repo touches this dependency.
+
+### Model home
+
+All guru fine-tunes are vendored under `~/programs/guru/<purpose>-v<N>/`
+(siblings of `~/programs/mistral`, `~/programs/gemma4` — never inside a repo
+checkout). The repo pins the path (and, where computed, a sha256 of the
+weights file) in config or in the serving script; a `training-card.json` (or
+`training-card.md`/README equivalent) ships alongside the weights for
+provenance. Current: `~/programs/guru/scorer-v1` (the 22.7M thin
+(query,chunk) relevance scorer used by `derive_parallels`, pinned in
+`config/derived_parallels.toml`) and `~/programs/guru/4b-v3` (the
+`qwen-3-4b-guru` v3-r32 tagger, served by `scripts/run-qwen-4b-guru.sh`).
+
 ---
 
 ## Running the Pipeline

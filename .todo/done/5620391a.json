@@ -1,0 +1,27 @@
+{
+  "id": "5620391a",
+  "type": "chore",
+  "state": "done",
+  "summary": "Port derive_parallels generator into guru (scripts/derive_parallels.py) with panel knobs",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.138Z",
+  "updated_at": "2026-08-14T02:39:09.624Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "Port rellm tools/derived_parallels.py (already carries partner-score ranking + via round-robin). Reads guru.db EXPRESSES + concepts/taxonomy.toml + the student checkpoint; emits corpus-export edges shape (source, target, PARALLELS, tier=inferred, weight=grade, annotation=\"Shared concept: <label> — <definition first sentence>. (derived)\"). Add the two knobs the snapshot trial exposed: per-work cap in panels (max 2 partners per work) and deterministic ordering by weight. Config (top_k, min_grade, caps) in config/, not hardcoded. Gotchas recorded in rellm proposal: concept nodes are namespaced concept.<id> vs bare taxonomy keys; BERT students cap at 512 positions; incremental score cache keyed (concept, chunk).",
+  "work": {
+    "branch": "feat/derived-parallels",
+    "base_branch": "main",
+    "started_at": "2026-08-14T02:28:42.518Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "b0d27a47953e7df16a87d155f9d3fc0128ac824c",
+    "resolved_at": "2026-08-14T02:39:09.624Z",
+    "resolved_by": "unknown",
+    "note": "Ported rellm derived_parallels.py to scripts/derive_parallels.py: EXPRESSES x thin-student scoring via guru.rerank (reused, not reimplemented — handles the 512-position cap and CPU-only enforcement), config/derived_parallels.toml (top_k/min_grade/per_work_cap/model_path/score_cache), content-hashed (concept,chunk) score cache, per-work panel cap, deterministic weight-desc ordering. 13 unit tests on pure ranking/round-robin/panel-cap/annotation logic (tests/test_derive_parallels.py), all passing; CPU smoke run (scoped venv, 3 concepts, 552 pairs, 15s) produced correct corpus-export edges shape and confirmed cache hits on re-run. No guru.db writes."
+  }
+}

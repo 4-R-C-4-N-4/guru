@@ -1,0 +1,801 @@
+# Frozen CONTRASTS snapshot (todo:6da4f965, parent c3f479ff).
+#
+# The 112 live CONTRASTS edges at snapshot time, carried through
+# scripts/export.py unchanged as a small curated list. CONTRASTS was
+# never large enough to warrant the derived-parallels treatment (see
+# config/derived_parallels.toml, PARALLELS's replacement), and the
+# ticket's intent is a frozen set, not a live re-query on every export
+# -- editing the live `edges` table after this snapshot does NOT change
+# what ships. To retire the freeze, regenerate this file from
+# `SELECT source_id, target_id, tier, justification FROM edges WHERE
+# type='CONTRASTS'` and note why in a todo.
+#
+# weight is always null: CONTRASTS never carried a weight in the live
+# table (scripts/export.py's old load_edges() emitted NULL for every
+# edge type), so the snapshot preserves that rather than inventing one.
+# Snapshotted 2026-08-13 from data/guru.db (112 rows: 108 verified, 4
+# proposed).
+
+[[edge]]
+source = "buddhism.diamond-sutra.007"
+target = "christian_mysticism.life-and-doctrines-boehme.031"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "The passages contrast in their views on the nature of enlightenment and the divine. Passage A emphasizes the non-individual nature of enlightenment and the rejection of a permanent self, while Passage B emphasizes a personal, individual God and the divine nature of Christ."
+
+[[edge]]
+source = "buddhism.diamond-sutra.007"
+target = "hinduism.bhagavad-gita-chapter-13.001"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the nature of the self and the ultimate reality, emphasizing the transcendence of individual identity and the interconnectedness of all things. The Bhagavad Gita discusses the concept of Kshetra and Kshetra-gña, while the Diamond Sutra talks about the non-existence of a fixed self in the context of an Arhat."
+
+[[edge]]
+source = "buddhism.diamond-sutra.016"
+target = "western_esoteric.transcendental-magic-doctrine.019"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the concept of the ineffable nature of ultimate reality and the limitations of human perception and language in describing it. The Diamond Sutra emphasizes the emptiness of all phenomena, including the Buddha's teachings and the Buddha himself, while the Hermetic text discusses the unity of the visible and invisible and the limitations of human reason in comprehending the absolute."
+
+[[edge]]
+source = "buddhism.diamond-sutra.018"
+target = "western_esoteric.transcendental-magic-ritual.031"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the attainment of spiritual power and enlightenment through specific knowledge and practices. The Magus in Passage A gains intellectual omnipotence through the use of symbols and adherence to certain principles, while the Bodhisattva in Passage B acquires merit through endurance in selfless and uncreated things. Both emphasize the importance of understanding and embodying certain truths to achieve spiritual realization."
+
+[[edge]]
+source = "buddhism.heart-sutra-smaller.001"
+target = "hinduism.bhagavad-gita-chapter-15.001"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the nature of reality and the self, emphasizing the transcendence of material and perceptual phenomena. The Bhagavad Gita discusses the inexhaustible Ashvattha tree as a metaphor for the cosmic order and the self, while the Prajnaparamita Sutra delves into the emptiness of all phenomena, including the five skandhas. Both texts aim to guide the seeker towards a higher understanding and liberation."
+
+[[edge]]
+source = "buddhism.heart-sutra-smaller.001"
+target = "western_esoteric.transcendental-magic-doctrine.031"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the nature of existence and non-existence, emphasizing the interconnectedness and impermanence of all things. The Heart Sutra discusses the emptiness of all phenomena, while the Tetragramd discusses the transformation and immortality of forms, both touching on the idea that nothing is destroyed, only transformed."
+
+[[edge]]
+source = "christian_mysticism.dionysius-divine-names-1.006"
+target = "western_esoteric.transcendental-magic-doctrine.034"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine revelation and the ability of certain individuals to perceive and communicate higher truths. They also explore the idea of the soul's capacity to evoke and interact with spiritual or astral images, though framed within different mystical traditions."
+
+[[edge]]
+source = "christian_mysticism.dionysius-divine-names-1.006"
+target = "western_esoteric.transcendental-magic-doctrine.056"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transformative power of mystical knowledge and the renunciation of earthly pleasures to achieve a higher state of being. They also touch on the idea of establishing spiritual currents or chains that can influence others and the world."
+
+[[edge]]
+source = "christian_mysticism.dionysius-divine-names-1.006"
+target = "western_esoteric.transcendental-magic-doctrine.096"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of transcendent knowledge and the limitations of human understanding in approaching the divine. They share a mystical approach to understanding the divine, emphasizing the need to move beyond ordinary human notions and symbols to grasp higher truths."
+
+[[edge]]
+source = "christian_mysticism.dionysius-mystical-theology.002"
+target = "western_esoteric.transcendental-magic-doctrine.006"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the attainment of divine knowledge and powers through mystical means. Passage A outlines the privileges and powers of the Magus, while Passage B describes the process of divine contemplation and the ultimate union with the divine. Both emphasize the transcendence of human understanding and the attainment of supernatural knowledge."
+
+[[edge]]
+source = "christian_mysticism.dionysius-mystical-theology.008"
+target = "western_esoteric.transcendental-magic-doctrine.019"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the ineffable nature of the divine, emphasizing that the ultimate reality transcends human understanding and categorization. Pseudo-Dionysius negates all attributes, while The Candidate asserts the unity and universality of reason and the word, both pointing to a transcendent truth beyond ordinary comprehension."
+
+[[edge]]
+source = "christian_mysticism.eckhart-sermons-field.005"
+target = "jewish_mysticism.enoch-charles-1917.130"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages deal with themes of judgment and redemption, but they present contrasting views. Passage A focuses on divine punishment and the destruction of sinners, while Passage B emphasizes divine love, sacrifice, and redemption through Jesus Christ."
+
+[[edge]]
+source = "christian_mysticism.eckhart-sermons-field.014"
+target = "western_esoteric.transcendental-magic-ritual.034"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the transformation and perfection of the human will or nature through spiritual practices and divine connection. Passage A discusses the cultivation of will and the projection of astral light through magical rituals, while Passage B focuses on the union with the Divine Nature through knowledge and faith in Christ, leading to divine-like actions and ultimate union with God."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.019"
+target = "sufism.masnavi-book-1.036"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the overcoming of evil (the Fiend/Iblis) through divine intervention and the scorn of God towards the evil one. They share a conceptual parallel in the theme of divine triumph over malevolent forces and the humility required in the face of divine will."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.027"
+target = "neoplatonism.plotinus-select-works-index.036"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the theme of suffering and the strength derived from it. Passage A discusses the profound suffering of Jesus and the divine love that underpins it, while Passage B examines the Stoic ideal of enduring suffering with a passionless and unshakeable soul. Both texts emphasize the transformative power of suffering and the higher purpose it serves."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.039"
+target = "jewish_mysticism.enoch-charles-1917.133"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine judgment and the differing fates of the righteous and the unrighteous. They share a conceptual parallel in emphasizing the rewards for the righteous and the punishments for the sinners, though they use different religious frameworks and vocabulary."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.040"
+target = "neoplatonism.plotinus-select-works-index.289"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the concept of divine love and the relationship between the divine and humanity. Passage A discusses the spiritual thirst of Christ and the ultimate unity of humanity with the divine, while Passage B describes the nature of The Good and its relationship with the Intellectual-Principle, emphasizing the striving towards the divine. Both texts convey the idea of a divine longing and the ultimate union with the divine, albeit in different theological frameworks."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.043"
+target = "jewish_mysticism.enoch-charles-1917.083"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the tension between divine justice and the ultimate salvation of all things. They share a conceptual parallel in the struggle to reconcile human understanding of judgment with divine assurance of ultimate redemption, though expressed within different theological frameworks."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.048"
+target = "western_esoteric.transcendental-magic-ritual.098"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature and purpose of miracles, emphasizing their role in revealing divine power and strengthening faith. They also highlight the importance of understanding and intention in the performance of miracles, though they come from different religious contexts."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.050"
+target = "jewish_mysticism.enoch-charles-1917.127"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address the theme of sin and its consequences, but from opposite perspectives. Passage A emphasizes the transformative power of divine love, where sin is turned into worship and rewarded with bliss. Passage B, on the other hand, focuses on the judgment and punishment of sinners, highlighting their shame and destruction."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.050"
+target = "jewish_mysticism.enoch-charles-1917.128"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages deal with sin and its consequences, but they take opposite positions. Passage A emphasizes that sin can be transformed into worship and that even sinners can find redemption and joy in Heaven. Passage B, on the other hand, focuses on the punishment and woes that await sinners, with no mention of redemption or transformation of sin."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.051"
+target = "jewish_mysticism.enoch-charles-1917.083"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the themes of repentance, divine judgment, and the transformation of the soul through suffering and contrition. They share a conceptual parallel in the emphasis on the purification and redemption of the soul through divine grace and the acknowledgment of sin."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.052"
+target = "jewish_mysticism.enoch-charles-1917.127"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address the theme of sin and its consequences, but from opposite perspectives. Passage A emphasizes God's love and mercy in forgiving sin, while Passage B focuses on the judgment and punishment of sinners."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.062"
+target = "jewish_mysticism.enoch-charles-1917.127"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address the theme of sin and divine judgment, but they take opposite positions. Passage A emphasizes divine love and the impossibility of God being wroth, while Passage B focuses on the impending doom and punishment of sinners."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.097"
+target = "jewish_mysticism.enoch-charles-1917.127"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address the theme of sin and its consequences, but from opposite perspectives. Passage A emphasizes the healing and redemptive power of divine love and grace, while Passage B focuses on the judgment and punishment of sinners."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.105"
+target = "renaissance_hermeticism.heroic-enthusiasts-pt1.055"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of overcoming adversity and the attainment of a state of inner peace or blessedness. Passage A emphasizes divine assurance and trust in God to overcome tribulations, while Passage B discusses the Epicurean ideal of achieving a state where one does not feel pain or discomfort, thus remaining steadfast in the face of adversity."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.120"
+target = "jewish_mysticism.enoch-charles-1917.128"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages deal with sin and divine judgment, but they take opposite positions. Passage A emphasizes divine love and the importance of self-reflection and humility, while Passage B focuses on divine wrath and the inevitable punishment for sinners."
+
+[[edge]]
+source = "christian_mysticism.julian-revelations.123"
+target = "jewish_mysticism.enoch-charles-1917.133"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the fate of the righteous and the sinners, but they present contrasting views. Passage A emphasizes divine love and the idea that even in sin, one is kept in love and should turn to God's mercy. Passage B, on the other hand, describes a stark division between the rewards of the righteous and the punishments of the sinners, with no mention of divine love or mercy for the sinners."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.004"
+target = "western_esoteric.transcendental-magic-ritual.010"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the need to transcend the self and one's personal desires to achieve a higher spiritual state or divine wisdom. They both stress the importance of self-denial and inner transformation as the path to spiritual realization."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.005"
+target = "western_esoteric.transcendental-magic-doctrine.017"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the necessity of surrendering one's self-will and ego to achieve a higher spiritual union or understanding. Passage A discusses the surrender of self-will to divine will to achieve union with Christ, while Passage B talks about overcoming natural instincts and achieving self-conquest to attain immortality and divine independence."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.009"
+target = "western_esoteric.transcendental-magic-doctrine.060"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages describe a transformative spiritual journey involving the surrender of the self to a higher power or divine truth. Boehme's passage focuses on the illumination of the soul through divine love and the recognition of God's supremacy, while the Hermetic text discusses the Great Work as a process of self-creation and emancipation of the will through spiritual and material operations. Both emphasize the need for inner transformation and the attainment of a higher state of being."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.009"
+target = "western_esoteric.transcendental-magic-ritual.034"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the importance of willpower and self-conquest in achieving spiritual or magical goals. They also highlight the transformation of the self through discipline and the alignment of one's will with a higher power or universal force."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.010"
+target = "western_esoteric.transcendental-magic-doctrine.015"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the idea of divine inspiration and the limitations of human intellect and education in understanding higher truths. They also emphasize the role of divine grace or spirit in revealing these truths, which is a genuine conceptual parallel across different mystical traditions."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.010"
+target = "western_esoteric.transcendental-magic-ritual.019"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of evocation or inspiration from a higher realm, emphasizing the role of divine or spiritual forces in achieving a state of higher consciousness or understanding. They share the idea that this state is not achievable through mere intellectual or personal effort alone, but requires divine grace or the presence of a higher power."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.010"
+target = "western_esoteric.transcendental-magic-ritual.046"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transmission of esoteric knowledge and the role of initiation. They emphasize the need for a higher understanding that transcends ordinary intellectual or sensory experience, and the idea that true wisdom comes from a divine or transcendent source rather than from human effort alone."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.011"
+target = "western_esoteric.transcendental-magic-doctrine.034"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of spiritual insight and the limitations of human understanding. They emphasize the need for a higher, spiritual state of consciousness to perceive eternal truths, and the idea that ordinary reasoning is insufficient for true understanding. The passages also highlight the transient nature of spiritual vision and the importance of the divine spirit in revealing truth."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.013"
+target = "western_esoteric.transcendental-magic-doctrine.060"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the transformation of the individual through divine or spiritual means. Passage A discusses the revelation of God within man through obedience and harmony, leading to divine knowledge. Passage B describes the Great Work as the self-creation of man through the emancipation of the will and the purification of the soul, achieving universal dominion and spiritual gold. Both highlight the internal transformation and the attainment of higher knowledge or power through spiritual practices."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.018"
+target = "western_esoteric.transcendental-magic-doctrine.096"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine will and its manifestation in the world, emphasizing the role of reason and the hierarchical nature of existence. They also touch on the idea of divine power and its interaction with the material world, though expressed in different symbolic and theological frameworks."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.024"
+target = "hinduism.yoga-sutras-book-01.021"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the role of will and desire in spiritual progress, emphasizing the need for intense effort and the challenges posed by desire. The Yoga Sutras highlight the importance of acting on intuitions with firm will, while the Theosophical passage describes the struggle between desire and the will for freedom, both stressing the internal conflict and the necessity of overcoming desire for spiritual advancement."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.030"
+target = "neoplatonism.plotinus-select-works-index.244"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of reality and existence, but they take opposite positions. Plotinus describes Matter as a non-being, devoid of any real existence, while Boehme asserts that everything originates from God and has a divine essence, even if it is remote from the divine center."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.030"
+target = "western_esoteric.transcendental-magic-doctrine.045"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the relationship between the divine and the created world, emphasizing that while everything originates from God, there is a distinction between the divine and the material. They also discuss the nature of human understanding and the limitations of human will in relation to the divine."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.046"
+target = "western_esoteric.transcendental-magic-ritual.030"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of Lucifer and the fall from divine grace, exploring themes of divine will, the nature of evil, and the consequences of defying divine order. They share a conceptual parallel in their examination of the duality of good and evil, and the role of human will in spiritual matters."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.052"
+target = "western_esoteric.transcendental-magic-ritual.002"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the concept of a divine or cosmic force that brings change and renewal, depicted through celestial imagery. Passage A describes Lucifer as a transformative, enlightening force akin to a comet, while Passage B discusses the sun and stars as manifestations of divine wisdom and life, with Lucifer's role in the corruption and renewal of light. Both texts use celestial bodies to symbolize spiritual and cosmic processes."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.052"
+target = "western_esoteric.transcendental-magic-ritual.003"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the themes of light, divine wisdom, and the role of a rebellious or transformative figure (Lucifer/Satan in Passage A and Lucifer in Passage B). They share a conceptual parallel in the depiction of a being associated with light and intelligence that challenges divine authority, and the idea of divine light manifesting in the world."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.106"
+target = "greek_mystery.pythagorean-golden-verses.011"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "The passages contrast in their views on women and divinity. Passage A from the Golden Verses of Pythagoras presents a misogynistic view, while Passage B from the mystical Christian tradition elevates the feminine principle and sees it as a vehicle for divine wisdom and spirituality."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.121"
+target = "hinduism.yoga-sutras-book-04.011"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transformation of the self or human nature through spiritual practices or divine intervention. Passage A focuses on the cessation of desire-driven mind-images to achieve liberation, while Passage B describes the divine intervention to restore humanity to its original, pure state. Both emphasize the shift from a lower, bound state to a higher, spiritual one."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.131"
+target = "western_esoteric.transcendental-magic-ritual.032"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the struggle against the lower, natural self or forces, symbolized as a serpent or dragon, which must be overcome to achieve spiritual liberation or divine will. The concept of overcoming temptation and the duality of forces is central to both texts."
+
+[[edge]]
+source = "christian_mysticism.life-and-doctrines-boehme.145"
+target = "western_esoteric.transcendental-magic-doctrine.060"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of surrendering one's will to a higher power (God or the Universal Magical Agent) to achieve a state of unity and dominion over nature or the self. They share the insight that complete submission leads to a transformation of the individual's being and powers."
+
+[[edge]]
+source = "egyptian.egyptian-book-of-the-dead-index.283"
+target = "western_esoteric.secret-teachings-of-all-ages.100"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the Egyptian practice of mummification and its connection to the afterlife and the preservation of the soul. They share the conceptual insight that mummification was not merely for physical preservation but had deeper spiritual and initiatory significance."
+
+[[edge]]
+source = "egyptian.egyptian-book-of-the-dead-index.283"
+target = "western_esoteric.transcendental-magic-doctrine.090"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the preservation of the body and its connection to eternal life or immortality. The Egyptian Book of the Dead emphasizes the mummification of the body to ensure its preservation and eternal life, while The Universal Medicine discusses the idea that moral and physical health are interconnected and that wisdom and temperance can lead to immortality. Both texts share the conceptual parallel of the body's role in achieving eternal life."
+
+[[edge]]
+source = "gnosticism.apocryphon-of-john.010"
+target = "hermeticism.corpus-hermeticum-01.003"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address Gnostic cosmogony and the origin of the material world, but they present opposing theological positions: Passage A depicts the creation as a flawed, ignorant act by a monstrous demiurge (Yaltabaoth) resulting in darkness and error, whereas Passage B describes a harmonious, loving union between divine principles that generates the cosmos and the potential for human immortality."
+
+[[edge]]
+source = "gnosticism.pistis-sophia.041"
+target = "western_esoteric.transcendental-magic-ritual.004"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages deal with the theme of a divine being (Pistis Sophia / Lucifer) facing opposition and judgment from a higher authority (the Light / God). The structural parallel involves a figure who is oppressed and cries out for help, leading to a divine intervention and judgment, reflecting a shared mytheme of divine justice and the consequences of defiance."
+
+[[edge]]
+source = "gnosticism.pistis-sophia.091"
+target = "neoplatonism.plotinus-select-works-index.158"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of human exaltation and relationship to the divine, but they take opposing positions. Passage A emphasizes the superiority and exaltation of a man over all divine beings and entities, claiming unity with the divine. Passage B, however, warns against human arrogance and the danger of exalting oneself above the Intellectual-Principle, advocating for humility and compliance within the divine order."
+
+[[edge]]
+source = "gnosticism.pistis-sophia.091"
+target = "taoism.tao-te-ching-legge.066"
+edge_type = "CONTRASTS"
+tier = "proposed"
+annotation = "[auto] Both passages discuss the concept of leadership and exaltation, but they present opposing views. Passage A emphasizes humility and service as the path to leadership, while Passage B emphasizes superiority and exaltation over others."
+
+[[edge]]
+source = "gnosticism.pistis-sophia.103"
+target = "neoplatonism.plotinus-select-works-index.164"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages address the use of spiritual or mystical practices, but they take opposing stances. Passage A criticizes the use of magical formulas and spells, emphasizing rational and reverent approaches to the divine. Passage B, on the other hand, advocates for the use of specific renunciations and practices to achieve deliverance and access to the mysteries of the Light."
+
+[[edge]]
+source = "greek_mystery.orphic-hymns.109"
+target = "taoism.tao-te-ching-legge.068"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of war and conflict, but they take opposite positions. Passage A advocates for a non-confrontational, humble approach to conflict, aligning with Taoist principles, while Passage B glorifies the fierce and destructive aspects of Mars, the god of war, before advocating for peace."
+
+[[edge]]
+source = "greek_mystery.orphic-hymns.136"
+target = "hinduism.bhagavad-gita-chapter-02.002"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of the soul or self as indestructible and eternal, transcending the physical body. They share a conceptual parallel in the idea of an everlasting essence that is not affected by physical death."
+
+[[edge]]
+source = "hinduism.bhagavad-gita-chapter-05.002"
+target = "western_esoteric.secret-teachings-of-all-ages.010"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "The passages present opposing views on the nature of pleasure and happiness. The Bhagavad Gita emphasizes inner peace and detachment from worldly pleasures as the path to true happiness, while the Cyrenaic philosophy advocates for the pursuit of physical pleasure as the true end of existence."
+
+[[edge]]
+source = "hinduism.bhagavad-gita-chapter-16.002"
+target = "taoism.tao-te-ching-legge.048"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the path to the highest goal or enlightenment, but they present opposing views. The Bhagavad Gita emphasizes adherence to scripture and prescribed actions, while the Tao Te Ching advocates for non-action and diminishing one's doing to achieve a state of harmony."
+
+[[edge]]
+source = "hinduism.yoga-sutras-book-01.011"
+target = "neoplatonism.plotinus-select-works-index.402"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of memory and perception, emphasizing that memory is an active power of the mind rather than a passive retention of impressions. They share the conceptual insight that memory is a dynamic and active process, though expressed in different philosophical contexts."
+
+[[edge]]
+source = "hinduism.yoga-sutras-book-04.025"
+target = "renaissance_hermeticism.heroic-enthusiasts-pt1.031"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the struggle and ultimate reward of spiritual aspiration and the overcoming of the self or worldly limitations to achieve a higher, divine state. They share a conceptual parallel in the theme of striving for spiritual perfection and the rewards of such a struggle."
+
+[[edge]]
+source = "hinduism.yoga-sutras-book-04.028"
+target = "sufism.masnavi-book-1.011"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the importance of persistent effort and trust in a higher power or the invincible nature of the soul. They share a conceptual parallel in the theme of spiritual struggle and the ultimate victory of the spiritual will or divine trust."
+
+[[edge]]
+source = "jewish_mysticism.enoch-charles-1917.082"
+target = "taoism.tao-te-ching-legge.066"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss leadership and exaltation, but they present opposite views. The Tao Te Ching advocates humility and service as the path to leadership, while the Book of Enoch describes a powerful, righteous ruler who judges and punishes the unrighteous."
+
+[[edge]]
+source = "jewish_mysticism.enoch-charles-1917.103"
+target = "native_american.eastman-soul-of-indian.021"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transmission of sacred knowledge and the role of divine figures in creation and instruction. Passage A describes the Sioux story of creation and the transmission of sacred customs, while Passage B details Enoch's reception of heavenly tablets and his mission to teach his children. Both emphasize the importance of sacred teachings and the role of divine figures in imparting knowledge."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.003"
+target = "western_esoteric.secret-teachings-of-all-ages.012"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of knowledge and belief in divine entities, but they present opposing views. The first passage describes Skepticism and Stoicism, which emphasize doubt and materialism, while the second passage argues for an innate, unquestionable knowledge of the divine, contrasting with the skeptical approach."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.043"
+target = "western_esoteric.transcendental-magic-doctrine.067"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of divine appearances and the potential for deception or misrepresentation. Iamblichus argues that divine beings do not deceive but reveal true representations, while the 13. Necromancye passage discusses the potential for misrepresentation and the influence of human perceptions on divine appearances. Both explore the theme of the authenticity of divine manifestations."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.044"
+target = "western_esoteric.transcendental-magic-doctrine.015"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of true and false spiritual practices, emphasizing the distinction between genuine knowledge and power (Magic/Theurgy) and deceptive or misguided practices (Sorcery/Ignorance). They also highlight the importance of proper understanding and the limitations of human intellect in divine matters."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.046"
+target = "western_esoteric.transcendental-magic-ritual.102"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of divination and foreknowledge, emphasizing that it is divine and supernatural, not derived from human or physical sources. They share the conceptual insight that true divination originates from the divine realm and is not a product of human artifice or natural processes."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.050"
+target = "western_esoteric.transcendental-magic-ritual.023"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine inspiration or possession and the various manifestations it can take. They explore the idea of different levels of divine interaction and the physical and spiritual signs that accompany such experiences, though they use different terminology and cultural contexts."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.052"
+target = "western_esoteric.transcendental-magic-doctrine.059"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of supernatural or divine forces influencing human perception and physical reality. They explore the idea of a universal agent or divine inspiration that can affect both the mind and the physical world, though they use different terminology and cultural frameworks."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.053"
+target = "western_esoteric.transcendental-magic-doctrine.059"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of supernatural phenomena and the role of the soul or universal agent in producing these effects. They explore the idea of a universal force that can be influenced by human will or divine intervention, leading to extraordinary experiences or manifestations."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.055"
+target = "western_esoteric.transcendental-magic-ritual.034"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine or supernatural influence on human beings, emphasizing the power of the will and the ability to harness and project an occult or divine force. They share a structural parallel in the idea of an initiated individual possessing the ability to influence nature or other people through this force."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.056"
+target = "western_esoteric.transcendental-magic-ritual.104"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the practice of divination and the role of the divine in the process. They share the concept of using natural elements (water, flowers, colors, animals) and rituals to connect with a higher power for prophetic insights, though they come from different mystical traditions."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.060"
+target = "western_esoteric.transcendental-magic-ritual.060"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine illumination and the interaction between the divine and the human imagination. Passage A describes how divine light inspires the phantastic part of the soul, while Passage B discusses the evocation of spirits through the Astral Light and the role of imagination in perceiving these apparitions. Both explore the idea of supernatural influence on human perception and the mechanisms by which this influence occurs."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.061"
+target = "western_esoteric.transcendental-magic-ritual.085"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the interpretation of divine signs through natural phenomena (stars in Passage B and various methods in Passage A). They share the concept of divine communication through symbolic means, though expressed in different traditions and contexts."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.063"
+target = "western_esoteric.transcendental-magic-ritual.102"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of divine power and its relationship to human understanding and participation. They explore the concept of divination and the way divine energy interacts with the world, though from different philosophical and religious perspectives."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.064"
+target = "western_esoteric.transcendental-magic-ritual.028"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature and practice of divination, emphasizing its supernatural and transcendent aspects. They share the concept of divination as a means to access higher knowledge or truth, though expressed in different terms and contexts."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.064"
+target = "western_esoteric.transcendental-magic-ritual.030"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the power of symbols and signs in magical and divine contexts, emphasizing their role in conveying divine will and knowledge. They share the concept of the divine using signs to communicate and influence the world, though they come from different traditions."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.064"
+target = "western_esoteric.transcendental-magic-ritual.031"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the power of symbols and their influence over spiritual hierarchies and the divine. They share the concept of intellectual or divine omnipotence gained through the proper understanding and use of symbolic tools, though they come from different traditions and use different vocabulary."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.064"
+target = "western_esoteric.transcendental-magic-ritual.067"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the power of the mind or divine will to alter perception and reality. Passage A focuses on the magical power of the will to make oneself invisible and transform reality through the use of specific words and symbols, while Passage B discusses the divine nature of signs and the power of divination to reveal truths and future events. Both emphasize the transcendent power of certain words or actions to effect change."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.064"
+target = "western_esoteric.transcendental-magic-ritual.083"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of divine or supernatural influence acting through intermediaries. Passage A describes the projection of the will of the Magus into another body, while Passage B discusses divine influence revealing knowledge through things deprived of knowledge, both illustrating the idea of higher powers manifesting through lesser entities."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.066"
+target = "western_esoteric.transcendental-magic-ritual.018"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the relationship between divine forces and human actions, emphasizing the supremacy of the divine and the limitations of human understanding. They also touch on the idea that human attempts to manipulate divine forces (magic in Passage A, theurgy in Passage B) are misguided or impious."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.071"
+target = "renaissance_hermeticism.agrippa-natural-magic-ch-62.001"
+edge_type = "CONTRASTS"
+tier = "proposed"
+annotation = "[auto] Both passages discuss the role of passions in human experience, but they take opposing views. Iamblichus argues that passions are impediments to true knowledge and divination, while the second passage categorizes and explains the various passions of the mind as natural, rational, and intellectual."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.072"
+target = "renaissance_hermeticism.agrippa-natural-magic-ch-60.001"
+edge_type = "CONTRASTS"
+tier = "proposed"
+annotation = "[auto] Both passages discuss the concept of divine inspiration or madness, but they take opposing positions. Passage A from Agrippa's 'The Philosophy of Natural Magic' suggests that melancholy humor can induce divine inspiration and prophecy, while Passage B from an unspecified text argues that divine inspiration is not related to bodily diseases or melancholy, but is a higher, divine state."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.072"
+target = "western_esoteric.transcendental-magic-doctrine.059"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of supernatural or mystical phenomena, exploring the idea of forces beyond ordinary human understanding influencing the physical world. They both delve into the concept of ecstasy or altered states of consciousness as a means to access higher truths or powers, though from different cultural and philosophical perspectives."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.072"
+target = "western_esoteric.transcendental-magic-ritual.094"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of madness and ecstasy, contrasting divine inspiration with human folly. They emphasize the importance of reason and the dangers of unchecked imagination, though in different contexts and with different vocabularies."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.073"
+target = "western_esoteric.transcendental-magic-ritual.053"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature of divination and the role of imagination in shaping reality. They explore the idea that human desires and fears can influence outcomes, and they both touch on the concept of supernatural intervention in divination practices."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.074"
+target = "western_esoteric.transcendental-magic-doctrine.094"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature and validity of divination, emphasizing the divine and immutable aspects of true divination versus more mundane or naturalistic explanations. They share a conceptual parallel in their exploration of the origins and authenticity of divine prediction."
+
+[[edge]]
+source = "neoplatonism.iamblichus-on-the-mysteries.079"
+target = "renaissance_hermeticism.agrippa-natural-magic-ch-38.001"
+edge_type = "CONTRASTS"
+tier = "proposed"
+annotation = "[auto] Both passages discuss the relationship between celestial bodies, divine entities, and material objects, but they take opposing positions. Iamblichus argues against the divine power of images and the ability to manipulate divine entities through material means, while the second passage supports the idea that celestial and divine gifts can be drawn down through natural and celestial correspondences."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.164"
+target = "western_esoteric.transcendental-magic-doctrine.040"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the nature and effects of magical practices, but they take opposing stances. Plotinus criticizes the use of magical formulas and spells, arguing that they diminish the majesty of the divine and are based on false premises. In contrast, the second passage from '6. Magical Equilibrium' describes the real and dangerous power of magical practices, emphasizing the need for caution and proper understanding to avoid harmful consequences."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.164"
+target = "western_esoteric.transcendental-magic-ritual.017"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the use of magical practices and their efficacy, but they take opposing stances. Passage A criticizes magical practices as undermining the divine and advocates for rational, philosophical approaches. Passage B, however, defends and explains the necessity of magical equilibrium and the proper use of magical rites."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.164"
+target = "western_esoteric.transcendental-magic-ritual.018"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the use of magical practices and their efficacy, but they take opposing stances. Passage A critiques the idea of magical spells and evocations, arguing that diseases have natural causes and that magical practices diminish the majesty of the divine. Passage B, on the other hand, describes the power of magical practices and their ability to influence natural forces, while acknowledging the suppression of such practices by certain religions."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.164"
+target = "western_esoteric.transcendental-magic-ritual.020"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the use of rituals and invocations, but they take opposing stances. Plotinus criticizes the use of magical practices and spells, arguing that they diminish the majesty of the divine and are based on false premises. In contrast, the second passage defends the use of magical rituals and invocations, describing their symbolic significance and practical applications in Kabbalistic and Gnostic traditions."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.164"
+target = "western_esoteric.transcendental-magic-ritual.049"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the use of magical practices and their validity, but they take opposing stances. Passage A criticizes the use of magical formulas and spells, arguing that they diminish the majesty of the divine and are not effective in curing diseases. Passage B, on the other hand, defends the use of Pantacles and magical symbols, asserting their efficacy and importance in focusing intellectual force and projecting will."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.165"
+target = "renaissance_hermeticism.heroic-enthusiasts-pt1.055"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the philosophy of Epicurus and the pursuit of pleasure or virtue, but they present opposing views. Passage A criticizes the Epicurean philosophy for despising the world and virtue, while Passage B defends Epicurus' view of pleasure and firmness, arguing that it does not detract from virtue but rather perfects it."
+
+[[edge]]
+source = "neoplatonism.plotinus-select-works-index.497"
+target = "western_esoteric.transcendental-magic-doctrine.037"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the nature of the divine and the relationship between the divine and the intellectual realm. Passage A discusses the primal Activity of The Good and its relationship to intellection, while Passage B explores the concept of the Absolute Reason and its personification in the Divine Ideal. Both texts delve into the nature of being and the divine, highlighting the unity and multiplicity within the divine realm."
+
+[[edge]]
+source = "platonism.plato-phaedrus.013"
+target = "western_esoteric.transcendental-magic-doctrine.069"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the concept of madness or altered states of consciousness as a means to access higher truths or divine influences. Passage A discusses the impact of the Astral Light and the influence of the imagination on the body and mind, while Passage B discusses the benefits of divine madness and its role in prophecy and artistic inspiration."
+
+[[edge]]
+source = "platonism.plato-phaedrus.013"
+target = "western_esoteric.transcendental-magic-ritual.053"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the power of the imagination and its role in shaping reality and human experience. They explore how belief, fear, and desire can manifest in tangible ways, and both touch on the idea of divine or supernatural influence in human affairs."
+
+[[edge]]
+source = "platonism.plato-phaedrus.013"
+target = "western_esoteric.transcendental-magic-ritual.094"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the theme of madness and its relationship to divine inspiration and understanding. Passage A discusses how fear and excitement can lead to madness and the importance of reason and faith, while Passage B describes different types of divine madness and their benefits, emphasizing the superiority of inspired madness over a sane mind."
+
+[[edge]]
+source = "platonism.plato-phaedrus.013"
+target = "western_esoteric.transcendental-magic-ritual.098"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the power of the mind and will to influence the world and others, framing it as a form of divine or supernatural power. They also emphasize the importance of faith and belief in achieving these effects, though in different contexts (magic vs. prophecy)."
+
+[[edge]]
+source = "platonism.plato-phaedrus.013"
+target = "western_esoteric.transcendental-magic-ritual.123"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transformative power of divine or mystical experiences, emphasizing that these experiences, though often misunderstood or dismissed as madness, are sources of profound insight and benefit to humanity. They share a conceptual parallel in valuing these mystical states as pathways to greater understanding and improvement of human life."
+
+[[edge]]
+source = "platonism.plato-timaeus.046"
+target = "western_esoteric.transcendental-magic-doctrine.090"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the relationship between the body and the soul, emphasizing how physical and moral states influence each other. They also discuss the importance of balance and harmony for health and virtue, though they do so within different philosophical and religious frameworks."
+
+[[edge]]
+source = "renaissance_hermeticism.agrippa-natural-magic-ch-15.001"
+target = "western_esoteric.transcendental-magic-ritual.015"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the interplay of opposing forces in nature and the universe. Passage A emphasizes the balance and interaction of contraries, such as light and shadow, active and passive principles, and the bisexual nature of all things. Passage B explores the concept of similitude, where things are drawn to their like and can influence each other based on shared qualities or properties. Both texts highlight the dynamic equilibrium and interconnectedness of forces in the natural world."
+
+[[edge]]
+source = "renaissance_hermeticism.agrippa-natural-magic-ch-15.001"
+target = "western_esoteric.transcendental-magic-ritual.100"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the transmission of vital forces or properties through physical means. Passage A focuses on the use of breath and magnetic passes to transmit life and heal, while Passage B discusses the transmission of properties through similitude and the use of specific parts of animals to influence corresponding qualities in humans. Both explore the concept of like attracting like and the use of natural forces for healing and influence."
+
+[[edge]]
+source = "renaissance_hermeticism.agrippa-natural-magic-ch-45.002"
+target = "western_esoteric.transcendental-magic-ritual.065"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of transformation or metamorphosis through magical means, citing similar examples such as Circe transforming Ulysses' companions and the magical transformations mentioned in religious texts. They share a structural parallel in exploring the idea of magical transfiguration."
+
+[[edge]]
+source = "renaissance_hermeticism.agrippa-natural-magic-ch-60.002"
+target = "western_esoteric.transcendental-magic-ritual.094"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the influence of the mind and imagination on perception and reality, and the potential for madness or delusion when these faculties are unchecked. They also share a theme of the power of reason and divine wisdom in combating irrational fears and tendencies."
+
+[[edge]]
+source = "renaissance_hermeticism.agrippa-natural-magic-ch-60.002"
+target = "western_esoteric.transcendental-magic-ritual.123"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the potential for humans to access and utilize hidden or supernatural powers, whether through magnetism (Passage A) or through the influence of spirits on the mind (Passage B). They share the concept of unlocking greater human potential and understanding through these powers, leading to significant changes in society and individual capabilities."
+
+[[edge]]
+source = "renaissance_hermeticism.heroic-enthusiasts-pt2.007"
+target = "western_esoteric.transcendental-magic-doctrine.058"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the importance of social status and reputation in determining the reception of ideas or messages. They highlight how the credibility of the messenger often overshadows the merit of the message itself, illustrating a shared insight across different traditions."
+
+[[edge]]
+source = "renaissance_hermeticism.paracelsus-treasure-of-treasures.003"
+target = "western_esoteric.transcendental-magic-doctrine.058"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the importance of social status and material wealth in validating spiritual or intellectual authority. They also share a theme of the need for renewal and transformation, whether through spiritual means (Passage A) or alchemical processes (Passage B)."
+
+[[edge]]
+source = "sufism.masnavi-book-1.009"
+target = "western_esoteric.transcendental-magic-ritual.027"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages explore the theme of divine intervention and the subjugation of natural elements by higher powers. Passage A describes how fire, as a servant of God, refuses to harm the innocent and instead consumes the wicked, illustrating the concept of divine justice. Passage B discusses the conjuration of the four elements and the ability of the wise to control them, emphasizing the idea that natural forces are subject to divine will and human understanding aligned with divine principles."
+
+[[edge]]
+source = "taoism.tao-te-ching-legge.073"
+target = "western_esoteric.transcendental-magic-doctrine.017"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages discuss the concept of aligning with a higher principle (Heaven in Tao Te Ching, honour in The Candidated) and the consequences of defiance or obedience. They emphasize the importance of inner strength and discipline to overcome natural inclinations, highlighting a shared insight into the nature of self-mastery and alignment with a transcendent order."
+
+[[edge]]
+source = "taoism.tao-te-ching-legge.073"
+target = "western_esoteric.transcendental-magic-doctrine.050"
+edge_type = "CONTRASTS"
+tier = "verified"
+annotation = "Both passages emphasize the importance of silence, humility, and the wise use of power. They also highlight the difficulties and persecutions faced by those who follow a higher path, though they do so in different cultural and religious contexts."

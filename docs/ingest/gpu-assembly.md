@@ -39,17 +39,26 @@ therefore ships activations across PCIe on every token, for nothing.
 
 ## The assembly
 
+Node 13 (propose-edges, the Mistral-24B consumer below) is retired —
+todo:c3f479ff / todo:aaaa5258 — so node 10 is the only ingest node left that
+needs a GPU-served local model. The two-server assembly this section
+originally described is kept as history: it explains the PCIe-tax measurement
+below and still applies verbatim if Qwen3.5-27B (node 10's 27B-provenance
+path) is ever run alongside something else that wants the second card.
+
 ```
 CUDA 0 · RTX 3090 · port 8080   the 24B-class model
-                                  Mistral-24B      → node 13 propose-edges
+                                  Mistral-24B      → node 13 propose-edges  (RETIRED)
                                   or Qwen3.5-27B   → node 10, for 27B provenance
 
 CUDA 1 · RTX 4070 · port 8081   qwen-3-4b-guru     → node 10 tag-concepts
 ```
 
 ```sh
-# 3090 — proposer
-CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-mistral.sh
+# 3090 — a 24B-class model (Qwen3.5-27B via scripts/run-qwen.sh today;
+# scripts/run-mistral.sh served this slot for node 13 before its retirement
+# and has been removed)
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-qwen.sh
 
 # 4070 — tagger, on a second port (see the diff below)
 CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 PORT=8081 scripts/run-qwen-4b-guru.sh
@@ -61,13 +70,13 @@ already honours — no code change:
 ```sh
 LLAMACPP_BASE_URL=http://127.0.0.1:8081 python3 scripts/tag_concepts.py --text <id> \
     --provider llamacpp --model qwen-3-4b-guru-Q4_K_M.gguf
-
-python3 scripts/propose_edges.py --text <id> --provider llamacpp   # defaults to :8080
 ```
 
 ## Measured
 
-Decode throughput, Mistral-24B, real edge-proposal traffic:
+Decode throughput, Mistral-24B, real edge-proposal traffic (node 13, before
+its retirement) — kept as the PCIe-tax evidence; the pinning lesson
+transfers to any 24B-class model run on this rig, Qwen3.5-27B included:
 
 | configuration | median | note |
 |---|---|---|
@@ -78,18 +87,27 @@ Decode throughput, Mistral-24B, real edge-proposal traffic:
 
 Two results worth separating. The +22% is the PCIe tax you stop paying. The
 second card going from *half a model* to *a whole second model* is the larger
-win, because it changes what the pipeline can do rather than how fast one step
-runs.
+win — historically that meant nodes 10 and 13 stopped contending for one
+server (see below); today, with 13 retired, it means node 10's two model
+variants (27B and the 4B fine-tune) can run pinned and simultaneously instead
+of trading one server back and forth.
 
-## What this unlocks
+## What this unlocked (historical — node 13 is retired)
 
-Nodes 10 and 13 stop being sequential. Today they contend for one server, so a
-text is tagged, then its edges are proposed. Pinned, they are independent
-services and the corpus can be pipelined:
+This section described why nodes 10 and 13 no longer needed to be
+sequential: pinned to separate cards, a text could be tagged on the 4070
+while the previous text's edges were proposed on the 3090. With node 13
+gone, there is no second GPU-bound ingest node to pipeline against — node 16
+([derive-parallels](16-derive-parallels.md)), Pass C's replacement, is
+CPU-only (see below) and never touches either card. The second card is not
+idle by necessity, though: node 10 alone can still use it, e.g. running the
+27B teacher and the 4B fine-tune on separate pinned servers when a batch
+needs both (see `docs/ingest/decisions/gospel-of-judas.md` for a case that
+called for the 27B specifically).
 
 ```
 book N     tag on 4070  ─┐
-book N-1                 └─→  propose edges on 3090
+book N-1                 └─→  (formerly) propose edges on 3090
 ```
 
 Node 12's embedder (`nomic-embed-text` via Ollama) is small and can share the
@@ -131,3 +149,46 @@ One card holding the model and the other near zero is correct. Both cards
 holding part of one model is the failure this document exists to prevent — and
 it is silent, since a split model serves requests perfectly well, just slower
 and while occupying hardware another stage wants.
+
+## derive_parallels: the one CPU-only exception
+
+`scripts/derive_parallels.py` does not touch either card. It scores
+(concept, chunk) pairs with the vendored `~/programs/guru/scorer-v1`
+cross-encoder via `guru.rerank.score_pairs` (torch + transformers, an
+optional dependency group — see the README), and that scorer is small enough
+(22.7M params) that CPU is the intended path, not a fallback of last resort:
+
+**There is no GPU path to choose.** `guru/rerank.py` never places the model
+or its tensors on a device — no `.to()`, no `.cuda()` — so scoring runs on
+CPU no matter what the environment says. Its `os.environ.setdefault(
+"CUDA_VISIBLE_DEVICES", "")` only *hides* the cards from torch; overriding it
+with `CUDA_VISIBLE_DEVICES=0` un-hides them and changes nothing else. Setting
+the usual `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0` pin here is
+inert — it will not move the work to the 3090, it will only look as though it
+did.
+
+| path | full corpus |
+|---|---|
+| CPU, 8 threads | ~10 min (measured 2026-08-14: 614 s scoring, 38,452 pairs over 116 concepts, fp32 as `rerank.py` loads it) |
+
+Earlier drafts of this file quoted a "~7 min GPU" row beside the CPU one. That
+number was real, but it belonged to the rellm prototype, which did its own GPU
+scoring; the guru port reuses `rerank.py` and inherited none of it. Treat any
+GPU timing for this node as prototype history, not something this script can
+reproduce. Adding GPU support would mean a device argument threaded through
+`_load()`/`score_pairs()` plus an opt-in env var — worth doing only if the
+corpus grows enough that ~15 CPU-minutes per re-derive starts to hurt, since
+the model is small enough that the win is minutes, not hours.
+
+## Model home
+
+Every guru fine-tune (this includes `derive_parallels`'s vendored scorer)
+lives under `~/programs/guru/<purpose>-v<N>/` — siblings of `~/programs/mistral`
+and `~/programs/gemma4`, never inside a repo checkout. The repo pins the path
+(and, where computed, a sha256 of the weights file) plus a training-card copy:
+`~/programs/guru/scorer-v1` (pinned in `config/derived_parallels.toml`) and
+`~/programs/guru/4b-v3` (pinned as `MODEL_DIR` in
+`scripts/run-qwen-4b-guru.sh`, the current `qwen-3-4b-guru` build — v3-r32,
+see `docs/ingest/decisions/gospel-of-judas.md` for why a text can still call
+for the 27B teacher instead: the finetune is pinned to the taxonomy snapshot
+it trained on).

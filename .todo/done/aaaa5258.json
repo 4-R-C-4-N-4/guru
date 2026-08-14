@@ -1,0 +1,21 @@
+{
+  "id": "aaaa5258",
+  "type": "chore",
+  "state": "done",
+  "summary": "Freeze the staged_edges flow: settle 1,301 pending rows as historical, deprecate propose/review/auto-promote scripts",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.519Z",
+  "updated_at": "2026-08-14T03:32:21.543Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "No new pair proposals. Mark remaining pending staged_edges rows with a terminal historical status (decision recorded, not silently dropped); propose_edges.py, review_edges.py, auto_promote_edges.py get deprecation headers pointing at the derive node; the guru-review edges queue UI section retires. staged_edges table itself stays as the historical record — do not drop it.\n\nALSO: remove scripts/run-mistral.sh — it exists solely to serve Mistral-Small-24B for Pass C (docs/ingest/13-propose-edges.md names it as the model behind every edge proposal). Update node 13 + docs/ingest/gpu-assembly.md references. The ~/programs/mistral model dir itself is the owner's to delete if nothing else uses it (check the llm swap wrappers in ~/programs/model-runners first).\n\nLegacy live-edge cleanup (the 2,825-edge suspect proposal in rellm runs/edges/curation/2026-08-13-run1) proceeds independently and only matters if the owner keeps any legacy edges post-cutover.",
+  "resolution": {
+    "commit": "c075b4ba7c98b243935c113f4dc968129974f7b2",
+    "resolved_at": "2026-08-14T03:32:21.543Z",
+    "resolved_by": "unknown",
+    "note": "staged_edges: 1,301 pending -> 0 pending, 0 deleted, 21,712 total unchanged; new terminal status 'retired_passc' via scripts/migrations/v3_011_staged_edges_retire_pending.py (--dry-run default, --apply, idempotent). guru/ingest.py: nodes 13/14 removed from NODES entirely (not stubbed) so 15-publish now follows 12-embed directly; node 16 deliberately left unwired (corpus-wide, no --text, doesn't fit per-text Ctx). Deprecation headers on propose_edges.py/review_edges.py/auto_promote_edges.py(+.sh). scripts/run-mistral.sh removed (git rm); docs/ingest/13-propose-edges.md, gpu-assembly.md updated. Wrapper finding: ~/programs/model-runners/run-mistral.sh is a byte-identical but separate copy backing the general 'llm mistral' swap tool -- unaffected by this repo's removal and still points at ~/programs/mistral, so that model dir is still in use outside this pipeline; owner's call on deletion. guru-review edges queue UI retirement is out of scope (guru-web/guru-review repo) -- noted, not touched. Full pytest: 606 passed, 48 skipped, 1 xfailed (also fixed a pre-existing orphan-doc test failure from node 16's doc landing without a NODES entry in a prior ticket)."
+  }
+}

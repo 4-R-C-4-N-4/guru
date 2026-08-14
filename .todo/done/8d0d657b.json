@@ -1,0 +1,21 @@
+{
+  "id": "8d0d657b",
+  "type": "chore",
+  "state": "done",
+  "summary": "Workbook: retire the Pass C node, add the derive node with failure modes",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-13T13:20:56.440Z",
+  "updated_at": "2026-08-14T03:15:23.699Z",
+  "relationships": {
+    "parent": "c3f479ff"
+  },
+  "description": "docs/ingest/ state machine: Pass C (propose_edges) node retired — status gates updated so ingest no longer waits on edge proposals/review; new node file for the derive step documenting: inputs (accepted tags, taxonomy, student checkpoint), the re-derive trigger (any EXPRESSES or taxonomy change), and Failure modes (empty-via = untagged chunk, not an error; concept namespace mismatch; stale score cache after re-chunk — clean_bodies/re-chunk invalidates cached chunk scores).",
+  "resolution": {
+    "commit": "7c8a79d54434defe1dec55ccb51c78de4b3620b9",
+    "resolved_at": "2026-08-14T03:15:23.699Z",
+    "resolved_by": "unknown",
+    "note": "Banner-retired 13-propose-edges.md and 14-edge-review.md (pointing to the new node; code-level removal from guru/ingest.py is todo:aaaa5258, still open). New node file docs/ingest/16-derive-parallels.md documents scripts/derive_parallels.py: inputs (accepted EXPRESSES tags read live not staged, taxonomy, scorer-v1 pinned in config/derived_parallels.toml), the corpus-wide (non-per-text) shape, the re-derive trigger (any EXPRESSES or taxonomy change, cache keyed per (concept,chunk) so re-runs are cheap), the export.py hand-off (latest run dir under data/derived_parallels/, loud-fail on missing/stale >max_age_days), the apparatus-chunk skip (staged_cleanups.status='apparatus' applied-only gate, todo:495577b7), and three failure modes: empty-via=untagged chunk not an error, concept.<id> vs bare taxonomy key namespace mismatch, and the content-hash-keyed score cache which self-heals after re-chunk but wastes a pass if run before node 07 clean-bodies. README's node table, intro count, and local-model section updated to reflect the retirement; node 16 sits out of numeric order by design (documented inline) since it isn't per-text and isn't wired into guru/ingest.py yet."
+  }
+}
