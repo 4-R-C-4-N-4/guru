@@ -1,0 +1,31 @@
+{
+  "id": "7427712c",
+  "type": "bug",
+  "state": "open",
+  "summary": "Derived-parallels selection is gated by a threshold calibrated on a different frame: min_grade=-4.415 is the (query,chunk) EDGE_RERANK operating point, applied to (concept-definition,chunk) grading, and it silently drops whole works",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-14T23:54:39.531Z",
+  "updated_at": "2026-08-14T23:55:08.393Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "scoring",
+    "rellm"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-08-14T23:55:08.393Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Found 2026-08-14 while ratifying the cutover at the golden-query gate (todo:9097deed). The gate itself came back 271/272 and its one failure is unrelated to edges; the damage showed up beside it, in panel coverage. Full record: docs/summary/derived-parallels-cutover-2026-08-14.md.\n\nTHE DEFECT. scripts/derive_parallels.py gates panel construction on config[scoring].min_grade = -4.415. That number is the thin scorer's calibrated EDGE_RERANK operating point, and the rellm prototype says so in its own flag help: \"--min-grade ... min-leg grade floor (default: the student's calibrated EDGE_RERANK threshold)\".\n\nEverything rellm validated about that number is on the (query, chunk) frame:\n  - thin-scorer-spec.md: \"A (query, chunk) relevance cross-encoder\"; pairs built ~30/query from a real query distribution; cache keyed by sha256(query).\n  - query-scorer-rungs.md: inter-grader kappa +0.800, reproduced at +0.868; the ship gate, the AUC figures and the operating point all sit on that frame.\n\nderive_parallels substitutes a CONCEPT DEFINITION for the query. Concept definitions are abstract descriptive prose, not questions; the input distribution is different and the operating point was never re-derived for it. Nothing in derived-parallels-proposal.md flags this — its \"known prototype flaws to fix before adoption\" lists only two, both about ranking (min-leg clamping, via round-robin), and the guru port fixed both faithfully. The frame substitution went unexamined by the proposal, the port, and PR #64 review alike.\n\nHOW IT BITES, AND WHY IT TAKES WHOLE WORKS. min_grade is applied TWICE in build_panels:\n  1. the anchor gate -- `vias = [c for c in concepts if score[(c,ch)] >= min_grade]` -- a chunk must clear the floor on its OWN score for a concept to contribute any partners at all;\n  2. the partner filter -- a candidate partner must clear the floor on that concept.\nThe anchor gate is the one that darkens whole texts: a work whose chunks all score under the floor produces no vias, so it emits nothing no matter how good its potential partners are. That is why enuma-elish went 249 Pass C edges -> 0.\n\nMEASURED IMPACT (corpus v54): chunks with any panel 3,525 -> 2,427; texts with any panel 201/241 -> 169/241; 52 texts fully dark. 69 of 235 works have their best (concept, chunk) pair under the floor.\n\nEVIDENCE THE FLOOR, NOT THE MODEL, IS WRONG. The scorer's RANKING is right where spot-checked: sunyata_emptiness tops the Diamond Sutra (-3.88), wu_wei tops the Tao Te Ching (-0.09), sephirot tops the Lesser Holy Assembly (-5.12), ritual_fire tops Yasna 43. Only the absolute values sit low, and they track passage length -- chunks under 500 chars clear the floor 12% of the time against 58% for 2,000-2,400 chars. Raw cross-encoder logits scale with how much corroborating evidence a passage carries, so one global cut across lengths penalises verse and aphorism traditions against discursive prose. Caveat: length correlates with register too, so that gradient is not purely artifact -- the counter-evidence that it is partly artifact is wu_wei scoring -0.09 on 700-char Tao Te Ching chunks, i.e. short text CAN score high on a strong match.\n\nNOT EVERY DARK WORK IS THIS BUG. enuma-elish is separately and genuinely mis-tagged (todo:743ba79b): concept.cosmogony exists, is applied to 20 texts across 10 traditions, and was never proposed for it; its best match is theurgy at -4.84 and the scorer is right to say so. That distinction is the sharp edge of this ticket -- a naive \"drop the floor\" or \"pure top-k\" fix would resurrect enuma-elish with panels annotated \"Shared concept: Theurgy. (derived)\" on a Babylonian creation epic, which is worse than an empty strip. Any fix here must leave a mis-tagged work empty.\n\nWHAT DONE LOOKS LIKE. Selection reflects a rule validated on the frame it actually runs on, evaluated against the evidence the approach was sold on (21 of 24 judged strict-relevant partners reachable) and against coverage, with a re-derive proving both restored coverage and continued exclusion of mis-tagged works.",
+      "confidence": "high"
+    }
+  ]
+}
