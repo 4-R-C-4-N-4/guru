@@ -1,13 +1,13 @@
 {
   "id": "5104d8c8",
   "type": "debt",
-  "state": "open",
+  "state": "done",
   "summary": "derive_parallels has no reproducible Python runtime: the workbook's own 'python3 scripts/derive_parallels.py' fails (no transformers in system python, no guru venv); the 2026-08-14 run used ~/Work/rellm/.venv as an undocumented cross-repo borrow",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-14T19:02:24.545Z",
-  "updated_at": "2026-08-14T19:02:36.843Z",
+  "updated_at": "2026-08-14T19:38:35.566Z",
   "files": [
     {
       "path": "docs/ingest/16-derive-parallels.md"
@@ -26,5 +26,11 @@
       "content": "Model vendoring (todo:379722ec) succeeded and is NOT the issue: ~/programs/guru/scorer-v1 is sha-pinned in config/derived_parallels.toml and the 2026-08-14 full-corpus run used it (summary.json model_path confirms). The gap is the RUNTIME, not the weights.\n\nFacts on this box (2026-08-14): system python3 has no transformers (ModuleNotFoundError); there is no .venv/ or venv/ in the guru checkout; README's optional group documents a bare 'pip install torch transformers' against an unspecified interpreter. So docs/ingest/16-derive-parallels.md's documented invocation, 'python3 scripts/derive_parallels.py', fails on this machine — lazily, partway through the run, when guru.rerank._load() first imports torch/transformers, i.e. after the DB and taxonomy have already loaded.\n\nThe 17,244-row artifact behind corpus_version 53 was produced with ~/Work/rellm/.venv/bin/python (torch 2.12.0+cu130, transformers 5.5.0). That is a cross-repo dependency nothing in this repo declares, and it partly undoes 379722ec's intent: the weights were successfully decoupled from rellm, but the runtime silently still lives there. Anyone following the workbook on a clean box cannot reproduce the run.\n\nOptions (owner's call, not baked in): (a) a dedicated guru venv created with --system-site-packages so the ~2-3GB torch install isn't duplicated, path documented in README + node 16; (b) formally declare the rellm venv as the shared runtime and document it as such, cheapest but keeps the cross-repo coupling; (c) a full standalone venv, cleanest isolation, costs the disk. Whichever is chosen, node 16's run block should name the interpreter explicitly instead of bare 'python3', since the failure is late and confusing.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "d3a44e1cceeb5ffd719aed003b93051c94fcb847",
+    "resolved_at": "2026-08-14T19:38:35.566Z",
+    "resolved_by": "unknown",
+    "note": "requirements-derive.txt pins CPU-only torch 2.13.0+cpu + transformers 5.15.0 into a guru-local .venv (901 MB vs rellm's 6.4 GB CUDA venv); README + node 16 name .venv/bin/python explicitly. Verified: venv loads the vendored scorer-v1 and scores +1.935 relevant / -10.811 irrelevant. No rellm dependency remains."
+  }
 }
