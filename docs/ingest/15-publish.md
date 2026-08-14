@@ -11,9 +11,14 @@ user's action, not a driver's. Nodes 13/14 (Pass C) are retired
 (todo:c3f479ff / todo:aaaa5258) and no longer part of this precondition —
 `guru/ingest.py`'s `NODES` list does not include them, so `guru ingest
 status` walks straight from 12-embed to this node. Node 16
-([derive-parallels](16-derive-parallels.md)) is not a per-text precondition
-either: it is corpus-wide and runs independently of any one text's publish
-gate — see that node's file for when to re-run it.
+([derive-parallels](16-derive-parallels.md)) is not a *per-text*
+precondition — it has no `--text` flag and no `guru ingest status` gate, so
+it never blocks any one source from reaching this node. But publish itself
+is not independent of it: node 15's action is `scripts/export.py`, which
+refuses to run — loudly, via `SystemExit` — unless a derived-parallels run
+exists under `config[export].derived_dir` and is younger than
+`max_age_days` (default 30). Re-run node 16 before publishing if the last
+run has aged out; see that node's file for the trigger and the command.
 
 ## Action
 

@@ -159,7 +159,8 @@ def test_stage_apparatus_flag_writes_pending_row_and_queued_reclassify(monkeypat
     conn = _conn()
     monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
 
-    outcome = fa.stage_apparatus_flag(conn, "a.t.001", "test reason", "model:x", dry_run=False)
+    outcome = fa.stage_apparatus_flag(conn, "a.t.001", "test reason", "model:x", dry_run=False,
+                                      staged_this_run=set())
     assert outcome == "staged"
 
     row = conn.execute(
@@ -178,8 +179,10 @@ def test_stage_apparatus_flag_is_idempotent(monkeypatch):
     conn = _conn()
     monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
 
-    first = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=False)
-    second = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=False)
+    first = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=False,
+                                    staged_this_run=set())
+    second = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=False,
+                                     staged_this_run=set())
     assert first == "staged"
     assert second == "already_staged"
     assert conn.execute("SELECT COUNT(*) FROM staged_cleanups").fetchone()[0] == 1
@@ -193,8 +196,10 @@ def test_stage_apparatus_flag_two_sources_same_chunk_dedupe(monkeypatch):
     conn = _conn()
     monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
 
-    from_a = fa.stage_apparatus_flag(conn, "shared.t.001", "reason a", fa.MODEL_SOURCE_A, dry_run=False)
-    from_b = fa.stage_apparatus_flag(conn, "shared.t.001", "reason b", fa.MODEL_SOURCE_B, dry_run=False)
+    from_a = fa.stage_apparatus_flag(conn, "shared.t.001", "reason a", fa.MODEL_SOURCE_A, dry_run=False,
+                                     staged_this_run=set())
+    from_b = fa.stage_apparatus_flag(conn, "shared.t.001", "reason b", fa.MODEL_SOURCE_B, dry_run=False,
+                                     staged_this_run=set())
     assert from_a == "staged"
     assert from_b == "already_staged"
     assert conn.execute("SELECT COUNT(*) FROM staged_cleanups").fetchone()[0] == 1
@@ -204,7 +209,8 @@ def test_stage_apparatus_flag_dry_run_writes_nothing(monkeypatch):
     conn = _conn()
     monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
 
-    outcome = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=True)
+    outcome = fa.stage_apparatus_flag(conn, "a.t.001", "reason", "model:x", dry_run=True,
+                                      staged_this_run=set())
     assert outcome == "would_stage"
     assert conn.execute("SELECT COUNT(*) FROM staged_cleanups").fetchone()[0] == 0
     assert conn.execute("SELECT COUNT(*) FROM review_actions").fetchone()[0] == 0
@@ -214,9 +220,54 @@ def test_stage_apparatus_flag_missing_body_refuses(monkeypatch):
     conn = _conn()
     monkeypatch.setattr(fa, "load_body", lambda cid: None)
 
-    outcome = fa.stage_apparatus_flag(conn, "ghost.t.001", "reason", "model:x", dry_run=False)
+    outcome = fa.stage_apparatus_flag(conn, "ghost.t.001", "reason", "model:x", dry_run=False,
+                                      staged_this_run=set())
     assert outcome == "missing_body"
     assert conn.execute("SELECT COUNT(*) FROM staged_cleanups").fetchone()[0] == 0
+
+
+def test_stage_apparatus_flag_dry_run_sees_staging_from_earlier_in_same_run(monkeypatch):
+    """PR #64 review finding 5: dry-run writes nothing to the DB, so
+    already_staged() alone can't catch a chunk source (a) already decided
+    to stage a moment earlier in the same dry-run pass. staged_this_run
+    must catch it instead."""
+    conn = _conn()
+    monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
+    staged_this_run: set[str] = set()
+
+    first = fa.stage_apparatus_flag(conn, "shared.t.001", "reason a", fa.MODEL_SOURCE_A,
+                                    dry_run=True, staged_this_run=staged_this_run)
+    second = fa.stage_apparatus_flag(conn, "shared.t.001", "reason b", fa.MODEL_SOURCE_B,
+                                     dry_run=True, staged_this_run=staged_this_run)
+    assert first == "would_stage"
+    assert second == "already_staged"
+    # dry-run never writes, regardless
+    assert conn.execute("SELECT COUNT(*) FROM staged_cleanups").fetchone()[0] == 0
+
+
+def test_stage_apparatus_flag_dry_run_and_apply_agree_on_overlap(monkeypatch):
+    """PR #64 review finding 5, the concrete case: source (a) and source (b)
+    both target a chunk (renaissance_hermeticism.heroic-enthusiasts-pt1.001-
+    style overlap). Dry-run and --apply must report the identical pair of
+    outcomes for that chunk, not diverge because dry-run never commits."""
+    monkeypatch.setattr(fa, "load_body", lambda cid: "the body text")
+
+    def run_both_sources(dry_run: bool) -> tuple[str, str]:
+        conn = _conn()
+        staged_this_run: set[str] = set()
+        first = fa.stage_apparatus_flag(conn, "shared.t.001", "reason a", fa.MODEL_SOURCE_A,
+                                        dry_run=dry_run, staged_this_run=staged_this_run)
+        second = fa.stage_apparatus_flag(conn, "shared.t.001", "reason b", fa.MODEL_SOURCE_B,
+                                         dry_run=dry_run, staged_this_run=staged_this_run)
+        return first, second
+
+    dry_outcomes = run_both_sources(dry_run=True)
+    apply_outcomes = run_both_sources(dry_run=False)
+
+    # would_stage/staged are the dry-run/apply names for "the same decision";
+    # what must match is which call staged and which was recognized as a dupe.
+    assert dry_outcomes == ("would_stage", "already_staged")
+    assert apply_outcomes == ("staged", "already_staged")
 
 
 # ── classification data sanity ───────────────────────────────────────────────

@@ -435,7 +435,11 @@ def _find_latest_run_dir(base_dir: Path) -> Path:
     return candidates[-1]
 
 
-def load_derived_parallels(config_path: Path = DERIVED_PARALLELS_CONFIG) -> list[dict]:
+def load_derived_parallels(
+    config_path: Path = DERIVED_PARALLELS_CONFIG,
+    *,
+    chunk_ids: set[str] | None = None,
+) -> list[dict]:
     """The sole source of PARALLELS rows in the corpus dump (todo:6da4f965).
 
     Reads config[export].derived_dir, picks the latest run directory, and
@@ -443,6 +447,13 @@ def load_derived_parallels(config_path: Path = DERIVED_PARALLELS_CONFIG) -> list
     missing, incomplete, older than config[export].max_age_days, or
     (suspiciously) contains zero rows. Silence here would mean a bad export
     quietly ships zero PARALLELS instead of failing the build.
+
+    If `chunk_ids` is given (main() always passes the set of chunk ids this
+    run is about to emit), every row's source/target is checked against it
+    and any orphan endpoint is a SystemExit — a re-chunk can shift chunk ids
+    out from under a derived run that was generated against the old set, and
+    an orphan row would otherwise load into Postgres silently (untyped TEXT
+    columns, no FK) and just never match at query time.
     """
     if not config_path.exists():
         raise SystemExit(f"derived-parallels config not found: {config_path}")
@@ -497,6 +508,20 @@ def load_derived_parallels(config_path: Path = DERIVED_PARALLELS_CONFIG) -> list
             f"genuinely expected, delete this check, don't work around it."
         )
 
+    if chunk_ids is not None:
+        orphans = sorted({
+            cid for row in rows for cid in (row["source"], row["target"])
+            if cid not in chunk_ids
+        })
+        if orphans:
+            raise SystemExit(
+                f"{run_dir / 'edges_derived.jsonl'}: {len(orphans)} PARALLELS "
+                f"endpoint(s) do not resolve to a chunk in this export "
+                f"(re-chunk drift?): {orphans[:5]}"
+                f"{' ...' if len(orphans) > 5 else ''}. Re-run "
+                f"scripts/derive_parallels.py against the current corpus."
+            )
+
     logger.info(
         "derived PARALLELS: %d rows from %s (generated %.1f days ago)",
         len(rows), run_dir, age_days,
@@ -504,12 +529,22 @@ def load_derived_parallels(config_path: Path = DERIVED_PARALLELS_CONFIG) -> list
     return rows
 
 
-def load_frozen_contrasts(path: Path = CONTRASTS_SNAPSHOT) -> list[dict]:
+def load_frozen_contrasts(
+    path: Path = CONTRASTS_SNAPSHOT,
+    *,
+    chunk_ids: set[str] | None = None,
+) -> list[dict]:
     """The sole source of CONTRASTS rows in the corpus dump (todo:6da4f965):
     a committed snapshot, carried through export unchanged. Editing the
     live `edges` table's CONTRASTS rows after the freeze has no effect on
     what ships — see the header comment in config/frozen_contrasts.toml for
-    how to retire the freeze."""
+    how to retire the freeze.
+
+    If `chunk_ids` is given, every row's source/target is checked against
+    it and any orphan endpoint is a SystemExit. This snapshot is the one
+    source that cannot self-heal after a re-chunk — CONTRASTS rows here are
+    never regenerated, so a shifted chunk id would otherwise ship a row that
+    quietly never matches in production (see PR #64 review finding 2)."""
     if not path.exists():
         raise SystemExit(f"Frozen CONTRASTS snapshot not found: {path}")
     with open(path, "rb") as fp:
@@ -535,6 +570,21 @@ def load_frozen_contrasts(path: Path = CONTRASTS_SNAPSHOT) -> list[dict]:
             "weight": row.get("weight"),
             "annotation": row.get("annotation"),
         })
+
+    if chunk_ids is not None:
+        orphans = sorted({
+            cid for row in out for cid in (row["source"], row["target"])
+            if cid not in chunk_ids
+        })
+        if orphans:
+            raise SystemExit(
+                f"{path}: {len(orphans)} CONTRASTS endpoint(s) do not "
+                f"resolve to a chunk in this export (re-chunk drift?): "
+                f"{orphans[:5]}{' ...' if len(orphans) > 5 else ''}. This "
+                f"snapshot cannot self-heal — update the affected rows in "
+                f"{path} to the current chunk ids."
+            )
+
     logger.info("frozen CONTRASTS: %d rows from %s", len(out), path)
     return out
 
@@ -597,9 +647,27 @@ def emit_copy_end(f) -> None:
     f.write("\\.\n\n")
 
 
-def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
+def emit_copies(
+    conn: sqlite3.Connection,
+    f,
+    schema: str,
+    chunks: list[dict],
+    derived_parallels_rows: list[dict],
+    frozen_contrasts_rows: list[dict],
+) -> dict:
     """Write COPY blocks for traditions, texts, concepts, chunks, edges.
-    Returns chunk count for the validation block."""
+
+    `chunks`, `derived_parallels_rows`, and `frozen_contrasts_rows` are
+    loaded by main() *before* this is called (PR #64 review finding 1) —
+    this function does no loading of its own for those three, only assembly
+    and emission. That hoist is what makes the two PARALLELS/CONTRASTS
+    artifact loaders' SystemExit guards fail-fast: they used to run from
+    inside here, which main() only reaches after next_corpus_version() has
+    already committed a version bump and after OUTPUT has already been
+    truncated by gzip.open() — so a guard tripping mid-emit_copies burned a
+    version number and destroyed the last good dump on the way out.
+
+    Returns per-table counts for the validation block."""
     # traditions
     emit_copy_start(f, schema, "traditions", ["id", "label", "description", "color"])
     for r in load_traditions(conn):
@@ -670,7 +738,6 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
     emit_copy_start(f, schema, "chunks",
                     ["id", "text_id", "tradition", "text_name", "section",
                      "section_path", "translator", "body", "token_count", "embedding"])
-    chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
     for r in chunks:
         # section_path is always None in v1 (TOMLs don't populate it).
         # When that changes, write a copy_esc_array() — esc_array() emits
@@ -689,9 +756,10 @@ def emit_copies(conn: sqlite3.Connection, f, schema: str) -> int:
     # edges — PARALLELS from the derived-parallels artifact and CONTRASTS
     # from the frozen snapshot (todo:6da4f965), everything else from the
     # live table. Sorted for a deterministic COPY block, matching the old
-    # single-source ORDER BY.
+    # single-source ORDER BY. Both artifact loads already happened in
+    # main() before this function was ever called — see the docstring above.
     edges = (
-        load_edges(conn) + load_derived_parallels() + load_frozen_contrasts()
+        load_edges(conn) + derived_parallels_rows + frozen_contrasts_rows
     )
     edges.sort(key=lambda r: (r["source"], r["target"], r["edge_type"]))
     emit_copy_start(f, schema, "edges",
@@ -888,6 +956,20 @@ def main() -> None:
     conn.row_factory = sqlite3.Row
 
     n_chunks = validate(conn)
+
+    # Load the chunk set and both PARALLELS/CONTRASTS sources BEFORE
+    # anything is mutated (PR #64 review findings 1 + 2). load_derived_
+    # parallels() and load_frozen_contrasts() are pure validation — they
+    # touch neither `conn` nor the output file — so their SystemExit guards
+    # (missing/stale/empty artifact, orphan endpoints) must all fire here,
+    # before next_corpus_version() commits a version bump and before
+    # gzip.open(OUTPUT, "wt") truncates the last good dump. The chunk id
+    # set doubles as the orphan-endpoint check both loaders run against.
+    chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
+    chunk_ids = {r["id"] for r in chunks}
+    derived_parallels_rows = load_derived_parallels(chunk_ids=chunk_ids)
+    frozen_contrasts_rows = load_frozen_contrasts(chunk_ids=chunk_ids)
+
     version = next_corpus_version(conn)
     commit = git_sha()
     exported_at = datetime.now(timezone.utc).isoformat()
@@ -915,7 +997,8 @@ def main() -> None:
         f.write("\n\n")
 
         # 3. Data — COPY blocks in FK order
-        counts = emit_copies(conn, f, STAGING_SCHEMA)
+        counts = emit_copies(conn, f, STAGING_SCHEMA, chunks,
+                             derived_parallels_rows, frozen_contrasts_rows)
 
         # 4. Post-load indexes
         emit_indexes(f, STAGING_SCHEMA)

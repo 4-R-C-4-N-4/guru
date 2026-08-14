@@ -273,13 +273,23 @@ def review_action_exists(conn: sqlite3.Connection, client_action_id: str) -> boo
 
 def stage_apparatus_flag(
     conn: sqlite3.Connection, chunk_id: str, reason: str, model: str, dry_run: bool,
+    staged_this_run: set[str],
 ) -> str:
     """Insert a pending staged_cleanups row (no rewrite — original ==
     proposed) plus its already-queued reclassify->apparatus_drop
     review_actions row. Returns a status string for the caller's tally.
     Nothing here flips status to 'apparatus'; that is the owner's apply
-    gate, exactly as it is for the web deck's own Apparatus... button."""
-    if already_staged(conn, chunk_id):
+    gate, exactly as it is for the web deck's own Apparatus... button.
+
+    `staged_this_run` is the set of chunk ids this function has already
+    decided to stage earlier in the SAME run (PR #64 review finding 5).
+    already_staged() only sees committed DB rows, so without this, source
+    (a) staging a chunk in dry-run mode (which writes nothing) is invisible
+    to source (b)'s already_staged() check a moment later — three chunks
+    overlap both sources — and dry-run's count silently diverges from
+    --apply's. Checking staged_this_run alongside already_staged() makes
+    both modes agree, since dry-run and apply both add to it identically."""
+    if chunk_id in staged_this_run or already_staged(conn, chunk_id):
         return "already_staged"
 
     body = load_body(chunk_id)
@@ -292,6 +302,8 @@ def stage_apparatus_flag(
         # staged_cleanups row is missing but the action already exists —
         # should not happen outside a partial prior run; don't double-file.
         return "already_staged"
+
+    staged_this_run.add(chunk_id)
 
     if dry_run:
         return "would_stage"
@@ -322,6 +334,10 @@ def run(db_path: Path, dry_run: bool) -> int:
     conn.execute("PRAGMA foreign_keys = ON")
 
     tally: dict[str, int] = {}
+    # Chunk ids staged (or, in dry-run, that would be staged) so far in THIS
+    # run — shared across both sources so dry-run and --apply agree on the
+    # 3-chunk source-a/source-b overlap (PR #64 review finding 5).
+    staged_this_run: set[str] = set()
 
     def bump(key: str) -> None:
         tally[key] = tally.get(key, 0) + 1
@@ -334,7 +350,7 @@ def run(db_path: Path, dry_run: bool) -> int:
             a_excluded += 1
             continue
         outcome = stage_apparatus_flag(conn, chunk_id, f"[source a: todo:6e0c2a63] {reason}",
-                                       MODEL_SOURCE_A, dry_run)
+                                       MODEL_SOURCE_A, dry_run, staged_this_run)
         bump(f"a_{outcome}")
         if outcome in ("staged", "would_stage"):
             logger.info(f"  {chunk_id}: {reason}")
@@ -353,7 +369,7 @@ def run(db_path: Path, dry_run: bool) -> int:
             logger.warning(f"  SKIP {chunk_id}: no longer all-rejected (staged_tags state changed)")
             continue
         outcome = stage_apparatus_flag(conn, chunk_id, f"[source b: all-rejected judgement pass] {reason}",
-                                       MODEL_SOURCE_B, dry_run)
+                                       MODEL_SOURCE_B, dry_run, staged_this_run)
         bump(f"b_{outcome}")
         if outcome in ("staged", "would_stage"):
             logger.info(f"  {chunk_id}: {reason}")

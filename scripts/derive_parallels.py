@@ -4,12 +4,26 @@ derive_parallels.py — parallels as a derived table, no Pass C.
 Ported from rellm tools/derived_parallels.py (docs/edges/derived-parallels-
 proposal.md, todo:5620391a / parent c3f479ff — "retire Pass C: parallels
 become a derived table"). Replaces LLM pair-classification with EXPRESSES
-(human-gated tags) x thin-student (concept, chunk) scores: a chunk's
-partners are the top cross-tradition co-expressors of its concepts, ranked
-by the PARTNER's own concept score (not min-leg — min-leg clamping made
-panels monochrome, per the proposal's "known prototype flaws" note) and
-round-robinned across via concepts so a panel doesn't monoculture on one
-via concept or one work.
+(every edge of that type, any tier — see note below) x thin-student
+(concept, chunk) scores: a chunk's partners are the top cross-tradition
+co-expressors of its concepts, ranked by the PARTNER's own concept score
+(not min-leg — min-leg clamping made panels monochrome, per the proposal's
+"known prototype flaws" note) and round-robinned across via concepts so a
+panel doesn't monoculture on one via concept or one work.
+
+EXPRESSES input, precisely (PR #64 review finding 7): load_expresses()
+below reads every EXPRESSES edge in guru.db regardless of `tier` — it is
+NOT restricted to human-reviewed rows. As of this port, ~29% of that
+supply (11,057 of 38,457 EXPRESSES rows) is `tier='proposed'`, written by
+scripts/auto_promote.py's auto-promotion without per-row human review
+before that tool was retired 2026-05-26; the remainder is `tier='verified'`
+via node 11's review queue. Whether this generator should filter to
+`tier='verified'` is a live, deliberately unresolved question tracked at
+guru-web todo:dd034dc4 (the tier-semantics decision — is tier a confidence
+signal or a provenance timestamp?): if that ticket lands on "confidence
+signal," `load_expresses()`'s query needs `AND tier='verified'` added and
+this note updated; if it lands on "provenance only," this note should say
+so plainly instead of hedging. This script does not add a tier filter today.
 
 Emits corpus-export edges shape (source, target, edge_type, tier, weight,
 annotation) — the same dict shape as scripts/export.py's load_edges() rows
@@ -21,7 +35,9 @@ Scoring reuses guru.rerank.score_pairs (CPU-only cross-encoder scoring,
 already used for EDGE_RERANK at query time) rather than re-implementing
 model loading — it already handles the BERT 512-position cap and the
 2400-char body truncation. Scores are cached incrementally, keyed by
-(concept, chunk) and a content hash, in config[scoring].score_cache.
+(concept, chunk) and a content hash, in config[scoring].score_cache — both
+within a run (flushed every SCORE_CACHE_FLUSH_EVERY concepts scored, so an
+interrupted cold run doesn't lose everything) and, of course, across runs.
 
 Usage:
     python3 scripts/derive_parallels.py [--config config/derived_parallels.toml]
@@ -237,6 +253,17 @@ def cache_key(concept: str, chunk: str) -> str:
     return f"{concept}|{chunk}"
 
 
+# Flush the score cache to disk every this many *concepts* scored inside the
+# model loop (PR #64 review finding 3) — save_score_cache() already writes
+# via tmp-file + os.replace(), so a mid-run flush is atomic and safe to
+# interleave with the next model call. Without this, save_score_cache() only
+# ran once, after score_needed_pairs() returned, so an interrupted cold
+# corpus-wide run (Ctrl-C, OOM, one malformed body raising inside
+# rerank.score_pairs) dropped every score computed so far, contradicting the
+# module header's "cached incrementally" contract.
+SCORE_CACHE_FLUSH_EVERY = 20
+
+
 # ── scoring ──────────────────────────────────────────────────────────────
 
 def score_needed_pairs(
@@ -245,6 +272,7 @@ def score_needed_pairs(
     bodies: dict[str, str],
     cache: dict[str, dict],
     model_path: str,
+    cache_path: Path | None = None,
 ) -> dict[tuple[str, str], float]:
     """Resolve every (concept, chunk) pair's score, cache-first.
 
@@ -252,6 +280,12 @@ def score_needed_pairs(
     are actually sent to the model. Reuses guru.rerank.score_pairs, grouped
     by concept (one query per call), so it inherits that module's 512-
     position cap and CPU-only enforcement instead of re-implementing them.
+
+    If `cache_path` is given, the cache is flushed to disk every
+    SCORE_CACHE_FLUSH_EVERY concepts scored (see that constant) — not just
+    once at the very end — so a run that dies partway through a long cold
+    pass still has its work saved. `run()` also does a final save after this
+    returns, which covers the tail end that doesn't land on a flush boundary.
     """
     score: dict[tuple[str, str], float] = {}
     todo: dict[str, list[str]] = {}  # concept -> [chunk, ...] needing a model call
@@ -283,6 +317,8 @@ def score_needed_pairs(
                 cache[cache_key(concept, ch)] = {"score": s, "hash": h_by_chunk[ch]}
             if i % 20 == 0:
                 print(f"  scored {i + 1}/{len(todo)} concepts", flush=True)
+            if cache_path is not None and (i + 1) % SCORE_CACHE_FLUSH_EVERY == 0:
+                save_score_cache(cache_path, cache)
 
     return score
 
@@ -444,8 +480,8 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
 
     cache = load_score_cache(cache_path)
     t0 = time.monotonic()
-    score = score_needed_pairs(need, defs, bodies, cache, model_path)
-    save_score_cache(cache_path, cache)
+    score = score_needed_pairs(need, defs, bodies, cache, model_path, cache_path)
+    save_score_cache(cache_path, cache)  # final flush covers the tail end
     elapsed = time.monotonic() - t0
 
     ranked = build_ranked(bycon, score)

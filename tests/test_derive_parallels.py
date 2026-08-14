@@ -22,6 +22,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
+import derive_parallels as dp  # noqa: E402
 from derive_parallels import (  # noqa: E402
     build_edges,
     build_panels,
@@ -32,6 +33,7 @@ from derive_parallels import (  # noqa: E402
     exclude_apparatus_chunks,
     first_sentence,
     format_label,
+    score_needed_pairs,
 )
 
 
@@ -260,3 +262,83 @@ def test_load_apparatus_chunks_gates_on_applied_status_only():
     conn.execute("INSERT INTO staged_cleanups VALUES ('a.t.003', 'rejected')")
     conn.commit()
     assert load_apparatus_chunks(conn) == {"a.t.001"}
+
+
+# ── score cache periodic flush (PR #64 review finding 3) ─────────────────
+
+def test_score_needed_pairs_flushes_cache_periodically(monkeypatch, tmp_path):
+    """An interrupted cold run must not lose everything: save_score_cache
+    must be called from inside the scoring loop, not just once at the very
+    end (which is run()'s job, not score_needed_pairs()'s)."""
+    monkeypatch.setattr(dp, "SCORE_CACHE_FLUSH_EVERY", 2)
+
+    def fake_score_pairs(query, bodies):
+        return {ch: 1.0 for ch in bodies}
+    monkeypatch.setattr("guru.rerank.score_pairs", fake_score_pairs)
+
+    flush_calls = []
+    def fake_save(path, cache):
+        flush_calls.append((path, dict(cache)))
+    monkeypatch.setattr(dp, "save_score_cache", fake_save)
+
+    n = 5  # 5 concepts, one chunk each -> flushes after concepts 2 and 4
+    need = [(f"concept.c{i}", f"trad.t.{i:03d}") for i in range(n)]
+    defs = {f"concept.c{i}": f"def{i}" for i in range(n)}
+    bodies = {f"trad.t.{i:03d}": f"body{i}" for i in range(n)}
+    cache_path = tmp_path / "score_cache.json"
+
+    score = score_needed_pairs(need, defs, bodies, {}, "model-path", cache_path=cache_path)
+
+    assert len(score) == n
+    assert len(flush_calls) == 2  # floor(5 / 2)
+    for path, _cache in flush_calls:
+        assert path == cache_path
+    # the first flush caught only what had been scored by then, not everything
+    assert len(flush_calls[0][1]) < n
+
+
+def test_score_needed_pairs_no_cache_path_never_flushes_mid_loop(monkeypatch):
+    """cache_path=None (the default) must not attempt to flush — callers
+    that don't pass it (e.g. a future direct caller) get the old
+    end-of-function-only behavior, not a crash on a None path."""
+    monkeypatch.setattr(dp, "SCORE_CACHE_FLUSH_EVERY", 1)
+
+    def fake_score_pairs(query, bodies):
+        return {ch: 1.0 for ch in bodies}
+    monkeypatch.setattr("guru.rerank.score_pairs", fake_score_pairs)
+
+    flush_calls = []
+    monkeypatch.setattr(dp, "save_score_cache", lambda *a: flush_calls.append(a))
+
+    need = [("concept.c0", "trad.t.000")]
+    defs = {"concept.c0": "def0"}
+    bodies = {"trad.t.000": "body0"}
+
+    score = score_needed_pairs(need, defs, bodies, {}, "model-path")  # no cache_path
+
+    assert len(score) == 1
+    assert flush_calls == []
+
+
+def test_score_needed_pairs_fully_cached_skips_model_and_flush(monkeypatch, tmp_path):
+    """A pair whose cache entry matches the current content hash must not
+    hit the model or trigger a flush — flush only fires when there was
+    something new to save."""
+    monkeypatch.setattr(dp, "SCORE_CACHE_FLUSH_EVERY", 1)
+
+    def _unreachable(*a, **k):
+        raise AssertionError("model should not be called for a fully cached pair")
+    monkeypatch.setattr("guru.rerank.score_pairs", _unreachable)
+    flush_calls = []
+    monkeypatch.setattr(dp, "save_score_cache", lambda *a: flush_calls.append(a))
+
+    h = content_hash("def0", "body0")
+    cache = {cache_key("concept.c0", "trad.t.000"): {"score": 9.0, "hash": h}}
+
+    score = score_needed_pairs(
+        [("concept.c0", "trad.t.000")], {"concept.c0": "def0"}, {"trad.t.000": "body0"},
+        cache, "model-path", cache_path=tmp_path / "score_cache.json",
+    )
+
+    assert score == {("concept.c0", "trad.t.000"): 9.0}
+    assert flush_calls == []

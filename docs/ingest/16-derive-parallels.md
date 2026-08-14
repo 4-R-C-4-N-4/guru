@@ -26,11 +26,21 @@ skipped.
 
 ## Precondition
 
-- **Accepted tags.** The generator reads the live `edges` table
-  (`type='EXPRESSES'`) directly — not `staged_tags`. A text's tags only count
-  once node 11's queue has been applied by the user; a text sitting in review
-  contributes nothing yet, and does so silently (no per-text readiness check
-  exists here — see Failure modes).
+- **Applied EXPRESSES edges, any tier.** The generator reads the live `edges`
+  table (`type='EXPRESSES'`) directly — not `staged_tags` — and does not
+  filter on `tier`. A text's tags only count once node 11's queue has been
+  applied by the user; a text sitting in review contributes nothing yet, and
+  does so silently (no per-text readiness check exists here — see Failure
+  modes). "Applied," though, is not the same as "human-verified": as of this
+  writing ~29% of the live EXPRESSES supply (11,057 of 38,457 rows) is
+  `tier='proposed'` — auto-promoted by `scripts/auto_promote.py` without
+  per-row human review, before that tool was retired 2026-05-26. Whether this
+  generator should restrict itself to `tier='verified'` is a live, explicitly
+  unresolved question tracked at guru-web todo:dd034dc4 (the tier-semantics
+  decision — is `tier` a confidence signal or a provenance timestamp?). This
+  node reads every tier today; if that ticket lands on "confidence signal,"
+  `load_expresses()` in `scripts/derive_parallels.py` needs `AND
+  tier='verified'` added and this bullet updated to match.
 - **Taxonomy.** `concepts/taxonomy.toml`, synced to `guru.db` (node 09's
   `sync_taxonomy.py --apply`). Concepts absent from the taxonomy cannot anchor
   a panel even if a chunk was somehow tagged with them.
@@ -155,6 +165,15 @@ the README's staleness note state), so scoring before node 07 runs spends a
 scoring pass on content that is about to change and will be invalidated and
 re-paid for once cleaning lands. Not wrong, just wasted work — run node 07
 first.
+
+**Local retrieval divergence.** `scripts/export.py` sources PARALLELS
+exclusively from this node's output now (see the export hand-off above), but
+`guru/retrieval_legs.py` still queries the live `edges` table's ~11,300
+PARALLELS rows (the old Pass C output) at query time, in three places. A
+local `guru query` run or a retrieval benchmark against `data/guru.db` is
+therefore reading a different, older PARALLELS set than production serves —
+silently, since both are well-formed rows. Tracked at todo:69682961 (PR #64
+review finding 9); not yet fixed.
 
 ## Provenance
 
