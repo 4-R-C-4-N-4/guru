@@ -1,0 +1,51 @@
+# Guru derived-parallels configuration
+# Consumed by: scripts/derive_parallels.py
+#
+# Ported from rellm tools/derived_parallels.py (docs/edges/derived-parallels-
+# proposal.md, todo:5620391a / parent c3f479ff — "retire Pass C: parallels
+# become a derived table"). Replaces LLM pair-classification with EXPRESSES
+# (human-gated tags) x thin-student (concept, chunk) scores: a chunk's
+# PARALLELS partners are the top cross-tradition co-expressors of its
+# concepts, thresholded and ranked by the student's own score. No LLM call,
+# no staged_edges review queue.
+
+[scoring]
+# Vendored checkpoint, guru-side path (NOT a rellm path — the checkpoint was
+# copied to ~/programs/guru/scorer-v1 for this repo to pin independently of
+# the rellm worktree). See training-card.json there for provenance:
+# cross-encoder/ms-marco-MiniLM-L6-v2 student, val_pearson 0.878.
+# training-card.json carries `pairs_sha` (a hash of the TRAINING DATA, not
+# the checkpoint), so there is nothing else to pin — path + training-card.json
+# together are the provenance record.
+model_path = "/home/ivy/programs/guru/scorer-v1"
+
+# Set as EDGE_RERANK_MODEL for guru.rerank.score_pairs (guru/rerank.py),
+# which this script reuses for CPU-only scoring. That module already caps
+# max_length at the checkpoint's own max_position_embeddings (512 for a
+# BERT-family student — the "BERT students cap at 512 positions" gotcha)
+# and truncates bodies to 2400 chars before tokenizing, so those are not
+# separate knobs here.
+
+# Min-leg grade floor: a chunk must itself clear this on a concept for that
+# concept to contribute partners, and a candidate partner must clear it too.
+# Default is the student's calibrated EDGE_RERANK threshold (matches the
+# rellm prototype's default and guru/retriever.py's EDGE_RERANK_THRESHOLD).
+min_grade = -4.415
+
+# Raw candidates gathered per chunk via via-concept round-robin before
+# ranking/capping (stops at top_k * 2 raw candidates — ported as-is from the
+# rellm prototype). The per-work cap below then thins that pool; a chunk can
+# end up with fewer than top_k partners if candidates cluster in one work.
+top_k = 5
+
+# Incremental (concept, chunk) score cache, keyed on a content hash of the
+# concept definition + chunk body (post 2400-char trim) so a corpus update
+# or a taxonomy definition edit only re-scores what actually changed. Path
+# is relative to the project root; data/ is git-ignored.
+score_cache = "data/derived_parallels_score_cache.json"
+
+[panels]
+# Max partners drawn from any single work (sources/works.toml; texts not
+# listed there are implicit singleton works) in one chunk's panel. Without
+# this, the snapshot trial found single-via, single-work monoculture panels.
+per_work_cap = 2
