@@ -52,3 +52,19 @@ score_cache = "data/derived_parallels_score_cache.json"
 # listed there are implicit singleton works) in one chunk's panel. Without
 # this, the snapshot trial found single-via, single-work monoculture panels.
 per_work_cap = 2
+
+[export]
+# Consumed by scripts/export.py (todo:6da4f965). derive_parallels.py writes
+# each run to a fresh data/derived_parallels/<UTC timestamp>/ directory
+# (edges_derived.jsonl + summary.json); export.py does not take a run
+# directory on the command line — it picks the lexicographically latest
+# subdirectory of derived_dir (the timestamp format sorts correctly) and
+# uses that run's edges_derived.jsonl as the sole source of PARALLELS rows.
+derived_dir = "data/derived_parallels"
+
+# Guardrail, not a correctness mechanism: if the latest run's summary.json
+# `generated_at` is older than this many days, export.py refuses to run
+# rather than silently shipping a stale panel set. Bump derive_parallels.py
+# and re-run to clear it; there is no override flag by design — a stale
+# artifact should be regenerated, not waved through.
+max_age_days = 30
