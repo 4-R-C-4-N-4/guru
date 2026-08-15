@@ -1,0 +1,18 @@
+{
+  "id": "0c34642e",
+  "type": "feature",
+  "state": "open",
+  "summary": "Add --parallel N (default 1): bounded ThreadPoolExecutor over the pure function, single writer thread owning the connection, progress/outcome counters and --resume semantics preserved; needs 6950de58",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.437Z",
+  "updated_at": "2026-08-15T14:43:59.437Z",
+  "tags": [
+    "tagging",
+    "performance"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  }
+}

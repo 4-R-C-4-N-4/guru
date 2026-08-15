@@ -1,0 +1,17 @@
+{
+  "id": "6950de58",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Split run_tagging's per-chunk work into a pure prepare+call+parse function returning a result object, with every DB write moved behind a single writer — byte-identical behaviour at one worker, so concurrency lands on a seam that already exists",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.385Z",
+  "updated_at": "2026-08-15T14:43:59.385Z",
+  "tags": [
+    "tagging"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  }
+}

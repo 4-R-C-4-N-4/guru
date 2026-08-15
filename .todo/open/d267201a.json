@@ -1,0 +1,18 @@
+{
+  "id": "d267201a",
+  "type": "feature",
+  "state": "open",
+  "summary": "Multi-endpoint: thread base_url through call_llm (today it reads process-global LLAMACPP_BASE_URL) and round-robin across servers, so a second 4B on the 4070 adds throughput instead of contending; needs 5955d038",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.517Z",
+  "updated_at": "2026-08-15T14:43:59.517Z",
+  "tags": [
+    "tagging",
+    "gpu"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  }
+}
