@@ -80,16 +80,29 @@ def _chat_openai_compat(
     return ""
 
 
-def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_llamacpp(
+    model: str,
+    system: str,
+    prompt: str,
+    max_tokens: int,
+    timeout: float = DEFAULT_HTTP_TIMEOUT,
+    base_url: str | None = None,
+) -> str:
     """
-    Call the local llama.cpp server via raw HTTP (no openai SDK dependency).
+    Call a llama.cpp server via raw HTTP (no openai SDK dependency).
     Uses urllib so there's no DNS lookup or connection overhead at import time.
     Handles thinking models: returns content if non-empty, else full text including
     reasoning_content so parse_json_response can extract JSON from it.
+
+    base_url, when given, overrides LLAMACPP_BASE_URL for this call only — it
+    is a real parameter, not a thread-local env hack, so it's safe to pass a
+    different value per call from concurrent threads (multi-endpoint fan-out,
+    todo:d267201a) without one thread's target leaking into another's. The
+    env var remains the default for every caller that doesn't pass it.
     """
     import os
     import urllib.request
-    base = os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
+    base = base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
     payload = json.dumps({
         "model": model,
         "messages": [
@@ -116,6 +129,50 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout
     # Thinking model: reasoning came first, actual answer follows after </think>
     # Return full reasoning so parse_json_response can scan it for JSON
     return reasoning
+
+
+def query_llamacpp_slots(base_url: str | None = None, timeout: float = 5.0) -> int | None:
+    """Best-effort query of how many concurrent slots a llama.cpp server is
+    actually running with (todo:5955d038 pre-flight, so --parallel N doesn't
+    silently queue behind a server that has fewer slots than N).
+
+    Tries GET /props first — modern llama-server builds report the launch
+    --parallel value there as "total_slots" (some builds instead/also use
+    "n_parallel"). Falls back to GET /slots (present when the server was
+    started with --slots; an array with one object per slot) and counts the
+    array. base_url defaults to the same LLAMACPP_BASE_URL env resolution
+    call_llamacpp uses, so this checks the server a plain call_llm() would
+    actually hit.
+
+    Returns None — never raises — if the server is unreachable, the build
+    predates either endpoint, --slots is disabled, or the response shape is
+    something this function doesn't recognize. This is advisory pre-flight
+    for a local dev server, not a stable API contract: a caller that gets
+    None should warn and continue, not hard-fail, and a caller that gets a
+    number should trust it enough to refuse an oversized --parallel.
+    """
+    import os
+    import urllib.request
+
+    base = base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
+
+    for path in ("/props", "/slots"):
+        try:
+            req = urllib.request.Request(f"{base}{path}", method="GET")
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                data = json.loads(resp.read())
+        except Exception:
+            continue
+
+        if path == "/props" and isinstance(data, dict):
+            for key in ("total_slots", "n_parallel"):
+                value = data.get(key)
+                if isinstance(value, int) and value > 0:
+                    return value
+        elif path == "/slots" and isinstance(data, list) and data:
+            return len(data)
+
+    return None
 
 
 def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
@@ -277,6 +334,7 @@ def call_llm(
     prompt: str,
     max_tokens: int,
     timeout: float = DEFAULT_HTTP_TIMEOUT,
+    base_url: str | None = None,
 ) -> str:
     """
     Call an LLM and return the response string.
@@ -285,11 +343,21 @@ def call_llm(
     models need 8k+ for the reasoning preamble alone) and on the task,
     and a library-level default was the silent failure mode that lost
     ~12% of chunks on the 2026-05 tagging run.
+
+    base_url is forwarded only when given (only call_llamacpp accepts it
+    today; todo:d267201a). Leaving it out of the call entirely when it's
+    None means non-llamacpp providers never need to accept an unused
+    parameter just for signature parity, and every existing call_llm(...)
+    call site is unaffected.
     """
     fn = PROVIDERS.get(provider)
     if fn is None:
         raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
-    return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens, timeout=timeout)
+    kwargs = {"model": model, "system": system, "prompt": prompt,
+              "max_tokens": max_tokens, "timeout": timeout}
+    if base_url is not None:
+        kwargs["base_url"] = base_url
+    return fn(**kwargs)
 
 
 _THINKING_MARKERS = (

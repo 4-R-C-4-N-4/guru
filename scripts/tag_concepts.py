@@ -36,7 +36,7 @@ DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
 sys.path.insert(0, str(Path(__file__).parent))
-from llm import call_llm, parse_json_response, PROVIDERS
+from llm import call_llm, parse_json_response, query_llamacpp_slots, PROVIDERS
 
 # Sized for thinking models that write a reasoning preamble before the JSON
 # answer. The Qwen3.5-27B teacher used 4-6k tokens just for the preamble on
@@ -49,6 +49,112 @@ You are a comparative religion scholar helping to build a concept index of mysti
 For each passage given, score it against every concept definition provided.
 Respond ONLY with a valid JSON array (no markdown, no commentary).
 """
+
+# ── --parallel safety guards (todo:5955d038) ────────────────────────────────
+#
+# --parallel N>1 is scoped to the 4B finetune served by
+# scripts/run-qwen-4b-guru.sh, which is small enough for the server to
+# multiplex several requests without VRAM pressure (see that script's
+# header). The 27B teacher (Qwen3.5-27B-UD-Q4_K_XL.gguf) runs think-on and
+# is served with --parallel 1 by default; silently multiplexing it would
+# contend multiple full-context reasoning passes for the same VRAM the
+# single-request budget assumed. Two independent checks guard --parallel:
+#
+#   1. check_parallel_model_guard — refuses N>1 for any model id that
+#      doesn't look like the finetune, unless explicitly overridden.
+#   2. preflight_server_slots — refuses N>1 when the llama.cpp server
+#      itself reports fewer slots than N, so a run doesn't silently queue
+#      behind a 1-slot server while believing it's running N-wide.
+
+FINETUNE_MODEL_PREFIX = "qwen-3-4b-guru-"
+
+
+class ParallelModelNotAllowedError(RuntimeError):
+    """--parallel N>1 was requested against a model outside the finetune
+    convention this feature is scoped to, and no override was given."""
+
+
+class InsufficientServerSlotsError(RuntimeError):
+    """The llama.cpp server positively reports fewer slots than --parallel
+    would submit concurrently against it."""
+
+
+def check_parallel_model_guard(
+    model: str, parallel: int, allow_parallel_any_model: bool = False,
+) -> None:
+    """Refuse --parallel N>1 unless `model` matches the finetune naming
+    convention (qwen-3-4b-guru-*, e.g. qwen-3-4b-guru-v3-Q4_K_M.gguf — the
+    -vN- infix varies by training run, see run-qwen-4b-guru.sh's header).
+
+    N<=1 is always allowed — there's nothing to multiplex. Passing
+    allow_parallel_any_model=True bypasses the check entirely; that's a
+    deliberate owner override (--allow-parallel-any-model on the CLI), not
+    something a default invocation should reach for by accident.
+    """
+    if parallel <= 1 or allow_parallel_any_model:
+        return
+    if model.startswith(FINETUNE_MODEL_PREFIX):
+        return
+    raise ParallelModelNotAllowedError(
+        f"--parallel {parallel} is scoped to the 4B finetune "
+        f"(model id starting with {FINETUNE_MODEL_PREFIX!r}), but --model is "
+        f"{model!r}. The 27B teacher runs think-on and must not be silently "
+        f"multiplexed — it is served with --parallel 1 for a reason. If you "
+        f"really mean to fan this model out concurrently, pass "
+        f"--allow-parallel-any-model to override deliberately."
+    )
+
+
+def preflight_server_slots(
+    provider_name: str,
+    parallel: int,
+    base_url: str | None = None,
+) -> None:
+    """Before running a parallel pool against a llama.cpp server, ask it how
+    many slots it actually has (query_llamacpp_slots, llm.py — GET /props
+    total_slots/n_parallel, falling back to GET /slots) and refuse rather
+    than let --parallel N queue behind a server serving fewer than N.
+
+    Degrades gracefully by design: this only refuses when the server
+    *positively* reports a too-low slot count. An unreachable server, an
+    older build without /props or /slots, or an unparseable response all
+    come back as None from query_llamacpp_slots — those cases log a
+    warning and continue rather than hard-failing, because they mean "we
+    don't know", not "the server is under-provisioned". Skipped entirely
+    for providers other than llamacpp, which have no slot concept.
+    """
+    if parallel <= 1 or provider_name != "llamacpp":
+        return
+
+    slots = query_llamacpp_slots(base_url=base_url)
+    resolved = base_url or "LLAMACPP_BASE_URL (env default)"
+
+    if slots is None:
+        logger.warning(
+            f"--parallel slot pre-flight: could not determine the slot count "
+            f"of the llama.cpp server at {resolved} (older build, --slots "
+            f"disabled, or an unrecognized response shape). Continuing "
+            f"without the check — verify manually that the server was "
+            f"started with --parallel >= {parallel}."
+        )
+        return
+
+    if slots < parallel:
+        raise InsufficientServerSlotsError(
+            f"--parallel {parallel} exceeds the {slots} slot(s) the server "
+            f"at {resolved} actually reports. Requests beyond {slots} would "
+            f"queue behind it serially while the run believes it's {parallel}-"
+            f"wide. Lower --parallel to <= {slots}, or restart the server "
+            f"with a higher PARALLEL (scripts/serve-llama.sh / "
+            f"run-qwen-4b-guru.sh — the client --parallel and server "
+            f"PARALLEL are two halves of one setting)."
+        )
+
+    logger.info(
+        f"--parallel slot pre-flight: server at {resolved} reports "
+        f"{slots} slot(s) — OK for --parallel {parallel}."
+    )
+
 
 def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
                  max_body_chars: int | None = None) -> str:
@@ -571,11 +677,16 @@ def run_tagging(
     supersede_pending: bool = True,
     chunk_ids: list[str] | None = None,
     parallel: int = 1,
+    allow_parallel_any_model: bool = False,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
         logger.error(f"Unknown provider: {provider_name}")
         sys.exit(1)
+
+    check_parallel_model_guard(model, parallel, allow_parallel_any_model)
+    preflight_server_slots(provider_name, parallel)
+
     concepts = load_taxonomy()
     conn = sqlite3.connect(str(db_path))
     conn.execute("PRAGMA foreign_keys=ON")
@@ -669,7 +780,21 @@ def build_parser() -> argparse.ArgumentParser:
                              "saturate it without hand-sharding --chunk-ids-from-file "
                              "across multiple terminals. All sqlite writes still "
                              "happen on the main thread; only the LLM call and "
-                             "response parsing run concurrently.")
+                             "response parsing run concurrently. Scoped to the 4B "
+                             "finetune (model id starting with "
+                             f"{FINETUNE_MODEL_PREFIX!r}) — refused for any other "
+                             "model unless --allow-parallel-any-model is also given "
+                             "— and pre-flighted against the server's actual slot "
+                             "count (GET /props total_slots, when reachable) before "
+                             "the run starts.")
+    parser.add_argument("--allow-parallel-any-model", action="store_true",
+                        default=False,
+                        help="Override the --parallel model guard and allow "
+                             "--parallel N>1 against a model outside the 4B "
+                             "finetune naming convention (e.g. the 27B teacher). "
+                             "The teacher runs think-on and was never sized for "
+                             "concurrent requests — only pass this if you have a "
+                             "specific, deliberate reason to multiplex it anyway.")
     parser.add_argument("--max-body-chars", type=int, default=0,
                         help="optional cap on chunk body length sent to the LLM. "
                              "0 (default) = unlimited; the chunker is the source "
@@ -715,21 +840,26 @@ def main() -> None:
             sys.exit(1)
         logger.info(f"Loaded {len(chunk_ids)} chunk IDs from {args.chunk_ids_from_file}")
 
-    run_tagging(
-        db_path=Path(args.db),
-        provider_name=args.provider,
-        model=args.model,
-        batch_size=args.batch_size,
-        resume=args.resume,
-        tradition=args.tradition,
-        text_id=args.text,
-        delay=args.delay,
-        max_body_chars=args.max_body_chars or None,
-        respect_reviewed=args.respect_reviewed,
-        supersede_pending=args.supersede_pending,
-        chunk_ids=chunk_ids,
-        parallel=args.parallel,
-    )
+    try:
+        run_tagging(
+            db_path=Path(args.db),
+            provider_name=args.provider,
+            model=args.model,
+            batch_size=args.batch_size,
+            resume=args.resume,
+            tradition=args.tradition,
+            text_id=args.text,
+            delay=args.delay,
+            max_body_chars=args.max_body_chars or None,
+            respect_reviewed=args.respect_reviewed,
+            supersede_pending=args.supersede_pending,
+            chunk_ids=chunk_ids,
+            parallel=args.parallel,
+            allow_parallel_any_model=args.allow_parallel_any_model,
+        )
+    except (ParallelModelNotAllowedError, InsufficientServerSlotsError) as e:
+        logger.error(str(e))
+        sys.exit(1)
 
 
 if __name__ == "__main__":

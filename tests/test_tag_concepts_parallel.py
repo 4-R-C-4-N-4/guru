@@ -107,11 +107,20 @@ def _stub_taxonomy(monkeypatch):
                         lambda: [{"id": "gnosis", "definition": "d"}])
 
 
+@pytest.fixture(autouse=True)
+def _stub_slot_preflight(monkeypatch):
+    """todo:5955d038's slot pre-flight would otherwise try a real HTTP
+    request to LLAMACPP_BASE_URL for every --parallel > 1 run in this file.
+    Stub it to report plenty of slots so these tests stay socket-free and
+    keep exercising only the worker-pool behaviour they're named for."""
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", lambda *a, **k: 64)
+
+
 def _run(db_path: Path, parallel: int, delay: float = 0.0, **kw) -> None:
     tag_concepts.run_tagging(
         db_path=db_path,
         provider_name="llamacpp",
-        model="test-model",
+        model="qwen-3-4b-guru-test-model",
         batch_size=0,
         resume=False,
         tradition=None,
@@ -331,7 +340,7 @@ def test_parallel_resume_skips_already_tagged_chunks(tmp_path, monkeypatch):
     monkeypatch.setattr(tag_concepts, "call_llm", fake_call_llm)
 
     tag_concepts.run_tagging(
-        db_path=db, provider_name="llamacpp", model="m", batch_size=0,
+        db_path=db, provider_name="llamacpp", model="qwen-3-4b-guru-test-model", batch_size=0,
         resume=True, tradition=None, text_id=None, delay=0.0, parallel=3,
     )
 

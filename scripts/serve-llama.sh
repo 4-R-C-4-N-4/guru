@@ -28,6 +28,13 @@ BATCH_SIZE="512"
 # each request can consume most of available VRAM. Smaller models can
 # safely run higher — set PARALLEL via the wrapper (see
 # run-qwen-4b-guru.sh).
+#
+# This PARALLEL is the SERVER-side half of one setting; the CLIENT-side
+# half is tag_concepts.py's --parallel N (todo:5955d038). The client
+# pre-flights this value (GET /props total_slots, when reachable) before
+# starting a run and refuses to exceed it — so raising --parallel N on the
+# client without raising PARALLEL here just makes the client refuse to
+# start, not silently queue behind too few slots.
 PARALLEL="${PARALLEL:-1}"
 
 # --- Sampling defaults (overridable per-request from clients, or by a
