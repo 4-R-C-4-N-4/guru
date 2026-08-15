@@ -1,6 +1,26 @@
 # auto-promote — design
 
-**Status:** Design — pending implementation
+> **RETIRED 2026-08-14 (todo:68028d8f). This documents a tool that no longer
+> exists — `scripts/auto_promote.py` and its wrapper were deleted, not
+> deprecated.** The owner never adopted unattended promotion, and keeping the
+> script in the tree kept leading agents to treat it as part of the tagging
+> workflow. There is exactly one path from a proposal to the live graph: the
+> review queue, applied by the user.
+>
+> Kept as provenance, not as a plan. The corpus still carries ~11,057
+> `tier='proposed'` EXPRESSES edges this design produced; what they mean, and
+> whether retrieval should weight them, is `todo:dd034dc4`. The concrete cost
+> of having shipped them is written up in
+> `docs/summary/derived-parallels-cutover-2026-08-14.md` — 48 of them are on
+> the Enuma Elish, and they are why that text's live tags describe a Babylonian
+> creation epic as `covenant`, `prayer` and `theurgy`.
+>
+> The "Why now" argument below did not survive contact: the ~120-hour review
+> estimate it weighs against was real, but the tags it bought were never
+> reviewed afterwards either, so the corpus absorbed the cost as permanent
+> uncertainty rather than saved time.
+
+**Status:** RETIRED — implemented, then deleted (see banner)
 **Scope:** Promote high-confidence LLM-tagged staged_tags into the live `edges` table without per-row human review, mapped onto the existing `verified`/`proposed`/`inferred` tier system.
 **Why now:** ~14k pending qwen-pass tags would take ~120 hours of manual review at 30s/tag. Score=3 spot-checks have been "almost all solid"; the existing tier hedge in the web UI already communicates confidence to the RAG consumer. Requiring 100% human review is throwing away the model's strongest signal for no UX benefit.
 

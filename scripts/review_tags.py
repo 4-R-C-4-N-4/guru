@@ -95,9 +95,10 @@ def promote_to_expresses(conn: sqlite3.Connection,
 
     Called only on human accept. Tier is *always* 'verified' — the load-
     bearing distinction is "a human signed off," not "the model was
-    confident." Auto-promote (scripts/auto_promote.py) writes lower
-    tiers via its own SQL; this function is the human-review path's
-    upgrade-to-verified hook. ON CONFLICT DO UPDATE means a prior
+    confident." This is now the only path that writes EXPRESSES tiers —
+    auto_promote.py, which wrote 'proposed'/'inferred' without review, was
+    deleted in todo:68028d8f. ON CONFLICT DO UPDATE still matters because
+    the corpus retains ~11k edges it left behind (todo:dd034dc4): a prior
     auto-promoted 'proposed' or 'inferred' edge gets correctly upgraded
     on the curator's accept.
 

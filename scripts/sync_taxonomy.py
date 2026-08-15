@@ -11,7 +11,7 @@ created by scripts/migrations/v3_006_concept_families.sql:
 
 Idempotent — safe to run on every TOML edit. Default is --dry-run (summary
 only, no writes); --apply commits inside a transaction. Same defaulting
-discipline as auto_promote.py / cleanup_dupes.sh.
+discipline as cleanup_dupes.sh.
 
     sync_taxonomy.py [--db PATH] [--dry-run | --apply]
 

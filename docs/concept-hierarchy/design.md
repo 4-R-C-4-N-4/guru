@@ -311,7 +311,7 @@ The loader distinguishes domain-level (one segment after `families.`) from famil
 sync_taxonomy.py [--db PATH] [--dry-run | --apply]
 ```
 
-Default behaviour is `--dry-run`, summarising what would change. Same defaulting discipline as `auto_promote.py` and `cleanup_dupes.sh`.
+Default behaviour is `--dry-run`, summarising what would change. Same defaulting discipline as `cleanup_dupes.sh`.
 
 Logic per run:
 

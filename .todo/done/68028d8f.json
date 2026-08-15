@@ -1,0 +1,27 @@
+{
+  "id": "68028d8f",
+  "type": "chore",
+  "state": "done",
+  "summary": "Deprecate auto_promote.py: the owner does not use it, but agents keep reading it as part of the tagging workflow",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-14T23:06:59.298Z",
+  "updated_at": "2026-08-14T23:18:13.922Z",
+  "files": [
+    {
+      "path": "scripts/auto_promote.py"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "pipeline",
+    "workflow"
+  ],
+  "resolution": {
+    "commit": "406d7a483befcdda744b089653ecd3f8121c0733",
+    "resolved_at": "2026-08-14T23:18:13.922Z",
+    "resolved_by": "unknown",
+    "note": "Deleted scripts/auto_promote.py + auto_promote.sh + tests/test_auto_promote.py. AGENTS.md now states there is no unattended promotion path and why the script was removed rather than deprecated. docs/autopromote/design.md kept as provenance under a RETIRED banner (the ~11,057 tier='proposed' edges it wrote are todo:dd034dc4's to rule on). auto_promote_edges.py untouched per PR #64's decision."
+  }
+}
