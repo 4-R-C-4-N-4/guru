@@ -1,0 +1,26 @@
+{
+  "id": "d267201a",
+  "type": "feature",
+  "state": "done",
+  "summary": "Multi-endpoint: thread base_url through call_llm (today it reads process-global LLAMACPP_BASE_URL) and round-robin across servers, so a second 4B on the 4070 adds throughput instead of contending; needs 5955d038",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.517Z",
+  "updated_at": "2026-08-15T15:30:58.817Z",
+  "tags": [
+    "tagging",
+    "gpu"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  },
+  "resolution": {
+    "commit": "fe550009",
+    "resolved_at": "2026-08-15T15:30:58.817Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_multi_endpoint.py",
+    "test_function": "test_round_robin_pins_each_chunk_to_its_endpoint_by_position",
+    "note": "base_url threaded through llm.call_llamacpp/call_llm as a real parameter (env default preserved, forwarded only when set — no thread-local/env hack). tag_concepts.py gets repeatable --endpoint URL; chunks are split round-robin by list position into per-endpoint buckets, each with its own ThreadPoolExecutor sized to --parallel, so --parallel is PER ENDPOINT (documented in --help and _run_parallel_pool's docstring) — total concurrency = parallel * len(endpoints). No --endpoint => endpoints=[None] => byte-identical to pre-multi-endpoint behavior. Model guard now judges parallel*n_endpoints (total concurrency) so it can't be dodged by spreading a disallowed model across many 1-worker endpoints; slot pre-flight runs once per endpoint against that endpoint's own base_url. Single-writer invariant unchanged: only the main thread ever touches conn. 13 new tests in test_tag_concepts_multi_endpoint.py, all socket-free."
+  }
+}
