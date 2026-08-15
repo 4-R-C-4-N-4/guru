@@ -19,6 +19,46 @@ HOST="${HOST:-127.0.0.1}"
 PORT="${PORT:-8080}"
 
 # --- Model loading ---
+# CTX_SIZE is PER SLOT, not the total passed to llama-server (todo:dcb3cce5
+# finding 1). llama.cpp itself divides whatever --ctx-size it's given by
+# n_seq_max (== --parallel) when kv_unified is false, the default
+# (~/programs/llama.cpp/src/llama-context.cpp:289:
+# cparams.n_ctx_seq = cparams.n_ctx / cparams.n_seq_max) — so a launch of
+# `--ctx-size 32768 --parallel 4` was already serving 8192-token slots, not
+# 32768-token ones, and every chunk of the 2026-08-15 elish run truncated
+# at n_ctx_slot=8192 (n_tokens=8191, truncated=1) with the ~7,600-token
+# worst-case tagging prompt (largest corpus chunk + the 116-concept
+# taxonomy). parse_json_response's truncation repair closes the array after
+# the last complete object instead of raising, so this failed silently —
+# --resume never revisited the affected chunks.
+#
+# This script now scales the total it asks llama-server for by PARALLEL
+# below, matching llama.cpp's own preset convention (common/arg.cpp sets
+# params.n_ctx = X * params.n_parallel for its context-size presets) — so
+# CTX_SIZE means "what one slot gets" here too, and llama.cpp's own division
+# hands it straight back. With the default PARALLEL=1 (the 27B teacher path,
+# run-qwen.sh), CTX_SIZE * PARALLEL == CTX_SIZE, so nothing changes for that
+# caller. run-qwen-4b-guru.sh sets both CTX_SIZE and PARALLEL explicitly —
+# see its header for the chosen per-slot default and why. Total VRAM now
+# scales with PARALLEL: raising it buys more per-slot context at the cost of
+# a proportionally larger total KV cache, on top of the same 2.3GB of
+# weights — that trade is unmeasured in absolute GB here (no GPU was used to
+# produce this comment); watch `nvidia-smi` when you raise it.
+#
+# --kv-unified (llama.cpp: cparams.kv_unified, common/common.h) is the other
+# lever this could use — it stops dividing --ctx-size by slot count at all,
+# so a single request could use the full budget instead of a fixed
+# `total/PARALLEL` share. Not used here: it trades a static per-slot
+# reservation for a *shared* pool that concurrent sequences draw from
+# dynamically, which pays off when requests are heterogeneous (some short,
+# some long) so the total can be smaller than the sum of worst cases. This
+# workload is the opposite — every tag_concepts.py request is close to the
+# same worst-case prompt size — so a shared pool would still need to hold
+# PARALLEL requests near their worst case at once, buying nothing over
+# static division while adding the unified cache's own complexity
+# (allocation/defrag across sequences). Static division (the default,
+# kv_unified=false) stays the simpler, equally-sized choice for this
+# specific access pattern.
 CTX_SIZE="${CTX_SIZE:-32768}"
 N_GPU_LAYERS="999"
 THREADS="6"
@@ -72,6 +112,12 @@ if [[ ! -x "$LLAMA_BIN" ]]; then
     exit 1
 fi
 
+# Total context handed to llama-server. CTX_SIZE is per-slot (see the
+# comment above the variable); llama.cpp divides this total back down by
+# PARALLEL internally, so multiplying here is what makes CTX_SIZE actually
+# mean "per slot" instead of "per slot only when PARALLEL happens to be 1".
+TOTAL_CTX_SIZE=$((CTX_SIZE * PARALLEL))
+
 # --- Banner so you know what's running ---
 cat <<EOF
 ╭─────────────────────────────────────────────────────╮
@@ -79,7 +125,7 @@ cat <<EOF
 ├─────────────────────────────────────────────────────┤
 │ model:   $MODEL_FILE
 │ bind:    http://$HOST:$PORT
-│ ctx:     $CTX_SIZE tokens
+│ ctx:     $CTX_SIZE tokens/slot  x  $PARALLEL slot(s)  =  $TOTAL_CTX_SIZE total
 │ layers:  $N_GPU_LAYERS (full GPU offload)
 │ stop:    Ctrl-C
 ╰─────────────────────────────────────────────────────╯
@@ -89,7 +135,7 @@ exec "$LLAMA_BIN" \
     --model "$MODEL_PATH" \
     --host "$HOST" \
     --port "$PORT" \
-    --ctx-size "$CTX_SIZE" \
+    --ctx-size "$TOTAL_CTX_SIZE" \
     --n-gpu-layers "$N_GPU_LAYERS" \
     --threads "$THREADS" \
     --batch-size "$BATCH_SIZE" \

@@ -279,6 +279,58 @@ def test_safe_apply_catches_db_write_failure_and_rolls_back_instead_of_raising()
     assert conn.execute("SELECT COUNT(*) FROM tagging_progress").fetchone() == (0,)
 
 
+def test_safe_apply_does_not_leave_outcome_counts_from_a_rolled_back_chunk():
+    """A chunk with two tags where the first upsert succeeds and the second
+    hits the CHECK(score BETWEEN 0 AND 3) constraint must not leave the
+    first tag's 'inserted' count sitting in outcomes after conn.rollback()
+    discards its row too (todo:dcb3cce5 finding 4) — apply_chunk_result
+    increments outcomes as it inserts, in the same loop that can raise
+    partway through, so without a snapshot/restore the counter would
+    overstate what's actually committed to staged_tags."""
+    conn = _seed_db()
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+    result = ChunkTagResult(
+        chunk_id="t.x.001",
+        tags=[_tag("gnosis"), _tag("light", score=99)],
+    )
+
+    error = _apply_chunk_result_safe(conn, result, model="m", respect_reviewed=True,
+                                     supersede_pending=True, outcomes=outcomes)
+
+    assert isinstance(error, Exception)
+    assert outcomes == {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+    assert conn.execute("SELECT COUNT(*) FROM staged_tags").fetchone() == (0,)
+    assert conn.execute("SELECT COUNT(*) FROM tagging_progress").fetchone() == (0,)
+
+
+def test_safe_apply_preserves_prior_outcome_counts_across_a_later_rollback():
+    """outcomes accumulates across many chunks in the real run loop (see
+    test_apply_chunk_result_accumulates_outcomes_across_multiple_results).
+    A later chunk's rollback must restore exactly the snapshot taken before
+    its own attempt — not zero the dict, not touch counts a prior,
+    successful chunk already contributed."""
+    conn = _seed_db()
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+
+    good = ChunkTagResult(chunk_id="t.x.001", tags=[_tag("gnosis"), _tag("light")])
+    assert _apply_chunk_result_safe(conn, good, model="m", respect_reviewed=True,
+                                    supersede_pending=True, outcomes=outcomes) is None
+    assert outcomes["inserted"] == 2
+
+    bad = ChunkTagResult(
+        chunk_id="t.x.002",
+        tags=[_tag("gnosis"), _tag("light", score=99)],
+    )
+    error = _apply_chunk_result_safe(conn, bad, model="m", respect_reviewed=True,
+                                     supersede_pending=True, outcomes=outcomes)
+
+    assert isinstance(error, Exception)
+    # Still exactly 2 — the first chunk's real inserts — not 3 (which the
+    # bug would produce: bad chunk's first tag increments 'inserted' before
+    # its second tag raises, and that increment used to survive rollback).
+    assert outcomes == {"inserted": 2, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+
+
 def test_safe_apply_failure_on_one_chunk_does_not_affect_a_prior_committed_chunk():
     conn = _seed_db()
     outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}

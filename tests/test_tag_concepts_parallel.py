@@ -111,9 +111,11 @@ def _stub_taxonomy(monkeypatch):
 def _stub_slot_preflight(monkeypatch):
     """todo:5955d038's slot pre-flight would otherwise try a real HTTP
     request to LLAMACPP_BASE_URL for every --parallel > 1 run in this file.
-    Stub it to report plenty of slots so these tests stay socket-free and
+    Stub both the slot-count and per-slot-context (todo:dcb3cce5 finding 2)
+    queries to report plenty of both so these tests stay socket-free and
     keep exercising only the worker-pool behaviour they're named for."""
     monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", lambda *a, **k: 64)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", lambda *a, **k: 32768)
 
 
 def _run(db_path: Path, parallel: int, delay: float = 0.0, **kw) -> None:
@@ -426,3 +428,65 @@ def test_parallel_resume_skips_already_tagged_chunks(tmp_path, monkeypatch):
     )
 
     assert set(seen) == set(ids) - already_done
+
+
+# ── Ctrl-C during --parallel doesn't hang (todo:dcb3cce5 finding 5) ─────────
+
+
+def test_parallel_ctrl_c_cancels_queued_work_and_does_not_hang(tmp_path, monkeypatch):
+    """A worker observing a KeyboardInterrupt (standing in for a real Ctrl-C
+    landing on the main thread — either while it's blocked in wait() or,
+    as simulated here, when it calls fut.result() on a future that raised
+    one) must not be swallowed, must not be left for the old bare
+    ExitStack's shutdown(wait=True) to block on, and must not silently
+    drain the rest of the queue.
+
+    Before this fix, the ExitStack around the executors called
+    shutdown(wait=True) with no cancel_futures on the way out regardless of
+    why the `with` block was exited — so even a prompt KeyboardInterrupt
+    would still wait for every already-queued chunk to run to completion
+    (up to DEFAULT_HTTP_TIMEOUT, 1200s, per in-flight call) before the
+    process actually stopped.
+
+    n=20 chunks are seeded but at most 4 (parallel=2 *
+    PARALLEL_INFLIGHT_MULTIPLIER=2) are ever submitted to the executor
+    before the interrupt is raised — chunks 4-19 are provably never
+    touched, since submit_next() for further chunks only runs from inside
+    the per-completion loop this test's poison chunk aborts out of."""
+    n = 20
+    parallel = 2
+    db = tmp_path / "guru.db"
+    _make_db(db, n)
+
+    calls = []
+    lock = threading.Lock()
+
+    def fake_call_llm(provider, model, system, prompt, max_tokens):
+        cid = _chunk_id_from_prompt(prompt)
+        with lock:
+            calls.append(cid)
+        idx = int(cid.rsplit(".", 1)[-1])
+        if idx == 0:
+            raise KeyboardInterrupt()
+        # Any chunk that actually starts (already claimed by a worker
+        # thread before shutdown(cancel_futures=True) could stop it) keeps
+        # running in the background — this must not block the function's
+        # return, which is exactly the property under test.
+        time.sleep(1.5)
+        return "[]"
+
+    monkeypatch.setattr(tag_concepts, "call_llm", fake_call_llm)
+
+    start = time.monotonic()
+    with pytest.raises(KeyboardInterrupt):
+        _run(db, parallel=parallel)
+    elapsed = time.monotonic() - start
+
+    # Prompt: nowhere near the 1.5s a single already-running chunk sleeps
+    # for, let alone what draining the rest of the queue would cost.
+    assert elapsed < 1.0
+    # The queue was actually cut short, not drained to completion — at
+    # most the initial priming wave (parallel * PARALLEL_INFLIGHT_MULTIPLIER
+    # = 4) could ever have been submitted before the bail-out.
+    assert len(calls) <= parallel * tag_concepts.PARALLEL_INFLIGHT_MULTIPLIER
+    assert len(calls) < n

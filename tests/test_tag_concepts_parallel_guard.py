@@ -202,7 +202,91 @@ def test_preflight_skips_entirely_for_parallel_1(monkeypatch):
         raise AssertionError("must not query slots when --parallel is 1")
 
     monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", _boom)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", _boom)
     tag_concepts.preflight_server_slots("llamacpp", parallel=1, base_url="http://fake:8080")
+
+
+# ── query_llamacpp_slot_ctx (llm.py) — stubbed HTTP, no sockets ────────────
+
+
+def test_query_slot_ctx_reads_n_ctx_from_default_generation_settings(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {"default_generation_settings": {"n_ctx": 16384}},
+    })
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") == 16384
+
+
+def test_query_slot_ctx_returns_none_when_props_unreachable(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_when_field_missing(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_on_malformed_json(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": b"not json at all"})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_on_non_positive_value(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {"default_generation_settings": {"n_ctx": 0}},
+    })
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+# ── preflight_server_slots' per-slot-context check (finding 2) ──────────────
+
+
+def test_preflight_ok_when_slot_ctx_is_comfortable(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {
+            "total_slots": 4,
+            "default_generation_settings": {"n_ctx": 16384},
+        },
+    })
+    tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_refuses_when_slot_ctx_is_too_small(monkeypatch):
+    """The exact shape of the 2026-08-15 elish run: slot COUNT is fine
+    (4 >= 4), but per-slot CONTEXT is the number that actually truncated
+    every chunk. The count check alone (the pre-fix behaviour) would have
+    logged 'OK' here and let the run proceed."""
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {
+            "total_slots": 4,
+            "default_generation_settings": {"n_ctx": 8192},
+        },
+    })
+    with pytest.raises(tag_concepts.InsufficientSlotContextError, match="8192"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_warns_and_continues_when_slot_ctx_field_missing(monkeypatch, caplog):
+    """Degrades exactly like the slot-count check: an older server that
+    doesn't populate default_generation_settings.n_ctx is 'unknown', not
+    'too small' — warn and continue, never hard-fail."""
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    with caplog.at_level("WARNING"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+    assert any("per-slot context" in r.message for r in caplog.records)
+
+
+def test_preflight_slot_ctx_check_skipped_when_slot_count_already_refuses(monkeypatch):
+    """When the slot-count check already raises, the function must not go
+    on to also query per-slot context — the run is already refused."""
+    def _boom(*a, **k):
+        raise AssertionError("must not query slot ctx once slot count already refused")
+
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", lambda *a, **k: 1)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", _boom)
+
+    with pytest.raises(tag_concepts.InsufficientServerSlotsError):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
 
 
 # ── run_tagging wires both checks in before doing any work ─────────────────

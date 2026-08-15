@@ -14,7 +14,6 @@ Usage:
 """
 
 import argparse
-import contextlib
 import json
 import logging
 import sqlite3
@@ -37,7 +36,10 @@ DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 TAXONOMY_TOML = PROJECT_ROOT / "concepts" / "taxonomy.toml"
 
 sys.path.insert(0, str(Path(__file__).parent))
-from llm import call_llm, parse_json_response, query_llamacpp_slots, PROVIDERS
+from llm import (
+    call_llm, parse_json_response, query_llamacpp_slots,
+    query_llamacpp_slot_ctx, PROVIDERS,
+)
 
 # Sized for thinking models that write a reasoning preamble before the JSON
 # answer. The Qwen3.5-27B teacher used 4-6k tokens just for the preamble on
@@ -59,15 +61,41 @@ Respond ONLY with a valid JSON array (no markdown, no commentary).
 # header). The 27B teacher (Qwen3.5-27B-UD-Q4_K_XL.gguf) runs think-on and
 # is served with --parallel 1 by default; silently multiplexing it would
 # contend multiple full-context reasoning passes for the same VRAM the
-# single-request budget assumed. Two independent checks guard --parallel:
+# single-request budget assumed. Three independent checks guard --parallel:
 #
 #   1. check_parallel_model_guard — refuses N>1 for any model id that
 #      doesn't look like the finetune, unless explicitly overridden.
 #   2. preflight_server_slots — refuses N>1 when the llama.cpp server
 #      itself reports fewer slots than N, so a run doesn't silently queue
-#      behind a 1-slot server while believing it's running N-wide.
+#      behind a 1-slot server while believing it's running N-wide. This
+#      check alone validates a number that is sufficient by construction
+#      once the server was launched with a matching PARALLEL — it exists to
+#      catch a *mismatched* launch, not to size the run.
+#   3. preflight_server_slots (same function) also refuses when the
+#      server's PER-SLOT context is too small for a real tagging prompt —
+#      the number that actually shrinks as slots rise (llama.cpp divides
+#      total --ctx-size by slot count when kv_unified is false, the
+#      default), and the one that silently truncated every chunk of the
+#      2026-08-15 elish run at n_ctx_slot=8192 (todo:dcb3cce5). Slot count
+#      being sufficient says nothing about this — a 4-slot server can still
+#      serve 4 slots too small to hold one prompt.
 
 FINETUNE_MODEL_PREFIX = "qwen-3-4b-guru-"
+
+# The 2026-08-15 elish run's worst-case tagging prompt (largest corpus
+# chunk + the full 116-concept taxonomy) was measured at ~7,600 tokens
+# (todo:dcb3cce5). n_ctx_slot=8192 that day left under 600 tokens for the
+# JSON response — nowhere near enough, which is exactly why every chunk
+# truncated (`n_tokens = 8191, truncated = 1`) and parse_json_response's
+# truncation repair silently produced partial tag lists instead of errors.
+# 10,000 is that measured prompt figure plus ~2,400 tokens of generation
+# headroom — not generous, just enough that a per-slot context below it is
+# close to guaranteed to repeat the same failure on a dense chunk. This is
+# deliberately far short of LLM_MAX_TOKENS (24000, the hard ceiling passed
+# to the LLM call for pathological chunks) — requiring headroom for the
+# full ceiling would flag every real-world server as "too small" by this
+# check's own logic, which is not what happened in practice.
+MIN_SAFE_SLOT_CTX_TOKENS = 10000
 
 
 class ParallelModelNotAllowedError(RuntimeError):
@@ -78,6 +106,13 @@ class ParallelModelNotAllowedError(RuntimeError):
 class InsufficientServerSlotsError(RuntimeError):
     """The llama.cpp server positively reports fewer slots than --parallel
     would submit concurrently against it."""
+
+
+class InsufficientSlotContextError(RuntimeError):
+    """The llama.cpp server positively reports a per-slot context smaller
+    than MIN_SAFE_SLOT_CTX_TOKENS — the exact silent-truncation failure
+    mode of todo:dcb3cce5, caught before any chunk is sent rather than
+    discovered later as a partial, "successfully parsed" JSON array."""
 
 
 class InvalidTaggingArgsError(RuntimeError):
@@ -135,24 +170,42 @@ def preflight_server_slots(
     parallel: int,
     base_url: str | None = None,
 ) -> None:
-    """Before running a parallel pool against a llama.cpp server, ask it how
-    many slots it actually has (query_llamacpp_slots, llm.py — GET /props
-    total_slots/n_parallel, falling back to GET /slots) and refuse rather
-    than let --parallel N queue behind a server serving fewer than N.
+    """Before running a parallel pool against a llama.cpp server, check two
+    independent numbers and refuse rather than let a broken config run
+    unnoticed:
 
-    Degrades gracefully by design: this only refuses when the server
-    *positively* reports a too-low slot count. An unreachable server, an
-    older build without /props or /slots, or an unparseable response all
-    come back as None from query_llamacpp_slots — those cases log a
+      1. Slot COUNT (query_llamacpp_slots, llm.py — GET /props
+         total_slots/n_parallel, falling back to GET /slots) — refuses
+         --parallel N against a server reporting fewer than N slots, so a
+         run doesn't silently queue behind too few slots while believing
+         it's N-wide.
+      2. Per-slot CONTEXT (query_llamacpp_slot_ctx, llm.py — GET /props
+         default_generation_settings.n_ctx) — refuses when that number is
+         too small for a real tagging prompt (MIN_SAFE_SLOT_CTX_TOKENS).
+         This is the check slot count *cannot* substitute for: total_slots
+         >= parallel is satisfied by construction once the server was
+         launched with a matching PARALLEL, but per-slot context SHRINKS
+         as slots rise (llama.cpp divides --ctx-size by slot count), and a
+         4-slot server passing check 1 can still serve 4 slots too small
+         to hold one prompt — exactly what silently truncated every chunk
+         of the 2026-08-15 elish run (todo:dcb3cce5).
+
+    Both degrade gracefully by design: each only refuses when the server
+    *positively* reports a too-low number. An unreachable server, an older
+    build without /props or /slots, or an unparseable response all come
+    back as None from the respective query function — those cases log a
     warning and continue rather than hard-failing, because they mean "we
     don't know", not "the server is under-provisioned". Skipped entirely
-    for providers other than llamacpp, which have no slot concept.
+    for providers other than llamacpp, which have no slot concept, and for
+    --parallel <= 1, where n_ctx_seq == n_ctx (nothing is divided) so
+    neither number can be the problem.
     """
     if parallel <= 1 or provider_name != "llamacpp":
         return
 
-    slots = query_llamacpp_slots(base_url=base_url)
     resolved = base_url or "LLAMACPP_BASE_URL (env default)"
+
+    slots = query_llamacpp_slots(base_url=base_url)
 
     if slots is None:
         logger.warning(
@@ -162,9 +215,7 @@ def preflight_server_slots(
             f"without the check — verify manually that the server was "
             f"started with --parallel >= {parallel}."
         )
-        return
-
-    if slots < parallel:
+    elif slots < parallel:
         raise InsufficientServerSlotsError(
             f"--parallel {parallel} exceeds the {slots} slot(s) the server "
             f"at {resolved} actually reports. Requests beyond {slots} would "
@@ -174,11 +225,47 @@ def preflight_server_slots(
             f"run-qwen-4b-guru.sh — the client --parallel and server "
             f"PARALLEL are two halves of one setting)."
         )
+    else:
+        logger.info(
+            f"--parallel slot pre-flight: server at {resolved} reports "
+            f"{slots} slot(s) — OK for --parallel {parallel}."
+        )
 
-    logger.info(
-        f"--parallel slot pre-flight: server at {resolved} reports "
-        f"{slots} slot(s) — OK for --parallel {parallel}."
-    )
+    slot_ctx = query_llamacpp_slot_ctx(base_url=base_url)
+
+    if slot_ctx is None:
+        logger.warning(
+            f"--parallel slot pre-flight: could not determine the per-slot "
+            f"context of the llama.cpp server at {resolved} "
+            f"(default_generation_settings.n_ctx missing from /props — "
+            f"older build or unrecognized response shape). Continuing "
+            f"without the check — this is the number that silently "
+            f"truncated every chunk of the 2026-08-15 elish run "
+            f"(todo:dcb3cce5), so verify manually: the server's startup "
+            f"banner logs n_ctx_slot, and slot-release log lines show "
+            f"truncated = 1 when a request actually hit the wall."
+        )
+    elif slot_ctx < MIN_SAFE_SLOT_CTX_TOKENS:
+        raise InsufficientSlotContextError(
+            f"--parallel {parallel} against the server at {resolved} "
+            f"leaves each slot only {slot_ctx} tokens of context — below "
+            f"the {MIN_SAFE_SLOT_CTX_TOKENS}-token floor "
+            f"(todo:dcb3cce5's worst-case tagging prompt measured ~7,600 "
+            f"tokens; {slot_ctx} tokens is not enough headroom for prompt "
+            f"+ a real generation budget and will likely truncate mid-JSON "
+            f"exactly as the 2026-08-15 elish run did, silently, since the "
+            f"truncation repair in parse_json_response doesn't raise. Raise "
+            f"the server's per-slot CTX_SIZE (scripts/serve-llama.sh — "
+            f"CTX_SIZE is now PER SLOT; total context served is "
+            f"CTX_SIZE * PARALLEL) or lower --parallel to fit within the "
+            f"context you're currently serving."
+        )
+    else:
+        logger.info(
+            f"--parallel slot pre-flight: server at {resolved} reports "
+            f"{slot_ctx} tokens of per-slot context — OK "
+            f"(>= {MIN_SAFE_SLOT_CTX_TOKENS})."
+        )
 
 
 def build_prompt(chunk_body: str, chunk_citation: str, concepts: list[dict],
@@ -606,11 +693,24 @@ def _apply_chunk_result_safe(
     linger in an open transaction; mark_complete is never reached for that
     chunk, so --resume retries it on the next run.
     """
+    # outcomes is snapshotted before the attempt and restored verbatim on
+    # failure. apply_chunk_result increments it per tag AS it inserts, in
+    # the same loop that can raise partway through (e.g. tag 3 of 5 hits
+    # the CHECK(score BETWEEN 0 AND 3) constraint) — without the snapshot,
+    # tags 1-2's increments would survive conn.rollback() discarding their
+    # rows, so outcomes would count inserts the DB no longer has
+    # (todo:dcb3cce5 finding 4). Restoring the snapshot on any exception
+    # keeps outcomes exactly in sync with what's actually committed; on
+    # success the snapshot is simply discarded, since apply_chunk_result
+    # already wrote the post-attempt values into outcomes directly.
+    snapshot = dict(outcomes)
     try:
         apply_chunk_result(conn, result, model, respect_reviewed, supersede_pending, outcomes)
         return None
     except Exception as e:
         conn.rollback()
+        outcomes.clear()
+        outcomes.update(snapshot)
         return e
 
 
@@ -731,39 +831,42 @@ def _run_parallel_pool(
     fut_endpoint_idx: dict[Future, int] = {}
     tagged = errors = completed = 0
 
-    with contextlib.ExitStack() as stack:
-        executors = [
-            stack.enter_context(ThreadPoolExecutor(max_workers=parallel))
-            for _ in range(n_endpoints)
-        ]
+    # Plain list, not an ExitStack — see the try/except/finally below for
+    # why: a KeyboardInterrupt needs to shut these down with
+    # cancel_futures=True *before* anything waits on them, and an ExitStack
+    # would run each executor's default __exit__ (shutdown(wait=True), no
+    # cancel_futures) on the way out regardless of what we do inside,
+    # re-introducing the exact hang this is fixing (todo:dcb3cce5 finding 5).
+    executors = [ThreadPoolExecutor(max_workers=parallel) for _ in range(n_endpoints)]
 
-        def submit_next(e: int) -> bool:
-            pos = bucket_pos[e]
-            bucket = buckets[e]
-            if pos >= len(bucket):
-                return False
-            bucket_pos[e] += 1
-            # Mirror the serial path's "no trailing sleep after the last
-            # unit of work" rule. Which physical worker thread ends up
-            # idle last isn't knowable ahead of time (ThreadPoolExecutor
-            # hands queued futures to whichever thread frees up next), but
-            # the final `parallel`-sized wave of a lane's bucket is exactly
-            # the set of submissions that — once done — have no next chunk
-            # to submit (submit_next returns False for them): whichever
-            # thread finishes one of those is done sleeping for nothing.
-            # Skipping --delay for that whole tail wave, not just the
-            # single last chunk, is what actually eliminates the wasted
-            # sleep the unconditional version paid on every worker's exit.
-            is_tail_wave = pos >= len(bucket) - parallel
-            fut = executors[e].submit(
-                _tag_one_chunk_then_delay, bucket[pos], concepts, provider_name,
-                model, max_body_chars, 0.0 if is_tail_wave else delay,
-                resolved_endpoints[e],
-            )
-            pending.add(fut)
-            fut_endpoint_idx[fut] = e
-            return True
+    def submit_next(e: int) -> bool:
+        pos = bucket_pos[e]
+        bucket = buckets[e]
+        if pos >= len(bucket):
+            return False
+        bucket_pos[e] += 1
+        # Mirror the serial path's "no trailing sleep after the last
+        # unit of work" rule. Which physical worker thread ends up
+        # idle last isn't knowable ahead of time (ThreadPoolExecutor
+        # hands queued futures to whichever thread frees up next), but
+        # the final `parallel`-sized wave of a lane's bucket is exactly
+        # the set of submissions that — once done — have no next chunk
+        # to submit (submit_next returns False for them): whichever
+        # thread finishes one of those is done sleeping for nothing.
+        # Skipping --delay for that whole tail wave, not just the
+        # single last chunk, is what actually eliminates the wasted
+        # sleep the unconditional version paid on every worker's exit.
+        is_tail_wave = pos >= len(bucket) - parallel
+        fut = executors[e].submit(
+            _tag_one_chunk_then_delay, bucket[pos], concepts, provider_name,
+            model, max_body_chars, 0.0 if is_tail_wave else delay,
+            resolved_endpoints[e],
+        )
+        pending.add(fut)
+        fut_endpoint_idx[fut] = e
+        return True
 
+    try:
         for e in range(n_endpoints):
             for _ in range(max_in_flight_per_endpoint):
                 if not submit_next(e):
@@ -780,7 +883,10 @@ def _run_parallel_pool(
                     # can (see its docstring), but a future can also fail
                     # for reasons outside that function (e.g. the executor
                     # itself). Either way, one bad chunk must not take down
-                    # the run or the other in-flight results.
+                    # the run or the other in-flight results. KeyboardInterrupt
+                    # is a BaseException, not an Exception, so it deliberately
+                    # does NOT match here — it falls through to the except
+                    # clause below instead.
                     result = ChunkTagResult(chunk_id="<unknown>", error=ex)
 
                 completed += 1
@@ -802,6 +908,41 @@ def _run_parallel_pool(
                     logger.info(f"Batch {completed//batch_size} complete ({tagged} tagged, {errors} errors)")
 
                 submit_next(e)
+    except KeyboardInterrupt:
+        # A KeyboardInterrupt here can arrive from two places: the main
+        # thread blocked inside wait() above (the common real-world case —
+        # an operator's Ctrl-C during the idle stretch between
+        # completions), or re-raised from fut.result() when a worker itself
+        # observed one. Either way, the old behaviour (bare ExitStack)
+        # would let this propagate straight into each executor's
+        # shutdown(wait=True): every already-queued-but-not-started chunk
+        # would still run, and any chunk mid-flight could hold the whole
+        # process up to DEFAULT_HTTP_TIMEOUT (1200s, llm.py) before the
+        # process actually exited. Shut down promptly instead: cancel every
+        # future that hasn't started, and don't wait on the ones that have
+        # — a thread already inside call_llamacpp can't be force-killed
+        # (Python has no API for that), but this call no longer blocks on
+        # it. Chunks already committed by apply_chunk_result before the
+        # interrupt are unaffected (each chunk commits its own transaction
+        # — see apply_chunk_result's docstring), so --resume picks the run
+        # back up from here without redoing or losing anything.
+        logger.warning(
+            "Ctrl-C: stopping the parallel pool. Cancelling every "
+            "queued-but-not-yet-started chunk; chunks already committed "
+            "before the interrupt are safe and --resume will skip them."
+        )
+        for ex in executors:
+            ex.shutdown(wait=False, cancel_futures=True)
+        raise
+    finally:
+        # Always release the thread pools. On the normal-completion path
+        # `pending` is already empty here, so this has nothing left to wait
+        # on and returns immediately. On the KeyboardInterrupt path the
+        # except clause above already requested cancellation; this second
+        # call is the ordinary (non-cancelling) shutdown and is safe to
+        # call again — ThreadPoolExecutor.shutdown() is idempotent.
+        for ex in executors:
+            ex.shutdown(wait=False)
 
     return tagged, errors
 
@@ -839,6 +980,29 @@ def run_tagging(
             f"(other providers have no server/slot concept to fan out "
             f"across), but --provider is {provider_name!r}."
         )
+
+    if endpoints:
+        # De-duplicate, preserving first-occurrence order (todo:dcb3cce5
+        # finding 6). Without this, the same URL passed twice via repeated
+        # --endpoint pre-flights independently (both pass, since each check
+        # only knows about itself) and then builds two separate
+        # `parallel`-sized ThreadPoolExecutor pools against what is really
+        # one server — 2 * parallel concurrent requests landing on a server
+        # pre-flighted and sized for `parallel`, the exact silent-
+        # serialization failure this whole feature exists to prevent.
+        deduped_endpoints = list(dict.fromkeys(endpoints))
+        if len(deduped_endpoints) != len(endpoints):
+            logger.warning(
+                f"--endpoint was given {len(endpoints)} times but only "
+                f"{len(deduped_endpoints)} distinct URL(s) were passed; "
+                f"duplicates collapse to a single pool per distinct "
+                f"endpoint. Repeat a URL only if you intend two "
+                f"independent llama.cpp servers at that address — "
+                f"otherwise this was accidental and would have sent "
+                f"{parallel * len(endpoints)} concurrent requests to a "
+                f"server pre-flighted for {parallel}."
+            )
+        endpoints = deduped_endpoints
 
     # --parallel is interpreted PER ENDPOINT (see _run_parallel_pool's
     # docstring for why): with E endpoints, up to `parallel` concurrent
@@ -1078,7 +1242,7 @@ def main() -> None:
             endpoints=args.endpoints,
         )
     except (ParallelModelNotAllowedError, InsufficientServerSlotsError,
-            InvalidTaggingArgsError) as e:
+            InsufficientSlotContextError, InvalidTaggingArgsError) as e:
         logger.error(str(e))
         sys.exit(1)
 

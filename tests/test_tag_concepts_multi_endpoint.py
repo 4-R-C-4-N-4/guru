@@ -218,9 +218,14 @@ def _make_db(path: Path, n: int) -> list[str]:
 def _stub_taxonomy_and_slots(monkeypatch):
     monkeypatch.setattr(tag_concepts, "load_taxonomy",
                         lambda: [{"id": "gnosis", "definition": "d"}])
-    # Keep these tests socket-free: report plenty of slots everywhere so the
-    # todo:5955d038 pre-flight (exercised separately below) never fires here.
+    # Keep these tests socket-free: report plenty of slots (and plenty of
+    # per-slot context, todo:dcb3cce5 finding 2) everywhere so the
+    # todo:5955d038 pre-flight (exercised separately below) never fires
+    # here, and never falls through to a real HTTP request against these
+    # fake hostnames (which would otherwise cost several seconds per test
+    # waiting on DNS/connect failures instead of failing fast).
     monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", lambda *a, **k: 64)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", lambda *a, **k: 32768)
 
 
 def test_round_robin_pins_each_chunk_to_its_endpoint_by_position(tmp_path):
@@ -421,3 +426,101 @@ def test_model_guard_sees_total_concurrency_across_endpoints(monkeypatch, tmp_pa
             batch_size=0, resume=False, tradition=None, text_id=None, delay=0.0,
             parallel=1, endpoints=["http://a:8080", "http://b:8080"],
         )
+
+
+# ── duplicate --endpoint is de-duplicated (todo:dcb3cce5 finding 6) ────────
+
+
+def test_duplicate_endpoint_collapses_to_one_pool_not_two(tmp_path, monkeypatch, caplog):
+    """Passing the same URL twice used to build two independent
+    `parallel`-sized ThreadPoolExecutor pools against what is really one
+    server — 2 * parallel concurrent requests landing on a server
+    pre-flighted (and, before this fix, actually launched) for `parallel`.
+    De-duping must collapse it to exactly one pool, so max concurrency
+    against that one server never exceeds `parallel`."""
+    import time
+
+    n = 12
+    db = tmp_path / "guru.db"
+    _make_db(db, n)
+    dup = "http://only-one:8080"
+
+    lock = threading.Lock()
+    outstanding = {"n": 0, "max": 0}
+
+    def fake_call_llm(provider, model, system, prompt, max_tokens, base_url=None):
+        assert base_url == dup
+        with lock:
+            outstanding["n"] += 1
+            outstanding["max"] = max(outstanding["max"], outstanding["n"])
+        time.sleep(0.02)
+        with lock:
+            outstanding["n"] -= 1
+        return "[]"
+
+    with caplog.at_level("WARNING"):
+        import unittest.mock as mock
+        with mock.patch.object(tag_concepts, "call_llm", fake_call_llm):
+            tag_concepts.run_tagging(
+                db_path=db, provider_name="llamacpp", model="qwen-3-4b-guru-test",
+                batch_size=0, resume=False, tradition=None, text_id=None, delay=0.0,
+                parallel=2, endpoints=[dup, dup],
+            )
+
+    # If the dedupe were missing, two 2-worker pools against the same
+    # server would let up to 4 requests run concurrently.
+    assert outstanding["max"] <= 2
+    assert any("distinct" in r.message for r in caplog.records)
+
+
+def test_endpoint_dedupe_preserves_first_occurrence_order(tmp_path, monkeypatch):
+    """Round-robin pinning (todo:d267201a) is by list position, so dedupe
+    must preserve first-occurrence order, not e.g. sort or set-scramble
+    it, or chunks would pin to the wrong endpoint."""
+    n = 6
+    db = tmp_path / "guru.db"
+    ids = _make_db(db, n)
+    endpoints = ["http://ep-b:8080", "http://ep-a:8080", "http://ep-b:8080"]
+    expected_deduped = ["http://ep-b:8080", "http://ep-a:8080"]
+
+    calls: list[tuple[str, str]] = []
+    lock = threading.Lock()
+
+    def fake_call_llm(provider, model, system, prompt, max_tokens, base_url=None):
+        cid = next(c for c in ids if f"label:{c}" in prompt)
+        with lock:
+            calls.append((cid, base_url))
+        return "[]"
+
+    import unittest.mock as mock
+    with mock.patch.object(tag_concepts, "call_llm", fake_call_llm):
+        tag_concepts.run_tagging(
+            db_path=db, provider_name="llamacpp", model="qwen-3-4b-guru-test",
+            batch_size=0, resume=False, tradition=None, text_id=None, delay=0.0,
+            parallel=1, endpoints=endpoints,
+        )
+
+    got = dict(calls)
+    for i, cid in enumerate(ids):
+        expected_endpoint = expected_deduped[i % len(expected_deduped)]
+        assert got[cid] == expected_endpoint
+
+
+def test_endpoints_without_duplicates_logs_no_dedupe_warning(tmp_path, caplog):
+    """No duplicates -> no warning; the log line is specifically about
+    collapsed duplicates, not a routine per-run notice."""
+    n = 2
+    db = tmp_path / "guru.db"
+    _make_db(db, n)
+    endpoints = ["http://ep-a:8080", "http://ep-b:8080"]
+
+    import unittest.mock as mock
+    with caplog.at_level("WARNING"):
+        with mock.patch.object(tag_concepts, "call_llm", lambda *a, **k: "[]"):
+            tag_concepts.run_tagging(
+                db_path=db, provider_name="llamacpp", model="qwen-3-4b-guru-test",
+                batch_size=0, resume=False, tradition=None, text_id=None, delay=0.0,
+                parallel=1, endpoints=endpoints,
+            )
+
+    assert not any("distinct" in r.message for r in caplog.records)

@@ -187,6 +187,48 @@ def query_llamacpp_slots(base_url: str | None = None, timeout: float = 5.0) -> i
     return None
 
 
+def query_llamacpp_slot_ctx(base_url: str | None = None, timeout: float = 5.0) -> int | None:
+    """Best-effort query of a llama.cpp server's PER-SLOT context size —
+    the number query_llamacpp_slots' slot-*count* check cannot see
+    (todo:dcb3cce5 finding 2). At --parallel N, total_slots >= N is
+    satisfied by construction once the server was started with a matching
+    PARALLEL; the number that actually determines whether a request
+    truncates is how much context each of those slots gets, which SHRINKS
+    as slots rise (llama-context.cpp: n_ctx_seq = n_ctx / n_seq_max when
+    kv_unified is false, the default — see scripts/serve-llama.sh's header
+    for the launch-side half of this).
+
+    Reads GET /props `default_generation_settings.n_ctx`, which llama-server
+    populates from the already-divided per-slot figure (n_ctx_seq), not the
+    launch --ctx-size total — so this reports the number that actually
+    bounds prompt + generation for one request, not the number an operator
+    might assume from the launch flag alone.
+
+    Returns None — never raises — on any unreachable server, missing field,
+    or unparseable shape, mirroring query_llamacpp_slots' degrade contract
+    exactly: "unknown" and "too small" are different facts, and only the
+    caller that gets a real number should refuse anything. A build old
+    enough to lack /props entirely, or one that doesn't populate
+    default_generation_settings, is not a reason to block a run — it just
+    means this particular check can't run, same as the slot-count query's
+    own fallback story.
+    """
+    base = llamacpp_base_url(base_url)
+    try:
+        data = _http_json(f"{base}/props", timeout=timeout)
+    except Exception:
+        return None
+    if not isinstance(data, dict):
+        return None
+    settings = data.get("default_generation_settings")
+    if not isinstance(settings, dict):
+        return None
+    value = settings.get("n_ctx")
+    if isinstance(value, int) and value > 0:
+        return value
+    return None
+
+
 def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
     base = ollama_base_url()
@@ -360,6 +402,15 @@ def call_llm(
     fn = PROVIDERS.get(provider)
     if fn is None:
         raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
+    if base_url is not None and provider != "llamacpp":
+        # Only call_llamacpp accepts base_url today (see its docstring and
+        # todo:d267201a). Every other provider function's signature has no
+        # such parameter, so forwarding it anyway raises a callee-side
+        # TypeError that names an internal kwarg, not a user-facing error
+        # about the actual mistake. Raise here instead, in the one place
+        # that already knows the provider contract, so the message is about
+        # what the caller did wrong (todo:dcb3cce5 finding 7).
+        raise ValueError(f"provider {provider!r} does not support base_url")
     kwargs = {"model": model, "system": system, "prompt": prompt,
               "max_tokens": max_tokens, "timeout": timeout}
     if base_url is not None:
