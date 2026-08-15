@@ -1,0 +1,26 @@
+{
+  "id": "5955d038",
+  "type": "chore",
+  "state": "done",
+  "summary": "Guard --parallel N>1 to the 4B finetune model id and pre-flight the server's actual slot count, refusing rather than silently queueing behind a 1-slot server; document the PARALLEL <-> --parallel pairing on both scripts; needs 0c34642e",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.481Z",
+  "updated_at": "2026-08-15T15:26:07.860Z",
+  "tags": [
+    "tagging",
+    "safety"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  },
+  "resolution": {
+    "commit": "85dc5f0a",
+    "resolved_at": "2026-08-15T15:26:07.860Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_parallel_guard.py",
+    "test_function": "test_guard_refuses_the_27b_teacher",
+    "note": "Model guard (check_parallel_model_guard) refuses --parallel N>1 for non-finetune model ids unless --allow-parallel-any-model; slot pre-flight (preflight_server_slots + llm.query_llamacpp_slots) queries GET /props (total_slots/n_parallel) falling back to GET /slots, warns-and-continues when unreachable/unparseable, refuses only on a positive too-low count. 20 new tests in test_tag_concepts_parallel_guard.py, all socket-free (stubbed urllib.request.urlopen)."
+  }
+}
