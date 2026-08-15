@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-14T12:20:27.645Z",
-  "updated_at": "2026-08-14T12:20:50.103Z",
+  "updated_at": "2026-08-15T02:07:48.255Z",
   "files": [
     {
       "path": "guru/retrieval_legs.py",
@@ -27,5 +27,14 @@
     "related": [
       "6da4f965"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-15T02:07:48.255Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CORRECTION (2026-08-14, same review that produced docs/edges/evaluation-tooling.md). This ticket overstates the problem, because I read three PARALLELS queries in guru/retrieval_legs.py and inferred a live divergence without checking their gates.\n\nWhat is actually true:\n  - the concept-concept reachability query (line ~180) includes type IN ('PARALLELS','DERIVES_FROM'), but PARALLELS endpoints are chunk ids and can never match a concept node id, and DERIVES_FROM does not exist in the corpus. Inert, in both guru and guru-web.\n  - edge_partners() (line ~332), the chunk-chunk hop, is OFF unless EDGE_LEG=on.\n  - score inheritance through PARALLELS (line ~405) is OFF unless EDGE_INHERIT is set to a non-zero weight.\n\nSo at default settings guru's retriever does NOT walk the live PARALLELS set, and there is no silent divergence to fix. Worse for the original framing: the divergence I described is deliberate and already documented. retrieval_legs.py's own docstring says guru-web has never had the chunk-chunk leg, that the pilot traversing it was 'the single largest behavioural difference between the two systems', and that 'making it an explicit toggle is what lets that be A/B'd'.\n\nWhat survives: if someone turns EDGE_LEG or EDGE_INHERIT on for an experiment, they are now experimenting against derived PARALLELS locally while production ships the same derived set -- which is fine -- but any pre-cutover measurement taken with those flags on is not comparable to a post-cutover one. That is a note for whoever runs the next A/B, not a code defect.\n\nRecommend closing as not-a-defect unless the owner wants the derived table materialised in guru.db for other reasons (the module header defers that separately).",
+      "confidence": "high"
+    }
+  ]
 }
