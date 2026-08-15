@@ -1,0 +1,26 @@
+{
+  "id": "0c34642e",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add --parallel N (default 1): bounded ThreadPoolExecutor over the pure function, single writer thread owning the connection, progress/outcome counters and --resume semantics preserved; needs 6950de58",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.437Z",
+  "updated_at": "2026-08-15T15:18:51.296Z",
+  "tags": [
+    "tagging",
+    "performance"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  },
+  "resolution": {
+    "commit": "5ad495e2c3fe763cd838417faec5c64924bd443d",
+    "resolved_at": "2026-08-15T15:18:51.296Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_parallel.py",
+    "test_function": "test_parallel_outcome_counters_match_serial_for_same_input",
+    "note": "--parallel N (default 1) added to build_parser/main/run_tagging; N<=1 keeps the exact serial loop, N>1 runs a bounded ThreadPoolExecutor (max_in_flight=N*2) over tag_one_chunk with the main thread as sole DB writer; --delay is a per-worker sleep (documented in --delay help + _tag_one_chunk_then_delay docstring); 8 new tests (parallel path, resume, bounded concurrency, worker-exception resilience, counter parity with serial), full suite 634 passed"
+  }
+}
