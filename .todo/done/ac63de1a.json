@@ -1,0 +1,35 @@
+{
+  "id": "ac63de1a",
+  "type": "chore",
+  "state": "done",
+  "summary": "Replace the absolute floor in build_panels with the chosen rule at BOTH sites — the anchor gate and the partner filter — config-driven, ranking untouched, with fixture tests covering a mis-tagged anchor staying empty; needs 404da836",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-14T23:55:18.324Z",
+  "updated_at": "2026-08-15T17:10:04.974Z",
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "7427712c"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-15T17:07:25.223Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Owner decision (supersedes this ticket's own summary text and the open\ninvestigation todo:404da836): the absolute score floor (config[scoring].min_grade,\n-4.415) is removed from build_panels entirely, at both the anchor gate and the\npartner filter. The thin scorer's score is used only to RANK partners within a\nvia concept; it never admits or excludes a (concept, chunk) pair. A pair with NO\nscore at all (scoring never ran for it) is still excluded -- that is a coverage\ngap, not a low score, and stays distinct from \"scored low.\"\n\nEvidence (parent todo:7427712c, docs/summary/derived-parallels-cutover-2026-08-14.md):\n- Of 27,395 human-VERIFIED (concept, chunk) pairs at node 11, only 18.9% cleared\n  -4.415 -- the floor was discarding four-fifths of completed human review work.\n- Unreviewed auto-promoted (tier='proposed') pairs cleared at 22.6%, slightly\n  MORE permissive than human-verified pairs (18.9%) -- the score carries no\n  signal about whether a chunk actually expresses a concept, only about\n  cross-encoder logit magnitude.\n- Clearance tracks passage length, not relevance: 12% for chunks under 500\n  chars vs 58% for 2,000-2,400 chars, so one global cut penalizes verse/aphorism\n  traditions against discursive prose.\n- Simulated effect of removal over the existing score cache: chunks carrying a\n  panel 2,364 -> 5,054; texts with any panel 166 -> 235.\n- The score's RANKING remains correct where spot-checked (sunyata_emptiness\n  tops Diamond Sutra, wu_wei tops Tao Te Ching, sephirot tops Lesser Holy\n  Assembly) -- only the absolute cut is wrong, not the model.\n\nNot addressed by this ticket: mis-tagged anchors (e.g. enuma-elish / cosmogony,\ntodo:743ba79b) are a tagging-accuracy problem, not a scoring-floor problem, and\nare handled by fixing the tag, not by an absolute score cut. Panel size growth\nfrom floor removal is bounded by the existing per_work_cap and by guru-web's\nweight-ordered panel query (guru-web todo:bc084b37), not by an admission floor\nhere.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "cb119e76c263eac915e06de46ba4cde454d9ac72",
+    "resolved_at": "2026-08-15T17:10:04.974Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_derive_parallels.py",
+    "test_function": "test_build_panels_very_low_scoring_partner_is_admitted_and_ranks_last",
+    "note": "Removed min_grade at both build_panels sites (anchor gate + partner filter); anchor gate now requires only that (concept, chunk) has a score, partner filter drops only b is None (still a valid early-exit since build_ranked sorts unscored candidates to the end); dropped min_grade from build_panels signature, run(), and config/derived_parallels.toml; docs/ingest/16-derive-parallels.md Failure modes records the measured floor-was-wrong evidence. Full suite green (621 passed, 48 skipped, 1 xfailed)."
+  }
+}
