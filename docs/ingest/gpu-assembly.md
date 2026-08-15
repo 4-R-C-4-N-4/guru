@@ -37,6 +37,95 @@ So a split is never *required* here — and `nvidia-smi topo -m` reports `PHB`,
 meaning the cards talk through the host bridge with no NVLink. A split model
 therefore ships activations across PCIe on every token, for nothing.
 
+## Slots vs workers
+
+`--parallel` on the client (`scripts/tag_concepts.py`) and `PARALLEL` on the
+server (`scripts/serve-llama.sh` / `scripts/run-qwen-4b-guru.sh`) are two
+halves of one setting, not two independent knobs. The server's `PARALLEL`
+decides how many requests llama.cpp will actually multiplex; the client's
+`--parallel` decides how many it *sends* concurrently, and the client never
+trusts the wrapper's default blindly — before a `--parallel N` run starts it
+asks the server how many slots it actually has (`GET /props total_slots`,
+falling back to `GET /slots`) and refuses to proceed if the server positively
+reports fewer than N. It only refuses on that positive too-low count; an
+unreachable server, or a build old enough to lack both endpoints, warns and
+continues, because "unknown" and "under-provisioned" are different facts and
+only one of them is a reason to block a run. See
+[10-tag-concepts.md](10-tag-concepts.md) for what the refusal looks like from
+the client side and what to do about it.
+
+**Slots are bounded by KV cache and context, not by model weight.** The 4B
+finetune is ~2.3 GB at Q4_K_M (table above) — small enough that VRAM for the
+weights themselves is never the constraint on how many slots fit. Each
+additional slot costs a full KV cache at `CTX_SIZE`, multiplied by
+`--parallel`; the table above already shows the arithmetic — 4 slots at 32K
+context cost 7.8 GB on the 4070 against 2.3 GB of weights, so the cache
+dwarfs the model. `PARALLEL=4` in `run-qwen-4b-guru.sh` is a starting point
+picked for headroom, not a measured ceiling for either card — raising it is
+a `CTX_SIZE` × `PARALLEL` arithmetic check against the card's free VRAM, not
+a fixed limit documented here.
+
+**A second endpoint, on the other card.** `tag_concepts.py --endpoint`
+(repeatable, todo:d267201a) fans work out to more than one llama.cpp server.
+This is a different pairing than "The assembly" below (27B on the 3090, 4B
+on the 4070): here both cards run the 4B, for two lanes of the same bulk pass
+instead of one, which only makes sense when a large tagging batch is all
+that's queued and the 27B server doesn't need to be up at the same time.
+
+```sh
+# 3090, port 8080
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-qwen-4b-guru.sh
+
+# 4070, port 8081
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 PORT=8081 scripts/run-qwen-4b-guru.sh
+
+python3 scripts/tag_concepts.py --text <source-id> \
+    --provider llamacpp --model qwen-3-4b-guru-v3-Q4_K_M.gguf \
+    --parallel 4 \
+    --endpoint http://127.0.0.1:8080 --endpoint http://127.0.0.1:8081
+```
+
+`--parallel` is interpreted *per endpoint* (`_run_parallel_pool`'s docstring
+in `tag_concepts.py`), so the run above is 8-wide total, not 4. Each endpoint
+is pre-flighted independently against that same `--parallel` value, so a
+slow or under-provisioned second server refuses on its own without dragging
+the first one's check down with it.
+
+**Pin explicitly, every time.** The naming trap above applies here exactly as
+it does to a single server: this rig's un-pinned CUDA enumeration is
+inverted relative to physical device order, not merely unstable — under the
+default `FASTEST_FIRST`, CUDA 0 resolves to the 4070, not the 3090 (the
+opposite of the pinned table above), because `FASTEST_FIRST` ranks by
+compute capability and the newer, smaller card wins that ranking. Always set
+`CUDA_DEVICE_ORDER=PCI_BUS_ID` and pick `CUDA_VISIBLE_DEVICES` explicitly per
+server, as in the commands above — never rely on the default to land the
+right model on the right card, in either direction.
+
+**The 27B teacher is excluded, and not just by convention.** It runs
+think-on by default (`serve-llama.sh`'s `REASONING=auto`) and is 16.4 GB
+against the 3090's 24 GB — far less headroom per additional slot than the
+4B's 2.3 GB leaves on either card, for a model whose single-request VRAM
+footprint from a full reasoning pass is already why `serve-llama.sh` defaults
+`PARALLEL=1`. `tag_concepts.py`'s model guard (`check_parallel_model_guard`,
+todo:5955d038) refuses `--parallel` N>1 against it structurally, not just by
+the routing convention in [10-tag-concepts.md](10-tag-concepts.md) —
+multiplexing it needs `--allow-parallel-any-model` as a deliberate,
+individually-justified override, not a default anyone reaches for on this
+hardware.
+
+**No throughput number exists for any of this yet.** Slot count, endpoint
+count, and `--parallel` are all unmeasured past "it runs without erroring" —
+there is no chunks/sec or wall-clock figure in this file for the parallel
+tagging path, on one endpoint or two, and none should be assumed from the
+numbers in Measured below (those are Mistral-24B decode throughput on the
+retired node 13 path — a different model doing a different kind of work).
+Measure it the way everything else in this file is measured: time a real run
+at `--parallel 1` and again at the value you intend to ship, against the
+same `--tradition`/`--text` scope, and record what you get rather than
+reusing a number that belongs to a different tool — see "Earlier drafts of
+this file quoted a '~7 min GPU' row..." further down for exactly what that
+mistake cost the last time it happened in this workbook.
+
 ## The assembly
 
 Node 13 (propose-edges, the Mistral-24B consumer below) is retired —
