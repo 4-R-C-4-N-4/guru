@@ -19,6 +19,7 @@ import logging
 import sqlite3
 import sys
 import time
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import tomllib
@@ -353,6 +354,92 @@ def mark_complete(conn: sqlite3.Connection, chunk_id: str) -> None:
     )
 
 
+# ── pure per-chunk work ──────────────────────────────────────────────────────
+
+
+@dataclass
+class ChunkTagResult:
+    """Outcome of tagging one chunk, with no DB side effects.
+
+    On success `tags` holds the parsed list (possibly empty — a legitimate
+    "nothing scored >= 1" result) and `error` is None. On failure `tags` is
+    `[]` and `error` carries the exception instead of it propagating, so a
+    caller iterating many chunks (serially or via a thread pool) can treat
+    every chunk uniformly and decide error handling in one place.
+    """
+
+    chunk_id: str
+    tags: list[dict] = field(default_factory=list)
+    error: BaseException | None = None
+
+
+def tag_one_chunk(
+    chunk: dict,
+    concepts: list[dict],
+    provider_name: str,
+    model: str,
+    max_body_chars: int | None = None,
+) -> ChunkTagResult:
+    """Do the slow, DB-free part of tagging one chunk: resolve its body,
+    build the prompt, call the LLM, and parse the response.
+
+    Touches no sqlite connection and never raises — any exception (missing
+    chunk file, malformed TOML, LLM/network error) is caught and returned on
+    the result's `error` field instead. That makes this function safe to call
+    from multiple threads and safe to drive from a ThreadPoolExecutor: a
+    failure in one call can never take down a caller that's mid-iteration
+    over others. call_llm's provider functions (llm.py) are stateless — each
+    call opens its own urllib/SDK request with no shared client object — so
+    concurrent calls from separate threads don't share mutable state.
+    """
+    chunk_id = chunk["id"]
+    try:
+        chunk_file = resolve_chunk_path(chunk_id)
+        if chunk_file is not None:
+            with open(chunk_file, "rb") as f:
+                cd = tomllib.load(f)
+            body = cd["content"]["body"]
+        else:
+            body = chunk["label"]
+
+        citation = chunk["label"]
+        prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
+
+        raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=LLM_MAX_TOKENS)
+        tags = parse_tags(raw)
+        return ChunkTagResult(chunk_id=chunk_id, tags=tags)
+    except Exception as e:
+        return ChunkTagResult(chunk_id=chunk_id, error=e)
+
+
+# ── DB writer (single-threaded owner of the connection) ─────────────────────
+
+
+def apply_chunk_result(
+    conn: sqlite3.Connection,
+    result: ChunkTagResult,
+    model: str,
+    respect_reviewed: bool,
+    supersede_pending: bool,
+    outcomes: dict[str, int],
+) -> None:
+    """Apply one ChunkTagResult's writes: upsert every tag, mark the chunk
+    complete, and commit. The only function in this module that mutates the
+    DB for a tagging pass (besides mark_complete/upsert_staged_tag it calls).
+    Must only ever be called from the thread that owns `conn`.
+    """
+    for tag in result.tags:
+        outcome = upsert_staged_tag(
+            conn, result.chunk_id, tag, model=model,
+            respect_reviewed=respect_reviewed,
+            supersede_pending=supersede_pending,
+        )
+        outcomes[outcome] = outcomes.get(outcome, 0) + 1
+
+    mark_complete(conn, result.chunk_id)
+    conn.commit()
+
+
 def run_tagging(
     db_path: Path,
     provider_name: str,
@@ -389,41 +476,19 @@ def run_tagging(
     outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
 
     for i, chunk in enumerate(chunks):
-        chunk_id = chunk["id"]
-        meta = chunk["meta"]
+        result = tag_one_chunk(
+            chunk, concepts, provider_name, model, max_body_chars=max_body_chars
+        )
 
-        # Load body from corpus chunk file
-        chunk_file = resolve_chunk_path(chunk_id)
-        if chunk_file is not None:
-            with open(chunk_file, "rb") as f:
-                cd = tomllib.load(f)
-            body = cd["content"]["body"]
-        else:
-            body = chunk["label"]
-
-        citation = chunk["label"]
-        prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
-
-        try:
-            raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=LLM_MAX_TOKENS)
-            tags = parse_tags(raw)
-
-            for tag in tags:
-                outcome = upsert_staged_tag(
-                    conn, chunk_id, tag, model=model,
-                    respect_reviewed=respect_reviewed,
-                    supersede_pending=supersede_pending,
-                )
-                outcomes[outcome] = outcomes.get(outcome, 0) + 1
-
-            mark_complete(conn, chunk_id)
-            conn.commit()
-            tagged += 1
-            logger.info(f"  [{i+1}/{len(chunks)}] {chunk_id}: {len(tags)} tags")
-
-        except Exception as e:
-            logger.error(f"  [{i+1}/{len(chunks)}] {chunk_id} FAILED: {e}")
+        if result.error is not None:
+            logger.error(f"  [{i+1}/{len(chunks)}] {result.chunk_id} FAILED: {result.error}")
             errors += 1
+        else:
+            apply_chunk_result(
+                conn, result, model, respect_reviewed, supersede_pending, outcomes
+            )
+            tagged += 1
+            logger.info(f"  [{i+1}/{len(chunks)}] {result.chunk_id}: {len(result.tags)} tags")
 
         if delay > 0 and i < len(chunks) - 1:
             time.sleep(delay)
