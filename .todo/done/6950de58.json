@@ -1,17 +1,23 @@
 {
   "id": "6950de58",
   "type": "refactor",
-  "state": "open",
+  "state": "done",
   "summary": "Split run_tagging's per-chunk work into a pure prepare+call+parse function returning a result object, with every DB write moved behind a single writer — byte-identical behaviour at one worker, so concurrency lands on a seam that already exists",
   "source": {
     "type": "human"
   },
   "created_at": "2026-08-15T14:43:59.385Z",
-  "updated_at": "2026-08-15T14:43:59.385Z",
+  "updated_at": "2026-08-15T15:14:21.568Z",
   "tags": [
     "tagging"
   ],
   "relationships": {
     "parent": "caa11164"
+  },
+  "resolution": {
+    "commit": "b8b63649b7ada43563d7d5dd428ec3c0c20e68ba",
+    "resolved_at": "2026-08-15T15:14:21.568Z",
+    "resolved_by": "unknown",
+    "note": "tag_one_chunk() (pure, no sqlite) + apply_chunk_result() (single writer) split from run_tagging's serial loop; behaviour-identical, 9 new tests in tests/test_tag_concepts_pure.py, full suite green (627 passed)"
   }
 }
