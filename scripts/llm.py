@@ -42,6 +42,28 @@ def ollama_embed_url() -> str:
 DEFAULT_HTTP_TIMEOUT = 1200
 
 
+def llamacpp_base_url(base_url: str | None = None) -> str:
+    """Resolve the llama.cpp server base URL: the given override if any,
+    else LLAMACPP_BASE_URL from env or the module default. Mirrors
+    ollama_base_url()'s precedent for the other local provider."""
+    import os
+    return base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
+
+
+def _http_json(url: str, method: str = "GET", payload: dict | None = None,
+               timeout: float = DEFAULT_HTTP_TIMEOUT):
+    """Shared urllib Request/urlopen/json.loads skeleton for the raw-HTTP
+    providers (no DNS lookup or connection overhead at import time from an
+    SDK). payload=None sends no body (GET); a dict is JSON-encoded as the
+    request body with a Content-Type header (POST)."""
+    import urllib.request
+    data = json.dumps(payload).encode() if payload is not None else None
+    headers = {"Content-Type": "application/json"} if data is not None else {}
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read())
+
+
 def _chat_openai_compat(
     base_url: str,
     model: str,
@@ -80,32 +102,40 @@ def _chat_openai_compat(
     return ""
 
 
-def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
+def call_llamacpp(
+    model: str,
+    system: str,
+    prompt: str,
+    max_tokens: int,
+    timeout: float = DEFAULT_HTTP_TIMEOUT,
+    base_url: str | None = None,
+) -> str:
     """
-    Call the local llama.cpp server via raw HTTP (no openai SDK dependency).
+    Call a llama.cpp server via raw HTTP (no openai SDK dependency).
     Uses urllib so there's no DNS lookup or connection overhead at import time.
     Handles thinking models: returns content if non-empty, else full text including
     reasoning_content so parse_json_response can extract JSON from it.
+
+    base_url, when given, overrides LLAMACPP_BASE_URL for this call only — it
+    is a real parameter, not a thread-local env hack, so it's safe to pass a
+    different value per call from concurrent threads (multi-endpoint fan-out,
+    todo:d267201a) without one thread's target leaking into another's. The
+    env var remains the default for every caller that doesn't pass it.
     """
-    import os
-    import urllib.request
-    base = os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        "max_tokens": max_tokens,
-    }).encode()
-    req = urllib.request.Request(
+    base = llamacpp_base_url(base_url)
+    data = _http_json(
         f"{base}/v1/chat/completions",
-        data=payload,
-        headers={"Content-Type": "application/json"},
         method="POST",
+        payload={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt},
+            ],
+            "max_tokens": max_tokens,
+        },
+        timeout=timeout,
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read())
 
     msg = data["choices"][0]["message"]
     content = msg.get("content") or ""
@@ -118,28 +148,104 @@ def call_llamacpp(model: str, system: str, prompt: str, max_tokens: int, timeout
     return reasoning
 
 
+def query_llamacpp_slots(base_url: str | None = None, timeout: float = 5.0) -> int | None:
+    """Best-effort query of how many concurrent slots a llama.cpp server is
+    actually running with (todo:5955d038 pre-flight, so --parallel N doesn't
+    silently queue behind a server that has fewer slots than N).
+
+    Tries GET /props first — modern llama-server builds report the launch
+    --parallel value there as "total_slots" (some builds instead/also use
+    "n_parallel"). Falls back to GET /slots (present when the server was
+    started with --slots; an array with one object per slot) and counts the
+    array. base_url defaults to the same LLAMACPP_BASE_URL env resolution
+    call_llamacpp uses, so this checks the server a plain call_llm() would
+    actually hit.
+
+    Returns None — never raises — if the server is unreachable, the build
+    predates either endpoint, --slots is disabled, or the response shape is
+    something this function doesn't recognize. This is advisory pre-flight
+    for a local dev server, not a stable API contract: a caller that gets
+    None should warn and continue, not hard-fail, and a caller that gets a
+    number should trust it enough to refuse an oversized --parallel.
+    """
+    base = llamacpp_base_url(base_url)
+
+    for path in ("/props", "/slots"):
+        try:
+            data = _http_json(f"{base}{path}", timeout=timeout)
+        except Exception:
+            continue
+
+        if path == "/props" and isinstance(data, dict):
+            for key in ("total_slots", "n_parallel"):
+                value = data.get(key)
+                if isinstance(value, int) and value > 0:
+                    return value
+        elif path == "/slots" and isinstance(data, list) and data:
+            return len(data)
+
+    return None
+
+
+def query_llamacpp_slot_ctx(base_url: str | None = None, timeout: float = 5.0) -> int | None:
+    """Best-effort query of a llama.cpp server's PER-SLOT context size —
+    the number query_llamacpp_slots' slot-*count* check cannot see
+    (todo:dcb3cce5 finding 2). At --parallel N, total_slots >= N is
+    satisfied by construction once the server was started with a matching
+    PARALLEL; the number that actually determines whether a request
+    truncates is how much context each of those slots gets, which SHRINKS
+    as slots rise (llama-context.cpp: n_ctx_seq = n_ctx / n_seq_max when
+    kv_unified is false, the default — see scripts/serve-llama.sh's header
+    for the launch-side half of this).
+
+    Reads GET /props `default_generation_settings.n_ctx`, which llama-server
+    populates from the already-divided per-slot figure (n_ctx_seq), not the
+    launch --ctx-size total — so this reports the number that actually
+    bounds prompt + generation for one request, not the number an operator
+    might assume from the launch flag alone.
+
+    Returns None — never raises — on any unreachable server, missing field,
+    or unparseable shape, mirroring query_llamacpp_slots' degrade contract
+    exactly: "unknown" and "too small" are different facts, and only the
+    caller that gets a real number should refuse anything. A build old
+    enough to lack /props entirely, or one that doesn't populate
+    default_generation_settings, is not a reason to block a run — it just
+    means this particular check can't run, same as the slot-count query's
+    own fallback story.
+    """
+    base = llamacpp_base_url(base_url)
+    try:
+        data = _http_json(f"{base}/props", timeout=timeout)
+    except Exception:
+        return None
+    if not isinstance(data, dict):
+        return None
+    settings = data.get("default_generation_settings")
+    if not isinstance(settings, dict):
+        return None
+    value = settings.get("n_ctx")
+    if isinstance(value, int) and value > 0:
+        return value
+    return None
+
+
 def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
-    import os
-    import urllib.request
-    base = os.environ.get("OLLAMA_BASE_URL", OLLAMA_BASE_URL)
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        "stream": False,
-        "options": {"num_predict": max_tokens},
-    }).encode()
-    req = urllib.request.Request(
+    base = ollama_base_url()
+    data = _http_json(
         f"{base}/api/chat",
-        data=payload,
-        headers={"Content-Type": "application/json"},
         method="POST",
+        payload={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt},
+            ],
+            "stream": False,
+            "options": {"num_predict": max_tokens},
+        },
+        timeout=timeout,
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read())
     return data["message"]["content"]
 
 
@@ -277,6 +383,7 @@ def call_llm(
     prompt: str,
     max_tokens: int,
     timeout: float = DEFAULT_HTTP_TIMEOUT,
+    base_url: str | None = None,
 ) -> str:
     """
     Call an LLM and return the response string.
@@ -285,11 +392,30 @@ def call_llm(
     models need 8k+ for the reasoning preamble alone) and on the task,
     and a library-level default was the silent failure mode that lost
     ~12% of chunks on the 2026-05 tagging run.
+
+    base_url is forwarded only when given (only call_llamacpp accepts it
+    today; todo:d267201a). Leaving it out of the call entirely when it's
+    None means non-llamacpp providers never need to accept an unused
+    parameter just for signature parity, and every existing call_llm(...)
+    call site is unaffected.
     """
     fn = PROVIDERS.get(provider)
     if fn is None:
         raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
-    return fn(model=model, system=system, prompt=prompt, max_tokens=max_tokens, timeout=timeout)
+    if base_url is not None and provider != "llamacpp":
+        # Only call_llamacpp accepts base_url today (see its docstring and
+        # todo:d267201a). Every other provider function's signature has no
+        # such parameter, so forwarding it anyway raises a callee-side
+        # TypeError that names an internal kwarg, not a user-facing error
+        # about the actual mistake. Raise here instead, in the one place
+        # that already knows the provider contract, so the message is about
+        # what the caller did wrong (todo:dcb3cce5 finding 7).
+        raise ValueError(f"provider {provider!r} does not support base_url")
+    kwargs = {"model": model, "system": system, "prompt": prompt,
+              "max_tokens": max_tokens, "timeout": timeout}
+    if base_url is not None:
+        kwargs["base_url"] = base_url
+    return fn(**kwargs)
 
 
 _THINKING_MARKERS = (

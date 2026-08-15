@@ -1,0 +1,356 @@
+"""Tests for todo:5955d038 — guarding --parallel N>1 to the 4B finetune and
+pre-flighting the llama.cpp server's actual slot count.
+
+Two independent checks:
+  check_parallel_model_guard — model-id policy, no network.
+  preflight_server_slots     — HTTP query via llm.query_llamacpp_slots,
+                                stubbed here with a fake urllib.request.urlopen.
+                                No real sockets are opened anywhere in this file.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+import urllib.error
+from pathlib import Path
+
+import pytest
+
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(PROJECT_ROOT))
+
+import tag_concepts  # noqa: E402
+import llm  # noqa: E402
+
+
+# ── check_parallel_model_guard ───────────────────────────────────────────────
+
+
+def test_guard_allows_parallel_1_for_any_model():
+    tag_concepts.check_parallel_model_guard("Qwen3.5-27B-UD-Q4_K_XL.gguf", parallel=1)
+
+
+def test_guard_accepts_the_finetune_model_id():
+    tag_concepts.check_parallel_model_guard("qwen-3-4b-guru-v3-Q4_K_M.gguf", parallel=4)
+
+
+def test_guard_accepts_a_future_finetune_infix():
+    # -vN- varies by training run; the prefix is what's load-bearing.
+    tag_concepts.check_parallel_model_guard("qwen-3-4b-guru-v7-Q8_0.gguf", parallel=8)
+
+
+def test_guard_refuses_the_27b_teacher():
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError, match="27B|think-on|qwen-3-4b-guru"):
+        tag_concepts.check_parallel_model_guard("Qwen3.5-27B-UD-Q4_K_XL.gguf", parallel=4)
+
+
+def test_guard_refuses_an_unrelated_model_id():
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError):
+        tag_concepts.check_parallel_model_guard("llama3", parallel=2)
+
+
+def test_guard_override_bypasses_the_refusal():
+    tag_concepts.check_parallel_model_guard(
+        "Qwen3.5-27B-UD-Q4_K_XL.gguf", parallel=4, allow_parallel_any_model=True,
+    )
+
+
+def test_guard_is_wired_into_the_cli_parser():
+    parser = tag_concepts.build_parser()
+    assert parser.parse_args([]).allow_parallel_any_model is False
+    assert parser.parse_args(["--allow-parallel-any-model"]).allow_parallel_any_model is True
+
+
+def test_guard_error_message_reports_the_raw_parallel_value_not_the_total():
+    """With multiple endpoints the refusal is judged against total
+    concurrency, but the message must say the --parallel value the operator
+    actually typed, not the multiplied total, or troubleshooting is
+    misleading."""
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError) as exc_info:
+        tag_concepts.check_parallel_model_guard(
+            "Qwen3.5-27B-UD-Q4_K_XL.gguf", parallel=2, n_endpoints=2,
+        )
+    message = str(exc_info.value)
+    assert "--parallel 2" in message
+    assert "4 total concurrency" in message
+
+
+def test_guard_single_endpoint_message_unchanged():
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError) as exc_info:
+        tag_concepts.check_parallel_model_guard("llama3", parallel=4)
+    assert "--parallel 4 is scoped" in str(exc_info.value)
+
+
+# ── query_llamacpp_slots (llm.py) — stubbed HTTP, no sockets ────────────────
+
+
+class _FakeHTTPResponse:
+    def __init__(self, body: bytes):
+        self._body = body
+
+    def read(self):
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+
+def _install_fake_urlopen(monkeypatch, by_path: dict[str, object]):
+    """by_path maps a URL suffix ("/props", "/slots") to either:
+      - a dict/list  -> served as a 200 JSON response
+      - bytes        -> served as the raw response body
+      - an Exception instance -> raised when that path is requested
+    Any path not present in by_path raises URLError (connection refused).
+    """
+
+    def _fake_urlopen(req, timeout=None):
+        url = req.full_url if hasattr(req, "full_url") else req
+        for suffix, spec in by_path.items():
+            if url.endswith(suffix):
+                if isinstance(spec, Exception):
+                    raise spec
+                if isinstance(spec, (bytes, bytearray)):
+                    return _FakeHTTPResponse(bytes(spec))
+                return _FakeHTTPResponse(json.dumps(spec).encode())
+        raise urllib.error.URLError("connection refused (no stub for this path)")
+
+    monkeypatch.setattr("urllib.request.urlopen", _fake_urlopen)
+
+
+def test_query_slots_reads_total_slots_from_props(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") == 4
+
+
+def test_query_slots_reads_n_parallel_from_props(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"n_parallel": 2}})
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") == 2
+
+
+def test_query_slots_falls_back_to_slots_endpoint(monkeypatch):
+    # /props exists but has neither key llama.cpp might use; /slots array
+    # of 3 objects should still be counted.
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {"model_path": "whatever"},
+        "/slots": [{"id": 0}, {"id": 1}, {"id": 2}],
+    })
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") == 3
+
+
+def test_query_slots_returns_none_when_both_endpoints_missing(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {})  # every request raises URLError
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") is None
+
+
+def test_query_slots_returns_none_on_malformed_json(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": b"not json at all", "/slots": b"also not json"})
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") is None
+
+
+def test_query_slots_returns_none_on_unrecognized_shape(monkeypatch):
+    # Valid JSON, but neither the /props keys nor a non-empty /slots array.
+    _install_fake_urlopen(monkeypatch, {"/props": {"chat_template": "..."}, "/slots": []})
+    assert llm.query_llamacpp_slots(base_url="http://fake:8080") is None
+
+
+# ── preflight_server_slots — the tag_concepts.py-level policy wrapper ───────
+
+
+def test_preflight_ok_when_slots_cover_parallel(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_refuses_when_slots_are_too_few(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 1}})
+    with pytest.raises(tag_concepts.InsufficientServerSlotsError, match="1 slot"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_warns_and_continues_when_endpoint_missing(monkeypatch, caplog):
+    _install_fake_urlopen(monkeypatch, {})  # neither /props nor /slots reachable
+    with caplog.at_level("WARNING"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+    assert any("could not determine" in r.message for r in caplog.records)
+
+
+def test_preflight_warns_and_continues_on_malformed_response(monkeypatch, caplog):
+    _install_fake_urlopen(monkeypatch, {"/props": b"garbage", "/slots": b"garbage"})
+    with caplog.at_level("WARNING"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+    assert any("could not determine" in r.message for r in caplog.records)
+
+
+def test_preflight_skips_non_llamacpp_providers(monkeypatch):
+    def _boom(*a, **k):
+        raise AssertionError("query_llamacpp_slots must not be called for a non-llamacpp provider")
+
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", _boom)
+    # Would refuse if it ever queried (no stub installed => URLError => None
+    # => warn-and-continue anyway), but the point is it must never even ask.
+    tag_concepts.preflight_server_slots("anthropic", parallel=4, base_url="http://fake:8080")
+    tag_concepts.preflight_server_slots("ollama", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_skips_entirely_for_parallel_1(monkeypatch):
+    def _boom(*a, **k):
+        raise AssertionError("must not query slots when --parallel is 1")
+
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", _boom)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", _boom)
+    tag_concepts.preflight_server_slots("llamacpp", parallel=1, base_url="http://fake:8080")
+
+
+# ── query_llamacpp_slot_ctx (llm.py) — stubbed HTTP, no sockets ────────────
+
+
+def test_query_slot_ctx_reads_n_ctx_from_default_generation_settings(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {"default_generation_settings": {"n_ctx": 16384}},
+    })
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") == 16384
+
+
+def test_query_slot_ctx_returns_none_when_props_unreachable(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_when_field_missing(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_on_malformed_json(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {"/props": b"not json at all"})
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+def test_query_slot_ctx_returns_none_on_non_positive_value(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {"default_generation_settings": {"n_ctx": 0}},
+    })
+    assert llm.query_llamacpp_slot_ctx(base_url="http://fake:8080") is None
+
+
+# ── preflight_server_slots' per-slot-context check (finding 2) ──────────────
+
+
+def test_preflight_ok_when_slot_ctx_is_comfortable(monkeypatch):
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {
+            "total_slots": 4,
+            "default_generation_settings": {"n_ctx": 16384},
+        },
+    })
+    tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_refuses_when_slot_ctx_is_too_small(monkeypatch):
+    """The exact shape of the 2026-08-15 elish run: slot COUNT is fine
+    (4 >= 4), but per-slot CONTEXT is the number that actually truncated
+    every chunk. The count check alone (the pre-fix behaviour) would have
+    logged 'OK' here and let the run proceed."""
+    _install_fake_urlopen(monkeypatch, {
+        "/props": {
+            "total_slots": 4,
+            "default_generation_settings": {"n_ctx": 8192},
+        },
+    })
+    with pytest.raises(tag_concepts.InsufficientSlotContextError, match="8192"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+def test_preflight_warns_and_continues_when_slot_ctx_field_missing(monkeypatch, caplog):
+    """Degrades exactly like the slot-count check: an older server that
+    doesn't populate default_generation_settings.n_ctx is 'unknown', not
+    'too small' — warn and continue, never hard-fail."""
+    _install_fake_urlopen(monkeypatch, {"/props": {"total_slots": 4}})
+    with caplog.at_level("WARNING"):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+    assert any("per-slot context" in r.message for r in caplog.records)
+
+
+def test_preflight_slot_ctx_check_skipped_when_slot_count_already_refuses(monkeypatch):
+    """When the slot-count check already raises, the function must not go
+    on to also query per-slot context — the run is already refused."""
+    def _boom(*a, **k):
+        raise AssertionError("must not query slot ctx once slot count already refused")
+
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slots", lambda *a, **k: 1)
+    monkeypatch.setattr(tag_concepts, "query_llamacpp_slot_ctx", _boom)
+
+    with pytest.raises(tag_concepts.InsufficientServerSlotsError):
+        tag_concepts.preflight_server_slots("llamacpp", parallel=4, base_url="http://fake:8080")
+
+
+# ── run_tagging wires both checks in before doing any work ─────────────────
+
+
+def test_run_tagging_raises_model_guard_before_touching_the_db(monkeypatch, tmp_path):
+    """A bogus db path proves the guard fires before sqlite3.connect — if it
+    didn't, this would raise sqlite3.OperationalError instead."""
+    monkeypatch.setattr(tag_concepts, "load_taxonomy", lambda: [])
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError):
+        tag_concepts.run_tagging(
+            db_path=tmp_path / "does" / "not" / "exist.db",
+            provider_name="llamacpp",
+            model="Qwen3.5-27B-UD-Q4_K_XL.gguf",
+            batch_size=0,
+            resume=False,
+            tradition=None,
+            text_id=None,
+            delay=0.0,
+            parallel=4,
+        )
+
+
+# ── upfront argument validation ─────────────────────────────────────────────
+
+
+@pytest.mark.parametrize("parallel", [0, -1])
+def test_run_tagging_rejects_non_positive_parallel_before_touching_the_db(
+    monkeypatch, tmp_path, parallel,
+):
+    """--parallel 0/negative used to bypass both guards (they no-op on
+    parallel<=1) and crash with a raw ValueError from
+    ThreadPoolExecutor(max_workers=<=0). It must now be refused upfront with
+    a clear error, before sqlite3.connect (bogus db path proves this)."""
+    monkeypatch.setattr(tag_concepts, "load_taxonomy", lambda: [])
+    with pytest.raises(tag_concepts.InvalidTaggingArgsError, match="--parallel"):
+        tag_concepts.run_tagging(
+            db_path=tmp_path / "does" / "not" / "exist.db",
+            provider_name="llamacpp",
+            model="qwen-3-4b-guru-test",
+            batch_size=0,
+            resume=False,
+            tradition=None,
+            text_id=None,
+            delay=0.0,
+            parallel=parallel,
+        )
+
+
+def test_run_tagging_rejects_endpoint_with_non_llamacpp_provider(monkeypatch, tmp_path):
+    """--endpoint only makes sense for llamacpp — combining it with another
+    provider used to fail per-chunk with a swallowed TypeError instead of a
+    clean upfront refusal."""
+    monkeypatch.setattr(tag_concepts, "load_taxonomy", lambda: [])
+    with pytest.raises(tag_concepts.InvalidTaggingArgsError, match="--endpoint"):
+        tag_concepts.run_tagging(
+            db_path=tmp_path / "does" / "not" / "exist.db",
+            provider_name="anthropic",
+            model="claude-x",
+            batch_size=0,
+            resume=False,
+            tradition=None,
+            text_id=None,
+            delay=0.0,
+            parallel=1,
+            endpoints=["http://127.0.0.1:8080"],
+        )

@@ -1,0 +1,30 @@
+{
+  "id": "dcb3cce5",
+  "type": "bug",
+  "state": "done",
+  "summary": "PARALLEL divides context rather than costing VRAM: --ctx-size 32768 --parallel 4 serves 8192-token slots, and every chunk of the 2026-08-15 elish run truncated at n_tokens=8191 with silently repaired JSON",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-15T18:43:24.555Z",
+  "updated_at": "2026-08-15T18:59:24.508Z",
+  "files": [
+    {
+      "path": "scripts/serve-llama.sh"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "gpu",
+    "serving",
+    "truncation"
+  ],
+  "resolution": {
+    "commit": "de76711562784857e5005554125e7eb51ac0ad04",
+    "resolved_at": "2026-08-15T18:59:24.508Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_tag_concepts_parallel_guard.py",
+    "test_function": "test_preflight_refuses_when_slot_ctx_is_too_small",
+    "note": "CTX_SIZE now per-slot (serve-llama.sh scales total = CTX_SIZE*PARALLEL); preflight checks per-slot n_ctx via new query_llamacpp_slot_ctx; outcomes snapshot/restore on rollback; Ctrl-C shuts pools down with cancel_futures=True; --endpoint de-duped; call_llm raises ValueError for base_url on non-llamacpp providers. 21 new tests, 699 passed/48 skipped/1 xfailed."
+  }
+}

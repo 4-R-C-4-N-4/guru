@@ -86,6 +86,55 @@ Both 4B identifiers match the `qwen-3-4b-guru-*` convention family; the
 distinguishable from v1's in the `model` column rather than colliding under
 one string. 27B identifiers follow `Qwen3.5-27B-*`.
 
+**Running a parallel bulk pass.** Parallelism is a property of the 4B path
+only. The routing table above already sends large, in-distribution batches
+to the 4B and everything small or net-new to the 27B, and `--parallel`
+follows that same line rather than crossing it: the model guard
+(`check_parallel_model_guard`, todo:5955d038) refuses `--parallel` N>1 for
+any `--model` that doesn't start with `qwen-3-4b-guru-`, so the 27B can't be
+multiplexed by accident. That costs nothing the routing table wasn't already
+deciding — the 27B's rows are exactly the ones this node runs serially by
+design.
+
+```sh
+scripts/run-qwen-4b-guru.sh    # PARALLEL=4 server-side (gpu-assembly.md)
+
+python3 scripts/tag_concepts.py --text <source-id> \
+    --provider llamacpp --model qwen-3-4b-guru-v3-Q4_K_M.gguf \
+    --parallel 4
+```
+
+`--parallel` on the client and `PARALLEL` in `run-qwen-4b-guru.sh` are two
+halves of one setting (see "Slots vs workers" in
+[gpu-assembly.md](gpu-assembly.md)). Before submitting anything,
+`tag_concepts.py` pre-flights the server's actual slot count (`GET /props
+total_slots`, falling back to `GET /slots`) and refuses to start if the
+server positively reports fewer than `--parallel`. **When it refuses:**
+either restart the server with a higher `PARALLEL`, or lower `--parallel` to
+match what it reported — never proceed past the refusal on the assumption
+the server will "catch up". An unreachable server, or one running a build
+old enough to lack both endpoints, only warns and continues rather than
+refusing — see Failure modes below for why that case is the one to worry
+about, not the refusal.
+
+Multiplexing the 27B anyway is `--allow-parallel-any-model` — a deliberate,
+individually-justified override of the guard above, not a workaround for it.
+The teacher runs think-on and was never sized for concurrent requests; see
+gpu-assembly.md for why it's excluded on hardware grounds too.
+
+A second 4B server on the other card is `--endpoint URL`, repeatable;
+`--parallel` is interpreted *per endpoint*, so `--parallel 4 --endpoint
+http://127.0.0.1:8080 --endpoint http://127.0.0.1:8081` submits 8 concurrent
+requests total, not 4. See gpu-assembly.md for bringing the second server up.
+
+No throughput figure exists for this path — it has not been measured, on one
+endpoint or two. The number to trust is whatever you measure on your own
+run: wrap the command above in `time`, once at `--parallel 1` and once at
+the `--parallel N` you intend to ship, against the same `--tradition`/`--text`
+scope, and compare wall-clock. Do not carry over a number from a different
+tool or a different node — see gpu-assembly.md's "~7 min GPU" correction for
+what that mistake cost elsewhere in this workbook.
+
 **The no-think caveat.** Running the 27B in no-think mode measured roughly
 6x faster on this corpus — one pass
 (`docs/corpus-expansion/apocryphon-of-john.md`) measured ~300 s/chunk
@@ -162,6 +211,21 @@ progress output, no rows, because the tagger only logs per chunk after a commit.
 Both also contend for write locks on `guru.db`. Diagnosis is `pgrep -af
 tag_concepts`, not patience: on 2026-08-08 a pilot run sat at zero rows for six
 minutes behind an existing job that had itself reached only chunk 2 of 24.
+
+**A `--parallel` run against a 1-slot server *looks* parallel and isn't.** N
+worker threads, N in-flight requests, log lines interleaving exactly as
+`--parallel N` promises — and llama.cpp still serialises every one of them
+internally if the server was started with `PARALLEL=1` (or never restarted
+after `PARALLEL` was raised in the wrapper). Wall-clock barely improves over
+`--parallel 1`; the only visible symptom is that a run that should be faster
+isn't, which reads as "the model is just slow" unless you go looking. This is
+exactly what `preflight_server_slots` (todo:5955d038) exists to catch — but
+it can only refuse on a *positive* too-low slot count. Against an unreachable
+server, an older build without `/props`/`/slots`, or a response shape it
+doesn't recognize, it logs a warning and continues rather than blocking the
+run. At that point you are flying blind exactly as this failure mode
+describes, and that warning line in the run log — not the absence of an
+error — is the only signal the check didn't actually run.
 
 **Assuming the model is a constant.** The 4B fine-tune and the 27B have
 different failure modes and different id ranges — 4B batches are 70xxx, 27B are

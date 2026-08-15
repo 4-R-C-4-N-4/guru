@@ -1,0 +1,46 @@
+{
+  "id": "caa11164",
+  "type": "feature",
+  "state": "done",
+  "summary": "In-process parallel tagging for the 4B finetune: one tag_concepts.py run saturates the server's slots, replacing manual chunk-id sharding across processes",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:15.549Z",
+  "updated_at": "2026-08-15T15:53:45.657Z",
+  "files": [
+    {
+      "path": "scripts/tag_concepts.py"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "performance",
+    "gpu"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-08-15T14:43:46.065Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Goal (owner, 2026-08-15): saturate the 4B finetune's server slots from a single tag_concepts.py invocation, so a bulk pass needs no external orchestration -- no agent fanning out, no hand-sharded chunk-id files, no N terminals.\n\nVERIFIED STATE OF THE CODE (read before planning, not assumed):\n\n  scripts/serve-llama.sh already exposes --parallel, defaulting to 1, and\n  scripts/run-qwen-4b-guru.sh already sets PARALLEL=4. So the SERVER side of\n  this is done: the 4B is served today with 4 concurrent slots. Its header\n  states the intended usage explicitly -- \"lets multiple tag_concepts.py\n  instances run in parallel against disjoint --tradition / --text scopes\" --\n  which is exactly the external orchestration this ticket removes.\n\n  scripts/tag_concepts.py run_tagging() is a strictly serial\n  `for i, chunk in enumerate(chunks)` loop over one sqlite connection:\n  resolve chunk path -> read TOML body -> build_prompt -> call_llm (blocking,\n  seconds) -> parse_tags -> upsert_staged_tag -> mark_complete. The LLM call\n  is the only slow step; everything else is local file/DB work in\n  milliseconds. So the concurrency that matters is exclusively around\n  call_llm.\n\n  run_tagging already sets PRAGMA busy_timeout=30000, and its comment names\n  the reason: \"WAL allows concurrent readers but one writer; parallel worker\n  runs (--chunk-ids-from-file shards) need a wait instead of an instant\n  'database is locked' crash.\" That is the existing multi-process story. A\n  single-process worker pool can do better than tolerating write contention:\n  keep every DB write on one thread and the contention disappears rather than\n  being waited out.\n\n  scripts/llm.py call_llamacpp() is stateless -- per-call urllib request, no\n  shared client object -- so it is safe to call from multiple threads as-is.\n  One catch for the multi-endpoint work below: it resolves the server address\n  from os.environ[\"LLAMACPP_BASE_URL\"] at call time, which is process-global.\n  Targeting two servers therefore needs the base URL threaded through as a\n  parameter; a thread-local env hack would work but would be a trap for the\n  next reader.\n\n  serve-llama.sh takes --host/--port/--n-gpu-layers/--parallel and no device\n  flag, so GPU selection is environmental (CUDA_DEVICE_ORDER=PCI_BUS_ID\n  CUDA_VISIBLE_DEVICES=..., per docs/ingest/gpu-assembly.md, which also\n  records that this rig's un-pinned CUDA order is inverted relative to\n  physical device 0).\n\nSHAPE OF THE FIX. Producer/worker/writer inside one process: the main thread\nfeeds chunks to a bounded ThreadPoolExecutor whose workers do only the pure\npart (read body, build prompt, call_llm, parse), and results come back to a\nsingle writer that owns the connection and does upsert_staged_tag +\nmark_complete. Serial behaviour is the N=1 case of the same code path, so the\nexisting accounting, --resume semantics and outcome counters survive intact.\n\nHARDWARE ENVELOPE. The 4B is Q4_K_M at ~2.5 GB against a 24 GB 3090, so slots\nare limited by KV cache and context, not weights -- 4 is a conservative\nstarting point rather than a ceiling, and the honest way to raise it is to\nmeasure. The 4070 (12 GB) can host a second server on another port for\nroughly double throughput, which is what the multi-endpoint child is for.\nBoth are subject to the standing rules: announce GPU use, `llm stop` when\ndone, and comfyui cannot share the 3090.\n\nSCOPE GUARD. Parallelism is opt-in and belongs to the finetune. The 27B\nteacher is served with think-on as the standing default and occupies far more\nVRAM; multiplexing it is not in scope and the flag should not silently invite\nit.\n\nVALIDATION. The last child re-tags mesopotamian.enuma-elish (12 chunks)\nthrough the new path. That is both the smoke test for the framework and the\nlive test of the todo:32e9d1de taxonomy-drift hypothesis: v3's training\nsnapshot contains concept.cosmogony, the text has never had it proposed in\nany status, so if the drift theory is right this run proposes it. If it does\nnot, the theory is wrong and we learn that for the price of 12 chunks instead\nof a 2,342-chunk backfill.",
+      "confidence": "high"
+    }
+  ],
+  "relationships": {
+    "children": [
+      "6950de58",
+      "0c34642e",
+      "5955d038",
+      "d267201a",
+      "fa75cfd9",
+      "3cfae473"
+    ]
+  },
+  "resolution": {
+    "commit": "9f0e60841241cdac2179174a3386c6b7ee2fc50a",
+    "resolved_at": "2026-08-15T15:53:45.657Z",
+    "resolved_by": "unknown",
+    "note": "All six subtasks complete. tag_concepts.py gained --parallel N (single DB writer), a finetune-only guard with slot pre-flight, multi-endpoint round-robin, and docs. Validated end-to-end on the Enuma Elish re-tag: 12 chunks in 44.7s at parallel 4, which surfaced concept.cosmogony 8/12 at score 3 and confirmed the taxonomy-drift hypothesis."
+  }
+}
