@@ -7,9 +7,18 @@
     "type": "human"
   },
   "created_at": "2026-08-13T13:20:56.674Z",
-  "updated_at": "2026-08-13T13:20:56.715Z",
+  "updated_at": "2026-08-15T17:37:22.002Z",
   "relationships": {
     "parent": "c3f479ff"
   },
-  "description": "The owner gate. On the first corpus version after the port: run the full chain, eyeball ~10 reader panels side by side (local snapshot swap procedure from the 2026-08-13 trial: backup PARALLELS to corpus.edges_passc_backup, load derived, reader SQL unchanged), confirm golden gates green (258/258 per-work + legacy), then the owner ships via their normal corpus push. Agents stop at the artifact — no sync_corpus.sh, no prod."
+  "description": "The owner gate. On the first corpus version after the port: run the full chain, eyeball ~10 reader panels side by side (local snapshot swap procedure from the 2026-08-13 trial: backup PARALLELS to corpus.edges_passc_backup, load derived, reader SQL unchanged), confirm golden gates green (258/258 per-work + legacy), then the owner ships via their normal corpus push. Agents stop at the artifact — no sync_corpus.sh, no prod.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-15T17:37:22.002Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "RATIFICATION EVIDENCE (supersedes the draft in the abandoned todo/9097deed-ratification-evidence branch / PR #65, closed as stale).\n\nMeasured 2026-08-15 against corpus v55 — the first export with no score floor (todo:ac63de1a).\n\nGOLDEN GATES: 271/272. Legacy gate 14/14; per-work gate 257/258. The single failure is enoch-charles-1917's recall probe, which is a pre-existing v50->v54 vector/lexical regression unrelated to edges (guru-web todo:31a7fe76 / 418a98c9) — the fixture is pinned corpus_version 50 and todo:a3bb24b5 records 258/258 passing there.\n\nThe result is IDENTICAL to v54's, which is the point worth recording: PARALLELS went 17,244 -> 50,148 and retrieval did not move by a single assertion. That is the third independent confirmation that edges cannot reach the retrieval path — 0 of the PARALLELS rows touch a concept node, walkGraph surfaces chunks only through EXPRESSES, and the failing query traces graphS=0.00 on every candidate.\n\nHOW TO RUN THEM (this cost two wrong answers to establish): both suites are describe.skipIf(!INTEGRATION_TEST) AND vitest does not load .env, so a plain run reports '258 skipped' and looks green, while INTEGRATION_TEST=1 without the env fails all 14 legacy tests with a SASL password error that reads like catastrophic drift.\n    set -a; . ./.env; set +a\n    INTEGRATION_TEST=1 npx vitest run src/__tests__/golden-queries.test.ts src/__tests__/golden-retrieval.test.ts\nRuntime ~8 min; every query embeds through host Ollama.\n\nPANEL COVERAGE at v55: 50,148 PARALLELS over 5,054/5,054 chunks (v54: 17,244 over 2,364). Texts with a panel 166 -> 235. Zero same-tradition rows. Weights -8.46..2.70.\n\nWHAT STILL NEEDS THE OWNER'S EYE BEFORE A CORPUS PUSH:\n1. Panel size at the tail — the largest is now 1,178 partners (christian_mysticism.life-and-doctrines-boehme.016), with plato-phaedrus.018 at 1,159. Readers are bounded by guru-web's LIMIT 100 (todo:bc084b37) but the export carries all of them.\n2. Weight semantics. On mesopotamian.enuma-elish.001 the top partner is dionysius-mystical-theology.006 at +2.61 via apophatic_theology — but the anchor's OWN score on that concept is -6.04. weight is the PARTNER's fit to the shared concept, not the pair's, so a panel can lead with a strong exemplar of a concept the anchor barely expresses. Inherent to partner-side ranking (chosen deliberately: min-leg clamping made panels monochrome), not caused by removing the floor — but the floor was concealing it.",
+      "confidence": "high"
+    }
+  ]
 }
