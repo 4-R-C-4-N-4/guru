@@ -35,3 +35,12 @@ def test_resume_is_on_by_default():
     assert parser.parse_args([]).resume is True
     assert parser.parse_args(["--no-resume"]).resume is False
     assert parser.parse_args(["--resume"]).resume is True
+
+
+def test_parallel_defaults_to_one():
+    """--parallel defaults to 1 (serial, byte-identical to pre-parallel
+    behaviour — see tests/test_tag_concepts_parallel.py for the runtime
+    proof). todo:0c34642e."""
+    parser = tag_concepts.build_parser()
+    assert parser.parse_args([]).parallel == 1
+    assert parser.parse_args(["--parallel", "4"]).parallel == 4

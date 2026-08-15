@@ -19,6 +19,7 @@ import logging
 import sqlite3
 import sys
 import time
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -440,6 +441,122 @@ def apply_chunk_result(
     conn.commit()
 
 
+# Bounded submission for --parallel: keep at most this many futures in
+# flight per worker thread. Submitting all chunks up front would let the
+# work queue (and its held prompt/response strings) grow unboundedly ahead
+# of what N workers can consume, and would queue far more requests at the
+# llama.cpp server than it has slots for. 2x is a conservative cushion — a
+# worker always has a next request ready the instant it frees up, without
+# piling up thousands of pending futures on a multi-thousand-chunk run.
+PARALLEL_INFLIGHT_MULTIPLIER = 2
+
+
+def _tag_one_chunk_then_delay(
+    chunk: dict,
+    concepts: list[dict],
+    provider_name: str,
+    model: str,
+    max_body_chars: int | None,
+    delay: float,
+) -> ChunkTagResult:
+    """Worker-thread entry point for --parallel > 1: run the pure per-chunk
+    work, then (--delay semantics for N>1, decided here) sleep on THIS
+    worker thread before it's free to pick up its next chunk.
+
+    --delay is a politeness throttle on how fast one lane hits the server,
+    not a global rate limit across all lanes — with N workers each sleeping
+    `delay` between their own calls, aggregate request rate scales with N,
+    same as running N separate serial processes with --delay would. A
+    global limiter (one shared sleep gate) was rejected: it would make
+    --parallel N behave like --parallel 1 throughput-wise whenever delay>0,
+    defeating the point of the flag.
+    """
+    result = tag_one_chunk(chunk, concepts, provider_name, model, max_body_chars=max_body_chars)
+    if delay > 0:
+        time.sleep(delay)
+    return result
+
+
+def _run_parallel_pool(
+    conn: sqlite3.Connection,
+    chunks: list[dict],
+    concepts: list[dict],
+    provider_name: str,
+    model: str,
+    max_body_chars: int | None,
+    delay: float,
+    parallel: int,
+    batch_size: int,
+    respect_reviewed: bool,
+    supersede_pending: bool,
+    outcomes: dict[str, int],
+) -> tuple[int, int]:
+    """--parallel > 1 path: a bounded ThreadPoolExecutor runs tag_one_chunk
+    (DB-free, thread-safe — see its docstring) across up to `parallel`
+    worker threads. This function's own caller's thread is the only thread
+    that ever touches `conn`: it consumes completed futures one at a time
+    and drives apply_chunk_result, so every write is single-threaded despite
+    the LLM calls that produced the data running concurrently.
+
+    Completion order is nondeterministic (whichever chunk's LLM call
+    finishes first), so progress is reported as "N/total completions" —
+    counting how many chunks have finished, not the chunks' original list
+    position — unlike the serial path's index-based log line.
+    """
+    total = len(chunks)
+    max_in_flight = parallel * PARALLEL_INFLIGHT_MULTIPLIER
+    chunk_iter = iter(chunks)
+    pending: set[Future] = set()
+    tagged = errors = completed = 0
+
+    with ThreadPoolExecutor(max_workers=parallel) as executor:
+
+        def submit_next() -> bool:
+            chunk = next(chunk_iter, None)
+            if chunk is None:
+                return False
+            pending.add(executor.submit(
+                _tag_one_chunk_then_delay, chunk, concepts, provider_name,
+                model, max_body_chars, delay,
+            ))
+            return True
+
+        for _ in range(max_in_flight):
+            if not submit_next():
+                break
+
+        while pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for fut in done:
+                try:
+                    result = fut.result()
+                except Exception as e:
+                    # Defensive: tag_one_chunk already catches everything it
+                    # can (see its docstring), but a future can also fail
+                    # for reasons outside that function (e.g. the executor
+                    # itself). Either way, one bad chunk must not take down
+                    # the run or the other in-flight results.
+                    result = ChunkTagResult(chunk_id="<unknown>", error=e)
+
+                completed += 1
+                if result.error is not None:
+                    logger.error(f"  [{completed}/{total}] {result.chunk_id} FAILED: {result.error}")
+                    errors += 1
+                else:
+                    apply_chunk_result(
+                        conn, result, model, respect_reviewed, supersede_pending, outcomes
+                    )
+                    tagged += 1
+                    logger.info(f"  [{completed}/{total}] {result.chunk_id}: {len(result.tags)} tags")
+
+                if batch_size and completed % batch_size == 0:
+                    logger.info(f"Batch {completed//batch_size} complete ({tagged} tagged, {errors} errors)")
+
+                submit_next()
+
+    return tagged, errors
+
+
 def run_tagging(
     db_path: Path,
     provider_name: str,
@@ -453,6 +570,7 @@ def run_tagging(
     respect_reviewed: bool = True,
     supersede_pending: bool = True,
     chunk_ids: list[str] | None = None,
+    parallel: int = 1,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
@@ -475,26 +593,37 @@ def run_tagging(
     tagged = errors = 0
     outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
 
-    for i, chunk in enumerate(chunks):
-        result = tag_one_chunk(
-            chunk, concepts, provider_name, model, max_body_chars=max_body_chars
-        )
-
-        if result.error is not None:
-            logger.error(f"  [{i+1}/{len(chunks)}] {result.chunk_id} FAILED: {result.error}")
-            errors += 1
-        else:
-            apply_chunk_result(
-                conn, result, model, respect_reviewed, supersede_pending, outcomes
+    if parallel <= 1:
+        # Serial path — unchanged from before --parallel existed. No thread
+        # pool, no behaviour change; this is the N=1 case the concurrent
+        # path in _run_parallel_pool is required to match for outcomes.
+        for i, chunk in enumerate(chunks):
+            result = tag_one_chunk(
+                chunk, concepts, provider_name, model, max_body_chars=max_body_chars
             )
-            tagged += 1
-            logger.info(f"  [{i+1}/{len(chunks)}] {result.chunk_id}: {len(result.tags)} tags")
 
-        if delay > 0 and i < len(chunks) - 1:
-            time.sleep(delay)
+            if result.error is not None:
+                logger.error(f"  [{i+1}/{len(chunks)}] {result.chunk_id} FAILED: {result.error}")
+                errors += 1
+            else:
+                apply_chunk_result(
+                    conn, result, model, respect_reviewed, supersede_pending, outcomes
+                )
+                tagged += 1
+                logger.info(f"  [{i+1}/{len(chunks)}] {result.chunk_id}: {len(result.tags)} tags")
 
-        if batch_size and (i + 1) % batch_size == 0:
-            logger.info(f"Batch {(i+1)//batch_size} complete ({tagged} tagged, {errors} errors)")
+            if delay > 0 and i < len(chunks) - 1:
+                time.sleep(delay)
+
+            if batch_size and (i + 1) % batch_size == 0:
+                logger.info(f"Batch {(i+1)//batch_size} complete ({tagged} tagged, {errors} errors)")
+    else:
+        logger.info(f"  parallel={parallel} (bounded thread pool, single DB-writer thread)")
+        tagged, errors = _run_parallel_pool(
+            conn, chunks, concepts, provider_name, model, max_body_chars,
+            delay, parallel, batch_size, respect_reviewed, supersede_pending,
+            outcomes,
+        )
 
     conn.close()
     print(
@@ -524,7 +653,23 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tradition")
     parser.add_argument("--text")
     parser.add_argument("--delay", type=float, default=0.0,
-                        help="Seconds between API calls (rate-limit pacing)")
+                        help="Seconds to sleep after each API call (rate-limit "
+                             "pacing). With --parallel N > 1, this is a PER-WORKER "
+                             "sleep — each of the N worker threads pauses --delay "
+                             "seconds between its own calls, so aggregate request "
+                             "rate scales with N (same as running N serial "
+                             "processes each with --delay would). It is not a "
+                             "global throttle shared across workers.")
+    parser.add_argument("--parallel", type=int, default=1,
+                        help="Number of concurrent worker threads calling the LLM "
+                             "from this single process. Default 1 = serial, "
+                             "byte-identical to the pre-parallel behaviour (no "
+                             "thread pool is created). Set to match the server's "
+                             "--parallel slot count (scripts/serve-llama.sh) to "
+                             "saturate it without hand-sharding --chunk-ids-from-file "
+                             "across multiple terminals. All sqlite writes still "
+                             "happen on the main thread; only the LLM call and "
+                             "response parsing run concurrently.")
     parser.add_argument("--max-body-chars", type=int, default=0,
                         help="optional cap on chunk body length sent to the LLM. "
                              "0 (default) = unlimited; the chunker is the source "
@@ -583,6 +728,7 @@ def main() -> None:
         respect_reviewed=args.respect_reviewed,
         supersede_pending=args.supersede_pending,
         chunk_ids=chunk_ids,
+        parallel=args.parallel,
     )
 
 
