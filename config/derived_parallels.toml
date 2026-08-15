@@ -10,8 +10,24 @@
 # todo:dd034dc4 for the tier-semantics question this deliberately
 # leaves open) x thin-student (concept, chunk) scores: a chunk's PARALLELS
 # partners are the top cross-tradition co-expressors of its concepts,
-# thresholded and ranked by the student's own score. No LLM call, no
-# staged_edges review queue.
+# RANKED by the student's own score. No LLM call, no staged_edges review
+# queue.
+#
+# There used to be a min_grade floor here (removed by todo:ac63de1a, parent
+# todo:7427712c): a (concept, chunk) pair had to clear an absolute score cut
+# to anchor a panel or be picked as a partner. It is gone, and deliberately
+# not replaced by any other absolute cut — the score ranks candidates, it
+# does not admit or exclude them. The removed number (-4.415) was the thin
+# scorer's calibrated operating point for a DIFFERENT frame — (query, chunk)
+# EDGE_RERANK relevance — never re-derived for the (concept-definition,
+# chunk) frame this script actually scores, and measurement showed it was
+# wrong on this frame: only 18.9% of 27,395 human-VERIFIED (concept, chunk)
+# pairs at node 11 cleared it, discarding four-fifths of completed review
+# work, and clearance tracked passage length (12% under 500 chars vs 58% for
+# 2,000–2,400 chars) rather than whether the chunk actually expressed the
+# concept — auto-promoted, never-reviewed pairs cleared at 22.6%, slightly
+# *more* permissively than human-verified ones. Full record:
+# docs/ingest/16-derive-parallels.md's Failure modes section.
 
 [scoring]
 # Vendored checkpoint, guru-side path (NOT a rellm path — the checkpoint was
@@ -32,17 +48,6 @@ model_sha256 = "be0174a36c98f8a8cd6bd979e2ec913a9365dadea87ad2d14d6399ee9e450fc7
 # BERT-family student — the "BERT students cap at 512 positions" gotcha)
 # and truncates bodies to 2400 chars before tokenizing, so those are not
 # separate knobs here.
-
-# Min-leg grade floor: a chunk must itself clear this on a concept for that
-# concept to contribute partners, and a candidate partner must clear it too.
-# Default matches the rellm prototype's --min-grade default, calibrated for
-# THIS config's scorer-v1 student (rellm thin-scorer run 2026-08-13-run1).
-# It is NOT guru/retriever.py's EDGE_RERANK_THRESHOLD (-3.8 by default) —
-# that number is a separate calibration for the bge-reranker-v2-m3 teacher,
-# not this student, and the two should not be reconciled against each other.
-# guru/rerank.py says it plainly: "the calibrated EDGE_RERANK_THRESHOLD is
-# model-specific — recalibrate when swapping." Same rule applies here.
-min_grade = -4.415
 
 # GATHER bound, not a panel ceiling. Via-concept round-robin gathers up to
 # top_k * 2 raw candidates per chunk (ported as-is from the rellm prototype;

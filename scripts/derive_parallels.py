@@ -9,7 +9,14 @@ become a derived table"). Replaces LLM pair-classification with EXPRESSES
 co-expressors of its concepts, ranked by the PARTNER's own concept score
 (not min-leg — min-leg clamping made panels monochrome, per the proposal's
 "known prototype flaws" note) and round-robinned across via concepts so a
-panel doesn't monoculture on one via concept or one work.
+panel doesn't monoculture on one via concept or one work. There is no
+absolute score floor (removed by todo:ac63de1a; see build_panels()'s
+docstring): a (concept, chunk) pair only needs to have BEEN scored to be
+eligible as an anchor via or a partner, however low that score is — the
+score ranks, it never gates. A -4.415 cut sat here once, calibrated on a
+different (query, chunk) frame than this script actually scores, and it
+discarded four-fifths of human-verified tag review with no correlation to
+correctness (see docs/ingest/16-derive-parallels.md's Failure modes).
 
 EXPRESSES input, precisely (PR #64 review finding 7): load_expresses()
 below reads every EXPRESSES edge in guru.db regardless of `tier` — it is
@@ -347,7 +354,6 @@ def build_panels(
     score: dict[tuple[str, str], float],
     trad_of: dict[str, str],
     work_of_chunk,
-    min_grade: float,
     top_k: int,
     per_work_cap: int,
 ) -> dict[str, list[tuple[str, str, float]]]:
@@ -360,14 +366,23 @@ def build_panels(
     via). Two additions per todo:5620391a: the per-work cap, and explicit
     sort-key tiebreaks everywhere the prototype relied on dict/set iteration
     order (which is not stable across runs under hash randomization).
+
+    No score floor (todo:ac63de1a / parent todo:7427712c): the thin scorer's
+    score RANKS partners, it never admits or excludes them. A (concept,
+    chunk) pair with NO score at all is still excluded here -- absence of a
+    score means scoring didn't happen for that pair, which is not the same
+    thing as a low score -- but a pair that was scored, however low, is a
+    fully eligible anchor via or partner now.
     """
     panels: dict[str, list[tuple[str, str, float]]] = {}
 
     for ch in sorted(bychunk):
         concepts = bychunk[ch]
-        # Anchor gate: the chunk must itself clear the floor on a concept
-        # for that concept to contribute partners.
-        vias = sorted(c for c in concepts if score.get((c, ch), -1e9) >= min_grade)
+        # Anchor gate: a concept contributes partners as long as the
+        # (concept, chunk) pair was actually scored. No floor on the score
+        # itself -- only an unscored pair (scoring never ran for it) is
+        # excluded.
+        vias = sorted(c for c in concepts if (c, ch) in score)
         iters = {c: iter(ranked.get(c, [])) for c in vias}
         best: dict[str, tuple[str, float]] = {}
         picked_n = 0
@@ -380,7 +395,14 @@ def build_panels(
                 if other == ch or trad_of.get(other) == trad_of.get(ch):
                     continue
                 b = score.get((c, other))
-                if b is None or b < min_grade:
+                if b is None:
+                    # build_ranked() sorts unscored candidates to the end
+                    # of each concept's ranked list (tied at the -1e9
+                    # sentinel), so once this concept's iterator yields an
+                    # unscored candidate, every candidate after it in this
+                    # concept is unscored too -- ending this concept's
+                    # iteration here is still correct. It no longer means
+                    # "too low," only "nothing left worth ranking."
                     del iters[c]
                     continue
                 if other not in best:
@@ -443,7 +465,6 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     scoring_cfg = cfg["scoring"]
     panels_cfg = cfg["panels"]
     top_k = int(scoring_cfg["top_k"])
-    min_grade = float(scoring_cfg["min_grade"])
     per_work_cap = int(panels_cfg["per_work_cap"])
     model_path = str(scoring_cfg["model_path"])
     cache_path = Path(scoring_cfg["score_cache"])
@@ -490,7 +511,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
 
     ranked = build_ranked(bycon, score)
     panels = build_panels(bychunk, ranked, score, trad_of, work_of_chunk,
-                          min_grade, top_k, per_work_cap)
+                          top_k, per_work_cap)
     rows = build_edges(panels, defs)
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -511,7 +532,6 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         "chunks_with_partners": chunks_with_partners,
         "unique_edge_rows": len(rows),
         "top_k": top_k,
-        "min_grade": min_grade,
         "per_work_cap": per_work_cap,
         "model_path": model_path,
     }

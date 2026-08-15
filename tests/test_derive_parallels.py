@@ -107,18 +107,19 @@ def _round_robin_fixture():
     bycon = {
         "concept.x": {ANCHOR, SAME_TRAD, P1, P2},
         "concept.y": {ANCHOR, Q1, Q2},
-        "concept.z": {ANCHOR, "trad_d.r.001"},  # anchor fails the gate on z
+        "concept.z": {ANCHOR, "trad_d.r.001"},  # anchor's z-pair is unscored
     }
     bychunk = {ANCHOR: {"concept.x", "concept.y", "concept.z"}}
     score = {
-        ("concept.x", ANCHOR): 2.0,      # clears min_grade -> concept.x is a via
+        ("concept.x", ANCHOR): 2.0,      # scored -> concept.x is a via
         ("concept.x", SAME_TRAD): 6.0,   # best score of all, but same tradition as anchor
         ("concept.x", P1): 5.0,
         ("concept.x", P2): 4.0,
-        ("concept.y", ANCHOR): 2.0,      # clears min_grade -> concept.y is a via
+        ("concept.y", ANCHOR): 2.0,      # scored -> concept.y is a via
         ("concept.y", Q1): 3.0,
         ("concept.y", Q2): 2.5,
-        ("concept.z", ANCHOR): 0.0,      # below min_grade -> concept.z is NOT a via
+        # ("concept.z", ANCHOR) is deliberately absent: no score at all ->
+        # concept.z never becomes a via, no floor involved.
         ("concept.z", "trad_d.r.001"): 9.0,  # would dominate the panel if the gate didn't hold
     }
     trad_of = {
@@ -135,13 +136,14 @@ def test_build_panels_round_robin_alternates_via_concepts_deterministically():
     bychunk, ranked, score, trad_of = _round_robin_fixture()
     panels = build_panels(
         bychunk, ranked, score, trad_of, work_of_chunk=chunk_text_id,
-        min_grade=1.0, top_k=2, per_work_cap=10,
+        top_k=2, per_work_cap=10,
     )
     got = panels[ANCHOR]
     partners = [p for p, _via, _g in got]
     # SAME_TRAD never appears (same tradition as anchor) despite the highest
     # raw score; ANCHOR itself never appears; concept.z contributes nothing
-    # (anchor's own z-score is below min_grade, so z never becomes a via).
+    # (anchor's own (concept.z, ANCHOR) pair was never scored, so z never
+    # becomes a via -- no score floor involved).
     assert SAME_TRAD not in partners
     assert ANCHOR not in partners
     assert "trad_d.r.001" not in partners
@@ -178,11 +180,85 @@ def test_build_panels_per_work_cap_thins_a_monoculture():
 
     panels = build_panels(
         bychunk, ranked, score, trad_of, work_of_chunk=work_map.get,
-        min_grade=1.0, top_k=4, per_work_cap=2,
+        top_k=4, per_work_cap=2,
     )
     partners = [p for p, _via, _g in panels[ANCHOR]]
     assert partners == [w1c1, w1c2, w2c1]  # w1c3 dropped: work "w1" already at cap
     assert w1c3 not in partners
+
+
+# ── panels: no score floor (todo:ac63de1a) ──────────────────────────────────
+
+def test_build_panels_unscored_pair_still_excluded():
+    """A (concept, chunk) pair with NO score at all must still be skipped --
+    absence of a score means scoring never ran for that pair, which is not
+    the same thing as a low score."""
+    anchor, scored_partner, unscored_partner = (
+        "trad_a.anchor.001", "trad_b.p.001", "trad_b.p.002",
+    )
+    bycon = {"concept.x": {anchor, scored_partner, unscored_partner}}
+    bychunk = {anchor: {"concept.x"}}
+    score = {
+        ("concept.x", anchor): -50.0,
+        ("concept.x", scored_partner): -40.0,
+        # ("concept.x", unscored_partner) is deliberately absent.
+    }
+    trad_of = {anchor: "trad_a", scored_partner: "trad_b", unscored_partner: "trad_b"}
+    ranked = build_ranked(bycon, score)
+
+    panels = build_panels(
+        bychunk, ranked, score, trad_of, work_of_chunk=chunk_text_id,
+        top_k=5, per_work_cap=10,
+    )
+    partners = [p for p, _via, _g in panels[anchor]]
+    assert partners == [scored_partner]
+    assert unscored_partner not in partners
+
+
+def test_build_panels_very_low_scoring_partner_is_admitted_and_ranks_last():
+    """No floor: a partner whose score would have failed the old -4.415
+    min_grade is now a fully eligible candidate, ranked below better-scoring
+    partners but not excluded."""
+    anchor, strong, weak = "trad_a.anchor.001", "trad_b.p.001", "trad_b.p.002"
+    bycon = {"concept.x": {anchor, strong, weak}}
+    bychunk = {anchor: {"concept.x"}}
+    score = {
+        ("concept.x", anchor): 0.0,
+        ("concept.x", strong): 2.0,
+        ("concept.x", weak): -9.5,  # well under the old -4.415 floor
+    }
+    trad_of = {anchor: "trad_a", strong: "trad_b", weak: "trad_b"}
+    ranked = build_ranked(bycon, score)
+
+    panels = build_panels(
+        bychunk, ranked, score, trad_of, work_of_chunk=chunk_text_id,
+        top_k=5, per_work_cap=10,
+    )
+    assert panels[anchor] == [
+        (strong, "concept.x", 2.0),
+        (weak, "concept.x", -9.5),
+    ]
+
+
+def test_build_panels_anchor_gate_not_blocked_by_low_own_score():
+    """A chunk whose OWN score on every tagged concept is very low must
+    still anchor a panel -- the old floor would have zeroed this chunk's
+    vias entirely and produced an empty panel."""
+    anchor, partner = "trad_a.anchor.001", "trad_b.p.001"
+    bycon = {"concept.x": {anchor, partner}}
+    bychunk = {anchor: {"concept.x"}}
+    score = {
+        ("concept.x", anchor): -12.0,  # far under the old -4.415 floor
+        ("concept.x", partner): -7.0,
+    }
+    trad_of = {anchor: "trad_a", partner: "trad_b"}
+    ranked = build_ranked(bycon, score)
+
+    panels = build_panels(
+        bychunk, ranked, score, trad_of, work_of_chunk=chunk_text_id,
+        top_k=5, per_work_cap=10,
+    )
+    assert panels[anchor] == [(partner, "concept.x", -7.0)]
 
 
 # ── edges: dedup + annotation formatting + final ordering ───────────────────

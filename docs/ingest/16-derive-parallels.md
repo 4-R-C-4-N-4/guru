@@ -93,7 +93,7 @@ default 2) so one prolific text doesn't fill every partner slot.
 per derived edge — `source`, `target`, `edge_type='PARALLELS'`,
 `tier='inferred'`, `weight` = the partner's grade, `annotation` naming the via
 concept) plus a `summary.json` (concept/pair counts, scoring time, the
-`top_k`/`min_grade`/`per_work_cap` knobs the run used).
+`top_k`/`per_work_cap` knobs the run used).
 
 **Does not write `guru.db`.** No `derived_parallels` table exists yet —
 materializing one is a documented future step, not this node's job. The
@@ -137,15 +137,46 @@ again, not export with a stale run, if that guard trips.
 
 ## Failure modes
 
-**Empty-via = untagged chunk, not an error.** A chunk with no accepted
-`EXPRESSES` tags — or whose only tagged concepts don't clear
-`config[scoring].min_grade` on the chunk's own leg — never enters the anchor
-set and gets `panels[chunk] = []`. It shows up in `summary.json`'s
-`chunks_total` but not `chunks_with_partners`. This mirrors node 10's
-legitimately-tagless-chunk case (`plotinus-select-works-index`, 107 of 752):
-a low `chunks_with_partners` ratio is a tag-coverage signal, not a generator
-defect, and should send you back to node 11's queue depth, not to this
-script's logic.
+**Empty-via = untagged or unscored chunk, not an error.** A chunk with no
+accepted `EXPRESSES` tags — or whose only tagged (concept, chunk) pairs were
+never actually scored (scoring didn't run for them, not that it ran and
+scored low) — never enters the anchor set and gets `panels[chunk] = []`. It
+shows up in `summary.json`'s `chunks_total` but not `chunks_with_partners`.
+This mirrors node 10's legitimately-tagless-chunk case
+(`plotinus-select-works-index`, 107 of 752): a low `chunks_with_partners`
+ratio is a tag-coverage signal, not a generator defect, and should send you
+back to node 11's queue depth, not to this script's logic. A low *score* on
+a tagged concept is never the cause any more — see the removed-floor note
+below.
+
+**There is no absolute score floor (removed 2026-08, todo:ac63de1a).**
+`build_panels()` used to require a (concept, chunk) pair to clear
+`config[scoring].min_grade` (-4.415) to anchor a panel or be picked as a
+partner. That number was the thin scorer's calibrated operating point for a
+different frame — (query, chunk) `EDGE_RERANK` relevance — carried over
+unexamined when this script substituted a concept definition for the query,
+and it was never re-derived for that substitution (parent todo:7427712c).
+Measurement showed it was actively wrong on this frame, not merely
+uncalibrated:
+- Of 27,395 (concept, chunk) pairs a human VERIFIED at node 11, only 18.9%
+  cleared -4.415 — the generator was discarding four-fifths of completed
+  review work.
+- Human-verified pairs cleared at 18.9%; unreviewed auto-promoted
+  (`tier='proposed'`) pairs cleared at 22.6% — the score was very slightly
+  *more* permissive toward tags nobody had reviewed, so it carried no signal
+  about whether a chunk actually expresses a concept.
+- Score clearance tracked passage length, not relevance: 12% for chunks
+  under 500 chars vs 58% for 2,000–2,400 chars.
+- Simulated effect of removal, over the existing score cache: chunks
+  carrying a panel 2,364 -> 5,054; texts with any panel 166 -> 235.
+
+The score remains the ranker — spot-checks confirm it still picks each
+work's defining concept (`sunyata_emptiness` for the Diamond Sutra, `wu_wei`
+for the Tao Te Ching, `sephirot` for the Lesser Holy Assembly) — it was only
+the absolute cut that was wrong. Expect the consequence: panels are now
+bigger and include weaker partners than before. `config[panels].per_work_cap`
+and guru-web's weight-ordered panel query (guru-web todo:bc084b37) are what
+manage that now, not an admission floor here.
 
 **Concept namespace mismatch: `concept.<id>` vs bare taxonomy keys.**
 `concepts/taxonomy.toml` keys are bare (`emanation_hierarchy`); every graph
@@ -193,7 +224,10 @@ bump) has to force real scoring: point `config[scoring].score_cache` at a
 throwaway path, or skip the script and score a pair directly —
 `EDGE_RERANK_MODEL=~/programs/guru/scorer-v1 .venv/bin/python -c "from guru
 import rerank; print(rerank.score_pairs('q', {'a': 'body'}))"`. A relevant
-pair should land well above `min_grade` and an unrelated one far below it.
+pair should score noticeably higher than an unrelated one — there is no
+`min_grade` cut to compare against any more (see the removed-floor note
+above); this is a sanity check on the model's *ranking*, not a threshold
+check.
 
 **Pinning this node at a GPU appears to work and does nothing.**
 `guru/rerank.py` performs no device placement anywhere — no `.to()`, no
