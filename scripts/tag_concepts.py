@@ -14,6 +14,7 @@ Usage:
 """
 
 import argparse
+import contextlib
 import json
 import logging
 import sqlite3
@@ -486,6 +487,7 @@ def tag_one_chunk(
     provider_name: str,
     model: str,
     max_body_chars: int | None = None,
+    base_url: str | None = None,
 ) -> ChunkTagResult:
     """Do the slow, DB-free part of tagging one chunk: resolve its body,
     build the prompt, call the LLM, and parse the response.
@@ -498,6 +500,13 @@ def tag_one_chunk(
     over others. call_llm's provider functions (llm.py) are stateless — each
     call opens its own urllib/SDK request with no shared client object — so
     concurrent calls from separate threads don't share mutable state.
+
+    base_url, when given, targets this one call at a specific llama.cpp
+    server instead of the process-global LLAMACPP_BASE_URL env default
+    (todo:d267201a multi-endpoint fan-out). It's threaded through as a real
+    argument — never an env mutation — precisely so concurrent calls from
+    different worker threads can each target a different server without
+    racing each other over shared process state.
     """
     chunk_id = chunk["id"]
     try:
@@ -512,7 +521,16 @@ def tag_one_chunk(
         citation = chunk["label"]
         prompt = build_prompt(body, citation, concepts, max_body_chars=max_body_chars)
 
-        raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, max_tokens=LLM_MAX_TOKENS)
+        # base_url is only added to the call when set, mirroring
+        # llm.call_llm's own "don't forward unless given" rule — so a
+        # single-endpoint run (base_url=None, the default) calls call_llm
+        # with exactly the same arguments it always has, and any caller or
+        # test double built against the pre-multi-endpoint signature is
+        # unaffected.
+        call_kwargs = {"max_tokens": LLM_MAX_TOKENS}
+        if base_url is not None:
+            call_kwargs["base_url"] = base_url
+        raw = call_llm(provider_name, model, SYSTEM_PROMPT, prompt, **call_kwargs)
         tags = parse_tags(raw)
         return ChunkTagResult(chunk_id=chunk_id, tags=tags)
     except Exception as e:
@@ -564,6 +582,7 @@ def _tag_one_chunk_then_delay(
     model: str,
     max_body_chars: int | None,
     delay: float,
+    base_url: str | None = None,
 ) -> ChunkTagResult:
     """Worker-thread entry point for --parallel > 1: run the pure per-chunk
     work, then (--delay semantics for N>1, decided here) sleep on THIS
@@ -576,8 +595,12 @@ def _tag_one_chunk_then_delay(
     global limiter (one shared sleep gate) was rejected: it would make
     --parallel N behave like --parallel 1 throughput-wise whenever delay>0,
     defeating the point of the flag.
+
+    base_url pins this one call to a specific endpoint (todo:d267201a); see
+    tag_one_chunk's docstring for why it's a parameter and not an env write.
     """
-    result = tag_one_chunk(chunk, concepts, provider_name, model, max_body_chars=max_body_chars)
+    result = tag_one_chunk(chunk, concepts, provider_name, model,
+                           max_body_chars=max_body_chars, base_url=base_url)
     if delay > 0:
         time.sleep(delay)
     return result
@@ -596,53 +619,105 @@ def _run_parallel_pool(
     respect_reviewed: bool,
     supersede_pending: bool,
     outcomes: dict[str, int],
+    endpoints: list[str] | None = None,
 ) -> tuple[int, int]:
-    """--parallel > 1 path: a bounded ThreadPoolExecutor runs tag_one_chunk
-    (DB-free, thread-safe — see its docstring) across up to `parallel`
-    worker threads. This function's own caller's thread is the only thread
-    that ever touches `conn`: it consumes completed futures one at a time
-    and drives apply_chunk_result, so every write is single-threaded despite
-    the LLM calls that produced the data running concurrently.
+    """--parallel > 1 path: a bounded ThreadPoolExecutor per endpoint runs
+    tag_one_chunk (DB-free, thread-safe — see its docstring) across up to
+    `parallel` worker threads *per endpoint*. This function's own caller's
+    thread is the only thread that ever touches `conn`: regardless of how
+    many endpoints/executors are feeding it, it consumes completed futures
+    one at a time and drives apply_chunk_result, so every write stays
+    single-threaded despite the LLM calls that produced the data running
+    concurrently across one or several servers (todo:d267201a — the
+    single-writer invariant from todo:0c34642e is unchanged; only where the
+    LLM call goes varies, never who writes to sqlite).
+
+    endpoints=None (the default — no --endpoint given) reproduces today's
+    behaviour exactly: one implicit endpoint whose calls pass base_url=None
+    through to call_llm, i.e. the ordinary LLAMACPP_BASE_URL env
+    resolution. --parallel means exactly what it always has: total worker
+    threads.
+
+    endpoints=[url, ...] (one or more, from repeated --endpoint) round-robins
+    chunks across them by list position — chunk i is pinned to
+    endpoints[i % len(endpoints)] for its entire lifetime, from first
+    submission to completion, never migrating to another endpoint's queue.
+    Each endpoint gets its OWN ThreadPoolExecutor sized to `parallel`, so
+    --parallel is interpreted PER ENDPOINT here: total concurrency across
+    the run is parallel * len(endpoints). Two reasons this beats treating
+    --parallel as a shared total split across endpoints: (1) it keeps the
+    single-endpoint case's meaning of --parallel completely unchanged — one
+    endpoint's "per-endpoint" pool of `parallel` workers *is* the total, so
+    a one-endpoint --endpoint run behaves identically to no --endpoint at
+    all; (2) it's what the todo:5955d038 per-endpoint slot pre-flight
+    actually checks — each endpoint was pre-flighted for `parallel` slots,
+    so a dedicated `parallel`-sized executor per endpoint is a structural
+    guarantee that no endpoint ever sees more than `parallel` concurrent
+    requests, rather than a probabilistic one a single shared pool with
+    per-task endpoint tagging could not promise (a shared pool's threads
+    don't otherwise know or care which endpoint a queued task targets, so a
+    slow endpoint's tasks could pile up occupying more than `parallel`
+    threads at once — exactly the silent-non-parallelism failure mode this
+    whole feature exists to avoid).
 
     Completion order is nondeterministic (whichever chunk's LLM call
-    finishes first), so progress is reported as "N/total completions" —
-    counting how many chunks have finished, not the chunks' original list
-    position — unlike the serial path's index-based log line.
+    finishes first, on whichever endpoint), so progress is reported as
+    "N/total completions" — counting how many chunks have finished, not the
+    chunks' original list position — unlike the serial path's index-based
+    log line.
     """
+    resolved_endpoints: list[str | None] = list(endpoints) if endpoints else [None]
+    n_endpoints = len(resolved_endpoints)
     total = len(chunks)
-    max_in_flight = parallel * PARALLEL_INFLIGHT_MULTIPLIER
-    chunk_iter = iter(chunks)
+    max_in_flight_per_endpoint = parallel * PARALLEL_INFLIGHT_MULTIPLIER
+
+    # Round-robin split by list position: bucket[e] is the ordered sub-list
+    # of chunks pinned to resolved_endpoints[e] for their whole lifetime.
+    buckets: list[list[dict]] = [[] for _ in range(n_endpoints)]
+    for i, chunk in enumerate(chunks):
+        buckets[i % n_endpoints].append(chunk)
+    bucket_iters = [iter(b) for b in buckets]
+
     pending: set[Future] = set()
+    fut_endpoint_idx: dict[Future, int] = {}
     tagged = errors = completed = 0
 
-    with ThreadPoolExecutor(max_workers=parallel) as executor:
+    with contextlib.ExitStack() as stack:
+        executors = [
+            stack.enter_context(ThreadPoolExecutor(max_workers=parallel))
+            for _ in range(n_endpoints)
+        ]
 
-        def submit_next() -> bool:
-            chunk = next(chunk_iter, None)
+        def submit_next(e: int) -> bool:
+            chunk = next(bucket_iters[e], None)
             if chunk is None:
                 return False
-            pending.add(executor.submit(
+            fut = executors[e].submit(
                 _tag_one_chunk_then_delay, chunk, concepts, provider_name,
-                model, max_body_chars, delay,
-            ))
+                model, max_body_chars, delay, resolved_endpoints[e],
+            )
+            pending.add(fut)
+            fut_endpoint_idx[fut] = e
             return True
 
-        for _ in range(max_in_flight):
-            if not submit_next():
-                break
+        for e in range(n_endpoints):
+            for _ in range(max_in_flight_per_endpoint):
+                if not submit_next(e):
+                    break
 
         while pending:
             done, pending = wait(pending, return_when=FIRST_COMPLETED)
             for fut in done:
+                e = fut_endpoint_idx.pop(fut)
                 try:
                     result = fut.result()
-                except Exception as e:
+                except Exception as ex:
                     # Defensive: tag_one_chunk already catches everything it
                     # can (see its docstring), but a future can also fail
                     # for reasons outside that function (e.g. the executor
                     # itself). Either way, one bad chunk must not take down
                     # the run or the other in-flight results.
-                    result = ChunkTagResult(chunk_id="<unknown>", error=e)
+                    result = ChunkTagResult(chunk_id="<unknown>", error=ex)
 
                 completed += 1
                 if result.error is not None:
@@ -658,7 +733,7 @@ def _run_parallel_pool(
                 if batch_size and completed % batch_size == 0:
                     logger.info(f"Batch {completed//batch_size} complete ({tagged} tagged, {errors} errors)")
 
-                submit_next()
+                submit_next(e)
 
     return tagged, errors
 
@@ -678,14 +753,32 @@ def run_tagging(
     chunk_ids: list[str] | None = None,
     parallel: int = 1,
     allow_parallel_any_model: bool = False,
+    endpoints: list[str] | None = None,
 ) -> None:
     call_fn = PROVIDERS.get(provider_name)
     if not call_fn:
         logger.error(f"Unknown provider: {provider_name}")
         sys.exit(1)
 
-    check_parallel_model_guard(model, parallel, allow_parallel_any_model)
-    preflight_server_slots(provider_name, parallel)
+    # --parallel is interpreted PER ENDPOINT (see _run_parallel_pool's
+    # docstring for why): with E endpoints, up to `parallel` concurrent
+    # requests can be in flight against EACH of them, so total concurrency
+    # is parallel * E. The finetune-only model guard (todo:5955d038) is
+    # judged against that total, not the raw flag value — two endpoints at
+    # --parallel 1 each is still 2-wide multiplexing of whatever model is
+    # named, and the 27B teacher must not be silently multiplexed that way
+    # either. With no --endpoint given, E=1 and this is exactly the
+    # pre-multi-endpoint behaviour.
+    n_endpoints = len(endpoints) if endpoints else 1
+    total_concurrency = parallel * n_endpoints
+    check_parallel_model_guard(model, total_concurrency, allow_parallel_any_model)
+
+    # Slot pre-flight applies PER endpoint: each endpoint is dispatched up
+    # to `parallel` concurrent requests (never more — see
+    # _run_parallel_pool), so each is checked against `parallel`, not the
+    # combined total.
+    for base_url in (endpoints or [None]):
+        preflight_server_slots(provider_name, parallel, base_url=base_url)
 
     concepts = load_taxonomy()
     conn = sqlite3.connect(str(db_path))
@@ -704,7 +797,16 @@ def run_tagging(
     tagged = errors = 0
     outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
 
-    if parallel <= 1:
+    # No --endpoint given -> the pool only kicks in for --parallel > 1,
+    # exactly as before (point 2 of todo:d267201a: "If no endpoint flag is
+    # given, behaviour is exactly today's"). Any --endpoint at all routes
+    # through the pool even at --parallel 1, since round-robinning across
+    # servers is itself the point — one worker per endpoint still means
+    # every endpoint after the first is doing something the serial
+    # single-connection loop below cannot.
+    use_pool = parallel > 1 or bool(endpoints)
+
+    if not use_pool:
         # Serial path — unchanged from before --parallel existed. No thread
         # pool, no behaviour change; this is the N=1 case the concurrent
         # path in _run_parallel_pool is required to match for outcomes.
@@ -729,11 +831,18 @@ def run_tagging(
             if batch_size and (i + 1) % batch_size == 0:
                 logger.info(f"Batch {(i+1)//batch_size} complete ({tagged} tagged, {errors} errors)")
     else:
-        logger.info(f"  parallel={parallel} (bounded thread pool, single DB-writer thread)")
+        if endpoints:
+            logger.info(
+                f"  parallel={parallel} per endpoint x {len(endpoints)} endpoint(s) "
+                f"= {parallel * len(endpoints)} total (bounded thread pools, "
+                f"single DB-writer thread)"
+            )
+        else:
+            logger.info(f"  parallel={parallel} (bounded thread pool, single DB-writer thread)")
         tagged, errors = _run_parallel_pool(
             conn, chunks, concepts, provider_name, model, max_body_chars,
             delay, parallel, batch_size, respect_reviewed, supersede_pending,
-            outcomes,
+            outcomes, endpoints=endpoints,
         )
 
     conn.close()
@@ -795,6 +904,22 @@ def build_parser() -> argparse.ArgumentParser:
                              "The teacher runs think-on and was never sized for "
                              "concurrent requests — only pass this if you have a "
                              "specific, deliberate reason to multiplex it anyway.")
+    parser.add_argument("--endpoint", action="append", dest="endpoints",
+                        metavar="URL", default=None,
+                        help="A llama.cpp server base URL to fan work out to "
+                             "(e.g. http://127.0.0.1:8080). Repeatable: pass "
+                             "--endpoint twice to spread one run across two "
+                             "servers (e.g. a second 4B on the 4070) round-robin "
+                             "by chunk position, instead of both instances "
+                             "contending for one. Each in-flight request is "
+                             "pinned to the endpoint it started on for its whole "
+                             "lifetime. --parallel is interpreted PER ENDPOINT "
+                             "here — each endpoint gets its own pool of up to "
+                             "--parallel concurrent workers, so total concurrency "
+                             "is --parallel times the number of --endpoint flags. "
+                             "Only meaningful with --provider llamacpp. Default "
+                             "(not given): today's single-server behaviour, "
+                             "unchanged — the env-resolved LLAMACPP_BASE_URL.")
     parser.add_argument("--max-body-chars", type=int, default=0,
                         help="optional cap on chunk body length sent to the LLM. "
                              "0 (default) = unlimited; the chunker is the source "
@@ -856,6 +981,7 @@ def main() -> None:
             chunk_ids=chunk_ids,
             parallel=args.parallel,
             allow_parallel_any_model=args.allow_parallel_any_model,
+            endpoints=args.endpoints,
         )
     except (ParallelModelNotAllowedError, InsufficientServerSlotsError) as e:
         logger.error(str(e))

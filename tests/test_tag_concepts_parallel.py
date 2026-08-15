@@ -292,10 +292,11 @@ def test_parallel_worker_exception_does_not_kill_run_or_lose_other_results(tmp_p
 
     real_tag_one_chunk = tag_concepts.tag_one_chunk
 
-    def flaky_tag_one_chunk(chunk, concepts, provider_name, model, max_body_chars=None):
+    def flaky_tag_one_chunk(chunk, concepts, provider_name, model, max_body_chars=None, base_url=None):
         if chunk["id"] == poison:
             raise RuntimeError("simulated worker-thread crash")
-        return real_tag_one_chunk(chunk, concepts, provider_name, model, max_body_chars=max_body_chars)
+        return real_tag_one_chunk(chunk, concepts, provider_name, model,
+                                  max_body_chars=max_body_chars, base_url=base_url)
 
     monkeypatch.setattr(tag_concepts, "tag_one_chunk", flaky_tag_one_chunk)
     monkeypatch.setattr(tag_concepts, "call_llm",
