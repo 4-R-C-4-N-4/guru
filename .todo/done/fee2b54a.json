@@ -1,13 +1,13 @@
 {
   "id": "fee2b54a",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Selection-rule harness: score a candidate rule against the 24 judged strict-relevant partners AND coverage (chunks/texts with panels, panel-size spread), so any rule change is measurable before it ships",
   "source": {
     "type": "human"
   },
   "created_at": "2026-08-14T23:55:18.239Z",
-  "updated_at": "2026-08-15T02:07:32.921Z",
+  "updated_at": "2026-08-15T17:11:19.868Z",
   "tags": [
     "edges",
     "eval"
@@ -23,5 +23,11 @@
       "content": "REVISED after reviewing existing code (owner steer 2026-08-14): do NOT build this from scratch. Inventory now at docs/edges/evaluation-tooling.md.\n\nWHAT ALREADY EXISTS. The evaluation apparatus lives in ~/Work/rellm/tools/ and drives GURU's parity retriever (guru/retriever.py + guru/retrieval_legs.py, the latter explicitly 'brought to guru-web parity'), selected via EDGE_GURU_ROOT. Directly relevant: edge_inherit_ab.py (A/B arms per golden query through the parity retriever, writes surfaced.jsonl), edge_relevance_judge.py (blind three-strata grading -- the judgment that decides whether a mechanism ships), edge_scorer_rungs.py (can a scorer separate relevant from not), edge_band_eval_set.py + edge_band_eval_collect.py (frozen rank 6-50 eval set), edge_symmetry.py (AB vs BA consistency), edge_matrix.py (Wilson-bounded outcome matrix). guru itself has NO eval scripts at all, and no doc pointing at any of this -- which is why this ticket was originally written as 'build a harness'.\n\nTHE METHODOLOGICAL CORRECTION, which matters more than the duplication. This ticket's original metric was 'judged-partner recovery against the 24 strict-relevant partners'. edge_band_eval_set.py exists precisely because labels concentrate where the incumbent looked (rank <=5, sim >=0.75). Scoring a new selection rule against incumbent-surfaced labels measures AGREEMENT WITH THE OLD MECHANISM, not quality, and actively penalises a rule that surfaces good material the old one never sampled. The 21/24 figure is a regression check, necessary but not sufficient, and must not be the primary gate.\n\nREVISED SCOPE. (1) Reuse the band-eval pattern: sample the band the new rule reaches but the incumbent never graded, and grade it blind under the existing protocol. (2) Keep judged-partner recovery only as a regression tripwire. (3) Add the coverage metrics that are genuinely new (chunks/texts with panels, panel-size spread) since no existing tool reports those -- they are the cutover symptom. (4) Pose the retrieval-side question as an A/B on guru's existing toggles (EDGE_LEG, EDGE_INHERIT, EDGE_RERANK) rather than new retrieval code.\n\nCONSTRAINT: rellm is the owner's sandbox. Mine it and cite it; do not give guru a runtime dependency on it (todo:5104d8c8).",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "4498deba590227d7961867223dbff6c63a921ee7",
+    "resolved_at": "2026-08-15T17:11:19.868Z",
+    "resolved_by": "unknown",
+    "note": "Superseded: the owner settled the selection rule directly (no floor, ac63de1a). The calibration this harness would have supported was answered from data already on disk — human-verified EXPRESSES tags are themselves labels for the (concept,chunk) frame, and only 18.9% of them cleared the floor."
+  }
 }

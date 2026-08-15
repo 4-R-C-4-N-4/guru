@@ -1,13 +1,13 @@
 {
   "id": "404da836",
   "type": "investigation",
-  "state": "open",
+  "state": "done",
   "summary": "Establish an operating point on the (concept-definition, chunk) frame: label a stratified sample under the proven judging protocol, or demonstrate a relative rule needs no absolute point — needs the harness from fee2b54a",
   "source": {
     "type": "human"
   },
   "created_at": "2026-08-14T23:55:18.288Z",
-  "updated_at": "2026-08-14T23:55:18.288Z",
+  "updated_at": "2026-08-15T17:11:19.911Z",
   "tags": [
     "edges",
     "scoring",
@@ -15,5 +15,11 @@
   ],
   "relationships": {
     "parent": "7427712c"
+  },
+  "resolution": {
+    "commit": "4498deba590227d7961867223dbff6c63a921ee7",
+    "resolved_at": "2026-08-15T17:11:19.911Z",
+    "resolved_by": "unknown",
+    "note": "Superseded by the owner's decision in ac63de1a: no absolute operating point is needed because the score is no longer used to admit, only to rank. No labelling round required."
   }
 }
