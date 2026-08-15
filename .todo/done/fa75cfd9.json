@@ -1,0 +1,24 @@
+{
+  "id": "fa75cfd9",
+  "type": "chore",
+  "state": "done",
+  "summary": "Document the parallel bulk-tagging recipe in node 10 and gpu-assembly: slots vs workers, the two-GPU layout with its CUDA pin, measured throughput, and why the 27B is excluded; needs d267201a",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-15T14:43:59.559Z",
+  "updated_at": "2026-08-15T15:35:02.733Z",
+  "tags": [
+    "docs",
+    "workbook"
+  ],
+  "relationships": {
+    "parent": "caa11164"
+  },
+  "resolution": {
+    "commit": "e3ee3f753c38e941df9df68c525829925bb43847",
+    "resolved_at": "2026-08-15T15:35:02.733Z",
+    "resolved_by": "unknown",
+    "note": "Documented parallel bulk-tagging recipe in docs/ingest/10-tag-concepts.md (Running a parallel bulk pass + Failure modes entry) and docs/ingest/gpu-assembly.md (Slots vs workers section); no throughput measured, per repo policy"
+  }
+}
