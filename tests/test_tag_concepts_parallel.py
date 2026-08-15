@@ -314,6 +314,86 @@ def test_parallel_worker_exception_does_not_kill_run_or_lose_other_results(tmp_p
     assert poison not in done
 
 
+# ── a DB-write failure doesn't kill the run (out-of-range score etc.) ───────
+
+
+def test_serial_db_write_failure_does_not_kill_run(tmp_path, monkeypatch, capsys):
+    """A score the schema's CHECK constraint rejects must be counted as one
+    error and skipped, not crash the whole serial run."""
+    n = 5
+    db = tmp_path / "guru.db"
+    ids = _make_db(db, n)
+    poison = ids[2]
+
+    def fake_call_llm(provider, model, system, prompt, max_tokens):
+        cid = _chunk_id_from_prompt(prompt)
+        score = 99 if cid == poison else 2
+        return json.dumps([{"concept_id": "gnosis", "score": score, "justification": "j"}])
+
+    monkeypatch.setattr(tag_concepts, "call_llm", fake_call_llm)
+
+    _run(db, parallel=1)
+
+    summary = _parse_done_line(capsys.readouterr().out)
+    assert summary["errors"] == 1
+    assert summary["tagged"] == n - 1
+
+    conn = sqlite3.connect(str(db))
+    done = {r[0] for r in conn.execute("SELECT chunk_id FROM tagging_progress")}
+    assert done == set(ids) - {poison}
+
+
+def test_parallel_db_write_failure_does_not_kill_run(tmp_path, monkeypatch, capsys):
+    n = 8
+    db = tmp_path / "guru.db"
+    ids = _make_db(db, n)
+    poison = ids[3]
+
+    def fake_call_llm(provider, model, system, prompt, max_tokens):
+        cid = _chunk_id_from_prompt(prompt)
+        score = 99 if cid == poison else 2
+        return json.dumps([{"concept_id": "gnosis", "score": score, "justification": "j"}])
+
+    monkeypatch.setattr(tag_concepts, "call_llm", fake_call_llm)
+
+    _run(db, parallel=3)
+
+    summary = _parse_done_line(capsys.readouterr().out)
+    assert summary["errors"] == 1
+    assert summary["tagged"] == n - 1
+
+    conn = sqlite3.connect(str(db))
+    done = {r[0] for r in conn.execute("SELECT chunk_id FROM tagging_progress")}
+    assert done == set(ids) - {poison}
+    assert poison not in done
+
+
+# ── --delay: no wasted trailing sleep per worker lane ────────────────────────
+
+
+def test_parallel_skips_delay_after_each_lanes_last_chunk(tmp_path, monkeypatch):
+    """Mirrors the serial path's "no sleep after the last chunk" rule per
+    worker lane: with n=6 chunks round-robinned across parallel=3 lanes (2
+    chunks per lane), each lane's second (last) chunk must not pay --delay,
+    so total elapsed time is close to one delay period, not two."""
+    n = 6
+    parallel = 3
+    delay = 0.2
+    db = tmp_path / "guru.db"
+    _make_db(db, n)
+
+    monkeypatch.setattr(tag_concepts, "call_llm", lambda *a, **k: "[]")
+
+    start = time.monotonic()
+    _run(db, parallel=parallel, delay=delay)
+    elapsed = time.monotonic() - start
+
+    # Each lane does 2 chunks; only the first should sleep --delay. If the
+    # bug were still present (unconditional sleep after every chunk), this
+    # would take ~2*delay per lane instead of ~1*delay.
+    assert elapsed < delay * 1.5
+
+
 # ── --resume semantics preserved under --parallel ────────────────────────────
 
 

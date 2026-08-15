@@ -80,24 +80,48 @@ class InsufficientServerSlotsError(RuntimeError):
     would submit concurrently against it."""
 
 
+class InvalidTaggingArgsError(RuntimeError):
+    """A CLI argument combination that run_tagging can reject upfront,
+    before touching the DB or the network, rather than surfacing as a
+    confusing per-chunk failure or a raw traceback mid-run."""
+
+
 def check_parallel_model_guard(
     model: str, parallel: int, allow_parallel_any_model: bool = False,
+    n_endpoints: int = 1,
 ) -> None:
     """Refuse --parallel N>1 unless `model` matches the finetune naming
     convention (qwen-3-4b-guru-*, e.g. qwen-3-4b-guru-v3-Q4_K_M.gguf — the
     -vN- infix varies by training run, see run-qwen-4b-guru.sh's header).
 
-    N<=1 is always allowed — there's nothing to multiplex. Passing
-    allow_parallel_any_model=True bypasses the check entirely; that's a
-    deliberate owner override (--allow-parallel-any-model on the CLI), not
-    something a default invocation should reach for by accident.
+    n_endpoints (default 1) is the number of --endpoint flags in play — the
+    guard is judged against total concurrency (parallel * n_endpoints), not
+    the raw --parallel value alone, since two endpoints at --parallel 1
+    each is still 2-wide multiplexing. n_endpoints only affects the
+    threshold and the error message's wording; the raw `parallel` value
+    passed in is always what's reported back to the operator so the
+    message matches the flag they actually typed.
+
+    Total concurrency <=1 is always allowed — there's nothing to
+    multiplex. Passing allow_parallel_any_model=True bypasses the check
+    entirely; that's a deliberate owner override
+    (--allow-parallel-any-model on the CLI), not something a default
+    invocation should reach for by accident.
     """
-    if parallel <= 1 or allow_parallel_any_model:
+    total_concurrency = parallel * n_endpoints
+    if total_concurrency <= 1 or allow_parallel_any_model:
         return
     if model.startswith(FINETUNE_MODEL_PREFIX):
         return
+    if n_endpoints > 1:
+        scope = (
+            f"--parallel {parallel} across {n_endpoints} --endpoint flag(s) "
+            f"({total_concurrency} total concurrency)"
+        )
+    else:
+        scope = f"--parallel {parallel}"
     raise ParallelModelNotAllowedError(
-        f"--parallel {parallel} is scoped to the 4B finetune "
+        f"{scope} is scoped to the 4B finetune "
         f"(model id starting with {FINETUNE_MODEL_PREFIX!r}), but --model is "
         f"{model!r}. The 27B teacher runs think-on and must not be silently "
         f"multiplexed — it is served with --parallel 1 for a reason. If you "
@@ -565,6 +589,31 @@ def apply_chunk_result(
     conn.commit()
 
 
+def _apply_chunk_result_safe(
+    conn: sqlite3.Connection,
+    result: ChunkTagResult,
+    model: str,
+    respect_reviewed: bool,
+    supersede_pending: bool,
+    outcomes: dict[str, int],
+) -> BaseException | None:
+    """apply_chunk_result, with the DB write isolated the same way
+    tag_one_chunk already isolates the LLM call: any exception (e.g. a
+    sqlite3.IntegrityError from an out-of-range score parse_tags didn't
+    catch — schema's CHECK(score BETWEEN 0 AND 3)) is caught and returned
+    instead of propagating, so one bad chunk can't crash a multi-thousand-
+    chunk run. Rolls back first so a partially-applied chunk's writes never
+    linger in an open transaction; mark_complete is never reached for that
+    chunk, so --resume retries it on the next run.
+    """
+    try:
+        apply_chunk_result(conn, result, model, respect_reviewed, supersede_pending, outcomes)
+        return None
+    except Exception as e:
+        conn.rollback()
+        return e
+
+
 # Bounded submission for --parallel: keep at most this many futures in
 # flight per worker thread. Submitting all chunks up front would let the
 # work queue (and its held prompt/response strings) grow unboundedly ahead
@@ -676,7 +725,7 @@ def _run_parallel_pool(
     buckets: list[list[dict]] = [[] for _ in range(n_endpoints)]
     for i, chunk in enumerate(chunks):
         buckets[i % n_endpoints].append(chunk)
-    bucket_iters = [iter(b) for b in buckets]
+    bucket_pos = [0] * n_endpoints
 
     pending: set[Future] = set()
     fut_endpoint_idx: dict[Future, int] = {}
@@ -689,12 +738,27 @@ def _run_parallel_pool(
         ]
 
         def submit_next(e: int) -> bool:
-            chunk = next(bucket_iters[e], None)
-            if chunk is None:
+            pos = bucket_pos[e]
+            bucket = buckets[e]
+            if pos >= len(bucket):
                 return False
+            bucket_pos[e] += 1
+            # Mirror the serial path's "no trailing sleep after the last
+            # unit of work" rule. Which physical worker thread ends up
+            # idle last isn't knowable ahead of time (ThreadPoolExecutor
+            # hands queued futures to whichever thread frees up next), but
+            # the final `parallel`-sized wave of a lane's bucket is exactly
+            # the set of submissions that — once done — have no next chunk
+            # to submit (submit_next returns False for them): whichever
+            # thread finishes one of those is done sleeping for nothing.
+            # Skipping --delay for that whole tail wave, not just the
+            # single last chunk, is what actually eliminates the wasted
+            # sleep the unconditional version paid on every worker's exit.
+            is_tail_wave = pos >= len(bucket) - parallel
             fut = executors[e].submit(
-                _tag_one_chunk_then_delay, chunk, concepts, provider_name,
-                model, max_body_chars, delay, resolved_endpoints[e],
+                _tag_one_chunk_then_delay, bucket[pos], concepts, provider_name,
+                model, max_body_chars, 0.0 if is_tail_wave else delay,
+                resolved_endpoints[e],
             )
             pending.add(fut)
             fut_endpoint_idx[fut] = e
@@ -724,11 +788,15 @@ def _run_parallel_pool(
                     logger.error(f"  [{completed}/{total}] {result.chunk_id} FAILED: {result.error}")
                     errors += 1
                 else:
-                    apply_chunk_result(
+                    write_error = _apply_chunk_result_safe(
                         conn, result, model, respect_reviewed, supersede_pending, outcomes
                     )
-                    tagged += 1
-                    logger.info(f"  [{completed}/{total}] {result.chunk_id}: {len(result.tags)} tags")
+                    if write_error is not None:
+                        logger.error(f"  [{completed}/{total}] {result.chunk_id} DB WRITE FAILED: {write_error}")
+                        errors += 1
+                    else:
+                        tagged += 1
+                        logger.info(f"  [{completed}/{total}] {result.chunk_id}: {len(result.tags)} tags")
 
                 if batch_size and completed % batch_size == 0:
                     logger.info(f"Batch {completed//batch_size} complete ({tagged} tagged, {errors} errors)")
@@ -760,6 +828,18 @@ def run_tagging(
         logger.error(f"Unknown provider: {provider_name}")
         sys.exit(1)
 
+    if parallel < 1:
+        raise InvalidTaggingArgsError(
+            f"--parallel must be >= 1 (got {parallel}); 1 means serial, "
+            f"there is no such thing as 0 or negative worker threads."
+        )
+    if endpoints and provider_name != "llamacpp":
+        raise InvalidTaggingArgsError(
+            f"--endpoint is only meaningful with --provider llamacpp "
+            f"(other providers have no server/slot concept to fan out "
+            f"across), but --provider is {provider_name!r}."
+        )
+
     # --parallel is interpreted PER ENDPOINT (see _run_parallel_pool's
     # docstring for why): with E endpoints, up to `parallel` concurrent
     # requests can be in flight against EACH of them, so total concurrency
@@ -770,15 +850,25 @@ def run_tagging(
     # either. With no --endpoint given, E=1 and this is exactly the
     # pre-multi-endpoint behaviour.
     n_endpoints = len(endpoints) if endpoints else 1
-    total_concurrency = parallel * n_endpoints
-    check_parallel_model_guard(model, total_concurrency, allow_parallel_any_model)
+    check_parallel_model_guard(model, parallel, allow_parallel_any_model, n_endpoints=n_endpoints)
 
     # Slot pre-flight applies PER endpoint: each endpoint is dispatched up
     # to `parallel` concurrent requests (never more — see
     # _run_parallel_pool), so each is checked against `parallel`, not the
-    # combined total.
-    for base_url in (endpoints or [None]):
-        preflight_server_slots(provider_name, parallel, base_url=base_url)
+    # combined total. Endpoints are pre-flighted concurrently — a single
+    # unreachable/slow endpoint's two sequential GET timeouts (/props then
+    # /slots) would otherwise block every endpoint after it in a plain loop.
+    preflight_targets = endpoints or [None]
+    if len(preflight_targets) == 1:
+        preflight_server_slots(provider_name, parallel, base_url=preflight_targets[0])
+    else:
+        with ThreadPoolExecutor(max_workers=len(preflight_targets)) as pool:
+            futures = [
+                pool.submit(preflight_server_slots, provider_name, parallel, base_url=url)
+                for url in preflight_targets
+            ]
+            for fut in futures:
+                fut.result()
 
     concepts = load_taxonomy()
     conn = sqlite3.connect(str(db_path))
@@ -819,11 +909,15 @@ def run_tagging(
                 logger.error(f"  [{i+1}/{len(chunks)}] {result.chunk_id} FAILED: {result.error}")
                 errors += 1
             else:
-                apply_chunk_result(
+                write_error = _apply_chunk_result_safe(
                     conn, result, model, respect_reviewed, supersede_pending, outcomes
                 )
-                tagged += 1
-                logger.info(f"  [{i+1}/{len(chunks)}] {result.chunk_id}: {len(result.tags)} tags")
+                if write_error is not None:
+                    logger.error(f"  [{i+1}/{len(chunks)}] {result.chunk_id} DB WRITE FAILED: {write_error}")
+                    errors += 1
+                else:
+                    tagged += 1
+                    logger.info(f"  [{i+1}/{len(chunks)}] {result.chunk_id}: {len(result.tags)} tags")
 
             if delay > 0 and i < len(chunks) - 1:
                 time.sleep(delay)
@@ -983,7 +1077,8 @@ def main() -> None:
             allow_parallel_any_model=args.allow_parallel_any_model,
             endpoints=args.endpoints,
         )
-    except (ParallelModelNotAllowedError, InsufficientServerSlotsError) as e:
+    except (ParallelModelNotAllowedError, InsufficientServerSlotsError,
+            InvalidTaggingArgsError) as e:
         logger.error(str(e))
         sys.exit(1)
 

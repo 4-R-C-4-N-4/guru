@@ -63,6 +63,26 @@ def test_guard_is_wired_into_the_cli_parser():
     assert parser.parse_args(["--allow-parallel-any-model"]).allow_parallel_any_model is True
 
 
+def test_guard_error_message_reports_the_raw_parallel_value_not_the_total():
+    """With multiple endpoints the refusal is judged against total
+    concurrency, but the message must say the --parallel value the operator
+    actually typed, not the multiplied total, or troubleshooting is
+    misleading."""
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError) as exc_info:
+        tag_concepts.check_parallel_model_guard(
+            "Qwen3.5-27B-UD-Q4_K_XL.gguf", parallel=2, n_endpoints=2,
+        )
+    message = str(exc_info.value)
+    assert "--parallel 2" in message
+    assert "4 total concurrency" in message
+
+
+def test_guard_single_endpoint_message_unchanged():
+    with pytest.raises(tag_concepts.ParallelModelNotAllowedError) as exc_info:
+        tag_concepts.check_parallel_model_guard("llama3", parallel=4)
+    assert "--parallel 4 is scoped" in str(exc_info.value)
+
+
 # ── query_llamacpp_slots (llm.py) — stubbed HTTP, no sockets ────────────────
 
 
@@ -203,4 +223,50 @@ def test_run_tagging_raises_model_guard_before_touching_the_db(monkeypatch, tmp_
             text_id=None,
             delay=0.0,
             parallel=4,
+        )
+
+
+# ── upfront argument validation ─────────────────────────────────────────────
+
+
+@pytest.mark.parametrize("parallel", [0, -1])
+def test_run_tagging_rejects_non_positive_parallel_before_touching_the_db(
+    monkeypatch, tmp_path, parallel,
+):
+    """--parallel 0/negative used to bypass both guards (they no-op on
+    parallel<=1) and crash with a raw ValueError from
+    ThreadPoolExecutor(max_workers=<=0). It must now be refused upfront with
+    a clear error, before sqlite3.connect (bogus db path proves this)."""
+    monkeypatch.setattr(tag_concepts, "load_taxonomy", lambda: [])
+    with pytest.raises(tag_concepts.InvalidTaggingArgsError, match="--parallel"):
+        tag_concepts.run_tagging(
+            db_path=tmp_path / "does" / "not" / "exist.db",
+            provider_name="llamacpp",
+            model="qwen-3-4b-guru-test",
+            batch_size=0,
+            resume=False,
+            tradition=None,
+            text_id=None,
+            delay=0.0,
+            parallel=parallel,
+        )
+
+
+def test_run_tagging_rejects_endpoint_with_non_llamacpp_provider(monkeypatch, tmp_path):
+    """--endpoint only makes sense for llamacpp — combining it with another
+    provider used to fail per-chunk with a swallowed TypeError instead of a
+    clean upfront refusal."""
+    monkeypatch.setattr(tag_concepts, "load_taxonomy", lambda: [])
+    with pytest.raises(tag_concepts.InvalidTaggingArgsError, match="--endpoint"):
+        tag_concepts.run_tagging(
+            db_path=tmp_path / "does" / "not" / "exist.db",
+            provider_name="anthropic",
+            model="claude-x",
+            batch_size=0,
+            resume=False,
+            tradition=None,
+            text_id=None,
+            delay=0.0,
+            parallel=1,
+            endpoints=["http://127.0.0.1:8080"],
         )

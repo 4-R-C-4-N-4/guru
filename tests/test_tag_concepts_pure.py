@@ -23,7 +23,9 @@ sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 import tag_concepts  # noqa: E402
-from tag_concepts import ChunkTagResult, apply_chunk_result, tag_one_chunk  # noqa: E402
+from tag_concepts import (  # noqa: E402
+    ChunkTagResult, apply_chunk_result, _apply_chunk_result_safe, tag_one_chunk,
+)
 from guru.prompt import PROMPT_VERSION  # noqa: E402
 
 
@@ -241,4 +243,58 @@ def test_apply_chunk_result_conflict_outcome_counted():
                        supersede_pending=False, outcomes=outcomes)
 
     assert outcomes["inserted"] == 1
-    assert outcomes["conflict"] == 1
+
+
+# ── _apply_chunk_result_safe (DB-write failure isolation) ────────────────────
+
+
+def test_safe_apply_returns_none_on_success():
+    conn = _seed_db()
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+    result = ChunkTagResult(chunk_id="t.x.001", tags=[_tag("gnosis")])
+
+    error = _apply_chunk_result_safe(conn, result, model="m", respect_reviewed=True,
+                                     supersede_pending=True, outcomes=outcomes)
+
+    assert error is None
+    assert outcomes["inserted"] == 1
+    assert conn.execute("SELECT chunk_id FROM tagging_progress").fetchall() == [("t.x.001",)]
+
+
+def test_safe_apply_catches_db_write_failure_and_rolls_back_instead_of_raising():
+    """A score the schema's CHECK(score BETWEEN 0 AND 3) rejects (e.g. a
+    hallucinated out-of-range value parse_tags didn't clamp) must not
+    propagate out of _apply_chunk_result_safe and kill the caller's loop —
+    it must be returned as an exception, with the chunk NOT marked complete
+    (so --resume retries it) and nothing left committed for that chunk."""
+    conn = _seed_db()
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+    result = ChunkTagResult(chunk_id="t.x.001", tags=[_tag("gnosis", score=99)])
+
+    error = _apply_chunk_result_safe(conn, result, model="m", respect_reviewed=True,
+                                     supersede_pending=True, outcomes=outcomes)
+
+    assert isinstance(error, Exception)
+    assert conn.execute("SELECT COUNT(*) FROM staged_tags").fetchone() == (0,)
+    assert conn.execute("SELECT COUNT(*) FROM tagging_progress").fetchone() == (0,)
+
+
+def test_safe_apply_failure_on_one_chunk_does_not_affect_a_prior_committed_chunk():
+    conn = _seed_db()
+    outcomes = {"inserted": 0, "superseded": 0, "skipped_reviewed": 0, "conflict": 0}
+
+    good = ChunkTagResult(chunk_id="t.x.001", tags=[_tag("gnosis")])
+    assert _apply_chunk_result_safe(conn, good, model="m", respect_reviewed=True,
+                                    supersede_pending=True, outcomes=outcomes) is None
+
+    bad = ChunkTagResult(chunk_id="t.x.002", tags=[_tag("gnosis", score=99)])
+    error = _apply_chunk_result_safe(conn, bad, model="m", respect_reviewed=True,
+                                     supersede_pending=True, outcomes=outcomes)
+
+    assert isinstance(error, Exception)
+    # The earlier chunk's already-committed write survives the later
+    # rollback — rollback only undoes the failing chunk's own transaction.
+    assert conn.execute(
+        "SELECT chunk_id FROM tagging_progress"
+    ).fetchall() == [("t.x.001",)]
+    assert conn.execute("SELECT chunk_id FROM staged_tags").fetchall() == [("t.x.001",)]

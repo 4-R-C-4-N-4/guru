@@ -42,6 +42,28 @@ def ollama_embed_url() -> str:
 DEFAULT_HTTP_TIMEOUT = 1200
 
 
+def llamacpp_base_url(base_url: str | None = None) -> str:
+    """Resolve the llama.cpp server base URL: the given override if any,
+    else LLAMACPP_BASE_URL from env or the module default. Mirrors
+    ollama_base_url()'s precedent for the other local provider."""
+    import os
+    return base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
+
+
+def _http_json(url: str, method: str = "GET", payload: dict | None = None,
+               timeout: float = DEFAULT_HTTP_TIMEOUT):
+    """Shared urllib Request/urlopen/json.loads skeleton for the raw-HTTP
+    providers (no DNS lookup or connection overhead at import time from an
+    SDK). payload=None sends no body (GET); a dict is JSON-encoded as the
+    request body with a Content-Type header (POST)."""
+    import urllib.request
+    data = json.dumps(payload).encode() if payload is not None else None
+    headers = {"Content-Type": "application/json"} if data is not None else {}
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read())
+
+
 def _chat_openai_compat(
     base_url: str,
     model: str,
@@ -100,25 +122,20 @@ def call_llamacpp(
     todo:d267201a) without one thread's target leaking into another's. The
     env var remains the default for every caller that doesn't pass it.
     """
-    import os
-    import urllib.request
-    base = base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        "max_tokens": max_tokens,
-    }).encode()
-    req = urllib.request.Request(
+    base = llamacpp_base_url(base_url)
+    data = _http_json(
         f"{base}/v1/chat/completions",
-        data=payload,
-        headers={"Content-Type": "application/json"},
         method="POST",
+        payload={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt},
+            ],
+            "max_tokens": max_tokens,
+        },
+        timeout=timeout,
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read())
 
     msg = data["choices"][0]["message"]
     content = msg.get("content") or ""
@@ -151,16 +168,11 @@ def query_llamacpp_slots(base_url: str | None = None, timeout: float = 5.0) -> i
     None should warn and continue, not hard-fail, and a caller that gets a
     number should trust it enough to refuse an oversized --parallel.
     """
-    import os
-    import urllib.request
-
-    base = base_url if base_url is not None else os.environ.get("LLAMACPP_BASE_URL", LLAMACPP_BASE_URL)
+    base = llamacpp_base_url(base_url)
 
     for path in ("/props", "/slots"):
         try:
-            req = urllib.request.Request(f"{base}{path}", method="GET")
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                data = json.loads(resp.read())
+            data = _http_json(f"{base}{path}", timeout=timeout)
         except Exception:
             continue
 
@@ -177,26 +189,21 @@ def query_llamacpp_slots(base_url: str | None = None, timeout: float = 5.0) -> i
 
 def call_ollama(model: str, system: str, prompt: str, max_tokens: int, timeout: float = DEFAULT_HTTP_TIMEOUT) -> str:
     """Call Ollama via its native chat API (no openai SDK)."""
-    import os
-    import urllib.request
-    base = os.environ.get("OLLAMA_BASE_URL", OLLAMA_BASE_URL)
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
-        ],
-        "stream": False,
-        "options": {"num_predict": max_tokens},
-    }).encode()
-    req = urllib.request.Request(
+    base = ollama_base_url()
+    data = _http_json(
         f"{base}/api/chat",
-        data=payload,
-        headers={"Content-Type": "application/json"},
         method="POST",
+        payload={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt},
+            ],
+            "stream": False,
+            "options": {"num_predict": max_tokens},
+        },
+        timeout=timeout,
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read())
     return data["message"]["content"]
 
 
