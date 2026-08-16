@@ -74,6 +74,46 @@ score_cache = "data/derived_parallels_score_cache.json"
 # this, the snapshot trial found single-via, single-work monoculture panels.
 per_work_cap = 2
 
+# Max INCOMING partner slots any one chunk may occupy in the EXPORTED edge
+# set — how many OTHER chunks' panels may list it as a partner. Nothing
+# upstream bounds that: top_k/per_work_cap above bound only a chunk's OWN
+# outgoing panel, and removing the score floor (todo:ac63de1a) can make a
+# chunk expressing a common concept a partner in hundreds of panels at once
+# (the v55 run produced a 1,178-partner panel). Omit this key entirely to
+# disable the cap; 0 or negative is rejected at load.
+#
+# cap_fan_in() in scripts/derive_parallels.py enforces it, applied by run()
+# rather than build_edges() so the before/after degree distribution can be
+# reported. Only the RECEIVING leg is charged: an edge dies only when the
+# chunk it points AT is over budget, never because the chunk that CHOSE it
+# had already accumulated edges elsewhere. A mutual pair (both endpoints
+# picked each other) is outgoing for both and always kept. Do not "simplify"
+# this into a both-endpoints degree budget — that was the first cut, and
+# letting each chunk's degree veto its neighbours' edges deleted 58% of the
+# v55 edge set and left 367 chunks with no partners at all, 4,531 of the
+# losers never having been over cap themselves.
+#
+# THE VALUE MATTERS MORE THAN THE MECHANISM. Swept over the v55 score cache
+# (edges kept / chunks left with NO partners, against 50,148 and 5,054
+# uncapped):
+#   1000 -> 49,830 / 0     500 -> 44,330 / 0     200 -> 31,120 / 48
+#    750 -> 48,168 / 0     400 -> 41,613 / 0     150 -> 26,769 / 134
+#                          300 -> 37,713 / 3     100 -> 21,476 / 353
+# Darkening a chunk is the hard failure — it drops out of the graph entirely
+# — and it starts below 400. The distribution is why: median chunk degree is
+# 10 but 41,807 of 50,148 edges (83%) touch one of the 129 chunks above 100,
+# so a cap of 100 offers those hubs 12,900 slots for 41,807 hub-bound edges
+# and MUST delete most of the graph. That is arithmetic, not a tuning
+# accident. Uncapped p99 degree is 315, so 500 bites only the genuine
+# outliers (max degree 1,178 -> 516) while keeping 88% of the edges. A value
+# near 100 is not a tail trim; it is a second score floor wearing a degree
+# cap's clothes, and it undoes what todo:ac63de1a just won.
+#
+# If you retighten this, read summary.json's fan_in_cap_chunks_darkened —
+# any nonzero value means chunks fell out of the graph. See
+# docs/ingest/16-derive-parallels.md's Failure modes section ("fan-in").
+max_fan_in = 500
+
 [export]
 # Consumed by scripts/export.py (todo:6da4f965). derive_parallels.py writes
 # each run to a fresh data/derived_parallels/<UTC timestamp>/ directory
