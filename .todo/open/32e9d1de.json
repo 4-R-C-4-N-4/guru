@@ -1,0 +1,30 @@
+{
+  "id": "32e9d1de",
+  "type": "bug",
+  "state": "open",
+  "summary": "Taxonomy backfill: works keep the concept vocabulary of whenever they were tagged — ~18k April/May tags predate 10+ later-added concepts, so nothing re-tags a work when the taxonomy grows",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-15T13:45:58.817Z",
+  "updated_at": "2026-08-15T13:46:12.146Z",
+  "files": [
+    {
+      "path": "concepts/taxonomy.toml"
+    }
+  ],
+  "tags": [
+    "tagging",
+    "taxonomy",
+    "corpus-quality"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-08-15T13:46:12.146Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "CORRECTION (2026-08-15). This ticket says the Enuma Elish is mis-tagged and implies the 27B failed to propose the obvious concept for a creation epic. That is wrong, and the real cause is systemic rather than specific to this text.\n\nTHE DATES. concept.cosmogony was added to concepts/taxonomy.toml on 2026-06-06 (commit 23591e03, \"concepts: add animism, cosmogony, world_tree_axis, word_power_incantation, ancestor_veneration, shapeshifting_transformation\"). The Enuma Elish's staged_tags were produced under prompt_version v1 and reviewed on 2026-05-11 -- twenty-six days EARLIER. The tagger never proposed cosmogony because the concept did not exist when the text was tagged. There is no judgment failure here to fix.\n\nThat also explains the distribution that looked so damning: cosmogony carries 123 tags over 20 texts in 10 traditions, all of which were tagged after 2026-06-06. Mesopotamian was tagged in May, so it is not among them. The concept looks widely adopted and the one obvious text looks skipped, purely as an artifact of when each was processed.\n\nTHIS IS TAXONOMY DRIFT, AND IT IS NOT SMALL. Nothing re-tags existing works when the taxonomy grows, so every work carries the concept vocabulary of whenever it happened to be tagged. Taxonomy additions since the bulk tagging began:\n    2026-05-02  a59d32ad  expand taxonomy (Tertium Organum / Heroic Enthusiasts)\n    2026-05-15  a454573a  add 10 concepts surfaced by Phase 1 new sources\n    2026-06-06  23591e03  add 6 (animism, cosmogony, world_tree_axis, word_power_incantation, ancestor_veneration, shapeshifting_transformation)\n    2026-06-07  b333ac95  add shamanic_journey\n    2026-07-16  e649882a  add astral_light, magical_equilibrium, magical_will\nTags by review month: 2026-04 = 130, 2026-05 = 18,086, 2026-06 = 15,238, 2026-07 = 13,250, 2026-08 = 9,044. So roughly 18,200 tags from April and May were produced blind to at least the ten concepts introduced from 2026-06-06 onward, and a further slice of May predates the 2026-05-15 addition of ten more.\n\nThe affected works are not randomly distributed either. The June 6 batch is heavy with animist, cosmogonic and world-axis concepts -- exactly the vocabulary that oral, mythological and indigenous traditions need -- while the traditions most likely to have been tagged early are the ones that entered the corpus first.\n\nWHAT THE FIX ACTUALLY IS. Not \"re-tag the Enuma Elish\". A scoped taxonomy-backfill pass: for each work, determine the concepts that did not exist at its tagging date, and re-run node 10 restricted to that delta, asking only \"does this chunk express any of these newer concepts?\" That is far cheaper than full re-tagging and it lands in node 11's queue like any other proposal, with the owner's apply gate intact. The Enuma Elish is the exemplar, not the scope.\n\nCONSEQUENCE FOR todo:7427712c (the selection-frame plan). Its acceptance test was \"a correct threshold fix leaves the Enuma Elish empty\", justified by this ticket's mis-tagging claim. That premise is now false: once the backfill gives the text cosmogony, it should legitimately earn panels on its own merits, and a fix that keeps it empty would be wrong. The acceptance test must be restated as \"a work whose tags are genuinely inapt produces no panels\", exercised by a fixture rather than by this text.\n\nIt also argues for ordering: calibrating a selection rule against a corpus with known-stale tags means calibrating on data we already know is wrong for ~18k tags. The backfill should run, or at least be measured, before the threshold operating point is fixed.",
+      "confidence": "high"
+    }
+  ]
+}

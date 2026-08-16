@@ -63,7 +63,7 @@ def _write_run(base_dir: Path, stamp: str, rows: list[dict], *,
 
 def _write_config(path: Path, derived_dir: Path, max_age_days: float = 30) -> None:
     path.write_text(
-        f'[scoring]\ntop_k = 5\nmin_grade = -4.415\n'
+        f'[scoring]\ntop_k = 5\n'
         f'model_path = "x"\nscore_cache = "x"\n'
         f'[panels]\nper_work_cap = 2\n'
         f'[export]\nderived_dir = "{derived_dir.as_posix()}"\n'
