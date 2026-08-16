@@ -19,6 +19,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
@@ -35,6 +37,7 @@ from derive_parallels import (  # noqa: E402
     exclude_apparatus_chunks,
     first_sentence,
     format_label,
+    resolve_max_fan_in,
     score_needed_pairs,
 )
 
@@ -497,3 +500,21 @@ def test_cap_fan_in_bounds_count_not_score():
 def test_degree_of_counts_both_endpoints():
     rows = _rows(("a", "b", 1.0), ("b", "c", 2.0))
     assert degree_of(rows) == {"a": 1, "b": 2, "c": 1}
+
+
+# ── max_fan_in config resolution (todo:64569f52) ────────────────────────────
+
+def test_resolve_max_fan_in_absent_key_disables_the_cap():
+    assert resolve_max_fan_in({"per_work_cap": 2}) is None
+
+
+def test_resolve_max_fan_in_reads_the_value():
+    assert resolve_max_fan_in({"max_fan_in": 500}) == 500
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_resolve_max_fan_in_rejects_non_positive(bad):
+    """0 would pass an `is not None` guard and silently drop every edge; the
+    run would then fail much later in export.py, pointing at the wrong file."""
+    with pytest.raises(SystemExit, match="must be >= 1"):
+        resolve_max_fan_in({"max_fan_in": bad})

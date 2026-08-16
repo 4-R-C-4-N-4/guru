@@ -93,6 +93,27 @@ def load_config(path: Path = DEFAULT_CONFIG) -> dict:
         return tomllib.load(f)
 
 
+def resolve_max_fan_in(panels_cfg: dict) -> int | None:
+    """config[panels].max_fan_in -> int, or None when the key is absent.
+
+    Absent means "no fan-in cap" — that is the off switch, deliberately,
+    rather than a sentinel value. Validated here because a 0 or negative
+    would otherwise sail through cap_fan_in() and drop every edge, and the
+    failure would surface much later in scripts/export.py as its "contains
+    zero PARALLELS rows — refusing to export" refusal, which points the
+    reader at the wrong file entirely.
+    """
+    if "max_fan_in" not in panels_cfg:
+        return None
+    value = int(panels_cfg["max_fan_in"])
+    if value < 1:
+        raise SystemExit(
+            f"config panels.max_fan_in must be >= 1 (got {value}); omit the key "
+            "entirely to disable the cap"
+        )
+    return value
+
+
 # ── taxonomy ─────────────────────────────────────────────────────────────
 
 def load_taxonomy(path: Path = TAXONOMY_TOML) -> dict[str, str]:
@@ -434,6 +455,12 @@ def build_edges(
     encountered in sorted-chunk-id order wins, deterministically).
 
     Final order: weight desc, (source, target) asc as the stable tiebreak.
+
+    Deliberately a pure shape conversion: the fan-in cap is NOT applied here.
+    run() calls cap_fan_in() on the result instead, so it can compare the
+    before/after degree distribution and report what the cap actually did.
+    Adding a cap parameter here would also create a path that tests exercise
+    and production never reaches.
     """
     seen: set[tuple[str, str]] = set()
     rows: list[dict] = []
@@ -531,6 +558,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     panels_cfg = cfg["panels"]
     top_k = int(scoring_cfg["top_k"])
     per_work_cap = int(panels_cfg["per_work_cap"])
+    max_fan_in = resolve_max_fan_in(panels_cfg)
     model_path = str(scoring_cfg["model_path"])
     cache_path = Path(scoring_cfg["score_cache"])
     if not cache_path.is_absolute():
@@ -578,6 +606,8 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     panels = build_panels(bychunk, ranked, score, trad_of, work_of_chunk,
                           top_k, per_work_cap)
     rows = build_edges(panels, defs)
+    if max_fan_in is not None:
+        rows = cap_fan_in(rows, max_fan_in, panels)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_dir / "edges_derived.jsonl", "w") as f:
