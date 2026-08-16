@@ -450,11 +450,26 @@ def build_panels(
 def build_edges(
     panels: dict[str, list[tuple[str, str, float]]], defs: dict[str, str]
 ) -> list[dict]:
-    """Panels -> corpus-export edges shape, one row per unique unordered
-    pair (a chunk pair can appear in both endpoints' panels; the first
-    encountered in sorted-chunk-id order wins, deterministically).
+    """Panels -> corpus-export edges shape, one row per unique unordered pair.
 
     Final order: weight desc, (source, target) asc as the stable tiebreak.
+
+    A pair can appear in BOTH endpoints' panels, once per direction, with a
+    different grade each way — the grade is the partner's own score on the via
+    concept, so A-picks-B carries B's score and B-picks-A carries A's. When
+    that happens the pair keeps the STRONGER leg (todo:38385429). It used to
+    keep whichever direction was encountered first in sorted-chunk-id order,
+    which made the exported weight depend on how the two chunk ids happen to
+    sort: a pair scoring -8.4 one way and +1.2 the other shipped +1.2 or -8.4
+    purely on lexical order, a ~10-logit swing. That was survivable while the
+    weight only set display order; it stopped being survivable once
+    cap_fan_in() started deciding survival by weight, and it would have made
+    the export sensitive to renaming or re-chunking one endpoint.
+
+    Max rather than min is deliberate: min-leg clamping is the prototype flaw
+    this port was written to fix (it made panels monochrome — see the module
+    docstring). Ties break on the lexicographically smaller via id, so the
+    result never depends on iteration order.
 
     Deliberately a pure shape conversion: the fan-in cap is NOT applied here.
     run() calls cap_fan_in() on the result instead, so it can compare the
@@ -462,25 +477,26 @@ def build_edges(
     Adding a cap parameter here would also create a path that tests exercise
     and production never reaches.
     """
-    seen: set[tuple[str, str]] = set()
-    rows: list[dict] = []
+    best: dict[tuple[str, str], tuple[float, str]] = {}
     for ch in sorted(panels):
         for partner, via, grade in panels[ch]:
-            a, b = (ch, partner) if ch < partner else (partner, ch)
-            key = (a, b)
-            if key in seen:
-                continue
-            seen.add(key)
-            annotation = (f"Shared concept: {format_label(via)} — "
-                          f"{first_sentence(defs[via])}. (derived)")
-            rows.append({
-                "source": a,
-                "target": b,
-                "edge_type": "PARALLELS",
-                "tier": "inferred",
-                "weight": round(grade, 3),
-                "annotation": annotation,
-            })
+            key = (ch, partner) if ch < partner else (partner, ch)
+            cur = best.get(key)
+            if cur is None or grade > cur[0] or (grade == cur[0] and via < cur[1]):
+                best[key] = (grade, via)
+
+    rows: list[dict] = []
+    for (a, b), (grade, via) in best.items():
+        annotation = (f"Shared concept: {format_label(via)} — "
+                      f"{first_sentence(defs[via])}. (derived)")
+        rows.append({
+            "source": a,
+            "target": b,
+            "edge_type": "PARALLELS",
+            "tier": "inferred",
+            "weight": round(grade, 3),
+            "annotation": annotation,
+        })
     rows.sort(key=lambda r: (-r["weight"], r["source"], r["target"]))
     return rows
 

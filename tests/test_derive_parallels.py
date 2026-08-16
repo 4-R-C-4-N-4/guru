@@ -561,3 +561,40 @@ def test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk():
     assert chunks_in_export == 2              # ...hub + winner ship
     assert loser not in degree_of(kept)       # ...but loser shipped nothing
     assert cap_report(rows, kept)[2] == 1     # and is reported as darkened
+
+
+# ── pair weight is direction-independent (todo:38385429) ────────────────────
+
+def _mutual_panels(low_id, high_id):
+    """Both chunks pick each other; the pair scores -8.4 toward `low_id` and
+    +1.2 toward `high_id`. Returns panels keyed so only the NAMES differ."""
+    return {
+        low_id: [(high_id, "concept.x", 1.2)],
+        high_id: [(low_id, "concept.x", -8.4)],
+    }
+
+
+def test_build_edges_keeps_the_stronger_leg_of_a_mutual_pair():
+    defs = {"concept.x": "Def of x."}
+    rows = build_edges(_mutual_panels("trad_a.a.001", "trad_b.b.001"), defs)
+    assert len(rows) == 1
+    assert rows[0]["weight"] == 1.2      # not -8.4
+
+
+def test_build_edges_weight_does_not_depend_on_chunk_id_ordering():
+    """Regression: the exported weight used to come from whichever endpoint
+    sorted first, so renaming one chunk could swing it ~10 logits -- and once
+    cap_fan_in() ranks by weight, that decides which edges survive."""
+    defs = {"concept.x": "Def of x."}
+    # Same pair, same scores, opposite lexical order of the two chunk ids.
+    forward = build_edges(_mutual_panels("trad_a.aaa.001", "trad_b.zzz.001"), defs)
+    reverse = build_edges(_mutual_panels("trad_a.zzz.001", "trad_b.aaa.001"), defs)
+    assert forward[0]["weight"] == reverse[0]["weight"] == 1.2
+
+
+def test_build_edges_still_emits_one_row_per_unordered_pair():
+    defs = {"concept.x": "Def of x."}
+    rows = build_edges(_mutual_panels("trad_a.a.001", "trad_b.b.001"), defs)
+    assert [(r["source"], r["target"]) for r in rows] == [
+        ("trad_a.a.001", "trad_b.b.001")
+    ]
