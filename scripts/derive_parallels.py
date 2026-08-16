@@ -458,6 +458,70 @@ def build_edges(
     return rows
 
 
+def degree_of(rows: list[dict]) -> dict[str, int]:
+    """chunk id -> how many edge rows touch it, either endpoint."""
+    degree: dict[str, int] = {}
+    for row in rows:
+        degree[row["source"]] = degree.get(row["source"], 0) + 1
+        degree[row["target"]] = degree.get(row["target"], 0) + 1
+    return degree
+
+
+def cap_fan_in(
+    rows: list[dict], max_fan_in: int,
+    panels: dict[str, list[tuple[str, str, float]]],
+) -> list[dict]:
+    """Cap how many OTHER chunks' panels may list a given chunk as a partner,
+    keeping that chunk's highest-weight INCOMING edges and dropping the rest.
+
+    Removing the score floor (todo:ac63de1a) means a (concept, chunk) pair is
+    never excluded for scoring low, only ranked — so nothing upstream bounds a
+    chunk's incoming fan-in. top_k/per_work_cap in build_panels() bound only a
+    chunk's OWN outgoing panel; how many other panels pick it was unbounded
+    until this ran in production and produced a 1,178-partner panel (see
+    docs/ingest/16-derive-parallels.md's Failure modes, "fan-in").
+
+    Only the RECEIVING leg is charged, and only it can veto an edge:
+
+    - A MUTUAL pair — both endpoints picked each other — is outgoing for both.
+      Always kept, charged to neither.
+    - Otherwise exactly one endpoint anchored the pair and the other received
+      it; only that receiver's budget is checked and spent.
+
+    So an edge dies only when the chunk RECEIVING it is genuinely over its own
+    budget, never because the chunk that CHOSE it had already accumulated
+    edges elsewhere. That asymmetry is the whole point. Charging both
+    endpoints (the first cut of this function) made every chunk's accumulated
+    degree veto its neighbours' edges too, which deleted 58% of the v55 edge
+    set and left 367 chunks with no partners at all — 4,531 of the losers
+    never having been over cap themselves.
+
+    What this does NOT promise is that a chunk keeps every partner it picked:
+    every edge is outgoing for one endpoint and incoming for the other, so
+    choosing a saturated partner still loses you that edge. The bound it does
+    give is per-chunk total degree <= |own panel| + max_fan_in.
+
+    `rows` must already be sorted weight-desc (build_edges() does this) so
+    each chunk keeps its strongest incoming edges.
+    """
+    picked = {ch: {p for p, _, _ in ps} for ch, ps in panels.items()}
+    fan_in: dict[str, int] = {}
+    kept: list[dict] = []
+    for row in rows:
+        a, b = row["source"], row["target"]
+        a_picked_b = b in picked.get(a, ())
+        b_picked_a = a in picked.get(b, ())
+        if a_picked_b and b_picked_a:
+            kept.append(row)
+            continue
+        receiver = b if a_picked_b else a
+        if fan_in.get(receiver, 0) >= max_fan_in:
+            continue
+        fan_in[receiver] = fan_in.get(receiver, 0) + 1
+        kept.append(row)
+    return kept
+
+
 # ── main ──────────────────────────────────────────────────────────────────
 
 def run(db_path: Path, config_path: Path, out_dir: Path,

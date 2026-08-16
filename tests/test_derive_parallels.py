@@ -28,8 +28,10 @@ from derive_parallels import (  # noqa: E402
     build_panels,
     build_ranked,
     cache_key,
+    cap_fan_in,
     chunk_text_id,
     content_hash,
+    degree_of,
     exclude_apparatus_chunks,
     first_sentence,
     format_label,
@@ -418,3 +420,80 @@ def test_score_needed_pairs_fully_cached_skips_model_and_flush(monkeypatch, tmp_
 
     assert score == {("concept.c0", "trad.t.000"): 9.0}
     assert flush_calls == []
+
+
+# ── fan-in cap (todo:6acd96ba) ──────────────────────────────────────────────
+
+def _rows(*triples):
+    """(source, target, weight) -> edge rows in build_edges() output order."""
+    rows = [{"source": s, "target": t, "weight": w} for s, t, w in triples]
+    rows.sort(key=lambda r: (-r["weight"], r["source"], r["target"]))
+    return rows
+
+
+def test_cap_fan_in_keeps_a_chunks_strongest_incoming_edges():
+    """A hub picked as a partner by 4 other chunks, capped to 2, keeps the
+    two highest-weight incoming edges and drops the weakest two."""
+    hub = "trad_a.hub.001"
+    p1, p2, p3, p4 = (f"trad_b.p{i}.001" for i in range(1, 5))
+    panels = {p: [(hub, "concept.x", w)]
+              for p, w in [(p1, 9.0), (p2, 7.0), (p3, 5.0), (p4, 3.0)]}
+    rows = _rows((hub, p1, 9.0), (hub, p2, 7.0), (hub, p3, 5.0), (hub, p4, 3.0))
+
+    kept = cap_fan_in(rows, max_fan_in=2, panels=panels)
+    assert [r["target"] for r in kept] == [p1, p2]
+
+
+def test_cap_fan_in_does_not_charge_the_chunk_that_chose():
+    """The regression that motivated the receiving-leg design: a chunk with a
+    large outgoing panel must not have its own picks vetoed by its own
+    accumulated degree. Each partner here receives exactly one edge, so
+    nothing is over its fan-in budget and the whole panel ships -- where a
+    both-endpoints degree budget would have kept only the first `max`."""
+    anchor = "trad_a.anchor.001"
+    partners = [f"trad_b.p{i}.001" for i in range(6)]
+    panels = {anchor: [(p, "concept.x", 9.0 - i) for i, p in enumerate(partners)]}
+    rows = _rows(*[(anchor, p, 9.0 - i) for i, p in enumerate(partners)])
+
+    kept = cap_fan_in(rows, max_fan_in=2, panels=panels)
+    assert kept == rows           # anchor's degree is 6, well over max_fan_in
+    assert len({r["target"] for r in kept}) == 6
+
+
+def test_cap_fan_in_keeps_mutual_pairs_and_charges_neither():
+    """Both endpoints picked each other -- outgoing for both, so the pair is
+    kept and spends no fan-in budget on either side."""
+    a, b = "trad_a.a.001", "trad_b.b.001"
+    other = "trad_b.other.001"
+    panels = {
+        a: [(b, "concept.x", 5.0)],
+        b: [(a, "concept.x", 5.0)],
+        other: [(a, "concept.x", 9.0)],
+    }
+    rows = _rows((a, other, 9.0), (a, b, 5.0))
+
+    kept = cap_fan_in(rows, max_fan_in=1, panels=panels)
+    # `other`'s incoming edge spends a's whole budget of 1, and the mutual
+    # a<->b pair still ships on top of it.
+    assert len(kept) == 2
+
+
+def test_cap_fan_in_no_op_under_budget():
+    panels = {"a": [("b", "concept.x", 1.0)]}
+    rows = _rows(("a", "b", 1.0))
+    assert cap_fan_in(rows, max_fan_in=100, panels=panels) == rows
+
+
+def test_cap_fan_in_bounds_count_not_score():
+    """A weak edge still ships when nothing stronger competes for the
+    receiver's budget -- the cap bounds COUNT, not score."""
+    hub = "trad_a.hub.001"
+    weak = "trad_b.weak.001"
+    panels = {weak: [(hub, "concept.x", -9.9)]}
+    rows = _rows((hub, weak, -9.9))
+    assert cap_fan_in(rows, max_fan_in=1, panels=panels) == rows
+
+
+def test_degree_of_counts_both_endpoints():
+    rows = _rows(("a", "b", 1.0), ("b", "c", 2.0))
+    assert degree_of(rows) == {"a": 1, "b": 2, "c": 1}
