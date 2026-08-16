@@ -645,7 +645,15 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         for r in rows:
             f.write(json.dumps(r) + "\n")
 
+    # Two different questions, deliberately two numbers rather than one
+    # overloaded key. chunks_with_partners is a SELECTION statistic, counted
+    # from panels before the cap runs: a low value means chunks went untagged
+    # or unscored, which is how node 16's gate reads it. chunks_in_export is
+    # what actually shipped. They diverge exactly when the cap darkens
+    # something -- at max_fan_in=100 the first says 5,054 while 353 of those
+    # chunks have no edge in edges_derived.jsonl at all.
     chunks_with_partners = sum(1 for p in panels.values() if p)
+    chunks_in_export = len(degree_of(rows))
     summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "db": str(db_path),
@@ -656,6 +664,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         "scoring_seconds": round(elapsed, 1),
         "chunks_total": len(bychunk),
         "chunks_with_partners": chunks_with_partners,
+        "chunks_in_export": chunks_in_export,
         "unique_edge_rows": len(rows),
         "top_k": top_k,
         "per_work_cap": per_work_cap,
@@ -670,8 +679,10 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     with open(out_dir / "summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
+    shipped = ("" if chunks_in_export == chunks_with_partners
+               else f" ({chunks_in_export} of them survive the cap into the export)")
     print(f"wrote {out_dir}: {len(rows)} unique PARALLELS rows, "
-          f"{chunks_with_partners}/{len(bychunk)} chunks have partners "
+          f"{chunks_with_partners}/{len(bychunk)} chunks have partners{shipped} "
           f"({elapsed:.1f}s scoring)")
 
 

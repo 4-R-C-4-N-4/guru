@@ -535,3 +535,29 @@ def test_cap_report_counts_reduced_and_darkened_not_over_cap():
 def test_cap_report_all_zero_when_nothing_dropped():
     raw = _rows(("a", "b", 1.0))
     assert cap_report(raw, raw) == (0, 0, 0)
+
+
+# ── selection vs export counts (todo:8c7abf05) ──────────────────────────────
+
+def test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk():
+    """Regression: chunks_with_partners is counted from panels BEFORE the cap
+    runs, so it cannot be read as "chunks that shipped". `loser` has a
+    non-empty panel and still ends up with no edge in the export once the hub
+    it picked is saturated -- which is why summary.json carries a separate
+    chunks_in_export, and why the run line discloses the gap."""
+    hub = "trad_a.hub.001"
+    winner, loser = "trad_b.win.001", "trad_b.lose.001"
+    panels = {
+        winner: [(hub, "concept.x", 9.0)],
+        loser: [(hub, "concept.x", 1.0)],
+    }
+    rows = _rows((hub, winner, 9.0), (hub, loser, 1.0))
+
+    kept = cap_fan_in(rows, max_fan_in=1, panels=panels)
+
+    chunks_with_partners = sum(1 for p in panels.values() if p)
+    chunks_in_export = len(degree_of(kept))
+    assert chunks_with_partners == 2          # both chose a partner...
+    assert chunks_in_export == 2              # ...hub + winner ship
+    assert loser not in degree_of(kept)       # ...but loser shipped nothing
+    assert cap_report(rows, kept)[2] == 1     # and is reported as darkened

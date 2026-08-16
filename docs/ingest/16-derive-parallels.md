@@ -118,7 +118,8 @@ cat "data/derived_parallels/$(ls -t data/derived_parallels/ | head -1)/summary.j
 ```
 
 reports `chunks_with_partners` and `unique_edge_rows` in the range you expect
-for the corpus's current tag coverage, and the run is fresh enough for
+for the corpus's current tag coverage, `fan_in_cap_chunks_darkened` is 0, and
+the run is fresh enough for
 `scripts/export.py` to accept it — see the hand-off below, which enforces this
 for real at hand-off time rather than leaving it a suggestion.
 
@@ -156,6 +157,15 @@ ratio is a tag-coverage signal, not a generator defect, and should send you
 back to node 11's queue depth, not to this script's logic. A low *score* on
 a tagged concept is never the cause any more — see the removed-floor note
 below.
+
+`chunks_with_partners` is a **selection** statistic, counted from `panels`
+before the fan-in cap runs, and it stays that way precisely so it keeps
+answering the tag-coverage question above. What actually shipped is
+`chunks_in_export`, counted from the final rows. The two are equal until the
+cap darkens something — at `max_fan_in = 100` the first reads 5,054 while 353
+of those chunks have no edge in `edges_derived.jsonl` at all. When they differ
+the run line says so explicitly, and `fan_in_cap_chunks_darkened` is the
+number to act on.
 
 **There is no absolute score floor (removed 2026-08, todo:ac63de1a).**
 `build_panels()` used to require a (concept, chunk) pair to clear
