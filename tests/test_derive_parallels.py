@@ -621,3 +621,39 @@ def test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched():
     kept = cap_fan_in(rows, max_fan_in=100, panels=panels)
     assert kept == rows
     assert len(degree_of(kept)) == len(partners) + 1
+
+
+# ── the panel bound is not 2 * top_k (todo:a15c59d8) ────────────────────────
+
+def test_build_panels_can_overshoot_two_times_top_k():
+    """The documented "a panel carries at most 2 * top_k partners" is false.
+    build_panels() tests picked_n only at the TOP of its while loop, while the
+    inner `for c in sorted(iters)` adds up to one partner per via concept in a
+    single pass -- so a chunk with many vias overshoots. The real bound is
+    (2 * top_k - 1) + len(vias).
+
+    Here top_k=2 puts the claimed ceiling at 4, and six via concepts each
+    contribute one partner in the first pass, giving 6. Measured on the live
+    corpus at top_k=5: max panel 22, with 1,804 panels above 10.
+
+    The overshoot itself is ratified prototype-faithful behaviour (2026-08-13
+    snapshot trial) -- this pins it so the STATED bound cannot drift back to a
+    number the code does not honour.
+    """
+    anchor = "trad_a.anchor.001"
+    vias = [f"concept.v{i}" for i in range(6)]
+    partners = [f"trad_b.p{i}.001" for i in range(6)]
+    bycon = {v: {anchor, p} for v, p in zip(vias, partners)}
+    bychunk = {anchor: set(vias)}
+    score = {}
+    for i, (v, p) in enumerate(zip(vias, partners)):
+        score[(v, anchor)] = 1.0          # scored -> v is a via
+        score[(v, p)] = 9.0 - i
+    trad_of = {anchor: "trad_a", **{p: "trad_b" for p in partners}}
+    ranked = build_ranked(bycon, score)
+
+    panels = build_panels(
+        bychunk, ranked, score, trad_of, work_of_chunk=lambda c: c,
+        top_k=2, per_work_cap=10,
+    )
+    assert len(panels[anchor]) == 6       # not <= 4

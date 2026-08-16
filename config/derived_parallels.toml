@@ -49,17 +49,26 @@ model_sha256 = "be0174a36c98f8a8cd6bd979e2ec913a9365dadea87ad2d14d6399ee9e450fc7
 # and truncates bodies to 2400 chars before tokenizing, so those are not
 # separate knobs here.
 
-# GATHER bound, not a panel ceiling. Via-concept round-robin gathers up to
-# top_k * 2 raw candidates per chunk (ported as-is from the rellm prototype;
-# diffed against rellm tools/derived_parallels.py — same behavior). The
-# per-work cap below then thins that pool, but nothing truncates it back
-# down to top_k afterward: a chunk's PARALLELS panel can carry up to
-# 2 * top_k partners (tests/test_derive_parallels.py's
-# test_build_panels_round_robin_alternates_via_concepts_deterministically
-# demonstrates a 4-partner panel at top_k=2), or fewer than top_k if
-# candidates cluster in one work. This is prototype-faithful, not a bug —
-# ratified by the 2026-08-13 snapshot trial — and is NOT truncated. Do not
-# size a reader panel layout assuming top_k is the maximum partner count.
+# GATHER bound, not a panel ceiling — and a LOOSE one. Via-concept
+# round-robin gathers raw candidates per chunk (ported as-is from the rellm
+# prototype; diffed against rellm tools/derived_parallels.py — same
+# behavior). The per-work cap below then thins that pool, but nothing
+# truncates it back down to top_k afterward.
+#
+# The gather loop tests its counter only at the TOP of the while, while the
+# inner `for c in sorted(iters)` adds up to one partner per via concept in a
+# single pass. So a chunk with many vias overshoots: the real bound is
+# (2 * top_k - 1) + len(vias), NOT 2 * top_k. Measured on the live corpus at
+# top_k = 5: max panel 22 partners, 1,804 panels above 10 —
+# tests/test_derive_parallels.py's
+# test_build_panels_can_overshoot_two_times_top_k pins it (6 partners at
+# top_k=2, where 2 * top_k would predict 4). A panel can also be SMALLER than
+# top_k if candidates cluster in one work.
+#
+# The overshoot is prototype-faithful, not a bug — ratified by the 2026-08-13
+# snapshot trial — and is NOT truncated. Do not size a reader panel layout
+# off top_k, and do not size a degree bound off 2 * top_k either (see
+# max_fan_in below, whose per-chunk total is |own panel| + max_fan_in).
 top_k = 5
 
 # Incremental (concept, chunk) score cache, keyed on a content hash of the
