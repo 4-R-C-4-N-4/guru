@@ -1,13 +1,13 @@
 {
   "id": "38a01171",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "Incoming fan-in is unbounded in the derived-parallels export: top_k/per_work_cap bound only a chunk's own panel, so removing the score floor let one chunk be everyone's partner (1,178-degree hubs)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-16T02:33:53.330Z",
-  "updated_at": "2026-08-16T02:34:35.771Z",
+  "updated_at": "2026-08-16T02:58:04.115Z",
   "files": [
     {
       "path": "scripts/derive_parallels.py"
@@ -38,5 +38,11 @@
       "bd00679b",
       "a15c59d8"
     ]
+  },
+  "resolution": {
+    "commit": "e148ef8626f030539d77a59079b207b2efbd6afc",
+    "resolved_at": "2026-08-16T02:58:04.115Z",
+    "resolved_by": "unknown",
+    "note": "Fan-in bounded at max_fan_in=500 via cap_fan_in(), charging only the receiving leg. Verified re-derive over v55: 44,330 rows, 5,818 dropped, 2,604 chunks reduced, 0 darkened, max degree 1,178 -> 516. Two child specs were corrected against measurement rather than implemented as written (8c7abf05 chunks_with_partners, bd00679b work-concentration) -- see their analysis entries. NOT SHIPPED: the cap changes exported edge counts (50,148 -> 44,330), so re-export and deploy remain the owner's gate; cutover verification is todo:9097deed."
   }
 }
