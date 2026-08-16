@@ -1,0 +1,23 @@
+{
+  "id": "64569f52",
+  "type": "chore",
+  "state": "open",
+  "summary": "Wire the cap into run() behind config[panels].max_fan_in with load-time validation; restore build_edges() to a pure shape conversion (needs cap_fan_in from 6acd96ba)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:26.620Z",
+  "updated_at": "2026-08-16T02:34:26.620Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  }
+}

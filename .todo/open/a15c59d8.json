@@ -1,0 +1,24 @@
+{
+  "id": "a15c59d8",
+  "type": "bug",
+  "state": "open",
+  "summary": "Correct the 2*top_k outgoing-panel bound: build_panels() tests picked_n only at the top of its while loop while the inner for adds one partner per via, so panels overshoot (measured max 22 at top_k=5, 1,804 panels over 10) — decide doc-fix vs enforce",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:35.771Z",
+  "updated_at": "2026-08-16T02:34:35.771Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "docs"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  }
+}

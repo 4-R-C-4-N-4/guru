@@ -1,0 +1,23 @@
+{
+  "id": "bd00679b",
+  "type": "bug",
+  "state": "open",
+  "summary": "Make cap selection per_work_cap-aware so a saturated hub's kept partners do not monoculture on one work (v55: boehme.062 kept 50 of 100 from plotinus-select-works-index)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:35.735Z",
+  "updated_at": "2026-08-16T02:34:35.735Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  }
+}
