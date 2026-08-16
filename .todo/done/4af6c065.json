@@ -1,0 +1,32 @@
+{
+  "id": "4af6c065",
+  "type": "chore",
+  "state": "done",
+  "summary": "Finalize derived-parallels edge methodology across living docs: max_fan_in 500->400, and reconcile the architecture/implementation/README docs that still describe PARALLELS as Pass C concept-to-concept",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-16T13:09:14.041Z",
+  "updated_at": "2026-08-16T13:12:40.601Z",
+  "files": [
+    {
+      "path": "docs/ingest/16-derive-parallels.md"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "docs"
+  ],
+  "relationships": {
+    "related": [
+      "38a01171"
+    ]
+  },
+  "resolution": {
+    "commit": "7f9c8a712c3bb1e1db860bee4fd96ec22e24197b",
+    "resolved_at": "2026-08-16T13:12:40.601Z",
+    "resolved_by": "unknown",
+    "note": "max_fan_in=400 verified (41,613 rows, 0 darkened, max degree 418). Node 16 carries the full sweep plus a reproducible Selection methodology section including the anchor-leg discrimination check. Living docs reconciled: architecture edge table corrected to Chunk->Chunk, retrieval graph-walk trap flagged, Pass C superseded banners in implementation/README/web-review/v2, and evaluation-tooling.md now records the investigation's outcome."
+  }
+}
