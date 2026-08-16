@@ -122,16 +122,20 @@ python scripts/tag_concepts.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_X
 # Stage 4 — Embed chunks into vector store
 python scripts/embed_corpus.py
 
-# Stage 3 (cont.) — Cross-tradition edge proposals (requires embeddings)
-python scripts/propose_edges.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf
+# Cross-tradition PARALLELS are no longer proposed and reviewed (Pass C is
+# retired). They are derived corpus-wide from reviewed tags by node 16 —
+# see docs/ingest/16-derive-parallels.md:
+OMP_NUM_THREADS=8 .venv/bin/python scripts/derive_parallels.py
 ```
 
 ---
 
 ## Review CLIs
 
-Stage 3 produces staged tags and edge proposals that need human review before
-they are promoted to the live graph. Both tools are interactive terminal UIs.
+Stage 3 produces staged tags that need human review before they are promoted
+to the live graph; the tool below is an interactive terminal UI for that.
+(Cross-tradition edge proposals — Pass C — are retired; PARALLELS are derived
+at node 16 instead, with no review step.)
 
 ### `python scripts/review_tags.py` — Concept tag review
 

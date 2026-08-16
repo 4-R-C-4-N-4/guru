@@ -183,9 +183,11 @@ Edge proposals land where a Sethian cosmogony should: western_esoteric (17),
 jewish_mysticism (6), hermeticism (5), renaissance_hermeticism (4),
 neoplatonism (4), sufism (3), mandaean (3).
 
-**Everything above is `status='pending'`.** Tag review and edge review are gates;
-nothing here has been promoted, and the 40 proposals at 0.85 are the usual noisy
-tier. `/guru-review-tags` and `/guru-review-edges` are the flow for them.
+**Everything above is `status='pending'`.** Tag review is the gate; nothing
+here has been promoted, and the 40 proposals at 0.85 are the usual noisy tier.
+(Edge review — Pass C — has since been retired in favour of derived parallels;
+see `docs/ingest/16-derive-parallels.md`. This expansion predates that cutover.)
+`/guru-review-tags` is the flow for the tags.
 
 ### Tagging was run in no-think mode
 
