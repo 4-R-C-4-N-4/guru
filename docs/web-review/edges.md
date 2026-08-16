@@ -1,6 +1,13 @@
 # guru-review: edge review extension
 
-**Status:** Design — pending implementation
+**Status:** Implemented and in use — but for a **frozen** queue. Pass C was
+retired 2026-08-13 (todo:c3f479ff): `propose_edges.py` no longer runs, so no
+new `staged_edges` rows are produced. This tool now serves the remaining
+backlog and the frozen CONTRASTS set only. The corpus's PARALLELS supply is
+derived instead — see
+[`../ingest/16-derive-parallels.md`](../ingest/16-derive-parallels.md), which
+carries the selection methodology and the measured evidence behind it. Read the
+"Why now" line below as of its writing date, not as current state.
 **Companion to:** [`design.md`](design.md) (Pass B — staged_tags) and [`impl.md`](impl.md). This doc extends the same web tool to handle Pass C (cross-tradition `staged_edges` — PARALLELS / CONTRASTS proposals from `scripts/propose_edges.py`).
 **Why now:** `propose_edges.py` is producing rows; the CLI (`scripts/review_edges.py`) is the only review path; bulk review on a phone is the same operational gap that motivated the original web tool. The infrastructure (snapshot, prepared statements, apply transaction, parity harness, PWA shell, retry queue) is already in place — this is a parallel route on top.
 

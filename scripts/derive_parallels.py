@@ -93,6 +93,27 @@ def load_config(path: Path = DEFAULT_CONFIG) -> dict:
         return tomllib.load(f)
 
 
+def resolve_max_fan_in(panels_cfg: dict) -> int | None:
+    """config[panels].max_fan_in -> int, or None when the key is absent.
+
+    Absent means "no fan-in cap" — that is the off switch, deliberately,
+    rather than a sentinel value. Validated here because a 0 or negative
+    would otherwise sail through cap_fan_in() and drop every edge, and the
+    failure would surface much later in scripts/export.py as its "contains
+    zero PARALLELS rows — refusing to export" refusal, which points the
+    reader at the wrong file entirely.
+    """
+    if "max_fan_in" not in panels_cfg:
+        return None
+    value = int(panels_cfg["max_fan_in"])
+    if value < 1:
+        raise SystemExit(
+            f"config panels.max_fan_in must be >= 1 (got {value}); omit the key "
+            "entirely to disable the cap"
+        )
+    return value
+
+
 # ── taxonomy ─────────────────────────────────────────────────────────────
 
 def load_taxonomy(path: Path = TAXONOMY_TOML) -> dict[str, str]:
@@ -429,33 +450,178 @@ def build_panels(
 def build_edges(
     panels: dict[str, list[tuple[str, str, float]]], defs: dict[str, str]
 ) -> list[dict]:
-    """Panels -> corpus-export edges shape, one row per unique unordered
-    pair (a chunk pair can appear in both endpoints' panels; the first
-    encountered in sorted-chunk-id order wins, deterministically).
+    """Panels -> corpus-export edges shape, one row per unique unordered pair.
 
     Final order: weight desc, (source, target) asc as the stable tiebreak.
+
+    A pair can appear in BOTH endpoints' panels, once per direction, with a
+    different grade each way — the grade is the partner's own score on the via
+    concept, so A-picks-B carries B's score and B-picks-A carries A's. When
+    that happens the pair keeps the STRONGER leg (todo:38385429). It used to
+    keep whichever direction was encountered first in sorted-chunk-id order,
+    which made the exported weight depend on how the two chunk ids happen to
+    sort: a pair scoring -8.4 one way and +1.2 the other shipped +1.2 or -8.4
+    purely on lexical order, a ~10-logit swing. That was survivable while the
+    weight only set display order; it stopped being survivable once
+    cap_fan_in() started deciding survival by weight, and it would have made
+    the export sensitive to renaming or re-chunking one endpoint.
+
+    Max rather than min is deliberate: min-leg clamping is the prototype flaw
+    this port was written to fix (it made panels monochrome — see the module
+    docstring). Ties break on the lexicographically smaller via id, so the
+    result never depends on iteration order.
+
+    Deliberately a pure shape conversion: the fan-in cap is NOT applied here.
+    run() calls cap_fan_in() on the result instead, so it can compare the
+    before/after degree distribution and report what the cap actually did.
+    Adding a cap parameter here would also create a path that tests exercise
+    and production never reaches.
     """
-    seen: set[tuple[str, str]] = set()
-    rows: list[dict] = []
+    best: dict[tuple[str, str], tuple[float, str]] = {}
     for ch in sorted(panels):
         for partner, via, grade in panels[ch]:
-            a, b = (ch, partner) if ch < partner else (partner, ch)
-            key = (a, b)
-            if key in seen:
-                continue
-            seen.add(key)
-            annotation = (f"Shared concept: {format_label(via)} — "
-                          f"{first_sentence(defs[via])}. (derived)")
-            rows.append({
-                "source": a,
-                "target": b,
-                "edge_type": "PARALLELS",
-                "tier": "inferred",
-                "weight": round(grade, 3),
-                "annotation": annotation,
-            })
+            key = (ch, partner) if ch < partner else (partner, ch)
+            cur = best.get(key)
+            if cur is None or grade > cur[0] or (grade == cur[0] and via < cur[1]):
+                best[key] = (grade, via)
+
+    rows: list[dict] = []
+    for (a, b), (grade, via) in best.items():
+        annotation = (f"Shared concept: {format_label(via)} — "
+                      f"{first_sentence(defs[via])}. (derived)")
+        rows.append({
+            "source": a,
+            "target": b,
+            "edge_type": "PARALLELS",
+            "tier": "inferred",
+            "weight": round(grade, 3),
+            "annotation": annotation,
+        })
     rows.sort(key=lambda r: (-r["weight"], r["source"], r["target"]))
     return rows
+
+
+def degree_of(rows: list[dict]) -> dict[str, int]:
+    """chunk id -> how many edge rows touch it, either endpoint."""
+    degree: dict[str, int] = {}
+    for row in rows:
+        degree[row["source"]] = degree.get(row["source"], 0) + 1
+        degree[row["target"]] = degree.get(row["target"], 0) + 1
+    return degree
+
+
+def cap_report(
+    deg_before: dict[str, int], deg_after: dict[str, int],
+) -> tuple[int, int]:
+    """(chunks_reduced, chunks_darkened) for a capping pass.
+
+    chunks_reduced counts chunks that lost at least one edge; chunks_darkened
+    counts those left with none at all. Deliberately NOT "chunks over the cap":
+    those two diverge by more than an order of magnitude in practice (at
+    max_fan_in=100 over v55, 129 chunks were over cap while 4,761 lost edges
+    and 348 lost all of them), and the over-cap number is the one that makes a
+    graph-halving run look routine.
+
+    Takes degree maps rather than row lists so run() can build each of them
+    once — it needs deg_before for the raw max degree and deg_after for
+    chunks_in_export anyway, and rebuilding them here made four O(n) passes
+    over ~50k rows where two do.
+    """
+    return (
+        sum(1 for ch, d in deg_before.items() if deg_after.get(ch, 0) < d),
+        sum(1 for ch in deg_before if deg_after.get(ch, 0) == 0),
+    )
+
+
+def cap_fan_in(
+    rows: list[dict], max_fan_in: int,
+    panels: dict[str, list[tuple[str, str, float]]],
+    score: dict[tuple[str, str], float],
+) -> list[dict]:
+    """Cap how many OTHER chunks' panels may list a given chunk as a partner,
+    keeping the strongest PARALLELS and dropping the weakest.
+
+    Removing the score floor (todo:ac63de1a) means a (concept, chunk) pair is
+    never excluded for scoring low, only ranked — so nothing upstream bounds a
+    chunk's incoming fan-in. top_k/per_work_cap in build_panels() bound only a
+    chunk's OWN outgoing panel; how many other panels pick it was unbounded
+    until this ran in production and produced a 1,178-partner panel (see
+    docs/ingest/16-derive-parallels.md's Failure modes, "fan-in").
+
+    Only the RECEIVING leg is charged, and only it can veto an edge:
+
+    - A MUTUAL pair — both endpoints picked each other — is outgoing for both.
+      Always kept, charged to neither.
+    - Otherwise exactly one endpoint anchored the pair and the other received
+      it; only that receiver's budget is checked and spent.
+
+    So an edge dies only when the chunk RECEIVING it is genuinely over its own
+    budget, never because the chunk that CHOSE it had already accumulated
+    edges elsewhere. That asymmetry is the whole point. Charging both
+    endpoints (the first cut of this function) made every chunk's accumulated
+    degree veto its neighbours' edges too, which deleted 58% of the v55 edge
+    set and left 367 chunks with no partners at all — 4,531 of the losers
+    never having been over cap themselves.
+
+    What this does NOT promise is that a chunk keeps every partner it picked:
+    every edge is outgoing for one endpoint and incoming for the other, so
+    choosing a saturated partner still loses you that edge. The bound it does
+    give is per-chunk total degree <= |own panel| + max_fan_in.
+
+    WHICH edges a saturated chunk keeps is ranked by the ANCHOR's leg —
+    score[(via, anchor)], how strongly the suitor itself expresses the shared
+    concept — not by the row weight (todo:6310a495). The row weight is the
+    PARTNER's score on the via, so for a chunk receiving edges it is that
+    chunk's OWN score, identical across every edge pointing at it: the top v55
+    hub carried 1,178 incoming edges with 9 distinct weights, 1,170 of them
+    tied at -0.994. Ranking by that meant "keep the strongest 500" fell
+    through to the (source, target) tiebreak and kept an alphabetical slice —
+    47% of all deletions were of edges tied with a survivor. The anchor's leg
+    is the only signal that varies across a receiver's suitors, so it is the
+    only one that can order them.
+
+    This is NOT the min-leg clamping the port rejected. That flaw was min-leg
+    RANKING of a chunk's outgoing panel, which made panels monochrome; the row
+    weight is deliberately still the partner's own score. Choosing among a
+    saturated chunk's incoming edges is a different question with a different
+    answer.
+
+    Selection is per-receiver and independent — every non-mutual edge has
+    exactly one receiver — so the result does not depend on the order `rows`
+    arrives in. Input order is preserved in the output.
+    """
+    # chunk -> {partner: via} for the partners it chose. The via is needed to
+    # look the anchor's own leg back up in `score`.
+    picked = {ch: {p: via for p, via, _ in ps} for ch, ps in panels.items()}
+
+    keep: set[tuple[str, str]] = set()
+    incoming: dict[str, list[tuple[tuple[str, str], str, str]]] = {}
+    for row in rows:
+        a, b = row["source"], row["target"]
+        key = (a, b)
+        via_ab = picked.get(a, {}).get(b)   # a chose b
+        via_ba = picked.get(b, {}).get(a)   # b chose a
+        if via_ab is not None and via_ba is not None:
+            keep.add(key)                   # mutual: outgoing for both
+            continue
+        anchor, receiver, via = ((a, b, via_ab) if via_ab is not None
+                                 else (b, a, via_ba))
+        incoming.setdefault(receiver, []).append((key, anchor, via))
+
+    for receiver, items in incoming.items():
+        if len(items) > max_fan_in:
+            # Strongest suitor first. Ties fall back to the receiver's own leg
+            # and then to ids, so the result is total and reproducible even
+            # when two anchors score identically on the same concept.
+            items.sort(key=lambda it: (
+                -score.get((it[2], it[1]), float("-inf")),
+                -score.get((it[2], receiver), float("-inf")),
+                it[0],
+            ))
+            items = items[:max_fan_in]
+        keep.update(key for key, _, _ in items)
+
+    return [r for r in rows if (r["source"], r["target"]) in keep]
 
 
 # ── main ──────────────────────────────────────────────────────────────────
@@ -467,6 +633,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     panels_cfg = cfg["panels"]
     top_k = int(scoring_cfg["top_k"])
     per_work_cap = int(panels_cfg["per_work_cap"])
+    max_fan_in = resolve_max_fan_in(panels_cfg)
     model_path = str(scoring_cfg["model_path"])
     cache_path = Path(scoring_cfg["score_cache"])
     if not cache_path.is_absolute():
@@ -513,14 +680,50 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     ranked = build_ranked(bycon, score)
     panels = build_panels(bychunk, ranked, score, trad_of, work_of_chunk,
                           top_k, per_work_cap)
-    rows = build_edges(panels, defs)
+    rows_raw = build_edges(panels, defs)
+    rows = cap_fan_in(rows_raw, max_fan_in, panels, score) if max_fan_in is not None else rows_raw
+
+    # Report what the cap DID, per chunk -- not merely how many chunks sat
+    # over budget. Those two numbers come apart badly: at max_fan_in=100 over
+    # v55, 129 chunks were over cap while 4,761 chunks actually lost edges and
+    # 348 lost every edge they had. The operator gate for this node is an
+    # eyeball of the line below (docs/ingest/16-derive-parallels.md), so it has
+    # to name the blast radius rather than the intent, or a run that halves the
+    # graph reads as a routine tail trim.
+    deg_before, deg_after = degree_of(rows_raw), degree_of(rows)
+    edges_dropped = len(rows_raw) - len(rows)
+    chunks_reduced, chunks_darkened = cap_report(deg_before, deg_after)
+    if edges_dropped:
+        print(f"fan-in cap ({max_fan_in}): dropped {edges_dropped} weakest incoming "
+              f"edges (raw max degree {max(deg_before.values())}); {chunks_reduced} "
+              f"chunks lost at least one edge, {chunks_darkened} left with none")
 
     out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_dir / "edges_derived.jsonl", "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
 
+    # Two different questions, deliberately two numbers rather than one
+    # overloaded key. chunks_with_partners is a SELECTION statistic, counted
+    # from panels before the cap runs: a low value means chunks went untagged
+    # or unscored, which is how node 16's gate reads it. chunks_in_export is
+    # what actually shipped.
+    #
+    # They can differ in BOTH directions, and only one direction is the cap's
+    # doing, so do not report the gap as a cap effect:
+    #   fewer in export  -- a chunk had a panel and lost every edge. That is
+    #                       cap-caused, and chunks_darkened above measures it
+    #                       directly (it is defined off deg_before/deg_after,
+    #                       not off this comparison).
+    #   more in export   -- a chunk with an EMPTY panel was picked as someone
+    #                       else's partner. Nothing here rules that out; it is
+    #                       a selection-shape property, unrelated to the cap,
+    #                       and it would still be possible with the cap off.
+    # It does not arise on the current corpus (both read 5,054 with the cap
+    # disabled), but the invariant is not enforced anywhere, so the run line
+    # below states the two counts and lets chunks_darkened carry the blame.
     chunks_with_partners = sum(1 for p in panels.values() if p)
+    chunks_in_export = len(deg_after)
     summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "db": str(db_path),
@@ -531,16 +734,25 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         "scoring_seconds": round(elapsed, 1),
         "chunks_total": len(bychunk),
         "chunks_with_partners": chunks_with_partners,
+        "chunks_in_export": chunks_in_export,
         "unique_edge_rows": len(rows),
         "top_k": top_k,
         "per_work_cap": per_work_cap,
+        "max_fan_in": max_fan_in,
+        # Always written, 0 when the cap dropped nothing -- a key that only
+        # appears when something went wrong is a key nobody builds a check on.
+        "fan_in_cap_edges_dropped": edges_dropped,
+        "fan_in_cap_chunks_reduced": chunks_reduced,
+        "fan_in_cap_chunks_darkened": chunks_darkened,
         "model_path": model_path,
     }
     with open(out_dir / "summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
+    shipped = ("" if chunks_in_export == chunks_with_partners
+               else f" ({chunks_in_export} appear in the export)")
     print(f"wrote {out_dir}: {len(rows)} unique PARALLELS rows, "
-          f"{chunks_with_partners}/{len(bychunk)} chunks have partners "
+          f"{chunks_with_partners}/{len(bychunk)} chunks have partners{shipped} "
           f"({elapsed:.1f}s scoring)")
 
 

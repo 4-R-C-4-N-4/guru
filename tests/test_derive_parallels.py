@@ -19,6 +19,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
@@ -28,11 +30,15 @@ from derive_parallels import (  # noqa: E402
     build_panels,
     build_ranked,
     cache_key,
+    cap_fan_in,
+    cap_report,
     chunk_text_id,
     content_hash,
+    degree_of,
     exclude_apparatus_chunks,
     first_sentence,
     format_label,
+    resolve_max_fan_in,
     score_needed_pairs,
 )
 
@@ -418,3 +424,290 @@ def test_score_needed_pairs_fully_cached_skips_model_and_flush(monkeypatch, tmp_
 
     assert score == {("concept.c0", "trad.t.000"): 9.0}
     assert flush_calls == []
+
+
+# ── fan-in cap (todo:6acd96ba) ──────────────────────────────────────────────
+
+def _score_from(panels, anchor_leg=0.0):
+    """Fixture helper: a score map where every anchor scores `anchor_leg` on
+    the via it used. Uniform by default, so ties fall to the id tiebreak and
+    these tests keep asserting the pre-existing weight-order behaviour."""
+    return {(via, ch): anchor_leg for ch, ps in panels.items() for _, via, _ in ps}
+
+
+def _rows(*triples):
+    """(source, target, weight) -> edge rows in build_edges() output order."""
+    rows = [{"source": s, "target": t, "weight": w} for s, t, w in triples]
+    rows.sort(key=lambda r: (-r["weight"], r["source"], r["target"]))
+    return rows
+
+
+def test_cap_fan_in_keeps_a_chunks_strongest_incoming_edges():
+    """A hub picked as a partner by 4 other chunks, capped to 2, keeps the
+    two highest-weight incoming edges and drops the weakest two."""
+    hub = "trad_a.hub.001"
+    p1, p2, p3, p4 = (f"trad_b.p{i}.001" for i in range(1, 5))
+    panels = {p: [(hub, "concept.x", w)]
+              for p, w in [(p1, 9.0), (p2, 7.0), (p3, 5.0), (p4, 3.0)]}
+    rows = _rows((hub, p1, 9.0), (hub, p2, 7.0), (hub, p3, 5.0), (hub, p4, 3.0))
+
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=2, panels=panels)
+    assert [r["target"] for r in kept] == [p1, p2]
+
+
+def test_cap_fan_in_does_not_charge_the_chunk_that_chose():
+    """The regression that motivated the receiving-leg design: a chunk with a
+    large outgoing panel must not have its own picks vetoed by its own
+    accumulated degree. Each partner here receives exactly one edge, so
+    nothing is over its fan-in budget and the whole panel ships -- where a
+    both-endpoints degree budget would have kept only the first `max`."""
+    anchor = "trad_a.anchor.001"
+    partners = [f"trad_b.p{i}.001" for i in range(6)]
+    panels = {anchor: [(p, "concept.x", 9.0 - i) for i, p in enumerate(partners)]}
+    rows = _rows(*[(anchor, p, 9.0 - i) for i, p in enumerate(partners)])
+
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=2, panels=panels)
+    assert kept == rows           # anchor's degree is 6, well over max_fan_in
+    assert len({r["target"] for r in kept}) == 6
+
+
+def test_cap_fan_in_keeps_mutual_pairs_and_charges_neither():
+    """Both endpoints picked each other -- outgoing for both, so the pair is
+    kept and spends no fan-in budget on either side."""
+    a, b = "trad_a.a.001", "trad_b.b.001"
+    other = "trad_b.other.001"
+    panels = {
+        a: [(b, "concept.x", 5.0)],
+        b: [(a, "concept.x", 5.0)],
+        other: [(a, "concept.x", 9.0)],
+    }
+    rows = _rows((a, other, 9.0), (a, b, 5.0))
+
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=1, panels=panels)
+    # `other`'s incoming edge spends a's whole budget of 1, and the mutual
+    # a<->b pair still ships on top of it.
+    assert len(kept) == 2
+
+
+def test_cap_fan_in_no_op_under_budget():
+    panels = {"a": [("b", "concept.x", 1.0)]}
+    rows = _rows(("a", "b", 1.0))
+    assert cap_fan_in(rows, score=_score_from(panels), max_fan_in=100, panels=panels) == rows
+
+
+def test_cap_fan_in_bounds_count_not_score():
+    """A weak edge still ships when nothing stronger competes for the
+    receiver's budget -- the cap bounds COUNT, not score."""
+    hub = "trad_a.hub.001"
+    weak = "trad_b.weak.001"
+    panels = {weak: [(hub, "concept.x", -9.9)]}
+    rows = _rows((hub, weak, -9.9))
+    assert cap_fan_in(rows, score=_score_from(panels), max_fan_in=1, panels=panels) == rows
+
+
+def test_degree_of_counts_both_endpoints():
+    rows = _rows(("a", "b", 1.0), ("b", "c", 2.0))
+    assert degree_of(rows) == {"a": 1, "b": 2, "c": 1}
+
+
+# ── max_fan_in config resolution (todo:64569f52) ────────────────────────────
+
+def test_resolve_max_fan_in_absent_key_disables_the_cap():
+    assert resolve_max_fan_in({"per_work_cap": 2}) is None
+
+
+def test_resolve_max_fan_in_reads_the_value():
+    assert resolve_max_fan_in({"max_fan_in": 500}) == 500
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_resolve_max_fan_in_rejects_non_positive(bad):
+    """0 would pass an `is not None` guard and silently drop every edge; the
+    run would then fail much later in export.py, pointing at the wrong file."""
+    with pytest.raises(SystemExit, match="must be >= 1"):
+        resolve_max_fan_in({"max_fan_in": bad})
+
+
+# ── cap reporting (todo:b95dd8e0) ───────────────────────────────────────────
+
+def test_cap_report_counts_reduced_and_darkened_not_over_cap():
+    """`a` keeps one of its two edges (reduced); `c` loses its only edge
+    (darkened). A chunks-over-cap count would report 1 here and hide both."""
+    raw = _rows(("a", "b", 9.0), ("a", "c", 1.0))
+    kept = _rows(("a", "b", 9.0))
+    reduced, darkened = cap_report(degree_of(raw), degree_of(kept))
+    assert (reduced, darkened) == (2, 1)   # a and c reduced; c dark
+
+
+def test_cap_report_all_zero_when_nothing_dropped():
+    raw = _rows(("a", "b", 1.0))
+    assert cap_report(degree_of(raw), degree_of(raw)) == (0, 0)
+
+
+# ── selection vs export counts (todo:8c7abf05) ──────────────────────────────
+
+def test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk():
+    """Regression: chunks_with_partners is counted from panels BEFORE the cap
+    runs, so it cannot be read as "chunks that shipped". `loser` has a
+    non-empty panel and still ends up with no edge in the export once the hub
+    it picked is saturated -- which is why summary.json carries a separate
+    chunks_in_export, and why the run line discloses the gap."""
+    hub = "trad_a.hub.001"
+    winner, loser = "trad_b.win.001", "trad_b.lose.001"
+    panels = {
+        winner: [(hub, "concept.x", 9.0)],
+        loser: [(hub, "concept.x", 1.0)],
+    }
+    rows = _rows((hub, winner, 9.0), (hub, loser, 1.0))
+    # `winner` is the stronger PARALLEL: it expresses concept.x far better
+    # than `loser` does, which is the leg the cap ranks on.
+    score = {("concept.x", winner): 4.0, ("concept.x", loser): -6.0}
+
+    kept = cap_fan_in(rows, score=score, max_fan_in=1, panels=panels)
+
+    chunks_with_partners = sum(1 for p in panels.values() if p)
+    chunks_in_export = len(degree_of(kept))
+    assert chunks_with_partners == 2          # both chose a partner...
+    assert chunks_in_export == 2              # ...hub + winner ship
+    assert loser not in degree_of(kept)       # ...but loser shipped nothing
+    assert cap_report(degree_of(rows), degree_of(kept))[1] == 1   # darkened
+
+
+# ── pair weight is direction-independent (todo:38385429) ────────────────────
+
+def _mutual_panels(low_id, high_id):
+    """Both chunks pick each other; the pair scores -8.4 toward `low_id` and
+    +1.2 toward `high_id`. Returns panels keyed so only the NAMES differ."""
+    return {
+        low_id: [(high_id, "concept.x", 1.2)],
+        high_id: [(low_id, "concept.x", -8.4)],
+    }
+
+
+def test_build_edges_keeps_the_stronger_leg_of_a_mutual_pair():
+    defs = {"concept.x": "Def of x."}
+    rows = build_edges(_mutual_panels("trad_a.a.001", "trad_b.b.001"), defs)
+    assert len(rows) == 1
+    assert rows[0]["weight"] == 1.2      # not -8.4
+
+
+def test_build_edges_weight_does_not_depend_on_chunk_id_ordering():
+    """Regression: the exported weight used to come from whichever endpoint
+    sorted first, so renaming one chunk could swing it ~10 logits -- and once
+    cap_fan_in() ranks by weight, that decides which edges survive."""
+    defs = {"concept.x": "Def of x."}
+    # Same pair, same scores, opposite lexical order of the two chunk ids.
+    forward = build_edges(_mutual_panels("trad_a.aaa.001", "trad_b.zzz.001"), defs)
+    reverse = build_edges(_mutual_panels("trad_a.zzz.001", "trad_b.aaa.001"), defs)
+    assert forward[0]["weight"] == reverse[0]["weight"] == 1.2
+
+
+def test_build_edges_still_emits_one_row_per_unordered_pair():
+    defs = {"concept.x": "Def of x."}
+    rows = build_edges(_mutual_panels("trad_a.a.001", "trad_b.b.001"), defs)
+    assert [(r["source"], r["target"]) for r in rows] == [
+        ("trad_a.a.001", "trad_b.b.001")
+    ]
+
+
+# ── the cap does not reshape work distribution (todo:bd00679b) ──────────────
+
+def test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched():
+    """The cap selects on weight alone and never on source work, by design.
+    A hub under its fan-in budget keeps every partner even when they are a
+    single-work monoculture -- so concentration observed in the export is a
+    property of selection upstream, not something capping introduced. Pinning
+    this stops a future 'fix' from making the degree cap work-aware, which
+    measured out at 730 darkened chunks for a mean concentration drop of
+    0.315 -> 0.192 (see the ticket's analysis entry)."""
+    hub = "trad_a.hub.001"
+    # Nine partners, eight of them from the same work.
+    mono = [f"trad_b.same-work.{i:03d}" for i in range(8)]
+    other = "trad_b.other-work.001"
+    partners = mono + [other]
+    panels = {p: [(hub, "concept.x", 9.0 - i)] for i, p in enumerate(partners)}
+    rows = _rows(*[(hub, p, 9.0 - i) for i, p in enumerate(partners)])
+
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=100, panels=panels)
+    assert kept == rows
+    assert len(degree_of(kept)) == len(partners) + 1
+
+
+# ── the panel bound is not 2 * top_k (todo:a15c59d8) ────────────────────────
+
+def test_build_panels_can_overshoot_two_times_top_k():
+    """The documented "a panel carries at most 2 * top_k partners" is false.
+    build_panels() tests picked_n only at the TOP of its while loop, while the
+    inner `for c in sorted(iters)` adds up to one partner per via concept in a
+    single pass -- so a chunk with many vias overshoots. The real bound is
+    (2 * top_k - 1) + len(vias).
+
+    Here top_k=2 puts the claimed ceiling at 4, and six via concepts each
+    contribute one partner in the first pass, giving 6. Measured on the live
+    corpus at top_k=5: max panel 22, with 1,804 panels above 10.
+
+    The overshoot itself is ratified prototype-faithful behaviour (2026-08-13
+    snapshot trial) -- this pins it so the STATED bound cannot drift back to a
+    number the code does not honour.
+    """
+    anchor = "trad_a.anchor.001"
+    vias = [f"concept.v{i}" for i in range(6)]
+    partners = [f"trad_b.p{i}.001" for i in range(6)]
+    bycon = {v: {anchor, p} for v, p in zip(vias, partners)}
+    bychunk = {anchor: set(vias)}
+    score = {}
+    for i, (v, p) in enumerate(zip(vias, partners)):
+        score[(v, anchor)] = 1.0          # scored -> v is a via
+        score[(v, p)] = 9.0 - i
+    trad_of = {anchor: "trad_a", **{p: "trad_b" for p in partners}}
+    ranked = build_ranked(bycon, score)
+
+    panels = build_panels(
+        bychunk, ranked, score, trad_of, work_of_chunk=lambda c: c,
+        top_k=2, per_work_cap=10,
+    )
+    assert len(panels[anchor]) == 6       # not <= 4
+
+
+# ── the cap ranks by parallel strength, not id order (todo:6310a495) ────────
+
+def test_cap_fan_in_ranks_suitors_by_their_own_leg_not_alphabetically():
+    """The defect: every edge pointing AT a chunk carries that chunk's own
+    score on the via, so all its incoming weights are identical and "keep the
+    strongest" used to fall through to the (source, target) tiebreak. The
+    suitors are ordered by THEIR leg -- how strongly each expresses the shared
+    concept -- so the alphabetically-first suitor loses to a stronger one."""
+    hub = "trad_a.hub.001"
+    # `aaa` sorts first and is the WEAKEST parallel; `zzz` sorts last and is
+    # the strongest. Every row carries the hub's own score, so all weights tie.
+    aaa, mid, zzz = "trad_b.aaa.001", "trad_b.mid.001", "trad_b.zzz.001"
+    panels = {c: [(hub, "concept.x", -0.994)] for c in (aaa, mid, zzz)}
+    rows = _rows((hub, aaa, -0.994), (hub, mid, -0.994), (hub, zzz, -0.994))
+    score = {
+        ("concept.x", aaa): -8.0,
+        ("concept.x", mid): -1.0,
+        ("concept.x", zzz): 2.5,
+        ("concept.x", hub): -0.994,
+    }
+
+    kept = cap_fan_in(rows, score=score, max_fan_in=2, panels=panels)
+    survivors = {r["target"] for r in kept}
+    assert survivors == {zzz, mid}    # not {aaa, mid}, which id order gives
+    assert aaa not in survivors
+
+
+def test_cap_fan_in_is_independent_of_input_row_order():
+    """Selection is per-receiver, so shuffling the input cannot change the
+    outcome -- the old implementation depended on global weight ordering."""
+    hub = "trad_a.hub.001"
+    suitors = [f"trad_b.s{i}.001" for i in range(5)]
+    panels = {c: [(hub, "concept.x", -1.0)] for c in suitors}
+    rows = _rows(*[(hub, c, -1.0) for c in suitors])
+    score = {("concept.x", c): float(i) for i, c in enumerate(suitors)}
+    score[("concept.x", hub)] = -1.0
+
+    forward = cap_fan_in(rows, score=score, max_fan_in=3, panels=panels)
+    backward = cap_fan_in(list(reversed(rows)), score=score, max_fan_in=3,
+                          panels=panels)
+    assert {r["target"] for r in forward} == {r["target"] for r in backward}
+    assert {r["target"] for r in forward} == set(suitors[2:])   # top 3 legs

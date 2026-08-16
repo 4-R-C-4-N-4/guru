@@ -1,0 +1,29 @@
+{
+  "id": "6acd96ba",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add cap_fan_in(): charge only the receiving leg, keep mutual pairs free of budget",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:26.580Z",
+  "updated_at": "2026-08-16T02:47:02.479Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  },
+  "resolution": {
+    "commit": "39c7264a5d233a03c11ea0dcd0fbb26ad17c7307",
+    "resolved_at": "2026-08-16T02:47:02.479Z",
+    "resolved_by": "unknown",
+    "note": "cap_fan_in() + degree_of() added with unit coverage: strongest-incoming-kept, chooser-not-charged, mutual-pair-free, no-op-under-budget, count-not-score. Unwired by design; todo:64569f52 wires it into run()."
+  }
+}

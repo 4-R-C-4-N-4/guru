@@ -1,0 +1,43 @@
+{
+  "id": "6310a495",
+  "type": "bug",
+  "state": "done",
+  "summary": "Fan-in cap drops edges alphabetically, not by parallel strength: the row weight is the receiver's OWN score and is constant across its incoming edges, so 47% of deletions fall to the (source,target) tiebreak",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T12:54:27.147Z",
+  "updated_at": "2026-08-16T12:57:45.728Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "scoring"
+  ],
+  "relationships": {
+    "related": [
+      "38a01171"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-16T12:54:36.303Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "MEASURED. An edge's weight is the PARTNER's score on the via concept (build_panels: grade = score[(via, partner)]). For a chunk RECEIVING edges, the partner is itself -- so every incoming edge carries that chunk's own score, and they tie. Top hub: 1,178 edges, 9 distinct weights, 1,170 tied at -0.994. Capping at 500 therefore keeps an alphabetical slice of 1,170 identical-weight edges. Run-wide: 5,521 of 11,636 dropped edges (47%) tied with a survivor, across 60 chunks where the cutoff lands inside a tie group -- precisely the hubs the cap exists to bound.\n\nFIX: rank a receiver's incoming edges by the ANCHOR's leg, score[(via, anchor)] -- how strongly the suitor expresses the shared concept. That varies per partner, which is exactly what is needed to choose among suitors. Selection becomes per-receiver and independent (each non-mutual edge has exactly one receiver), so it is fully deterministic without relying on global weight order.\n\nNOT min-leg clamping. The prototype flaw the port rejected was min-leg RANKING of a chunk's outgoing panel (it made panels monochrome). Choosing which incoming edges to keep is a different question, and the anchor's leg is the only signal that discriminates there.\n\ncap_fan_in() needs the score map plus the via id per pair; build_edges() collapses both legs into one weight and discards the other. Recover the via from panels rather than adding a key to the exported row shape -- export.py validates that shape.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "9e53590f1d0a0cdfaf34bdf68782d2a0f0cea5b1",
+    "resolved_at": "2026-08-16T12:57:45.728Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_derive_parallels.py",
+    "test_function": "test_cap_fan_in_ranks_suitors_by_their_own_leg_not_alphabetically",
+    "note": "cap_fan_in() now ranks a saturated receiver's suitors by the anchor's leg score[(via, anchor)]. Row weight was the receiver's own score and tied across its incoming edges (top hub: 1,178 edges, 9 distinct weights), so selection had degenerated to the id tiebreak for 47% of deletions. Measured: swaps 3,421 of 44,330 edges; kept-vs-dropped median anchor leg -5.97/-5.91 (noise) before, -5.77/-7.07 after. Also pinned input-order independence."
+  }
+}

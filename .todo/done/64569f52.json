@@ -1,0 +1,29 @@
+{
+  "id": "64569f52",
+  "type": "chore",
+  "state": "done",
+  "summary": "Wire the cap into run() behind config[panels].max_fan_in with load-time validation; restore build_edges() to a pure shape conversion (needs cap_fan_in from 6acd96ba)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:26.620Z",
+  "updated_at": "2026-08-16T02:48:32.806Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  },
+  "resolution": {
+    "commit": "7f620f0ca40e9c39b5b0a3ba27b029e8698abb39",
+    "resolved_at": "2026-08-16T02:48:32.806Z",
+    "resolved_by": "unknown",
+    "note": "resolve_max_fan_in() + run() wiring; build_edges() left pure. Cap off until todo:509174c8 sets the value. Verified inert: full re-derive still 50,148 rows / 5,054 chunks. Tests: absent-key, value read, and SystemExit on 0/-1."
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "bd00679b",
+  "type": "bug",
+  "state": "done",
+  "summary": "Make cap selection per_work_cap-aware so a saturated hub's kept partners do not monoculture on one work (v55: boehme.062 kept 50 of 100 from plotinus-select-works-index)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:35.735Z",
+  "updated_at": "2026-08-16T02:56:45.163Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-16T02:55:59.464Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "SPEC MISDIAGNOSES THE CAUSE. The ticket says the cap 'bakes' single-work monoculture into the export and asks for per_work_cap-aware cap selection. Measured over v55, the concentration is PRE-EXISTING in the uncapped edge set and the cap does not create it.\n\nEVIDENCE. Top-work share among the 378 chunks with degree>=20, uncapped vs capped at 500: mean 0.315 -> 0.333, and the worst offenders are byte-identical in both. christian_mysticism.dionysius-divine-names-2.001 has 189 of 205 partners (92%) from plotinus-select-works-index in BOTH runs -- at degree 205 it never reaches the 500 cap, so cap selection never touches it. The original observation (boehme.062 keeping 50 of 100 from plotinus) was made at max_fan_in=100, where the cap deletes 57% of the graph; at that setting nearly every hub is pinned to the cap and the selection does dominate. At the shipped 500 it does not.\n\nWHY per_work_cap NEVER COVERED THIS. per_work_cap bounds a chunk's OUTGOING panel per source work. Incoming fan-in has no per-work bound at all and never did -- many chunks of one prolific work can each independently pick the same target. That is a real gap, but it is orthogonal to the degree cap and predates it.\n\nA PER-WORK FAN-IN BOUND IS NOT WORTH IT. Swept (edges kept / chunks darkened / mean top-work share, from 50,148 / 0 / 0.315):\n  50 -> 42,320 / 57 / 0.296     25 -> 34,672 / 238 / 0.272\n  10 -> 23,957 / 730 / 0.192     5 -> 16,733 / 1,305 / 0.118\nBuying a meaningful concentration drop costs coverage at the rate the score floor did. And the concentration is largely genuine structure, not noise: Dionysius IS Neoplatonic, and Boehme's affinity with the Hermetic compendia is real. Thinning it would delete true parallels to flatten a histogram.\n\nRESOLUTION: no change to cap selection. Keep the cap weight-only and deliberate about it. Record the measurement in node 16 so this is not rediscovered and 'fixed' destructively, and pin the claim with a regression test that a chunk under budget keeps every partner regardless of their work distribution. If a per-work fan-in bound is ever wanted it belongs in build_panels()/selection, not in the degree cap, and needs its own ticket and its own evidence.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "a376867ac083e57331cb8c585cd20a04e3759de6",
+    "resolved_at": "2026-08-16T02:56:45.163Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_derive_parallels.py",
+    "test_function": "test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched",
+    "note": "Spec misdiagnosed the cause (see analysis [0]): concentration is pre-existing, not cap-induced -- worst offenders byte-identical uncapped vs capped, mean top-work share 0.315 -> 0.333. Resolved as no-change-to-selection plus a documented measurement and a regression test pinning weight-only capping."
+  }
+}

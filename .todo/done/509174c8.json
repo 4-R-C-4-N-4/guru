@@ -1,0 +1,30 @@
+{
+  "id": "509174c8",
+  "type": "chore",
+  "state": "done",
+  "summary": "Set max_fan_in from the measured sweep (500) and record the curve plus the 83%-of-edges-touch-a-hub arithmetic in node 16 Failure modes",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:26.705Z",
+  "updated_at": "2026-08-16T02:51:30.398Z",
+  "files": [
+    {
+      "path": "config/derived_parallels.toml"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "docs"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  },
+  "resolution": {
+    "commit": "5a0f7c94c63e23d24f353691445ed3c5a4c2af0d",
+    "resolved_at": "2026-08-16T02:51:30.398Z",
+    "resolved_by": "unknown",
+    "note": "max_fan_in = 500, chosen from a sweep over the v55 cache (darkening starts below 400; uncapped p99 degree 315). Verified re-derive: 44,330 rows, 5,818 dropped, 2,604 reduced, 0 darkened. Sweep table beside the knob; node 16 Failure modes carries the hub arithmetic and the both-endpoints post-mortem."
+  }
+}

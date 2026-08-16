@@ -252,7 +252,16 @@ Output goes to a staging table, not directly into the live graph. This turns hum
 
 #### 4.6.2 Cross-Tradition Edge Proposals
 
-For PARALLELS and CONTRASTS edges, the system runs targeted comparison passes:
+> **Superseded 2026-08 (todo:c3f479ff).** The LLM pair-classification pass
+> described below — "Pass C" — was retired. PARALLELS are now *derived* from
+> EXPRESSES tags plus a thin cross-encoder, with no LLM call and no review
+> queue; CONTRASTS were frozen at their reviewed set. The authoritative
+> description of what runs today, including the selection methodology and the
+> measured evidence behind every threshold, is
+> [`ingest/16-derive-parallels.md`](ingest/16-derive-parallels.md). The passage
+> below is kept as the original design rationale.
+
+For PARALLELS and CONTRASTS edges, the system ran targeted comparison passes:
 
 1. Vector search identifies chunk pairs across traditions with high embedding similarity.
 2. An LLM classifies each pair into one of: `parallel` (same concept, different vocabulary), `contrast` (same domain, divergent claims), `surface_only` (lexical similarity without conceptual overlap), or `unrelated`.
@@ -445,8 +454,8 @@ The concept graph is Guru's core differentiator. Rather than relying purely on e
 | Edge Type | From → To | Meaning |
 |-----------|-----------|---------|
 | `EXPRESSES` | Chunk → Concept | This chunk discusses this concept |
-| `PARALLELS` | Concept → Concept | These concepts are structurally or thematically analogous |
-| `CONTRASTS` | Concept → Concept | These concepts address the same domain but diverge |
+| `PARALLELS` | **Chunk → Chunk** | These passages express a shared concept across traditions. Derived, not authored — see the note below |
+| `CONTRASTS` | Chunk → Chunk | These passages address the same domain but diverge |
 | `DERIVES_FROM` | Concept → Concept | Historical influence or textual dependency |
 | `BELONGS_TO` | Chunk → Tradition | Provenance |
 
@@ -532,6 +541,18 @@ The hybrid approach means a query like "what traditions describe a hierarchy of 
 
 - **Vector path:** chunks containing words like "emanation," "hierarchy," "divine beings"
 - **Graph path:** the `emanation_hierarchy` concept node → PARALLELS → `sefirot`, `aeons`, `hypostases` → EXPRESSES → chunks from Kabbalah, Gnosticism, Neoplatonism that may use completely different vocabulary
+
+> **This graph path does not exist as drawn, and the discrepancy has misled
+> readers more than once.** `PARALLELS` endpoints are **chunk** ids, so they
+> can never match a concept node id and cannot expand concepts the way step 2
+> above describes. The concept↔concept reachability query does include
+> `type IN ('PARALLELS','DERIVES_FROM')`, which is precisely what makes the
+> mistake easy — but `PARALLELS` never matches there and `DERIVES_FROM` does
+> not exist in the corpus. With the retrieval toggles at their defaults, edges
+> **do not enter retrieval at all**. See
+> [`edges/evaluation-tooling.md`](edges/evaluation-tooling.md) for the toggle
+> inventory and todo:69682961 for the open question of whether the derived
+> chunk↔chunk panel should feed retrieval. Kept as the original design intent.
 
 ### 6.3 Re-ranking
 

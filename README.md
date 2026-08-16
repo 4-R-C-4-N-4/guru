@@ -165,6 +165,15 @@ Keys: **a** accept → promotes to live EXPRESSES edge | **r** reject | **s** sk
 
 ### `python scripts/review_edges.py` — Cross-tradition edge review
 
+> **Pass C is retired (2026-08-13, todo:c3f479ff).** PARALLELS are now derived,
+> not proposed and reviewed: `scripts/derive_parallels.py` grades chunks against
+> their applied EXPRESSES concepts with a thin cross-encoder and ranks each
+> chunk's cross-tradition partners off those grades — no LLM call and no review
+> queue. See [`docs/ingest/16-derive-parallels.md`](docs/ingest/16-derive-parallels.md)
+> for the mechanism and its selection methodology. This reviewer still serves
+> the frozen CONTRASTS set and the `staged_edges` backlog; it no longer
+> produces the corpus's PARALLELS supply.
+
 Reviews LLM-proposed cross-tradition relationships from `staged_edges`.
 Accepted edges are promoted to the live `edges` table in `guru.db`.
 
