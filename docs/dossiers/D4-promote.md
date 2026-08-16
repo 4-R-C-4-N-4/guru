@@ -34,9 +34,9 @@ span has an accepted structure entry.
 ## Why this node has no apply gate
 
 This node writes live tables directly. Everywhere else in the project that is
-the user's action and never a driver's — `staged_tags` and `staged_edges` are
-queued through the guru-review web app's HTTP API and drained by the user, and
-`auto_promote` is never run on their behalf at any confidence tier.
+the user's action and never a driver's — `staged_tags` are queued through the
+guru-review web app's HTTP API and drained by the user, and `auto_promote` is
+never run on their behalf at any confidence tier.
 
 Pass D sidesteps that on purpose. The standing preference is for DB writes to
 sit behind an API with a queue-then-apply split; this stream is a deliberate

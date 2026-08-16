@@ -15,6 +15,14 @@ confidence = "the proposing model's confidence"
 justification = "the proposing model's stated reason"
 ---
 
+> **RETIRED 2026-08-13.** Node 14 (edge review) is retired with the rest of
+> Pass C — there are no new `staged_edges` proposals to judge. Cross-tradition
+> PARALLELS are now derived at node 16 (see
+> [`../../docs/ingest/16-derive-parallels.md`](../../docs/ingest/16-derive-parallels.md)),
+> which ranks strictly off applied EXPRESSES tags (any tier) and needs no review
+> queue. This contract is kept for the historical `staged_edges` queue only.
+> Decision record: todo:c3f479ff.
+
 ## System
 
 You judge one proposed cross-tradition edge. The bar is a **shared conceptual

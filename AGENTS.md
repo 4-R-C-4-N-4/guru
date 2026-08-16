@@ -30,11 +30,13 @@ python3 -m guru ingest status <source-id>    # the gate re-checks; the node adva
 of the corpus rather than the state of anyone's memory. `--json` for machine
 consumption.
 
-Fifteen nodes, one workbook file each, in [`docs/ingest/`](docs/ingest/). Read
-the node file the CLI names before acting — the **Failure modes** section of
-each is the part that is not reconstructible from the scripts.
+Sixteen node files in [`docs/ingest/`](docs/ingest/) — fourteen live, two
+retired (13 propose-edges and 14 edge-review, Pass C; replaced by 16
+derive-parallels). Read the node file the CLI names before acting — the
+**Failure modes** section of each is the part that is not reconstructible from
+the scripts.
 
-Six of the nodes are judgement calls rather than commands. Each has a contract
+Five of the nodes are judgement calls rather than commands. Each has a contract
 in [`prompts/ingest/`](prompts/ingest/) specifying its inputs, output JSON
 schema, and decision rubric, executable either way:
 
@@ -84,8 +86,10 @@ Never delete them to clear the report.
 
 **Never apply your own proposals.** Every LLM proposal in the ingest stream
 lands in a `staged_*` table with `status='pending'`. You may queue accept /
-reject / reassign / reclassify decisions. Promotion to the live graph is the
-user's. Never call the review app's `/api/apply`.
+reject / reassign / reclassify decisions (`reassign`/`reassign_to` retargets a
+concept tag; `reclassify`/`reclassify_to` retargets an edge type, or flags a
+cleanup as apparatus). Promotion to the live graph is the user's. Never
+call the review app's `/api/apply`.
 
 There is no unattended promotion path and there is not meant to be one.
 `auto_promote.py` was deleted (todo:68028d8f) rather than left deprecated,
@@ -104,10 +108,12 @@ that stream is driven end to end by an agent with the expertise to own it. Do
 not add an apply gate there and do not flag its absence as a defect — but do
 run `--dry-run` first, since it is the only checkpoint that node has.
 
-**Never queue a verdict you did not earn.** Every accept and reject at nodes 11
-and 14 must come from having read the chunk body. Sampling and extrapolating
-across a batch is not review; it produces an audit trail that cannot be
-distinguished from one that was.
+**Never queue a verdict you did not earn.** Every accept and reject at node 11
+must come from having read the chunk body. Sampling and extrapolating across a
+batch is not review; it produces an audit trail that cannot be distinguished
+from one that was. (Node 14, the edge-review gate, is retired — Pass C is gone,
+and cross-tradition PARALLELS are now derived at node 16 from applied tags,
+with no review queue of their own.)
 
 **Never publish.** No `scripts/sync_corpus.sh`, no ssh to the production VPS —
 including under an instruction as broad as "run the whole thing". Stop at the
