@@ -531,9 +531,10 @@ def cap_report(rows_raw: list[dict], rows: list[dict]) -> tuple[int, int, int]:
 def cap_fan_in(
     rows: list[dict], max_fan_in: int,
     panels: dict[str, list[tuple[str, str, float]]],
+    score: dict[tuple[str, str], float],
 ) -> list[dict]:
     """Cap how many OTHER chunks' panels may list a given chunk as a partner,
-    keeping that chunk's highest-weight INCOMING edges and dropping the rest.
+    keeping the strongest PARALLELS and dropping the weakest.
 
     Removing the score floor (todo:ac63de1a) means a (concept, chunk) pair is
     never excluded for scoring low, only ranked — so nothing upstream bounds a
@@ -562,25 +563,60 @@ def cap_fan_in(
     choosing a saturated partner still loses you that edge. The bound it does
     give is per-chunk total degree <= |own panel| + max_fan_in.
 
-    `rows` must already be sorted weight-desc (build_edges() does this) so
-    each chunk keeps its strongest incoming edges.
+    WHICH edges a saturated chunk keeps is ranked by the ANCHOR's leg —
+    score[(via, anchor)], how strongly the suitor itself expresses the shared
+    concept — not by the row weight (todo:6310a495). The row weight is the
+    PARTNER's score on the via, so for a chunk receiving edges it is that
+    chunk's OWN score, identical across every edge pointing at it: the top v55
+    hub carried 1,178 incoming edges with 9 distinct weights, 1,170 of them
+    tied at -0.994. Ranking by that meant "keep the strongest 500" fell
+    through to the (source, target) tiebreak and kept an alphabetical slice —
+    47% of all deletions were of edges tied with a survivor. The anchor's leg
+    is the only signal that varies across a receiver's suitors, so it is the
+    only one that can order them.
+
+    This is NOT the min-leg clamping the port rejected. That flaw was min-leg
+    RANKING of a chunk's outgoing panel, which made panels monochrome; the row
+    weight is deliberately still the partner's own score. Choosing among a
+    saturated chunk's incoming edges is a different question with a different
+    answer.
+
+    Selection is per-receiver and independent — every non-mutual edge has
+    exactly one receiver — so the result does not depend on the order `rows`
+    arrives in. Input order is preserved in the output.
     """
-    picked = {ch: {p for p, _, _ in ps} for ch, ps in panels.items()}
-    fan_in: dict[str, int] = {}
-    kept: list[dict] = []
+    # chunk -> {partner: via} for the partners it chose. The via is needed to
+    # look the anchor's own leg back up in `score`.
+    picked = {ch: {p: via for p, via, _ in ps} for ch, ps in panels.items()}
+
+    keep: set[tuple[str, str]] = set()
+    incoming: dict[str, list[tuple[tuple[str, str], str, str]]] = {}
     for row in rows:
         a, b = row["source"], row["target"]
-        a_picked_b = b in picked.get(a, ())
-        b_picked_a = a in picked.get(b, ())
-        if a_picked_b and b_picked_a:
-            kept.append(row)
+        key = (a, b)
+        via_ab = picked.get(a, {}).get(b)   # a chose b
+        via_ba = picked.get(b, {}).get(a)   # b chose a
+        if via_ab is not None and via_ba is not None:
+            keep.add(key)                   # mutual: outgoing for both
             continue
-        receiver = b if a_picked_b else a
-        if fan_in.get(receiver, 0) >= max_fan_in:
-            continue
-        fan_in[receiver] = fan_in.get(receiver, 0) + 1
-        kept.append(row)
-    return kept
+        anchor, receiver, via = ((a, b, via_ab) if via_ab is not None
+                                 else (b, a, via_ba))
+        incoming.setdefault(receiver, []).append((key, anchor, via))
+
+    for receiver, items in incoming.items():
+        if len(items) > max_fan_in:
+            # Strongest suitor first. Ties fall back to the receiver's own leg
+            # and then to ids, so the result is total and reproducible even
+            # when two anchors score identically on the same concept.
+            items.sort(key=lambda it: (
+                -score.get((it[2], it[1]), float("-inf")),
+                -score.get((it[2], receiver), float("-inf")),
+                it[0],
+            ))
+            items = items[:max_fan_in]
+        keep.update(key for key, _, _ in items)
+
+    return [r for r in rows if (r["source"], r["target"]) in keep]
 
 
 # ── main ──────────────────────────────────────────────────────────────────
@@ -640,7 +676,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     panels = build_panels(bychunk, ranked, score, trad_of, work_of_chunk,
                           top_k, per_work_cap)
     rows_raw = build_edges(panels, defs)
-    rows = cap_fan_in(rows_raw, max_fan_in, panels) if max_fan_in is not None else rows_raw
+    rows = cap_fan_in(rows_raw, max_fan_in, panels, score) if max_fan_in is not None else rows_raw
 
     # Report what the cap DID, per chunk -- not merely how many chunks sat
     # over budget. Those two numbers come apart badly: at max_fan_in=100 over

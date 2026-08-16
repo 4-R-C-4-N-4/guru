@@ -89,7 +89,8 @@ monoculture a panel, and capped per source work (`config[panels].per_work_cap`,
 default 2) so one prolific text doesn't fill every partner slot. How many
 *other* panels may then list a chunk as a partner — its incoming fan-in, which
 none of the above bounds — is separately capped at `config[panels].max_fan_in`
-(default 500), keeping that chunk's highest-weight incoming edges; see the
+(default 500), keeping the suitors that express the shared concept most
+strongly; see the
 fan-in note in Failure modes.
 
 ## Output
@@ -210,10 +211,25 @@ todo:bc084b37) hid this from the UI but did not fix it: the exported
 reading the export directly got it.
 
 `cap_fan_in()`, applied by `run()` after `build_edges()`, bounds this in the
-generated graph itself. It processes edges weight-descending and charges each
-one only to the chunk *receiving* it — the endpoint that did not anchor the
-panel — so a chunk keeps its strongest incoming partners and the weakest
-excess is dropped.
+generated graph itself. It charges each edge only to the chunk *receiving* it —
+the endpoint that did not anchor the panel — and, when a receiver is over
+budget, keeps the suitors whose *own* leg on the shared concept is strongest.
+
+**Rank by the anchor's leg, never by the row weight (todo:6310a495).** This is
+the subtle part and the first implementation got it wrong. An edge's weight is
+the *partner's* score on the via concept — so for a chunk receiving edges, it
+is that chunk's **own** score, identical across every edge pointing at it. The
+top v55 hub carried 1,178 incoming edges with **9 distinct weights, 1,170 of
+them tied at −0.994**. Ranking by weight therefore fell straight through to the
+`(source, target)` tiebreak and kept an alphabetical slice; 47% of all
+deletions were of edges tied with a survivor. The measurable signature was that
+kept and dropped edges had indistinguishable parallel strength (median anchor
+leg −5.97 vs −5.91 — the selection was noise). Ranking by the anchor's leg
+separates them properly: **−5.77 kept vs −7.07 dropped**, swapping 3,421 of
+44,330 edges. This is *not* the min-leg clamping the port rejected — that was
+about ranking a chunk's *outgoing* panel, where the partner's score is
+correctly the signal. Choosing among a saturated chunk's *incoming* edges is a
+different question, and the anchor's leg is the only leg that varies.
 
 **The asymmetry is load-bearing, and the first cut got it wrong.** That
 version charged *both* endpoints and skipped an edge when either was full,

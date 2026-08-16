@@ -93,7 +93,12 @@ per_work_cap = 2
 #
 # cap_fan_in() in scripts/derive_parallels.py enforces it, applied by run()
 # rather than build_edges() so the before/after degree distribution can be
-# reported. Only the RECEIVING leg is charged: an edge dies only when the
+# reported. When a chunk is over budget, the suitors it KEEPS are ranked by
+# their own leg on the shared concept — not by the edge weight, which is the
+# receiving chunk's own score and therefore identical across all of its
+# incoming edges (the top v55 hub had 1,178 incoming edges and 9 distinct
+# weights). Ranking by weight silently degenerates to alphabetical order; see
+# todo:6310a495. Only the RECEIVING leg is charged: an edge dies only when the
 # chunk it points AT is over budget, never because the chunk that CHOSE it
 # had already accumulated edges elsewhere. A mutual pair (both endpoints
 # picked each other) is outgoing for both and always kept. Do not "simplify"

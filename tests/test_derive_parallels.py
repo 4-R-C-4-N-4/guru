@@ -428,6 +428,13 @@ def test_score_needed_pairs_fully_cached_skips_model_and_flush(monkeypatch, tmp_
 
 # ── fan-in cap (todo:6acd96ba) ──────────────────────────────────────────────
 
+def _score_from(panels, anchor_leg=0.0):
+    """Fixture helper: a score map where every anchor scores `anchor_leg` on
+    the via it used. Uniform by default, so ties fall to the id tiebreak and
+    these tests keep asserting the pre-existing weight-order behaviour."""
+    return {(via, ch): anchor_leg for ch, ps in panels.items() for _, via, _ in ps}
+
+
 def _rows(*triples):
     """(source, target, weight) -> edge rows in build_edges() output order."""
     rows = [{"source": s, "target": t, "weight": w} for s, t, w in triples]
@@ -444,7 +451,7 @@ def test_cap_fan_in_keeps_a_chunks_strongest_incoming_edges():
               for p, w in [(p1, 9.0), (p2, 7.0), (p3, 5.0), (p4, 3.0)]}
     rows = _rows((hub, p1, 9.0), (hub, p2, 7.0), (hub, p3, 5.0), (hub, p4, 3.0))
 
-    kept = cap_fan_in(rows, max_fan_in=2, panels=panels)
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=2, panels=panels)
     assert [r["target"] for r in kept] == [p1, p2]
 
 
@@ -459,7 +466,7 @@ def test_cap_fan_in_does_not_charge_the_chunk_that_chose():
     panels = {anchor: [(p, "concept.x", 9.0 - i) for i, p in enumerate(partners)]}
     rows = _rows(*[(anchor, p, 9.0 - i) for i, p in enumerate(partners)])
 
-    kept = cap_fan_in(rows, max_fan_in=2, panels=panels)
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=2, panels=panels)
     assert kept == rows           # anchor's degree is 6, well over max_fan_in
     assert len({r["target"] for r in kept}) == 6
 
@@ -476,7 +483,7 @@ def test_cap_fan_in_keeps_mutual_pairs_and_charges_neither():
     }
     rows = _rows((a, other, 9.0), (a, b, 5.0))
 
-    kept = cap_fan_in(rows, max_fan_in=1, panels=panels)
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=1, panels=panels)
     # `other`'s incoming edge spends a's whole budget of 1, and the mutual
     # a<->b pair still ships on top of it.
     assert len(kept) == 2
@@ -485,7 +492,7 @@ def test_cap_fan_in_keeps_mutual_pairs_and_charges_neither():
 def test_cap_fan_in_no_op_under_budget():
     panels = {"a": [("b", "concept.x", 1.0)]}
     rows = _rows(("a", "b", 1.0))
-    assert cap_fan_in(rows, max_fan_in=100, panels=panels) == rows
+    assert cap_fan_in(rows, score=_score_from(panels), max_fan_in=100, panels=panels) == rows
 
 
 def test_cap_fan_in_bounds_count_not_score():
@@ -495,7 +502,7 @@ def test_cap_fan_in_bounds_count_not_score():
     weak = "trad_b.weak.001"
     panels = {weak: [(hub, "concept.x", -9.9)]}
     rows = _rows((hub, weak, -9.9))
-    assert cap_fan_in(rows, max_fan_in=1, panels=panels) == rows
+    assert cap_fan_in(rows, score=_score_from(panels), max_fan_in=1, panels=panels) == rows
 
 
 def test_degree_of_counts_both_endpoints():
@@ -552,8 +559,11 @@ def test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk():
         loser: [(hub, "concept.x", 1.0)],
     }
     rows = _rows((hub, winner, 9.0), (hub, loser, 1.0))
+    # `winner` is the stronger PARALLEL: it expresses concept.x far better
+    # than `loser` does, which is the leg the cap ranks on.
+    score = {("concept.x", winner): 4.0, ("concept.x", loser): -6.0}
 
-    kept = cap_fan_in(rows, max_fan_in=1, panels=panels)
+    kept = cap_fan_in(rows, score=score, max_fan_in=1, panels=panels)
 
     chunks_with_partners = sum(1 for p in panels.values() if p)
     chunks_in_export = len(degree_of(kept))
@@ -618,7 +628,7 @@ def test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched():
     panels = {p: [(hub, "concept.x", 9.0 - i)] for i, p in enumerate(partners)}
     rows = _rows(*[(hub, p, 9.0 - i) for i, p in enumerate(partners)])
 
-    kept = cap_fan_in(rows, max_fan_in=100, panels=panels)
+    kept = cap_fan_in(rows, score=_score_from(panels), max_fan_in=100, panels=panels)
     assert kept == rows
     assert len(degree_of(kept)) == len(partners) + 1
 
@@ -657,3 +667,47 @@ def test_build_panels_can_overshoot_two_times_top_k():
         top_k=2, per_work_cap=10,
     )
     assert len(panels[anchor]) == 6       # not <= 4
+
+
+# ── the cap ranks by parallel strength, not id order (todo:6310a495) ────────
+
+def test_cap_fan_in_ranks_suitors_by_their_own_leg_not_alphabetically():
+    """The defect: every edge pointing AT a chunk carries that chunk's own
+    score on the via, so all its incoming weights are identical and "keep the
+    strongest" used to fall through to the (source, target) tiebreak. The
+    suitors are ordered by THEIR leg -- how strongly each expresses the shared
+    concept -- so the alphabetically-first suitor loses to a stronger one."""
+    hub = "trad_a.hub.001"
+    # `aaa` sorts first and is the WEAKEST parallel; `zzz` sorts last and is
+    # the strongest. Every row carries the hub's own score, so all weights tie.
+    aaa, mid, zzz = "trad_b.aaa.001", "trad_b.mid.001", "trad_b.zzz.001"
+    panels = {c: [(hub, "concept.x", -0.994)] for c in (aaa, mid, zzz)}
+    rows = _rows((hub, aaa, -0.994), (hub, mid, -0.994), (hub, zzz, -0.994))
+    score = {
+        ("concept.x", aaa): -8.0,
+        ("concept.x", mid): -1.0,
+        ("concept.x", zzz): 2.5,
+        ("concept.x", hub): -0.994,
+    }
+
+    kept = cap_fan_in(rows, score=score, max_fan_in=2, panels=panels)
+    survivors = {r["target"] for r in kept}
+    assert survivors == {zzz, mid}    # not {aaa, mid}, which id order gives
+    assert aaa not in survivors
+
+
+def test_cap_fan_in_is_independent_of_input_row_order():
+    """Selection is per-receiver, so shuffling the input cannot change the
+    outcome -- the old implementation depended on global weight ordering."""
+    hub = "trad_a.hub.001"
+    suitors = [f"trad_b.s{i}.001" for i in range(5)]
+    panels = {c: [(hub, "concept.x", -1.0)] for c in suitors}
+    rows = _rows(*[(hub, c, -1.0) for c in suitors])
+    score = {("concept.x", c): float(i) for i, c in enumerate(suitors)}
+    score[("concept.x", hub)] = -1.0
+
+    forward = cap_fan_in(rows, score=score, max_fan_in=3, panels=panels)
+    backward = cap_fan_in(list(reversed(rows)), score=score, max_fan_in=3,
+                          panels=panels)
+    assert {r["target"] for r in forward} == {r["target"] for r in backward}
+    assert {r["target"] for r in forward} == set(suitors[2:])   # top 3 legs
