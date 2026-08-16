@@ -247,6 +247,27 @@ charged to neither — the real per-chunk bound is `|own panel| + max_fan_in`,
 not `max_fan_in` — and the cap cannot promise a chunk keeps every partner it
 picked, since every edge is incoming for *somebody*.
 
+**Panel work-concentration is upstream of the cap, and mostly real
+(todo:bd00679b).** A chunk's partners can cluster heavily in one source work:
+`christian_mysticism.dionysius-divine-names-2.001` draws 189 of its 205
+partners (92%) from `plotinus-select-works-index`. This is tempting to blame
+on the fan-in cap and it is not the cap's doing — those figures are identical
+in the uncapped run, and at degree 205 that chunk never reaches the 500 cap at
+all. Across the 378 chunks with degree ≥ 20, mean top-work share moves only
+0.315 → 0.333 under capping. `per_work_cap` bounds a chunk's *outgoing* panel
+per work; incoming fan-in has never had a per-work bound, independently of any
+degree cap.
+
+Do not "fix" this by making the cap work-aware. Swept as a per-work fan-in
+bound (edges kept / chunks darkened / mean top-work share, from 50,148 / 0 /
+0.315): 50 → 42,320 / 57 / 0.296; 25 → 34,672 / 238 / 0.272; 10 → 23,957 /
+730 / 0.192. Meaningful flattening costs coverage at the rate the score floor
+did, and much of the concentration is genuine structure rather than noise —
+Dionysius really is Neoplatonic. The cap therefore ranks on weight alone, and
+`test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched` pins that.
+If a per-work fan-in bound is ever wanted it belongs in selection
+(`build_panels()`), not in the degree cap.
+
 **Concept namespace mismatch: `concept.<id>` vs bare taxonomy keys.**
 `concepts/taxonomy.toml` keys are bare (`emanation_hierarchy`); every graph
 identity — `EXPRESSES` edge targets, `nodes.id` — is namespaced

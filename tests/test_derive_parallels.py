@@ -598,3 +598,26 @@ def test_build_edges_still_emits_one_row_per_unordered_pair():
     assert [(r["source"], r["target"]) for r in rows] == [
         ("trad_a.a.001", "trad_b.b.001")
     ]
+
+
+# ── the cap does not reshape work distribution (todo:bd00679b) ──────────────
+
+def test_cap_fan_in_leaves_a_chunk_under_budget_completely_untouched():
+    """The cap selects on weight alone and never on source work, by design.
+    A hub under its fan-in budget keeps every partner even when they are a
+    single-work monoculture -- so concentration observed in the export is a
+    property of selection upstream, not something capping introduced. Pinning
+    this stops a future 'fix' from making the degree cap work-aware, which
+    measured out at 730 darkened chunks for a mean concentration drop of
+    0.315 -> 0.192 (see the ticket's analysis entry)."""
+    hub = "trad_a.hub.001"
+    # Nine partners, eight of them from the same work.
+    mono = [f"trad_b.same-work.{i:03d}" for i in range(8)]
+    other = "trad_b.other-work.001"
+    partners = mono + [other]
+    panels = {p: [(hub, "concept.x", 9.0 - i)] for i, p in enumerate(partners)}
+    rows = _rows(*[(hub, p, 9.0 - i) for i, p in enumerate(partners)])
+
+    kept = cap_fan_in(rows, max_fan_in=100, panels=panels)
+    assert kept == rows
+    assert len(degree_of(kept)) == len(partners) + 1
