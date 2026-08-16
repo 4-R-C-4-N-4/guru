@@ -510,19 +510,24 @@ def degree_of(rows: list[dict]) -> dict[str, int]:
     return degree
 
 
-def cap_report(rows_raw: list[dict], rows: list[dict]) -> tuple[int, int, int]:
-    """(edges_dropped, chunks_reduced, chunks_darkened) for a capping pass.
+def cap_report(
+    deg_before: dict[str, int], deg_after: dict[str, int],
+) -> tuple[int, int]:
+    """(chunks_reduced, chunks_darkened) for a capping pass.
 
     chunks_reduced counts chunks that lost at least one edge; chunks_darkened
     counts those left with none at all. Deliberately NOT "chunks over the cap":
     those two diverge by more than an order of magnitude in practice (at
-    max_fan_in=100 over v55, 129 chunks were over cap while 4,652 lost edges
-    and 353 lost all of them), and the over-cap number is the one that makes a
+    max_fan_in=100 over v55, 129 chunks were over cap while 4,761 lost edges
+    and 348 lost all of them), and the over-cap number is the one that makes a
     graph-halving run look routine.
+
+    Takes degree maps rather than row lists so run() can build each of them
+    once — it needs deg_before for the raw max degree and deg_after for
+    chunks_in_export anyway, and rebuilding them here made four O(n) passes
+    over ~50k rows where two do.
     """
-    deg_before, deg_after = degree_of(rows_raw), degree_of(rows)
     return (
-        len(rows_raw) - len(rows),
         sum(1 for ch, d in deg_before.items() if deg_after.get(ch, 0) < d),
         sum(1 for ch in deg_before if deg_after.get(ch, 0) == 0),
     )
@@ -680,13 +685,14 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
 
     # Report what the cap DID, per chunk -- not merely how many chunks sat
     # over budget. Those two numbers come apart badly: at max_fan_in=100 over
-    # v55, 129 chunks were over cap while 4,531 chunks actually lost edges and
-    # 353 lost every edge they had. The operator gate for this node is an
+    # v55, 129 chunks were over cap while 4,761 chunks actually lost edges and
+    # 348 lost every edge they had. The operator gate for this node is an
     # eyeball of the line below (docs/ingest/16-derive-parallels.md), so it has
     # to name the blast radius rather than the intent, or a run that halves the
     # graph reads as a routine tail trim.
-    deg_before = degree_of(rows_raw)
-    edges_dropped, chunks_reduced, chunks_darkened = cap_report(rows_raw, rows)
+    deg_before, deg_after = degree_of(rows_raw), degree_of(rows)
+    edges_dropped = len(rows_raw) - len(rows)
+    chunks_reduced, chunks_darkened = cap_report(deg_before, deg_after)
     if edges_dropped:
         print(f"fan-in cap ({max_fan_in}): dropped {edges_dropped} weakest incoming "
               f"edges (raw max degree {max(deg_before.values())}); {chunks_reduced} "
@@ -701,11 +707,23 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     # overloaded key. chunks_with_partners is a SELECTION statistic, counted
     # from panels before the cap runs: a low value means chunks went untagged
     # or unscored, which is how node 16's gate reads it. chunks_in_export is
-    # what actually shipped. They diverge exactly when the cap darkens
-    # something -- at max_fan_in=100 the first says 5,054 while 353 of those
-    # chunks have no edge in edges_derived.jsonl at all.
+    # what actually shipped.
+    #
+    # They can differ in BOTH directions, and only one direction is the cap's
+    # doing, so do not report the gap as a cap effect:
+    #   fewer in export  -- a chunk had a panel and lost every edge. That is
+    #                       cap-caused, and chunks_darkened above measures it
+    #                       directly (it is defined off deg_before/deg_after,
+    #                       not off this comparison).
+    #   more in export   -- a chunk with an EMPTY panel was picked as someone
+    #                       else's partner. Nothing here rules that out; it is
+    #                       a selection-shape property, unrelated to the cap,
+    #                       and it would still be possible with the cap off.
+    # It does not arise on the current corpus (both read 5,054 with the cap
+    # disabled), but the invariant is not enforced anywhere, so the run line
+    # below states the two counts and lets chunks_darkened carry the blame.
     chunks_with_partners = sum(1 for p in panels.values() if p)
-    chunks_in_export = len(degree_of(rows))
+    chunks_in_export = len(deg_after)
     summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "db": str(db_path),
@@ -732,7 +750,7 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         json.dump(summary, f, indent=2)
 
     shipped = ("" if chunks_in_export == chunks_with_partners
-               else f" ({chunks_in_export} of them survive the cap into the export)")
+               else f" ({chunks_in_export} appear in the export)")
     print(f"wrote {out_dir}: {len(rows)} unique PARALLELS rows, "
           f"{chunks_with_partners}/{len(bychunk)} chunks have partners{shipped} "
           f"({elapsed:.1f}s scoring)")

@@ -535,13 +535,13 @@ def test_cap_report_counts_reduced_and_darkened_not_over_cap():
     (darkened). A chunks-over-cap count would report 1 here and hide both."""
     raw = _rows(("a", "b", 9.0), ("a", "c", 1.0))
     kept = _rows(("a", "b", 9.0))
-    dropped, reduced, darkened = cap_report(raw, kept)
-    assert (dropped, reduced, darkened) == (1, 2, 1)   # a and c reduced; c dark
+    reduced, darkened = cap_report(degree_of(raw), degree_of(kept))
+    assert (reduced, darkened) == (2, 1)   # a and c reduced; c dark
 
 
 def test_cap_report_all_zero_when_nothing_dropped():
     raw = _rows(("a", "b", 1.0))
-    assert cap_report(raw, raw) == (0, 0, 0)
+    assert cap_report(degree_of(raw), degree_of(raw)) == (0, 0)
 
 
 # ── selection vs export counts (todo:8c7abf05) ──────────────────────────────
@@ -570,7 +570,7 @@ def test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk():
     assert chunks_with_partners == 2          # both chose a partner...
     assert chunks_in_export == 2              # ...hub + winner ship
     assert loser not in degree_of(kept)       # ...but loser shipped nothing
-    assert cap_report(rows, kept)[2] == 1     # and is reported as darkened
+    assert cap_report(degree_of(rows), degree_of(kept))[1] == 1   # darkened
 
 
 # ── pair weight is direction-independent (todo:38385429) ────────────────────

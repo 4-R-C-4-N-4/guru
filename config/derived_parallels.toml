@@ -107,25 +107,23 @@ per_work_cap = 2
 # v55 edge set and left 367 chunks with no partners at all, 4,531 of the
 # losers never having been over cap themselves.
 #
-# THE VALUE MATTERS MORE THAN THE MECHANISM. Swept over the v55 score cache
-# (edges kept / chunks left with NO partners, against 50,148 and 5,054
-# uncapped):
-#   1000 -> 49,830 / 0     500 -> 44,330 / 0     200 -> 31,120 / 48
-#    750 -> 48,168 / 0     400 -> 41,613 / 0     150 -> 26,769 / 134
-#                          300 -> 37,713 / 3     100 -> 21,476 / 353
-# Darkening a chunk is the hard failure — it drops out of the graph entirely
-# — and it starts below 400. The distribution is why: median chunk degree is
-# 10 but 41,807 of 50,148 edges (83%) touch one of the 129 chunks above 100,
-# so a cap of 100 offers those hubs 12,900 slots for 41,807 hub-bound edges
-# and MUST delete most of the graph. That is arithmetic, not a tuning
-# accident. Uncapped p99 degree is 315, so 500 bites only the genuine
-# outliers (max degree 1,178 -> 516) while keeping 88% of the edges. A value
-# near 100 is not a tail trim; it is a second score floor wearing a degree
-# cap's clothes, and it undoes what todo:ac63de1a just won.
+# THE VALUE MATTERS MORE THAN THE MECHANISM, and 400 is measured, not picked.
+# Darkening a chunk — it drops out of the graph entirely — is the hard
+# failure, and it starts below 400, so 400 is the tightest setting that costs
+# no coverage: 41,613 of 50,148 edges (83%), max degree 1,178 -> 418, against
+# an uncapped p99 degree of 315. A value near 100 is not a tail trim; it is a
+# second score floor wearing a degree cap's clothes (it deletes 57% of the
+# graph), and it undoes what todo:ac63de1a just won.
+#
+# The full sweep — every threshold's edges, darkening, max degree and
+# discrimination, plus the commands to regenerate all of it — lives in
+# docs/ingest/16-derive-parallels.md's Failure modes and "Selection
+# methodology" sections. That is the single source of truth; do not restate
+# the table here. It was duplicated once and the two copies drifted within a
+# day of each other (PR #71 review).
 #
 # If you retighten this, read summary.json's fan_in_cap_chunks_darkened —
-# any nonzero value means chunks fell out of the graph. See
-# docs/ingest/16-derive-parallels.md's Failure modes section ("fan-in").
+# any nonzero value means chunks fell out of the graph.
 max_fan_in = 400
 
 [export]
