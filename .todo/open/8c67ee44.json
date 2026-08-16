@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-16T19:16:30.514Z",
-  "updated_at": "2026-08-16T19:17:18.728Z",
+  "updated_at": "2026-08-16T19:28:06.214Z",
   "tags": [
     "dossiers",
     "local-llm",
@@ -24,5 +24,14 @@
       "fd16e2f9",
       "5baef657"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-16T19:28:06.214Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Workflow note: this plan uses the FEATURE BRANCH method (feat/c8-local-dossier-bench) rather than the CLI's todo/<parent-id> convention. 'todo work <child> --branch feat/c8-local-dossier-bench' keeps the state machine correct, but 'todo close' emits an advisory warning ('HEAD is on feat/..., expected todo/8c67ee44') and proceeds anyway. The warning is expected, not a failure. Do not switch branches to satisfy it.",
+      "confidence": "high"
+    }
+  ]
 }
