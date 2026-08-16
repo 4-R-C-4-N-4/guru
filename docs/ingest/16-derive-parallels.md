@@ -89,7 +89,7 @@ monoculture a panel, and capped per source work (`config[panels].per_work_cap`,
 default 2) so one prolific text doesn't fill every partner slot. How many
 *other* panels may then list a chunk as a partner — its incoming fan-in, which
 none of the above bounds — is separately capped at `config[panels].max_fan_in`
-(default 500), keeping the suitors that express the shared concept most
+(default 400), keeping the suitors that express the shared concept most
 strongly; see the
 fan-in note in Failure modes.
 
@@ -225,8 +225,8 @@ them tied at −0.994**. Ranking by weight therefore fell straight through to th
 deletions were of edges tied with a survivor. The measurable signature was that
 kept and dropped edges had indistinguishable parallel strength (median anchor
 leg −5.97 vs −5.91 — the selection was noise). Ranking by the anchor's leg
-separates them properly: **−5.77 kept vs −7.07 dropped**, swapping 3,421 of
-44,330 edges. This is *not* the min-leg clamping the port rejected — that was
+separates them properly: **−5.77 kept vs −7.07 dropped** at the 500 used for that comparison, swapping
+3,421 of 44,330 edges; at the shipped 400 the separation is 1.24. This is *not* the min-leg clamping the port rejected — that was
 about ranking a chunk's *outgoing* panel, where the partner's score is
 correctly the signal. Choosing among a saturated chunk's *incoming* edges is a
 different question, and the anchor's leg is the only leg that varies.
@@ -248,15 +248,45 @@ above 100**, so a cap of 100 offers those hubs 12,900 slots for 41,807
 hub-bound edges and *must* delete most of the graph. Swept over the v55 cache
 (edges kept / chunks left with no partners):
 
-| `max_fan_in` | 1000 | 750 | 500 | 400 | 300 | 200 | 150 | 100 |
-|---|---|---|---|---|---|---|---|---|
-| edges | 49,830 | 48,168 | 44,330 | 41,613 | 37,713 | 31,120 | 26,769 | 21,476 |
-| darkened | 0 | 0 | 0 | 0 | 3 | 48 | 134 | 353 |
+| `max_fan_in` | none | 1000 | 750 | 500 | **400** | 300 | 250 | 200 | 150 | 100 | 50 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| edges | 50,148 | 49,830 | 48,168 | 44,330 | **41,613** | 37,713 | 34,727 | 31,120 | 26,769 | 21,476 | 14,151 |
+| % kept | 100 | 99.4 | 96.1 | 88.4 | **83.0** | 75.2 | 69.2 | 62.1 | 53.4 | 42.8 | 28.2 |
+| darkened | 0 | 0 | 0 | 0 | **0** | 4 | 19 | 52 | 136 | 348 | 998 |
+| max degree | 1,178 | 1,011 | 768 | 518 | **418** | 318 | 268 | 217 | 167 | 115 | 64 |
+| kept − dropped leg | — | — | — | 1.30 | **1.24** | 1.22 | 1.25 | 1.26 | 1.27 | 1.26 | 1.30 |
 
-Darkening — a chunk dropping out of the graph entirely — is the hard failure
-and starts below 400. Uncapped p99 degree is 315, so the default of 500 bites
-only the genuine outliers (max degree 1,178 -> 516) while keeping 88% of the
-edges. If you retighten it, read `fan_in_cap_chunks_darkened`; any nonzero
+Darkening — a chunk dropping out of the graph entirely — is the hard failure,
+and it starts below 400. **400 is therefore the tightest setting with zero
+darkening**, which is why it is the default: it keeps 83% of the edges and
+pulls max degree 1,178 → 418, comfortably above the uncapped p99 of 315 so it
+bites only genuine outliers.
+
+Two things this table settles, both of which look like they should be true and
+are not:
+
+- **Better ranking does not buy headroom.** The darkening column is
+  materially unchanged from the same sweep run under the old (weight-order)
+  ranking — 300 gave 3 then and 4 now, 100 gave 353 then and 348 now. Whether
+  you can go lower is a property of the *degree distribution* (a chunk darkens
+  when every edge it has points at a saturated hub), not of which edges you
+  pick. Fixing the ranking made the same-sized cut land correctly; it did not
+  make a bigger cut safe.
+- **Tightening does not prune "more logically."** The last row is the median
+  gap between kept and dropped anchor legs — the cap's discrimination. It sits
+  at ~1.25 logits at *every* threshold from 500 down to 50. There is no level
+  at which the cap starts earning its damage; below 400 you are simply
+  deleting more at the same quality.
+
+The rising kept-leg average at tighter settings is a trap: hub edges skew weak,
+so deleting more of them lifts the mean without the cap having judged anything.
+A degree cap only ever touches edges pointing at *saturated* chunks and leaves
+the low-weight tail everywhere else untouched — it is the wrong instrument for
+edge quality. That question is the unfiltered tail left by the floor removal,
+and it needs a relevance judgement on the (concept-definition, chunk) frame,
+not a lower `max_fan_in`.
+
+If you retighten it, read `fan_in_cap_chunks_darkened`; any nonzero
 value means chunks fell out of the graph. Two standing properties: a **mutual**
 pair (both endpoints picked each other) is outgoing for both, so it is kept and
 charged to neither — the real per-chunk bound is `|own panel| + max_fan_in`,
@@ -363,6 +393,64 @@ local `guru query` run or a retrieval benchmark against `data/guru.db` is
 therefore reading a different, older PARALLELS set than production serves —
 silently, since both are well-formed rows. Tracked at todo:69682961 (PR #64
 review finding 9); not yet fixed.
+
+## Selection methodology — how to re-derive these numbers
+
+Every threshold and ranking claim above is measured, not argued, and the
+measurement is cheap to repeat. This section exists so a future revisit starts
+from evidence rather than from this document's conclusions.
+
+**Why it is cheap.** Scoring is cached per `(concept, chunk)` in
+`config[scoring].score_cache`. Against a warm cache a full re-derive is
+CPU-only and takes ~1 second (`38459 cached, 0 to run`), so a nine-point sweep
+costs about ten seconds. Nothing here needs the GPU — `guru/rerank.py` sets
+`CUDA_VISIBLE_DEVICES=""` before importing torch, deliberately.
+
+**Never sweep into `data/derived_parallels/`.** `scripts/export.py` picks the
+lexicographically *latest* subdirectory with no provenance check, so an
+experimental run written there silently becomes the next export's source —
+including a `--limit-concepts` smoke run. Write sweeps somewhere else.
+
+```sh
+# 1. baseline: cap off. Comment out max_fan_in rather than setting it to 0
+#    (0 is rejected at load; absence is the documented off switch).
+sed 's/^max_fan_in/#max_fan_in/' config/derived_parallels.toml > /tmp/nocap.toml
+.venv/bin/python scripts/derive_parallels.py --config /tmp/nocap.toml --out /tmp/sweep/nocap
+
+# 2. one run per candidate threshold
+for V in 1000 750 500 400 300 200 150 100; do
+  sed "s/^max_fan_in = .*/max_fan_in = $V/" config/derived_parallels.toml > /tmp/c$V.toml
+  .venv/bin/python scripts/derive_parallels.py --config /tmp/c$V.toml --out /tmp/sweep/$V
+done
+```
+
+Read `unique_edge_rows` and `fan_in_cap_chunks_darkened` straight out of each
+`summary.json`; those two are the whole coverage story. Max degree is a
+histogram over both endpoints of `edges_derived.jsonl`.
+
+**The one metric that is not in `summary.json`** is the discrimination check —
+the median gap between the anchor legs of kept and dropped edges. It is what
+caught the ranking defect (todo:6310a495), and it is worth recomputing after
+*any* change to how partners are ranked, because a broken ranker looks fine on
+every other metric. Rebuild `panels` and `score` the way `run()` does, then for
+each raw edge recover the anchor's leg:
+
+```python
+picked = {ch: {p: via for p, via, _ in ps} for ch, ps in panels.items()}
+def anchor_leg(row):                       # None for mutual pairs
+    a, b = row["source"], row["target"]
+    vab, vba = picked.get(a, {}).get(b), picked.get(b, {}).get(a)
+    if vab is not None and vba is not None:
+        return None
+    anchor, via = (a, vab) if vab is not None else (b, vba)
+    return score.get((via, anchor))
+```
+
+Compare the median over kept edges against the median over dropped ones. A
+healthy cap separates them by ~1.2–1.3 logits. **A separation near zero means
+the ranker is not discriminating** — that is exactly what the weight-ordered
+version produced (−5.97 kept vs −5.91 dropped, i.e. noise), and it is invisible
+in edge counts, darkening, and degree alike.
 
 ## Provenance
 

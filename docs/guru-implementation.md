@@ -373,6 +373,17 @@ CREATE TABLE staged_tags (
 
 ### Pass C: Cross-Tradition Edge Proposals
 
+> **Retired 2026-08-13 (todo:c3f479ff).** PARALLELS are no longer proposed by
+> an LLM and reviewed. They are derived from applied EXPRESSES tags plus a thin
+> cross-encoder — no LLM call, no `staged_edges` queue, no embeddings
+> dependency — by `scripts/derive_parallels.py`. CONTRASTS were frozen at their
+> reviewed set. The current mechanism, its selection methodology, and the
+> measured evidence for every threshold are in
+> [`ingest/16-derive-parallels.md`](ingest/16-derive-parallels.md); the retired
+> nodes are [`ingest/13-propose-edges.md`](ingest/13-propose-edges.md) and
+> [`ingest/14-edge-review.md`](ingest/14-edge-review.md). Kept as the original
+> build plan.
+
 **`scripts/propose_edges.py`**
 
 - Requires Stage 4 (vector indexing) to be partially complete — needs embeddings to find similar chunk pairs

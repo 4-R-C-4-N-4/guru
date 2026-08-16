@@ -114,3 +114,48 @@ Check, in order:
    instead of spending human labelling time?
 4. guru's toggles above — can the question be posed as an A/B on the existing
    retriever rather than as new code?
+
+---
+
+## 5. What the threshold work actually concluded (2026-08-15/16)
+
+This file was written mid-investigation. The investigation finished; recording
+the outcome here so the next person starts from it rather than re-opening the
+question. Full record and the reproduction recipe:
+[`../ingest/16-derive-parallels.md`](../ingest/16-derive-parallels.md).
+
+**The −4.415 floor was removed entirely (todo:ac63de1a), not re-derived.** Only
+18.9% of 27,395 human-*verified* (concept, chunk) pairs cleared it, against
+22.6% for never-reviewed auto-promoted pairs — slightly *more* permissive
+toward tags nobody checked. What it tracked was passage length (12% clearance
+under 500 chars vs 58% at 2,000–2,400), not correctness. The score ranks; it
+does not gate. Note what this leaves: **there is no quality filter on derived
+PARALLELS at all today.** 83% of shipped edges carry a negative weight and
+~1,300 sit below the old floor. That is the deliberate consequence of the
+removal, not an oversight, and it is the open question — not the threshold.
+
+**The replacement bound is on degree, not score (todo:38a01171).** Removing the
+floor exposed unbounded incoming fan-in: one chunk reached 1,178 partners.
+`config[panels].max_fan_in` (400) bounds how many *other* panels may list a
+chunk as a partner. Three findings worth not rediscovering:
+
+- **Charge only the receiving leg.** A degree budget charged to both endpoints
+  lets a chunk's own accumulated degree veto its neighbours' edges — it deleted
+  58% of the edge set and darkened 367 chunks, 4,531 of the losers never having
+  been over cap.
+- **The threshold mattered more than the mechanism.** 83% of edges touch the
+  129 chunks above degree 100, so a cap near 100 must delete most of the graph
+  regardless of how correctly it is implemented. Darkening starts below 400.
+- **Rank by the anchor's leg, never the row weight (todo:6310a495).** The row
+  weight is the *partner's* score, so for a chunk receiving edges it is that
+  chunk's own score — constant across all of them. The top hub had 1,178
+  incoming edges and 9 distinct weights. Ranking by it silently degenerated to
+  alphabetical order for 47% of deletions. **This was invisible in every count
+  metric**; what exposed it was comparing the median anchor leg of kept vs
+  dropped edges (−5.97 vs −5.91 — noise; now −5.70 vs −6.94). If you change how
+  partners are ranked, run that check.
+
+The section 3 warning above applies to all of it: these are coverage and
+discrimination measurements over the incumbent's own output. None of them
+establishes that a derived parallel is *correct*. That still needs blind
+grading on the (concept-definition, chunk) frame.

@@ -126,7 +126,7 @@ per_work_cap = 2
 # If you retighten this, read summary.json's fan_in_cap_chunks_darkened —
 # any nonzero value means chunks fell out of the graph. See
 # docs/ingest/16-derive-parallels.md's Failure modes section ("fan-in").
-max_fan_in = 500
+max_fan_in = 400
 
 [export]
 # Consumed by scripts/export.py (todo:6da4f965). derive_parallels.py writes
