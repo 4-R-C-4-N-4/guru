@@ -31,6 +31,7 @@ from derive_parallels import (  # noqa: E402
     build_ranked,
     cache_key,
     cap_fan_in,
+    cap_report,
     chunk_text_id,
     content_hash,
     degree_of,
@@ -518,3 +519,19 @@ def test_resolve_max_fan_in_rejects_non_positive(bad):
     run would then fail much later in export.py, pointing at the wrong file."""
     with pytest.raises(SystemExit, match="must be >= 1"):
         resolve_max_fan_in({"max_fan_in": bad})
+
+
+# ── cap reporting (todo:b95dd8e0) ───────────────────────────────────────────
+
+def test_cap_report_counts_reduced_and_darkened_not_over_cap():
+    """`a` keeps one of its two edges (reduced); `c` loses its only edge
+    (darkened). A chunks-over-cap count would report 1 here and hide both."""
+    raw = _rows(("a", "b", 9.0), ("a", "c", 1.0))
+    kept = _rows(("a", "b", 9.0))
+    dropped, reduced, darkened = cap_report(raw, kept)
+    assert (dropped, reduced, darkened) == (1, 2, 1)   # a and c reduced; c dark
+
+
+def test_cap_report_all_zero_when_nothing_dropped():
+    raw = _rows(("a", "b", 1.0))
+    assert cap_report(raw, raw) == (0, 0, 0)

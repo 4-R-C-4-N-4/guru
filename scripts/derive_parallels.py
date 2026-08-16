@@ -494,6 +494,24 @@ def degree_of(rows: list[dict]) -> dict[str, int]:
     return degree
 
 
+def cap_report(rows_raw: list[dict], rows: list[dict]) -> tuple[int, int, int]:
+    """(edges_dropped, chunks_reduced, chunks_darkened) for a capping pass.
+
+    chunks_reduced counts chunks that lost at least one edge; chunks_darkened
+    counts those left with none at all. Deliberately NOT "chunks over the cap":
+    those two diverge by more than an order of magnitude in practice (at
+    max_fan_in=100 over v55, 129 chunks were over cap while 4,652 lost edges
+    and 353 lost all of them), and the over-cap number is the one that makes a
+    graph-halving run look routine.
+    """
+    deg_before, deg_after = degree_of(rows_raw), degree_of(rows)
+    return (
+        len(rows_raw) - len(rows),
+        sum(1 for ch, d in deg_before.items() if deg_after.get(ch, 0) < d),
+        sum(1 for ch in deg_before if deg_after.get(ch, 0) == 0),
+    )
+
+
 def cap_fan_in(
     rows: list[dict], max_fan_in: int,
     panels: dict[str, list[tuple[str, str, float]]],
@@ -605,9 +623,22 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
     ranked = build_ranked(bycon, score)
     panels = build_panels(bychunk, ranked, score, trad_of, work_of_chunk,
                           top_k, per_work_cap)
-    rows = build_edges(panels, defs)
-    if max_fan_in is not None:
-        rows = cap_fan_in(rows, max_fan_in, panels)
+    rows_raw = build_edges(panels, defs)
+    rows = cap_fan_in(rows_raw, max_fan_in, panels) if max_fan_in is not None else rows_raw
+
+    # Report what the cap DID, per chunk -- not merely how many chunks sat
+    # over budget. Those two numbers come apart badly: at max_fan_in=100 over
+    # v55, 129 chunks were over cap while 4,531 chunks actually lost edges and
+    # 353 lost every edge they had. The operator gate for this node is an
+    # eyeball of the line below (docs/ingest/16-derive-parallels.md), so it has
+    # to name the blast radius rather than the intent, or a run that halves the
+    # graph reads as a routine tail trim.
+    deg_before = degree_of(rows_raw)
+    edges_dropped, chunks_reduced, chunks_darkened = cap_report(rows_raw, rows)
+    if edges_dropped:
+        print(f"fan-in cap ({max_fan_in}): dropped {edges_dropped} weakest incoming "
+              f"edges (raw max degree {max(deg_before.values())}); {chunks_reduced} "
+              f"chunks lost at least one edge, {chunks_darkened} left with none")
 
     out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_dir / "edges_derived.jsonl", "w") as f:
@@ -628,6 +659,12 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         "unique_edge_rows": len(rows),
         "top_k": top_k,
         "per_work_cap": per_work_cap,
+        "max_fan_in": max_fan_in,
+        # Always written, 0 when the cap dropped nothing -- a key that only
+        # appears when something went wrong is a key nobody builds a check on.
+        "fan_in_cap_edges_dropped": edges_dropped,
+        "fan_in_cap_chunks_reduced": chunks_reduced,
+        "fan_in_cap_chunks_darkened": chunks_darkened,
         "model_path": model_path,
     }
     with open(out_dir / "summary.json", "w") as f:
