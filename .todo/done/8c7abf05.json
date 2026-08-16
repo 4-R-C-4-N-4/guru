@@ -1,0 +1,41 @@
+{
+  "id": "8c7abf05",
+  "type": "bug",
+  "state": "done",
+  "summary": "Reconcile chunks_with_partners: code counts any chunk in an edge row, node 16 doc says anchors with a non-empty panel — pick one definition and make both agree",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T02:34:35.663Z",
+  "updated_at": "2026-08-16T02:53:31.607Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "edges",
+    "derive",
+    "docs"
+  ],
+  "relationships": {
+    "parent": "38a01171"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-16T02:51:57.433Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "SPEC WAS STALE -- the divergence it describes never landed on main. The redefinition of chunks_with_partners (panels-based -> any chunk appearing in an edge row) came from the uncommitted draft this ticket tree was planned from; that draft was discarded when the work was re-split across todo:6acd96ba..509174c8. scripts/derive_parallels.py:648 still reads sum(1 for p in panels.values() if p), which is exactly what node 16 lines 148-154 describe. Nothing to reconcile.\n\nTHE REAL DEFECT IS NARROWER AND NEWER, and the cap created it. chunks_with_partners is computed from panels -- BEFORE cap_fan_in() runs -- so it counts chunks whose panel was non-empty at selection time, not chunks that survived into the export. Those diverge exactly when the cap darkens something. Measured at max_fan_in=100: summary.json and the run line both report 5,054/5,054 chunks have partners while 353 of those chunks have zero edges in edges_derived.jsonl. At the shipped 500 they agree (0 darkened), so this is latent today and bites whoever retightens the knob -- which the node-16 gate explicitly invites by telling the operator to read chunks_with_partners.\n\nFIX: keep chunks_with_partners panels-based. It is the doc's meaning, and node 16 line 154 reads it as a TAG-COVERAGE signal (a low value means untagged/unscored chunks, e.g. plotinus-select-works-index at 107 of 752) -- redefining it against the export would blunt exactly that. Add a second, separately-named chunks_in_export counted from the final rows, and make the run line show both whenever they differ. Two questions, two numbers, neither overloaded.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "a912c92a6297c81f673d9f4baa1cbde8c0b89d59",
+    "resolved_at": "2026-08-16T02:53:31.607Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_derive_parallels.py",
+    "test_function": "test_panel_count_and_export_count_diverge_when_the_cap_darkens_a_chunk",
+    "note": "Spec was stale (see analysis [0]) -- the redefinition never landed. Real defect: chunks_with_partners is pre-cap, so it cannot be read as what shipped. Kept it panels-based for the tag-coverage signal; added chunks_in_export and a run-line disclosure. Verified: at 500 both read 5,054; at 100 they read 5,054 vs 4,701 with 353 darkened."
+  }
+}
