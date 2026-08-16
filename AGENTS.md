@@ -86,7 +86,9 @@ Never delete them to clear the report.
 
 **Never apply your own proposals.** Every LLM proposal in the ingest stream
 lands in a `staged_*` table with `status='pending'`. You may queue accept /
-reject / reassign decisions. Promotion to the live graph is the user's. Never
+reject / reassign / reclassify decisions (`reassign`/`reassign_to` retargets a
+concept tag; `reclassify`/`reclassify_to` retargets an edge type, or flags a
+cleanup as apparatus). Promotion to the live graph is the user's. Never
 call the review app's `/api/apply`.
 
 There is no unattended promotion path and there is not meant to be one.
@@ -110,7 +112,7 @@ run `--dry-run` first, since it is the only checkpoint that node has.
 must come from having read the chunk body. Sampling and extrapolating across a
 batch is not review; it produces an audit trail that cannot be distinguished
 from one that was. (Node 14, the edge-review gate, is retired — Pass C is gone,
-and cross-tradition PARALLELS are now derived at node 16 from reviewed tags,
+and cross-tradition PARALLELS are now derived at node 16 from applied tags,
 with no review queue of their own.)
 
 **Never publish.** No `scripts/sync_corpus.sh`, no ssh to the production VPS —

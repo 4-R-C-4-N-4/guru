@@ -123,7 +123,7 @@ python scripts/tag_concepts.py --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_X
 python scripts/embed_corpus.py
 
 # Cross-tradition PARALLELS are no longer proposed and reviewed (Pass C is
-# retired). They are derived corpus-wide from reviewed tags by node 16 —
+# retired). They are derived corpus-wide from applied tags by node 16 —
 # see docs/ingest/16-derive-parallels.md:
 OMP_NUM_THREADS=8 .venv/bin/python scripts/derive_parallels.py
 ```
