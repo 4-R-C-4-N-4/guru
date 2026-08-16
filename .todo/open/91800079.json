@@ -1,0 +1,20 @@
+{
+  "id": "91800079",
+  "type": "chore",
+  "state": "open",
+  "summary": "Add staged_summaries and staged_dossier_fields counts to backup_db.sh manifest",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:16:54.591Z",
+  "updated_at": "2026-08-16T19:16:54.624Z",
+  "files": [
+    {
+      "path": "scripts/backup_db.sh"
+    }
+  ],
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "backup_db.sh writes a manifest of row counts as the canary for a snapshot, but it counts only staged_tags, edges and nodes. The dossier tables are absent, so a Pass D snapshot cannot be checked before/after.\n\nDONE: the manifest SQL also emits counts for staged_summaries (total, and by status) and staged_dossier_fields (total, and by status). Verified by running scripts/backup_db.sh with a throwaway label and reading the generated .manifest.txt.\n\nDo this first — the snapshot taken in the next tickets should already carry the dossier counts."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "2a5a41ad",
+  "type": "chore",
+  "state": "open",
+  "summary": "Add c8 local-provider campaign to config/dossiers.toml",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:16:54.653Z",
+  "updated_at": "2026-08-16T19:16:54.688Z",
+  "files": [
+    {
+      "path": "config/dossiers.toml"
+    }
+  ],
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "Per V9 a provider/model change is a NEW campaign, never a partial re-plan.\n\nSet: campaign_id='c8', provider='llamacpp', model='Qwen3.8-27B-UD-Q4_K_XL.gguf', input_budget=6000, span_target=6000 UNCHANGED (span_target is provider-independent by design; changing it destroys span identity and with it the whole paired comparison).\n\nTRAP: the existing comment says provider='local'. That value does not exist — llm.py:370 defines PROVIDERS = {llamacpp, ollama, anthropic, openai, claude-code} and 'local' would KeyError at the first call. Fix the comment while you are in the file so the next reader is not caught.\n\nNOTE: llm.py's call_llamacpp sends 'model' in the request body, but llama-server ignores that field and serves whatever GGUF is loaded. The model column records the STRING, not what ran. Confirm the loaded GGUF matches the configured name before generating, or provenance silently lies.\n\nDONE: config committed with the c8 block and a campaign-bump comment in the established style."
+}

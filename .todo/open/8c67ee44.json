@@ -7,11 +7,22 @@
     "type": "agent"
   },
   "created_at": "2026-08-16T19:16:30.514Z",
-  "updated_at": "2026-08-16T19:16:30.552Z",
+  "updated_at": "2026-08-16T19:17:18.728Z",
   "tags": [
     "dossiers",
     "local-llm",
     "benchmark"
   ],
-  "description": "Paired A/B: can a local model (Qwen3.8-27B-UD-Q4_K_XL on llama.cpp, 3090) replace claude-opus-4-8 for Pass D L1 span summarization?\n\nWHY IT MIGHT WORK. The rubric names the characteristic frontier failure: 'fluent well-formed prose that silently imports outside knowledge... the model knows a great deal about these texts and will write it confidently and correctly. Correct is not the standard. Supported by the input is.' A 27B knows less about these texts, so it has less to leak. GROUND and LEAK are structurally easier for a weaker model. The capability actually needed is instruction-following, not knowledge.\n\nWHY IT MIGHT NOT. COVERAGE (strict source order, proportion) and FORMAT are capability limits a smaller model is worse at. l1-v3 exists because frontier models failed COVERAGE/GROUND three times.\n\nDESIGN (settled, do not re-derive):\n- Compare ONLY within prompt_version. L1 baseline is fragmented: l1-v2 = 834 accepted, l1-v3 = 36 accepted. Comparing local-v3 against frontier-v2 measures the template revision, not the model.\n- Free paired set = the 36 spans with accepted frontier l1-v3 rows: iamblichus-on-the-mysteries 22, egyptian-heaven-and-hell 11, apocryphon-of-john 3. span_target is provider-independent by design, so span ids survive a provider switch — that is what makes pairing possible.\n- Those 3 works contain NO sayings/logia collection, the genre where l1-v3's source-order rule is most likely to break. Baseline needs extending.\n- Measure the failure-code distribution and template_defect rate, NOT accept rate alone. Hypothesis: GROUND/LEAK down, COVERAGE/FORMAT up.\n\nSCOPE: Phase 1, L1 only. Explicitly NOT in scope: the fold/map-reduce path (folds exist only for L2 under input_budget>0 and that code has never run) and the structured fields (context/key_figures/key_terms/reading_notes, where FORMAT retries against MAX_ATTEMPTS=3 will cost most). Both are follow-ups gated on Phase 1 passing. A good L1 result does NOT imply the pipeline is ready.\n\nCONSTRAINTS: guru main is protected, PR flow only. Work on a guru.db snapshot from scripts/backup_db.sh, never the live DB. Nothing is auto-promoted; the apply gate stays with the owner. Est. ~1-2h GPU for 36 spans plus judge calls."
+  "description": "Paired A/B: can a local model (Qwen3.8-27B-UD-Q4_K_XL on llama.cpp, 3090) replace claude-opus-4-8 for Pass D L1 span summarization?\n\nWHY IT MIGHT WORK. The rubric names the characteristic frontier failure: 'fluent well-formed prose that silently imports outside knowledge... the model knows a great deal about these texts and will write it confidently and correctly. Correct is not the standard. Supported by the input is.' A 27B knows less about these texts, so it has less to leak. GROUND and LEAK are structurally easier for a weaker model. The capability actually needed is instruction-following, not knowledge.\n\nWHY IT MIGHT NOT. COVERAGE (strict source order, proportion) and FORMAT are capability limits a smaller model is worse at. l1-v3 exists because frontier models failed COVERAGE/GROUND three times.\n\nDESIGN (settled, do not re-derive):\n- Compare ONLY within prompt_version. L1 baseline is fragmented: l1-v2 = 834 accepted, l1-v3 = 36 accepted. Comparing local-v3 against frontier-v2 measures the template revision, not the model.\n- Free paired set = the 36 spans with accepted frontier l1-v3 rows: iamblichus-on-the-mysteries 22, egyptian-heaven-and-hell 11, apocryphon-of-john 3. span_target is provider-independent by design, so span ids survive a provider switch — that is what makes pairing possible.\n- Those 3 works contain NO sayings/logia collection, the genre where l1-v3's source-order rule is most likely to break. Baseline needs extending.\n- Measure the failure-code distribution and template_defect rate, NOT accept rate alone. Hypothesis: GROUND/LEAK down, COVERAGE/FORMAT up.\n\nSCOPE: Phase 1, L1 only. Explicitly NOT in scope: the fold/map-reduce path (folds exist only for L2 under input_budget>0 and that code has never run) and the structured fields (context/key_figures/key_terms/reading_notes, where FORMAT retries against MAX_ATTEMPTS=3 will cost most). Both are follow-ups gated on Phase 1 passing. A good L1 result does NOT imply the pipeline is ready.\n\nCONSTRAINTS: guru main is protected, PR flow only. Work on a guru.db snapshot from scripts/backup_db.sh, never the live DB. Nothing is auto-promoted; the apply gate stays with the owner. Est. ~1-2h GPU for 36 spans plus judge calls.",
+  "relationships": {
+    "children": [
+      "91800079",
+      "2a5a41ad",
+      "c5e84249",
+      "b67bf6d9",
+      "46d8152e",
+      "fd16e2f9",
+      "5baef657"
+    ]
+  }
 }
