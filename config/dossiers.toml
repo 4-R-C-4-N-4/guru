@@ -43,15 +43,34 @@
 # with the driving model recorded verbatim in `model`
 # (hermes-deepseek-v4-flash — the provenance convention applied to dossiers);
 # the other five new works generate under the campaign default.
-campaign_id = "c7"
+# c8 = c7 with NO corpus change: a PROVIDER change. Per V9 that is equally a
+# new campaign — the backend is a campaign parameter, so switching it means a
+# new campaign_id and a re-plan, never a partial. span_target is unchanged, so
+# every c7 span id is reproduced identically under c8; that identity is what
+# makes the local-vs-frontier comparison a PAIRED one (todo:8c67ee44).
+# This campaign is a BENCHMARK, not a production run: it generates the local
+# arm for a handful of works only, and its rows are provenance-separated by
+# the `model` column below.
+campaign_id = "c8"
 
 # "claude-code" — headless Claude Code on the subscription (default).
-# "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).
-provider = "claude-code"
+# "llamacpp"   — llama.cpp on the 3090 (V7 applies; set input_budget below).
+#
+# These are the literal keys of PROVIDERS in scripts/llm.py — the dispatch is
+# PROVIDERS[provider], so an unrecognised value raises KeyError at the first
+# call rather than failing at config load. There is no "local" provider; that
+# was this comment's wording, never a valid value.
+provider = "llamacpp"
 
 # Recorded verbatim in staged rows' `model`. Always pinned explicitly —
 # never rely on a session default.
-model = "claude-opus-4-8"
+#
+# WARNING for llamacpp campaigns: llm.py's call_llamacpp puts `model` in the
+# request body, but llama-server ignores that field and serves whichever GGUF
+# is loaded. So this string is a LABEL, not a selector — the provenance line is
+# only as honest as the operator checking that the loaded model matches it.
+# Verify before generating: curl -s 127.0.0.1:8080/props | grep model_path
+model = "Qwen3.8-27B-UD-Q4_K_XL.gguf"
 
 # Reader-facing span size (TOC granularity + L1 review size), in pipeline
 # tokens. Provider-INDEPENDENT: does not change when the backend does,
@@ -61,7 +80,13 @@ span_target = 6000
 # Max tokens per generation call. 0 = effectively unbounded (claude-code).
 # Local campaigns set 6000-8000; folds and figures/terms map-reduce activate
 # only when this is > 0 and a work's L1 set exceeds it.
-input_budget = 0
+#
+# NOTE: setting this > 0 activates the fold / map-reduce path for the first
+# time ever — the pre-c8 snapshot manifest records staged_summaries folds = 0
+# across the whole history, so that code has never executed. Phase 1 of the
+# benchmark is L1-only and does not reach it; treat the first fold run as
+# untested code, not as a measured comparison.
+input_budget = 6000
 
 # Rubric sample size per field for the review loop (§1.3.4): works sampled
 # stratified by tradition and size; structure entries sampled per-span.
