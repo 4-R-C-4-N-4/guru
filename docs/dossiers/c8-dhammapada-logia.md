@@ -122,3 +122,50 @@ false-positive rate and says nothing about whether either config catches a real
 failure — the negative controls would need re-running at 0.6 to establish that.
 And the 36% judge-agreement figure above was measured at temp 1.0; it would
 need re-running at 0.6 before being quoted as the local judge's agreement rate.
+
+## Addendum 2 — generation temperature (2026-08-17)
+
+The generation numbers above were produced at temp 1.0 / effort medium, because
+the run used the judge server's settings. Re-run with only TEMP and
+reasoning_effort changed — same spans, same seed, same reasoning budget — via
+the new `scripts/run-qwen-generate.sh`:
+
+| chapter | frontier | temp 1.0 / medium | temp 0.6 / low |
+|---|---|---|---|
+| I | 380 | 554 | 585 |
+| II | 142 | 148 | 158 |
+| III | 191 | 300 | 251 |
+| IV | 175 | 267 | 230 |
+| V | 153 | **LOG-SKIP** | **210** |
+| VI | 236 | 371 | 358 |
+| VII | 240 | 308 | 262 |
+| VIII | 178 | 248 | 212 |
+| **produced** | 8/8 | 7/8 | **8/8** |
+| **vs frontier** | — | +40.6% | **+30.7%** |
+
+temp 0.6 is tighter on 6 of 7 comparable spans and **recovers chapter V**, which
+at 1.0 exhausted all three attempts (387/320/309 against a [42,256] band) and
+produced nothing.
+
+This corrects a claim made earlier in this investigation. The argument was that
+configuration could deliver reproducibility but not compliance, because "no
+sampler setting changes what the prompt is asking for", and that the budget
+formula was therefore the only lever. The second half stands — the residual
++30.7% and the retry rate do trace to `min(300, max(80, tok // 12))` asking ~87
+tokens of a 1,052-token chapter, and frontier clearing all 8 bands first try
+proves the formula is met-able. But the first half was wrong: temperature
+changes how closely the model tracks a length instruction, and at 0.6 it tracks
+it well enough to clear a band it could not clear at 1.0. A span was recovered
+by a config change alone.
+
+So the two runners earn their separation on measurement, not on principle:
+
+| | `run-qwen-generate.sh` | `run-qwen-judge.sh` |
+|---|---|---|
+| CTX_SIZE | 24576 | 32768 |
+| TEMP | 0.6 | 0.6 |
+| REASONING_BUDGET | 2048 of 8192 | 2048 of 6000 |
+| tuned against | length-band overrun → skips | not reaching the verdict |
+| gain from tuning | 7/8 → 8/8 spans, +40.6% → +30.7% | 4/6 → 5/6 agreement, 3/3 flips → 6/6 stable |
+
+Raw output in `c8-generate-temp-tuning.txt`.
