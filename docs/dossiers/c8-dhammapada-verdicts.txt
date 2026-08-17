@@ -1,0 +1,15 @@
+# row arm qwen_verdict qwen_code | opus_verdict opus_code
+s1675 frontier reject GROUND accept None
+s1676 frontier reject GROUND accept GROUND
+s1677 frontier accept GROUND accept None
+s1678 frontier accept GROUND accept None
+s1680 frontier reject GROUND accept None
+s1681 frontier reject REGISTER accept None
+s1682 frontier reject GROUND accept None
+s1683 local accept None accept GROUND
+s1684 local reject GROUND accept GROUND
+s1685 local reject COVERAGE accept GROUND
+s1686 local reject GROUND accept None
+s1687 local accept GROUND accept None
+s1688 local reject REGISTER accept None
+s1689 local accept GROUND accept None
