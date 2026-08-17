@@ -1,5 +1,25 @@
 # Can a local model replace the frontier judge?
 
+> **[2026-08-16] READ THIS BEFORE QUOTING ANY NUMBER BELOW.** Every measurement
+> here was taken through `llm qwen3.8`, which at the time meant TWO uncontrolled
+> variables, both discovered afterwards while building `scripts/run-qwen-judge.sh`:
+>
+> 1. **No pinned seed.** llama.cpp's `--seed` defaults to -1 — a fresh random
+>    seed per request. Re-judging the same three rows flipped 3/3 verdicts.
+> 2. **MTP speculative decoding on.** At a fixed seed, MTP on vs off changed
+>    2 of 3 verdicts and made a third fail to parse, reproducibly. It is
+>    distribution-preserving in theory and draws a different sample in practice.
+>
+> So the agreement rate, the control scores and the self-preference gap all
+> have an unknown noise floor. Treat them as directional, not as measurements.
+> Re-run through `scripts/run-qwen-judge.sh` (pinned seed, bounded reasoning,
+> MTP off — verified reproducible) before any of this decides anything.
+>
+> Two findings survive the confound. The control DESIGN is sound: opus caught
+> 5/6, so the injections are detectable. And the COVERAGE blind spot is real —
+> all three graders accepting a summary truncated to its first third is not
+> something a seed or a draft head explains.
+
 Three graders over the same 78 items: the 72 paired L1 rows plus 6 negative
 controls. Question: can the review loop run offline?
 
