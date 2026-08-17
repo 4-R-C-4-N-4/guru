@@ -1,0 +1,16 @@
+# temp sweep, 8 Dhammapada L1 chapters, budget=2048 effort=low seed=20260816 (fixed)
+# chapter: frontier t1.0 t0.7 t0.6 t0.5   (SKIP = exhausted MAX_ATTEMPTS)
+I     380 554 587 585 539
+II    142 148 176 158 189
+III   191 300 295 251 223
+IV    175 267 210 230 300
+V     153 SKIP SKIP 210 SKIP
+VI    236 371 SKIP 358 SKIP
+VII   240 308 282 262 258
+VIII  178 248 184 212 244
+
+# produced / mean-ratio-on-common-6 (I,II,III,IV,VII,VIII only, fair across configs)
+t1.0: 7/8 produced, common-6 ratio +37.9%
+t0.7: 6/8 produced, common-6 ratio +29.0%
+t0.6: 8/8 produced, common-6 ratio +26.1%   <- best on both axes
+t0.5: 6/8 produced, common-6 ratio +34.6%

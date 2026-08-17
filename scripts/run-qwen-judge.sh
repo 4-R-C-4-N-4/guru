@@ -55,6 +55,15 @@
 # matters. It is set via LLAMA_ARG_CHAT_TEMPLATE_KWARGS because serve-llama.sh
 # does not model chat-template kwargs and the env var needs no hook.
 #
+# GRID-SEARCHED, not a single point. temp x reasoning_budget was swept as a
+# 3x3 grid (0.5/0.6/0.7 x 1024/2048/3072) against 7 rows designed to expose
+# BOTH false positives and false negatives (3 known-accept + 4 known-reject:
+# 1 real GROUND failure, 3 synthetic controls). Reject-detection was 4/4 in
+# EVERY cell regardless of config; the only variance was one over-strict
+# accept-row miss. Five cells tied at 7/7; temp=0.6/budget=2048 (shipped here)
+# was the fastest of them at 49.2s/call. Full table and raw data:
+# docs/dossiers/c8-dhammapada-logia.md Addendum 3, c8-judge-grid.jsonl.
+#
 # CTX_SIZE=32768. The rubric prompt is the stage input plus the output plus
 # the ~3.5k-char rubric body; the largest c8 L1 stage input measured ~38k
 # chars (~12k tokens), and run_contract.py's default --budget of 12000 CHARS

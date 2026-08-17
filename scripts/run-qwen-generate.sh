@@ -39,6 +39,21 @@
 # produced nothing. Lower temperature tracks the prompt's length instruction
 # more closely; that is the whole of the gain, and it is worth having.
 #
+# GRID-SEARCHED. temp {0.5,0.6,0.7} vs the shipped 1.0, budget fixed at 2048,
+# same 8 chapters each. Comparing produced-count alone favors configs that skip
+# the hard chapters, so ratio is computed on the 6 chapters every config
+# actually produced (I,II,III,IV,VII,VIII):
+#
+#   temp 1.0   7/8 produced   +37.9%
+#   temp 0.7   6/8 produced   +29.0%
+#   temp 0.6   8/8 produced   +26.1%   <- wins BOTH axes, not a tradeoff
+#   temp 0.5   6/8 produced   +34.6%
+#
+# 0.5 and 0.7 skip the identical two chapters (V, VI) that 0.6 alone resolves.
+# temp=0.6 is a genuine local optimum in the tested range, not an arbitrary
+# midpoint. Full table: docs/dossiers/c8-dhammapada-logia.md Addendum 3,
+# c8-generate-temp-grid.txt.
+#
 # IT DOES NOT CLOSE THE GAP. Still +30.7% long, still retrying on most spans,
 # against a frontier arm that cleared all 8 bands first try in 8 calls. The
 # residual is the budget formula in generate_dossiers.py:

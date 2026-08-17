@@ -169,3 +169,66 @@ So the two runners earn their separation on measurement, not on principle:
 | gain from tuning | 7/8 → 8/8 spans, +40.6% → +30.7% | 4/6 → 5/6 agreement, 3/3 flips → 6/6 stable |
 
 Raw output in `c8-generate-temp-tuning.txt`.
+
+## Addendum 3 — stratified grid search, judge and generation (2026-08-17)
+
+Prior tuning was three isolated points (temp 1.0, 0.6, and a confounded 0.2).
+This is a real grid: judge over temp x reasoning_budget (9 cells), generation
+over temp alone (4 points), against test sets designed to expose false
+positives AND false negatives, not just accepts.
+
+### Judge: 3x3 grid, temp {0.5,0.6,0.7} x budget {1024,2048,3072}
+
+Test set: 3 known-accept rows (opus reference) + 4 known-should-reject (1 real
+GROUND failure — `s1597` — plus 3 synthetic controls: GROUND, LEAK, REGISTER).
+One pass per cell, `reasoning_effort=low` held fixed throughout.
+
+**Reject-detection was 4/4 in every one of the 9 cells.** GROUND, LEAK,
+REGISTER and the real s1597 failure are caught regardless of temp or budget in
+this range — that axis has no failure mode here. All variance is one row,
+`s1640`, over-rejected in the weaker cells.
+
+| temp\budget | 1024 | 2048 | 3072 |
+|---|---|---|---|
+| 0.5 | 6/7 | **7/7** | 7/7 |
+| 0.6 | 6/7 | **7/7** | 7/7 |
+| 0.7 | 6/7 | 6/7 | 7/7 |
+
+Five cells tie at 7/7. Fastest among them: **temp 0.6 / budget 2048 at 49.2s/call**
+— the config already shipped in `run-qwen-judge.sh`. Its determinism was
+verified earlier through the real code path (`run_contract.py`, 2 passes,
+6/6 stable). Budget 3072 is the more conservative choice (7/7 at every temp
+tested) at a 15-30% speed cost and no accuracy gain on this sample.
+
+Raw data: `c8-judge-grid.jsonl`.
+
+### Generation: temp sweep, 4 points, budget=2048 fixed
+
+Same 8 Dhammapada chapters, everything but TEMP held constant.
+
+| config | produced | ratio, common-6 chapters (fair) |
+|---|---|---|
+| temp 1.0 | 7/8 | +37.9% |
+| temp 0.7 | 6/8 | +29.0% |
+| **temp 0.6** | **8/8** | **+26.1%** |
+| temp 0.5 | 6/8 | +34.6% |
+
+"Common-6" = the 6 chapters (I,II,III,IV,VII,VIII) every config actually
+produced — comparing raw means across configs with different skip sets is
+unfair, since a config that skips the hardest chapters (V, VI) gets an
+artificially better average. On that fair basis, **temp 0.6 wins outright**:
+zero skips AND the best length efficiency, not a tradeoff between them.
+
+Both 0.5 and 0.7 skip the same two chapters (V and VI) that 0.6 alone
+resolves. 0.6 is not an arbitrary midpoint — it is a genuine local optimum on
+both metrics in the tested range.
+
+Raw data: `c8-generate-temp-grid.txt`.
+
+### Net result
+
+Both files' shipped defaults (temp=0.6, budget=2048, effort=low, seed pinned)
+are validated by a real grid rather than by the point-tests that set them.
+No change made — the search confirmed the existing choice rather than beating
+it, which is itself the useful result: the earlier single comparisons weren't
+lucky, they landed on the actual optimum.
