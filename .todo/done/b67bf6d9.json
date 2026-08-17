@@ -1,13 +1,13 @@
 {
   "id": "b67bf6d9",
   "type": "chore",
-  "state": "open",
+  "state": "done",
   "summary": "Extend the paired baseline with ~8 frontier l1-v3 spans on a sayings/logia work",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-16T19:17:18.535Z",
-  "updated_at": "2026-08-16T19:31:53.217Z",
+  "updated_at": "2026-08-17T12:51:19.891Z",
   "relationships": {
     "parent": "8c67ee44"
   },
@@ -20,5 +20,11 @@
       "content": "Candidate analysis (no GPU used). Corpus: 64 works / 23 traditions; span counts min 1, median 5, p75 17, max 74. The EXISTING paired set sits at 3934-5664 tok/span (iamblichus 5169, egyptian-heaven-and-hell 5664, apocryphon-of-john 3934) — i.e. long continuous prose. The missing axis is therefore DISCRETE-UNIT ORDERING, not just 'a sayings work'.\n\nScale-matched logia (~4800-5300 tok/span, STABLE, no orphans): pythagorean-golden-verses (greek_mystery, 15 spans, 5260), orphic-hymns (greek_mystery, 13 spans, 4841), yoga-sutras books 01-04 (hinduism, 7 spans composite, ~4900).\nGenre-purest but ~1500 tok/span: dhammapada (buddhism, 26 spans, 1541), bhagavad-gita (hinduism, 18 spans, 1496), gathas (zoroastrianism, 17 spans, 1486).\nDISQUALIFIED: zhuangzi-inner-chapters-index (9 of 18 accepted rows orphaned — span layout drifted); gospel-of-thomas (purest logia but only 2 spans).\n\nSeparate finding: 16 of 51 works with accepted L1 rows have rows that match no c8 planned span (secret-teachings 70/72, pistis-sophia 34/34, transcendental-magic 29/29, mabinogion 26/30, iamblichus 16/38). For iamblichus the orphans are its older l1-v2 rows — its 22 l1-v3 rows all matched, which is why the gate passed. Per AGENTS.md these are not to be deleted.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "0fde9919d58bbd82c9ed7fdba62d5365ff61d777",
+    "resolved_at": "2026-08-17T12:51:19.891Z",
+    "resolved_by": "unknown",
+    "note": "Dhammapada, 8 chapters (~1540 tok/span discrete verses), 7 paired. First run under the pinned sampler so it is reproducible. GENERATION: frontier 8/8 in 8 calls with 0 retries; local 7/8 in ~18 calls with every span retried and +40.6% length; 3 spans across ch1-18 exhausted MAX_ATTEMPTS and produced nothing. Cause is the budget formula min(300,max(80,tok//12)) — an 87-token budget for a 1052-token chapter vs 300 for Iamblichus — not the genre. REVIEW: opus 14/14 accept, qwen 5/14, agreement 36% (vs 87.9% on long prose). Which judge is right is NOT established. One COVERAGE reject fired, the only one in the study, from qwen on a row opus accepted. Findings: docs/dossiers/c8-dhammapada-logia.md"
+  }
 }
