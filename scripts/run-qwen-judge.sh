@@ -27,40 +27,33 @@
 #
 # Three of three flipped. SEED below is what fixes that.
 #
-# TEMP stays at the model card's 1.0 rather than serve-llama.sh's 0.2 default,
-# and this is the non-obvious part. Lowering temperature looks like the
-# reproducibility fix and is not: MEASURED at 0.2, the thinking pass rambles —
-# 4,469 generated tokens and still going on a span that takes ~1,200 at 1.0 —
-# exhausting the token budget before the verdict JSON is emitted. Six of six
-# judgements returned no parseable verdict at 0.2. Qwen specifies temp 1.0 for
-# thinking mode for exactly this reason. Reproducibility comes from pinning the
-# SEED, not from flattening the distribution.
+# TEMP=0.6 and reasoning_effort=low, both measured, and the history here is
+# worth keeping because the obvious reading was wrong twice.
 #
-# REASONING_BUDGET=2048 is load-bearing, not tuning. Unbounded, the thinking
-# pass consumes the caller's whole max_tokens and `content` comes back empty;
-# llm.py then returns reasoning_content, so run_contract.py receives a
-# paragraph of deliberation and reports "no parseable JSON". MEASURED: every
-# call failed that way before this was set. 2048 leaves ~4k of a --max-tokens
-# 6000 budget for the verdict object, which runs a few hundred tokens.
+# An earlier test at TEMP=0.2 produced 4,469 tokens of thinking and no verdict,
+# 6 of 6 judgements returning nothing, and that was written up as "low
+# temperature breaks thinking models". It was CONFOUNDED: that run had no
+# reasoning budget set. Unbounded thinking consumes the caller's max_tokens on
+# its own — see REASONING_BUDGET above — and temperature was never the cause.
 #
-# MTP IS DELIBERATELY OFF, and this one is counter-intuitive enough to be
-# worth the paragraph. Qwen3.8 ships a draft head in the GGUF and
-# --spec-type draft-mtp is a free 62 tok/s against 38 — for generation. For a
-# gate it is not free. Speculative decoding is distribution-preserving in
-# theory, but it consumes the RNG differently, so at a FIXED seed it draws a
-# different sample. MEASURED, same seed, same rows, MTP off then on:
+# With the budget fixed at 2048, temperature is free to move. MEASURED over 6
+# rows spanning both genres (3 long-prose, 3 logia), two passes each, all six
+# carrying opus=accept as reference:
 #
-#   s1639  reject GROUND  ->  PARSE-FAIL (reproducibly, both passes)
-#   s1640  accept GROUND  ->  reject GROUND
-#   s1641  reject GROUND  ->  accept
+#   temp 1.0 / effort medium   6/6 deterministic   4/6 agree with opus   0 fails
+#   temp 0.6 / effort low      6/6 deterministic   5/6 agree with opus   0 fails
 #
-# Two of three verdicts changed and one stopped parsing at all. Both configs
-# are internally reproducible; they simply do not agree with each other. A
-# review gate answers to correctness before throughput, so the fast path is
-# opt-in:
-#   EXTRA_ARGS='--spec-type draft-mtp --spec-draft-n-max 2' scripts/run-qwen-judge.sh
-# and if you take it, re-baseline — verdicts from an MTP server are not
-# comparable to verdicts from this default.
+# Same reproducibility, closer to the reference, no parse cost. 1.0 is the
+# model card's CREATIVE setting and was never the right default for a gate;
+# it survived here only because a confounded measurement had closed off the
+# rest of the range.
+#
+# reasoning_effort is a prompt string with no enforcement — `low` injects "Keep
+# your thinking brief and focused, moving directly to the conclusion without
+# unnecessary elaboration". Against a 2048-token budget that nudges the model
+# toward reaching the verdict before the cap, which is the failure mode that
+# matters. It is set via LLAMA_ARG_CHAT_TEMPLATE_KWARGS because serve-llama.sh
+# does not model chat-template kwargs and the env var needs no hook.
 #
 # CTX_SIZE=32768. The rubric prompt is the stage input plus the output plus
 # the ~3.5k-char rubric body; the largest c8 L1 stage input measured ~38k
@@ -89,13 +82,14 @@
 # l1-v3 exists to enforce; this gate does not currently verify them, whoever
 # runs it.
 CTX_SIZE=32768 \
-TEMP="${TEMP:-1.0}" \
+TEMP="${TEMP:-0.6}" \
 TOP_P="${TOP_P:-0.95}" \
 TOP_K="${TOP_K:-20}" \
 MIN_P="${MIN_P:-0.0}" \
 REPEAT_PENALTY="${REPEAT_PENALTY:-1.0}" \
 SEED="${SEED:-20260816}" \
 REASONING_BUDGET="${REASONING_BUDGET:-2048}" \
+LLAMA_ARG_CHAT_TEMPLATE_KWARGS="${LLAMA_ARG_CHAT_TEMPLATE_KWARGS:-{\"reasoning_effort\":\"low\"}}" \
 EXTRA_ARGS="${EXTRA_ARGS:-}" \
 MODEL_DIR="$HOME/programs/qwen" \
 exec "$(dirname "$0")/serve-llama.sh" "Qwen3.8-27B-UD-Q4_K_XL.gguf"

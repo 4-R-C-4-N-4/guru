@@ -89,3 +89,36 @@ differently:
 Neither result forbids local orchestration. Both say the case is not yet made,
 and that the budget formula — not the model — is the first thing to fix if the
 answer is meant to be yes.
+
+## Addendum — judge temperature (2026-08-17)
+
+The judge above ran at TEMP=1.0. That was wrong, and the reasoning that put it
+there was confounded.
+
+An earlier TEMP=0.2 test produced 4,469 tokens of thinking and no verdict, 6 of
+6 judgements returning nothing, and was written up as "low temperature breaks
+thinking models". That run had **no reasoning budget set**. Unbounded thinking
+exhausts the caller's max_tokens by itself; temperature was never the cause. The
+conclusion should never have been drawn from it, and it closed off the range a
+gate actually wants.
+
+Re-tested with REASONING_BUDGET held at 2048, varying only temperature and
+reasoning effort. Six rows across both genres (3 long-prose, 3 logia), two
+passes each, all six carrying `opus=accept` as reference:
+
+| config | deterministic | agrees with opus | parse failures |
+|---|---|---|---|
+| temp 1.0 / effort medium | 6/6 | 4/6 | 0 |
+| **temp 0.6 / effort low** | **6/6** | **5/6** | **0** |
+
+Same reproducibility, closer to the reference, no parse cost. `s1641` — the
+apocryphon "his seed" row — is the one that moves, from reject to accept.
+
+`scripts/run-qwen-judge.sh` now defaults to temp 0.6 with
+`reasoning_effort=low`. Raw verdicts in `c8-judge-temp-tuning.txt`.
+
+Two caveats. n=6 with every reference verdict being `accept`, so this measures
+false-positive rate and says nothing about whether either config catches a real
+failure — the negative controls would need re-running at 0.6 to establish that.
+And the 36% judge-agreement figure above was measured at temp 1.0; it would
+need re-running at 0.6 before being quoted as the local judge's agreement rate.
