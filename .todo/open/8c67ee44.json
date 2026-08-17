@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-16T19:16:30.514Z",
-  "updated_at": "2026-08-16T19:28:06.214Z",
+  "updated_at": "2026-08-17T02:12:40.122Z",
   "tags": [
     "dossiers",
     "local-llm",
@@ -22,7 +22,8 @@
       "b67bf6d9",
       "46d8152e",
       "fd16e2f9",
-      "5baef657"
+      "5baef657",
+      "b8c1c346"
     ]
   },
   "analysis": [

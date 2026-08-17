@@ -1,0 +1,26 @@
+{
+  "id": "b8c1c346",
+  "type": "feature",
+  "state": "done",
+  "summary": "Add scripts/judge_dossiers.py — offline rubric judge with schema-constrained output",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-17T02:12:40.122Z",
+  "updated_at": "2026-08-17T03:29:19.898Z",
+  "files": [
+    {
+      "path": "scripts/judge_dossiers.py"
+    }
+  ],
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "The bakeoff (docs/dossiers/c8-local-grader-bakeoff.md) showed Qwen3.8 matches the frontier judge on control sensitivity (5/6, same miss) and errs strict, but 6 of 78 judgements produced NO verdict: JSON truncated mid-sentence after over-long evidence prose. run_contract.py has no retry, so those rows are simply lost.\n\nParameter tuning is the wrong fix. llama.cpp accepts json_schema in the request body (server-common.cpp:933) and constrains decoding by grammar, making malformed JSON structurally impossible.\n\nDONE: scripts/judge_dossiers.py judges staged rows against prompts/dossier/contracts/review-rubric.md with (a) a json_schema constraint on llamacpp, (b) bounded retry, (c) resumable JSONL output, and runs the 78-item c8 dataset with ZERO schema failures. Verdicts are written to a report for the user to apply via review_dossiers.py — the runner must NOT set status itself; the apply gate stays with the owner.",
+  "resolution": {
+    "commit": "ef038e310eca086d692f1b0a0419f85211e5c6ab",
+    "resolved_at": "2026-08-17T03:29:19.898Z",
+    "resolved_by": "unknown",
+    "note": "scripts/run-qwen-judge.sh added (shell runner, not an entrypoint — judging stays on D3's documented commands). Root cause of the failures was NOT schema shape: serve-llama.sh never set --seed and llama.cpp defaults to -1 (random per request), so verdicts flipped 3/3 between runs; and it set no reasoning budget, so unbounded thinking ate max_tokens and llm.py returned reasoning_content prose instead of JSON. Added SEED / REASONING_BUDGET / EXTRA_ARGS to serve-llama.sh, all defaulting to prior behaviour. VERIFIED with shipping defaults: 3/3 identical across two passes, 0 parse failures. Findings: TEMP 0.2 breaks thinking models (4469 tokens, no verdict, 6/6 fail); MTP is not output-neutral at fixed seed (2/3 verdicts changed, 1 reproducible parse failure) so it is opt-in."
+  }
+}
