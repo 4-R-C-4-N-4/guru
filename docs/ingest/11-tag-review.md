@@ -23,6 +23,20 @@ same criteria in both.
 
 Queue `accept` / `reject` / `reassign` / `skip`. Never call `/api/apply`.
 
+**Accepting an `is_new_concept=1` proposal: name it before you accept it, not
+after.** The id becomes the concept's query-time label in `guru-web`
+(underscores to spaces, title-cased), and that label is matched against query
+text **whole-word** — so a one- or two-word id built from an ordinary,
+high-frequency English noun or verb ("mind", "path", "power", "light" alone)
+will fire on unrelated queries that merely happen to contain that word,
+polluting the graph-search leg for everyone, not just this concept's own
+chunks. Prefer a specific compound (`collective_psychic_field`,
+`psychopomp_journey`) over a bare common word, the same instinct as not naming
+a variable `list` or `data`. This is a judgement call at accept time, not
+something `sync_taxonomy.py` or the apply gate catches — see Failure modes
+below for the incident that motivated this rule and the checklist for fixing
+one that already slipped through.
+
 ## Output
 
 Queued decisions in `review_actions`. The live `EXPRESSES` edges do not change
@@ -146,24 +160,21 @@ collision in the failure mode above is with a *different* pending row.
 **Mistyped ids in a batch queue.** They are silently rejected. Check the
 accepted count matches what was intended — 4B ids are 70xxx, 27B are 71xxx.
 
-**A new concept's id/label can collide with an ordinary word in
-`guru-web`'s query-time concept matcher.** `is_new_concept=1` acceptance adds a
-row to `concepts/taxonomy.toml`; the query side (`extractConcepts` in
-`guru-web/src/lib/graph.ts`) matches concept labels against query text
-whole-word, case-insensitively. A concept id like `group_mind` derives the
-label "Group Mind" — and "mind" alone, as a whole word, is common enough that
-it fired on an unrelated golden-query probe about a completely different
-tradition, pulling the graph leg into this concept's tradition on a query that
-had nothing to do with it. Confirmed directly: renaming the concept
-(`group_mind` → `collective_psychic_field`, same definition, id/label only)
-stopped the spurious match and cleared the resulting retrieval regression.
-Before accepting a new concept, sanity-check its id against common English
-words the same way you would a variable name shadowing a builtin — a
-one- or two-word id built from ordinary nouns/verbs ("mind", "path", "power",
-"light" alone) is the risk case; a more specific compound
-(`collective_psychic_field`, `psychopomp_journey`) is not. This is a
-node-11 judgement call, not something `sync_taxonomy.py` catches — it has no
-knowledge of `guru-web`'s matcher.
+**A new concept's id/label collided with an ordinary word in `guru-web`'s
+query-time concept matcher — the incident behind the naming rule under
+Action, above.** The concept `group_mind` (accepted this session while
+tag-reviewing psychic-self-defence) derived the label "Group Mind" in
+`guru-web`'s `extractConcepts` (`src/lib/graph.ts`), which matches concept
+labels against query text whole-word, case-insensitively. "Mind" alone, as a
+whole word, is common enough that it fired on an unrelated golden-query probe
+about a completely different tradition, pulling the graph leg into
+`group_mind`'s own tradition on a query that had nothing to do with it.
+Confirmed directly: renaming the concept (`group_mind` →
+`collective_psychic_field`, same definition, id/label only) stopped the
+spurious match and cleared the resulting retrieval regression. `guru-web`'s
+matcher has no visibility into the taxonomy at accept time, so nothing catches
+this automatically — check the id yourself, per the rule above, before you
+queue the accept.
 
 **Renaming an already-applied concept touches four tables, not three.**
 `nodes` (the concept row itself), `edges` (any live `EXPRESSES` rows), and
