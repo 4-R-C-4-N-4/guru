@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.kybalion.017"
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+section = "Chapter IV (part 4)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb06.htm"
+token_count = 89
+
+[content]
+body = "The answer is \"LIVING MIND,\" as far above that which mortals know by those words, as Life and Mind are higher than mechanical forces, or matter--INFINITE LIVING MIND as compared to finite \"Life and Mind.\" We mean that which the illumined souls mean when they reverently pronounce the word: \"SPIRIT!\" \"THE ALL\" is Infinite Living Mind--the Illumined call it SPIRIT!"
+
+[annotations]
+concepts = []
+related_chunks = []

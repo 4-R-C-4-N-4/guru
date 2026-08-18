@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.054"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 27"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob27.htm"
+token_count = 6
+
+[content]
+body = "CONSTITUTION OF MAN."
+
+[annotations]
+concepts = []
+related_chunks = []

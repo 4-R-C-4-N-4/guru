@@ -1,0 +1,7 @@
+tradition = "western_esoteric"
+text_id = "kybalion"
+text_name = "The Kybalion (Three Initiates)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb01.htm"
+sections_format = "chapter"
+chunk_count = 63

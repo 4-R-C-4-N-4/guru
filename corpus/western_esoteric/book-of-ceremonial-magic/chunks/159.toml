@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.159"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 74 (part 3)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm73.htm"
+token_count = 105
+
+[content]
+body = "Éliphas Lévi observes that the directions recall the history of the bell of Rodilard, but the criticism is scarcely commensurate, for the material is certainly obtainable, nor would it be necessary to catch one's own hyena.\n\nThe point which was missed by the occultist may be evident to the ordinary reader; the head of the hyena is short-coated, and the hairs could not be braided.\n\nIt is not, however, unreasonable that impossible conditions should attach to an impossible object."
+
+[annotations]
+concepts = []
+related_chunks = []

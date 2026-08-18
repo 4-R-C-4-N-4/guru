@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.063"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 35"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob35.htm"
+token_count = 9
+
+[content]
+body = "CONSTITUTION OF THE UNIVERSE."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.069"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 41"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob41.htm"
+token_count = 8
+
+[content]
+body = "THE TERNARY OF TRANSITION."
+
+[annotations]
+concepts = []
+related_chunks = []

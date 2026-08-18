@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.059"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 31 (part 2)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob31.htm"
+token_count = 57
+
+[content]
+body = "AFFINITIES SIGNIFCATIONS Primitive Hieroglyphic: Serpent Astronomy: Sagittarius Month: November Hebrew letter: Samech (simple) DESTINY Chance __________ FATALITY Result of the fall of Adam-Eve OBSERVATIONS NAHASH The Dragon of the Threshold"
+
+[annotations]
+concepts = []
+related_chunks = []

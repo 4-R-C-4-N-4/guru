@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.003"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 3 (part 3)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm02.htm"
+token_count = 16
+
+[content]
+body = "The small circles within the triangle show the place of the operator and his assistants."
+
+[annotations]
+concepts = []
+related_chunks = []

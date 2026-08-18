@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.083"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 40 (part 2)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm39.htm"
+token_count = 99
+
+[content]
+body = "O God all-merciful, Who wiliest not the death of a sinner, but rather his true conversion, bestow Thy grace on us!\n\nO Lord, O God, full of compassion, aid us in this work which we are about to perform, that Thy Name may be blessed for ever!\n\nAmen .\n\nThe concluding days of the fast should be additionally strict, the meals being limited to bread and water, with abstinence from all sin and repetition of the above prayer."
+
+[annotations]
+concepts = []
+related_chunks = []

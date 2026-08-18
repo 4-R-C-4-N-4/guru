@@ -1,0 +1,40 @@
+# Two-level CHAPTER/section (§) structure, but "CHAPTER N" only appears on
+# a chapter's FIRST page — continuation pages start directly with "§ N."
+# with no chapter context (verified node 04/05: bcm05 has both CHAPTER I
+# and § 1; bcm06/bcm07 have only § 2 / § 3). Plain-text extraction also
+# loses the HTML heading/body tag boundary, so a heading vs. body-prose
+# regex can't reliably isolate just the section title anyway. Falls back to
+# honest "Page {n}" labels rather than mislabeling continuation pages with
+# a stale chapter number or truncating titles at the first period (most
+# section titles here have no terminal punctuation of their own once
+# flattened to plain text).
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Page {n}"
+number_source = "filename"
+max_tokens = 800
+pre_strip_patterns = [
+    "^Sacred Texts.*?(Previous\\s+)?Next",
+    "Next:[^\\n]*$",
+]
+# Drop title page (bcm00) and contents (bcm01) as front matter, same
+# treatment as kybalion's kyb00/kyb01 — keep starts at bcm02, "Explanation
+# of Full-Page Plates" (node 04: genuine descriptive prose, not a caption
+# list, so kept as content rather than dropped with the rest of front matter).
+drop_before_marker = "EXPLANATION OF FULL-PAGE PLATES"
+# Drop the Talismans of the Sage of the Pyramids sub-section (bcm26-bcm35,
+# 10 pages) — flagged at node 01/04 as genuinely image-dependent ("TALISMAN
+# N. / Click to view" with no textual glyph description, unlike every other
+# plate reference in this book, which carries real descriptive prose). Drop
+# the errata page (bcm80, the very last content page) whole — it is the
+# entire page, matching class P6.
+drop_chunk_patterns = [
+    "TALISMAN\\s+[IVXLCDM]+\\s*\\.\\s*Click to view",
+    "^Errata\\b",
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+translator = "Arthur Edward Waite"
+sections_format = "page"

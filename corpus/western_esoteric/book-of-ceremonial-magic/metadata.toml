@@ -1,0 +1,7 @@
+tradition = "western_esoteric"
+text_id = "book-of-ceremonial-magic"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm00.htm"
+sections_format = "page"
+chunk_count = 175

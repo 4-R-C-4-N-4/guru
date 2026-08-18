@@ -43,10 +43,37 @@
 # with the driving model recorded verbatim in `model`
 # (hermes-deepseek-v4-flash — the provenance convention applied to dossiers);
 # the other five new works generate under the campaign default.
-campaign_id = "c7"
+# c8 = c7 + book-of-ceremonial-magic + kybalion + psychic-self-defence +
+# tarot-of-the-bohemians (4 works, western_esoteric, ingested through node 12
+# 2026-08-18). The c7 plan froze at 64 works before this batch's ingest
+# changed totals; per V9 that is a new campaign, never a partial re-plan.
+# Provider/model/span_target unchanged, so the 64 prior works' span ids are
+# identical under c8 and their c7 staged rows satisfy the generate-loop
+# skip/upstream checks unchanged. All four new works generate under the
+# campaign default (no agent-driven model override).
+# c9 = c8 with NO corpus change: a PROVIDER change, local-generator vetting
+# for kybalion only (todo:8c67ee44-style bench, mirrored from
+# feat/c8-local-dossier-bench). Per V9 that is equally a new campaign — the
+# backend is a campaign parameter — even though span_target is unchanged and
+# every c8 span id (including kybalion's 10) is reproduced identically under
+# c9. Completed 2026-08-18: kybalion's full DAG (L1 through notes) generated,
+# reviewed, promoted, and embedded under Qwen3.8 — the first local-model
+# dossier to go live in this project, going past PR #73's untested-past-L1
+# boundary. The other three c8 works (book-of-ceremonial-magic,
+# psychic-self-defence, tarot-of-the-bohemians) were deliberately held out of
+# c9 and stay on the c8/claude-code line below — kybalion's result is
+# evidence for that one text, not a blanket case for local generation.
+# Switching back to c8 now that c9's only work is done; no c9 generation
+# remains pending.
+campaign_id = "c8"
 
 # "claude-code" — headless Claude Code on the subscription (default).
-# "local"      — llama.cpp on the 3090 (V7 applies; set input_budget below).
+# "llamacpp"   — llama.cpp on the 3090 (V7 applies; set input_budget below).
+#
+# These are the literal keys of PROVIDERS in scripts/llm.py — the dispatch is
+# PROVIDERS[provider], so an unrecognised value raises KeyError at the first
+# call rather than failing at config load. There is no "local" provider; that
+# was this comment's prior wording, never a valid value.
 provider = "claude-code"
 
 # Recorded verbatim in staged rows' `model`. Always pinned explicitly —

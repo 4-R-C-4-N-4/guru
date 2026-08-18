@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.108"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 54"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm53.htm"
+token_count = 191
+
+[content]
+body = "CHAPTER IV The Mysteries of Goëtic Theurgy according to the Lesser Key of Solomon the King §1 Concerning the Spirits of the Brazen Vessel, otherwise called the False Monarchy of Demons THE Goëtic Art of Solomon gives instructions for the evocation of the seventy-two spirits whom the King of Israel, according to a well-known legend, shut up in a brass vessel and cast into a deep lake. When the vessel was discovered by the Babylonians, it was supposed to contain a great treasure and was accordingly broken open. The spirits who were thus set at liberty, together with their legions, returned to their former places, Belial excepted, who entered into a certain image, and gave oracles to the people of the country in return for sacrifices and divine honours, by which there is corrupt Kabalistic authority for concluding that demons were assuaged and sustained. Their names and offices are as follows:--"
+
+[annotations]
+concepts = []
+related_chunks = []

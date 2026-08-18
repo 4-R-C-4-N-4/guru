@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.007"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 4 (part 4)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm03.htm"
+token_count = 154
+
+[content]
+body = "For convenience of treatment the present work is divided into two parts.\n\nThe first contains an analytical and critical account of the chief magical rituals known to the writer; the second forms a complete Grimoire of Black Magic.\n\nIt must be remembered that these are the operations which gave arms to the Inquisitors of the past, and justified Civil Tribunals in the opinion of their century for the sanguinary edicts pronounced against witch, warlock and magician.\n\nIt is, in truth, a very strange and not reassuring page in the history of human aberration; nor has it been a pleasing exercise which has thus sought to make it plain, once and for all.\n\nClick to view A SERPENT BEFORE THE CURSE.\n\nFrom the \" Speculum Salvationis .\""
+
+[annotations]
+concepts = []
+related_chunks = []

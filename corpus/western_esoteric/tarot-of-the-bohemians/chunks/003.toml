@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.003"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 2 (part 3)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob02.htm"
+token_count = 259
+
+[content]
+body = "Introduction : To our Lady Readers--Astronomy and Astrology--Intuition--Fortune-telling by the Tarot in Seven Lessons 301 1 st Lesson --Simplification of the Rules of Fortune-telling by the Tarot 305 2 nd Lesson --Minor Arcana--Signification --A good Memory unnecessary for their retention-Key to the Divining Tarot 307 3 rd Lesson --Major Arcana--Signification from a Divining Point of View 316 4 th Lesson --Basis of the Application of this Knowledge--Arrangement of the Cards 318 5 th Lesson --Reading the Tarot--Rapid Process--Elaborate Process 322 6 th Lesson --Etteila's original and unpublished Method of reading the Tarot (from one of his rarest works).\n\n1st Deal--2nd Deal--3rd Deal--4th Deal 327 7 th Lesson --Conclusion--Bibliography 333 XXI.--APPLICATION OF THE TAROT TO GAMES: The Royal Game of the Human Life according to the Egyptians--The Unity of Games in the Tarot 335 XXII.--CONCLUSION OF THE WORK 343 INDEX 349 TABLE OF THE AUTHORS AND PRINCIPAL WORKS QUOTED 353"
+
+[annotations]
+concepts = []
+related_chunks = []

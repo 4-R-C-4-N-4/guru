@@ -1,0 +1,36 @@
+# Mostly one page per chapter, like kybalion — CHAPTER headers are intact
+# and reliable for Part I-III (verified: tob04 carries both a "PART I."
+# banner and the full "CHAPTER II" heading on one page, same shape as
+# tob03/CHAPTER I). The 22-card Major Arcana walkthrough (tob14 onward)
+# uses card names ("THE JUGGLER", "THE HIGH PRIESTESS", ...) instead of
+# CHAPTER numbering, so those pages fall back to the generic "Page {n}"
+# label — same honest-fallback convention as front matter elsewhere in
+# this tradition, not a new pattern.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+section_label_format_no_number_match = "Page {n}"
+number_source = "content"
+number_pattern = 'CHAPTER\s+([IVXLCDM]+)'
+max_tokens = 800
+pre_strip_patterns = [
+    "^Sacred Texts.*?(Previous\\s+)?Next",
+    "Next:[^\\n]*$",
+]
+# Drop the Contents/TOC listing and the title page (title page crawled last
+# in link order — same out-of-sequence pattern as kybalion's kyb00 — and
+# the Contents page — pure navigation, not primary text). Drop the errata
+# page whole (class P6). The "Alphabetic Table of Authors and Principal
+# Works Quoted" bibliography (second-to-last page) is kept — it's Papus's
+# own compiled bibliography, not archive packaging.
+drop_chunk_patterns = [
+    "^CONTENTS\\.",
+    "^Absolute Key to Occult Science",
+    "^Errata\\b",
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+translator = "A.P. Morton"
+sections_format = "chapter"

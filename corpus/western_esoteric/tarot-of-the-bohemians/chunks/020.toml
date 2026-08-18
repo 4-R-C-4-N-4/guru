@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.020"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter VI (part 3)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob08.htm"
+token_count = 47
+
+[content]
+body = "The second to Man.\n\nThe third to Nature.\n\nFinally, the last ternary indicates the passage from the creative and providential World to the created and fatal world.\n\nThis ternary establishes the connection between the major and minor arcana ."
+
+[annotations]
+concepts = []
+related_chunks = []

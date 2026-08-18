@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.psychic-self-defence.026"
+tradition = "western_esoteric"
+text_name = "Psychic Self-Defence (Dion Fortune)"
+section = "3. A Case Of Modern Witchcraft-e"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/dion-fortune_psychic-self-defense_complete-text.html"
+token_count = 99
+
+[content]
+body = "This case reveals another interesting point in that, true to the witch-tradition, she had a horror of sacred symbols.\n\nShe would not occupy a room where there was a picture of a religious subject.\n\nNothing would induce her to wear any piece of jewelry in the form of a cross, and it was impossible for her to enter a church.\n\nThis case has many points of interest, especially in the fact that what was apparently a case of well-marked insanity was cleared up by occult methods."
+
+[annotations]
+concepts = []
+related_chunks = []

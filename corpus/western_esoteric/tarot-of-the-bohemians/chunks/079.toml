@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.079"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter XIV (part 10)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob42.htm"
+token_count = 33
+
+[content]
+body = "3 4 of 4 in 4 2 3 4 1 3 4 1 2 4 1 2 3"
+
+[annotations]
+concepts = []
+related_chunks = []

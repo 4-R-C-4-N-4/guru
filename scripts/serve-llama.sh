@@ -88,6 +88,14 @@ TOP_K="${TOP_K:-40}"
 MIN_P="${MIN_P:-0.05}"
 REPEAT_PENALTY="${REPEAT_PENALTY:-1.05}"
 
+# RNG seed. llama.cpp's default is -1, meaning a fresh random seed PER REQUEST,
+# so two identical calls to the same model with the same prompt can return
+# different answers. That is fine for generation and fatal for a gate: measured
+# on the D3 rubric, three of three verdicts flipped between two consecutive
+# runs of the same rows. Pin SEED in a wrapper that needs reproducibility
+# (scripts/run-qwen-judge.sh). -1 keeps the existing behaviour everywhere else.
+SEED="${SEED:--1}"
+
 # --- Reasoning routing ---
 # REASONING=auto + REASONING_FORMAT=deepseek route a thinking model's
 # preamble into message.reasoning_content instead of mixing it into
@@ -98,6 +106,24 @@ REPEAT_PENALTY="${REPEAT_PENALTY:-1.05}"
 # thousands of tokens first. Non-thinking models (Mistral) are unaffected.
 REASONING="${REASONING:-auto}"
 REASONING_FORMAT="${REASONING_FORMAT:-deepseek}"
+
+# Hard cap on thinking tokens. -1 (llama.cpp's default) is unbounded, and for
+# a thinking model that is a live failure: the reasoning pass can consume the
+# caller's entire max_tokens, leaving `content` empty. llm.py:call_llamacpp
+# then falls back to reasoning_content and hands the caller a paragraph of
+# deliberation where it expected JSON — every contract call fails, and fails
+# looking like a parse bug rather than a budget one. At N>0 llama.cpp injects
+# a message and closes the think block with the proper end tag, so an answer
+# is emitted. Set this in any wrapper whose caller parses structured output.
+REASONING_BUDGET="${REASONING_BUDGET:--1}"
+
+# Raw llama-server flags, word-split on purpose so a wrapper can pass several.
+# Same hook the model-runners copy of this script already has; added here so a
+# wrapper can reach flags this script does not model, e.g. speculative decoding:
+#   EXTRA_ARGS='--spec-type draft-mtp --spec-draft-n-max 2'
+# Unquoted expansion means values containing spaces must not be quoted as one
+# argument — pass JSON without spaces, or use the LLAMA_ARG_* env var instead.
+EXTRA_ARGS="${EXTRA_ARGS:-}"
 
 # --- Sanity checks ---
 if [[ ! -f "$MODEL_PATH" ]]; then
@@ -146,8 +172,11 @@ exec "$LLAMA_BIN" \
     --top-k "$TOP_K" \
     --min-p "$MIN_P" \
     --repeat-penalty "$REPEAT_PENALTY" \
+    --seed "$SEED" \
     --reasoning "$REASONING" \
     --reasoning-format "$REASONING_FORMAT" \
+    --reasoning-budget "$REASONING_BUDGET" \
     --jinja \
     --no-webui \
-    --metrics
+    --metrics \
+    $EXTRA_ARGS

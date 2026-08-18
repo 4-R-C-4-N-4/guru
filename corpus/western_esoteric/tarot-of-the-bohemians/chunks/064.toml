@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.064"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter XIII"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob36.htm"
+token_count = 49
+
+[content]
+body = "CHAPTER XIII. GENERAL TRANSITION. ARCANA 19 TO 21. The Qoph and the Sun--The Resh and the Judgment--The Shin and the Fool--The Vau and the Sun. The Ternary of Transition."
+
+[annotations]
+concepts = []
+related_chunks = []

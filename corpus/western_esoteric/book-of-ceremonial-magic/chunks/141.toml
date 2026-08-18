@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.141"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 66 (part 5)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm65.htm"
+token_count = 80
+
+[content]
+body = "We glorify Thee, O blessed and glorious Trinity I May the Name of the Lord be blessed, now and henceforth for ever I Amen.\n\nIn the Name of the Father, of the Son and of the Holy Ghost, Jesus of Nazareth, King of the Jews.\n\nMay Christ conquer ✠ , reign ✠ , command ✠ , and defend me from all evil.\n\nAmen ."
+
+[annotations]
+concepts = []
+related_chunks = []

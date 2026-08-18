@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.psychic-self-defence.046"
+tradition = "western_esoteric"
+text_name = "Psychic Self-Defence (Dion Fortune)"
+section = "6. Hauntings-j"
+translator = ""
+source_url = "https://www.globalgreyebooks.com/online-ebooks/dion-fortune_psychic-self-defense_complete-text.html"
+token_count = 62
+
+[content]
+body = "A great deal of relief can be given to lunatics by breaking up the thought-forms that are surrounding them, but unfortunately the relief is short-lived; for unless the cause of the illness can be dealt with, a fresh batch of thought-forms is built up as soon as the original ones are destroyed."
+
+[annotations]
+concepts = []
+related_chunks = []
