@@ -52,25 +52,7 @@ SELECT 'edges EXPRESSES proposed',  COUNT(*) FROM edges WHERE type='EXPRESSES' A
 SELECT 'edges EXPRESSES inferred',  COUNT(*) FROM edges WHERE type='EXPRESSES' AND tier='inferred' UNION ALL
 SELECT 'nodes total',               COUNT(*) FROM nodes UNION ALL
 SELECT 'nodes concept',             COUNT(*) FROM nodes WHERE type='concept' UNION ALL
-SELECT 'nodes chunk',               COUNT(*) FROM nodes WHERE type='chunk' UNION ALL
--- Pass D canary. Without these a dossier snapshot cannot be diffed before and
--- after a generation run: the tags/edges/nodes counts above are all unchanged
--- by Pass D, so the manifest would report 'no movement' for a campaign that
--- wrote thousands of rows.
-SELECT 'staged_summaries total',    COUNT(*) FROM staged_summaries UNION ALL
-SELECT 'staged_summaries pending',  COUNT(*) FROM staged_summaries WHERE status='pending' UNION ALL
-SELECT 'staged_summaries accepted', COUNT(*) FROM staged_summaries WHERE status='accepted' UNION ALL
-SELECT 'staged_summaries rejected', COUNT(*) FROM staged_summaries WHERE status='rejected' UNION ALL
-SELECT 'staged_summaries L1',       COUNT(*) FROM staged_summaries WHERE level=1 UNION ALL
-SELECT 'staged_summaries L2',       COUNT(*) FROM staged_summaries WHERE level=2 UNION ALL
--- level 0 = internal folds: zero under claude-code, non-zero only under a
--- small-context provider (input_budget > 0). A non-zero count here is the
--- signal that the fold path actually executed.
-SELECT 'staged_summaries folds',    COUNT(*) FROM staged_summaries WHERE level=0 UNION ALL
-SELECT 'dossier_fields total',      COUNT(*) FROM staged_dossier_fields UNION ALL
-SELECT 'dossier_fields pending',    COUNT(*) FROM staged_dossier_fields WHERE status='pending' UNION ALL
-SELECT 'dossier_fields accepted',   COUNT(*) FROM staged_dossier_fields WHERE status='accepted' UNION ALL
-SELECT 'dossier_fields rejected',   COUNT(*) FROM staged_dossier_fields WHERE status='rejected';
+SELECT 'nodes chunk',               COUNT(*) FROM nodes WHERE type='chunk';
 " > "$SNAP.manifest.txt"
 
 SIZE="$(du -h "$SNAP" | cut -f1)"

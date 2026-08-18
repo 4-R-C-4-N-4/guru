@@ -111,3 +111,12 @@ want opposite responses:
 
 That distinction is the single most useful thing in this workbook, because the
 symptom is identical and one of the two responses destroys work.
+
+## Decisions
+
+Cross-cutting judgement calls that don't belong to one node — provider
+choices, infrastructure investigations, anything a future reader would ask
+"why" about rather than "how" — go in `decisions/`, mirroring
+[`docs/ingest/decisions/`](../ingest/decisions/). One file per topic, not per
+node. See [`decisions/local-model-benchmark.md`](decisions/local-model-benchmark.md)
+for why Pass D still runs on `claude-code` rather than a local model.
