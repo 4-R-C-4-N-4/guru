@@ -113,6 +113,25 @@ def fetch_index(url: str) -> list[dict]:
     _fix_encoding(response)
     soup = BeautifulSoup(response.text, "html.parser")
     
+    # Sacred-texts pages carry site-wide "adjacent title" navigation — a
+    # header breadcrumb and a footer Previous/Next-title block — that link
+    # to a DIFFERENT work's pages, not this one's. The old "index" in href
+    # filter only catches same-collection self-links named literally
+    # 'index.htm'; it misses an adjacent title whose own entry point is
+    # named something else (e.g. 'pageidx.htm'), and it misses a header
+    # breadcrumb link entirely (e.g. a "Tarot Reading" shortcut to a
+    # sibling work's title page). Both slipped through undetected on the
+    # 2026-08-17 western_esoteric batch: kybalion's index page picked up
+    # Rudolf Steiner's Knowledge of the Higher Worlds (eso/khw/pageidx.htm,
+    # the catalog-adjacent title's back-index) via the footer nav, and
+    # tarot-of-the-bohemians' index page picked up Waite's Pictorial Key to
+    # the Tarot (tarot/pkt/tarot0.htm) via the header breadcrumb. Both
+    # false positives resolve to a directory other than the index page's
+    # own — every genuine chapter/section link for a work lives under that
+    # work's own path — so scoping to the index's own directory is a
+    # structural fix rather than another name-based heuristic to evade.
+    index_dir = url.rsplit("/", 1)[0] + "/"
+
     # Find all text links (usually in a list or specific container)
     links = []
     for a in soup.find_all("a", href=True):
@@ -125,6 +144,10 @@ def fetch_index(url: str) -> list[dict]:
             # Convert relative to absolute URL
             if not href.startswith("http"):
                 href = urljoin(url, href)
+            # Skip links that resolve outside this work's own directory —
+            # adjacent-title navigation, not a page of this work.
+            if not href.startswith(index_dir):
+                continue
             links.append({
                 "url": href,
                 "title": a.get_text(strip=True)

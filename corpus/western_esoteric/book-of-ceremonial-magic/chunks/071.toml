@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.071"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 24 (part 4)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm23.htm"
+token_count = 54
+
+[content]
+body = "He gives no satisfactory account of it, nor can it be traced at this day.\n\nPossibly it represented the transition of the Sworn Book of Honorius into the Spurious Papal Constitution, which certainly reproduces the motive and moves in the atmosphere of its prototype."
+
+[annotations]
+concepts = []
+related_chunks = []

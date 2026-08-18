@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.038"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 14 (part 3)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob14.htm"
+token_count = 132
+
+[content]
+body = "The Hebrew letters placed upon the upper line of this key indicate the origin of the card under consideration, the Hebrew letters placed above it indicate the exact meaning of the card.\n\n1.\n\nא The Juggler .\n\nAFFINITIES SIGNIFICATIONS Primitive Hieroglyph: Man Kabbalah: Kether Astronomy: No Affinity Key to the Card: yod yod __________ The divine creator or GOD the Father OSIRIS yod of yod yod-yod OBSERVATIONS The divine transformer THE ACTIVE UNIVERSE NATURA NATURANS vau of yod yod-yod __________ 2 nd he of yod yod-yod"
+
+[annotations]
+concepts = []
+related_chunks = []

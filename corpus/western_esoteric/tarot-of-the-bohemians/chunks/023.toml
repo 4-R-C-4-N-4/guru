@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.023"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter VII (part 3)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob09.htm"
+token_count = 113
+
+[content]
+body = "Arcana 21-22 Ten of Sceptres ---- of Swords ---- of Cups ---- of Pentacles GENERAL FIGURE OF THE CONSTRUCTION OF THE TAROT, SHOWING ALL THE AFFINITIES.\n\nThe absolute law.\n\nYod He Vau He is in the centre of the figure.\n\nEach of the letters of the tetragrammaton governs one quarter of the circle which contains its affinities.\n\nThe different colours indicate the especial dominion of each arcanum.\n\nGRAND GENERAL FIGURE OF THE TAROT.-- Arrangement of Series ."
+
+[annotations]
+concepts = []
+related_chunks = []

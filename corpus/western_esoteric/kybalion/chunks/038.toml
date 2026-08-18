@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.kybalion.038"
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+section = "Chapter VIII (part 7)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb10.htm"
+token_count = 31
+
+[content]
+body = "As we proceed with our consideration of the remaining Principles, we will see even more clearly the truth of the universal nature of this great Principle of Correspondence."
+
+[annotations]
+concepts = []
+related_chunks = []

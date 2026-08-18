@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.032"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 10"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm09.htm"
+token_count = 377
+
+[content]
+body = "§ 2. Theosophia Pneumatica In the year 1686, the Arbatel was translated into German, and in the same year--possibly in the same volume-appeared, also in German, a work entitled The Little Keys of Solomon or Theosophia Pneumatica . There are no examples of these editions in the British Museum, and inquiry has failed to elicit any particulars concerning them. Both are reprinted, together with other specimens of Ancient Magical Literature, to illustrate the Faust legend, in the third volume of Scheible's Das Kloster , The translation of the Arbatel makes no reference to the previous edition in Latin, and Theosophia Pneumatica nowhere states that it is an adaptation of the earlier work. The attribution to Solomon is, of course, wholly contrary to the spirit of the Ritual, and betrays so far the hand of ignorance. The adapter had, however, been subject to other occult influences besides the Arbatel . He applies the term Talmid to the magical aspirant, and this is not used by the original. The adaptation has been well executed and makes for additional clearness. The transcendental portions are slightly accentuated; it is said in one place that the exaltation of prayer is the end of the whole Mystery, and that such exaltation will never be denied to the true seeker, who is recommended on no account to undervalue his own prayers. This is a better presentation of the theory than the corresponding passage in the Arbatel itself. There is also an addendum on Transcendental Medicine, which, so far as can be known, is original, and it is as curious as anything in the literature with which we are dealing. Click to view THE ANGELS AND OLYMPIC SPIRITS OF THE SILVER PLANETS"
+
+[annotations]
+concepts = []
+related_chunks = []

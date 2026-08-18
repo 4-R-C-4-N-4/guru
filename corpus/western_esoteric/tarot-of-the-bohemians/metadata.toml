@@ -1,0 +1,7 @@
+tradition = "western_esoteric"
+text_id = "tarot-of-the-bohemians"
+text_name = "The Tarot of the Bohemians (Papus)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob01.htm"
+sections_format = "chapter"
+chunk_count = 134

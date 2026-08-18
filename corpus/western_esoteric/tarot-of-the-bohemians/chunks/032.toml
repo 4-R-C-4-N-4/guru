@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.032"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter IX (part 6)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob11.htm"
+token_count = 381
+
+[content]
+body = "Seven doubles (double because they express two sounds, the one positive strong, the other negative soft); The B (Beth) ב The G (Gimel) ג The D (Daleth) ג The Ch (Caph) כ The Ph (Pe) פ The R (Resh) ר The T (Tau) ט 3rd.\n\nLastly, twelve simple, formed by the other letters.\n\nTo render this clearer, we will give the Hebrew alphabet here, indicating the quality of each letter and its rank.\n\n(See page 95 .) We have now given a fixed principle for symbolism in the Hebrew letter, and need not fear being deceived by the false interpretation of a costume, or of an incorrect figure.\n\nThe Hebrew letter will be always there, to enlighten us upon obscure or difficult points.\n\nWe can therefore safely return to the Tarot, which we have left to make this digression.\n\nNUMBER IN ORDER HIEROGLYPHIC NAMES VALUE IN ROMAN LETTERS VALUE IN ALPHABET 1 א aleph A mother 2 ב beth B double 3 ג gimel G double 4 ד daleth D double 5 ה he E simple 6 ו vau V simple 7 ז zain z simple 8 ה heth H simple 9 ט teth T simple 10 י Yod I simple and principle 11 כ kaph CH double 12 ל lamed L simple 13 מ mem M mother 14 נ nun N simple 15 ס samech S simple 16 ע ayin GH simple 17 פ phe PH double 18 צ tzaddi TS simple 19 ק qoph K simple 20 ר resh R double 21 ש shin SH mother 22 ט tau TH double"
+
+[annotations]
+concepts = []
+related_chunks = []

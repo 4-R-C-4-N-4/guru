@@ -1,0 +1,45 @@
+# Dion Fortune, Psychic Self-Defence (1930) — Global Grey complete-text page
+# via generic_html, single flattened line (no \n anywhere), same shape as
+# transcendental-magic-doctrine/secret-teachings-of-all-ages. Preface + 20
+# numbered chapters + Conclusion, grouped under 4 unnumbered "Part N. <title>"
+# labels that carry no prose of their own — pre_strip removes the 4 Part
+# labels so they don't trail onto the preceding chapter's chunk body.
+#
+# Exact-title alternation, not a bare '\d{1,2}\.' pattern: chapter numbers
+# restart meaning has no cross-chapter collision risk here, but two pairs of
+# titles are literal prefixes of each other ("Methods Of Defence I" is a
+# prefix of "...II"/"...III"/"...IV"; "The Motives Of Psychic Attack. I" is a
+# prefix of "...II") — those four and two are ordered longest-alternative-
+# first so Python's leftmost-alternative-wins regex engine can't truncate a
+# longer title to its shorter prefix. All 22 markers (Preface, 20 chapters,
+# Conclusion) verified unique and singly-occurring against the raw
+# (2026-08-17) — the one non-heading "Vampirism" hit (as ordinary prose, no
+# leading "5. ") and the one non-heading "Chapter II" cross-reference (an
+# inline mention, not a header) do not collide with the pattern, since the
+# pattern requires the digit+period immediately before the exact title text.
+# Chapters run 15-60KB single-line -> subsplit() sentence-level fallback at
+# max_tokens (no paragraph boundaries survive the flattened extraction).
+[chunking]
+strategy = "regex-section-split"
+pattern = '((?:^Preface)|(?:Conclusion)|(?:\d{1,2}\. (?:Methods Of Defence IV|Methods Of Defence III|Methods Of Defence II|Methods Of Defence I|The Motives Of Psychic Attack\. II|The Motives Of Psychic Attack\. I|Signs Of Psychic Attack|Analysis Of The Nature Of Psychic Attack|A Case Of Modern Witchcraft|Projection Of The Etheric Body|Vampirism|Hauntings|The Pathology Of Non-Human Contacts|The Risks Incidental To Ceremonial Magic|Distinction Between Objective Psychic Attack And Subjective Psychic Disturbance|Non-Occult Dangers Of The Black Lodge|The Psychic Element In Mental Disturbance|Methods Employed In Making A Psychic Attack|Physical Aspect Of Psychic Attack And Defence|Diagnosis Of The Nature Of An Attack)))'
+section_label_format = "{n}"
+max_tokens = 800
+group_size = 1
+pre_strip_patterns = [
+    # The 4 Part-level structural labels — no prose of their own, each one
+    # sits directly between the previous chapter's last sentence and the
+    # next chapter's numbered heading. Stripped so they don't trail onto
+    # the preceding chapter's chunk body. Verified single-occurrence each.
+    'Part 1\. Types Of Psychic Attack\s+',
+    'Part 2\. Differential Diagnosis\s+',
+    'Part 3\. The Diagnosis Of A Psychic Attack\s+',
+    'Part 4\. Methods Of Defence Against Psychic Attack\s+',
+    # Global Grey end-of-page furniture (node 04 survey) — same marker,
+    # same fix, as secret-teachings-of-all-ages.toml.
+    'THE END \S* Back to top\s*$',
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "Psychic Self-Defence (Dion Fortune)"
+sections_format = "chapter"

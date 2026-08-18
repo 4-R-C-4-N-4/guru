@@ -52,6 +52,16 @@
 # comment); check `nvidia-smi --query-gpu=index,name,memory.used
 # --format=csv,noheader` after starting the server and before assuming it
 # fits alongside anything else on the same card.
+#
+# Pinned to the 4070 (docs/ingest/gpu-assembly.md's assembly: the 4B
+# fine-tune belongs on CUDA 1 / the 4070, port 8081, leaving the 3090 free
+# for a 24B-class model). Without this, llama.cpp's full-offload silently
+# splits across both visible cards — discovered 2026-08-17 running both
+# GPUs hot for one job's worth of work. CUDA_DEVICE_ORDER=PCI_BUS_ID is
+# required alongside CUDA_VISIBLE_DEVICES — this rig's default
+# FASTEST_FIRST ordering resolves CUDA 0 to the 4070, not the 3090.
+CUDA_DEVICE_ORDER="${CUDA_DEVICE_ORDER:-PCI_BUS_ID}" \
+CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-1}" \
 CTX_SIZE=16384 \
 PARALLEL=4 \
 MODEL_DIR="/home/ivy/programs/guru/4b-v3" \

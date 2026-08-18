@@ -1,0 +1,31 @@
+# Same shape as tertium-organum.toml: one page = one chapter for the
+# primary text (kyb03-kyb17), front matter (title kyb00, TOC kyb01,
+# Introduction kyb02) falls back to the no-match label. Verified 1:1
+# page:chapter mapping at node 01 — unlike book-of-ceremonial-magic, no
+# chapter here spans multiple raw pages, so a single number_pattern is
+# reliable for every primary-text page.
+[chunking]
+strategy = "page-as-chunk"
+section_label_format = "Chapter {n}"
+section_label_format_no_number_match = "Page {n}"
+number_source = "content"
+number_pattern = 'CHAPTER\s+([IVXLCDM]+)'
+max_tokens = 800
+pre_strip_patterns = [
+    "^Sacred Texts.*?at sacred-texts\\.com",
+    "Next:[^\\n]*$",
+]
+# Drop the title page (kyb00, dedication block, front matter — same
+# treatment as book-of-ceremonial-magic's title page) and the table of
+# contents (kyb01, pure listing, not primary text). Both landed
+# out-of-sequence in raw file order (crawl picked up kyb00 last), so this
+# is a content match, not a position-based drop.
+drop_chunk_patterns = [
+    "^THE KYBALION A Study of The Hermetic Philosophy",
+    "^Table of Contents\\b",
+]
+
+[metadata]
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+sections_format = "chapter"

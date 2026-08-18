@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.064"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 21 (part 2)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm20.htm"
+token_count = 536
+
+[content]
+body = "from which it has been printed must have been in a most confused state; there are not in reality any distinct divisions, and the little volume abounds in Latin passages which often defy translation, as, for example, sic pro ratione voluntas; ut illud sit hoe in opere inclusum minimo clerum in doctis; quia amicus fiet capitalis, fiet inimicus .\n\nSo also we have Sanctum Regum throughout for Sanctum Regnum .\n\nThere are two folding plates of Characters and Seals, of which many have no reference to the text, while others essential to the process are missing, the deficiencies being supplied in the modern Italian versions, which probably follow another edition, also Italian, and the source of the French translation, but unknown to the present writer, as indeed to most bibliographers.\n\nThe work, as it stands, is really in two parts only, the Grimorium Verum proper and certain \"Rare and Astounding Magical Secrets.\" The first may be analysed as follows:--( a .) Directions for the preparation of the Operator, all of a personal kind and analogous to those of the Clavicle.\n\n( b .) Instructions for the manufacture of the magical instruments required in the work, also analogous to the Clavicle.\n\n( c .) The composition of the virgin parchment on which the characters and seals are to be inscribed, shewing distinct variations from the Clavicle.\n\n( d .) The processes of evocation and the discharge.\n\nBeyond the fact that the evoked Spirits are Lucifer, Beelzebuth, Astaroth and the inferiors and ministers of these, this first and chief part is not more repulsive, as it is indeed scarcely more unintelligent, than most of the processes in its prototype.\n\nThe second part contains the usual curiosities common to all the later Grimoires, including the Admirable Secrets of the pretended Albertus Magnus, the Little Albert , &c.\n\nIn so far as it presents any considerable variations, such variations are usually in the direction of Black Magic.\n\nSome are venereal in the more objectionable sense of the term, others merely revolting, while yet others, as that of the Magic Garters, are derived from the Clavicle.\n\nFinally, there are certain processes which might claim to be those of White Magic and are concerned with the ceremonial induction of simple clairvoyance.\n\nWe may therefore conclude that the Grimorium Verum proper is not more diabolical than the first part of the Lemegeton , which indeed contains the ceremonial for the evocation of precisely the same spirits."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.107"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter XVIII (part 2)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob47.htm"
+token_count = 89
+
+[content]
+body = "The curious had better consult his work on the subject-- COLLECTION SUR LES HAUTES SCIENCES, or a theoretical and practical treatise upon the wisdom magic of the ancients, absolutely complete in twelve books, which contain all that Etteila has written upon the Hermetic philosophy, the art of fortune-telling by cards .\n\n.\n\n.\n\nand particularly the sublime Book of Thoth .\n\n2 vols.\n\n8vo., bound, 1780."
+
+[annotations]
+concepts = []
+related_chunks = []

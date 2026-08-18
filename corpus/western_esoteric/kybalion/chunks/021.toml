@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.kybalion.021"
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+section = "Chapter V (part 4)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb07.htm"
+token_count = 137
+
+[content]
+body = "And at the end of the Grand Cycle of Aeons, when THE ALL shall draw back into itself all of its creations--you will go gladly for you will then be able to know the Whole Truth of being At One with THE ALL.\n\nSuch is the report of the Illumined--those who have advanced well along The Path.\n\nAnd, in the meantime, rest calm and serene--you are safe and protected by the Infinite Power of the FATHER-MOTHER MIND.\n\n\"Within the Father-Mother Mind, mortal children are at home.\"--The Kybalion.\n\n\"There is not one who is Fatherless, nor Motherless in the Universe.\"--The Kybalion."
+
+[annotations]
+concepts = []
+related_chunks = []

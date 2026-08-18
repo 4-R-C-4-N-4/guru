@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.060"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 19 (part 2)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm18.htm"
+token_count = 470
+
+[content]
+body = "As a counterpoise, a century later his bust was placed in the town-hall of Padua.\n\nHis undoubted works, which are frankly unreadable, betray no acquaintance with the occult sciences beyond a belief in astrology, which in those days was catholic as Rome and powerful as the Holy Tribunal.\n\nHe remains, therefore, one of the moral martyrs of Magic, faussement accusé , as Gabriel Naudé has it.\n\nHis accusation and the mode of its prosecution remain also among the lesser glories of the Holy Office.\n\nAccepting the Heptameron as a work belonging to the period of its first publication, it is here placed among the Rituals of a composite character, not because it professedly deals with devils, but because the nature of its angels and spirits is indicated by the manner of their conjuration; in a word, they are described as angels and threatened as demons.\n\nThe procedure is divided into two parts--a general method for the evocation of the Spirits of the Air, who are undoubtedly demons, and a set of angelical conjurations proper to each day of the week.\n\nThe second section presumably belongs to the department of White Magic--if I may adopt this glorious distinction in the ribaldry of a passing moment--as the intelligences concerned are said to be good and great, though their offices are mixed and confusing, including the discovery of treasures, the detection of secrets, fomenting war, opening locks and bolts, procuring the love of women, inclining men to luxury and sowing hatred and evil thought.\n\nObviously, White Magic of this kind is much blacker than it is painted.\n\nThough the entire Heptameron appears under one attribution, the first part only is ascribed in the text to Peter de Abano.\n\nTherein the personal preparation of the operator corresponds to that given in the Second Part of the present work, and the ceremonial itself, which, if cited at all, would have to be printed in extenso , as it contains no detachable portions, is much too elaborate to be inserted in this place, more especially as that of the Lemegeton will provide later on a fairly complete notion of the scope and purpose of the Composite Rituals, taken in their broad aspect, and will illustrate the fact that all conventional distinctions dissolve therein."
+
+[annotations]
+concepts = []
+related_chunks = []

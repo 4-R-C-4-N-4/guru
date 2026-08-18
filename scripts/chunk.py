@@ -308,8 +308,15 @@ def process_source(
             ]
             pages = [(n, stem, content) for n, stem, content in pages if content]
 
+        # Per-page source_url, keyed by filename stem (e.g. "kybalion-05"),
+        # so each chunk can record the page it actually came from — see the
+        # note on page_chunker.split's source_urls param.
+        page_source_urls = {
+            stem: _find_source_url(tradition, stem) for _, stem, _ in pages
+        }
+
         import page_chunker
-        final_chunks = page_chunker.split(pages, cfg)
+        final_chunks = page_chunker.split(pages, cfg, page_source_urls)
 
         # Ensure all token counts are filled
         for chunk in final_chunks:
@@ -356,7 +363,7 @@ def process_source(
                 "text_name": text_name,
                 "section": chunk.section_label,
                 "translator": translator,
-                "source_url": source_url,
+                "source_url": chunk.metadata.get("source_url") or source_url,
                 "token_count": chunk.token_count,
             },
             "content": {

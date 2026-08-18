@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.kybalion.010"
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+section = "Chapter II (part 5)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb04.htm"
+token_count = 201
+
+[content]
+body = "Every Male thing has the Female Element also; every Female contains also the Male Principle.\n\nIf you would understand the philosophy of Mental and Spiritual Creation, Generation, and Re-generation, you must understand and study this Hermetic Principle.\n\nIt contains the solution of many mysteries of Life.\n\nWe caution you that this Principle has no reference to the many base, pernicious and degrading lustful theories, teachings and practices, which are taught under fanciful titles, and which are a prostitution of the great natural principle of Gender.\n\nSuch base revivals of the ancient infamous forms of Phallicism tend to ruin mind, body and soul, and the Hermetic Philosophy has ever sounded the warning note against these degraded teachings which tend toward lust, licentiousness, and perversion of Nature's principles.\n\nIf you seek such teachings, you must go elsewhere for them--Hermeticism contains nothing for you along these lines.\n\nTo the pure, all things are pure; to the base, all things are base."
+
+[annotations]
+concepts = []
+related_chunks = []

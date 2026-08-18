@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.073"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 25 (part 2)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm24.htm"
+token_count = 344
+
+[content]
+body = "it is, however, an operation of Necromancy and will be found in its proper place in the Second Part.\n\nThe Verus Jesuitarum Libellus closes with a fuliginous conjuration of the entire hierarchy of Infernus, which continues for many pages and contains more unintelligible words than several combined Grimoires.\n\nIn the absence of all knowledge of its original edition, it is impossible to throw any light upon this singular imposture.\n\nThe Praxis Magica Fausti or \"Magical Elements of Dr.\n\nJohn Faust, Practitioner of Medicine,\" claims to have been printed from the original MS.\n\nin the Municipal Library of Weimar and is dated 1571, at which period it must be respectfully affirmed that there was no Municipal Library in the birthplace of Goethe.\n\nFurthermore, the existing collection does not include the MS.\n\nWhether the original edition was antedated cannot be certainly affirmed, as it is exceedingly scarce, and I am acquainted with it only in the reprint of Scheible and in an unprinted transcript by Major Irwin.\n\nThe work consists of a few curious plates, in the manner of the seventeenth century, and a few unintelligible conjurations, all exceedingly brief.\n\nThe third of these exhorts the Evil Spirit on the quaint ground that now it is the time of the Great Name Tetragrammaton .\n\nThe purpose of citation is not indicated; the formulæ are Christian, broken up by innumerable crosses and by names and terms which defy conjecture as to their significance.\n\nThe hierarchy of the spirit is determined by the closing words: \"I command thee, O Spirit Rumoar , even by Lucifer, thy mighty sovereign.\""
+
+[annotations]
+concepts = []
+related_chunks = []

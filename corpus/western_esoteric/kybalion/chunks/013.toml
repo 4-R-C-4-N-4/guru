@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.kybalion.013"
+tradition = "western_esoteric"
+text_name = "The Kybalion (Three Initiates)"
+section = "Chapter III (part 3)"
+translator = ""
+source_url = "https://sacred-texts.com/eso/kyb/kyb05.htm"
+token_count = 46
+
+[content]
+body = "We ask the close attention, and careful study of this great Principle, on the part of our students, for it is really the Basic Principle of the whole Hermetic Philosophy, and of the Hermetic Art of Mental Transmutation."
+
+[annotations]
+concepts = []
+related_chunks = []

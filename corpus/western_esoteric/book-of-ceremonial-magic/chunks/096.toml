@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.096"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 48"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm47.htm"
+token_count = 227
+
+[content]
+body = "§ 6. Concerning the Silken Cloth When all the instruments belonging to the Art have been properly consecrated and exorcised, they must be gathered into a costly cloth of silk, as Solomon ordains-says the testament whereby they may be preserved clean and pure and may thus be more efficacious. So it be not black or brown, the colour is indifferent, but the following characters must be written upon it in pigeon's blood with the male goose-quill proper to the Art. Click to view Add these names: ADONAY, AMMASTIUS, ANARETON, COSBOS, ELOYM. Then fumigate and asperge, reciting subsequently the Psalms Domine, Dominus noster, Deus Judicium tuum Regi da and Ecce nunc dimittis . Place, lastly, all the magical instruments in this silken cloth. \"So shalt thou use them at will and shalt learn their effect,\" says the Magus, Iroë-Grego. But the pledge has a savour of the salt which is called prudence."
+
+[annotations]
+concepts = []
+related_chunks = []

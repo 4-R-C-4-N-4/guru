@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.044"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 14 (part 3)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm13.htm"
+token_count = 409
+
+[content]
+body = "It is ( a .) frivolous in such experiments as the detection of stolen goods, by which it is placed on the same level as the pedlar's literature of fortune-telling; it is ( b .) hyperbolical and fantastic in the experiment of invisibility, in the composition of the Magic Garters and the Magic Staff; it is ( c .) foolish in such chapters as that on preventing a sportsman from killing any game.\n\nPerhaps, however, these distinctions may be held to merge into one another.\n\nM.\n\nPapus, the mouthpiece of the French occultists, distinguishes between the Keys of Solomon and the impostures of colportage ; but in what respect, it may be asked, are these processes superior to the chapbooks of colporteurs ?\n\nThe highest ambition of the Clavicles is identical with that of the Grimoires--to become master of a treasure possessed by spirits.\n\nIt should also be observed that experiments which have for their object an interference with the freewill of another person, such as that of seeking favour and love, are essentially evil experiments.\n\nI have now enumerated all the processes which are set forth in this \"fountainhead and storehouse of Kabalistical Magic\"; it is for such trumpery purposes that the Magus is directed to undertake his laborious preparation, and for such also to put in motion the powers believed to be inherent in Divine Names, in long pages of pretentious prayers and in \"stronger and more powerful\" conjurations.\n\nHowever much the justice of the critic may be tempered by the mercy of the familiar explorer towards a memorial of occult science which has been unduly honoured--that is, honoured otherwise than as a literary curiosity--it must be concluded that the [paragraph continues] Key of Solomon is a grotesque combination of the pompous and ridiculous; it is, in fact, the old story of the mountain and the mouse, but so great is the travail that, in this case, the mouse is brought forth dead."
+
+[annotations]
+concepts = []
+related_chunks = []

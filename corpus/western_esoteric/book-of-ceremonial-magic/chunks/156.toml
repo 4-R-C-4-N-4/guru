@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.156"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 73 (part 4)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm72.htm"
+token_count = 191
+
+[content]
+body = "Having thrice pronounced this conjuration, place the taper on the parchment and let it burn.\n\nTake the parchment on the morrow, put it in your left shoe and there leave it until the person for whom you have operated shall have come to seek you out.\n\nYou must specify in the Conjuration the day that you desire her to come, and she will not fail.\n\nThis process has its disadvantages, and even its difficulties.\n\nIt seems absurd to suppose that there are Spirit Princes inhabiting the flame of a taper, and the treatment invoked upon the lady is of a turbulent kind, nor is there any colourable pretence on which the position of the rival lover can be justified; but it has the touch of the picturesque, and, making all allowance for the potencies which may inhere in Sator, Arepo, Tenet, Opera, Rotas , it does not suffer seriously by comparison with the method of the Clavicle."
+
+[annotations]
+concepts = []
+related_chunks = []

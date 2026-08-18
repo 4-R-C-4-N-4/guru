@@ -70,7 +70,11 @@ def _extract_title(content: str, config: dict) -> str | None:
     return None
 
 
-def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
+def split(
+    pages: list[tuple[int, str, str]],
+    config: dict,
+    source_urls: dict[str, str] | None = None,
+) -> list[Chunk]:
     """
     Process multi-page source files into chunks.
 
@@ -87,10 +91,21 @@ def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
                                title_pattern (regex),
                                title_max_len (int, default 80),
                                max_tokens (default 800).
+        source_urls: Optional {filename_stem: source_url} map (from each
+                      page's own raw .meta.toml), so each chunk records the
+                      page it actually came from rather than the whole
+                      work's single URL. Without it every chunk falls back
+                      to that shared URL at the orchestrator level — correct
+                      for `strategy_type == "single"`, wrong for multi-page:
+                      every chunk beyond the first page would otherwise cite
+                      the first page's URL (todo: found on the 2026-08-17
+                      western_esoteric batch, confirmed pre-existing on the
+                      already-applied tertium-organum corpus too).
 
     Returns:
         List of Chunk objects.
     """
+    source_urls = source_urls or {}
     label_fmt = config.get("section_label_format", "Page {n}")
     # Fallback used when number_source='content' but number_pattern didn't
     # match (e.g. front-matter pages with no Roman numeral). Without this,
@@ -144,12 +159,17 @@ def split(pages: list[tuple[int, str, str]], config: dict) -> list[Chunk]:
         except (KeyError, IndexError):
             label = active_fmt.format(n=number)
 
-        chunk = Chunk(section_label=label, body=content)
+        page_meta = {"source_url": source_urls.get(filename, "")}
+        chunk = Chunk(section_label=label, body=content, metadata=page_meta)
         chunk.token_count = count_tokens(content)
 
         if chunk.token_count > max_tokens:
-            # Sub-split on paragraph boundaries
+            # Sub-split on paragraph boundaries. subsplit() builds fresh Chunk
+            # objects and doesn't know about page_meta, so carry it over here
+            # rather than in the shared splitter.
             subs = subsplit(chunk, max_tokens, count_tokens)
+            for sub in subs:
+                sub.metadata = page_meta
             # Relabel sub-chunks with part numbers
             if len(subs) > 1:
                 for i, sub in enumerate(subs):

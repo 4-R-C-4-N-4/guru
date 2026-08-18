@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.044"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 18 (part 2)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob18.htm"
+token_count = 23
+
+[content]
+body = "Their reciprocal action will give rise to the universal attraction or universal Love represented by the 6th arcanum."
+
+[annotations]
+concepts = []
+related_chunks = []

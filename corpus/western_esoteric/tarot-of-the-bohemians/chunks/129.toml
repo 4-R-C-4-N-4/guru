@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.129"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Chapter XXI (part 4)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob58.htm"
+token_count = 179
+
+[content]
+body = "But one priest, observing that virtue is a most fragile thing, and most difficult to find, at all events in a continuous line, proposed to confide the scientific traditions to vice.\n\nThe latter, he said, would never fail completely, and through it we are sure of a long and durable preservation of our principles.\n\nThis opinion was evidently adopted, and the game chosen as a vice was preferred.\n\nThe small plates were then engraved with the mysterious figures which formerly taught the most important scientific secrets, and since then the players have transmitted this Tarot from generation to generation, far better than the most virtuous men upon earth would have done.\n\nSuch is the story or the history confided to me by this old manuscript, upon the origin of the father of our great games, and I am very glad that it provided me with the means of proving my perhaps paradoxical assertion of their original unity."
+
+[annotations]
+concepts = []
+related_chunks = []

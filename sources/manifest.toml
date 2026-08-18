@@ -1095,6 +1095,93 @@ format = "html"
 license = "public_domain"
 notes = "Hall's 1928 encyclopedic survey of Western esotericism — Mysteries, Pythagorean number theory, Qabbalah, Tarot, alchemy, Rosicrucianism, Freemasonry, ceremonial magic. US PD since 2024. Cites Lévi, Agrippa, Paracelsus, Bruno and the Corpus Hermeticum throughout — dense cross-shelf linkage expected; treat edge staging at stricter threshold (genre-magnet profile)."
 
+# VERIFIED 2026-08-17 (node 01, docs/ingest/decisions/kybalion.md) —
+# sacred-texts.com/eso/kyb, browser-UA fetch, multi-page (18 pages: title,
+# TOC, intro, chs I-XV — kyb00.htm through kyb17.htm). Heading chain
+# confirmed real primary text (CHAPTER I / THE HERMETIC PHILOSOPHY), not
+# apparatus. sacred-texts stamps this scan [1912] (Yogi Publication Society
+# printing) though the work is externally cited as first published 1908 —
+# both pre-1929, no PD consequence. Originally English (no translator);
+# "Three Initiates" is the byline sacred-texts itself uses, with the
+# Atkinson attribution noted as probable-but-unconfirmed by the source.
+
+[[source]]
+id = "kybalion"
+tradition = "western_esoteric"
+label = "The Kybalion (Three Initiates)"
+url = "https://sacred-texts.com/eso/kyb/index.htm"
+format = "html_multi"
+license = "public_domain_us_pre_1929"
+notes = "Attributed to William Walker Atkinson, published by the Yogi Publication Society; sacred-texts' scan is stamped [1912], first published 1908 per external sources — both pre-1929. Seven Hermetic Principles synthesis, direct companion to Hall's Secret Teachings — same genre-magnet profile expected (dense cross-shelf citation potential). Index page links to 18 sequential pages (kyb00.htm through kyb17.htm); title page (kyb00) carries a dedication block and kyb01 is the table of contents — both front matter, exclude from chunking."
+
+# VERIFIED 2026-08-17 (node 01, docs/ingest/decisions/book-of-ceremonial-magic.md)
+# — sacred-texts.com/grim/bcm, browser-UA fetch, multi-page (81 pages: bcm00
+# through bcm80). Edition ambiguity (1898 "Book of Black Magic and of Pacts"
+# vs. the retitled/expanded edition) resolved directly from the page's own
+# bibliographic note: this is confirmed the SECOND edition [1913], not the
+# 1898 original. Chapter IV §7 "Talismans of the Sage of the Pyramids"
+# (bcm26-35, 10 of 81 pages) is genuinely image-dependent ("TALISMAN I. /
+# Click to view" with no textual glyph description) — flagged for node 04/05
+# to exclude or specially handle; everything else spot-checked reads as
+# self-contained scholarly prose.
+
+[[source]]
+id = "book-of-ceremonial-magic"
+tradition = "western_esoteric"
+label = "The Book of Ceremonial Magic (A.E. Waite)"
+url = "https://sacred-texts.com/grim/bcm/index.htm"
+format = "html_multi"
+license = "public_domain_us_pre_1929"
+translator = "Arthur Edward Waite"
+notes = "Waite's own synthesis of the grimoire tradition — Key of Solomon, Grimorium Verum, the pseudo-Agrippa Fourth Book, the Black Pullet, and others. Second edition (1913) of the 1898 The Book of Black Magic and of Pacts; per sacred-texts' redactor note the second edition 'contains substantially the same material as the first with some additions.' Complements the existing Agrippa chapters under renaissance_hermeticism. Index page links to 81 sequential pages (bcm00.htm through bcm80.htm). Chapter IV §7 ('Talismans of the Sage of the Pyramids', bcm26.htm-bcm35.htm) is image-dependent ('Click to view' plates with no textual glyph description) — exclude or flag specially at chunk-config; the rest of the book is self-contained prose."
+
+# VERIFIED 2026-08-17 (node 01, docs/ingest/decisions/tarot-of-the-bohemians.md)
+# — sacred-texts.com/tarot/tob, browser-UA fetch, multi-page (61 pages: tob00
+# through tob60). Explicit public-domain notice on the title page. Checked
+# specifically for the image-dependency problem that dropped Waite's
+# Pictorial Key to the Tarot from this batch: the 22-card Major Arcana
+# walkthrough (tob14 onward) opens with picture-referencing language but the
+# substance is Papus's own argued numerological/Kabbalistic correspondence
+# schema, independently meaningful without the card image — a matter of
+# degree, not the same failure as Pictorial Key. Flagged for extra attention
+# at the node 08 readability gate, not excluded.
+
+[[source]]
+id = "tarot-of-the-bohemians"
+tradition = "western_esoteric"
+label = "The Tarot of the Bohemians (Papus)"
+url = "https://sacred-texts.com/tarot/tob/index.htm"
+format = "html_multi"
+license = "public_domain_us_pre_1929"
+translator = "A.P. Morton"
+notes = "Gérard Encausse ('Papus'), Clef absolue de la science occulte, trans. A.P. Morton, Chapman and Hall, London [1892 per this scan]. Same French occult-revival generation as Lévi's Transcendental Magic — Hebrew-letter, numerological and Kabbalistic correspondence theory applied to the 22 Major and 56 Minor Arcana. Index page links to 61 sequential pages (tob00.htm through tob60.htm). The Major Arcana walkthrough (tob14 onward) references the card imagery but stands as independent argued prose, not caption-dependent — see docs/ingest/decisions/tarot-of-the-bohemians.md for the assessment that kept this text after Waite's more heavily pictorial Pictorial Key to the Tarot was dropped from consideration."
+
+# VERIFIED 2026-08-17 (node 01, docs/ingest/decisions/psychic-self-defence.md)
+# — globalgreyebooks.com online-ebooks complete-text page, same pattern as
+# Lévi's Transcendental Magic and Hall's Secret Teachings entries above.
+# Chapter structure (Preface > Part 1 Types Of Psychic Attack chs.1-8 > Part 2
+# Differential Diagnosis chs.9-11 > Part 3 The Diagnosis Of A Psychic Attack
+# chs.12-14 > Part 4 Methods Of Defence Against Psychic Attack chs.15-20 >
+# Conclusion) cross-checked against an independent description of the 1930
+# original and matches exactly — not a reorganized later edition. Preface
+# read in full: consistent first-person authorial voice throughout, no
+# revision-era framing. One period-consistent internal citation ("the Occult
+# Review of January, 1930" on the Fornario case). No colophon/copyright page
+# reproduced (Global Grey strips publisher front matter site-wide, same gap
+# as the Hall/Lévi entries above) — no specific print exemplar citable, do
+# not invent one. License: public_domain — 1930 publication, URAA-restored
+# (Fortune d.1946; UK term ran past the 1996-01-01 restoration date),
+# 95-years-from-publication term per 17 U.S.C. §304, expired 2026-01-01.
+
+[[source]]
+id = "psychic-self-defence"
+tradition = "western_esoteric"
+label = "Psychic Self-Defence (Dion Fortune)"
+url = "https://www.globalgreyebooks.com/online-ebooks/dion-fortune_psychic-self-defense_complete-text.html"
+format = "html"
+license = "public_domain"
+notes = "Fortune's 1930 study of psychic attack, occult pathology and defence against it — Society of the Inner Light. Structure: Preface, Part 1 Types Of Psychic Attack (chs.1-8), Part 2 Differential Diagnosis (chs.9-11), Part 3 The Diagnosis Of A Psychic Attack (chs.12-14), Part 4 Methods Of Defence Against Psychic Attack (chs.15-20), Conclusion. No specific print exemplar confirmable via Global Grey (site strips publisher front matter); do not cite a specific printing beyond '1930, publisher/exemplar not confirmable via Global Grey.'"
+
 
 # ============================================
 # RENAISSANCE HERMETICISM (Bruno)

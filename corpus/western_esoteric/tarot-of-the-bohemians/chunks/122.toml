@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.tarot-of-the-bohemians.122"
+tradition = "western_esoteric"
+text_name = "The Tarot of the Bohemians (Papus)"
+section = "Page 55 (part 2)"
+translator = "A.P. Morton"
+source_url = "https://sacred-texts.com/tarot/tob/tob55.htm"
+token_count = 216
+
+[content]
+body = "II.); Decline or Obstacle (arc.\n\nIII.); Fall (arc.\n\nIV.).\n\nLastly, the 3 major arcana placed in the centre indicate the especial character of the horoscope in the Past (V.), in the Present (VI.), and in the Future (VII.).\n\nThe future is indicated in the minor arcana by the cards placed from 7 to 12; The past by those placed from 1 to 4; and the present by those placed from 4 to 7.\n\nThese numbers only indicate the numbers of the places occupied by the arcana, and never the numbers of the arcana.\n\nthemselves.\n\nIt is important to avoid the idea that the arcanum VII.\n\nmust always return to the place numbered VII.\n\nBut our readers are sufficiently intelligent to make any further insistence upon this point quite unnecessary.\n\nThe explanation of the meaning of the arcana will be perfectly easy, when the lessons 2 and 3 have been once read.\n\nPractice will teach all these details far better than all the theories in the world."
+
+[annotations]
+concepts = []
+related_chunks = []

@@ -1,0 +1,15 @@
+[chunk]
+id = "western_esoteric.book-of-ceremonial-magic.046"
+tradition = "western_esoteric"
+text_name = "The Book of Ceremonial Magic (A.E. Waite)"
+section = "Page 15 (part 2)"
+translator = "Arthur Edward Waite"
+source_url = "https://sacred-texts.com/grim/bcm/bcm14.htm"
+token_count = 63
+
+[content]
+body = "It is, however, especially provided that no seal, pentacle or character shall be applied to the injury of another, and more especially a student of the art.\n\nThe art, in fine, does not involve any compact, \"implicit or explicit.\" I suppose that this production is later than others of the cycle."
+
+[annotations]
+concepts = []
+related_chunks = []
