@@ -1,5 +1,14 @@
 # Can a local model replace the frontier judge?
 
+> **Naming note (2026-08-18).** `campaign_id = "c8"` below is this
+> benchmark's own local identifier, frozen when it ran, and unrelated to the
+> production campaign of the same name created independently on `main`
+> afterward (four western_esoteric texts, `provider = "claude-code"`). This
+> branch never modified the shared `config/dossiers.toml`, and the plan
+> artifact is filed as `span-plan-c8-bench.*` to avoid colliding on disk with
+> whatever the real c8 plan writes. The `"c8"` string inside that frozen JSON
+> is left as generated — editing it would falsify the freeze record.
+
 > **[2026-08-16] READ THIS BEFORE QUOTING ANY NUMBER BELOW.** Every measurement
 > here was taken through `llm qwen3.8`, which at the time meant TWO uncontrolled
 > variables, both discovered afterwards while building `scripts/run-qwen-judge.sh`:

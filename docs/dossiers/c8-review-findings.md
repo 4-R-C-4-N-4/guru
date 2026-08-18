@@ -1,5 +1,14 @@
 # c8 paired review — findings
 
+> **Naming note (2026-08-18).** `campaign_id = "c8"` below is this
+> benchmark's own local identifier, frozen when it ran, and unrelated to the
+> production campaign of the same name created independently on `main`
+> afterward (four western_esoteric texts, `provider = "claude-code"`). This
+> branch never modified the shared `config/dossiers.toml`, and the plan
+> artifact is filed as `span-plan-c8-bench.*` to avoid colliding on disk with
+> whatever the real c8 plan writes. The `"c8"` string inside that frozen JSON
+> is left as generated — editing it would falsify the freeze record.
+
 Blind rubric review of both arms of the local-generator benchmark
 (todo:8c67ee44 / todo:fd16e2f9). 72 judgements, 36 paired spans, ~27 min.
 

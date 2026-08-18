@@ -16,7 +16,7 @@ OUT = SP / f"grader_{label}.jsonl"
 LOCAL, FRONTIER = "Qwen3.8-27B-UD-Q4_K_XL.gguf", "claude-opus-4-8"
 
 labels = {w["work_id"]: w["label"]
-          for w in json.load(open(W / "docs/summary/span-plan-c8.json"))["works"]}
+          for w in json.load(open(W / "docs/summary/span-plan-c8-bench.json"))["works"]}
 con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True); con.row_factory = sqlite3.Row
 
 items = []

@@ -1,5 +1,14 @@
 # c8 local L1 generation run
 
+> **Naming note (2026-08-18).** `campaign_id = "c8"` below is this
+> benchmark's own local identifier, frozen when it ran, and unrelated to the
+> production campaign of the same name created independently on `main`
+> afterward (four western_esoteric texts, `provider = "claude-code"`). This
+> branch never modified the shared `config/dossiers.toml`, and the plan
+> artifact is filed as `span-plan-c8-bench.*` to avoid colliding on disk with
+> whatever the real c8 plan writes. The `"c8"` string inside that frozen JSON
+> is left as generated — editing it would falsify the freeze record.
+
 Phase 1 of the local-generator benchmark (todo:8c67ee44). Generates the LOCAL
 arm for the 36 spans that already carry an accepted frontier `l1-v3` row, so
 the two arms are paired on identical spans under an identical template.
