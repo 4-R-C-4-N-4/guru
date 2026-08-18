@@ -146,6 +146,47 @@ collision in the failure mode above is with a *different* pending row.
 **Mistyped ids in a batch queue.** They are silently rejected. Check the
 accepted count matches what was intended — 4B ids are 70xxx, 27B are 71xxx.
 
+**A new concept's id/label can collide with an ordinary word in
+`guru-web`'s query-time concept matcher.** `is_new_concept=1` acceptance adds a
+row to `concepts/taxonomy.toml`; the query side (`extractConcepts` in
+`guru-web/src/lib/graph.ts`) matches concept labels against query text
+whole-word, case-insensitively. A concept id like `group_mind` derives the
+label "Group Mind" — and "mind" alone, as a whole word, is common enough that
+it fired on an unrelated golden-query probe about a completely different
+tradition, pulling the graph leg into this concept's tradition on a query that
+had nothing to do with it. Confirmed directly: renaming the concept
+(`group_mind` → `collective_psychic_field`, same definition, id/label only)
+stopped the spurious match and cleared the resulting retrieval regression.
+Before accepting a new concept, sanity-check its id against common English
+words the same way you would a variable name shadowing a builtin — a
+one- or two-word id built from ordinary nouns/verbs ("mind", "path", "power",
+"light" alone) is the risk case; a more specific compound
+(`collective_psychic_field`, `psychopomp_journey`) is not. This is a
+node-11 judgement call, not something `sync_taxonomy.py` catches — it has no
+knowledge of `guru-web`'s matcher.
+
+**Renaming an already-applied concept touches four tables, not three.**
+`nodes` (the concept row itself), `edges` (any live `EXPRESSES` rows), and
+`staged_tags` (any queued rows) are the obvious ones — but
+`concept_family_membership` also references the concept id directly, and
+`sync_taxonomy.py` explicitly does not clean up rows for ids that vanish from
+the TOML ("Does not delete families / memberships / aliases that vanish from
+the TOML"). A rename that misses this table leaves an orphaned membership row
+that only surfaces later, as a foreign-key failure in `scripts/export.py`'s
+output when `concept_family_membership` is COPY'd but the concept it
+references is not. Check all four tables (`nodes`, `edges`, `staged_tags`,
+`concept_family_membership`) plus `concept_aliases` before considering a
+concept rename complete, then run `sync_taxonomy.py --apply` to pick up the
+new id.
+
+**Mistrust `sync_taxonomy.py --dry-run`'s "concepts with no primary family"
+count during a rename.** It is computed inside the same transaction the dry
+run rolls back, so it reflects a hypothetical post-write state, not the
+current one — and in one case here it reported entries as "no primary family"
+that, once queried directly against the applied state, already had correct
+memberships. Don't debug against the dry-run summary; query
+`concept_family_membership` directly.
+
 **Chasing an accept rate.** Observed rates run from about 15% on diffuse
 score-1 pools to 90% on densely on-concept curated runs, and 0% on apparatus
 chunks. The rate is an outcome.

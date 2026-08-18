@@ -22,10 +22,38 @@ run has aged out; see that node's file for the trigger and the command.
 
 ## Action
 
-Nothing, if you are a driver. Stop here and hand back.
+Nothing, if you are a driver, beyond the artifact. Stop before the VPS and
+hand back.
 
 A driver's work ends at the artifact: the corpus TOMLs, the migrated local DB,
 the queued review decisions, an open PR. Publication is the user's.
+
+**Building and loading the local artifact is a driver's normal work, not part
+of the gate.** Running `scripts/export.py` and loading the resulting
+`export/guru-corpus.sql.gz` into a local Postgres — most commonly `guru-web`'s
+`docker compose exec postgres psql`, to run that repo's golden-query gates
+against the new corpus — is exactly the same "local artifact, validates the
+corpus end to end" carve-out that
+[D6-export](../dossiers/D6-export.md) already states for the dossier stream:
+*"Building it locally is fine... Shipping it is not yours."* The same holds
+here. What stays the user's exclusively is anything that reaches the VPS or
+production: `scripts/sync_corpus.sh`, ssh to the box, or a push to a
+protected `main`. Reloading a local dev database from a local export crosses
+none of those lines.
+
+**A corpus update that adds or re-chunks a text needs a companion
+`guru-web` PR.** That repo's `docs/golden-queries.md` states the rule from
+its own side: *"A corpus update that adds or re-chunks a work ships that
+work's query file (new or re-audited) in the same PR."* A `guru` PR that
+lands a new or re-chunked text without also drafting/re-auditing that work's
+`src/__tests__/fixtures/golden-queries/<work>.json` in a paired `guru-web`
+PR is incomplete — the golden set otherwise drifts from the corpus it's
+meant to be evaluating. Draft the file from the work's own chunks (never
+from memory), verify it locally with
+`npx tsx scripts/verify-golden-queries.ts <work>` against the freshly loaded
+corpus, then run that repo's own gates before opening the PR there. See that
+file for the full authoring rules (paraphrase-against-circularity,
+`frozenEval`, provenance-only chunk ids).
 
 Specifically, and regardless of how broad the instruction that got you here
 was — including "run the whole thing" and "do the full fix":
