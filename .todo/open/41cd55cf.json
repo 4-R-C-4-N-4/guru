@@ -7,11 +7,12 @@
     "type": "agent"
   },
   "created_at": "2026-08-07T19:28:54.000Z",
-  "updated_at": "2026-08-07T19:28:54.000Z",
+  "updated_at": "2026-08-20T12:36:50.315Z",
   "tags": [
     "tag-review",
     "quarantine",
-    "user-action"
+    "user-action",
+    "corpus-quality"
   ],
-  "description": "Across the four quarantine batches/waves correcting the v1->v2 regression's cross-tradition contamination, a handful of cells per wave were skipped rather than ruled on because the call was genuinely ambiguous (e.g. Kilhwch divine-transformation asides, a kalevala.044 maxim, a mooney.107 'go-to-water' cell). These accumulated to roughly 15-20 skipped cells sitting in guru-review's pending queue. No rush \u2014 the v3 retrain already shipped without them (see rellm's qwen-3-4b-guru v3 model card and 4b-v2-regression-root-cause project notes) \u2014 but they should get a ruling eventually so they don't just sit forever."
+  "description": "Across the four quarantine batches/waves correcting the v1->v2 regression's cross-tradition contamination, a handful of cells per wave were skipped rather than ruled on because the call was genuinely ambiguous (e.g. Kilhwch divine-transformation asides, a kalevala.044 maxim, a mooney.107 'go-to-water' cell). These accumulated to roughly 15-20 skipped cells sitting in guru-review's pending queue. No rush — the v3 retrain already shipped without them (see rellm's qwen-3-4b-guru v3 model card and 4b-v2-regression-root-cause project notes) — but they should get a ruling eventually so they don't just sit forever."
 }

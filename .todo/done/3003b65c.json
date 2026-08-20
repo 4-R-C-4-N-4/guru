@@ -1,13 +1,13 @@
 {
   "id": "3003b65c",
   "type": "chore",
-  "state": "open",
+  "state": "wontfix",
   "summary": "Atlas cannot distinguish shared-milieu edges from independent convergence",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-09T21:58:27.548Z",
-  "updated_at": "2026-08-09T22:30:33.560Z",
+  "updated_at": "2026-08-20T12:36:50.199Z",
   "tags": [
     "atlas",
     "provenance",
