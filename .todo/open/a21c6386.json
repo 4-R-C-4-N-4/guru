@@ -85,6 +85,25 @@
         3,
         5
       ]
+    },
+    {
+      "timestamp": "2026-08-20T19:00:29.597Z",
+      "author": "driver",
+      "type": "conclusion",
+      "content": "D1-D5 re-plan complete under campaign c10. PR #90 (branch corpus-quality/c10-orphic-hymns-dossier) carries the git-tracked artifacts: config bump c8->c10 + span-plan-c10.json/.md. Final corpus shape is 86 chunks (not 103 — the appended-commentary drop f1e1e009 landed after this ticket was filed, taking 103->86). c8 dossier rows for orphic-hymns cleared (invalidated by re-chunk; the old L2 unit sum:orphic-hymns would have blocked c10 generation via the version-keyed skip check). D2: 6 L1s + 6 structure + 1 L2 + 5 fields under claude-opus-4-8. D3: reviewed, all grounded, accepted. D4: promoted (dry-run first) — 1 work_dossiers, 7 summary_nodes, 8 themes. D5: embedded 7. Drift clean: 68 planned / 68 live. Golden-set: no editorial content retrievable. Stops at D6-export (user gate). Holding ticket open until PR #90 merges (done-contract is a merged PR).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T19:01:11.901Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "RESOLVED BY DRIVER: PR #90 (campaign c8→c10, D1-D5 re-plan for orphic-hymns over the 86-chunk corpus).\n\nWhat landed:\n- Campaign bump c8→c10 (c9 was reserved for kybalion bench)\n- D1 freeze: span-plan-c10, 6 hymn-only spans over FINAL 86-chunk corpus\n- Cleared invalidated c8 rows (stale L2 unit + dead L1 ids)\n- D2: 6 L1 + 6 structure + 1 L2 + summary/context/figures/terms/notes generated\n- D3: reviewed all rows — grounded, no cluster defects\n- D4: promoted (dry-run first): 1 work_dossiers, 7 summary_nodes, 8 themes\n- D5: embedded 7\n\nVerification:\n- Golden-set retrieval: 'Taylor dissertation' now surfaces ONLY real hymn chunks — no editorial or front-matter content\n- Drift clean: 68 planned / 68 live\n\nPR #90 is OPEN (stacked on #87). Once #87 merges to main, #90's diff shrinks to config + plan files.\n\nThe dossier re-plan is DONE. The ticket can be closed when PR #90 merges.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        3,
+        7
+      ]
     }
   ]
 }
