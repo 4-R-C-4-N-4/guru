@@ -371,6 +371,7 @@ prophetic_rejection = "The phenomenon where spiritual messengers or healers are 
 [concept_aliases]
 
 # — alternate spelling / transliteration (the core recall gain) —
+sefirot_tree = ["sephirot_tree"]
 sephirot = ["sefirot", "sefiroth"]
 ein_sof = ["ein-sof", "einsof", "ein soph", "ayn sof"]
 tzimtzum = ["tsimtsum", "zimzum"]
