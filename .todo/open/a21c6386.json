@@ -1,0 +1,48 @@
+{
+  "id": "a21c6386",
+  "type": "bug",
+  "state": "open",
+  "summary": "Dossier re-plan needed for orphic-hymns after front-matter drop: 138→103 chunks breaks c8 span freeze",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:55:43.522Z",
+  "updated_at": "2026-08-20T14:56:10.715Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "dossier",
+    "re-plan",
+    "freeze-violation"
+  ],
+  "relationships": {
+    "parent": "df44bdeb"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:55:53.833Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "DRIVER FINDING (2026-08-20): The dossier stream for orphic-hymns (campaign c8, all D1-D5 complete) is built ON the front-matter chunks that df44bdeb is dropping. After the ingest re-chunk (138→103 chunks), this is a freeze violation:\n\n- work_dossiers.structure_json has spans like 'Front Matter, p. 1 – 3' / 'Title Page, Preface, and Dissertation I' — 6 of 13 L1 spans are front-matter summaries about content being removed\n- summary_nodes: 14 rows referencing old 001-138 chunk ids (including 35 to-be-dropped)\n- staged_summaries: 26 rows with child_chunk_ids JSON pointing at old chunk ids\n- work_dossiers: 1 row with structure_json child_chunk_ids pointing at old chunk ids\n- staged_cleanups: 1 row on chunk .001 (becomes moot when .001 is dropped)\n\napparatus_remap.py (COLS list) does NOT cover: summary_nodes.child_chunk_ids, staged_summaries.child_chunk_ids, work_dossiers.structure_json, or staged_cleanups.chunk_id — these will reference dead/renumbered ids after the remap lands.\n\nPer dossier rules (docs/dossiers/#span-plan-is-a-freeze-artifact): a corpus change that alters totals means a NEW campaign (c8→c9) and full re-plan/generate/review/promote/embed cycle. The front-matter summaries are about content that no longer exists — they cannot be remapped, only regenerated.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:56:01.574Z",
+      "author": "corpus-quality",
+      "type": "hypothesis",
+      "content": "The orphic-hymns dossier (c8) must be invalidated and redone under a new campaign c9. After the Driver's ingest remap lands (dropping 35 front-matter chunks, 138→103):\n\n1.  should show orphic-hymns as a freeze violation (DB chunk count ≠ plan count)\n2. Bump campaign_id c8→c9 in config/dossiers.toml\n3. Re-plan D1 for orphic-hymns: the span plan freezes at 103 chunks now, with front-matter spans removed\n4. Re-generate D2-D3-D4: summaries for the 6 removed front-matter spans will not be regenerated (no source chunks), the remaining 7 hymn-bound spans regenerate\n5. Re-promote D4 (work_dossiers, summary_nodes) with new chunk ids\n6. Re-embed D5 (summary_embeddings)\n\nThe staged_cleanups row on .001 can be deleted alongside the chunk drop — it's moot.\n\nThis must be sequenced AFTER the Driver's ingest PR lands, because the plan needs the final 103-chunk structure. But the scope is clear: it's a full dossier campaign reset for one work, not a remap.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:56:10.714Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "Dossier re-plan ticket for orphic-hymns (work_id=orphic-hymns, tradition=greek_mystery). Scope:\n\nBLOCKER: Must wait for df44bdeb ingest PR to land (138→103 chunks). The span plan needs the final chunk structure.\n\nOnce landed:\n1. Verify  shows orphic-hymns as freeze violation\n2. Bump campaign_id c8→c9 in config/dossiers.toml  \n3. D1 re-plan: freeze at 103 chunks, remove 6 front-matter spans\n4. D2-D3: regenerate summaries (front-matter spans won't regenerate — no source chunks)\n5. D4: re-promote work_dossiers/summary_nodes with new chunk ids\n6. D5: re-embed summary_embeddings\n\nAlso: delete the 1 staged_cleanups row on .001 (moot once chunk is dropped).\n\nThis is NOT a remap — apparatus_remap.py's COLS don't cover dossier tables. The front-matter summaries describe content that no longer exists; they must be regenerated from scratch on the 103-chunk corpus.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        1
+      ]
+    }
+  ]
+}
