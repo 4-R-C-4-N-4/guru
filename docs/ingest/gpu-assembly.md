@@ -29,7 +29,8 @@ GPU-e82e59ae-aba4-1fff-25a6-211616234334   # 4070
 | model | file | 3090 (24 GB) | 4070 (12 GB) |
 |---|---|---|---|
 | Mistral-Small-3.2-24B Q5_K_XL | 15.6 GB | ✓ (21.3 GB resident with 32K ctx) | ✗ |
-| Qwen3.5-27B Q4_K_XL | 16.4 GB | ✓ | ✗ |
+| Qwen3.8-27B Q4_K_XL (current teacher) | 16.7 GB | ✓ | ✗ |
+| Qwen3.5-27B Q4_K_XL (prior teacher) | 16.4 GB | ✓ | ✗ |
 | qwen-3-4b-guru Q4_K_M | 2.3 GB | ✓ | ✓ (7.8 GB with 32K *total* ctx, parallel 4 — pre-todo:dcb3cce5 config, see "Slots vs workers" below; not the current `run-qwen-4b-guru.sh` default) |
 
 Neither 24B-class model fits on the 4070, and both fit the 3090 with headroom.
@@ -142,11 +143,10 @@ compute capability and the newer, smaller card wins that ranking. Always set
 server, as in the commands above — never rely on the default to land the
 right model on the right card, in either direction.
 
-**The 27B teacher is excluded, and not just by convention.** It runs
-think-on by default (`serve-llama.sh`'s `REASONING=auto`) and is 16.4 GB
+**The 27B teacher is excluded, and not just by convention.** It is 16.7 GB
 against the 3090's 24 GB — far less headroom per additional slot than the
-4B's 2.3 GB leaves on either card, for a model whose single-request VRAM
-footprint from a full reasoning pass is already why `serve-llama.sh` defaults
+4B's 2.3 GB leaves on either card — and it runs a reasoning pass whose
+single-request VRAM footprint is already why `serve-llama.sh` defaults
 `PARALLEL=1`. `tag_concepts.py`'s model guard (`check_parallel_model_guard`,
 todo:5955d038) refuses `--parallel` N>1 against it structurally, not just by
 the routing convention in [10-tag-concepts.md](10-tag-concepts.md) —
@@ -173,22 +173,22 @@ Node 13 (propose-edges, the Mistral-24B consumer below) is retired —
 todo:c3f479ff / todo:aaaa5258 — so node 10 is the only ingest node left that
 needs a GPU-served local model. The two-server assembly this section
 originally described is kept as history: it explains the PCIe-tax measurement
-below and still applies verbatim if Qwen3.5-27B (node 10's 27B-provenance
+below and still applies verbatim if Qwen3.8-27B (node 10's 27B-provenance
 path) is ever run alongside something else that wants the second card.
 
 ```
 CUDA 0 · RTX 3090 · port 8080   the 24B-class model
                                   Mistral-24B      → node 13 propose-edges  (RETIRED)
-                                  or Qwen3.5-27B   → node 10, for 27B provenance
+                                  or Qwen3.8-27B   → node 10, for 27B provenance
 
 CUDA 1 · RTX 4070 · port 8081   qwen-3-4b-guru     → node 10 tag-concepts
 ```
 
 ```sh
-# 3090 — a 24B-class model (Qwen3.5-27B via scripts/run-qwen.sh today;
-# scripts/run-mistral.sh served this slot for node 13 before its retirement
-# and has been removed)
-CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-qwen.sh
+# 3090 — a 24B-class model (Qwen3.8-27B via scripts/run-qwen3.8-tagger.sh today;
+# scripts/run-qwen.sh serves the prior Qwen3.5 teacher; scripts/run-mistral.sh
+# served this slot for node 13 before its retirement and has been removed)
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 scripts/run-qwen3.8-tagger.sh
 
 # 4070 — tagger, on a second port (see the diff below)
 CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 PORT=8081 scripts/run-qwen-4b-guru.sh
@@ -206,7 +206,8 @@ LLAMACPP_BASE_URL=http://127.0.0.1:8081 python3 scripts/tag_concepts.py --text <
 
 Decode throughput, Mistral-24B, real edge-proposal traffic (node 13, before
 its retirement) — kept as the PCIe-tax evidence; the pinning lesson
-transfers to any 24B-class model run on this rig, Qwen3.5-27B included:
+transfers to any 24B-class model run on this rig, the Qwen3.8-27B and Qwen3.5-27B
+teachers included:
 
 | configuration | median | note |
 |---|---|---|
