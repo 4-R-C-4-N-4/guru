@@ -279,4 +279,55 @@ def test_drop_trailing_nonprimary_subsplits_optout_is_noop():
                "Renown'd Pierian, sweetly speaking Nine; "
                + ("Footnotes 205:1 Ver. i.] Proclus says the Muses are daughters of Jove and Mnemosyne. " * 20))
     chunks = split([(1, "t-01", content)], cfg, {})
-    assert len(chunks) >= 2, [c.section_label for c in chunks]  # tail parts survive when opt-out
+    assert len(chunks) >= 2, [c.section_label for c in chunks]  # tail parts survive? no — dropped
+    # Finding #2 regression: the multi-sub (part N) relabel is UNCONDITIONAL —
+    # a non-orphic page-as-chunk source (no editorial keys) with len(subs) > 1
+    # MUST still get 'Page X (part N)' labels, not subsplit's raw '-a'/'-b'.
+    assert chunks[0].section_label == "Page LXXV (part 1)", chunks[0].section_label
+    assert chunks[1].section_label == "Page LXXV (part 2)", chunks[1].section_label
+
+
+def test_nonorphic_single_sub_gets_plain_label():
+    """Finding #2 regression: a non-orphic page-as-chunk source WITHOUT the
+    opt-in editorial keys must get the plain page label on a single surviving
+    sub (pre-PR unconditional behavior) — the opt-in keys control COMMENTARY
+    handling only, never labeling."""
+    cfg = {
+        "strategy": "page-as-chunk",
+        "section_label_format": "Hymn {n}. {title}",
+        "number_source": "content",
+        "number_pattern": r"^([IVXLCDM]+)(?=\.\s*[Tt]|\s*[Tt][Oo] )",
+        "title_source": "content",
+        "title_pattern": r"(?i)^(?:[IVXLCDM]+\.?\s+)?TO\s+(.+?)[\.\*]?\s*$",
+        "title_max_len": 80,
+        "max_tokens": 800,
+        # no opt-in keys
+    }
+    # A single oversized page so subsplit produces one '-a' sub that the
+    # relabel must restore to the plain page label.
+    content = ("LXXV. TO THE MUSES. Daughters of Jove, dire-sounding and divine, "
+               "Renown'd Pierian, sweetly speaking Nine; " * 20)
+    chunks = split([(1, "t-01", content)], cfg, {})
+    assert len(chunks) == 1
+    # Without opt-in keys, the plain label is still restored (pre-PR behavior).
+    assert chunks[0].section_label == "Hymn LXXV. THE MUSES", chunks[0].section_label
+
+
+def test_orphic_single_sub_gets_plain_label():
+    """Sanity: the opt-in editorial keys also yield the plain page label on a
+    single surviving sub (no labeling change, just commentary handling)."""
+    cfg = {
+        "strategy": "page-as-chunk",
+        "section_label_format": "Hymn {n}. {title}",
+        "number_source": "content",
+        "number_pattern": r"^([IVXLCDM]+)(?=\.\s*[Tt]|\s*[Tt][Oo] )",
+        "title_source": "content",
+        "title_pattern": r"(?i)^(?:[IVXLCDM]+\.?\s+)?TO\s+(.+?)[\.\*]?\s*$",
+        "title_max_len": 80,
+        "max_tokens": 800,
+        "strip_appended_commentary": "Footnotes",
+    }
+    content = "LXXV. TO THE MUSES. Daughters of Jove, dire-sounding and divine, Renown'd Pierian, sweetly speaking Nine; "
+    chunks = split([(1, "t-01", content)], cfg, {})
+    assert len(chunks) == 1
+    assert chunks[0].section_label == "Hymn LXXV. THE MUSES", chunks[0].section_label

@@ -240,19 +240,21 @@ def split(
                     subs = keep
             for sub in subs:
                 sub.metadata = page_meta
-            # Relabel sub-chunks with part numbers. The plain-label restore
-            # for a single surviving sub is part of the drop/truncate opt-in
-            # behavior, so it is gated on the same opt-in flag (finding 2):
-            # a source WITHOUT the editorial-prose keys keeps its subsplit
-            # '-a'/'(part N)' labels exactly as before.
-            if config.get("drop_trailing_nonprimary_subsplits") or config.get(
-                "strip_appended_commentary"
-            ):
-                if len(subs) == 1:
-                    subs[0].section_label = label
-                elif len(subs) > 1:
-                    for i, sub in enumerate(subs):
-                        sub.section_label = f"{label} (part {i + 1})"
+            # Relabel sub-chunks with part numbers. UNCONDITIONAL — this is the
+            # pre-PR behavior that every page-as-chunk source relied on: a lone
+            # sub gets the plain page label (subsplit otherwise suffixes '-a'),
+            # and multi-subs get "Page X (part N)". The opt-in editorial keys
+            # (strip_appended_commentary / drop_trailing_nonprimary_subsplits)
+            # control COMMENTARY handling only; they must not alter labeling,
+            # or the other 14 page-as-chunk corpora (e.g.
+            # life-and-doctrines-boehme, ~1626 chunks) would flip from
+            # "(part N)" to subsplit's raw "-a"/"-b" on re-chunk (regression
+            # on PR #87 review round 2, finding 2).
+            if len(subs) == 1:
+                subs[0].section_label = label
+            elif len(subs) > 1:
+                for i, sub in enumerate(subs):
+                    sub.section_label = f"{label} (part {i + 1})"
             chunks.extend(subs)
         else:
             chunks.append(chunk)

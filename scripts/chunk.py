@@ -492,8 +492,9 @@ def main() -> None:
     )
 
     pairs = collect_chunking_configs()
-    ok = skipped = 0
+    ok = skipped = failed = 0
     summary: list[dict] = []
+    failed_sources: list[str] = []
 
     for tradition, source_id in pairs:
         if args.only and source_id != args.only:
@@ -505,20 +506,27 @@ def main() -> None:
             stats = process_source(tradition, source_id, dry_run=args.dry_run)
         except RuntimeError as exc:
             # A fail-closed config check (e.g. require_drop_before_marker with a
-            # drifted marker) raises rather than silently keeping the dropped
-            # pages. That abort must be scoped to THIS text, not the whole
-            # batch: under --all, one mis-dropped corpus should not leave every
-            # subsequent text unchunked (PR #87 finding 5). Skip the offending
-            # source, log the hard failure, and continue the sweep — the broken
-            # config still surfaces (here + in the per-source log), it just
-            # can't take the rest of the run down with it. The bare invocation
-            # is still refused (see --all guard above), so this is not a
-            # fail-open.
+            # drifted marker, or the drop_trailing_nonprimary_subsplits
+            # number_source guard) raises rather than silently keeping the
+            # dropped pages. That abort must be scoped to THIS text, not the
+            # whole batch: under --all, one mis-dropped corpus should not leave
+            # every subsequent text unchunked (PR #87 finding 5).
+            #
+            # But it is NOT a benign skip: a drifted load-bearing marker means
+            # the on-disk chunks for this source are STALE/WRONG, and the prior
+            # require_drop_before_marker guard existed precisely to make that
+            # loud. So we (a) keep the run going for the other sources, but
+            # (b) record a hard failure and exit non-zero at the end — so both
+            # the --all sweep and the --only <id> node-06 form surface the
+            # break instead of exiting 0 with bad chunks (the fail-open this
+            # guard was added to prevent). The bare unscoped run is still
+            # refused at the top of main(), so this is not a fail-open.
             logger.error(
-                f"[{source_id}] chunking aborted by a fail-closed config "
-                f"check: {exc} — skipping this source, continuing the run"
+                f"[{source_id}] chunking ABORTED by a fail-closed config "
+                f"check: {exc}"
             )
-            skipped += 1
+            failed += 1
+            failed_sources.append(source_id)
             continue
         if stats:
             ok += 1
@@ -532,7 +540,10 @@ def main() -> None:
         for s in summary:
             print(f"  {s['source_id']}: {s['chunk_count']} chunks "
                   f"({s['total_tokens']} tokens total, avg {s['avg_tokens']}/chunk)")
-    print(f"\nDone: {ok} chunked, {skipped} skipped/failed")
+    print(f"\nDone: {ok} chunked, {skipped} skipped, {failed} failed")
+    if failed:
+        print(f"FAILED (fail-closed config abort): {', '.join(failed_sources)}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
