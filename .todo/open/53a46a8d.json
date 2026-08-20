@@ -1,0 +1,28 @@
+{
+  "id": "53a46a8d",
+  "type": "debt",
+  "state": "open",
+  "summary": "Concept ID format mismatch: staged_tags uses bare IDs, nodes uses concept.* prefixed IDs — 282 concept_ids have no matching node but are all rejected/orphan, not applied",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:10:04.630Z",
+  "updated_at": "2026-08-20T14:11:14.873Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "data-integrity"
+  ],
+  "relationships": {
+    "parent": "a3db4346"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:11:14.873Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "SWEPT 2026-08-20: Discovered a concept ID format mismatch between staged_tags and nodes:\n\n- staged_tags.concept_id uses BARE IDs: 'active_contemplation', 'aeons', 'pleroma'\n- nodes.id for concepts uses PREFIXED IDs: 'concept.active_contemplation', 'concept.aeons'\n\nResult: 443 distinct concept_ids in staged_tags, but only 161 concept nodes in DB.\n282 concept_ids in staged_tags have NO matching node (concept.{id} not in nodes).\n\nCRITICAL: All 282 orphan concept_ids are on REJECTED (301) or REASSIGNED (31) tags — ZERO accepted or pending tags reference undefined concepts. So no live graph damage, but this is a latent integrity hazard:\n- If a rejected tag were accepted, it would create an edge to a non-existent concept\n- New tag review on these concepts would be silently broken (no node to link to)\n\nRoot cause hypothesis: The Qwen3.5-27B model (19,414 accepted + 297 pending orphan proposals) generates bare concept names as new proposals; these are either rejected at review time or proposed as staged_concepts. The concept.* prefix is applied at promotion time when nodes are created. The 292 is_new_concept=1 orphan tags are rejected proposal attempts.",
+      "confidence": "high"
+    }
+  ]
+}

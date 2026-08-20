@@ -1,0 +1,21 @@
+{
+  "id": "eb194235",
+  "type": "bug",
+  "state": "open",
+  "summary": "flag_apparatus.py has_surviving_tags() filter creates blind spot: apparatus chunks with accepted tags escape flagging (Orphic Hymns 002-034 carry 209 verified tags on Taylor Dissertation)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:19:02.516Z",
+  "updated_at": "2026-08-20T14:20:02.042Z",
+  "tags": [
+    "apparatus",
+    "flag_apparatus",
+    "guru-dev",
+    "process-gap",
+    "cq-intake"
+  ],
+  "relationships": {
+    "parent": "d1b3db8b"
+  }
+}

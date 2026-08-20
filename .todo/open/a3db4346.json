@@ -1,0 +1,33 @@
+{
+  "id": "a3db4346",
+  "type": "chore",
+  "state": "open",
+  "summary": "corpus-quality intake 2026-08-20: 44 apparatus chunks with verified tags, 39 dup bodies, 103 multi-model pending dupes, 1 taxonomy redundancy",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:09:34.598Z",
+  "updated_at": "2026-08-20T14:11:26.648Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake"
+  ],
+  "relationships": {
+    "children": [
+      "d1b3db8b",
+      "d2b255b5",
+      "4ba5c250",
+      "5ab28e2e",
+      "53a46a8d"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:11:26.648Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "SWEPT 2026-08-20: corpus-quality intake across 84 source texts (6068 chunks, 161 concepts, 52,599 edges). Four action items created as children:\n\n1. d1b3db8b — APPARATUS WITH VERIFIED TAGS (critical): 44 apparatus chunks carry 234 accepted tags and 579 live edges. Hotspots: Orphic Hymns (35 chunks, 209 accepted tags, 507 edges — all Taylor Dissertation front-matter) + 9 other texts. Linked to 50438e23 for remediation coordination (apparatus removal is a re-chunk that must preserve these tags via body-matched remap).\n\n2. d2b255b5 — DUPLICATE BODIES (high): 39 byte-identical chunk pairs, 37 in egyptian-book-of-the-dead-index + 2 in plotinus-select-works-index. All in-index crawl artifacts. Linked to 6ea7c8e0 (which tracked only 1 of 39).\n\n3. 4ba5c250 — DUPLICATE PENDING TAGS (medium): 103 (chunk, concept) pairs pending from both Carnice-9b and Qwen3.5-27B. Legal by current index design but doubles review burden. Duplicates ticket 56d6d337.\n\n4. 5ab28e2e — TAXONOMY REDUNDANCY (low): sefirot_tree vs sephirot_tree (0.88 similarity). Linked to 19b04fcb.\n\n5. 53a46a8d — CONCEPT ID FORMAT MISMATCH (low/debt): 282 staged_tags concept_ids have no matching node, but ALL are rejected/reassigned — no live damage. Still a latent hazard.\n\nFalse positives: the initial 47,595 'dangling curation' count was a script bug (compared against corpus files instead of DB nodes). Real dangling refs: 0. No blind/drifted tags found. No novel-cell contamination. No stuck mid-review works.",
+      "confidence": "high"
+    }
+  ]
+}
