@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:19:07.729Z",
-  "updated_at": "2026-08-20T14:33:03.912Z",
+  "updated_at": "2026-08-20T14:55:43.522Z",
   "tags": [
     "driver",
     "apparatus",
@@ -17,7 +17,10 @@
     "cq-intake"
   ],
   "relationships": {
-    "parent": "d1b3db8b"
+    "parent": "d1b3db8b",
+    "children": [
+      "a21c6386"
+    ]
   },
   "analysis": [
     {
