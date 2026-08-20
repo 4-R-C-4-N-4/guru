@@ -1,0 +1,62 @@
+{
+  "id": "f612abc6",
+  "type": "bug",
+  "state": "open",
+  "summary": "Follow-on: Orphic Hymns appended editorial prose not dropped (chunks 087-090 'Hymn LXXV Muse' + 103 'Hymn LXXXVI Death' are pure Taylor commentary, mislabeled as hymns)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T18:02:12.945Z",
+  "updated_at": "2026-08-20T18:06:52.862Z",
+  "tags": [
+    "driver",
+    "apparatus",
+    "orphic-hymns",
+    "editorial-prose"
+  ],
+  "relationships": {
+    "parent": "df44bdeb"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T18:02:23.618Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "PR #83 REVIEW FINDING #1 (2026-08-20): The PR's headline claim — removing retrievable pollution where queries about Orphic theology surfaced Taylor's essay instead of hymns — is only PARTIALLY MET.\n\ndrop_before_marker stripped the LEADING front matter (pages 1-6, chunks old 001-034), but the SAME dissertation-style commentary is appended to note-heavy hymn pages:\n- Source page hoo80.htm (Hymn LXXV 'THE MUSES') has the hymn text + Taylor's essay on the Muses\n- Source page hoo91.htm (Hymn LXXXVI 'DEATH') has the hymn text + Taylor's philosophical commentary on commerce/philosophy\n\nWhen these pages exceed max_tokens=800, the chunker sub-splits them into (part N) chunks that inherit the hymn label. Verified content of the mislabeled chunks:\n- .087 (DB .053) 'Hymn LXXV. THE MUSES (part 2)' — 793 tokens of Taylor's essay on Plato's Phædrus, poetic fury, Muses as divine motion. Pure prose, no hymn text.\n- .088 (DB .054) through .090 likely same pattern\n- .103 (DB .069) 'Hymn LXXXVI. DEATH (part 2)' — 429 tokens of Taylor's essay on Thames commerce, the Dæmon of commerce, philosophical retreats. Pure prose, no hymn text.\n\nThese chunks carry the hymn's label but their body is editorial commentary. A query for 'the Muses' returns ~3000 tokens of Taylor's essay labeled 'Hymn LXXV. THE MUSES' — the exact defect the PR claims to fix.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T18:03:06.363Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "VERIFIED: 5 chunks are editorial prose mislabeled as hymn parts:\n- .087 'Hymn LXXV. THE MUSES (part 2)' — 793 tokens of Taylor's essay on Plato's Phædrus, poetic fury, divine motion. No hymn text.\n- .088 'Hymn LXXV. THE MUSES (part 3)' — 777 tokens on poetic chain, divine mediators, soul circuits. No hymn text.\n- .089 'Hymn LXXV. THE MUSES (part 4)' — 791 tokens on soul immortality, circuits of the soul. No hymn text.\n- .090 'Hymn LXXV. THE MUSES (part 5)' — 434 tokens on Plato's Republic/Laws, phantastic poetry, Thamyris vs Muses. No hymn text.\n- .103 'Hymn LXXXVI. DEATH (part 2)' — 429 tokens on Thames commerce, Daemon of commerce, philosophical retreat. No hymn text.\n\nRoot cause: these are the TAIL end of note-heavy source pages (hoo80.htm, hoo91.htm) that exceeded max_tokens=800 and got sub-split into (part N) chunks. The sub-splits inherit the hymn label but contain only Taylor's appended commentary, not hymn text.\n\nThis is the SAME class as the dropped front matter — editorial prose carrying the hymn's retrieval signal (concept tags that may now be applied here post-re-embed). Unlike the leading front matter, these are not contiguous and cannot be fixed with drop_before_marker alone.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T18:05:54.556Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "VERIFIED ON PR #83 BRANCH: Chunks 087-090 (5 chunks total, incl. 103 if it still exists) ARE PURE EDITORIAL PROSE, mislabeled as 'Hymn LXXV. THE MUSES (part 2-5)':\n\n- 086: 'Hymn LXXV. THE MUSES (part 1)' — ACTUAL HYMN (starts 'LXXV. TO THE MUSES. The FUMIGATION from FRANKINCENSE.')\n- 087: 'Hymn LXXV. THE MUSES (part 2)' — Taylor's essay on poetic fury, Plato's Phædrus (starts '207 fury arises from truth...')\n- 088: 'Hymn LXXV. THE MUSES (part 3)' — Taylor's essay on poetic chain, divine mediators\n- 089: 'Hymn LXXV. THE MUSES (part 4)' — Taylor's essay on soul immortality, circuits\n- 090: 'Hymn LXXV. THE MUSES (part 5)' — Taylor's essay on Plato's Republic, Thamyris vs Muses\n\nThese 4 chunks (087-090) are the TAIL of source page hoo80.htm, which contains Hymn LXXV + Taylor's lengthy commentary. The page exceeded max_tokens=800 and sub-split, creating (part 1) = hymn, (parts 2-5) = editorial prose.\n\nThe  in PR #83 only strips the leading contiguous block (old 001-034). It does NOT address these appended editorial blocks on individual hymn pages.\n\nSame pattern on other note-heavy pages (e.g., 069 'Hymn LVIII. THE FATES' contains hymn text + 150+ words of Taylor's footnote commentary at the tail).",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T18:06:33.655Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "VERIFIED ON PR #83 BRANCH + DB: The editorial prose chunks still carry verified tags and live edges — the exact 'retrievable pollution' the PR claims to fix is still present:\n\nDB state for chunks 087-090 + 103 (all labeled as Hymn LXXV/LXXXVI 'parts'):\n- 087 'Hymn LXXV. THE MUSES (part 2)': 5 accepted tags, 22 edges\n- 088 'Hymn LXXV. THE MUSES (part 3)': 16 accepted tags, 30 edges\n- 089 'Hymn LXXV. THE MUSES (part 4)': 2 accepted tags, 21 edges\n- 090 'Hymn LXXV. THE MUSES (part 5)': 2 accepted tags, 8 edges\n- 103 'Hymn LXXXVI. DEATH (part 2)': 15 accepted tags, 32 edges\nTOTAL: 40 accepted tags + 113 live edges on pure editorial prose\n\nPR #83 did NOT fix this. drop_before_marker only strips the leading contiguous front-matter block. The appended editorial commentary on note-heavy pages (hoo80 = Hymn LXXV + 1500+ words of Taylor's essay on the Muses; hoo63 = Hymn LVIII + Gesner commentary) was chunked into (part N) sub-chunks that inherited the hymn labels. These chunks are retrievable pollution: a query for 'Muses' or 'Orphic theology' surfaces Taylor's essay, not the hymn.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T18:06:52.862Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "FIX OPTIONS:\n\n(A) Pipeline code change (guru-dev/Driver) — the proper fix:\n   - In scripts/chunk.py, after page-as-chunk splits a note-heavy page into (part N) chunks, apply a 'no_hymn_pattern' check: if a chunk's body doesn't start with the hymn invocation pattern (Roman numeral + 'TO' or period), flag it as apparatus via staged_cleanups.\n   - OR: add a post-split 'appended editorial' stripper that removes Taylor's essay commentary from hymn page tails before chunking (a companion to drop_before_marker for the tail, call it drop_after_marker or tail_strip_patterns).\n   - This is NOT a config-only fix — it requires chunk.py changes to handle the split sub-chunks.\n\n(B) Config-only workaround (limited): Add 'FOOTNOTES' to a tail-strip pattern — but this would also strip legitimate footnotes from hymn text, and the review explicitly flagged this risk.\n\nThe 40 accepted tags + 113 edges on these 5 chunks need to be: (1) deleted (they're curation on editorial prose), and (2) the chunks themselves need to be either dropped or re-stripped. The tag deletion is corpus-quality's orphan cleanup; the chunk re-stripping is a re-chunk (Driver).",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        2,
+        3
+      ]
+    }
+  ]
+}
