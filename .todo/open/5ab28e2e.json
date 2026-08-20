@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:09:58.791Z",
-  "updated_at": "2026-08-20T14:11:04.349Z",
+  "updated_at": "2026-08-20T23:12:31.262Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -27,6 +27,16 @@
       "type": "evidence",
       "content": "SWEPT 2026-08-20: concept.sefirot_tree (label='Sefirot Tree', definition='The diagrammatic arrangement of the ten Sephirot...') and concept.sephirot_tree (label='Sephirot Tree', definition=None) — SequenceMatcher similarity 0.88.\n\nNeither concept has any accepted or pending tags. concept.sephirot_tree has no definition at all (one of 5 undefined concepts: cosmic_order, kingdom_of_light, sephirot_tree, immortality, hope).\n\nThis is a clear merge candidate: same referent (the Kabbalistic Tree of Life), different transliteration spelling. After merge, all tags on either concept should re-point to the surviving ID.\n\nOVERLAP: Ticket 19b04fcb covers taxonomy redundancy pass broadly; this is one specific instance.",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T23:12:31.262Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "TAXONOMY FIX APPLIED: Added 'sephirot_tree' as an alias of 'sefirot_tree' in concepts/taxonomy.toml [concept_aliases].\n\nDB-LEVEL CLEANUP STILL NEEDED (guru-dev):\n- concept.sephirot_tree node still exists in DB (1 verified incoming edge, 5 bare tags)\n- sync_taxonomy.py does NOT delete orphan nodes (only adds/synchronizes) — so the orphan persists after the taxonomy edit\n- The 1 verified edge (christian_mysticism.dionysius-divine-names-12.001 → concept.sephirot_tree, id=96855) needs retargeting to concept.sefirot_tree\n\nThis is a node-merge, not a chunk re-chunk — needs a dedicated concept_merge.py migration (like the existing apparatus_remap.py / ch11_006_remap.py patterns) OR a sync_taxonomy.py enhancement to drop orphaned nodes. Escalating DB cleanup to guru-dev.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
     }
   ]
 }
