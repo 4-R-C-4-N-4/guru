@@ -65,7 +65,16 @@
 # evidence for that one text, not a blanket case for local generation.
 # Switching back to c8 now that c9's only work is done; no c9 generation
 # remains pending.
-campaign_id = "c8"
+# c10 = c8 with a CORPUS change to orphic-hymns only: the Thomas Taylor
+# edition was re-chunked 138 → 86 chunks (todo:df44bdeb dropped 34 front-matter
+# + 1 redirect pages; todo:f1e1e009 dropped 17 appended-commentary sub-split
+# tails). That alters one work's span totals, so per V9 this is a new
+# campaign, never a partial re-plan. Provider/model/span_target unchanged, so
+# the 67 prior works' span ids are identical under c10 and their c8 staged
+# rows satisfy the generate-loop skip/upstream checks unchanged. orphic-hymns
+# itself is invalidated: its c8 spans (13, including 6 front-matter spans)
+# are gone; c10 plans fresh hymn-only spans over the 86-chunk corpus.
+campaign_id = "c10"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "llamacpp"   — llama.cpp on the 3090 (V7 applies; set input_budget below).
