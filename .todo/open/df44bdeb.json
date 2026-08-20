@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:19:07.729Z",
-  "updated_at": "2026-08-20T14:30:12.417Z",
+  "updated_at": "2026-08-20T14:33:03.912Z",
   "tags": [
     "driver",
     "apparatus",
@@ -62,6 +62,13 @@
         0,
         3
       ]
+    },
+    {
+      "timestamp": "2026-08-20T14:33:03.912Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "USER SIGN-OFF: Approved corrected scope. Drop chunks .001–.034 (34 contiguous front-matter pages) + .138 (sacred-texts redirect) = 35 total. Keep .087 (Hymn XLII to the Seasons). Use drop_before_marker on 'I. TO THE GODDESS PROTHYRAE' (first hymn, unique to .035). The .087 mislabel (Roman numeral 'XLII' without period breaks number_pattern) approved as bundled fix — number_pattern made tolerant of missing period. Body-matched remap for 209 accepted tags, re-embed, round-trip check. DB backup before remap per corpus-quality convention.",
+      "confidence": "high"
     }
   ]
 }
