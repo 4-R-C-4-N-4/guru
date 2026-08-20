@@ -501,7 +501,25 @@ def main() -> None:
         if args.tradition and tradition != args.tradition:
             continue
 
-        stats = process_source(tradition, source_id, dry_run=args.dry_run)
+        try:
+            stats = process_source(tradition, source_id, dry_run=args.dry_run)
+        except RuntimeError as exc:
+            # A fail-closed config check (e.g. require_drop_before_marker with a
+            # drifted marker) raises rather than silently keeping the dropped
+            # pages. That abort must be scoped to THIS text, not the whole
+            # batch: under --all, one mis-dropped corpus should not leave every
+            # subsequent text unchunked (PR #87 finding 5). Skip the offending
+            # source, log the hard failure, and continue the sweep — the broken
+            # config still surfaces (here + in the per-source log), it just
+            # can't take the rest of the run down with it. The bare invocation
+            # is still refused (see --all guard above), so this is not a
+            # fail-open.
+            logger.error(
+                f"[{source_id}] chunking aborted by a fail-closed config "
+                f"check: {exc} — skipping this source, continuing the run"
+            )
+            skipped += 1
+            continue
         if stats:
             ok += 1
             summary.append(stats)

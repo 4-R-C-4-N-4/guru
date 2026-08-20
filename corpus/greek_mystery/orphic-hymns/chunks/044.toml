@@ -5,10 +5,10 @@ text_name = "Orphic Hymns"
 section = "Hymn XLIV. DIONYSIUS BASSAREUS TRIENNALIS"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo49.htm"
-token_count = 134
+token_count = 118
 
 [content]
-body = "XLIV. TO DIONYSIUS BASSAREUS TRIENNALIS * . A HYMN COME, blessed Dionysius, various nam'd, Bull-fac'd, begot from Thunder, Bacchus fam'd. Bassarian God, of universal might, Whom swords, and blood, and sacred rage delight: In heav'n rejoicing, mad, loud-sounding God, 5 Furious inspirer, bearer of the rod: By Gods rever'd, who dwell'st with human kind, Propitious come, with much-rejoicing mind. Footnotes 178:* So called because his rites were performed every third year."
+body = "XLIV. TO DIONYSIUS BASSAREUS TRIENNALIS * . A HYMN COME, blessed Dionysius, various nam'd, Bull-fac'd, begot from Thunder, Bacchus fam'd. Bassarian God, of universal might, Whom swords, and blood, and sacred rage delight: In heav'n rejoicing, mad, loud-sounding God, 5 Furious inspirer, bearer of the rod: By Gods rever'd, who dwell'st with human kind, Propitious come, with much-rejoicing mind."
 
 [annotations]
 concepts = []
