@@ -1,0 +1,32 @@
+{
+  "id": "d2b255b5",
+  "type": "bug",
+  "state": "open",
+  "summary": "Duplicate chunk bodies: 39 byte-identical pairs across egyptian-book-of-the-dead-index (37) and plotinus-select-works-index (2)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:09:48.830Z",
+  "updated_at": "2026-08-20T14:10:49.579Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "duplicates",
+    "egyptian"
+  ],
+  "relationships": {
+    "parent": "a3db4346",
+    "related": [
+      "6ea7c8e0"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:10:49.578Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "SWEPT 2026-08-20: 39 byte-identical chunk body groups across corpus/. All within single texts (no cross-text dups):\n\n37 groups in egyptian.egyptian-book-of-the-dead-index (Budge edition):\nPairs: 028≡265, 029≡266, 030≡267, 031≡268, 032≡269, 033≡270, 034≡271, 035≡272,\n054≡290, 055≡291, 056≡292, 057≡293, 058≡294, 059≡295, 060≡296, 061≡297, 062≡298,\n063≡299, 064≡300, 067≡302, 092≡327, 093≡328, 094≡329, 095≡330, 096≡331, 097≡332,\n098≡333, 099≡334, 100≡335, 101≡336, 102≡337, 103≡338, 104≡339, 054≡290, etc.\nEach pair has different section labels: e.g. chunk 031 = 'Chapter 4 (part 28)' but chunk 268 = 'Chapter 43 (part 29)' — same body text, two different chapter headings in the index crawl.\n\n2 groups in neoplatonism.plotinus-select-works-index: chunks 751≡752\n\nROOT CAUSE: Sacred-texts.com index crawl for Budge's EBD edition visited content pages twice (sections 026-067 vs 263-299), the chunker didn't dedupe. Same class as the CH-15/16 duplication in ticket c59758f3.\n\nOVERLAP: Ticket 6ea7c8e0 tracked ONE pair (064≡300). This intake sweep found the full scope: 39 groups total.",
+      "confidence": "high"
+    }
+  ]
+}

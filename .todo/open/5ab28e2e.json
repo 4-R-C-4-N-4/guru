@@ -1,0 +1,32 @@
+{
+  "id": "5ab28e2e",
+  "type": "refactor",
+  "state": "open",
+  "summary": "Taxonomy redundancy: concept.sefirot_tree vs concept.sephirot_tree (0.88 label similarity) — neither has tags, one has no definition",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:09:58.791Z",
+  "updated_at": "2026-08-20T14:11:04.349Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "taxonomy",
+    "redundancy"
+  ],
+  "relationships": {
+    "parent": "a3db4346",
+    "related": [
+      "19b04fcb"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:11:04.349Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "SWEPT 2026-08-20: concept.sefirot_tree (label='Sefirot Tree', definition='The diagrammatic arrangement of the ten Sephirot...') and concept.sephirot_tree (label='Sephirot Tree', definition=None) — SequenceMatcher similarity 0.88.\n\nNeither concept has any accepted or pending tags. concept.sephirot_tree has no definition at all (one of 5 undefined concepts: cosmic_order, kingdom_of_light, sephirot_tree, immortality, hope).\n\nThis is a clear merge candidate: same referent (the Kabbalistic Tree of Life), different transliteration spelling. After merge, all tags on either concept should re-point to the surviving ID.\n\nOVERLAP: Ticket 19b04fcb covers taxonomy redundancy pass broadly; this is one specific instance.",
+      "confidence": "high"
+    }
+  ]
+}

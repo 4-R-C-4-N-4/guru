@@ -1,0 +1,35 @@
+{
+  "id": "d1b3db8b",
+  "type": "bug",
+  "state": "open",
+  "summary": "Apparatus chunks with verified tags: 35 Orphic Hymns Taylor Dissertation + 9 others carry 234 accepted concept tags and 579 live edges on editorial/prophylon front-matter",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:09:38.961Z",
+  "updated_at": "2026-08-20T14:10:37.803Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "apparatus",
+    "edges"
+  ],
+  "relationships": {
+    "parent": "a3db4346",
+    "related": [
+      "50438e23"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:10:37.803Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "SWEPT 2026-08-20 across all 6068 chunk TOML bodies in corpus/ + data/guru.db. Found 44 apparatus chunks carrying verified concept tags:\n\nORPHIC HYMNS (Thomas Taylor edition) — 35 chunks:\ngreek_mystery.orphic-hymns.002 through 034 (33 chunks), plus .087 and .138\nAll have section='Front Matter' — these are Taylor's 'Dissertation on the Life and Theology of Orpheus' editorial commentary, not the actual hymns.\n- 209 accepted (verified) concept tags across these chunks\n- 507 live edges (EXPRESSES + PARALLELS) sourced from these chunks\n- Orphic-hymns.002 alone: 4 accepted tags, section='Front Matter, p. 2 (part 1)', body starts 'PREFACE.'\n- Orphic-hymns.007: 7 accepted tags, 8 EXPRESSES edges, 1 PARALLELS edge\n- Orphic-hymns.017: 21 accepted tags, 23 EXPRESSES edges\n- Orphic-hymns.034: 8 accepted tags, 21 EXPRESSES edges\n\nOTHER TEXTS with apparatus+verified-tags:\n- hermeticism.corpus-hermeticum-14.003: 9 accepted tags, 16 EXPRESSES edges (footnote block)\n- egyptian.egyptian-heaven-and-hell.002: 2 accepted tags, 5 EXPRESSES edges (preface)\n- western_esoteric.tarot-of-the-bohemians.001: 5 accepted tags, 5 EXPRESSES edges (preface)\n- western_esoteric.book-of-ceremonial-magic.004: 4 accepted tags, 4 EXPRESSES edges (preface)\n- western_esoteric.secret-teachings-of-all-ages.263: 2 accepted tags, 2 EXPRESSES edges (editorial)\n- western_esoteric.secret-teachings-of-all-ages.382: 1 accepted tag, 1 EXPRESSES edge (footnote)\n- western_esoteric.tertium-organum.002: 2 accepted tags, 2 EXPRESSES edges (preface)\n- egyptian.egyptian-book-of-the-dead-index.002: 0 accepted, 1 pending (preface)\n- egyptian.egyptian-book-of-the-dead-index.003: 0 accepted, 1 pending (preface)\n\nOVERLAP: This is a sub-scope of ticket 50438e23 (which specifically called out orphic-hymns Taylor Dissertation but only as one of many apparatus-leak sources). This ticket captures the verified-tag contamination — the most dangerous aspect — which 50438e23's analysis did not quantify.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    }
+  ]
+}

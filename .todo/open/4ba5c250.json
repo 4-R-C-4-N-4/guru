@@ -1,0 +1,30 @@
+{
+  "id": "4ba5c250",
+  "type": "bug",
+  "state": "open",
+  "summary": "Duplicate pending tags: 103 (chunk, concept) pairs proposed by both Carnice-9b and Qwen3.5-27B, creating double-review burden for identical propositions",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:09:53.010Z",
+  "updated_at": "2026-08-20T14:10:57.220Z",
+  "tags": [
+    "corpus-quality",
+    "cq-intake",
+    "staged_tags",
+    "dedup"
+  ],
+  "relationships": {
+    "parent": "a3db4346",
+    "duplicates": "56d6d337"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:10:57.220Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "SWEPT 2026-08-20: Query on data/guru.db found 103 (chunk_id, concept_id) pairs where BOTH 'pending' and from DIFFERENT models:\n\nModels producing duplicate pending:\n- Carnic-9b + Qwen3.5-27B-UD-Q4_K_XL.gguf: all 103 pairs\n\nThis is legal by the current unique index idx_staged_tags_provenance_unique = UNIQUE(chunk_id, concept_id, model, prompt_version) WHERE status='pending' — since model is part of the key, both inserts succeed.\n\nTop affected texts:\n- christian_mysticism.life-and-doctrines-boehme: 64 dup pairs (worst hit)\n- mesopotamian.enuma-elish: 26 dup pairs\n- buddhism.diamond-sutra: 12 dup pairs\n- gnosticism.gospel-of-thomas: 1 dup pair\n\nAll 103 cases are the SAME concept proposed by both models (just different model provenance), not different concepts. The resolutions are both pending; neither has been reviewed.\n\nOVERLAP: Ticket 56d6d337 already documents this exact mechanism and query. This intake confirms the scope has grown: the ticket was filed 2026-08-09, and the sweep shows 103 pairs (not resolved).",
+      "confidence": "high"
+    }
+  ]
+}
