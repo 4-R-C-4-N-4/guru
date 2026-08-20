@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.040"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXII. VICTORY"
+section = "Hymn XL. THE CERALIAN MOTHER"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo37.htm"
-token_count = 144
+source_url = "https://sacred-texts.com/cla/hoo/hoo45.htm"
+token_count = 155
 
 [content]
-body = "XXXII. TO VICTORY. The FUMIGATION from MANNA. O Powerful Victory, by men desir'd, With adverse breasts to dreadful fury fir'd, Thee I invoke, whose might alone can quell Contending rage, and molestation fell: 'Tis thine in battle to confer the crown, 5 The victor's prize, the mark of sweet renown; For thou rul'st all things, Victory divine! And glorious strife, and joyful shouts are thine. Come, mighty Goddess, and thy suppliant bless, With sparkling eye, elated with success; 10 May deeds illustrious thy protection claim, And find, led on by thee immortal Fame."
+body = "XL. TO THE CERALIAN MOTHER. The FUMIGATION from AROMATICS. CERALIAN queen, of celebrated name, From whom both men, and Gods immortal came; Who widely wand'ring once, oppress'd with grief, In Eleusina's valley found'st relief, p. 173 Discovering Proserpine thy daughter pure 5 In dread Avernus, dismal and obscure; A sacred youth while thro' the world you stray Bacchus, attending leader of the way; The holy marriage of terrestrial Jove Relating, while oppress'd with grief you rove; 10 Come, much invok'd, and to these rites inclin'd, Thy mystic suppliant bless, with fav'ring mind."
 
 [annotations]
 concepts = []

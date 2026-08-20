@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.027"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXI. THE SEA, OR TETHYS"
+section = "Hymn XXVII. MERCURY"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo26.htm"
-token_count = 215
+source_url = "https://sacred-texts.com/cla/hoo/hoo32.htm"
+token_count = 249
 
 [content]
-body = "XXI. TO THE SEA, OR TETHYS * . The FUMIGATION from FRANKINCENSE and MANNA. TETHYS I call, with eyes cærulean bright, Hid in a veil obscure from human sight; Great Ocean's empress, wand'ring thro' the deep, And pleas'd with gentle gales, the earth to sweep; p. 147 Whose blessed waves in swift succession go, 5 And lash the rocky shore with endless flow: Delighting in the Sea serene to play, In ships exulting and the wat'ry way. Mother of Venus, and of clouds obscure, Great nurse of beasts, and source of fountains pure. 10 O venerable Goddess, hear my pray'r, And make benevolent my life thy care; Send, blessed queen, to ships a prosp'rous breeze, And waft them safely o'er the stormy seas. Footnotes 146:* See the last note to Hymn v. for an explanation of the Goddess Tethys."
+body = "XXVII. TO MERCURY. The FUMIGATION from FRANKINCENSE. HERMES, draw near, and to my pray'r incline, Angel of Jove, and Maia's son divine; Studious of contests, ruler of mankind, With heart almighty, and a prudent mind. Celestial messenger, of various skill, 5 Whose pow'rful arts could watchful Argus kill: With winged feet, 'tis thine thro' air to course, O friend of man, and prophet of discourse: Great life-supporter, to rejoice is thine, In arts gymnastic, and in fraud divine: 10 With pow'r endu'd all language to explain, Of care the loos'ner, and the source of gain. Whose hand contains of blameless peace the rod, Corucian, blessed, profitable God; Of various speech, whose aid in works we find, 15 And in necessities to mortals kind: p. 153 Dire weapon of the tongue, which men revere, Be present, Hermes, and thy suppliant hear; Assist my works, conclude my life with peace, Give graceful speech, and me memory's increase. 20"
 
 [annotations]
 concepts = []

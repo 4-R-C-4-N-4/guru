@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.079"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXVIII. THE FURIES * The FUMIGATION from AROMATICS"
+section = "Hymn LXXIX. THE NORTH WIND"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo73.htm"
-token_count = 312
+source_url = "https://sacred-texts.com/cla/hoo/hoo84.htm"
+token_count = 114
 
 [content]
-body = "LXVIII. TO THE FURIES * The FUMIGATION from AROMATICS. VOCIFEROUS Bacchanalian Furies, hear! Ye, I invoke, dread pow'rs, whom all revere; Nightly, profound, in secret who retire, Tisiphone, Alecto, and Megara dire: Deep in a cavern merg'd, involv'd in night, 5 Near where Styx flows impervious to the sight; Ever attendant on mysterious rites, Furious and fierce, whom Fate's dread law delights; Revenge and sorrows dire to you belong, Hid in a savage veil, severe and strong, 10 Terrific virgins, who forever dwell Endu'd with various forms, in deepest hell; Aerial, and unseen by human kind, And swiftly coursing, rapid as the mind. In vain the Sun with wing'd refulgence bright, 15 In vain the Moon, far darting milder light, Wisdom and Virtue may attempt in vain; And pleasing, Art, our transport to obtain Unless with these you readily conspire, And far avert your all-destructive ire. 20 p. 201 The boundless tribes of mortals you descry, And justly rule with Right's impartial eye. Come, snaky-hair'd, Fates many-form'd, divine, Suppress your rage, and to our rites incline. Footnotes 200:* See the note to Hymn lviii. to the Fates."
+body = "LXXIX. TO THE NORTH WIND. The FUMIGATION from FRANKINCENSE. BOREAS, whose wint'ry blasts, terrific, tear The bosom of the deep surrounding air; Cold icy pow'r, approach, and fav'ring blow, And Thrace a while desert expos'd to snow: The misty station of the air dissolve, 5 With pregnant clouds, whose frames in show'rs resolve: Serenely temper all within the sky, And wipe from moisture, Æther's beauteous eye."
 
 [annotations]
 concepts = []

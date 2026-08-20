@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.023"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XVII. PLUTO"
+section = "Hymn XXIII. THE NEREIDS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo22.htm"
-token_count = 504
+source_url = "https://sacred-texts.com/cla/hoo/hoo28.htm"
+token_count = 203
 
 [content]
-body = "XVII. TO PLUTO. PLUTO, magnanimous, whose realms profound Are fix'd beneath the firm and solid ground, In the Tartarian plains remote from fight, And wrapt forever in the depths of night; Terrestrial Jove, thy sacred ear incline, 5 5 And, pleas'd, accept thy mystic's hymn divine. Earth's keys to thee, illustrious king belong, 7 Its secret gates unlocking, deep and strong. 'Tis thine, abundant annual fruits to bear, For needy mortals are thy constant care. 10 p. 143 To thee, great king, Avernus is assign'd, The seat of Gods, and basis of mankind. Thy throne is fix'd in Hade's dismal plains, Distant, unknown to rest, where darkness reigns; Where, destitute of breath, pale spectres dwell, 15 In endless, dire, inexorable hell; And in dread Acheron, whose depths obscure, Earth's stable roots eternally secure. O mighty dæmon, whose decision dread, The future fate determines of the dead, 20 With captive Proserpine, thro' grassy plains, Drawn in a four-yok'd car with loosen'd reins, Rapt o'er the deep, impell'd by love, you flew 'Till Eleusina's city rose to view; There, in a wond'rous cave obscure and deep, 25 The sacred maid secure from search you keep, The cave of Atthis, whose wide gates display An entrance to the kingdoms void of day. Of unapparent works, thou art alone The dispensator, visible and known. 30 O pow'r all-ruling, holy, honor'd light, Thee sacred poets and their hymns delight: Propitious to thy mystic's works incline, Rejoicing come, for holy rites are thine. Footnotes 142:5 Ver. 5.] Terrestrial Jove , Pluto, says Proclus in Theol. Plat. p. 368. is called terrestrial Jupiter, because he governs by his providence the earth, and all she contains. 142:7 Ver. 7.] Earth's keys . Pausanias informs us, that Pluto is reported to have keys, as an illustrious distinction; in the same manner as a sceptre is attributed to Jupiter, and a trident to Neptune."
+body = "XXIII. TO THE NEREIDS. The FUMIGATION from AROMATICS. DAUGHTERS of Nereus, resident in caves Merg'd deep in Ocean, sporting thro' the waves; Fanatic fifty nymphs, who thro' the main Delight to follow in the Triton's train, Rejoicing close behind their cars to keep; 5 Whose forms half wild, are nourish'd by the deep, With other nymphs of different degree Leaping and wand'ring thro' the liquid sea: Bright, wat'ry dolphins, sonorous and gay, Well pleas'd to sport with bachanalian play; 10 Nymphs beauteous-ey'd, whom sacrifice delights, Send rich abundance on our mystic rites; For you at first disclos'd the rites divine, Of holy Bacchus and of Proserpine, Of fair Calliope from whom I spring, 15 And of Apollo bright, the Muse's king."
 
 [annotations]
 concepts = []

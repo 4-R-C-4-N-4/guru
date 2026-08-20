@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.016"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XI. HERCULES (part 2)"
+section = "Hymn XVI. NEPTUNE"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo16.htm"
-token_count = 412
+source_url = "https://sacred-texts.com/cla/hoo/hoo21.htm"
+token_count = 253
 
 [content]
-body = "127 hence the reason is obvious why Hercules is called \"earth's best blossom.\" And we shall find that Saturn in the following hymn is called \"blossom of the earth;\" and Themis, in Hymn 78, \"young blossom of the earth;\" and the Titans, in Hymn 36, \"the illustrious progeny of heaven and earth.\" 135:15 Ver.\n\n15.] With primogenial fires you shine .\n\nSince the intelligible world, which, as we have already observed, was produced from Æther and Chaos, is nothing else than the comprehension of all the demiurgic ideas in the divine mind, which is, according to Orpheus, the God Phanes; it remains that the sensible world, which is but the image τυ Νοζτυ Παραδείγματοσ of an intelligible paradigm, should be produced according to its similitude, and filled with its proper divinities.\n\nNow Phanes, the author of the sensible world, is represented by Orpheus (for the purpose of symbolically representing the causal production of the universe) as adorned with the heads of various animals.\n\nAccording to Athenagoras, with the head of a dragon, of a lion, and the countenance of the God himself; but according to Proclus and others, in the words of Orpheus, with the countenance of a ram, a bull, a serpent and a lion.\n\nAnd this Phanes Athenagoras informs us is denominated by Orpheus, Hercules, and Time.\n\nHence we see the reason why Hercules is said to shine with primogenial fires; since he is no other than Protogonos in the intelligible, and the Sun in the sensible world.\n\nHence too the reason is apparent why Saturn who is the same with Time, is called in the following Hymn, τιτὰν i.e.\n\nTitan, or the Sun."
+body = "XVI. TO NEPTUNE. The FUMIGATION from MYRRH HEAR, Neptune, ruler of the sea profound, Whose liquid grasp begirts the solid ground; Who, at the bottom of the stormy main, Dark and deep-bosom'd, hold'st thy wat'ry reign; Thy awful hand the brazen trident bears, And ocean's utmost bound, thy will reveres: Thee I invoke, whose steeds the foam divide, From whose dark locks the briny waters glide; Whose voice loud founding thro' the roaring deep, Drives all its billows, in a raging heap; 10 When fiercely riding thro' the boiling sea, Thy hoarse command the trembling waves obey. p. 142 Earth shaking, dark-hair'd God, the liquid plains (The third division) Fate to thee ordains, 'Tis thine, cærulian dæmon, to survey Well pleas'd the monsters of the ocean play, 15 Confirm earth's basis, and with prosp'rous gales Waft ships along, and swell the spacious sails; Add gentle Peace, and fair-hair'd Health beside, And pour abundance in a blameless tide. 20"
 
 [annotations]
 concepts = []

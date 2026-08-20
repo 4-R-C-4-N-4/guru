@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.020"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIV. JUPITER"
+section = "Hymn XX. THE CLOUDS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo19.htm"
-token_count = 198
+source_url = "https://sacred-texts.com/cla/hoo/hoo25.htm"
+token_count = 135
 
 [content]
-body = "XIV. TO JUPITER. The FUMIGATION from STORAX. O Jove much-honor'd, Jove supremely great, To thee our holy rites we consecrate, p. 140 Our pray'rs and expiations, king divine, For all things round thy head exalted shine. The earth is thine, and mountains swelling high, 5 The sea profound, and all within the sky. Saturnian king, descending from above, Magnanimous, commanding, sceptred Jove; All-parent, principle and end of all, Whose pow'r almighty, shakes this earthly ball; 10 Ev'n Nature trembles at thy mighty nod, Loud-sounding, arm'd with light'ning, thund'ring God. Source of abundance, purifying king, O various-form'd from whom all natures spring; Propitious hear my pray'r, give blameless health, 15 With peace divine, and necessary wealth."
+body = "XX. TO THE CLOUDS. The FUMIGATION from MYRRH. Ærial clouds, thro' heav'n's resplendent plains Who wander, parents of prolific rains; Who nourish fruits, whose water'y frames are hurl'd, By winds impetuous, round the mighty world; All-thund'ring, lion-roaring, flashing fire, 5 In Air's wide bosom, bearing thunders dire Impell'd by ev'ry stormy, sounding gale, With rapid course, along the skies ye fail. With blowing winds your wat'ry frames I call, On mother Earth with fruitful show'rs to fall."
 
 [annotations]
 concepts = []

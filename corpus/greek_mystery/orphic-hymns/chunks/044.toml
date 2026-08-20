@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.044"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXIV"
+section = "Hymn XLIV. DIONYSIUS BASSAREUS TRIENNALIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo39.htm"
+source_url = "https://sacred-texts.com/cla/hoo/hoo49.htm"
 token_count = 134
 
 [content]
-body = "XXXIV. T O L A T O N A. The FUMIGATION from MYRRH. DARK veil'd Latona, much invoked queen, Twin-bearing Goddess, of a noble mien; Cæantis great, a mighty mind is thine, Offspring prolific, blest of Jove divine: Phœbus proceeds from thee, the God of light, 5 And Dian fair, whom winged darts delight; She in Ortygia's honor'd regions born, In Delos he, which mountains high adorn. Hear me, O Goddess, with propitious mind, And end these holy rites, with aspect kind. 10"
+body = "XLIV. TO DIONYSIUS BASSAREUS TRIENNALIS * . A HYMN COME, blessed Dionysius, various nam'd, Bull-fac'd, begot from Thunder, Bacchus fam'd. Bassarian God, of universal might, Whom swords, and blood, and sacred rage delight: In heav'n rejoicing, mad, loud-sounding God, 5 Furious inspirer, bearer of the rod: By Gods rever'd, who dwell'st with human kind, Propitious come, with much-rejoicing mind. Footnotes 178:* So called because his rites were performed every third year."
 
 [annotations]
 concepts = []

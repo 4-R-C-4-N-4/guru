@@ -76,13 +76,13 @@ def test_title_pattern_recovers_xlii_seasons_title(cfg):
     """Hymn XLII's body starts "XLII TO THE SEASONS." with no period after the
     numeral. The optional-period title prefix must strip the numeral and yield
     "THE SEASONS", matching every sibling hymn's title."""
-    xlii_body = tomllib.load(open(CHUNKS_DIR / "053.toml", "rb"))["content"]["body"]
+    xlii_body = tomllib.load(open(CHUNKS_DIR / "042.toml", "rb"))["content"]["body"]
     assert _extract_title(xlii_body, cfg) == "THE SEASONS"
 
 
 def test_title_pattern_still_extracts_period_form(cfg):
     """The optional-period prefix must not disturb the normal period form."""
-    xliii_body = tomllib.load(open(CHUNKS_DIR / "054.toml", "rb"))["content"]["body"]
+    xliii_body = tomllib.load(open(CHUNKS_DIR / "043.toml", "rb"))["content"]["body"]
     assert _extract_title(xliii_body, cfg) == "SEMELE"
 
 
@@ -101,20 +101,38 @@ def test_corpus_has_no_surviving_front_matter():
     assert not offenders, "front-matter chunks survived the drop:\n  " + "\n  ".join(offenders)
 
 
-def test_corpus_emits_103_hymns_first_to_death():
+def test_corpus_emits_86_hymns_first_to_death():
     """The kept chunks form a complete Hymn I-LXXXVI set with no gaps — the
-    front matter (34) and redirect (1) removed from the original 138."""
+    front matter (34), redirect (1), and appended editorial sub-splits (17)
+    removed from the original 138."""
     labels = [
         tomllib.load(open(ct, "rb"))["chunk"]["section"]
         for ct in sorted(CHUNKS_DIR.glob("*.toml"))
     ]
-    assert len(labels) == 103, f"{len(labels)} chunks, expected 103"
+    assert len(labels) == 86, f"{len(labels)} chunks, expected 86"
     assert labels[0].startswith("Hymn I."), labels[0]
     assert labels[-1].startswith("Hymn LXXXVI."), labels[-1]
+
+
+def test_no_subsplit_editorial_tails_survive():
+    """No chunk may be a pure-commentary sub-split tail (Taylor's appended
+    footnotes/essays past the verse). The page's verse always fits in one
+    chunk (longest is 567 tokens), so a (part N) chunk whose body does not
+    open with a hymn number is editorial overflow, not primary text
+    (todo:f1e1e009). Guards drop_trailing_nonprimary_subsplits."""
+    import re
+    tails = []
+    for ct in sorted(CHUNKS_DIR.glob("*.toml")):
+        d = tomllib.load(open(ct, "rb"))
+        sec, body = d["chunk"]["section"], d["content"]["body"]
+        m = re.search(r"\(part (\d+)\)$", sec)
+        if m and int(m.group(1)) >= 2:
+            tails.append(f"{d['chunk']['id']}: {sec!r}")
+    assert not tails, "editorial sub-split tails survived:\n  " + "\n  ".join(tails)
 
 
 def test_corpus_hymn_xlii_labelled_with_title():
     """Hymn XLII (the chunk that was mislabelled "Front Matter, p. 48") must
     survive as a titled hymn, not an empty-title "Hymn XLII"."""
-    label = tomllib.load(open(CHUNKS_DIR / "053.toml", "rb"))["chunk"]["section"]
+    label = tomllib.load(open(CHUNKS_DIR / "042.toml", "rb"))["chunk"]["section"]
     assert label == "Hymn XLII. THE SEASONS", label

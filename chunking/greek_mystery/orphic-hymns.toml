@@ -59,6 +59,17 @@ drop_chunk_patterns = [
 # the warn-and-keep default).
 require_drop_before_marker = true
 
+# Some hymn pages (Muses, Death, Protogonus, Apollo, ...) carry Taylor's
+# appended footnotes/essays past the verse. When such a page exceeds
+# max_tokens=800, page_chunker sub-splits it, and the trailing (part N)
+# chunks are pure editorial commentary — the verse itself always fits in one
+# chunk (longest verse is 567 tokens). drop_trailing_nonprimary_subsplits
+# drops those trailing parts: the FIRST sub-chunk opens with the page's hymn
+# number, so any later part that does NOT open with a number is commentary
+# overflow, not verse continuation. This is the appended-editorial half of
+# the front-matter fix (todo:f1e1e009).
+drop_trailing_nonprimary_subsplits = true
+
 # Strip sacred-texts navigation cruft. Each page comes back as a single
 # line: "Sacred Texts Classics Index Previous Next XXII. TO NEREUS. ...
 # Next: XXIII: To the Nereids". Embedding the prefix/suffix pollutes

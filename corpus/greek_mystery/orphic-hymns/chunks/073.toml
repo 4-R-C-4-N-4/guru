@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.073"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXII. EQUITY"
+section = "Hymn LXXIII. LEUCOTHEA"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo67.htm"
-token_count = 222
+source_url = "https://sacred-texts.com/cla/hoo/hoo78.htm"
+token_count = 202
 
 [content]
-body = "LXII. TO EQUITY. The FUMIGATION from FRANKINCENSE. O Blessed Equity, mankind's delight, Th' eternal friend of conduct just and right: Abundant, venerable, honor'd maid, To judgments pure, dispensing constant aid, p. 195 A stable conscience, and an upright mind; For men unjust, by thee are undermin'd, Whose souls perverse thy bondage ne'er desire, But more untam'd decline thy scourges dire: Harmonious, friendly power, averse to strife, In peace rejoicing, and a stable life; 10 Lovely, loquacious, of a gentle mind, Hating excess, to equal deeds inclin'd: Wisdom, and virtue of whate'er degree, Receive their proper bound alone in thee. Hear, Goddess Equity, the deeds destroy 15 Of evil men, which human life annoy; That all may yield to thee of mortal birth, Whether supported by the fruits of earth, Or in her kindly fertile bosom found, or in the depths of Marine Jove profound. 20"
+body = "LXXIII. TO LEUCOTHEA. The FUMIGATION from AROMATICS. I Call Leucothea, of great Cadmus born, And Bacchus' nurse, whom ivy leaves adorn. Hear, pow'rful Goddess, in the mighty deep Wide and profound, thy Ration doom'd to keep: In waves rejoicing, guardian of mankind; 5 For ships from thee alone deliv'rance find Amidst the fury of th' unstable main, When art no more avail, and strength is vain; When rushing billows with tempestuous ire O'erwhelm the mariner in ruin dire, 10 Thou hear'st, with pity touch'd, his suppliant pray'r, Resolv'd his life to succour and to spare. Be ever present, Goddess! in distress, Waft ships along with prosperous success: Thy mystics thro' the stormy sea defend, 15 And safe conduct them to their destin'd end."
 
 [annotations]
 concepts = []

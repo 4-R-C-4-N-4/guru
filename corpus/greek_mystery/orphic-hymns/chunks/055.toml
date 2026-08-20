@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.055"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLIV. DIONYSIUS BASSAREUS TRIENNALIS"
+section = "Hymn LV. ADONIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo49.htm"
-token_count = 134
+source_url = "https://sacred-texts.com/cla/hoo/hoo60.htm"
+token_count = 302
 
 [content]
-body = "XLIV. TO DIONYSIUS BASSAREUS TRIENNALIS * . A HYMN COME, blessed Dionysius, various nam'd, Bull-fac'd, begot from Thunder, Bacchus fam'd. Bassarian God, of universal might, Whom swords, and blood, and sacred rage delight: In heav'n rejoicing, mad, loud-sounding God, 5 Furious inspirer, bearer of the rod: By Gods rever'd, who dwell'st with human kind, Propitious come, with much-rejoicing mind. Footnotes 178:* So called because his rites were performed every third year."
+body = "LV. TO ADONIS. The FUMIGATION from AROMATICS. MUCH-nam'd, and best of dæmons, hear my pray'r, The desart-loving, deck'd with tender hair; Joy to diffuse, by all desir'd is thine, Much form'd, Eubulus; aliment divine p. 188 Female and Male, all charming to the sight, 5 Adonis ever flourishing and bright; At stated periods doom'd to set and rise, With splendid lamp, the glory of the skies. 8 Two-horn'd and lovely, reverenc'd with tears, Of beauteous form, adorn'd with copious hairs. 10 Rejoicing in the chace, all-graceful pow'r, Sweet plant of Venus, Love's delightful flow'r: Descended from the secret bed divine, Of lovely-hair'd, infernal Proserpine. 'Tis thine to fink in Tartarus profound, 15 And shine again thro' heav'ns illustrious round, With beauteous temp'ral orb restor'd to sight; Come, with earth's fruits, and in these flames delight. Footnotes 188:8 Ver. 8.] With splendid lamp , &c. Proclus, in his elegant Hymn to the Sun, celebrates him as frequently called Adonis; and this perfectly agrees with the present epithet, and with many others in the Hymn."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.059"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLVIII. IPPA * The FUMIGATION from STORAX"
+section = "Hymn LIX. THE GRACES"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo53.htm"
+source_url = "https://sacred-texts.com/cla/hoo/hoo64.htm"
 token_count = 133
 
 [content]
-body = "XLVIII. TO IPPA * The FUMIGATION from STORAX. Great nurse of Bacchus, to my pray'r incline, For holy Sabus' secret rites are thine, The mystic rites of Bacchus' nightly choirs, Compos'd of sacred, loud-resounding fires: Hear me, terrestrial mother, mighty queen, 5 Whether on Phyrgia's holy mountain + seen, Or if to dwell in Tmolus thee delights, With holy aspect come, and bless these rites. Footnotes 180:* Ippa according to Proclus is same with Juno. 180:+ Ida."
+body = "LIX. TO THE GRACES. The FUMIGATION from STORAX. HEAR me, illustrious Graces, mighty nam'd, From Jove descended and Eunomia fam'd; Thalia, and Aglaia fair and bright, And blest Euphrosyne whom joys delight: Mothers of mirth, all lovely to the view, 5 Pleasure abundant pure belongs to you: Various, forever flourishing and fair, Desir'd by mortals, much invok'd in pray'r: Circling, dark-ey'd, delightful to mankind, Come, and your mystics bless with bounteous mind."
 
 [annotations]
 concepts = []

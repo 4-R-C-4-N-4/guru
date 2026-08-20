@@ -8,9 +8,12 @@ boundaries if it exceeds the token budget.
 Strategy name: page-as-chunk
 """
 
+import logging
 import re
 
 from regex_splitter import Chunk, subsplit  # reuse Chunk dataclass and subsplit
+
+logger = logging.getLogger(__name__)
 
 
 def _extract_number(filename: str, content: str, config: dict) -> str | None:
@@ -168,10 +171,34 @@ def split(
             # objects and doesn't know about page_meta, so carry it over here
             # rather than in the shared splitter.
             subs = subsplit(chunk, max_tokens, count_tokens)
+            # Opt-in: drop trailing sub-split parts that are appended editorial
+            # commentary rather than primary text. The trigger is the page's
+            # own primary marker: the FIRST sub-chunk always opens with the
+            # page's hymn number (number_pattern matched at the page level), so
+            # a trailing part that does NOT open with a number is commentary
+            # overflow (Taylor's footnotes/essays appended past max_tokens),
+            # not verse continuation. Safe only when the primary unit is known
+            # to fit in max_tokens (orphic-hymns: longest verse 567 < 800), so
+            # it is opt-in per config and documented in the config comment.
+            if config.get("drop_trailing_nonprimary_subsplits") and number_matched:
+                keep = [subs[0]]
+                for sub in subs[1:]:
+                    if _extract_number(filename, sub.body, config) is not None:
+                        keep.append(sub)
+                if len(keep) != len(subs):
+                    logger.info(
+                        f"[{filename}] dropped {len(subs) - len(keep)} trailing "
+                        f"non-primary sub-split part(s)"
+                    )
+                subs = keep
             for sub in subs:
                 sub.metadata = page_meta
-            # Relabel sub-chunks with part numbers
-            if len(subs) > 1:
+            # Relabel sub-chunks with part numbers. When the editorial-tail
+            # drop leaves a single sub, restore the plain page label (subsplit
+            # had suffixed it with '-a').
+            if len(subs) == 1:
+                subs[0].section_label = label
+            elif len(subs) > 1:
                 for i, sub in enumerate(subs):
                     sub.section_label = f"{label} (part {i + 1})"
             chunks.extend(subs)

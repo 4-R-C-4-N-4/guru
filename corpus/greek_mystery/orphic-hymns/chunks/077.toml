@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.077"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXVI. ESCULAPIUS"
+section = "Hymn LXXVII. AURORA"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo71.htm"
-token_count = 171
+source_url = "https://sacred-texts.com/cla/hoo/hoo82.htm"
+token_count = 218
 
 [content]
-body = "LXVI. TO ESCULAPIUS. The FUMIGATION from MANNA. GREAT Esculapius, skill'd to heal mankind,, All-ruling Pæan, and physician kind; Whose arts medic'nal, can alone assuage Diseases dire, and stop their dreadful rage: Strong lenient God, regard my suppliant pray'r, Bring gentle Health, adorn'd with lovely hair; Convey the means of mitigating pain, And raging, deadly pestilence restrain. O pow'r all-flourishing, abundant, bright, Apollo's honor'd offspring, God of light; 10 Husband of blameless Health, the constant foe Of dread Disease the minister of woe: p. 199 Come, blessed saviour, and my health defend, And to my life afford a prosp'rous end."
+body = "LXXVII. TO AURORA. The FUMIGATION from MANNA. HEAR me, O Goddess! whose emerging ray Leads on the broad refulgence of the day; Blushing Aurora, whose celestial light Beams on the world with red'ning splendours bright: Angel of Titan, whom with constant round, 5 Thy orient beams recall from night profound: Labour of ev'ry kind to lead is thine, Of mortal life the minister divine. Mankind in thee eternally delight, And none presumes to shun thy beauteous sight. 10 Soon as thy splendours break the bands of rest, And eyes unclose with pleasing sleep oppress'd; Men, reptiles, birds, and beasts, with gen'ral voice, And all the nations of the deep, rejoice; For all the culture of our life is thine. 15 Come, blessed pow'r! and to these rites incline: Thy holy light increase, and unconfin'd Diffuse its radiance on thy mystic's mind."
 
 [annotations]
 concepts = []

@@ -54,20 +54,48 @@ chunk relabelled rather than dropped.
    XLII recovers its title (`Hymn XLII. THE SEASONS`) instead of an empty-title
    `Hymn XLII` — the parallel half of the relabel the first pass left out.
 
+## Appended editorial commentary (todo:f1e1e009, follow-on from the PR #83 re-review)
+
+The front-matter drop removed the 34 leading editorial chunks, but the same
+class of Taylor commentary survives as sub-split `(part N)` chunks on
+note-heavy hymn pages: when a page exceeds `max_tokens=800` it splits into a
+hymn part and a commentary/footnote tail that inherits the hymn's label.
+17 chunks (087-090 + 103, plus footnote tails on Protogonus/Moon/Nature/
+Hercules/Rhea/Proserpine/Pallas/Apollo/Mises/Vesta pages) carried 80 accepted
+tags + 399 edges of pure editorial prose labelled as hymns.
+
+**Why a config-only fix was impossible:** `drop_before_marker` only strips the
+leading block; `drop_chunk_patterns` is a whole-chunk per-body regex and the
+commentary shares pages with the hymns.
+
+**The mechanism:** new opt-in `page_chunker` key
+`drop_trailing_nonprimary_subsplits = true`. When a page sub-splits, the FIRST
+sub-chunk always opens with the page's hymn number (`number_pattern` matched at
+the page level), so any trailing part that does NOT open with a number is
+commentary overflow, not verse continuation. Safe here because the longest hymn
+verse is 567 tokens — well under `max_tokens=800` — so a sub-split only happens
+when the commentary pushes the page over budget. Re-chunk: **103 → 86 chunks**,
+17 dropped. Remap `remap=86, delete=17`; the 80 accepted tags + 399 edges on
+the dropped commentary were deleted with the chunks; the 449 surviving tags on
+the real hymns preserved. Re-embedded; golden-set retrieval confirms the Muses/
+Death essays no longer surface.
+
 ## Remap
 
 `scripts/migrations/apparatus_remap.py greek_mystery/orphic-hymns` —
 body-matched two-phase rename (pre-existing tool, CH-11 / Plotinus pattern).
 Because `clean_bodies` was never run on this text (node 07 unrecorded), the
 surviving hymn bodies are byte-identical between git HEAD and the re-chunk, so
-the match was exact: **remap=103, delete=35**, zero residual TMP refs.
+the match was exact: **remap=86, delete=52** (35 front-matter/redirect + 17
+appended commentary), zero residual TMP refs.
 
 Consequence, and it is the correct one: the 209 accepted tags lived on the
-**deleted** front-matter chunks, so the remap *deletes* them (with the chunks),
-not re-points them — they are curation mistakenly applied to editorial prose,
-and the whole point is to remove them. The **529 accepted tags** and the
-surviving edges on the real hymns are preserved and re-pointed to the renumbered
-ids. `graph_bootstrap --text orphic-hymns` refreshed section labels.
+**deleted** front-matter chunks, and a further 80 on the deleted appended
+commentary — the remap *deletes* them (with the chunks), not re-points them:
+they are curation mistakenly applied to editorial prose, and the whole point is
+to remove them. The **449 accepted tags** and the surviving edges on the real
+hymns are preserved and re-pointed to the renumbered ids.
+`graph_bootstrap --text orphic-hymns` refreshed section labels.
 
 ## CROSS-STREAM FOLLOW-ON (not part of this change)
 
