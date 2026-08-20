@@ -1,0 +1,21 @@
+{
+  "id": "46d8152e",
+  "type": "investigation",
+  "state": "done",
+  "summary": "Generate local L1 rows for the paired span set with Qwen3.8-27B",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:17:18.602Z",
+  "updated_at": "2026-08-16T21:46:41.175Z",
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "Generate the local arm: build_dossiers.py --generate --stage l1 --db <snapshot>, restricted to the paired works. generate_dossiers.py has NO --db flag of its own — it is the --generate half of build_dossiers.py and must be driven through it.\n\nServer: llm qwen3.8. Context is not a constraint (spans are ~6000 tokens), so the oversized agent-tuned window is harmless. Thinking should stay ON — l1-v3 asks the model to 're-check each such statement against the input' before finishing, which is exactly what the thinking pass is for — but cap it with THINK_BUDGET so a stuck generation ends with an answer instead of finish_reason=length.\n\nAnnounce the GPU grab; llm stop when finished. Est. 1-2h for ~44 spans.\n\nRows land as pending under model='Qwen3.8-27B-UD-Q4_K_XL.gguf', namespaced by (unit, model, prompt_version), so they cannot clobber the frontier rows.\n\nDONE: one pending local l1-v3 row per paired span, zero generation errors, and any log-skips (MAX_ATTEMPTS=3 exhausted) counted and recorded here — a high skip rate is itself a FORMAT result worth reporting.",
+  "resolution": {
+    "commit": "f90a599b3ac2f07c12f26d510cc985dd3b9260a2",
+    "resolved_at": "2026-08-16T21:46:41.175Z",
+    "resolved_by": "unknown",
+    "note": "36/36 paired spans generated, zero skips. 52 calls / 16 retries (42% of spans needed >=1). 15 of 16 retries were length-band overruns (727-1538 tok vs ~300 target); 1 was mid-sentence start. Post-correction the local arm is +17.7% longer than frontier (483.6 vs 410.2), ratio 1.16-1.21 across all three works. ~70 tok/s pinned single-card vs 48.3 split. Full detail: docs/dossiers/c8-local-l1-run.md"
+  }
+}

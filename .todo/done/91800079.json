@@ -1,0 +1,26 @@
+{
+  "id": "91800079",
+  "type": "chore",
+  "state": "done",
+  "summary": "Add staged_summaries and staged_dossier_fields counts to backup_db.sh manifest",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:16:54.591Z",
+  "updated_at": "2026-08-16T19:27:50.830Z",
+  "files": [
+    {
+      "path": "scripts/backup_db.sh"
+    }
+  ],
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "backup_db.sh writes a manifest of row counts as the canary for a snapshot, but it counts only staged_tags, edges and nodes. The dossier tables are absent, so a Pass D snapshot cannot be checked before/after.\n\nDONE: the manifest SQL also emits counts for staged_summaries (total, and by status) and staged_dossier_fields (total, and by status). Verified by running scripts/backup_db.sh with a throwaway label and reading the generated .manifest.txt.\n\nDo this first — the snapshot taken in the next tickets should already carry the dossier counts.",
+  "resolution": {
+    "commit": "0307aef78763a938a92284ea2c0a4aecab633a4f",
+    "resolved_at": "2026-08-16T19:27:50.830Z",
+    "resolved_by": "unknown",
+    "note": "Manifest extended and verified against a real snapshot (guru-20260816T192724Z-pre-c8-local-bench): staged_summaries total=1622 accepted=951 rejected=671 L1=1504 L2=118 folds=0, dossier_fields total=1798 accepted=1149 rejected=649. folds=0 independently confirms the fold path has never executed."
+  }
+}

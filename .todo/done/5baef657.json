@@ -1,0 +1,21 @@
+{
+  "id": "5baef657",
+  "type": "chore",
+  "state": "done",
+  "summary": "Write up the failure-code comparison and the go/no-go recommendation",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:17:18.728Z",
+  "updated_at": "2026-08-18T12:12:18.243Z",
+  "relationships": {
+    "parent": "8c67ee44"
+  },
+  "description": "Turn the review data into a decision document under docs/dossiers/.\n\nReport the failure-code DISTRIBUTION, not the accept rate alone — the question is which failures you would rather review, not which model scores higher. Test the stated hypothesis explicitly: GROUND/LEAK down, COVERAGE/FORMAT up. State plainly if it did not hold.\n\nReport the logia subset separately from the Iamblichus-heavy set; if local degrades sharply on sayings order, that is the finding regardless of the aggregate.\n\nBe explicit about what was NOT tested: the fold/map-reduce path (never-run code) and every structured field. A pass here licenses a Phase 2, not a provider switch.\n\nDONE: committed doc with the contingency table, the hypothesis verdict, a recommendation, and — if the answer is yes — the concrete next campaign config. Owner keeps the call.",
+  "resolution": {
+    "commit": "40418f2d978bb4936c872cdb19b956b21ab4f61f",
+    "resolved_at": "2026-08-18T12:12:18.243Z",
+    "resolved_by": "unknown",
+    "note": "Superseded by a single report rather than a per-code contingency table: docs/dossiers/decisions/local-model-benchmark.md. Verdict: not yet — the L1 budget formula (min(300,max(80,tok//12))) is the actual blocker, not model quality; judge agreement swung 36%-88% across two genres and is unresolved; COVERAGE is undetectable by every judge tested including opus. Raw grid/verdict data intentionally not kept in-tree (lab notebook vs workbook reference) — full history preserved at commit 40418f2d."
+  }
+}

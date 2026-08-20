@@ -1,0 +1,44 @@
+{
+  "id": "8c67ee44",
+  "type": "investigation",
+  "state": "done",
+  "summary": "Benchmark Qwen3.8-27B as a local Pass D dossier generator against the frontier baseline",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-16T19:16:30.514Z",
+  "updated_at": "2026-08-18T12:12:18.284Z",
+  "tags": [
+    "dossiers",
+    "local-llm",
+    "benchmark"
+  ],
+  "description": "Paired A/B: can a local model (Qwen3.8-27B-UD-Q4_K_XL on llama.cpp, 3090) replace claude-opus-4-8 for Pass D L1 span summarization?\n\nWHY IT MIGHT WORK. The rubric names the characteristic frontier failure: 'fluent well-formed prose that silently imports outside knowledge... the model knows a great deal about these texts and will write it confidently and correctly. Correct is not the standard. Supported by the input is.' A 27B knows less about these texts, so it has less to leak. GROUND and LEAK are structurally easier for a weaker model. The capability actually needed is instruction-following, not knowledge.\n\nWHY IT MIGHT NOT. COVERAGE (strict source order, proportion) and FORMAT are capability limits a smaller model is worse at. l1-v3 exists because frontier models failed COVERAGE/GROUND three times.\n\nDESIGN (settled, do not re-derive):\n- Compare ONLY within prompt_version. L1 baseline is fragmented: l1-v2 = 834 accepted, l1-v3 = 36 accepted. Comparing local-v3 against frontier-v2 measures the template revision, not the model.\n- Free paired set = the 36 spans with accepted frontier l1-v3 rows: iamblichus-on-the-mysteries 22, egyptian-heaven-and-hell 11, apocryphon-of-john 3. span_target is provider-independent by design, so span ids survive a provider switch — that is what makes pairing possible.\n- Those 3 works contain NO sayings/logia collection, the genre where l1-v3's source-order rule is most likely to break. Baseline needs extending.\n- Measure the failure-code distribution and template_defect rate, NOT accept rate alone. Hypothesis: GROUND/LEAK down, COVERAGE/FORMAT up.\n\nSCOPE: Phase 1, L1 only. Explicitly NOT in scope: the fold/map-reduce path (folds exist only for L2 under input_budget>0 and that code has never run) and the structured fields (context/key_figures/key_terms/reading_notes, where FORMAT retries against MAX_ATTEMPTS=3 will cost most). Both are follow-ups gated on Phase 1 passing. A good L1 result does NOT imply the pipeline is ready.\n\nCONSTRAINTS: guru main is protected, PR flow only. Work on a guru.db snapshot from scripts/backup_db.sh, never the live DB. Nothing is auto-promoted; the apply gate stays with the owner. Est. ~1-2h GPU for 36 spans plus judge calls.",
+  "relationships": {
+    "children": [
+      "91800079",
+      "2a5a41ad",
+      "c5e84249",
+      "b67bf6d9",
+      "46d8152e",
+      "fd16e2f9",
+      "5baef657",
+      "b8c1c346"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-16T19:28:06.214Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Workflow note: this plan uses the FEATURE BRANCH method (feat/c8-local-dossier-bench) rather than the CLI's todo/<parent-id> convention. 'todo work <child> --branch feat/c8-local-dossier-bench' keeps the state machine correct, but 'todo close' emits an advisory warning ('HEAD is on feat/..., expected todo/8c67ee44') and proceeds anyway. The warning is expected, not a failure. Do not switch branches to satisfy it.",
+      "confidence": "high"
+    }
+  ],
+  "resolution": {
+    "commit": "40418f2d978bb4936c872cdb19b956b21ab4f61f",
+    "resolved_at": "2026-08-18T12:12:18.284Z",
+    "resolved_by": "unknown",
+    "note": "Closed: not yet, provider stays claude-code. Full findings, root cause, and what would need to change: docs/dossiers/decisions/local-model-benchmark.md. Kept: run-qwen-generate.sh, run-qwen-judge.sh, and the SEED/REASONING_BUDGET/EXTRA_ARGS reproducibility fix in serve-llama.sh — all three independent of the go/no-go outcome. Not kept: the investigation's raw data, intermediate per-run docs, and three throwaway analysis scripts, which cluttered docs/dossiers/ without being operational reference; removed before merge, preserved in branch history."
+  }
+}
