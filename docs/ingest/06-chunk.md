@@ -14,6 +14,12 @@ A valid `chunking/{tradition}/{source-id}.toml` that passes `--dry-run`.
 python3 scripts/chunk.py --only <source-id>
 ```
 
+`--only` is not optional convenience — it is the scope. A bare `chunk.py` is
+**refused** (it would re-chunk every configured text, and since output is
+pre-clean that also invalidates nodes 07/08 for all of them). Pass `--only <id>`
+for one text, `--tradition <name>` for one tradition, or `--all` for a
+deliberate whole-corpus rebuild.
+
 ## Output
 
 - `corpus/{tradition}/{source-id}/metadata.toml`

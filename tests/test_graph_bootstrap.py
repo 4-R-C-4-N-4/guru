@@ -40,3 +40,66 @@ def test_graph_bootstrap_delegates_concepts_to_sync_taxonomy():
     """The broken, obsolete concepts pass is gone — concept nodes are created by
     scripts/sync_taxonomy.py, not here."""
     assert not hasattr(gb, "bootstrap_concepts")
+
+
+def _first_chunked_text():
+    """(tradition, text) of some real corpus text with chunk TOMLs, or None."""
+    if not gb.CORPUS_DIR.exists():
+        return None
+    for trad in sorted(gb.CORPUS_DIR.iterdir()):
+        if not trad.is_dir() or trad.name.endswith(".toml"):
+            continue
+        for text in sorted(trad.iterdir()):
+            if text.is_dir() and (text / "chunks").exists() \
+                    and any((text / "chunks").glob("*.toml")):
+                return trad.name, text.name
+    return None
+
+
+def test_only_text_restricts_to_one_text(tmp_path):
+    """--text bootstraps exactly one source-id's chunks, not the whole corpus —
+    the property node 09 relies on so a driver cannot sweep another in-flight
+    text into the graph."""
+    picked = _first_chunked_text()
+    if picked is None:
+        import pytest
+        pytest.skip("no chunked corpus text available")
+    tradition, text_id = picked
+
+    conn = sqlite3.connect(str(tmp_path / "one.db"))
+    conn.execute("PRAGMA foreign_keys=ON")
+    gb.apply_schema(conn)
+    n = gb.bootstrap_chunks(conn, only_text=text_id)
+
+    assert n > 0, f"--text {text_id} bootstrapped nothing"
+    # Every chunk node belongs to the requested text.
+    import json
+    rows = conn.execute(
+        "SELECT metadata_json FROM nodes WHERE type='chunk'").fetchall()
+    assert rows and all(json.loads(m)["text_id"] == text_id for (m,) in rows)
+    # Exactly one tradition node — the target's — was touched.
+    trads = [r[0] for r in conn.execute(
+        "SELECT id FROM nodes WHERE type='tradition'").fetchall()]
+    assert trads == [tradition]
+
+    # And it is strictly a subset of the whole-corpus walk.
+    whole = sqlite3.connect(str(tmp_path / "all.db"))
+    whole.execute("PRAGMA foreign_keys=ON")
+    gb.apply_schema(whole)
+    total = gb.bootstrap_chunks(whole)
+    assert n <= total
+    conn.close()
+    whole.close()
+
+
+def test_only_text_no_match_bootstraps_nothing(tmp_path):
+    """A --text that matches no corpus dir is a clean no-op, not a whole-corpus
+    fallback."""
+    conn = sqlite3.connect(str(tmp_path / "none.db"))
+    conn.execute("PRAGMA foreign_keys=ON")
+    gb.apply_schema(conn)
+    n = gb.bootstrap_chunks(conn, only_text="no-such-text-zzz")
+    assert n == 0
+    (nodes,) = conn.execute("SELECT COUNT(*) FROM nodes").fetchone()
+    assert nodes == 0
+    conn.close()

@@ -11,10 +11,17 @@ Clean chunk TOMLs on disk (nodes 06–08).
 ## Action
 
 ```sh
-python3 scripts/graph_bootstrap.py
+python3 scripts/graph_bootstrap.py --text <source-id>
 ```
 
-It walks the whole corpus and is idempotent, so there is no per-text flag.
+`--text` restricts the walk to this one text. It is the form a driver should
+use: the script is idempotent and upserts, so a whole-corpus run is harmless in
+isolation, but an unscoped run also bootstraps every *other* text currently
+sitting in `corpus/` into `guru.db` — including one a second driver is still
+mid-pipeline on, whose chunk nodes then appear (and whose node-09 gate flips)
+before it is tagged or embedded. `--text` keeps the two from stepping on each
+other. Whole-corpus (no flag) and `--tradition <name>` remain available for
+rebuilds and migrations, where sweeping everything is the point.
 
 If the text introduced concepts not yet in `concepts/taxonomy.toml`, add them
 and sync — otherwise node 10 has nothing to tag against:
