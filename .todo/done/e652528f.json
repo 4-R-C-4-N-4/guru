@@ -26,7 +26,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "afaa515d8ed8cd9958b39e17a0d59de44b1ffe14",
+    "commit": "6cf1652830b28ee5bf3fbe2fda685bc6fc3b785d",
     "resolved_at": "2026-04-27T14:12:56.635Z",
     "resolved_by": "unknown",
     "note": "Created guru/paths.py with PROJECT_ROOT, DEFAULT_DB, CONFIG_*, CORPUS_DIR, TAXONOMY_TOML, SCRIPTS_DIR. Refactored guru/{retriever,model,cli,corpus}.py to import from it. Scripts left untouched — they each compute Path(__file__).parent.parent identically and stay self-contained."

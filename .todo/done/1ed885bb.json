@@ -27,7 +27,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "94726d0f288012b526413c774f080250fef0273f",
+    "commit": "852d5680446765f21b5e7d4cb6818339c7e16c8e",
     "resolved_at": "2026-04-27T14:15:41.562Z",
     "resolved_by": "unknown",
     "note": "Added [ranking].vector_weight (0.7) and [ranking].graph_weight (0.3) to config/model.toml, retriever now reads them. Defaults preserve previous behavior."

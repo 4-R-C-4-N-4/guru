@@ -138,7 +138,6 @@
     }
   ],
   "work": {
-    "branch": "corpus/mesopotamian-deepening",
     "base_branch": "main",
     "started_at": "2026-06-25T15:55:37.344Z",
     "started_by": "Hermes Agent"

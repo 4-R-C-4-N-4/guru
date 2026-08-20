@@ -26,7 +26,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "ffd149dc82445f894d647e7c960e05a327a9e8fb",
+    "commit": "dce73d1bfc617dba5e376ac43e0af040195ae396",
     "resolved_at": "2026-04-27T14:13:37.716Z",
     "resolved_by": "unknown",
     "test_file": "tests/test_model_provider.py",

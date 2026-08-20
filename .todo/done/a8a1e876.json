@@ -23,7 +23,7 @@
     "parent": "659b7664"
   },
   "resolution": {
-    "commit": "13e142f007f30155c963aa741ca55529fe569200",
+    "commit": "d8d1ec23c00252167e927165e29ba35e5ca083db",
     "resolved_at": "2026-04-26T21:09:29.885Z",
     "resolved_by": "unknown",
     "note": "review_edges.py: dropped [p] accept-at-proposed key. Any human Accept now writes tier='verified' per the editorial overlay rule. Help text + prompt + unknown-key message updated. Pytest 92/92 still green."

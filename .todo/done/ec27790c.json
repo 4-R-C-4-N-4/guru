@@ -27,7 +27,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "03d919f1cba5547a99a378672f04f03ca1b35290",
+    "commit": "95ec7c4da1ac064a98d0260bedc0aba4fb6d4db7",
     "resolved_at": "2026-04-27T14:20:20.676Z",
     "resolved_by": "unknown",
     "note": "Added [retrieval].max_concept_walks (default 5). 0 means no cap."
