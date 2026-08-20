@@ -177,6 +177,11 @@ again. If an adapter starts accumulating rules of its own, those rules belong
 in a node file instead — that is exactly the silo this workbook was built to
 drain.
 
+When more than one driver works the corpus at once, ownership of a text — who
+holds it, and whether acquisition has been handed off to processing — is tracked
+in a per-text `todo` ticket, separately from the physical node state `status`
+probes. See [`handoff-tickets.md`](handoff-tickets.md).
+
 - **Any harness** — `AGENTS.md` at the repo root carries the driver loop and
   the standing constraints.
 - **Claude Code** — `CLAUDE.md` defers to `AGENTS.md`. The
