@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.097"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LII. AMPHIETUS BACCHUS"
+section = "Hymn LXXXII. OCEAN"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 184
+source_url = "https://sacred-texts.com/cla/hoo/hoo87.htm"
+token_count = 208
 
 [content]
-body = "LII. To AMPHIETUS BACCHUS. The FUMIGATION from every AROMATIC except FRANKINCENSE. TERRESTRIAL Dionysius, hear my pray'r, Awak'ned rise with nymphs of lovely hair: Great Amphietus Bacchus, annual God, Who laid asleep in Proserpine's abode, Did'st lull to drowsy and oblivious rest, The rites triennial, and the sacred feast; Which rous'd again by thee, in graceful ring, Thy nurses round thee mystic anthems sing; When briskly dancing with rejoicing pow'rs, Thou mov'st in concert with the circling hours. 10 Come, blessed, fruitful, horned, and divine, And on these rites with joyful aspect shine; Accept the general incense and the pray'r, And make prolific holy fruits thy care."
+body = "LXXXII. TO OCEAN. The Fumigation from AROMATICS OCEAN I call, whose nature ever flows, From whom at first both Gods and men arose; Sire incorruptible, whose waves surround, 3 And earth's concluding mighty circle bound: p. 220 Hence every river, hence the spreading sea, 5 And earth's pure bubbling fountains spring from thee: Hear, mighty fire, for boundless bliss is thine, Whose waters purify the pow'rs divine: Earth's friendly limit, fountain of the pole, Whose waves wide spreading and circumfluent roll. Approach benevolent, with placid mind, And be for ever to thy mystics kind. Footnotes 219:3 LXXXII. Ver. 3.] Whose waves surround , &c. Gesner well observes, that this opinion of the ocean surrounding the earth, is exceeding ancient. see his Præl. i. de Navigationibus vet. § I."
 
 [annotations]
 concepts = []

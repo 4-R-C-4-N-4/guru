@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.100"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LV. ADONIS"
+section = "Hymn LXXXIV. SLEEP"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 302
+source_url = "https://sacred-texts.com/cla/hoo/hoo89.htm"
+token_count = 171
 
 [content]
-body = "LV. TO ADONIS. The FUMIGATION from AROMATICS. MUCH-nam'd, and best of dæmons, hear my pray'r, The desart-loving, deck'd with tender hair; Joy to diffuse, by all desir'd is thine, Much form'd, Eubulus; aliment divine p. 188 Female and Male, all charming to the sight, 5 Adonis ever flourishing and bright; At stated periods doom'd to set and rise, With splendid lamp, the glory of the skies. 8 Two-horn'd and lovely, reverenc'd with tears, Of beauteous form, adorn'd with copious hairs. 10 Rejoicing in the chace, all-graceful pow'r, Sweet plant of Venus, Love's delightful flow'r: Descended from the secret bed divine, Of lovely-hair'd, infernal Proserpine. 'Tis thine to fink in Tartarus profound, 15 And shine again thro' heav'ns illustrious round, With beauteous temp'ral orb restor'd to sight; Come, with earth's fruits, and in these flames delight. Footnotes 188:8 Ver. 8.] With splendid lamp , &c. Proclus, in his elegant Hymn to the Sun, celebrates him as frequently called Adonis; and this perfectly agrees with the present epithet, and with many others in the Hymn."
+body = "LXXXIV. TO SLEEP. The FUMIGATION from a Poppy. SLEEP, king of Gods, and men of mortal birth, Sov'reign of all sustain'd by mother Earth; p. 223 For thy dominion is supreme alone, O'er all extended, and by all things known. 'Tis thine all bodies with benignant mind 5 In other bands than those of brass to bind: Tamer of cares, to weary toil repose, From whom sweet solace in affliction flows. Thy pleasing, gentle chains preserve the soul, And e'en the dreadful cares of death controul; 10 For death and Lethe with oblivious stream, Mankind thy genuine brothers justly deem. With fav'ring aspect to my pray'r incline, And save thy mystics in their works divine."
 
 [annotations]
 concepts = []

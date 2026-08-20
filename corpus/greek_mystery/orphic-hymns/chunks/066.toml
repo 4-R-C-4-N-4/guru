@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.066"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXVI. THE MOTHER OF THE GODS"
+section = "Hymn LV. ADONIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 334
+source_url = "https://sacred-texts.com/cla/hoo/hoo60.htm"
+token_count = 302
 
 [content]
-body = "XXVI. TO THE MOTHER OF THE GODS. The FUMIGATION from a Variety of ODORIFEROUS SUBSTANCES. Mother of Gods, great nurse of all, draw near, Divinely honor'd, and regard my pray'r: Thron'd on a car, by lions drawn along, By bull-destroying lions, swift and strong, Thou sway'st the sceptre of the pole divine, 5 5 And the world's middle seat, much-fam'd, is thine. Hence earth is thine, and needy mortals share Their constant food, from thy protecting care: From thee at first both Gods and men arose; From thee, the sea and ev'ry river flows. 10 Vesta, and source of good, thy name we find To mortal men rejoicing to be kind; For ev'ry good to give, thy soul delights; Come, mighty pow'r, propitious to our rites, All-taming, blessed, Phrygian saviour, come, 15 Saturn's great queen, rejoicing in the drum. p. 152 Celestial, ancient, life-supporting maid, Fanatic Goddess, give thy suppliant aid; With joyful aspect on our incense shine, And, pleas'd, accept the sacrifice divine. Footnotes 151:5 Ver. 5.] We have already observed, that the mother of the Gods is the same with Rhea; and Proclus, in the second book of his Commentary on Euclid, informs us, that the pole of the world is called by the Pythagoreans the seal of Rhea."
+body = "LV. TO ADONIS. The FUMIGATION from AROMATICS. MUCH-nam'd, and best of dæmons, hear my pray'r, The desart-loving, deck'd with tender hair; Joy to diffuse, by all desir'd is thine, Much form'd, Eubulus; aliment divine p. 188 Female and Male, all charming to the sight, 5 Adonis ever flourishing and bright; At stated periods doom'd to set and rise, With splendid lamp, the glory of the skies. 8 Two-horn'd and lovely, reverenc'd with tears, Of beauteous form, adorn'd with copious hairs. 10 Rejoicing in the chace, all-graceful pow'r, Sweet plant of Venus, Love's delightful flow'r: Descended from the secret bed divine, Of lovely-hair'd, infernal Proserpine. 'Tis thine to fink in Tartarus profound, 15 And shine again thro' heav'ns illustrious round, With beauteous temp'ral orb restor'd to sight; Come, with earth's fruits, and in these flames delight. Footnotes 188:8 Ver. 8.] With splendid lamp , &c. Proclus, in his elegant Hymn to the Sun, celebrates him as frequently called Adonis; and this perfectly agrees with the present epithet, and with many others in the Hymn."
 
 [annotations]
 concepts = []

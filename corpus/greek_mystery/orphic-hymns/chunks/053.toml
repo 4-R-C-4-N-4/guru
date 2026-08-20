@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.053"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIII. RHEA (part 2)"
+section = "Hymn XLII. THE SEASONS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 271
+source_url = "https://sacred-texts.com/cla/hoo/hoo47.htm"
+token_count = 203
 
 [content]
-body = "Rhea, in the Orphic theology, is among the mundane divinities, the earth.\n\nHence, according to Varro, she is represented with a drum; because that instrument is a symbol of the earth.\n\nAugust.\n\ndc Civitat.\n\nlib.\n\nvii.\n\n139:12 XIII Ver.\n\n12.] Deceitful saviour .\n\nWhen Jupiter was born (says the fable) his mother Rhea in order to deceive Saturn, gave him a stone wrapped in swaddling bands, in the place of Jove; informing him that was her offspring.\n\nSaturn immediately devoured the stone; and Jupiter who was privately educated, at length obtained the government of the world.\n\nWith great propriety, therefore, is she called by the poet a deceitful saviour.\n\nThis fable, according to Phurnutus, signifies the creation of the world.\n\nFor at that time Nature (which among elementary essences is the same with Jupiter) was then nourished in the world, and at length prevailed.\n\nThe stone devoured by Saturn is the earth, alluding to its firmly occupying the middle place: for says Phurnutus, beings could not abide without such a foundation for their support.\n\nFrom this all things are produced, and derive their proper aliment.\n\nOpusc.\n\nMythol.\n\np.\n\n147."
+body = "XLII TO THE SEASONS. The FUMIGATION from AROMATICS. DAUGHTERS of Jove and Themis, seasons bright, Justice, and blessed peace, and lawful right, Vernal and grassy, vivid, holy pow'rs, Whose balmy breath exhales in lovely flow'rs All-colour'd seasons, rich increase your care, 5 Circling, for ever flourishing and fair: Invested with a veil of shining dew, A flow'ry veil delightful to the view: p. 177 Attending Proserpine, when back from night, The Fates and Graces lead her up to light; 10 When in a band-harmonious they advance, And joyful round her, form the solemn dance: With Ceres triumphing, and Jove divine; Propitious come, and on our incense shine; Give earth a blameless store of fruits to bear, 15 And make a novel mystic's life your care."
 
 [annotations]
 concepts = []

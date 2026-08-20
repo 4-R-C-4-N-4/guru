@@ -139,6 +139,11 @@ def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, 
                             boilerplate pages. Anchor + length-bound these so
                             they cannot match a long primary page that merely
                             shares an opening word.
+      require_drop_before_marker : bool (default false); when true and
+                            drop_before_marker never matches, raise instead of
+                            warn-and-keep. Opt-in fail-closed for configs whose
+                            front-matter drop is load-bearing (a drifted marker
+                            would silently reintroduce the dropped pages).
 
     A no-op (returns chunks unchanged) when no key is set. Validated on
     plotinus-select-works-index (76 front-matter+dividers dropped, 752 kept) and
@@ -155,6 +160,15 @@ def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, 
     if marker:
         hit = next((i for i, c in enumerate(chunks) if re.search(marker, c.body)), None)
         if hit is None:
+            if cfg.get("require_drop_before_marker"):
+                # Fail-closed: a config that asserts its front-matter drop must
+                # not silently keep everything when the marker drifts (e.g. a
+                # re-scrape changes the heading). Only opt-in per-config; the
+                # default stays warn-and-keep so other texts are unaffected.
+                raise RuntimeError(
+                    f"[{source_id}] drop_before_marker /{marker}/ required but never "
+                    f"matched — refusing to keep the front matter"
+                )
             logger.warning(
                 f"[{source_id}] drop_before_marker /{marker}/ never matched — "
                 f"keeping from the start"

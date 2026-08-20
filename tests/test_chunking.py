@@ -551,3 +551,25 @@ def test_all_flag_permits_whole_corpus_run(monkeypatch):
     import chunk as chunkmod
     monkeypatch.setattr(sys, "argv", ["chunk.py", "--dry-run", "--all"])
     chunkmod.main()  # returns normally; no SystemExit from the guard
+
+
+def test_require_drop_before_marker_fails_closed():
+    """A config asserting require_drop_before_marker must FAIL when the marker
+    never matches, instead of warn-and-keep — the load-bearing front-matter
+    drop cannot silently reintroduce the dropped pages on a drifted marker.
+    The default (no key) keeps the warn-and-keep behavior for other configs."""
+    import chunk as chunkmod
+    from chunkers.page_chunker import Chunk
+
+    cfg_required = {"drop_before_marker": "NEVER MATCHES", "require_drop_before_marker": True}
+    cfg_default = {"drop_before_marker": "NEVER MATCHES"}
+    chunks = [Chunk(section_label="a", body="alpha"), Chunk(section_label="b", body="beta")]
+
+    # opt-in fail-closed
+    with pytest.raises(RuntimeError, match="required but never matched"):
+        chunkmod._apply_config_drops(chunks, cfg_required, "t")
+
+    # default unchanged: warn-and-keep
+    kept, dropped = chunkmod._apply_config_drops(chunks, cfg_default, "t")
+    assert dropped == 0 and len(kept) == 2
+    assert kept[0].section_label == "a" and kept[1].section_label == "b"

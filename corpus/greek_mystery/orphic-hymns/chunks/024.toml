@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.024"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Front Matter, p. 4 (part 18)"
+section = "Hymn XVIII. THUNDRING JOVE"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 409
+source_url = "https://sacred-texts.com/cla/hoo/hoo23.htm"
+token_count = 394
 
 [content]
-body = "30:i I have here followed the correction of Eschenbach, who reads σείρα instead of συῥῥα which is I think more expressive and philosophical.\n\n32:k His mind is truth, and a little after, His; body full of light; or, Νοῦσ δέ ἀψευδὴς and Σωμα δέ ϖεριψεγγὲς, perfectly agree with what Pythagoras affirmed, concerning God; that in his soul he resembled truth, and in his body light.\n\n33:l Enn.\n\n5, lib, vi.\n\n34:m Vide Ἀφορμαὶ ϖρὸς τα Νοητά.\n\np.\n\n233.\n\n36:n Meaning material forms and qualities.\n\n36:o It is remarkable that in the Hymn to Nature, among the following, the Deity is celebrated as all things, yet the poet adds that he is p.\n\n37 alone incommunicable; which perfectly agrees with the preceding account of his subsisting in all things, and at the same time being separate and apart from all.\n\n37:p If the word Gods offends the ear of the reader, he may substitute in its stead, thrones, dominions; &c.\n\nfor I do not discourse concerning words.\n\n38:q Stob.\n\nEcl.\n\nPhys.\n\np.\n\n5.\n\n38:r En.\n\n2.\n\nlib.\n\nix.\n\ncap.\n\n9.\n\n40:s In Tim.\n\np.\n\n286.\n\n42:t De Abstinentia, lib.\n\ni.\n\n56:e In the latter part of this Dissertation, we shall shew the wonderful agreement of the following Hymns, with the names given by Pythagoras to numbers.\n\n74:x As a Latin version only of this valuable work is published, the reader will please to make allowances for the Paraphrase, where it may be requisite."
+body = "XVIII. TO THUNDRING JOVE. The FUMIGATION from STORAX. O Father Jove, who shak'st with fiery light The world deep-sounding from thy lofty height: From thee, proceeds th' ætherial lightning's blaze, Flashing around intolerable rays. Thy sacred thunders shake the blest abodes, 5 The shining regions of th' immortal Gods: Thy pow'r divine, the flaming lightning shrouds, With dark investiture, in fluid clouds. 'Tis thine to brandish thunders strong and dire, To scatter storms, and dreadful darts of fire; 10 With roaring flames involving all around, And bolts of thunder of tremendous sound. Thy rapid dart can raise the hair upright, And shake the heart of man with wild afright. Sudden, unconquer'd, holy, thund'ring God, 15 'With noise unbounded, flying all abroad; With all-devouring force, entire and strong, Horrid, untam'd, thou roll'st the flames along. Rapid, ætherial bolt, descending fire, The earth all-parent, trembles at thy ire; 20 The sea all-shining; and each beast that hears The sound terrific, with dread horror fears: When Nature's face is bright with flashing fire, And in the heavens resound thy thunders dire. p. 145 Thy thunders white, the azure garments tear, And burst the veil of all surrounding air. O Jove, all-blessed, may thy wrath severe, Hurl'd in the bosom of the deep appear, And on the tops of mountains be reveal'd, For thy strong arm is not from us conceal'd. 30 Propitious to these sacred rites incline, And crown my wishes with a life divine: Add royal health, and gentle peace beside, With equal reason, for my constant guide."
 
 [annotations]
 concepts = []

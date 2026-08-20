@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.060"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XX. THE CLOUDS"
+section = "Hymn XLIX. LYSIUS LENÆUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 135
+source_url = "https://sacred-texts.com/cla/hoo/hoo54.htm"
+token_count = 237
 
 [content]
-body = "XX. TO THE CLOUDS. The FUMIGATION from MYRRH. Ærial clouds, thro' heav'n's resplendent plains Who wander, parents of prolific rains; Who nourish fruits, whose water'y frames are hurl'd, By winds impetuous, round the mighty world; All-thund'ring, lion-roaring, flashing fire, 5 In Air's wide bosom, bearing thunders dire Impell'd by ev'ry stormy, sounding gale, With rapid course, along the skies ye fail. With blowing winds your wat'ry frames I call, On mother Earth with fruitful show'rs to fall."
+body = "XLIX. TO LYSIUS LENÆUS. A HYMN. Hear me, Jove's son, blest Bacchus, God of wine, Born of two mothers, honor'd and divine; Lysian, Euion * Bacchus, various-nam'd, Of Gods the offspring secret, holy, fam'd: Fertile and nourishing whose liberal care 5 Earth's fruits increases, flourishing and fair; Sounding, magnanimous, Lenæan pow'r O various form'd, medic'nal, holy flow'r: Mortals in thee, repose from labour find, Delightful charm, desir'd by all mankind: 10 Fair-hair'd Euion, Bromian, joyful God, Lysian, invested with the leafy rod. To these our rites, benignant pow'r incline, When fav'ring men, or when on Gods you shine; Be present to thy mystic's suppliant pray'r, 15 Rejoicing come, and fruits abundant bear. Footnotes 181:* Euion ingeminat, reparabilis assonat Echo. Persius ."
 
 [annotations]
 concepts = []

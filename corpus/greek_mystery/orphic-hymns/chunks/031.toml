@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.031"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Front Matter, p. 5 (part 7)"
+section = "Hymn XXV"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 386
+source_url = "https://sacred-texts.com/cla/hoo/hoo30.htm"
+token_count = 328
 
 [content]
-body = "And in that to Death οἴ πάντων ϑητῶν οἴηκα κρατύνωεις.\n\n100:a Lib.\n\niv.\n\np, 128.\n\n101:b The reader may observe that this two-fold power is divided into male and female; the reason of which distribution we have already assigned from Proclus.\n\n104:c I have omitted a comparison between the eighth sphere and Pericionius from necessity, because there is no hymn among the following to that p.\n\n105 orb.\n\nAnd I have not contrasted Licnitan Bacchus with the lunar Sphere, because the resemblance is not apparent; though doubtless there is a concealed similitude.\n\n105:d This is evident from the following epistle of Lucas Holstenius to P.\n\nLambecius, preserved by Fabricius in that excellent work, his Bibliotheca Græca, tom, i.\n\np.\n\n117 .\n\nHabeo et Orphei exemplar p.\n\n106 non contemnendum, ex quo Argonautica plurimis locis emendavi.\n\nAuctor ille huc usque a Criticorum et Correctorum vulgo derelictus tuam exposcere videtur operam.\n\nHymni autem reconditæ antiquitatis plenissimi justum commentarium me entur, quem vel unius, Procli scripta ἀνέκδοτα tibi instruent, ut ex notis meis as Sallustium Philosophum prospicies: ne quid de cæteris, quos apud me habeo, Platonicis nunc dicam, in quibus τῆσ μυθικης ϑεολογίας thesaurus latet."
+body = "XXV. TO THE EARTH * The FUMIGATION from every kind of SEED, except BEANS and AROMATICS. O Goddess, Earth, of Gods and men the source, Endu'd with fertile, all destroying force; All-parent, bounding, whose prolific pow'rs, Produce a store of beauteous fruits and flow'rs, All-various maid, th' eternal world's strong base 5 Immortal, blessed, crown'd with ev'ry grace; From whose wide womb, as from an endless root, Fruits, many-form'd, mature and grateful shoot. Deep bosom'd, blessed, pleas'd with grassy plains, Sweet to the smell, and with prolific rains. 10 All flow'ry dæmon, centre of the world, Around thy orb, the beauteous stars are hurl'd With rapid whirl, eternal and divine, Whose frames with matchless skill and wisdom shine. Come, blessed Goddess, listen to my pray'r, 15 And make increase of fruits thy constant care; With fertile Seasons in thy train, draw near, And with propitious mind thy suppliant hear. Footnotes 150:* According to Orpheus, as related by Proclus, in Tim. p. 292. Earth is the mother of every thing, of which Heaven is the father. And the reader will please to observe, that, in the Orphic theology, Rhea, the mother of the Gods, the Earth, and Vesta, are all one and the same divinity, considered according to her essential peculiarities."
 
 [annotations]
 concepts = []
