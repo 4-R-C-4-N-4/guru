@@ -1,0 +1,49 @@
+{
+  "id": "df44bdeb",
+  "type": "bug",
+  "state": "open",
+  "summary": "Re-chunk Orphic Hymns: drop 36 front-matter chunks (Taylor Dissertation + footnotes) carrying 209 accepted tags and 507 live edges",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-20T14:19:07.729Z",
+  "updated_at": "2026-08-20T14:20:02.077Z",
+  "tags": [
+    "driver",
+    "apparatus",
+    "orphic-hymns",
+    "re-chunk",
+    "remap-needed",
+    "cq-intake"
+  ],
+  "relationships": {
+    "parent": "d1b3db8b"
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-20T14:19:16.008Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "36 chunks in greek_mystery.orphic-hymns.001 through 034 (plus .087, .138) are Taylor's 'Dissertation on the Life and Theology of Orpheus' editorial front-matter, labeled 'Front Matter, p. N'. They carry 209 accepted concept tags and 507 live EXPRESSES/PARALLELS edges. The chunker config (chunking/greek_mystery/orphic-hymns.toml) uses page-as-chunk strategy with no drop_chunk_patterns for these pages.\n\nThe chunk bodies are genuine English prose about Orphic theology (theurgy, divine knowledge, etc.) — concepts that ARE valid in the taxonomy — so the tagger found real matches and the reviewer accepted them. But the content is editorial commentary, not the primary hymns.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:19:23.006Z",
+      "author": "corpus-quality",
+      "type": "hypothesis",
+      "content": "chunking/greek_mystery/orphic-hymns.toml needs drop_chunk_patterns that match the front-matter pages (Taylor Dissertation on pages 2-6, footnote blocks on p.48 and p.93). The pattern should match 'DISERTATION ON THE LIFE AND THEOLOGY OF ORPHEUS' and 'FOOTNOTES' headers.\n\nThis is a whole-chunk drop (not in-place strip) because the front-matter pages are pure editorial content with no primary text — the chunker's shrink-guard would refuse a 0-content drop. This shifts chunk ids: the 102 actual hymn chunks would need renumbering, or the front-matter chunks simply removed and the hymn chunks preserved with stable ids.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:19:29.517Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "Driver task: Add drop_chunk_patterns to chunking/greek_mystery/orphic-hymns.toml for the 36 front-matter pages. Re-chunk orphic-hymns. The 209 accepted tags on those chunks must be body-matched onto the correct hymn chunks (scripts/migrations/apparatus_remap.py pattern from CH-11) OR re-tagged from scratch with the 27B teacher. 507 live edges will need their source endpoints re-pointed or dropped. DB backup required before remap.\n\nThis is the same pattern as d18a44cf (CH apparatus fix) and 2957d758 (Plotinus/Zhuangzi).",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        1
+      ]
+    }
+  ]
+}
