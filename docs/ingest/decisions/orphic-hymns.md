@@ -44,12 +44,15 @@ chunk relabelled rather than dropped.
    contain the word "Footnotes"), so that pattern would have deleted 54 real hymns.
 2. **`drop_chunk_patterns = ["hypertext version of Homer"]`** — the one redirect
    page (.138), precise body-unique anchor.
-3. **`number_pattern '^([IVXLCDM]+)\.'` → `'^([IVXLCDM]+)\.?'`** — the period is
-   now optional, so Hymn XLII's missing period no longer sends it to the
-   front-matter fallback. Bundles the relabel fix (Hymn XLII now labelled "Hymn
-   XLII", unambiguous and citable; the title stays empty, consistent with the
-   corpus's existing "Hymn X"/"Hymn XXV"-style title gaps where the source
-   omits the period).
+3. **`number_pattern` → `^([IVXLCDM]+)(?=\.| TO )`** — a hymn number is a Roman
+   numeral followed by either a period or the invocation " TO ". That keeps both
+   the normal form (`XLIII. TO SEMELE`) and Hymn XLII's omitted-period form
+   (`XLII TO THE SEASONS`) matching, while **restoring the guard** that the
+   earlier `\.?` form dropped — a leading ordinary word of I/V/X/L/C/D/M
+   letters (`CIVIL`, `MILD`, `DIM`) is no longer captured as a hymn number.
+   `title_pattern`'s numeral-prefix period was made optional to match, so Hymn
+   XLII recovers its title (`Hymn XLII. THE SEASONS`) instead of an empty-title
+   `Hymn XLII` — the parallel half of the relabel the first pass left out.
 
 ## Remap
 
