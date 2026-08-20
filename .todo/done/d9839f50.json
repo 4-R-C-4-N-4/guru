@@ -27,7 +27,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "2cccb13156d82d6113313419dbfe3b2ce91ad935",
+    "commit": "077d6595c6cb50b4ced958afcaaf671f195e742b",
     "resolved_at": "2026-04-27T14:16:41.493Z",
     "resolved_by": "unknown",
     "note": "Three call sites + helper. OLLAMA_BASE_URL env var now overrides embed and chat together."

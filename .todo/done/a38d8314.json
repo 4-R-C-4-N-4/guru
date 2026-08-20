@@ -33,7 +33,7 @@
     "started_by": "Hermes Agent"
   },
   "resolution": {
-    "commit": "ba28d6eb06e6a19d1847d95827033baae28e775d",
+    "commit": "1ed573614e6c33c723dd390436a438017a9d72e8",
     "resolved_at": "2026-04-27T14:21:27.474Z",
     "resolved_by": "unknown",
     "note": "All 9 children closed. Configurable knobs added: [provider].timeout, [retrieval].max_concept_walks, [retrieval].concept_match_min_word_len, [ranking].vector_weight, [ranking].graph_weight, [processing].timeout (embedding). Centralized: guru/paths.py, llm.ollama_embed_url(). Bug fixes: dual TIER_WEIGHTS source removed, ModelProvider raises on missing config.model. 109 unit tests + 4 chunking tests pass."

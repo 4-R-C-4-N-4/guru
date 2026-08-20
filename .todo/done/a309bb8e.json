@@ -27,7 +27,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "45db507ec0491f893494fd1ff7db68ce57a7ebb7",
+    "commit": "1da930030602bddffad8bb143683a4db8c5230ee",
     "resolved_at": "2026-04-27T14:19:48.197Z",
     "resolved_by": "unknown",
     "note": "Added [provider].timeout (1200s default) to config/model.toml. Wired through call_llm and all four backends. ModelProvider reads it from config."

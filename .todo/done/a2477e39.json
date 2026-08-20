@@ -27,7 +27,7 @@
     "parent": "a38d8314"
   },
   "resolution": {
-    "commit": "099eecd0a49b8bd7142283ee4feb9f15183aff42",
+    "commit": "12c11f6dc78039b30103137e5b16d65a305b9862",
     "resolved_at": "2026-04-27T14:15:12.324Z",
     "resolved_by": "unknown",
     "test_file": "tests/test_retriever_ranking.py",
