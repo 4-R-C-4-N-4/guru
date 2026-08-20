@@ -60,15 +60,27 @@ drop_chunk_patterns = [
 require_drop_before_marker = true
 
 # Some hymn pages (Muses, Death, Protogonus, Apollo, ...) carry Taylor's
-# appended footnotes/essays past the verse. When such a page exceeds
-# max_tokens=800, page_chunker sub-splits it, and the trailing (part N)
-# chunks are pure editorial commentary — the verse itself always fits in one
-# chunk (longest verse is 567 tokens). drop_trailing_nonprimary_subsplits
-# drops those trailing parts: the FIRST sub-chunk opens with the page's hymn
-# number, so any later part that does NOT open with a number is commentary
-# overflow, not verse continuation. This is the appended-editorial half of
-# the front-matter fix (todo:f1e1e009).
+# appended footnotes/essays past the verse. The verse itself always fits in
+# one chunk (longest verse is 567 tokens < max_tokens=800), so any
+# commentary is strictly trailing on the page. Two complementary keys strip
+# it (todo:f1e1e009, hardened after review of PR #87):
+#
+#   strip_appended_commentary : truncate each page body at the first
+#       'Footnotes <n>:' marker (the verse is the leading block; no hymn
+#       verse contains that token, and no verse follows it on the page).
+#       This removes the commentary that would otherwise be packed into the
+#       KEPT sub-chunk (the sub-split sentence-packing fills the 800-token
+#       budget with verse + commentary head).
+#   drop_trailing_nonprimary_subsplits : after truncation, any page that
+#       STILL exceeds max_tokens sub-splits, and trailing parts that do NOT
+#       open with the page's hymn number are dropped (covers multi-footnote
+#       pages where truncation alone isn't enough).
+#
+# Both are opt-in per config (the truncate only fires when this flag is set)
+# and documented here so other page-as-chunk texts keep their existing
+# behavior.
 drop_trailing_nonprimary_subsplits = true
+strip_appended_commentary = "Footnotes"
 
 # Strip sacred-texts navigation cruft. Each page comes back as a single
 # line: "Sacred Texts Classics Index Previous Next XXII. TO NEREUS. ...

@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T18:02:12.945Z",
-  "updated_at": "2026-08-20T18:06:52.862Z",
+  "updated_at": "2026-08-20T18:44:41.642Z",
   "tags": [
     "driver",
     "apparatus",
@@ -56,6 +56,17 @@
         0,
         2,
         3
+      ]
+    },
+    {
+      "timestamp": "2026-08-20T18:44:41.642Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "PR #87 is OPEN (not merged). Work is complete on the Driver's branch (43aeb19a, corpus-quality/orphic-hymns-subsplit-drop). The re-chunk dropped 17 editorial sub-split chunks (103→86). DB reflects 86 chunks. Ticket f1e1e009 will close when PR #87 merges.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        1
       ]
     }
   ]

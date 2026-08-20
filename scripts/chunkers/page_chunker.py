@@ -164,6 +164,39 @@ def split(
 
         page_meta = {"source_url": source_urls.get(filename, "")}
         chunk = Chunk(section_label=label, body=content, metadata=page_meta)
+
+        # Opt-in: strip appended editorial commentary (translator's footnotes /
+        # essays) that trails the primary text on the page. Runs for EVERY page
+        # carrying the marker, not just oversized ones — most orphic-hymns
+        # pages fit in max_tokens as verse-only, but their raw bodies STILL
+        # contain the footnotes, and embedding that prose pollutes retrieval.
+        # Truncate at the first '<marker> <n>:' line: the verse is the leading
+        # block, the marker never appears inside a verse, and no verse follows
+        # it on the page, so the cut keeps exactly the verse. No-op unless the
+        # key is set, so other page-as-chunk texts keep their behavior.
+        cmarker = config.get("strip_appended_commentary")
+        if cmarker:
+            cm = re.compile(r"\n*" + re.escape(str(cmarker)) + r"\s+\d+:", re.DOTALL)
+            cut = cm.split(content, 1)
+            if len(cut) > 1:
+                content = cut[0].strip()
+                if not content:
+                    # The marker is at the very start of the page: this is a
+                    # standalone commentary/essay page with no leading verse.
+                    # Stripping leaves an empty body — emit nothing rather than
+                    # a 0-token chunk that would still be written and embedded
+                    # (PR #87 review round 3).
+                    logger.info(
+                        f"[{filename}] dropped page: pure commentary, no verse "
+                        f"before marker '{cmarker}'"
+                    )
+                    continue
+                chunk.body = content
+                logger.info(
+                    f"[{filename}] stripped appended commentary "
+                    f"(marker '{cmarker}')"
+                )
+
         chunk.token_count = count_tokens(content)
 
         if chunk.token_count > max_tokens:
@@ -171,31 +204,63 @@ def split(
             # objects and doesn't know about page_meta, so carry it over here
             # rather than in the shared splitter.
             subs = subsplit(chunk, max_tokens, count_tokens)
-            # Opt-in: drop trailing sub-split parts that are appended editorial
-            # commentary rather than primary text. The trigger is the page's
-            # own primary marker: the FIRST sub-chunk always opens with the
-            # page's hymn number (number_pattern matched at the page level), so
-            # a trailing part that does NOT open with a number is commentary
-            # overflow (Taylor's footnotes/essays appended past max_tokens),
-            # not verse continuation. Safe only when the primary unit is known
-            # to fit in max_tokens (orphic-hymns: longest verse 567 < 800), so
-            # it is opt-in per config and documented in the config comment.
-            if config.get("drop_trailing_nonprimary_subsplits") and number_matched:
-                keep = [subs[0]]
-                for sub in subs[1:]:
-                    if _extract_number(filename, sub.body, config) is not None:
-                        keep.append(sub)
-                if len(keep) != len(subs):
-                    logger.info(
-                        f"[{filename}] dropped {len(subs) - len(keep)} trailing "
-                        f"non-primary sub-split part(s)"
+            # Opt-in: after commentary is stripped, any page that STILL exceeds
+            # max_tokens sub-splits, and trailing parts that do NOT open with
+            # this page's OWN hymn number are dropped (commentary overflow, not
+            # verse continuation). No-op unless the key is set.
+            if config.get("drop_trailing_nonprimary_subsplits"):
+                # The drop trigger is "does this sub open with the page's OWN
+                # primary marker?" — knowable only when number_source='content'
+                # matched a primary number AT THE PAGE LEVEL. Two inert cases:
+                #   (a) number_source != 'content' (e.g. 'filename'): every sub
+                #       would be tested against the page's file number, not a
+                #       content hymn number — meaningless, so the drop
+                #       silently does nothing useful (finding 3). Warn, don't
+                #       raise, and skip: the feature is opt-in, so an inert
+                #       config is harmless as long as it's flagged.
+                #   (b) number_matched is False (this page has no content hymn
+                #       number — front matter, apparatus): it isn't a primary
+                #       unit at all, so there's nothing to drop. drop_before_marker
+                #       handles such pages later; skip here.
+                if config.get("number_source") != "content":
+                    logger.warning(
+                        f"[{filename}] drop_trailing_nonprimary_subsplits is "
+                        f"inert with number_source='{config.get('number_source')}'"
+                        f" (needs 'content') — skipping the drop for this page"
                     )
-                subs = keep
+                elif not number_matched:
+                    pass  # not a primary unit; handled by _apply_config_drops
+                else:
+                    keep = [subs[0]]
+                    for sub in subs[1:]:
+                        # Finding 4: a footnote that quotes another hymn's
+                        # incipit ("XV. TO SATURN.") must NOT be retained as a
+                        # verse part. The check is the page's OWN number, not
+                        # "any Roman numeral" — _extract_number on a sub returns
+                        # the first number it finds, which for a footnote-
+                        # quoting sub is the QUOTED hymn's number, not this
+                        # page's. Match against the page's verified primary
+                        # number instead.
+                        if _extract_number(filename, sub.body, config) == number:
+                            keep.append(sub)
+                    if len(keep) != len(subs):
+                        logger.info(
+                            f"[{filename}] dropped {len(subs) - len(keep)} trailing "
+                            f"non-primary sub-split part(s)"
+                        )
+                    subs = keep
             for sub in subs:
                 sub.metadata = page_meta
-            # Relabel sub-chunks with part numbers. When the editorial-tail
-            # drop leaves a single sub, restore the plain page label (subsplit
-            # had suffixed it with '-a').
+            # Relabel sub-chunks with part numbers. UNCONDITIONAL — this is the
+            # pre-PR behavior that every page-as-chunk source relied on: a lone
+            # sub gets the plain page label (subsplit otherwise suffixes '-a'),
+            # and multi-subs get "Page X (part N)". The opt-in editorial keys
+            # (strip_appended_commentary / drop_trailing_nonprimary_subsplits)
+            # control COMMENTARY handling only; they must not alter labeling,
+            # or the other 14 page-as-chunk corpora (e.g.
+            # life-and-doctrines-boehme, ~1626 chunks) would flip from
+            # "(part N)" to subsplit's raw "-a"/"-b" on re-chunk (regression
+            # on PR #87 review round 2, finding 2).
             if len(subs) == 1:
                 subs[0].section_label = label
             elif len(subs) > 1:

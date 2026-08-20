@@ -5,10 +5,10 @@ text_name = "Orphic Hymns"
 section = "Hymn XXX. THE CURETES"
 translator = "Thomas Taylor"
 source_url = "https://sacred-texts.com/cla/hoo/hoo35.htm"
-token_count = 147
+token_count = 115
 
 [content]
-body = "XXX. TO THE CURETES. A HYMN. LEAPING Curetes, who with dancing feet And circling measures, armed footsteps beat: Whose bosom's mad, fanatic transports fire, Who move in rythm to the founding lyre: Who traces deaf when lightly leaping tread, Arm bearers, strong defenders, rulers dread: Propitious omens, guards of Proserpine * , Preserving rites, mysterious and divine Come, and benevolent my words attend, (In herds rejoicing), and my life defend. 10 Footnotes 156:* Proclus calls the Curetes, guards of Proserpine, lib. vi. Theol. Plat. p. 383."
+body = "XXX. TO THE CURETES. A HYMN. LEAPING Curetes, who with dancing feet And circling measures, armed footsteps beat: Whose bosom's mad, fanatic transports fire, Who move in rythm to the founding lyre: Who traces deaf when lightly leaping tread, Arm bearers, strong defenders, rulers dread: Propitious omens, guards of Proserpine * , Preserving rites, mysterious and divine Come, and benevolent my words attend, (In herds rejoicing), and my life defend. 10"
 
 [annotations]
 concepts = []

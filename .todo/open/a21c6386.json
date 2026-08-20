@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:55:43.522Z",
-  "updated_at": "2026-08-20T19:01:22.663Z",
+  "updated_at": "2026-08-20T19:01:44.669Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -64,6 +64,29 @@
       ]
     },
     {
+      "timestamp": "2026-08-20T18:42:57.456Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "DEEP AUDIT (2026-08-20, after PR #87): The dossier structure_json is structurally mismatched, not just orphaned.\n\nSpans 0-8 (front matter + early hymn groupings) reference chunk IDs 001-085 that STILL EXIST but now contain DIFFERENT content:\n- Span 0 'Title Page, Preface, and Dissertation I' → chunk .001 is now 'Hymn I. THE GODDESS PROTHYRAEPA'\n- Span 5 'To Musæus; Hymns I–VII' → chunk .032 is now 'Hymn XXXII. VICTORY'\n- Span 9 'Hymns to Mises through the Graces' → chunk .085 is now 'Hymn LXXXV. THE DIVINITY OF DREAMS'\n\nThe front-matter spans (0-4: Title Page, Preface, Dissertation, Theology, Sacrifice) now point at actual hymn chunks. The hymn grouping spans (5-9) point at WRONG hymns because the removal of front matter shifted all chunk content.\n\nSpans 10-12 (Nemesis to Palæmon, The Muses to Ocean, Hymn to Vesta) reference chunks 105-138 that NO LONGER EXIST (dropped as editorial sub-splits).\n\nThis is NOT a remap — it is a complete structural invalidation. Every span's chunk-to-content mapping is wrong. A D1 re-plan from scratch is required: generate a new span plan over the 86-chunk corpus with front-matter spans removed and hymn groupings re-anchored to their actual content.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        3
+      ]
+    },
+    {
+      "timestamp": "2026-08-20T18:43:08.019Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "REMEDIATION PLAN — DEFINITIVE (after PR #87, final 86-chunk corpus):\n\nThe c8 dossier is structurally invalidated, not just renumbered. Three categories of damage:\n\n1. SPANS 0-4 (front-matter spans): These now point at HYMN chunks (001-034 are hymns I-XXXIV). The span titles (Title Page, Preface, Dissertation, etc.) describe content that NO LONGER EXISTS. These spans must be DROPPED entirely.\n\n2. SPANS 5-9 (hymn grouping spans): The chunk-to-content mapping shifted when front matter was removed. Span 5 'To Musæus; Hymns I-VII' references chunk .032 which is now Hymn XXXII. These spans must be REGENERATED with correct chunk IDs.\n\n3. SPANS 10-12 (late hymn spans): Reference chunks 105-138 that were DROPPED (editorial sub-splits). These must be DROPPED or regenerated with new chunk IDs.\n\nAdditionally:\n- 7 front-matter summary_nodes + 7 summary_embeddings must be dropped\n- 1 staged_cleanups row on .001 is misattached (was front matter, now Hymn I)\n- summary_nodes/staged_summaries have 140 child_chunk_ids all referencing old (shifted) IDs\n\nACTION: Campaign c8→c9. D1 (re-plan) generates a fresh span plan over 86 chunks. D2 (generate), D3 (review), D4 (promote), D5 (embed) all regenerate. The existing c8 summaries describe wrong content and cannot be patched.\n\nThis is independent of f1e1e009 (which is about the chunking mechanism, not the dossier).",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        3,
+        5
+      ]
+    },
+    {
       "timestamp": "2026-08-20T19:00:29.597Z",
       "author": "driver",
       "type": "conclusion",
@@ -79,7 +102,7 @@
       "supporting_evidence": [
         0,
         3,
-        5
+        7
       ]
     }
   ]
