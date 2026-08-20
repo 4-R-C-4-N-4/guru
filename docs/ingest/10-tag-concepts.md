@@ -17,8 +17,8 @@ server, not after:
 | text size | tradition / concept territory | model |
 |---|---|---|
 | large | existing — taxonomy already covers it | 4B fine-tune — `scripts/run-qwen-4b-guru.sh` |
-| small | existing | 27B teacher — `scripts/run-qwen.sh` |
-| any size | net-new — new tradition, new concept territory, a taxonomy expansion | 27B teacher — `scripts/run-qwen.sh`, regardless of size |
+| small | existing | 27B teacher — `scripts/run-qwen3.8-tagger.sh` |
+| any size | net-new — new tradition, new concept territory, a taxonomy expansion | 27B teacher — `scripts/run-qwen3.8-tagger.sh`, regardless of size |
 
 Net-new always wins the row: a large net-new text still gets the 27B teacher.
 
@@ -61,11 +61,11 @@ the command itself.
 Then start a server if there isn't one, and run the tagger:
 
 ```sh
-scripts/run-qwen.sh            # Qwen3.5-27B-UD-Q4_K_XL.gguf, small/net-new
+scripts/run-qwen3.8-tagger.sh  # Qwen3.8-27B-UD-Q4_K_XL.gguf, small/net-new
 # or scripts/run-qwen-4b-guru.sh for the qwen-3-4b-guru fine-tune, large/existing
 
 python3 scripts/tag_concepts.py --text <source-id> \
-    --provider llamacpp --model Qwen3.5-27B-UD-Q4_K_XL.gguf
+    --provider llamacpp --model Qwen3.8-27B-UD-Q4_K_XL.gguf
 # or --model qwen-3-4b-guru-v3-Q4_K_M.gguf, matching whichever server you started
 ```
 
@@ -77,14 +77,16 @@ string, so server and client must name the same file:
 
 | model | identifier(s) | serving script |
 |---|---|---|
-| 27B teacher | `Qwen3.5-27B-UD-Q4_K_XL.gguf` | `scripts/run-qwen.sh` |
+| 27B teacher (current) | `Qwen3.8-27B-UD-Q4_K_XL.gguf` | `scripts/run-qwen3.8-tagger.sh` |
+| 27B teacher, Qwen3.5 (prior) | `Qwen3.5-27B-UD-Q4_K_XL.gguf` | `scripts/run-qwen.sh` |
 | 4B fine-tune, v3 (current) | `qwen-3-4b-guru-v3-Q4_K_M.gguf` | `scripts/run-qwen-4b-guru.sh` |
 | 4B fine-tune, v1 (retired serving default) | `qwen-3-4b-guru-Q4_K_M.gguf` | — |
 
 Both 4B identifiers match the `qwen-3-4b-guru-*` convention family; the
 `-v3-` infix is deliberate (todo:379722ec), not cosmetic — it keeps v3's rows
 distinguishable from v1's in the `model` column rather than colliding under
-one string. 27B identifiers follow `Qwen3.5-27B-*`.
+one string. 27B identifiers follow `Qwen3.8-27B-*` (current teacher) or
+`Qwen3.5-27B-*` (the prior teacher's rows).
 
 **Running a parallel bulk pass.** Parallelism is a property of the 4B path
 only. The routing table above already sends large, in-distribution batches
@@ -119,8 +121,8 @@ about, not the refusal.
 
 Multiplexing the 27B anyway is `--allow-parallel-any-model` — a deliberate,
 individually-justified override of the guard above, not a workaround for it.
-The teacher runs think-on and was never sized for concurrent requests; see
-gpu-assembly.md for why it's excluded on hardware grounds too.
+The teacher still runs a reasoning pass and was never sized for concurrent
+requests; see gpu-assembly.md for why it's excluded on hardware grounds too.
 
 A second 4B server on the other card is `--endpoint URL`, repeatable;
 `--parallel` is interpreted *per endpoint*, so `--parallel 4 --endpoint
@@ -135,19 +137,18 @@ scope, and compare wall-clock. Do not carry over a number from a different
 tool or a different node — see gpu-assembly.md's "~7 min GPU" correction for
 what that mistake cost elsewhere in this workbook.
 
-**The no-think caveat.** Running the 27B in no-think mode measured roughly
-6x faster on this corpus — one pass
-(`docs/corpus-expansion/apocryphon-of-john.md`) measured ~300 s/chunk
-thinking versus ~37 s/chunk no-think, and
-that ratio should be read as an order-of-magnitude figure from one text, not
-a precise constant. It is also the mode the *applied* corpus was tagged in.
-**Quality versus think mode remains UNMEASURED** — no gold-eval or accuracy
-comparison exists, only the speed figure and the fact that it's what shipped.
-Do not silently default to no-think on the strength of the speed number alone;
-say which mode a run used. Practically: `scripts/serve-llama.sh` in this repo
-hardcodes `--reasoning auto` and has no `EXTRA_ARGS` hook, so no-think is not
-reachable from the in-repo script — only the `~/programs/model-runners/` copy
-supports it.
+**The reasoning-budget caveat.** How much reasoning the model does per chunk is
+the dominant speed lever, but it is not a knob to reach for casually. The
+current teacher script `scripts/run-qwen3.8-tagger.sh` pins a fixed posture —
+`reasoning_effort:low` with `REASONING_BUDGET=2048` — which is the posture the
+c9 local runs used. Treat that as the default and leave it there unless you have
+a measured reason not to: **quality versus reasoning budget is UNMEASURED** on
+this corpus, so a lighter setting buys speed against an unknown accuracy cost.
+If a run departs from the script's default, record which setting it used.
+
+`serve-llama.sh` exposes the relevant knobs (`REASONING`, default `auto`;
+`REASONING_BUDGET`, default `-1`; and an `EXTRA_ARGS` hook), so a run's posture
+is set through those env vars rather than by editing the script.
 
 `llm stop` **only a server you started.** One started outside `llm` — which
 `llm status` reports as `model: (started outside llm)` — belongs to another
@@ -186,8 +187,8 @@ which is what makes `--resume` correct rather than merely convenient.
 
 **What the coverage gate still cannot see: the failure mode directly below
 it.** `mark_complete` runs after the insert loop whether or not the loop had
-anything to insert, and `parse_tags` returns `[]` rather than raising when a
-thinking model burns its budget without closing the JSON. So an overflowed
+anything to insert, and `parse_tags` returns `[]` rather than raising when the
+model burns its reasoning budget without closing the JSON. So an overflowed
 chunk is recorded as processed and the gate reports `all N chunks tagged`. A
 repeat of the 2026-05 run, which lost about 12% of chunks this way, would pass
 cleanly. `tagging_progress` cannot distinguish it, because "processed, no tags"
@@ -198,7 +199,7 @@ opposed to parsing to an empty list. Until then the run log's
 `parse_json_response` warnings are the only signal, and the gate going green
 does not stand in for reading them.
 
-**Thinking-budget overflow producing silent gaps.** A thinking model can spend
+**Reasoning-budget overflow producing silent gaps.** The model can spend
 its whole token budget on reasoning prose and never close the JSON. This lost
 about 12% of chunks on the 2026-05 run before `parse_json_response` learned to
 warn on it. Check the run log for those warnings rather than trusting the row
