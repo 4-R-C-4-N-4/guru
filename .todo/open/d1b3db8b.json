@@ -1,13 +1,13 @@
 {
   "id": "d1b3db8b",
   "type": "bug",
-  "state": "open",
+  "state": "active",
   "summary": "Apparatus chunks with verified tags: 35 Orphic Hymns Taylor Dissertation + 9 others carry 234 accepted concept tags and 579 live edges on editorial/prophylon front-matter",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-20T14:09:38.961Z",
-  "updated_at": "2026-08-20T14:10:37.803Z",
+  "updated_at": "2026-08-20T14:18:47.035Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -30,6 +30,46 @@
       "supporting_evidence": [
         0
       ]
+    },
+    {
+      "timestamp": "2026-08-20T14:18:18.654Z",
+      "author": "corpus-quality",
+      "type": "blame",
+      "content": "flag_apparatus.py:349 — the has_surviving_tags() filter is the mechanism that lets apparatus chunks with accepted tags escape flagging. The script explicitly lists orphic-hymns.001-034 as apparatus candidates (line 112-113) but then filters them out because they carry surviving staged_tags rows (line 349: 'if has_surviving_tags(conn, chunk_id): continue'). The docstring (line 6-8) acknowledges this design: 'a reviewer sees a translator's preface or a footnote block and rejects every tag proposal on it.' But the filter means chunks where the reviewer did NOT reject all tags (i.e. accepted some) are never flagged as apparatus.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:18:28.372Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "The orphic-hymns chunker config (chunking/greek_mystery/orphic-hymns.toml) uses strategy='page-as-chunk'. It labels front-matter pages as 'Front Matter, p. {n}' (line 7: section_label_format_no_number_match) but does NOT drop them. The page-as-chunk strategy treats every sacred-texts.com page as a chunk. The 36 front-matter pages (Taylor's 'Dissertation on the Life and Theology of Orpheus' + footnotes) become retrievable chunks.\n\nTimeline: Chunked on 2026-04-28 (commit 3d3c4728, todo:10917af0) which re-chunked after adding section_label_format_no_number_match. Tags were accepted on 2026-05-14 and 2026-05-24 (Qwen3.5-27B model). The tag reviewer saw these chunks, read their bodies (which are genuine English prose about Orphism), and accepted concept tags — treating the editorial content as primary text.\n\nContrast: Corpus Hermeticum apparatus was fixed in commit d18a44cf (todo:50438e23) by adding BASELINE_PRE_STRIP patterns to scripts/chunk.py. The Orphic Hymns front-matter was NOT given the same treatment — it was only labeled differently, not stripped/dropped at chunk time.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:18:38.787Z",
+      "author": "corpus-quality",
+      "type": "hypothesis",
+      "content": "The root cause is twofold:\n\n(A) Chunking gap: The Orphic Hymns chunker config (chunking/greek_mystery/orphic-hymns.toml) uses page-as-chunk strategy with section_label_format_no_number_match='Front Matter, p. {n}' but no drop_chunk_patterns or pre_strip_patterns to remove the Taylor Dissertation front-matter. This is a per-source chunker gap, not a global one — the CH apparatus fix (d18a44cf) addressed sacred-texts.com translator headers but did not address the Orphic Hymns specifically. The front-matter is genuinely English prose that the tagger naturally tags as concept-bearing, so the reviewer accepted tags on it.\n\n(B) Process gap: flag_apparatus.py's has_surviving_tags() filter (line 349) is designed to avoid dropping chunks that have human-verified tags, but this creates a catch-22: chunks with accepted tags escape apparatus flagging, so their accepted tags on apparatus content persist indefinitely. The filter's comment says 'any of these means a human or the model itself found real content here' — but a human reviewer reading Taylor's 'Dissertation on the Life and Theology of Orpheus' would reasonably find concept-bearing content (it discusses theurgy, divine knowledge, etc.) even though it is NOT primary text.\n\nThe remediation for (A) is a re-chunk with drop_chunk_patterns for the Orphic Hymns front-matter (whole-chunk drops, since these are pure apparatus) — but this is a Driver task (shifts chunk ids) with curation remap. The remediation for (B) is an escalation: flag_apparatus.py's filter should distinguish 'has surviving tags because a human vetted this as primary text' from 'has surviving tags because the tagger found concepts in apparatus that happens to look like real prose.' This needs a redesign — the current filter is a safety mechanism that backfires here.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:18:47.035Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "Two distinct fixes needed:\n\n(A) Pipeline (Driver/guru-dev): Re-chunk Orphic Hymns with front-matter drop. The chunking/greek_mystery/orphic-hymns.toml config needs drop_chunk_patterns that remove pages 2-6 (the Taylor Dissertation) and the footnote blocks at p.48/p.93. This is a whole-chunk drop that shifts chunk ids for ~35 chunks — a Driver task with curation remap (like CH-11 6→5 in d18a44cf). The 209 accepted tags on these chunks are at risk: they need body-matched remapping onto the correct hymn chunks, or re-tagging (the Dissertation discusses Orphic theurgy that may be validly tagged onto hymn chunks that express the same concepts).\n\n(B) Process (corpus-quality/guru-review): flag_apparatus.py's has_surviving_tags() filter (line 349) creates a blind spot for apparatus chunks that have accepted tags. Escalation ticket needed to redesign the escape hatch — the current filter protects verified content from accidental apparatus-flagging but cannot distinguish 'verified because this is primary text' from 'verified because the tagger found concepts in prose that happens to be editorial.'",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        1,
+        2,
+        3
+      ]
     }
-  ]
+  ],
+  "work": {
+    "branch": "corpus-quality/cq-intake-2026-08-20",
+    "base_branch": "main",
+    "started_at": "2026-08-20T14:18:12.559Z",
+    "started_by": "corpus-quality"
+  }
 }
