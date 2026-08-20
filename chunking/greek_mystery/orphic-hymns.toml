@@ -11,15 +11,17 @@ section_label_format_no_number_match = "Front Matter, p. {n}"
 # number. The Roman numeral inside the body (e.g. "XXII. TO NEREUS.") is
 # the canonical hymn id. Anchor on start of (post-strip) content.
 number_source = "content"
-# A hymn number is a Roman numeral followed by either a period ("XLIII. TO
-# SEMELE") or the invocation " TO " ("XLII TO THE SEASONS" — the one hymn
-# whose source omits the period). The lookahead requires one of those two
-# followers, which is what keeps a leading ordinary word made of
-# I/V/X/L/C/D/M letters (e.g. "CIVIL", "MILD", "DIM") from being captured
-# as a hymn number. A bare '\.?' dropped that guard: '^([IVXLCDM]+)\.?'
-# matches "CIVIL" and labels the chunk "Hymn CIVIL". The guard was the
-# mandatory period; the lookahead keeps XLII working while restoring it.
-number_pattern = '^([IVXLCDM]+)(?=\.| TO )'
+# A hymn number is a Roman numeral followed by either a period (or period +
+# whitespace) leading into the invocation, or the invocation " TO " itself
+# ("XLII TO THE SEASONS" — the one hymn whose source omits the period, and
+# "XXXIV. T O L A T O N A" whose title is letter-spaced). The lookahead
+# requires one of those two followers, which is what keeps a leading ordinary
+# word made of I/V/X/L/C/D/M letters (e.g. "CIVIL", "MILD. air", "DIM.")
+# from being captured as a hymn number. Case-insensitive [Tt][Oo] because the
+# source mixes "TO" and "To", matching title_pattern's (?i). Residual: a word
+# that is ALSO a valid Roman numeral followed by " TO " (e.g. "MIX TO IT")
+# is indistinguishable from a hymn opening at this level.
+number_pattern = '^([IVXLCDM]+)(?=\.\s*[Tt]|\s*[Tt][Oo] )'
 
 title_source = "content"
 # Require literal 'TO X' (case-insensitive — source has both 'TO' and 'To').
@@ -42,10 +44,20 @@ drop_before_marker = "TO THE GODDESS PROTHYR"
 
 # Drop the sacred-texts redirect page (raw page 93): "The new sacred-texts
 # hypertext version of Homer's Iliad can be found here!...". Not a hymn and
-# not a footnote — a nav redirect. Precise, body-unique anchor.
+# not a footnote — a nav redirect. Anchored to the body start so a hymn page
+# whose footnotes merely quote that boilerplate can never match (the helper's
+# own rule: anchor + length-bound drop_chunk_patterns).
 drop_chunk_patterns = [
-    'hypertext version of Homer',
+    '^The new sacred-texts hypertext version of Homer',
 ]
+
+# The front-matter drop is load-bearing: if a re-scrape ever changes the
+# Hymn I heading so the marker stops matching, chunk.py's default is to warn
+# and keep EVERYTHING (fail-open). For this text that would silently
+# reintroduce all 34 editorial chunks. require_drop_before_marker flips the
+# shared mechanism to fail-closed for this config only (other configs keep
+# the warn-and-keep default).
+require_drop_before_marker = true
 
 # Strip sacred-texts navigation cruft. Each page comes back as a single
 # line: "Sacred Texts Classics Index Previous Next XXII. TO NEREUS. ...

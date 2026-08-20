@@ -48,17 +48,21 @@ def cfg() -> dict:
 def test_number_pattern_rejects_leading_roman_letter_words(cfg):
     r"""A leading word made only of I/V/X/L/C/D/M letters is not a hymn number.
     The optional-period form (`[IVXLCDM]+\.?`) captured "CIVIL"/"MILD"/"DIM";
-    the `(?=\.| TO )` lookahead must reject them."""
-    for word in ("CIVIL", "MILD", "DIM", "MIXED", "DIVIDED"):
+    the `(?=\.\s*[Tt]|\s*[Tt][Oo] )` lookahead must reject them — including
+    when the word is followed by a period ("MILD. air") but not by the hymn
+    invocation."""
+    for word in ("CIVIL", "MILD", "DIM", "MIXED", "DIVIDED",
+                 "MILD. air", "DIM. air", "CIVIL service"):
         assert _extract_number("x", word, cfg) is None, word
 
 
 def test_number_pattern_accepts_period_and_invocation_forms(cfg):
     """Both the period form ("XLIII. TO SEMELE") and the omitted-period form
-    ("XLII TO THE SEASONS") are hymn numbers."""
+    ("XLII TO THE SEASONS") are hymn numbers; mixed-case "To" matches too."""
     assert _extract_number("x", "XLII TO THE SEASONS", cfg) == "XLII"
     assert _extract_number("x", "XLIII. TO SEMELE", cfg) == "XLIII"
     assert _extract_number("x", "XXII. TO NEREUS", cfg) == "XXII"
+    assert _extract_number("x", "VI. To the stars", cfg) == "VI"
 
 
 def test_number_pattern_skips_non_hymn_content(cfg):
