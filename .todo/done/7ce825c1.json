@@ -1,13 +1,13 @@
 {
   "id": "7ce825c1",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "chunk.py isn't idempotent against already-clean texts: a corpus-wide re-run silently reverted node-07 cleaning across 6 traditions (data now restored)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-18T14:43:49.632Z",
-  "updated_at": "2026-08-18T14:59:15.477Z",
+  "updated_at": "2026-08-20T12:36:49.992Z",
   "files": [
     {
       "path": "scripts/chunk.py"
@@ -28,5 +28,13 @@
       "content": "DATA REMEDIATED 2026-08-18. The uncommitted dirty state was confirmed live\nin the DB (not just a filesystem diff): 100% of the 1,886 affected\nchunk_ids already had contaminated metadata_json.token_count loaded via a\nprior graph_bootstrap.py run, across all six traditions. Two chunks\n(jewish_mysticism.enoch-charles-1917.141, western_esoteric.tertium-organum.225)\nwere actually deleted by the re-chunk, with live edges/staged_tags/\nchunk_embeddings still pointing at the now-missing files — an active,\nnot hypothetical, breakage.\n\nFix applied: `git checkout -- corpus/{egyptian,neoplatonism,greek_mystery,\njewish_mysticism,taoism,western_esoteric/tertium-organum}` restored all\n2,224 chunk files (both the 1,886 dirty ones and the 2 deleted ones) to\ntheir last-committed clean state, verified byte-for-byte only via\ntoken_count parity, no untracked/new chunk files existed in these trees so\ncheckout alone was sufficient. Ran `graph_bootstrap.py` (idempotent,\nwhole-corpus) to resync nodes.metadata_json — verified 0 mismatches across\nall 2,224 chunks afterward. Re-ran `embed_corpus.py --reindex` per\ntradition (plus `--text tertium-organum` specifically, since it shares the\nwestern_esoteric tradition with 4 newly-ingested clean texts that did not\nneed touching) as defensive insurance against embeddings having been\ncomputed against the dirty bodies at some point — no direct evidence found\neither way (chunk_embeddings has no timestamp/hash column to check), so\nthis was precautionary rather than confirmed-necessary. 6,068 rows stable\nbefore and after, 0 errors. `guru dossier drift` clean (68/68, no drift)\nafterward.\n\nNo staged_tags/review_actions/edges rows were ever deleted by the original\nregression — this was a live grounding-mismatch and (for 2 chunks) a\nmissing-file risk, not a data-loss event, and it is now fully closed.\n\nREMAINING OPEN WORK (this ticket stays open for it): the root cause —\nscripts/chunk.py has no guard against clobbering already-clean,\nalready-committed texts when invoked corpus-wide — is unfixed. The two\nremediation paths from the original capture still apply: (1) diagnose why\nchunk.py ran corpus-wide during the 2026-08-17 downloader-fix verification\nand scope it correctly going forward, or (2) make chunk.py idempotent\nagainst texts that already have committed clean output, so a repeat of\nthis trigger can't reproduce the regression regardless of invocation scope.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "c9e8f0da",
+    "resolved_at": "2026-08-20T12:36:49.992Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_chunking.py",
+    "test_function": "test_bare_chunk_run_is_refused",
+    "note": "Fixed elsewhere: data remediated (dba6a17b); chunk.py bare-run footgun closed by c9e8f0da (PR #76). Left open by oversight."
+  }
 }
