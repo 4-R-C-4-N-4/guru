@@ -7,6 +7,12 @@ everything else — the investigation's raw data, intermediate docs, and
 throwaway analysis scripts — was deliberately not kept in-tree. This file is
 the durable record.
 
+> **Qualified 2026-08-20.** "Not yet" holds for the *sample this was measured
+> on*, not as a blanket rule. Local generation subsequently ran the full
+> **Kybalion** Pass D end-to-end and shipped as campaign `c9` — the first
+> local-model dossier live in the corpus. See
+> [Update: the Kybalion counter-case](#update-2026-08-20--the-kybalion-counter-case).
+
 ## Question
 
 Local capacity (Qwen3.8-27B on the 3090, tuned via `run-qwen-generate.sh` /
@@ -110,3 +116,33 @@ data file, is preserved in this branch's git history up to commit
    (`input_budget > 0`) were never touched — Phase 1 of this investigation
    was L1-only throughout, and a good L1 result doesn't imply the rest of
    the pipeline is ready.
+
+## Update 2026-08-20 — the Kybalion counter-case
+
+After this benchmark, **Qwen3.8-27B (`llamacpp`) drove the entire Pass D for
+the Kybalion** — generate, review-as-judge, promote, embed — as campaign `c9`,
+and it went live: the first local-model dossier in the corpus
+(`config/dossiers.toml`, c9 note). It did well. So the blanket "not yet" now has
+a real counter-data-point: local Pass D is *demonstrated end-to-end on at least
+one work*, past the L1-only boundary Phase 1 stopped at.
+
+**It does not overturn the benchmark, and the two are consistent.** The one hard
+blocker here was the L1 budget formula overshooting on *terse, discrete-verse
+spans* — the Dhammapada arm, where the finding above says the formula "binds
+hardest." The Kybalion is modern, continuous prose with looser spans: exactly
+the shape the formula does **not** pinch. Kybalion clearing what the Dhammapada
+arm failed is what this benchmark would predict from span geometry alone — a
+genre effect, not a reversal of the length-budget finding.
+
+**Owner's read (unproven):** the more modern prose may simply be easier for the
+local model to handle. Plausible, but **not measured** — nothing here isolates
+prose-era from span geometry, sampler settings, or the budget-formula
+interaction, and the two candidate explanations (modern prose vs. loose
+continuous spans) are confounded in this single case. Treat it as a hypothesis
+to test — the third-genre control called for in "Before revisiting" #2 is
+exactly the instrument that would separate them — not as an established finding.
+
+**Standing guidance is unchanged.** The campaign default is still `claude-code`;
+local is proven on one modern-prose work, not as a general option; and
+recalibrating the L1 budget formula (#1 above) is still the prerequisite before
+local generation is worth defaulting anywhere near terse-verse material.
