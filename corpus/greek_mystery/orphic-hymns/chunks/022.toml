@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.022"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XVI. NEPTUNE"
+section = "Hymn XXII. NEREUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo21.htm"
-token_count = 253
+source_url = "https://sacred-texts.com/cla/hoo/hoo27.htm"
+token_count = 179
 
 [content]
-body = "XVI. TO NEPTUNE. The FUMIGATION from MYRRH HEAR, Neptune, ruler of the sea profound, Whose liquid grasp begirts the solid ground; Who, at the bottom of the stormy main, Dark and deep-bosom'd, hold'st thy wat'ry reign; Thy awful hand the brazen trident bears, And ocean's utmost bound, thy will reveres: Thee I invoke, whose steeds the foam divide, From whose dark locks the briny waters glide; Whose voice loud founding thro' the roaring deep, Drives all its billows, in a raging heap; 10 When fiercely riding thro' the boiling sea, Thy hoarse command the trembling waves obey. p. 142 Earth shaking, dark-hair'd God, the liquid plains (The third division) Fate to thee ordains, 'Tis thine, cærulian dæmon, to survey Well pleas'd the monsters of the ocean play, 15 Confirm earth's basis, and with prosp'rous gales Waft ships along, and swell the spacious sails; Add gentle Peace, and fair-hair'd Health beside, And pour abundance in a blameless tide. 20"
+body = "XXII. TO NEREUS. The FUMIGATION from MYRRH. O Thou, who doff the roots of Ocean keep In seats cærulean, dæmon of the deep, With fifty nymphs (attending in thy train, Fair virgin artists) glorying thro' the main: The dark foundation of the rolling sea 5 And Earth's wide bounds, belong much-fam'd to thee; Great dæmon, source of all, whose pow'r can make The Earth's unmeasur'd, holy basis shake, When blust'ring winds in secret caverns pent, By thee excited, struggle hard for vent: 10 Come, blessed Nereus, listen to my pray'r, And cease to shake the earth with wrath severe; p. 148 Send on our sacred rites abundant health, With peace divine and necessary wealth."
 
 [annotations]
 concepts = []

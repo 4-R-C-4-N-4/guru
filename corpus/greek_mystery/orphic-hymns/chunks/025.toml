@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.025"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIX. JOVE, as the AUTHOR of LIGHTNING"
+section = "Hymn XXV"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo24.htm"
-token_count = 112
+source_url = "https://sacred-texts.com/cla/hoo/hoo30.htm"
+token_count = 238
 
 [content]
-body = "XIX. To JOVE, as the AUTHOR of LIGHTNING. The FUMIGATION from FRANKINCENSE and MANNA. I Call the mighty, holy, splendid light, Aerial, dreadful-sounding, fiery-bright; Flaming, aerial-light, with angry voice, Lightning thro' lucid clouds with horrid noise. Untam'd, to whom resentments dire belong, Pure, holy pow'r, all-parent, great and strong: Come, and benevolent these rites attend, And grant my days a peaceful, blessed end."
+body = "XXV. TO THE EARTH * The FUMIGATION from every kind of SEED, except BEANS and AROMATICS. O Goddess, Earth, of Gods and men the source, Endu'd with fertile, all destroying force; All-parent, bounding, whose prolific pow'rs, Produce a store of beauteous fruits and flow'rs, All-various maid, th' eternal world's strong base 5 Immortal, blessed, crown'd with ev'ry grace; From whose wide womb, as from an endless root, Fruits, many-form'd, mature and grateful shoot. Deep bosom'd, blessed, pleas'd with grassy plains, Sweet to the smell, and with prolific rains. 10 All flow'ry dæmon, centre of the world, Around thy orb, the beauteous stars are hurl'd With rapid whirl, eternal and divine, Whose frames with matchless skill and wisdom shine. Come, blessed Goddess, listen to my pray'r, 15 And make increase of fruits thy constant care; With fertile Seasons in thy train, draw near, And with propitious mind thy suppliant hear."
 
 [annotations]
 concepts = []

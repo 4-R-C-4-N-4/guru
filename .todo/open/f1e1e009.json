@@ -1,13 +1,13 @@
 {
   "id": "f1e1e009",
   "type": "bug",
-  "state": "open",
+  "state": "active",
   "summary": "Drop appended Taylor commentary chunks in orphic-hymns (17 sub-split editorial chunks, 80 accepted tags + 399 edges)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-20T18:27:02.931Z",
-  "updated_at": "2026-08-20T18:28:12.258Z",
+  "updated_at": "2026-08-20T18:30:13.782Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -20,5 +20,11 @@
   "relationships": {
     "parent": "d1b3db8b"
   },
-  "description": "Chunking gap found in PR #83 re-review (finding #1, raised by ivy + corpus-quality).\n\nThe front-matter drop removed the 34 leading editorial chunks, but the same class of Taylor commentary survives as sub-split (part N) chunks on note-heavy hymn pages: when a page exceeds max_tokens=800 it splits into a hymn part and a commentary/footnote tail that inherits the hymn's label.\n\nVERIFIED against corpus + DB on branch corpus-quality/orphic-hymns-front-matter-drop: 17 chunks (of 103) whose body does NOT open with a hymn number — pure Taylor essay/footnote prose labelled as hymn parts:\n- 087-090 'Hymn LXXV. THE MUSES (part 2-5)': essay on the Muses (Plato's Phædrus, poetic fury, Thamyris) — 25 accepted tags, 81 edges\n- 103 'Hymn LXXXVI. DEATH (part 2)': commerce/philosophy essay — 15 tags, 32 edges\n- plus 006/010/012/014/016/019/035/039/042/043/052/099 (footnote tails of Protogonus, Moon, Nature, Hercules, Rhea, Proserpine, Pallas, Apollo, Mises, Vesta pages)\nTOTAL: 80 accepted tags + 399 live edges on editorial prose labelled as hymns. A query for 'the Muses'/'Orphic theology' still returns ~3000 tokens of Taylor's essay labeled 'Hymn LXXV. THE MUSES' — the exact defect PR #83 claims to fix, just relabeled.\n\nNOT fixable by config: drop_before_marker only strips the leading block; drop_chunk_patterns is a whole-chunk per-body regex and the commentary shares pages with the hymns. Needs a chunk.py mechanism change: flag/drop the split-off editorial tail (e.g. sub-split parts that do not open with the section's own number+invocation are commentary, not primary text).\n\nSuggested approach: in page_chunker sub-split, drop trailing sub-chunks that do not begin with a hymn number pattern (the (part N) tail is editorial); or post-hoc: drop the 17 chunks + remap tags (apparatus_remap.py) + re-embed.\n\nDB backup required before any remap. Separate ticket from df44bdeb (front-matter drop) — do not block PR #83 on it."
+  "description": "Chunking gap found in PR #83 re-review (finding #1, raised by ivy + corpus-quality).\n\nThe front-matter drop removed the 34 leading editorial chunks, but the same class of Taylor commentary survives as sub-split (part N) chunks on note-heavy hymn pages: when a page exceeds max_tokens=800 it splits into a hymn part and a commentary/footnote tail that inherits the hymn's label.\n\nVERIFIED against corpus + DB on branch corpus-quality/orphic-hymns-front-matter-drop: 17 chunks (of 103) whose body does NOT open with a hymn number — pure Taylor essay/footnote prose labelled as hymn parts:\n- 087-090 'Hymn LXXV. THE MUSES (part 2-5)': essay on the Muses (Plato's Phædrus, poetic fury, Thamyris) — 25 accepted tags, 81 edges\n- 103 'Hymn LXXXVI. DEATH (part 2)': commerce/philosophy essay — 15 tags, 32 edges\n- plus 006/010/012/014/016/019/035/039/042/043/052/099 (footnote tails of Protogonus, Moon, Nature, Hercules, Rhea, Proserpine, Pallas, Apollo, Mises, Vesta pages)\nTOTAL: 80 accepted tags + 399 live edges on editorial prose labelled as hymns. A query for 'the Muses'/'Orphic theology' still returns ~3000 tokens of Taylor's essay labeled 'Hymn LXXV. THE MUSES' — the exact defect PR #83 claims to fix, just relabeled.\n\nNOT fixable by config: drop_before_marker only strips the leading block; drop_chunk_patterns is a whole-chunk per-body regex and the commentary shares pages with the hymns. Needs a chunk.py mechanism change: flag/drop the split-off editorial tail (e.g. sub-split parts that do not open with the section's own number+invocation are commentary, not primary text).\n\nSuggested approach: in page_chunker sub-split, drop trailing sub-chunks that do not begin with a hymn number pattern (the (part N) tail is editorial); or post-hoc: drop the 17 chunks + remap tags (apparatus_remap.py) + re-embed.\n\nDB backup required before any remap. Separate ticket from df44bdeb (front-matter drop) — do not block PR #83 on it.",
+  "work": {
+    "branch": "main",
+    "base_branch": "main",
+    "started_at": "2026-08-20T18:30:13.782Z",
+    "started_by": "driver"
+  }
 }

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.084"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXXIII. LEUCOTHEA"
+section = "Hymn LXXXIV. SLEEP"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo78.htm"
-token_count = 202
+source_url = "https://sacred-texts.com/cla/hoo/hoo89.htm"
+token_count = 171
 
 [content]
-body = "LXXIII. TO LEUCOTHEA. The FUMIGATION from AROMATICS. I Call Leucothea, of great Cadmus born, And Bacchus' nurse, whom ivy leaves adorn. Hear, pow'rful Goddess, in the mighty deep Wide and profound, thy Ration doom'd to keep: In waves rejoicing, guardian of mankind; 5 For ships from thee alone deliv'rance find Amidst the fury of th' unstable main, When art no more avail, and strength is vain; When rushing billows with tempestuous ire O'erwhelm the mariner in ruin dire, 10 Thou hear'st, with pity touch'd, his suppliant pray'r, Resolv'd his life to succour and to spare. Be ever present, Goddess! in distress, Waft ships along with prosperous success: Thy mystics thro' the stormy sea defend, 15 And safe conduct them to their destin'd end."
+body = "LXXXIV. TO SLEEP. The FUMIGATION from a Poppy. SLEEP, king of Gods, and men of mortal birth, Sov'reign of all sustain'd by mother Earth; p. 223 For thy dominion is supreme alone, O'er all extended, and by all things known. 'Tis thine all bodies with benignant mind 5 In other bands than those of brass to bind: Tamer of cares, to weary toil repose, From whom sweet solace in affliction flows. Thy pleasing, gentle chains preserve the soul, And e'en the dreadful cares of death controul; 10 For death and Lethe with oblivious stream, Mankind thy genuine brothers justly deem. With fav'ring aspect to my pray'r incline, And save thy mystics in their works divine."
 
 [annotations]
 concepts = []

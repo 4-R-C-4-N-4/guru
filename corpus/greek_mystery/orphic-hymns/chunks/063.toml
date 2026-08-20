@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.063"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LII. AMPHIETUS BACCHUS"
+section = "Hymn LXIII. LAW A HYMN"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo57.htm"
-token_count = 184
+source_url = "https://sacred-texts.com/cla/hoo/hoo68.htm"
+token_count = 257
 
 [content]
-body = "LII. To AMPHIETUS BACCHUS. The FUMIGATION from every AROMATIC except FRANKINCENSE. TERRESTRIAL Dionysius, hear my pray'r, Awak'ned rise with nymphs of lovely hair: Great Amphietus Bacchus, annual God, Who laid asleep in Proserpine's abode, Did'st lull to drowsy and oblivious rest, The rites triennial, and the sacred feast; Which rous'd again by thee, in graceful ring, Thy nurses round thee mystic anthems sing; When briskly dancing with rejoicing pow'rs, Thou mov'st in concert with the circling hours. 10 Come, blessed, fruitful, horned, and divine, And on these rites with joyful aspect shine; Accept the general incense and the pray'r, And make prolific holy fruits thy care."
+body = "LXIII. TO LAW A HYMN. THE holy king of Gods and men I call, Celestial Law, the righteous seal of all; The seal which stamps whate'er the earth contains, Nature's firm basis, and the liquid plains: Stable, and starry, of harmonious frame, 5 Preserving laws eternally the same: p. 196 Thy all-composing pow'r in heaven appears, Connects its frame, and props the starry spheres; And shakes weak Envy with tremendous sound, Toss'd by thy arm in giddy whirls around. 10 'Tis thine, the life of mortals to defend, And crown existence with a blessed end; For thy command and alone, of all that lives Order and rule to ev'ry dwelling gives: Ever observant of the upright mind, 15 And of just actions the companion kind; Foe to the lawless, with avenging ire, Their steps involving in destruction dire. Come, bless, abundant pow'r, whom all revere, By all desir'd, with favr'ing mind draw near; 20 Give me thro' life, on thee to fix my fight, And ne'er forsake the equal paths of right."
 
 [annotations]
 concepts = []

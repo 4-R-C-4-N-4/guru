@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.067"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LVI. THE TERRESTRIAL HERMES"
+section = "Hymn LXVII. HEALTH"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo61.htm"
-token_count = 200
+source_url = "https://sacred-texts.com/cla/hoo/hoo72.htm"
+token_count = 224
 
 [content]
-body = "LVI. TO THE TERRESTRIAL HERMES. The FUMIGATION from STORAX. HERMES I call, whom Fate decrees to dwell In the dire path which leads to deepest hell O Bacchic Hermes, progeny divine Of Dionysius, parent of the vine, p. 189 And of celestial Venus Paphian queen, 5 Dark eye-lash'd Goddess of a lovely mien: Who constant wand'rest thro' the sacred feats Where hell's dread empress, Proserpine, retreats; To wretched souls the leader of thc way When Fate decrees, to regions void of day: 10 Thine is the wand which causes sleep to fly, Or lulls to slumb'rous rest the weary eye; For Proserpine thro' Tart'rus dark and wide Gave thee forever flowing souls to guide. Come, blessed pow'r the sacrifice attend, 15 And grant our mystic works a happy end."
+body = "LXVII. TO HEALTH. The FUMIGATION from MANNA. O Much-desir'd, prolific, gen'ral queen, Hear me, life-bearing, Health, of beauteous mien, Mother of all; by thee diseases dire, Of bliss destructive, from our life retire; And ev'ry house is flourishing and fair, 5 If with rejoicing aspect thou art there: Each dædal art, thy vig'rous force inspires, And all the world thy helping hand desires; Pluto life's bane alone resists thy will, And ever hates thy all-preserving skill. 10 O fertile queen, from thee forever flows To mortal life from agony repose; And men without thy all-sustaining ease, Find nothing useful, nothing form'd to please; Without thy aid, not Plutus' self can thrive, 15 Nor man to much afflicted age arrive; For thou alone of countenance serene, Dost govern all things, universal queen. Assist thy mystics with propitious mind, And far avert disease of ev'ry kind."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.054"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLIII. SEMELE"
+section = "Hymn LIV. VENUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo48.htm"
-token_count = 198
+source_url = "https://sacred-texts.com/cla/hoo/hoo59.htm"
+token_count = 494
 
 [content]
-body = "XLIII. TO SEMELE. The FUMIGATION from STORAX. CADMEAN Goddess, universal queen, Thee, Semele I call, of beauteous mien; Deep-bosom'd, lovely flowing locks are thine, Mother of Bacchus, joyful and divine, The mighty offspring, whom love's thunder bright, 5 Forc'd immature, and fright'ned into light: Born from the deathless counsels, secret, high, Of Jove Saturnian, regent of the sky Whom Proserpine permits to view the light, And visit mortals from the realms of night: 10 Constant attending on the sacred rites, And feast triennial, which thy soul delights; When thy son's wond'rous birth mankind relate, And secrets deep, and holy celebrate. p. 178 Now I invoke thee, great Cadmean queen, 15 To bless these rites with countenance serene."
+body = "LIV. TO VENUS. A HYMN. HEAV'NLY, illustrious, laughter-loving queen, Sea-born, night-loving, of an awful mien; p. 186 Crafty, from whom necessity first came, Producing, nightly, all-connecting dame: 'Tis thine the world with harmony to join, 5 5 For all things spring from thee, O pow'r divine. The triple Fates are rul'd by thy decree, And all productions yield alike to thee: Whate'er the heav'ns, encircling all contain, Earth fruit-producing, and the stormy main, 10 Thy sway confesses, and obeys thy nod, Awful attendant of the brumal God: Goddess of marriage, charming to the sight, Mother of Loves, whom banquetings delight; Source of persuasion, secret, fav'ring queen, 15 Illustrious born, apparent and unseen: Spousal, lupercal, and to men inclin'd, Prolific, most-desir'd, life-giving., kind: Great sceptre-bearer of the Gods, 'tis thine, Mortals in necessary bands to join; 20 And ev'ry tribe of savage monsters dire In magic chains to bind, thro' mad desire. p. 187 Come, Cyprus-born, and to my pray'r incline, Whether exalted in the heav'ns you shine, Or pleas'd in Syria's temple to preside, 25 Or o'er th' Egyptian plains thy car to guide, Fashion'd of gold; and near its sacred flood, Fertile and fam'd to fix thy blest abode; Or if rejoicing in the azure shores, Near where the sea with foaming billows roars, 30 The circling choirs of mortals, thy delight, Or beauteous nymphs, with eyes cerulean bright, Pleas'd by the dusty banks renown'd of old, To drive thy rapid, two-yok'd car of gold; Or if in Cyprus with thy mother fair, 35 Where married females praise thee ev'ry year, And beauteous virgins in the chorus join, Adonis pure to sing and thee divine; Come, all-attractive to my pray'r inclin'd, For thee, I call, with holy, reverent mind. 40"
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.081"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXX. MELINOE"
+section = "Hymn LXXXI. THE SOUTH WIND"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo75.htm"
-token_count = 197
+source_url = "https://sacred-texts.com/cla/hoo/hoo86.htm"
+token_count = 108
 
 [content]
-body = "LXX. TO MELINOE. The FUMIGATION from AROMATICS. Call Melinoe, saffron-veil'd, terrene, Who from infernal Pluto's sacred queen, Mixt with Saturnian Jupiter, arose, Near where Cocytus' mournful river flows; When under Pluto's semblance, Jove divine 5 Deceiv'd with guileful arts dark Proserpine. Hence, Partly black thy limbs and partly white, From Pluto dark, from Jove etherial, bright Thy colour'd members, men by night inspire When seen in specter'd forms with terrors dire; 10 Now darkly visible, involv'd in night, Perspicuous now they meet the fearful fight. Terrestrial queen expel wherever found The soul's mad fears to earth's remotest bound; With holy aspect on our incense shrine, 15 And bless thy mystics, and the rites divine."
+body = "LXXXI. TO THE SOUTH WIND. The FUMIGATION from FRANKINCENSE. WIDE coursing gales, whose lightly leaping feet With rapid wings the air's wet bosom beat, Approach benevolent, swift-whirling pow'rs, With humid clouds the principles of flow'rs: For flow'ry clouds are portion'd to your care, 5 To send on earth from all surrounding air. Bear, blessed pow'rs, these holy rites attend, And fruitful rains on earth all-parent send."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.021"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XV. JUNO"
+section = "Hymn XXI. THE SEA, OR TETHYS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo20.htm"
-token_count = 255
+source_url = "https://sacred-texts.com/cla/hoo/hoo26.htm"
+token_count = 190
 
 [content]
-body = "XV. TO JUNO * . The FUMIGATION from AROMATICS. O Royal Juno of majestic mien, Aerial-form'd, divine, Jove's blessed queen, Thron'd in the bosom of cærulean air, The race of mortals is thy constant care. p. 141 The cooling gales thy pow'r alone inspires, Which nourish life, which ev'ry life desires. Mother of clouds and winds, from thee alone Producing all things, mortal life is known: All natures share thy temp'rament divine, And universal sway alone is thine. 10 With founding blasts of wind, the swelling sea And rolling rivers roar, when shook by thee. Come, blessed Goddess, fam'd almighty queen, With aspect kind, rejoicing and serene. Footnotes 140:* Juno is called by the Orphic theologers, according to Proclus Ζωογόνος ϑεά or the vivific Goddess: an epithet perfectly agreeing with the attributes ascribed to her in this Hymn. And in Theol. Plat. p. 483, he says that Juno is the source of the soul's procreation."
+body = "XXI. TO THE SEA, OR TETHYS * . The FUMIGATION from FRANKINCENSE and MANNA. TETHYS I call, with eyes cærulean bright, Hid in a veil obscure from human sight; Great Ocean's empress, wand'ring thro' the deep, And pleas'd with gentle gales, the earth to sweep; p. 147 Whose blessed waves in swift succession go, 5 And lash the rocky shore with endless flow: Delighting in the Sea serene to play, In ships exulting and the wat'ry way. Mother of Venus, and of clouds obscure, Great nurse of beasts, and source of fountains pure. 10 O venerable Goddess, hear my pray'r, And make benevolent my life thy care; Send, blessed queen, to ships a prosp'rous breeze, And waft them safely o'er the stormy seas."
 
 [annotations]
 concepts = []

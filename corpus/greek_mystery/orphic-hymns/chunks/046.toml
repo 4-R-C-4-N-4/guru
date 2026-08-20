@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.046"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXVI. THE TITANS * The FUMIGATION from FRANKINCENSE"
+section = "Hymn XLVI. BACCHUS PERICIONIUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo41.htm"
-token_count = 156
+source_url = "https://sacred-texts.com/cla/hoo/hoo51.htm"
+token_count = 116
 
 [content]
-body = "XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas."
+body = "XLVI. TO BACCHUS PERICIONIUS * . The FUMIGATION from AROMATICS. BACCHUS Pericionius, hear my pray'r, Who mad'st the house of Cadmus once thy care, With matchless force, his pillars twining round, (When burning thunders shook the solid ground, In flaming, founding torrents borne along), 5 Propt by thy grasp indissolubly strong. Come mighty Bacchus to these rites inclin'd, And bless thy suppliants with rejoicing mind."
 
 [annotations]
 concepts = []

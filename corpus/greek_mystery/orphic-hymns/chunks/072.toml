@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.072"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXI. JUSTICE"
+section = "Hymn LXXII. THE DÆMON, OR GENIUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo66.htm"
-token_count = 352
+source_url = "https://sacred-texts.com/cla/hoo/hoo77.htm"
+token_count = 193
 
 [content]
-body = "LXI. TO JUSTICE. The FUMIGATION from FRANKINCENSE. THE piercing eye of Justice bright, I sing, 1 Plac'd by the throne of heav'n's almighty king, p. 194 Perceiving thence, with vision unconfin'd, The life and conduct of the human kind To thee, revenge and punishment belong, 5 Chastising ev'ry deed, unjust and wrong; Whose pow'r alone, dissimilars can join, And from th' equality of truth combine: For all the ill, persuasion can inspire, When urging bad designs, with counsel dire, 10 'Tis thine alone to punish; with the race Of lawless passions, and incentives base; For thou art ever to the good inclin'd, And hostile to the men of evil mind. Come, all-propitious, and thy suppliant hear, 15 When Fate's predestin'd, final hour draws near. Footnotes 193:1 Ver. i.] The piercing eye . &c. This Hymn is cited by Demosthenes in his first speech against Aristogiton, as follows: \"Let us, says the orator overlooking all custom, judge righteous judgment; let us reverence Eunomia that loves equity, and preserves states; and inexorable Δικη right or justice p. 194 whom Orpheus our instructor, in the most holy initiations, τελεται, places by the throne of Jove, inspecting the affairs of men. Let each of us imagine her piercing eye is now upon us, and think and vote so as not to dishonour her from whom every judge has his name.\""
+body = "LXXII. TO THE DÆMON, OR GENIUS. The FUMIGATION from FRANKINCENSE. THEE, mighty-ruling, Dæmon dread, I call, Mild Jove, life-giving, and the source of all: Great Jove, much-wand'ring, terrible and strong, To whom revenge and tortures dire belong. Mankind from thee, in plenteous wealth abound, 5 When in their dwellings joyful thou art found; Or pass thro' life afflicted and distress'd, The needful means of bliss by thee supprest. 'Tis thine alone endu'd with boundless might, To keep the keys of sorrow and delight. 10 p. 304 O holy, blessed father, hear my pray'r, Disperse the seeds of life-consuming care; With fav'ring mind the sacred rites attend, And grant my days a glorious, blessed end."
 
 [annotations]
 concepts = []

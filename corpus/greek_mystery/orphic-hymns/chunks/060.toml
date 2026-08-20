@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.060"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLIX. LYSIUS LENÆUS"
+section = "Hymn LX. NEMESIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo54.htm"
-token_count = 237
+source_url = "https://sacred-texts.com/cla/hoo/hoo65.htm"
+token_count = 229
 
 [content]
-body = "XLIX. TO LYSIUS LENÆUS. A HYMN. Hear me, Jove's son, blest Bacchus, God of wine, Born of two mothers, honor'd and divine; Lysian, Euion * Bacchus, various-nam'd, Of Gods the offspring secret, holy, fam'd: Fertile and nourishing whose liberal care 5 Earth's fruits increases, flourishing and fair; Sounding, magnanimous, Lenæan pow'r O various form'd, medic'nal, holy flow'r: Mortals in thee, repose from labour find, Delightful charm, desir'd by all mankind: 10 Fair-hair'd Euion, Bromian, joyful God, Lysian, invested with the leafy rod. To these our rites, benignant pow'r incline, When fav'ring men, or when on Gods you shine; Be present to thy mystic's suppliant pray'r, 15 Rejoicing come, and fruits abundant bear. Footnotes 181:* Euion ingeminat, reparabilis assonat Echo. Persius ."
+body = "LX. TO NEMESIS. A HYMN. THEE, Nemesis I call, almighty queen, By whom the deeds of mortal life are seen: Eternal, much rever'd, of boundless sight, Alone rejoicing in the just and right: Changing the counsels of the human breast 5 For ever various, rolling without rest. p. 193 To every mortal is thy influence known, And men beneath thy righteous bondage groan; For ev'ry thought within the mind conceal'd Is to thy fight perspicuously reveal'd. 10 The soul unwilling reason to obey By lawless passion rul'd, thy eyes survey. All to see, hear, and rule, O pow'r divine Whose nature Equity contains, is thine. Come, blessed, holy Goddess, hear my pray'r, 15 And make thy mystic's life, thy constant care: Give aid benignant in the needful hour, And strength abundant to the reas'ning pow'r; And far avert the dire, unfriendly race Of counsels impious, arrogant, and base. 20"
 
 [annotations]
 concepts = []

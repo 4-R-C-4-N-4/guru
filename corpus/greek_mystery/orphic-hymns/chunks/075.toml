@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.075"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXIV. MARS"
+section = "Hymn LXXV. THE MUSES"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo69.htm"
-token_count = 257
+source_url = "https://sacred-texts.com/cla/hoo/hoo80.htm"
+token_count = 288
 
 [content]
-body = "LXIV. TO MARS * . The FUMIGATION from FRANKINCENSE. Magnanimous, unconquer'd, boistrous Mars, In darts rejoicing, and in bloody wars p. 197 Fierce and untam'd, whose mighty pow'r can make The strongest walls from their foundations shake: Mortal destroying king, defil'd with gore, 5 Pleas'd with war's dreadful and tumultuous roar: Thee, human blood, and swords, and spears delight, And the dire ruin of mad savage fight. Stay, furious contests, and avenging strife, Whose works with woe, embitter human life; 10 To lovely Venus, and to Bacchus yield, To Ceres give the weapons of the field; Encourage peace, to gentle works inclin'd, And give abundance, with benignant mind. Footnotes 196:* This deity, according to Proclus, in Repub. p. 388. perpetually discerns and nourishes, and constantly excites the contrarieties of the universe, that the world may exist perfect and entire from its parts. But he requires the assistance of Venus, that he may insert order and harmony into things contrary and discordant."
+body = "LXXV. TO THE MUSES. The FUMIGATION from FRANKINCENSE. Daughters of Jove, dire-sounding and divine, 1 Renown'd Pierian, sweetly speaking Nine; p. 206 To those whose breasts your sacred furies fire Much-form'd, the objects of supreme desire: p. 207 Sources of blameless virtue to mankind, 5 Who form to excellence the youthful mind; p. 208 Who nurse the soul, and give her to descry The paths of right with Reason's steady eye. p. 209 Commanding queens who lead to sacred light The intellect refin'd from Error's night; 10 p. 210 And to mankind each holy rite disclose, For mystic knowledge from your nature flows. p. 211 Clio, and Erato, who charms the sight, With thee Euterpe minist'ring delight: p. 212 Thalia flourishing, Polymina fam'd, 15 Melpomene from skill in music nam'd: p. 213 Terpischore, Urania heav'nly bright, With thee * who gav'st me to behold the light. Come, venerable, various, pow'rs divine, With fav'ring aspect on your mystics shine; 20 Bring glorious, ardent, lovely, fam'd desire, And warm my bosom with your sacred fire."
 
 [annotations]
 concepts = []

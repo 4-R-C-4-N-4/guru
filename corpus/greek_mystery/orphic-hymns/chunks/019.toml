@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.019"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIII. RHEA (part 2)"
+section = "Hymn XIX. JOVE, as the AUTHOR of LIGHTNING"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo18.htm"
-token_count = 271
+source_url = "https://sacred-texts.com/cla/hoo/hoo24.htm"
+token_count = 112
 
 [content]
-body = "Rhea, in the Orphic theology, is among the mundane divinities, the earth.\n\nHence, according to Varro, she is represented with a drum; because that instrument is a symbol of the earth.\n\nAugust.\n\ndc Civitat.\n\nlib.\n\nvii.\n\n139:12 XIII Ver.\n\n12.] Deceitful saviour .\n\nWhen Jupiter was born (says the fable) his mother Rhea in order to deceive Saturn, gave him a stone wrapped in swaddling bands, in the place of Jove; informing him that was her offspring.\n\nSaturn immediately devoured the stone; and Jupiter who was privately educated, at length obtained the government of the world.\n\nWith great propriety, therefore, is she called by the poet a deceitful saviour.\n\nThis fable, according to Phurnutus, signifies the creation of the world.\n\nFor at that time Nature (which among elementary essences is the same with Jupiter) was then nourished in the world, and at length prevailed.\n\nThe stone devoured by Saturn is the earth, alluding to its firmly occupying the middle place: for says Phurnutus, beings could not abide without such a foundation for their support.\n\nFrom this all things are produced, and derive their proper aliment.\n\nOpusc.\n\nMythol.\n\np.\n\n147."
+body = "XIX. To JOVE, as the AUTHOR of LIGHTNING. The FUMIGATION from FRANKINCENSE and MANNA. I Call the mighty, holy, splendid light, Aerial, dreadful-sounding, fiery-bright; Flaming, aerial-light, with angry voice, Lightning thro' lucid clouds with horrid noise. Untam'd, to whom resentments dire belong, Pure, holy pow'r, all-parent, great and strong: Come, and benevolent these rites attend, And grant my days a peaceful, blessed end."
 
 [annotations]
 concepts = []

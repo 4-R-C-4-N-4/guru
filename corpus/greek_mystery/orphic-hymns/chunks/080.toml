@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.080"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn LXIX. THE FURIES"
+section = "Hymn LXXX. THE WEST WIND"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo74.htm"
-token_count = 195
+source_url = "https://sacred-texts.com/cla/hoo/hoo85.htm"
+token_count = 116
 
 [content]
-body = "LXIX. TO THE FURIES. The FUMIGATION from AROMATICS. HEAR me, illustrious Furies, mighty nam'd, Terrific pow'rs, for prudent counsel fam'd; Holy and pure, from Jove terrestrial born And Proserpine, whom lovely locks adorn: Whose piercing sight, with vision unconfin'd, 5 Surveys the deeds of all the impious kind: On Fate attendant, punishing the race (With wrath severe) of deeds unjust and base. Dark-colour'd queens, whose glittering eyes, are bright With dreadful, radiant, life-destroying, light: 10 Eternal rulers, terrible and strong, To whom revenge, and tortures dire belong; Fatal and horrid to the human sight, With snaky tresses wand'ring in the night; Either approach, and in these rites rejoice, 15 For ye, I call, with holy, suppliant voice."
+body = "LXXX. TO THE WEST WIND. The FUMIGATION from FRANKINCENSE. SEA-born, aerial, blowing from the west, Sweet gales, who give to weary'd labour rest: Vernal and grassy, and of gentle found, To ships delightful, thro' the sea profound; For these, impell'd by you with gentle force, 5 Pursue with prosp'rous Fate their destin'd course. With blameless gales regard my suppliant pray'r, Zephyrs unseen, light-wing'd, and form'd from air."
 
 [annotations]
 concepts = []
