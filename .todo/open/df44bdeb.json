@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:19:07.729Z",
-  "updated_at": "2026-08-20T14:20:02.077Z",
+  "updated_at": "2026-08-20T14:33:03.912Z",
   "tags": [
     "driver",
     "apparatus",
@@ -44,6 +44,31 @@
         0,
         1
       ]
+    },
+    {
+      "timestamp": "2026-08-20T14:30:03.183Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "CORRECTION FROM DRIVER (2026-08-20): The ticket's chunk enumeration was wrong in three ways:\n\n1. Chunk .087 is NOT front matter — it's Hymn XLII 'To the Seasons' ('XLII TO THE SEASONS. DAUGHTERS of Jove and Themis...'). It got the 'Front Matter, p. 48' label only because the source line 'XLII TO THE SEASONS' has no period after XLII, so number_pattern '^([IVXLCDM]+)\\.' failed to match. .087 has 0 accepted tags and sits correctly between XLI (086) and XLIII (088). DROPPING IT = deleting Hymn XLII from the corpus.\n\n2. Chunk .138 is a sacred-texts redirect page ('The new sacred-texts hypertext version of Homer's Iliad...'), not a footnote block. Drop-worthy, but for a different reason.\n\n3. The proposed 'FOOTNOTES' drop pattern is CATASTROPHIC: 54 hymn chunks contain the word 'Footnotes' inline (e.g. Hymn I .035 ends 'Footnotes 114:* An epithet of Diana's...'). A drop_chunk_patterns regex on 'FOOTNOTES' would delete 54 real hymns, not just front material. Same risk with 'DISERTATION' (also misspelled in the ticket — source is 'DISSERTATION').\n\nCORRECTED SCOPE: Drop 001–034 (34 contiguous front-matter pages) + .138 (redirect) = 35 chunks total. KEEP .087 (it's a hymn). Use drop_before_marker anchored on the first hymn 'I. TO THE GODDESS PROTHYRÆA' (verified unique to .035), not scattered drop patterns.\n\nVERIFIED: 34 front-matter chunks carry 209 accepted tags + 478 live EXPRESSES+PARALLELS edges (source side) + 34 BELONGS_TO edges. Chunk .087 has 0 accepted tags. Chunk .138 has 0 accepted tags.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-20T14:30:12.417Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "CORRECTED task (per Driver review):\n\n1. Fix chunking/greek_mystery/orphic-hymns.toml: use drop_before_marker anchored on 'I\\. TO THE GODDESS PROTHYRÆA' (first hymn, unique to chunk .035) to drop the 34 contiguous front-matter chunks (.001–.034) as a block. This is NOT a regex on 'FOOTNOTES' or 'DISSERTATION' — those would hit 54 real hymns.\n\n2. Drop .138 separately with a precise anchor on 'hypertext version of Homer's Iliad'.\n\n3. KEEP .087 — it's Hymn XLII 'To the Seasons', wrongly labeled as Front Matter because its Roman numeral 'XLII' lacks a trailing period, breaking number_pattern. The mislabel is a separate bug (label fix only, no chunk deletion).\n\n4. Re-chunk orphic-hymns, then body-matched remap via scripts/migrations/apparatus_remap.py for the 209 accepted tags, re-embed, run round-trip.\n\nScope: 35 chunks dropped (.001–034 + .138), .087 preserved.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0,
+        3
+      ]
+    },
+    {
+      "timestamp": "2026-08-20T14:33:03.912Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "USER SIGN-OFF: Approved corrected scope. Drop chunks .001–.034 (34 contiguous front-matter pages) + .138 (sacred-texts redirect) = 35 total. Keep .087 (Hymn XLII to the Seasons). Use drop_before_marker on 'I. TO THE GODDESS PROTHYRAE' (first hymn, unique to .035). The .087 mislabel (Roman numeral 'XLII' without period breaks number_pattern) approved as bundled fix — number_pattern made tolerant of missing period. Body-matched remap for 209 accepted tags, re-embed, round-trip check. DB backup before remap per corpus-quality convention.",
+      "confidence": "high"
     }
   ]
 }
