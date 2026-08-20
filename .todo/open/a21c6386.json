@@ -7,13 +7,14 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:55:43.522Z",
-  "updated_at": "2026-08-20T18:43:08.019Z",
+  "updated_at": "2026-08-20T19:01:44.669Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
     "dossier",
     "re-plan",
-    "freeze-violation"
+    "freeze-violation",
+    "status/resolved"
   ],
   "relationships": {
     "parent": "df44bdeb"
