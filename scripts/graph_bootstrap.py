@@ -86,8 +86,20 @@ def upsert_edge(conn: sqlite3.Connection, source_id: str, target_id: str,
 
 # ── passes ───────────────────────────────────────────────────────────────────
 
-def bootstrap_chunks(conn: sqlite3.Connection) -> int:
-    """Insert chunk nodes and BELONGS_TO edges."""
+def bootstrap_chunks(
+    conn: sqlite3.Connection,
+    only_text: str | None = None,
+    only_tradition: str | None = None,
+) -> int:
+    """Insert chunk nodes and BELONGS_TO edges.
+
+    With no filter this walks the whole corpus (the rebuild/migration form).
+    ``only_text`` restricts the walk to a single source-id and ``only_tradition``
+    to a single tradition dir — the targeted form ingest node 09 uses so a
+    driver processing one text cannot sweep another in-flight text's chunks into
+    the graph. A tradition node is upserted only when the walk actually visits a
+    text under it, so ``only_text`` touches exactly its own tradition.
+    """
     count = 0
 
     if not CORPUS_DIR.exists():
@@ -98,15 +110,22 @@ def bootstrap_chunks(conn: sqlite3.Connection) -> int:
         if not trad_dir.is_dir() or trad_dir.name.endswith(".toml"):
             continue
         tradition_id = trad_dir.name
+        if only_tradition and tradition_id != only_tradition:
+            continue
+
+        text_dirs = [d for d in sorted(trad_dir.iterdir()) if d.is_dir()]
+        if only_text and only_text not in {d.name for d in text_dirs}:
+            continue
 
         # Tradition nodes are created here, on first encounter under
         # corpus/. Labels come from LABEL_OVERRIDES or the title-cased
-        # id fallback.
+        # id fallback. Upserted after the filters above so a targeted run
+        # only ever touches the tradition its text actually belongs to.
         upsert_node(conn, id=tradition_id, type="tradition",
                     label=tradition_label(tradition_id))
 
-        for text_dir in sorted(trad_dir.iterdir()):
-            if not text_dir.is_dir():
+        for text_dir in text_dirs:
+            if only_text and text_dir.name != only_text:
                 continue
 
             chunk_dir = text_dir / "chunks"
@@ -175,6 +194,13 @@ def main() -> None:
     parser.add_argument("--db", default=str(DEFAULT_DB), metavar="PATH")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--verbose", "-v", action="store_true")
+    parser.add_argument(
+        "--text", metavar="ID",
+        help="Bootstrap only this source-id's chunks (targeted node-09 form; "
+             "keeps a driver from sweeping another in-flight text into the graph).")
+    parser.add_argument(
+        "--tradition", metavar="NAME",
+        help="Bootstrap only this tradition's chunks.")
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -197,8 +223,15 @@ def main() -> None:
     apply_schema(conn)
 
     # Concept nodes/families come from scripts/sync_taxonomy.py, not here.
-    logger.info("Bootstrapping chunks + BELONGS_TO edges ...")
-    n = bootstrap_chunks(conn)
+    scope = args.text or args.tradition
+    logger.info(
+        "Bootstrapping chunks + BELONGS_TO edges%s ..."
+        % (f" (scope: {scope})" if scope else ""))
+    n = bootstrap_chunks(conn, only_text=args.text, only_tradition=args.tradition)
+    if args.text and n == 0:
+        logger.warning(
+            "--text %s matched no chunks under corpus/ — nothing bootstrapped. "
+            "Has the text been chunked (nodes 06-08) yet?" % args.text)
 
     # Summary
     (n_nodes,) = conn.execute("SELECT COUNT(*) FROM nodes").fetchone()

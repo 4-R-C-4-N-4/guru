@@ -453,8 +453,23 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--only", metavar="ID")
     parser.add_argument("--tradition", metavar="NAME")
+    parser.add_argument(
+        "--all", action="store_true",
+        help="Chunk every configured text (whole-corpus rebuild). Required to "
+             "run unscoped — a bare invocation is refused so an automated "
+             "driver cannot re-chunk texts it never meant to touch.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
+
+    # A bare run silently chunks every text with a config — and chunk.py output
+    # is pre-clean, so an unintended re-chunk also invalidates clean_bodies and
+    # the readability gate (nodes 07/08, stale_on_rechunk). Make the whole-corpus
+    # scope opt-in via --all so the targeted path (--only / --tradition, what
+    # ingest node 06 emits) is the only thing a driver reaches by default.
+    if not (args.only or args.tradition or args.all):
+        parser.error(
+            "refusing an unscoped run: pass --only <id> (one text, the node-06 "
+            "form), --tradition <name>, or --all to chunk the whole corpus.")
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,

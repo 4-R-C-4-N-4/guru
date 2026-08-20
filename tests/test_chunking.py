@@ -530,3 +530,24 @@ def test_baseline_strips_mead_hermetica_apparatus():
     keep = ("The book was translated by a monk; next we read on p. 222 that "
             "<the lacuna here> Ἔκ γὰρ τῆς εἵμαρτο.")
     assert strip(keep) == keep
+
+
+def test_bare_chunk_run_is_refused(monkeypatch, capsys):
+    """A bare `chunk.py` (no --only/--tradition/--all) must refuse rather than
+    silently chunk every configured text — chunk output is pre-clean, so an
+    unintended whole-corpus re-chunk also invalidates nodes 07/08 everywhere.
+    This is the guard an automated driver relies on."""
+    import chunk as chunkmod
+    monkeypatch.setattr(sys, "argv", ["chunk.py"])
+    with pytest.raises(SystemExit) as exc:
+        chunkmod.main()
+    assert exc.value.code != 0
+    assert "unscoped" in capsys.readouterr().err.lower()
+
+
+def test_all_flag_permits_whole_corpus_run(monkeypatch):
+    """--all is the explicit opt-in for the whole-corpus rebuild — it clears the
+    guard (a --dry-run --all must not raise the unscoped error)."""
+    import chunk as chunkmod
+    monkeypatch.setattr(sys, "argv", ["chunk.py", "--dry-run", "--all"])
+    chunkmod.main()  # returns normally; no SystemExit from the guard

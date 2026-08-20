@@ -555,7 +555,7 @@ NODES: list[Node] = [
 
     Node("09-graph-bootstrap", "Create chunk and tradition nodes", "command",
          _p_graph,
-         command="python3 scripts/graph_bootstrap.py",
+         command="python3 scripts/graph_bootstrap.py --text {id}",
          gate="python3 -m guru ingest status {id}",
          notes=["Run scripts/sync_taxonomy.py --apply too if the text "
                 "introduced concepts that are not yet in "
