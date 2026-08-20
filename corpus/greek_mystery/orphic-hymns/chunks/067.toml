@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.067"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXVII. MERCURY"
+section = "Hymn LVI. THE TERRESTRIAL HERMES"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 249
+source_url = "https://sacred-texts.com/cla/hoo/hoo61.htm"
+token_count = 200
 
 [content]
-body = "XXVII. TO MERCURY. The FUMIGATION from FRANKINCENSE. HERMES, draw near, and to my pray'r incline, Angel of Jove, and Maia's son divine; Studious of contests, ruler of mankind, With heart almighty, and a prudent mind. Celestial messenger, of various skill, 5 Whose pow'rful arts could watchful Argus kill: With winged feet, 'tis thine thro' air to course, O friend of man, and prophet of discourse: Great life-supporter, to rejoice is thine, In arts gymnastic, and in fraud divine: 10 With pow'r endu'd all language to explain, Of care the loos'ner, and the source of gain. Whose hand contains of blameless peace the rod, Corucian, blessed, profitable God; Of various speech, whose aid in works we find, 15 And in necessities to mortals kind: p. 153 Dire weapon of the tongue, which men revere, Be present, Hermes, and thy suppliant hear; Assist my works, conclude my life with peace, Give graceful speech, and me memory's increase. 20"
+body = "LVI. TO THE TERRESTRIAL HERMES. The FUMIGATION from STORAX. HERMES I call, whom Fate decrees to dwell In the dire path which leads to deepest hell O Bacchic Hermes, progeny divine Of Dionysius, parent of the vine, p. 189 And of celestial Venus Paphian queen, 5 Dark eye-lash'd Goddess of a lovely mien: Who constant wand'rest thro' the sacred feats Where hell's dread empress, Proserpine, retreats; To wretched souls the leader of thc way When Fate decrees, to regions void of day: 10 Thine is the wand which causes sleep to fly, Or lulls to slumb'rous rest the weary eye; For Proserpine thro' Tart'rus dark and wide Gave thee forever flowing souls to guide. Come, blessed pow'r the sacrifice attend, 15 And grant our mystic works a happy end."
 
 [annotations]
 concepts = []

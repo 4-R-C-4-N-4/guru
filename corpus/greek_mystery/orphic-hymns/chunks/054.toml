@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.054"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIV. JUPITER"
+section = "Hymn XLIII. SEMELE"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
+source_url = "https://sacred-texts.com/cla/hoo/hoo48.htm"
 token_count = 198
 
 [content]
-body = "XIV. TO JUPITER. The FUMIGATION from STORAX. O Jove much-honor'd, Jove supremely great, To thee our holy rites we consecrate, p. 140 Our pray'rs and expiations, king divine, For all things round thy head exalted shine. The earth is thine, and mountains swelling high, 5 The sea profound, and all within the sky. Saturnian king, descending from above, Magnanimous, commanding, sceptred Jove; All-parent, principle and end of all, Whose pow'r almighty, shakes this earthly ball; 10 Ev'n Nature trembles at thy mighty nod, Loud-sounding, arm'd with light'ning, thund'ring God. Source of abundance, purifying king, O various-form'd from whom all natures spring; Propitious hear my pray'r, give blameless health, 15 With peace divine, and necessary wealth."
+body = "XLIII. TO SEMELE. The FUMIGATION from STORAX. CADMEAN Goddess, universal queen, Thee, Semele I call, of beauteous mien; Deep-bosom'd, lovely flowing locks are thine, Mother of Bacchus, joyful and divine, The mighty offspring, whom love's thunder bright, 5 Forc'd immature, and fright'ned into light: Born from the deathless counsels, secret, high, Of Jove Saturnian, regent of the sky Whom Proserpine permits to view the light, And visit mortals from the realms of night: 10 Constant attending on the sacred rites, And feast triennial, which thy soul delights; When thy son's wond'rous birth mankind relate, And secrets deep, and holy celebrate. p. 178 Now I invoke thee, great Cadmean queen, 15 To bless these rites with countenance serene."
 
 [annotations]
 concepts = []

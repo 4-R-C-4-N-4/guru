@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.063"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXIII. THE NEREIDS"
+section = "Hymn LII. AMPHIETUS BACCHUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 203
+source_url = "https://sacred-texts.com/cla/hoo/hoo57.htm"
+token_count = 184
 
 [content]
-body = "XXIII. TO THE NEREIDS. The FUMIGATION from AROMATICS. DAUGHTERS of Nereus, resident in caves Merg'd deep in Ocean, sporting thro' the waves; Fanatic fifty nymphs, who thro' the main Delight to follow in the Triton's train, Rejoicing close behind their cars to keep; 5 Whose forms half wild, are nourish'd by the deep, With other nymphs of different degree Leaping and wand'ring thro' the liquid sea: Bright, wat'ry dolphins, sonorous and gay, Well pleas'd to sport with bachanalian play; 10 Nymphs beauteous-ey'd, whom sacrifice delights, Send rich abundance on our mystic rites; For you at first disclos'd the rites divine, Of holy Bacchus and of Proserpine, Of fair Calliope from whom I spring, 15 And of Apollo bright, the Muse's king."
+body = "LII. To AMPHIETUS BACCHUS. The FUMIGATION from every AROMATIC except FRANKINCENSE. TERRESTRIAL Dionysius, hear my pray'r, Awak'ned rise with nymphs of lovely hair: Great Amphietus Bacchus, annual God, Who laid asleep in Proserpine's abode, Did'st lull to drowsy and oblivious rest, The rites triennial, and the sacred feast; Which rous'd again by thee, in graceful ring, Thy nurses round thee mystic anthems sing; When briskly dancing with rejoicing pow'rs, Thou mov'st in concert with the circling hours. 10 Come, blessed, fruitful, horned, and divine, And on these rites with joyful aspect shine; Accept the general incense and the pray'r, And make prolific holy fruits thy care."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.059"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XIX. JOVE, as the AUTHOR of LIGHTNING"
+section = "Hymn XLVIII. IPPA * The FUMIGATION from STORAX"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 112
+source_url = "https://sacred-texts.com/cla/hoo/hoo53.htm"
+token_count = 133
 
 [content]
-body = "XIX. To JOVE, as the AUTHOR of LIGHTNING. The FUMIGATION from FRANKINCENSE and MANNA. I Call the mighty, holy, splendid light, Aerial, dreadful-sounding, fiery-bright; Flaming, aerial-light, with angry voice, Lightning thro' lucid clouds with horrid noise. Untam'd, to whom resentments dire belong, Pure, holy pow'r, all-parent, great and strong: Come, and benevolent these rites attend, And grant my days a peaceful, blessed end."
+body = "XLVIII. TO IPPA * The FUMIGATION from STORAX. Great nurse of Bacchus, to my pray'r incline, For holy Sabus' secret rites are thine, The mystic rites of Bacchus' nightly choirs, Compos'd of sacred, loud-resounding fires: Hear me, terrestrial mother, mighty queen, 5 Whether on Phyrgia's holy mountain + seen, Or if to dwell in Tmolus thee delights, With holy aspect come, and bless these rites. Footnotes 180:* Ippa according to Proclus is same with Juno. 180:+ Ida."
 
 [annotations]
 concepts = []

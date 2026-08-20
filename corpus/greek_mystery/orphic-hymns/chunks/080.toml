@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.080"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXXVI. THE TITANS * The FUMIGATION from FRANKINCENSE"
+section = "Hymn LXIX. THE FURIES"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 156
+source_url = "https://sacred-texts.com/cla/hoo/hoo74.htm"
+token_count = 195
 
 [content]
-body = "XXXVI. TO THE TITANS * The FUMIGATION from FRANKINCENSE. O Mighty Titans, who from heav'n and earth Derive your noble and illustrious birth, Our fathers fires, in Tartarus profound Who dwell, deep merg'd beneath the solid ground: Fountains and principles, from whom began 5 Th' afflicted, miserable, race of man: Who not alone in earth's retreats abide, But in the ocean and the air reside; Since ev'ry species from your nature flows, Which all prolific, nothing barren knows: 10 Avert your rage, if from th' infernal seats One of your tribe should visit our retreats. Footnotes 167:* See note to Hymn xxxi. to Pallas."
+body = "LXIX. TO THE FURIES. The FUMIGATION from AROMATICS. HEAR me, illustrious Furies, mighty nam'd, Terrific pow'rs, for prudent counsel fam'd; Holy and pure, from Jove terrestrial born And Proserpine, whom lovely locks adorn: Whose piercing sight, with vision unconfin'd, 5 Surveys the deeds of all the impious kind: On Fate attendant, punishing the race (With wrath severe) of deeds unjust and base. Dark-colour'd queens, whose glittering eyes, are bright With dreadful, radiant, life-destroying, light: 10 Eternal rulers, terrible and strong, To whom revenge, and tortures dire belong; Fatal and horrid to the human sight, With snaky tresses wand'ring in the night; Either approach, and in these rites rejoice, 15 For ye, I call, with holy, suppliant voice."
 
 [annotations]
 concepts = []

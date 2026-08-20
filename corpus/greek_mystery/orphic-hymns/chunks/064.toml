@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.064"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XXIV. PROTEUS"
+section = "Hymn LIII. SILENUS, SATYRUS, and the PRIESTESSES of BACCHUS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 242
+source_url = "https://sacred-texts.com/cla/hoo/hoo58.htm"
+token_count = 215
 
 [content]
-body = "XXIV. TO PROTEUS * . The FUMIGATION from STORAX. PROTEUS I call, whom Fate decrees, to keep The keys which lock the chambers of the deep; First-born, by whose illustrious pow'r alone All Nature's principles are clearly shewn: Matter to change with various forms is thine, 5 Matter unform'd, capacious, and divine. All-honor'd, prudent, whose sagacious mind Knows all that was, and is, of ev'ry kind, With all that shall be in succeeding time; So vast thy wisdom, wond'rous, and sublime: 10 For all things Nature first to thee consign'd, And in thy essence omniform confin'd. Come, blessed father, to our rites attend, And grant our happy lives a prosp'rous end. Footnotes 149:* According to Proclus, in Plat. Repub. p. 97, Proteus, though inferior to the primary Gods, is immortal: and though not a deity, is a certain angelic mind of the order of Neptune, comprehending in himself all the forms of things generated in the universe."
+body = "LIII. To SILENUS, SATYRUS, and the PRIESTESSES of BACCHUS. The FUMIGATION from MANNA. GREAT nurse of Bacchus, to my pray'r incline., Silenus, honor'd by the pow'rs divine And by mankind at the triennial feast Illustrious dæmon, reverenc'd as the best: Holy, august, the source of lawful rites, 5 Rejoicing pow'r, whom vigilance delights With Sylvans dancing ever young and fair, Head of the Bacchic Nymphs, who ivy bear. With all thy Satyrs on our incense shine, Dæmons wild form'd, and bless the rites divine; 10 Come, rouse to sacred Joy thy pupil kin, * And Brumal Nymphs with rites Lenæan bring; Our orgies shining thro' the night inspire, And bless triumphant pow'r the sacred choir. Footnotes 185:* Because he was the nurse of Bacchus."
 
 [annotations]
 concepts = []

@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.055"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XV. JUNO"
+section = "Hymn XLIV. DIONYSIUS BASSAREUS TRIENNALIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 255
+source_url = "https://sacred-texts.com/cla/hoo/hoo49.htm"
+token_count = 134
 
 [content]
-body = "XV. TO JUNO * . The FUMIGATION from AROMATICS. O Royal Juno of majestic mien, Aerial-form'd, divine, Jove's blessed queen, Thron'd in the bosom of cærulean air, The race of mortals is thy constant care. p. 141 The cooling gales thy pow'r alone inspires, Which nourish life, which ev'ry life desires. Mother of clouds and winds, from thee alone Producing all things, mortal life is known: All natures share thy temp'rament divine, And universal sway alone is thine. 10 With founding blasts of wind, the swelling sea And rolling rivers roar, when shook by thee. Come, blessed Goddess, fam'd almighty queen, With aspect kind, rejoicing and serene. Footnotes 140:* Juno is called by the Orphic theologers, according to Proclus Ζωογόνος ϑεά or the vivific Goddess: an epithet perfectly agreeing with the attributes ascribed to her in this Hymn. And in Theol. Plat. p. 483, he says that Juno is the source of the soul's procreation."
+body = "XLIV. TO DIONYSIUS BASSAREUS TRIENNALIS * . A HYMN COME, blessed Dionysius, various nam'd, Bull-fac'd, begot from Thunder, Bacchus fam'd. Bassarian God, of universal might, Whom swords, and blood, and sacred rage delight: In heav'n rejoicing, mad, loud-sounding God, 5 Furious inspirer, bearer of the rod: By Gods rever'd, who dwell'st with human kind, Propitious come, with much-rejoicing mind. Footnotes 178:* So called because his rites were performed every third year."
 
 [annotations]
 concepts = []

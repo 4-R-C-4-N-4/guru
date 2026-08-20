@@ -2,13 +2,13 @@
 id = "greek_mystery.orphic-hymns.093"
 tradition = "Greek Mystery"
 text_name = "Orphic Hymns"
-section = "Hymn XLVIII. IPPA * The FUMIGATION from STORAX"
+section = "Hymn LXXVIII. THEMIS"
 translator = "Thomas Taylor"
-source_url = "https://sacred-texts.com/cla/hoo/hoo00.htm"
-token_count = 133
+source_url = "https://sacred-texts.com/cla/hoo/hoo83.htm"
+token_count = 228
 
 [content]
-body = "XLVIII. TO IPPA * The FUMIGATION from STORAX. Great nurse of Bacchus, to my pray'r incline, For holy Sabus' secret rites are thine, The mystic rites of Bacchus' nightly choirs, Compos'd of sacred, loud-resounding fires: Hear me, terrestrial mother, mighty queen, 5 Whether on Phyrgia's holy mountain + seen, Or if to dwell in Tmolus thee delights, With holy aspect come, and bless these rites. Footnotes 180:* Ippa according to Proclus is same with Juno. 180:+ Ida."
+body = "LXXVIII. TO THEMIS. The FUMIGATION from FRANKINCENSE. ILLUSTRIOUS Themis, of celestial birth, Thee I invoke, young blossom of the earth; 2 Beauteous-eyed virgin; first from thee alone, Prophetic oracles to men were known, Giv'n from the deep recesses of the fane 5 In sacred Pytho, where renown'd you reign; From thee, Apollo's oracles arose, And from thy pow'r his inspiration flows. Honour'd by all, of form divinely bright, Majestic virgin, wand'ring in the night: 10 Mankind from thee first learnt initial rites, And Bacchus' nightly choirs thy soul delights; For holy honours to disclose is thine, With all the culture of the pow'rs divine. Be present, Goddess, to my pray'r inclin'd, And bless the mystic rites with fav'ring mind. Footnotes 217:2 Ver. 2.] Young blossom of the earth . See the note to Hymn xi, to Hercules."
 
 [annotations]
 concepts = []
