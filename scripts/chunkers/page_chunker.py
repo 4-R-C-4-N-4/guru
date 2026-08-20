@@ -180,6 +180,17 @@ def split(
             cut = cm.split(content, 1)
             if len(cut) > 1:
                 content = cut[0].strip()
+                if not content:
+                    # The marker is at the very start of the page: this is a
+                    # standalone commentary/essay page with no leading verse.
+                    # Stripping leaves an empty body — emit nothing rather than
+                    # a 0-token chunk that would still be written and embedded
+                    # (PR #87 review round 3).
+                    logger.info(
+                        f"[{filename}] dropped page: pure commentary, no verse "
+                        f"before marker '{cmarker}'"
+                    )
+                    continue
                 chunk.body = content
                 logger.info(
                     f"[{filename}] stripped appended commentary "

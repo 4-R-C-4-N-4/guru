@@ -331,3 +331,30 @@ def test_orphic_single_sub_gets_plain_label():
     chunks = split([(1, "t-01", content)], cfg, {})
     assert len(chunks) == 1
     assert chunks[0].section_label == "Hymn LXXV. THE MUSES", chunks[0].section_label
+
+
+def test_strip_appended_commentary_pure_commentary_page_emits_nothing():
+    """PR #87 review round 3: a standalone page that BEGINS with the marker is
+    pure commentary with no leading verse. strip_appended_commentary strips it
+    to an empty body — the page must be dropped, not emitted as a 0-token chunk
+    that would still be written and embedded."""
+    cfg = {
+        "strategy": "page-as-chunk",
+        "section_label_format": "Hymn {n}. {title}",
+        "number_source": "content",
+        "number_pattern": r"^([IVXLCDM]+)(?=\.\s*[Tt]|\s*[Tt][Oo] )",
+        "title_source": "content",
+        "title_pattern": r"(?i)^(?:[IVXLCDM]+\.?\s+)?TO\s+(.+?)[\.\*]?\s*$",
+        "title_max_len": 80,
+        "max_tokens": 800,
+        "strip_appended_commentary": "Footnotes",
+    }
+    content = "Footnotes 12: pure editorial commentary with no verse. " * 10
+    # A real verse page alongside, to confirm only the empty one is dropped.
+    verse = ("LXXV. TO THE MUSES. Daughters of Jove, dire-sounding and divine, "
+             "Renown'd Pierian, sweetly speaking Nine; ")
+    chunks = split([(1, "t-01", content), (2, "t-02", verse)], cfg, {})
+    assert len(chunks) == 1, [c.section_label for c in chunks]
+    assert chunks[0].section_label == "Hymn LXXV. THE MUSES"
+    assert all(c.body.strip() for c in chunks)
+    assert all(c.token_count > 0 for c in chunks)

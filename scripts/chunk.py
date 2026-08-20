@@ -119,6 +119,14 @@ def _apply_pre_strip(content: str, patterns: list[str]) -> str:
     return content.strip()
 
 
+class FailClosedDropError(RuntimeError):
+    """A load-bearing, opt-in config drop (require_drop_before_marker) could not
+    apply because its marker never matched. A RuntimeError subclass so existing
+    `except RuntimeError` callers and tests still catch it, but a distinct type
+    so the batch loop can tell a deliberate fail-closed abort apart from an
+    unrelated processing bug (PR #87 review round 3)."""
+
+
 def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, int]:
     """Order-aware whole-chunk drops for page-as-chunk corpora where entire
     pages are apparatus that pre_strip cannot touch (front matter, dividers).
@@ -165,7 +173,7 @@ def _apply_config_drops(chunks: list, cfg: dict, source_id: str) -> tuple[list, 
                 # not silently keep everything when the marker drifts (e.g. a
                 # re-scrape changes the heading). Only opt-in per-config; the
                 # default stays warn-and-keep so other texts are unaffected.
-                raise RuntimeError(
+                raise FailClosedDropError(
                     f"[{source_id}] drop_before_marker /{marker}/ required but never "
                     f"matched — refusing to keep the front matter"
                 )
@@ -504,26 +512,38 @@ def main() -> None:
 
         try:
             stats = process_source(tradition, source_id, dry_run=args.dry_run)
-        except RuntimeError as exc:
-            # A fail-closed config check (e.g. require_drop_before_marker with a
-            # drifted marker, or the drop_trailing_nonprimary_subsplits
-            # number_source guard) raises rather than silently keeping the
-            # dropped pages. That abort must be scoped to THIS text, not the
-            # whole batch: under --all, one mis-dropped corpus should not leave
+        except FailClosedDropError as exc:
+            # A load-bearing, opt-in fail-closed drop (require_drop_before_marker
+            # with a drifted marker) aborts rather than silently keeping the
+            # pages it was meant to drop. Scope the abort to THIS text, not the
+            # whole batch: under --all, one mis-dropped corpus must not leave
             # every subsequent text unchunked (PR #87 finding 5).
             #
             # But it is NOT a benign skip: a drifted load-bearing marker means
-            # the on-disk chunks for this source are STALE/WRONG, and the prior
-            # require_drop_before_marker guard existed precisely to make that
-            # loud. So we (a) keep the run going for the other sources, but
-            # (b) record a hard failure and exit non-zero at the end — so both
-            # the --all sweep and the --only <id> node-06 form surface the
-            # break instead of exiting 0 with bad chunks (the fail-open this
-            # guard was added to prevent). The bare unscoped run is still
-            # refused at the top of main(), so this is not a fail-open.
+            # the on-disk chunks for this source are STALE/WRONG. So we (a) keep
+            # the run going for the other sources, but (b) record a hard failure
+            # and exit non-zero at the end — so both the --all sweep and the
+            # --only <id> node-06 form surface the break instead of exiting 0
+            # with bad chunks. The bare unscoped run is still refused at the top
+            # of main(), so this is not a fail-open.
             logger.error(
                 f"[{source_id}] chunking ABORTED by a fail-closed config "
                 f"check: {exc}"
+            )
+            failed += 1
+            failed_sources.append(source_id)
+            continue
+        except Exception as exc:
+            # An UNRELATED failure — a genuine bug in a chunking strategy, an
+            # I/O error — not a deliberate fail-closed abort. Round-2's catch
+            # was a bare `except RuntimeError`, which mislabeled such bugs as a
+            # "fail-closed config abort" and sent the operator debugging the
+            # wrong thing (PR #87 review round 3). Keep the batch resilient
+            # (one source's bug must not kill the sweep) but report it honestly,
+            # with a traceback, and still exit non-zero.
+            logger.error(
+                f"[{source_id}] chunking FAILED with an unexpected error: {exc}",
+                exc_info=True,
             )
             failed += 1
             failed_sources.append(source_id)
@@ -542,7 +562,7 @@ def main() -> None:
                   f"({s['total_tokens']} tokens total, avg {s['avg_tokens']}/chunk)")
     print(f"\nDone: {ok} chunked, {skipped} skipped, {failed} failed")
     if failed:
-        print(f"FAILED (fail-closed config abort): {', '.join(failed_sources)}")
+        print(f"FAILED: {', '.join(failed_sources)}")
         sys.exit(1)
 
 
