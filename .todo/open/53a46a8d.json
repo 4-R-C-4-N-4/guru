@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:10:04.630Z",
-  "updated_at": "2026-08-21T12:00:10.212Z",
+  "updated_at": "2026-08-21T12:03:40.084Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -50,6 +50,16 @@
       "type": "conclusion",
       "content": "Guru-dev review disproves the format-mismatch premise. staged_tags.concept_id is intentionally the bare taxonomy key; the live graph namespace is added only at the human apply boundary. Both apply implementations explicitly construct concept.<concept_id>: scripts/review_tags.py promote_to_expresses (lines 90-123) and guru-review/server/src/apply.ts applyTagAction (lines 82-94). docs/concept-hierarchy/design.md line 32 also specifies that staged_tags keeps existing snake_case IDs. Live DB verification: 30,294 of 30,349 accepted staged tags already have the corresponding EXPRESSES edge at target_id='concept.'||staged_tags.concept_id. Therefore changing tagger output to prefixed IDs would double-prefix applies as concept.concept.<id>, break definition/family lookups, and split dedupe/provenance keys. The 55 accepted rows without an edge are a separate consistency issue and should be investigated independently; they are not evidence that bare staging IDs fail promotion. No tagger/prompt fix should be made.",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-21T12:03:40.084Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "GURU-DEV REFUTED (2026-08-21): The ticket's premise is incorrect.\n\nThe concept ID format mismatch is NOT a bug. Per docs/concept-hierarchy/design.md:32 and confirmed by live DB verification:\n- staged_tags.concept_id intentionally stores bare taxonomy keys\n- Both human-apply implementations (scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94) add the 'concept.' namespace at apply time\n- Prefixing tagger output would create malformed 'concept.concept.<id>' nodes and break deduplication\n\nLive DB verification:\n- 30,349 accepted tags use bare IDs — all but 55 have matching EXPRESSES edges\n- Coverage: 30,294/30,349 = 99.9%\n- 0 of 71,421 tags use prefixed IDs (by design — prefixing happens at apply)\n\nREAL BUG FOUND: 55 accepted tags are missing EXPRESSES edges. ALL 55 have a rejected sibling for the same (chunk, concept) pair from a different model. The reject action deletes the shared edge unconditionally, even when another accepted provenance row still supports it.\n\nExample: buddhism.diamond-sutra.003 → unity_of_being: one model accepted (Qwen3.5), one model rejected (qwen-3-4b-guru). The reject deleted the edge that the accepted tag still needs.\n\nThis is an apply-path defect in the reject→edge-deletion logic. Recommended tracking as a separate ticket. The concept ID format mismatch (53a46a8d) should be closed as 'not a bug' — the design is intentional and working correctly.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
     }
   ]
 }
