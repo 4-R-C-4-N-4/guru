@@ -8,8 +8,8 @@
     "cq-intake",
     "edge-deletion",
     "apply-path",
-    "guru-dev",
-    "status/resolved"
+    "status/resolved",
+    "corpus-quality-fix-applied"
   ],
   "created_at": "2026-08-21T12:04:03.070860+00:00",
   "source": "corpus-quality",
@@ -18,7 +18,7 @@
       {
         "type": "evidence",
         "confidence": "high",
-        "content": "Discovered while auditing 53a46a8d (concept ID format mismatch). The premise of 53a46a8d was incorrect — bare IDs in staged_tags are BY DESIGN (apply-time prefixing per docs/concept-hierarchy/design.md:32 and confirmed by scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94). Live DB verification: 30,294 of 30,349 accepted tags have matching EXPRESSES edges (99.9% coverage)."
+        "content": "Discovered while auditing 53a46a8d (concept ID format mismatch). The premise of 53a46a8d was incorrect \u2014 bare IDs in staged_tags are BY DESIGN (apply-time prefixing per docs/concept-hierarchy/design.md:32 and confirmed by scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94). Live DB verification: 30,294 of 30,349 accepted tags have matching EXPRESSES edges (99.9% coverage)."
       },
       {
         "type": "evidence",
