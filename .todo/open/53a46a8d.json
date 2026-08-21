@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:10:04.630Z",
-  "updated_at": "2026-08-21T11:57:03.747Z",
+  "updated_at": "2026-08-21T12:00:10.212Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -43,6 +43,13 @@
       "supporting_evidence": [
         0
       ]
+    },
+    {
+      "timestamp": "2026-08-21T12:00:10.212Z",
+      "author": "guru-dev",
+      "type": "conclusion",
+      "content": "Guru-dev review disproves the format-mismatch premise. staged_tags.concept_id is intentionally the bare taxonomy key; the live graph namespace is added only at the human apply boundary. Both apply implementations explicitly construct concept.<concept_id>: scripts/review_tags.py promote_to_expresses (lines 90-123) and guru-review/server/src/apply.ts applyTagAction (lines 82-94). docs/concept-hierarchy/design.md line 32 also specifies that staged_tags keeps existing snake_case IDs. Live DB verification: 30,294 of 30,349 accepted staged tags already have the corresponding EXPRESSES edge at target_id='concept.'||staged_tags.concept_id. Therefore changing tagger output to prefixed IDs would double-prefix applies as concept.concept.<id>, break definition/family lookups, and split dedupe/provenance keys. The 55 accepted rows without an edge are a separate consistency issue and should be investigated independently; they are not evidence that bare staging IDs fail promotion. No tagger/prompt fix should be made.",
+      "confidence": "high"
     }
   ]
 }

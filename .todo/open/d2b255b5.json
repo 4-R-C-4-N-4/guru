@@ -7,12 +7,13 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:09:48.830Z",
-  "updated_at": "2026-08-20T23:07:11.833Z",
+  "updated_at": "2026-08-21T12:00:31.722Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
     "duplicates",
-    "egyptian"
+    "egyptian",
+    "status/by-design"
   ],
   "relationships": {
     "parent": "a3db4346",
@@ -33,6 +34,16 @@
       "author": "corpus-quality",
       "type": "evidence",
       "content": "VERIFIED: 38 duplicate body pairs in corpus/egyptian/egyptian-book-of-the-dead-index/chunks/ (not 39 — ticket slightly overstated).\n\nEach pair is 2 chunk IDs with byte-identical [content].body. Examples:\n- 330.toml == 095.toml: 'Chapter 43 (part 91)'\n- 297.toml == 061.toml: 'Chapter 43 (part 58)'\n- 096.toml == 331.toml: 'Chapter 10 (part 11)'\n\nThese are INTRA-text duplicates (same text, different chunk IDs). Source: Budge index repetition — the index volume contains repeated entries for the same chapter.\n\nAction: these are pure data duplicates. One of each pair should be dropped. But which is the 'right' one — requires checking the indexing/metadata. The chunks are sequential numbers that jump (031→095, 268→290, etc.) suggesting these are separate index entries that happen to use the same text.\n\nRecommendation: review against source to determine if they're intentional cross-references (keep both) or genuine duplicates (drop one). If drops, need a re-chunk + remap (Driver) + tag/edge orphan cleanup (corpus-quality).",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    },
+    {
+      "timestamp": "2026-08-21T12:00:28.034Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "content": "INVESTIGATION COMPLETE — the 38 duplicate body pairs are NOT errors.\n\nPattern: Every duplicate pair consists of:\n- One chunk labeled 'Chapter N (part M)' (the original chapter location)\n- One chunk labeled 'Chapter 43 (part X)' (the index cross-reference)\n\nChapter 43 is the Budge index's master cross-reference chapter — it lists each entry with its full text, pointing back to the original chapter. The byte-identical bodies are intentional: the index reproduces the entry text at both locations for citation-addressability.\n\nExamples:\n- Chunk 031 'Chapter 4 (part 28)' == Chunk 268 'Chapter 43 (part 29)'\n- Chunk 054 'Chapter 6 (part 10)' == Chunk 290 'Chapter 43 (part 51)'\n- Chunk 033 'Chapter 4 (part 30)' == Chunk 270 'Chapter 43 (part 31)'\n\nBoth chunk IDs are valid citation addresses — a reader citing 'Chapter 43, part 29' of the Budge index must land on the same text. Dropping either half would break addressability.\n\n157 accepted tags + 663 edges across these chunks represent legitimate annotations on BOTH locations of the index entries. This is a corpus DESIGN feature, not a defect.\n\nNo action needed — close as 'by design'. The ticket's 'byte-identical' framing was technically correct but missed the indexing context.",
       "confidence": "high",
       "supporting_evidence": [
         0
