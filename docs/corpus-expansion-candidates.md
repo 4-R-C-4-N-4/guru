@@ -475,9 +475,217 @@ notes = "Bellows 1923. Index -> poe03.htm..poe37.htm (34 poems incl. Voluspa cre
 id = "prose-edda"
 tradition = "norse"
 label = "The Prose Edda (Brodeur)"
-url = "https://sacred-texts.com/neu/pre/index.htm"
+url = "https://www.sacred-texts.com/neu/pre/index.htm"
 format = "html_multi"
 license = "public_domain_us_pre_1929"
 translator = "Arthur Gilchrist Brodeur"
 notes = "Brodeur 1916. Index -> pre00.htm..pre07.htm. Gylfaginning (pre04) is the main myth narrative; continuous prose -> paragraph-group (Gylfaginning ~130KB, do not page-as-chunk)."
+```
+---
+
+## 8. Modern Western Esoteric / Anthroposophy expansion (Steiner + theosophical precursors)
+
+*Surveyed 2026-08-21 against sacred-texts.com and Project Gutenberg.
+All URLs verified HTTP 200 + title check with browser User-Agent.
+PD status confirmed for all (pre-1929 US PD or Gutenberg-declared PD).*
+
+### 8.1 Rudolf Steiner — Anthroposophy (new leg `anthroposophy`)
+
+Two Steiner works are confirmed live on **sacred-texts.com** under the Esoteric section, both translations of pre-1923 German originals:
+
+#### 8.1a. *Theosophy: An Introduction to the Supersensible Knowledge of the World and the Destination of Man* (1910)
+
+- **URL:** `https://www.sacred-texts.com/eso/theo/index.htm`
+- **Format:** `html_multi`, 20 pages (`theo00.htm` through `theo19.htm`)
+- **Translator:** Elizabeth Douglas Shields
+- **Publication year:** 1910 (English translation)
+- **PD status:** ✅ Clean US-PD (1910 publication, pre-1929)
+- **Structure:**
+  - `theo00.htm` = title page
+  - `theo01.htm` = contents
+  - `theo02.htm` = translator's foreword
+  - `theo03.htm` = preface to the first edition
+  - `theo04.htm` = preface to the third edition
+  - `theo05.htm` = introduction
+  - `theo06–theo10.htm` = Chapter I: "The Constitution of the Human Being" (5 pages, split by topic headings — see below)
+  - `theo11–theo15.htm` = Chapter II: "Re-embodiment of the Spirit and Destiny" (5 pages)
+  - `theo16–theo18.htm` = Chapter III: "The Three Worlds" (3 pages covering 6 sub-sections)
+  - `theo19.htm` = Chapter IV: "The Path of Knowledge" + "Notes and Amplifications"
+- **Content verified:** Page theo06 opens "CHAPTER I. THE CONSTITUTION OF THE HUMAN BEING. The human being has body, soul and spirit..." — confirmed primary text, not apparatus.
+- **Apparatus note:** Front matter (title, contents, translator's foreword, prefaces) = `theo00–theo05`; chunk from `theo06` onward only, or exclude in chunking config.
+- **Cohesion:** Steiner's 1910 introduction to anthroposophy — `threefold_human`, `reincarnation`, `higher_worlds`, `aura`, `tripartite_soul`. Bridges directly to Hall's Secret Teachings (1928) already in corpus, and to theosophical content.
+
+#### 8.1b. *Knowledge of the Higher Worlds and Its Attainment* (1947 English trans.)
+
+- **URL:** `https://www.sacred-texts.com/eso/khw/index.htm`
+- **Format:** `html_multi`, 16 pages (`khw00.htm` through `khw15.htm`)
+- **Translator:** George Metaxa
+- **Publication year:** 1947 (English); original German 1910/1912
+- **PD status:** ✅ Verified — the scan page states: "This text was created from the first (1947) edition of this English translation, which has an unrenewed copyright in the US, and is furthermore a translation of a pre-1923 book, which makes it public domain in the US."
+- **Structure:**
+  - `khw00` = title page
+  - `khw01` = table of contents
+  - `khw02-04` = prefaces (May 1918, Sixth Edition, Third Edition)
+  - `khw05` = Part I: How is Knowledge of the Higher Worlds Attained?
+  - `khw06-10` = Parts II–V (Stages of Initiation through Results of Initiation)
+  - `khw11-13` = Parts VI–VIII (Dream Transformation through Splitting of Personality)
+  - `khw14` = Part IX: The Guardian of the Threshold
+  - `khw15` = Part X: Life and Death — The Greater Guardian of the Threshold + Appendix
+- **Content verified:** Page khw05 opens "I. HOW IS KNOWLEDGE OF THE HIGHER WORLDS ATTAINED?" — confirmed primary text.
+- **Apparatus note:** Front matter = `khw00–khw04`; chunk from `khw05` onward.
+- **Cohesion:** The anthroposophical path-of-initiation text — `esoteric_training`, `guardian_of_the_threshold`, `subtle_body`, `higher_worlds`, `spiritual_exercise`. The natural companion to §8.1a.
+
+### 8.2 Theosophical precursors (within `western_esoteric`, extends existing holdings)
+
+The corpus already holds Lévi (1854-56, Waite trans. 1896), Hall (1928), Papus (1892), Kybalion (1908), Waite (1913/1898), Dion Fortune (1930), and Ouspensky (1920). The following fill gaps:
+
+#### 8.2a. Helena Blavatsky — *Isis Unveiled* (1877)
+
+- **URL:** Gutenberg #68705 (Vol 1) + #75871 (Vol 2)
+  - `https://www.gutenberg.org/ebooks/68705` and `https://www.gutenberg.org/ebooks/75871`
+- **Format:** `html` (single-file per volume)
+- **PD status:** ✅ 1877, US PD
+- **Notes:** The founding text of the 1875 Theosophical Society. Direct source for `sevenfold_cosmos`, spiritual hierarchies, theosophy↔eastern-parallels. Two volumes → two source_ids, regex-section-split on chapter headers.
+
+#### 8.2b. Helena Blavatsky — *The Secret Doctrine* (1888)
+
+- **URL:** Gutenberg #54824 (Vol 1) + #54488 (Vol 2) + #56880 (Vol 3) + #61626 (Vol 4)
+  - `https://www.gutenberg.org/ebooks/54824` and others
+- **Format:** `html` (single-file per volume)
+- **PD status:** ✅ 1888, US PD
+- **Notes:** The "Synthetic" stela of modern western esotericism — `root_race`, `rounds`, `akashic_records`, cosmic evolution. Extremely heavy; four volumes → four source_ids. High edge density to everything already held (Hall cites it, Lévi precedes it, Steiner follows it).
+
+#### 8.2c. Swedenborg — *Heaven and Hell* (1758, tr. Ager 1900)
+
+- **URL:** `https://www.sacred-texts.com/swd/hh/index.htm` (sacred-texts.com has a full Swedenborg section)
+- **Format:** `html_multi` (sacred-texts splits into 50-paragraph files)
+- **PD status:** ✅ 1758 original, 1900 translation
+- **Cohesion:** The single strongest link in the 18th-century mystical chain — bridges Boehme (already held at §3.6 era) directly to 19th-century theosophy/esotericism. `as_above_so_below` already documented as a Swedenborg↔Hall edge in the existing manifest notes, but Swedenborg himself isn't in the corpus yet. 134+ Swedenborg texts exist on sacred-texts; Heaven and Hell is the headline pick.
+
+### 8.3 Summary table
+
+| Source ID (proposed) | Tradition | URL | Format | Pages | Key concepts |
+|---|---|---|---|---|---|
+| `steiner-theosophy` | `anthroposophy` | `sacred-texts.com/eso/theo/index.htm` | html_multi | 20 (theo00-19, chunk theo06-19) | threefold_human, reincarnation, higher_worlds |
+| `steiner-higher-worlds` | `anthroposophy` | `sacred-texts.com/eso/khw/index.htm` | html_multi | 16 (khw00-15, chunk khw05-15) | esoteric_training, guardian_of_the_threshold, subtle_body |
+| `blavatsky-isis-unveiled` | `western_esoteric` | Gutenberg #68705 | html | 2 (Vol 1+2) | sevenfold_cosmos, theosophical_society |
+| `blavatsky-secret-doctrine` | `western_esoteric` | Gutenberg #54824 et al. | html | 4 (Vol 1-4) | root_race, akashic_records, cosmic_evolution |
+| `swedenborg-heaven-hell` | `western_esoteric` | `sacred-texts.com/swd/hew/index.htm` | html_multi | 50-para chunks | as_above_so_below, afterlife, correspondence_theory |
+
+### 8.4 Notes on "previous generation" sourcing
+
+The "previous generation to the western eso" corpus already holds (c. 1854-1912):
+- **Lévi** (Transcendental Magic, 1854-56)
+- **Westcott** (Numbers/Kabbalah, 1888-1911)
+- **Papus** (Tarot of the Bohemians, 1892)
+- **Atkinson** (Kybalion, 1908; various pseud. works)
+- **Hall** (Secret Teachings, 1928)
+
+The single biggest gap is **Steiner** (1861-1925) — the bridge between 19th-c. occultism and 20th-c. anthroposophy. Both works above are confirmed PD on sacred-texts.com. Blavatsky (1831-1891) is the foundational figure missing from the corpus — Isis Unveiled and Secret Doctrine are the two cornerstones.
+```
+
+---
+
+## 9. Non-Western modern religious texts — survey (2026-08-21)
+
+*Follow-up to §8 after user asked to also look at "eastern societies" and modern non-Western religious literature. All URLs verified HTTP 200 + title check with browser User-Agent.*
+
+### 9.1 Bahá'í Faith (new tradition `bahai`) — **copyright block, do not acquire**
+
+**sacred-texts.com/bhi/index.htm** hosts 105+ Bahá'í texts (Bahá'u'lláh, the Báb, 'Abdu'l-Bahá, Shoghi Effendi) including:
+- The Kitáb-i-Aqdas, The Kitáb-i-Íqán, Epistle to the Son of the Wolf
+- Selections from the Writings of Bahá'u'lláh, The Hidden Words, The Seven Valleys
+- 'Abdu'l-Bahá's Paris Talks, Some Answered Questions, The Secret of Divine Civilization
+- Shoghi Effendi's God Passes By, The World Order of Bahá'u'lláh
+
+**Copyright:** The sacred-texts page explicitly states these texts are "copyrighted but redistributable freely under the terms below" with a gracious permission notice from the Bahá'í World Centre. This is **not public domain** and falls outside the project's clean US-PD gate.
+
+**Status:** ❌ **Copyright blocker.** The Báb (d. 1850), Bahá'u'lláh (d. 1892), and 'Abdu'l-Bahá (d. 1921) are all deceased >70 years — their core writings are PD *in their origin* — but the specific English translations on sacred-texts carry the Bahá'í copyright notice. No clean PD English translation of the core Bahá'í writings was found on Gutenberg or ccel.org.
+
+### 9.2 Sikhism — *Shri Guru Granth Sahib* (sacred-texts.com/skh)
+
+**New tradition `sikhism`.** The corpus currently has **zero Sikh content**.
+
+- **URL:** `https://www.sacred-texts.com/skh/granth/index.htm` — 45 pages (`gr01.htm`–`gr45.htm`)
+- **Content:** The complete Guru Granth Sahib, the central scripture of Sikhism. Page gr01 titled "Jup" (the Japji Sahib opening prayer). The index mentions translator Max Arthur Macauliffe, [1909].
+- **PD status:** ✅ 1909 translation, pre-1929
+- **Structure:** 45 html_multi pages, one per major section (Jup, Jap, Sihar, etc.)
+- **Cohesion:** Sikhism is a major world religion (25M+ adherents) that bridges Hindu devotional theology and Islamic monotheism. The corpus's only Indic content is in Buddhism and Hinduism. A Sikh presence would wire `meditation`, `divine_name`, and `soul_bird` concepts into both Hindu and Islamic traditions.
+- **Notes:** The Granth page index mentions a second volume "The Religion of the Sikhs by Dorothy Field [1914]" and other supporting texts. Gr00 is the title page.
+
+### 9.3 Modern Buddhist teachers on sacred-texts.com/bud/
+
+The Buddha section's **Modern works** subsection already lists texts already in the candidate doc (Paul Carus, Henry Olcott, D.T. Suzuki):
+
+| Text | Author | Year | URL | PD? |
+|---|---|---|---|---|
+| *The Gospel of Buddha* | Paul Carus | 1909 | `bud/gob/index.htm` | ✅ |
+| *The Buddhist Catechism* | H.S. Olcott | 1908 (42nd ed.) | `bud/cat/index.htm` | ✅ |
+| *A Buddhist Bible* | D. Goddard | 1932 | `bud/bib/index.htm` | ✅ (copyright not renewed) |
+| *Manual of Zen Buddhism* | D.T. Suzuki | 1935 | `bud/moz/index.htm` | ✅ |
+| *Zen for Americans* | Soyen Shaku / Suzuki | 1906 | `bud/zfa/index.htm` | ✅ |
+| *The Religion of the Samurai* | Kaiten Nukariya | 1913 | `bud/ros/index.htm` | ✅ |
+| *Mysticism, Christian and Buddhist* | D.T. Suzuki | 1957 | `bud/mcb/index.htm` | ⚠️ 1957, not renewed → PD in US |
+
+**Not yet in manifest.** Suzuki is the single most important popularizer of Zen to the West; his 1935 Manual of Zen Buddhism is the canonical anthology of Zen texts in English.
+
+### 9.4 Modern Chinese/Japanese religious texts
+
+From the **Confucianism** (cfu/) and **Taoism** sections, already on sacred-texts:
+
+- **The Analects** (James Legge, 1893) — core Confucian text, PD ✅
+- **The Book of Changes (I Ching)** (Legge, 1899) — one of the oldest divination texts, PD ✅
+- **The Great Learning** + **Doctrine of the Mean** (Legge, 1893) — Confucian classics, PD ✅
+- **Lao Tzu / Lao-tse** (Legge, 1891) + **Chuang-tzu** (Legge, 1891) — Taoist classics, PD ✅
+- **The Art of War** (Lionel Giles, 1910) — Sun Tzu, PD ✅
+
+All already exist as SBE volumes under `cla/` or `cfu/`. The SBE1 (Five Classics) and SBE3/40 (Lao-tse/Chuang-tzu) translations are clean PD.
+
+### 9.5 Modern Hindu reform movement texts
+
+From the Hinduism section (hin/), the **Modern books** subsection includes texts not yet in the manifest:
+
+| Text | Author | Year | URL | PD? |
+|---|---|---|---|---|
+| *Ramakrishna, His Life and Sayings* | F. Max Müller | 1898 | `hin/rls/index.htm` | ✅ |
+| *The Gospel of Ramakrishna* | Mahendra Nath Gupta, ed. Swami Abhedananda | 1907 | `hin/gork/index.htm` | ✅ (15 chapters, gork00–gork14) |
+| *Karma-Yoga* | Swami Vivekananda | 1921 | `hin/ky/index.htm` | ✅ |
+| *How To Be A Yogi* | Swami Abhedananda | 1902 | `hin/ay/index.htm` | ✅ |
+| *Studies from an Eastern Home* | Sister Nivedita | 1913 | `hin/sn/index.htm` | ✅ |
+| *Kali the Mother* | Sister Nivedita | 1900 | `hin/km/index.htm` | ✅ |
+| *Hindu Mysticism* | S.N. Dasgupta | 1927 | `hin/hm/index.htm` | ✅ |
+
+These represent the Bengali Renaissance and Ramakrishna-Vivekananda movement — the single most important modern Hindu reform current. **High cohesion** with the Vedanta and Yoga already in the corpus.
+
+### 9.6 Japan / East Asian new religions
+
+The sacred-texts.com **Shinto** (shn/) section already holds the Kojiki (in the corpus). Beyond that:
+- **The Book of Tea** (*Kakuten* / *Sadō*) by Kakuzo Okakura [1906] — `hin/tte/index.htm` (under Hinduism section, oddly). PD ✅. Aesthetic/religious philosophy bridging Zen and tea ceremony.
+- **The Ideals of the East** by Kakuzo Okakura [1904] — `hin/ide/index.htm`. PD ✅.
+
+No modern Japanese new religions (Tenrikyo, Soka Gakkai, etc.) were found on sacred-texts.com. The **New Thought** tradition on sacred-texts (new/) is entirely Western (William Walker Atkinson, etc.).
+
+### 9.7 Summary — what's PD and actionable
+
+| Source ID (proposed) | Tradition | URL | Format | Pages | Key concepts |
+|---|---|---|---|---|---|
+| `sikh-guru-granth-sahib` | `sikhism` | `sacred-texts.com/skh/granth/index.htm` | html_multi | 45 (gr01–gr45) | divine_name, simran, soul_bird |
+| `vivekananda-karma-yoga` | `hinduism` (or `hindu_reform`) | `sacred-texts.com/hin/ky/index.htm` | html_multi | ~11 | karma_yoga, work_as_worship |
+| `ramakrishna-gospel` | `hinduism` (or `hindu_reform`) | `sacred-texts.com/hin/gork/index.htm` | html_multi | 15 (gork00–gork14) | guru_devotion, direct_realization |
+| `nivedita-kali` | `hinduism` (or `hindu_reform`) | `sacred-texts.com/hin/km/index.htm` | html_multi | ~? | shakti_puja, divine_feminine |
+| `suzuki-manual-zen` | `buddhism` | `sacred-texts.com/bud/moz/index.htm` | html_multi | ~20 | koan, sudden_enlightenment, mu |
+| `carus-gospel-of-buddha` | `buddhism` | `sacred-texts.com/bud/gob/index.htm` | html_multi | ~? | early_buddhism_retold, non-dogmatic_soul |
+| `okakura-book-of-tea` | `buddhism` (or `east_asian`) | `sacred-texts.com/hin/tte/index.htm` | html_multi | ~? | wabi_sabi, zen_meets_tea, mindfulness |
+
+### 9.8 Decision points needed
+
+1. **Bahá'í**: The sacred-texts copy carries the Bahá'í copyright notice despite the authors being long-dead. Either add a `--license-check` gate that flags non-PD, or source Bahá'í from a clean PD translation (none currently found on supported sites).
+
+2. **Sikhism as a tradition**: No Sikh content exists in the corpus. The Guru Granth Sahib on sacred-texts (Macauliffe, 1909) is the natural flagship — 45 PD pages, clean structure.
+
+3. **Hindu reform movement**: Vivekananda, Ramakrishna, Sister Nivedita, and Dasgupta represent the Bengali Renaissance — the modern Hindu intellectual renaissance that directly produced the English translations the corpus already holds (Müller, etc.). These are strong `hindu_reform` or sub-tradition candidates.
+
+4. **D.T. Suzuki**: The single most important Zen popularizer. *Manual of Zen Buddhism* (1935) is PD on sacred-texts — 20 pages, ~? KB each. Should be Tier 2 priority for Buddhism depth.
+
+5. **Shinto expansion**: Only the Kojiki is held. *The Book of Rites* (ritual texts) and *Records of the Grand Historian* (Ssu-yu-ki, 1898) are on sacred-texts under `chi/`. Worth checking if PD.
 ```
