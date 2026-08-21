@@ -295,13 +295,23 @@ def edges_conn():
     c.executescript(
         "CREATE TABLE edges (source_id TEXT, target_id TEXT, type TEXT, "
         "tier TEXT, justification TEXT);"
+        "CREATE TABLE staged_tags (chunk_id TEXT, concept_id TEXT, "
+        "score INTEGER, status TEXT);"
     )
     c.executescript(
         "INSERT INTO edges VALUES "
         "('c1','concept.x','EXPRESSES','verified','e'),"
+        "('c2','concept.x','EXPRESSES','verified','e-unstaged'),"
         "('t1','t2','BELONGS_TO','inferred','b'),"
         "('c1','c2','PARALLELS','verified','should not appear'),"
         "('c1','c3','CONTRASTS','verified','should not appear');"
+        # c1/x: two accepted rows (two models) -> MAX wins; a rejected 3 and a
+        # pending 3 must not leak in. c2/x has no staged row -> weight NULL.
+        "INSERT INTO staged_tags VALUES "
+        "('c1','x',2,'accepted'),"
+        "('c1','x',1,'accepted'),"
+        "('c1','x',3,'rejected'),"
+        "('c1','x',3,'pending');"
     )
     c.commit()
     yield c
@@ -312,7 +322,17 @@ def test_load_edges_excludes_parallels_and_contrasts(edges_conn):
     rows = export.load_edges(edges_conn)
     types = {r["edge_type"] for r in rows}
     assert types == {"EXPRESSES", "BELONGS_TO"}
-    assert len(rows) == 2
+    assert len(rows) == 3
+
+
+def test_load_edges_expresses_weight_from_accepted_staged_score(edges_conn):
+    """todo:f6af90e8 — EXPRESSES weight = MAX accepted staged_tags score;
+    rejected/pending rows never contribute; unmatched rows and BELONGS_TO
+    stay NULL (partial coverage is the contract, not a defect)."""
+    rows = {(r["source"], r["edge_type"]): r["weight"] for r in export.load_edges(edges_conn)}
+    assert rows[("c1", "EXPRESSES")] == 2.0   # MAX(2,1); rejected/pending 3s excluded
+    assert rows[("c2", "EXPRESSES")] is None  # no accepted staged row
+    assert rows[("t1", "BELONGS_TO")] is None
 
 
 def test_load_edges_row_shape_matches_corpus_edges_columns(edges_conn):

@@ -393,19 +393,36 @@ def load_edges(conn: sqlite3.Connection) -> list[dict]:
     the derived-parallels artifact (load_derived_parallels) and CONTRASTS
     from the frozen snapshot (load_frozen_contrasts). Live rows of those
     two types (if any linger in guru.db, e.g. pre-freeze CONTRASTS or
-    staged-edge-promoted PARALLELS) are deliberately NOT read here."""
+    staged-edge-promoted PARALLELS) are deliberately NOT read here.
+
+    EXPRESSES weight (todo:f6af90e8, owner decision 2026-08-21): the accepted
+    staged_tags score (an INTEGER 1-3 — the tagging model's own strength
+    rating, kept through review) rides along as `weight`, MAX over accepted
+    rows when several models proposed the same pair. Coverage is deliberately
+    partial: rows with no surviving accepted staged row — chiefly the
+    Apr-May 2026 auto-promote residue — keep weight NULL, and no consumer may
+    treat NULL as 0. This is persistence, not ranking: the retriever half of
+    guru-web todo:9f401f76 stays eval-gated (the graph leg held ~1% of top-K
+    in the 2026-08-21 golden A/B). Other types (BELONGS_TO) stay NULL."""
     rows = []
     for r in conn.execute(
-        "SELECT source_id, target_id, type, tier, justification FROM edges "
-        "WHERE type NOT IN ('PARALLELS', 'CONTRASTS') "
-        "ORDER BY source_id, target_id, type"
+        "SELECT e.source_id, e.target_id, e.type, e.tier, e.justification, "
+        "       CASE WHEN e.type = 'EXPRESSES' THEN "
+        "         (SELECT MAX(st.score) FROM staged_tags st "
+        "           WHERE st.status = 'accepted' "
+        "             AND st.chunk_id = e.source_id "
+        "             AND 'concept.' || st.concept_id = e.target_id) "
+        "       END AS weight "
+        "FROM edges e "
+        "WHERE e.type NOT IN ('PARALLELS', 'CONTRASTS') "
+        "ORDER BY e.source_id, e.target_id, e.type"
     ):
         rows.append({
             "source": r[0],
             "target": r[1],
             "edge_type": r[2],
             "tier": r[3],
-            "weight": None,
+            "weight": float(r[5]) if r[5] is not None else None,
             "annotation": r[4],
         })
     return rows
