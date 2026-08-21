@@ -4,11 +4,11 @@
 # Ported from rellm tools/derived_parallels.py (docs/edges/derived-parallels-
 # proposal.md, todo:5620391a / parent c3f479ff — "retire Pass C: parallels
 # become a derived table"). Replaces LLM pair-classification with EXPRESSES
-# (every edge of that type, any tier — including the ~29% tier='proposed'
-# legacy auto-promoted residue frozen 2026-05-26; NOT restricted to
-# human-reviewed rows. See scripts/derive_parallels.py's module header and
-# todo:dd034dc4 for the tier-semantics question this deliberately
-# leaves open) x thin-student (concept, chunk) scores: a chunk's PARALLELS
+# (every edge of that type, any tier — including the ~26% tier='proposed'
+# legacy auto-promoted residue; NOT restricted to reviewed rows, and that is
+# settled: todo:dd034dc4 resolved tier as write-tool provenance, not
+# confidence — nothing filters or ranks on it) x thin-student
+# (concept, chunk) scores: a chunk's PARALLELS
 # partners are the top cross-tradition co-expressors of its concepts,
 # RANKED by the student's own score. No LLM call, no staged_edges review
 # queue.
@@ -122,22 +122,21 @@ per_work_cap = 2
 # the table here. It was duplicated once and the two copies drifted within a
 # day of each other (PR #71 review).
 #
-# If you retighten this, read summary.json's fan_in_cap_chunks_darkened —
+# If you retighten this, read the run summary's fan_in_cap_chunks_darkened
+# (derived_runs.summary_json since todo:675a76f8) —
 # any nonzero value means chunks fell out of the graph.
 max_fan_in = 400
 
 [export]
-# Consumed by scripts/export.py (todo:6da4f965). derive_parallels.py writes
-# each run to a fresh data/derived_parallels/<UTC timestamp>/ directory
-# (edges_derived.jsonl + summary.json); export.py does not take a run
-# directory on the command line — it picks the lexicographically latest
-# subdirectory of derived_dir (the timestamp format sorts correctly) and
-# uses that run's edges_derived.jsonl as the sole source of PARALLELS rows.
-derived_dir = "data/derived_parallels"
+# Consumed by scripts/export.py (todo:6da4f965). As of todo:675a76f8 runs
+# land in guru.db (derived_runs + derived_parallels tables, migration
+# v3_012), and export reads the latest run from there — the JSONL
+# run-directory artifact and its lexicographic-latest pick are retired.
+# Export also refuses a latest run that is PARTIAL (--limit-concepts).
 
-# Guardrail, not a correctness mechanism: if the latest run's summary.json
+# Guardrail, not a correctness mechanism: if the latest run's
 # `generated_at` is older than this many days, export.py refuses to run
-# rather than silently shipping a stale panel set. Bump derive_parallels.py
-# and re-run to clear it; there is no override flag by design — a stale
-# artifact should be regenerated, not waved through.
+# rather than silently shipping a stale panel set. Re-run
+# derive_parallels.py to clear it; there is no override flag by design — a
+# stale run should be regenerated, not waved through.
 max_age_days = 30

@@ -15,10 +15,12 @@ status` walks straight from 12-embed to this node. Node 16
 precondition — it has no `--text` flag and no `guru ingest status` gate, so
 it never blocks any one source from reaching this node. But publish itself
 is not independent of it: node 15's action is `scripts/export.py`, which
-refuses to run — loudly, via `SystemExit` — unless a derived-parallels run
-exists under `config[export].derived_dir` and is younger than
-`max_age_days` (default 30). Re-run node 16 before publishing if the last
-run has aged out; see that node's file for the trigger and the command.
+refuses to run — loudly, via `SystemExit` — unless a full (non-partial)
+derived-parallels run exists in `guru.db` (`derived_runs`/`derived_parallels`,
+migration v3_012 — todo:675a76f8 retired the JSONL run-directory artifact)
+and is younger than `max_age_days` (default 30). Re-run node 16 before
+publishing if the last run has aged out; see that node's file for the
+trigger and the command.
 
 ## Action
 

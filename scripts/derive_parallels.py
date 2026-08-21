@@ -19,25 +19,22 @@ discarded four-fifths of human-verified tag review with no correlation to
 correctness (see docs/ingest/16-derive-parallels.md's Failure modes).
 
 EXPRESSES input, precisely (PR #64 review finding 7): load_expresses()
-below reads every EXPRESSES edge in guru.db regardless of `tier` — it is
-NOT restricted to human-reviewed rows. As of this port, ~29% of that
-supply (11,057 of 38,457 EXPRESSES rows) is `tier='proposed'`, written by
-scripts/auto_promote.py's auto-promotion without per-row human review
-(that script was deleted 2026-08-14, todo:68028d8f; the rows remain)
-before that tool was retired 2026-05-26; the remainder is `tier='verified'`
-via node 11's review queue. Whether this generator should filter to
-`tier='verified'` is a live, deliberately unresolved question tracked at
-todo:dd034dc4 (the tier-semantics decision — is tier a confidence
-signal or a provenance timestamp?): if that ticket lands on "confidence
-signal," `load_expresses()`'s query needs `AND tier='verified'` added and
-this note updated; if it lands on "provenance only," this note should say
-so plainly instead of hedging. This script does not add a tier filter today.
+below reads every EXPRESSES edge in guru.db regardless of `tier`, and that
+is now settled, not a hedge: todo:dd034dc4 (owner decision 2026-08-21)
+resolved tier as WRITE-TOOL PROVENANCE, not confidence — no reviewer ever
+chose one, and nothing may filter or rank on it. This script therefore
+deliberately has no tier filter.
 
-Emits corpus-export edges shape (source, target, edge_type, tier, weight,
-annotation) — the same dict shape as scripts/export.py's load_edges() rows
-— as a JSONL file plus a summary.json. This script does NOT write guru.db:
-materializing a `derived_parallels` table is a separate future step (see
-the proposal's migration sketch); this ticket only ports the generator.
+Output (todo:675a76f8): two tables in guru.db, written directly —
+`derived_runs` (one summary row per run, full history) and
+`derived_parallels` (the latest run's edge rows, replaced wholesale per
+run inside one transaction). These are derived-cache tables in the same
+category as chunk_embeddings: regenerable, generator-owned, outside the
+staged_*/review/apply flow. Requires migration v3_012. Export reads the
+latest run from these tables (scripts/export.py load_derived_parallels)
+and refuses partial (--limit-concepts) runs, so a smoke run can no longer
+silently become the next export's source — the old JSONL run-directory
+artifact and its lexicographic-latest pick are gone.
 
 Scoring reuses guru.rerank.score_pairs (CPU-only cross-encoder scoring,
 already used for EDGE_RERANK at query time) rather than re-implementing
@@ -49,8 +46,7 @@ interrupted cold run doesn't lose everything) and, of course, across runs.
 
 Usage:
     python3 scripts/derive_parallels.py [--config config/derived_parallels.toml]
-        [--db data/guru.db] [--out data/derived_parallels/<timestamp>]
-        [--limit-concepts N] [--verbose]
+        [--db data/guru.db] [--limit-concepts N] [--verbose]
 """
 from __future__ import annotations
 
@@ -626,7 +622,47 @@ def cap_fan_in(
 
 # ── main ──────────────────────────────────────────────────────────────────
 
-def run(db_path: Path, config_path: Path, out_dir: Path,
+def persist_run(db_path: Path, rows: list[dict], summary: dict,
+                limit_concepts: int | None) -> int:
+    """Write one run into guru.db (todo:675a76f8): a derived_runs summary
+    row (history kept) and the derived_parallels edge rows (previous run's
+    rows replaced wholesale), one transaction. Returns the new run_id.
+
+    Fails loudly if migration v3_012 has not been applied — a generator
+    that silently wrote nowhere would let export ship a stale run."""
+    wconn = sqlite3.connect(db_path)
+    try:
+        have = {r[0] for r in wconn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name IN ('derived_runs','derived_parallels')")}
+        if have != {"derived_runs", "derived_parallels"}:
+            raise SystemExit(
+                f"{db_path} is missing the derived-parallels tables. Apply "
+                f"scripts/migrations/v3_012_derived_parallels.sql first."
+            )
+        with wconn:
+            cur = wconn.execute(
+                "INSERT INTO derived_runs "
+                "(generated_at, limit_concepts, edge_rows, summary_json) "
+                "VALUES (?, ?, ?, ?)",
+                (summary["generated_at"], limit_concepts, len(rows),
+                 json.dumps(summary)),
+            )
+            run_id = cur.lastrowid
+            wconn.execute("DELETE FROM derived_parallels")
+            wconn.executemany(
+                "INSERT INTO derived_parallels "
+                "(run_id, source, target, weight, annotation) "
+                "VALUES (?, ?, ?, ?, ?)",
+                [(run_id, r["source"], r["target"], r["weight"], r["annotation"])
+                 for r in rows],
+            )
+        return run_id
+    finally:
+        wconn.close()
+
+
+def run(db_path: Path, config_path: Path,
         limit_concepts: int | None = None) -> None:
     cfg = load_config(config_path)
     scoring_cfg = cfg["scoring"]
@@ -698,10 +734,6 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
               f"edges (raw max degree {max(deg_before.values())}); {chunks_reduced} "
               f"chunks lost at least one edge, {chunks_darkened} left with none")
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    with open(out_dir / "edges_derived.jsonl", "w") as f:
-        for r in rows:
-            f.write(json.dumps(r) + "\n")
 
     # Two different questions, deliberately two numbers rather than one
     # overloaded key. chunks_with_partners is a SELECTION statistic, counted
@@ -745,15 +777,18 @@ def run(db_path: Path, config_path: Path, out_dir: Path,
         "fan_in_cap_chunks_reduced": chunks_reduced,
         "fan_in_cap_chunks_darkened": chunks_darkened,
         "model_path": model_path,
+        # NULL for full runs; export refuses runs where this is set.
+        "limit_concepts": limit_concepts,
     }
-    with open(out_dir / "summary.json", "w") as f:
-        json.dump(summary, f, indent=2)
+    run_id = persist_run(db_path, rows, summary, limit_concepts)
 
     shipped = ("" if chunks_in_export == chunks_with_partners
                else f" ({chunks_in_export} appear in the export)")
-    print(f"wrote {out_dir}: {len(rows)} unique PARALLELS rows, "
+    partial = f" [PARTIAL --limit-concepts {limit_concepts}]" if limit_concepts else ""
+    print(f"wrote run {run_id} to {db_path} (derived_runs/derived_parallels): "
+          f"{len(rows)} unique PARALLELS rows, "
           f"{chunks_with_partners}/{len(bychunk)} chunks have partners{shipped} "
-          f"({elapsed:.1f}s scoring)")
+          f"({elapsed:.1f}s scoring){partial}")
 
 
 def main() -> None:
@@ -761,11 +796,10 @@ def main() -> None:
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--config", default=str(DEFAULT_CONFIG))
-    parser.add_argument("--out", default=None,
-                        help="output dir (default: data/derived_parallels/<UTC timestamp>)")
     parser.add_argument("--limit-concepts", type=int, default=None,
                         help="restrict to the first N concept ids (sorted) — "
-                             "for bounded smoke runs, not a production knob")
+                             "for bounded smoke runs; the run is recorded as "
+                             "partial and export refuses to ship it")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -775,12 +809,7 @@ def main() -> None:
         stream=sys.stderr,
     )
 
-    out_dir = Path(args.out) if args.out else (
-        PROJECT_ROOT / "data" / "derived_parallels"
-        / datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ")
-    )
-
-    run(db_path=Path(args.db), config_path=Path(args.config), out_dir=out_dir,
+    run(db_path=Path(args.db), config_path=Path(args.config),
         limit_concepts=args.limit_concepts)
 
 

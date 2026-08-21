@@ -44,30 +44,53 @@ import export  # noqa: E402
 
 # ── helpers ──────────────────────────────────────────────────────────────
 
-def _write_run(base_dir: Path, stamp: str, rows: list[dict], *,
-                generated_at: str | None = None) -> Path:
-    """Write one derive_parallels.py-shaped run directory."""
-    run_dir = base_dir / stamp
-    run_dir.mkdir(parents=True)
-    with open(run_dir / "edges_derived.jsonl", "w") as f:
-        for r in rows:
-            f.write(json.dumps(r) + "\n")
-    summary = {
-        "generated_at": generated_at or datetime.now(timezone.utc).isoformat(),
-        "unique_edge_rows": len(rows),
-    }
-    with open(run_dir / "summary.json", "w") as f:
-        json.dump(summary, f)
-    return run_dir
+MIGRATION_SQL = (PROJECT_ROOT / "scripts" / "migrations"
+                 / "v3_012_derived_parallels.sql").read_text()
 
 
-def _write_config(path: Path, derived_dir: Path, max_age_days: float = 30) -> None:
+def _make_db(tmp_path: Path) -> Path:
+    """A guru.db stand-in with the v3_012 tables — created from the real
+    migration file, so these tests validate the shipped DDL."""
+    db = tmp_path / "guru.db"
+    conn = sqlite3.connect(db)
+    conn.executescript(MIGRATION_SQL)
+    conn.commit()
+    conn.close()
+    return db
+
+
+def _insert_run(db: Path, rows: list[dict], *,
+                generated_at: str | None = None,
+                limit_concepts: int | None = None) -> int:
+    conn = sqlite3.connect(db)
+    with conn:
+        cur = conn.execute(
+            "INSERT INTO derived_runs (generated_at, limit_concepts, edge_rows, summary_json) "
+            "VALUES (?, ?, ?, ?)",
+            (generated_at or datetime.now(timezone.utc).isoformat(),
+             limit_concepts, len(rows), json.dumps({"unique_edge_rows": len(rows)})),
+        )
+        run_id = cur.lastrowid
+        conn.execute("DELETE FROM derived_parallels")
+        conn.executemany(
+            "INSERT INTO derived_parallels (run_id, source, target, weight, annotation) "
+            "VALUES (?, ?, ?, ?, ?)",
+            [(run_id, r["source"], r["target"], r["weight"], r["annotation"]) for r in rows],
+        )
+    conn.close()
+    return run_id
+
+
+def _open(db: Path) -> sqlite3.Connection:
+    return sqlite3.connect(db)
+
+
+def _write_config(path: Path, max_age_days: float = 30) -> None:
     path.write_text(
         f'[scoring]\ntop_k = 5\n'
         f'model_path = "x"\nscore_cache = "x"\n'
         f'[panels]\nper_work_cap = 2\n'
-        f'[export]\nderived_dir = "{derived_dir.as_posix()}"\n'
-        f'max_age_days = {max_age_days}\n'
+        f'[export]\nmax_age_days = {max_age_days}\n'
     )
 
 
@@ -78,133 +101,112 @@ _SAMPLE_ROW = {
 }
 
 
-# ── load_derived_parallels ─────────────────────────────────────────────
+# ── load_derived_parallels (guru.db tables, todo:675a76f8) ─────────────
 
 def test_load_derived_parallels_happy_path(tmp_path):
-    base = tmp_path / "derived_parallels"
-    _write_run(base, "2026-01-01T00-00-00Z", [_SAMPLE_ROW])
+    db = _make_db(tmp_path)
+    _insert_run(db, [_SAMPLE_ROW])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
-    rows = export.load_derived_parallels(config_path=cfg)
+    rows = export.load_derived_parallels(_open(db), config_path=cfg)
+    # edge_type/tier are reconstructed constants, not stored columns.
     assert rows == [_SAMPLE_ROW]
 
 
-def test_load_derived_parallels_picks_lexicographically_latest_run(tmp_path):
-    base = tmp_path / "derived_parallels"
-    older = dict(_SAMPLE_ROW, source="older.chunk")
-    newer = dict(_SAMPLE_ROW, source="newer.chunk")
-    _write_run(base, "2026-01-01T00-00-00Z", [older])
-    _write_run(base, "2026-06-01T00-00-00Z", [newer])
+def test_load_derived_parallels_reads_latest_run(tmp_path):
+    db = _make_db(tmp_path)
+    _insert_run(db, [dict(_SAMPLE_ROW, source="older.chunk")])
+    _insert_run(db, [dict(_SAMPLE_ROW, source="newer.chunk")])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
-    rows = export.load_derived_parallels(config_path=cfg)
-    assert rows == [newer]
+    rows = export.load_derived_parallels(_open(db), config_path=cfg)
+    assert [r["source"] for r in rows] == ["newer.chunk"]
 
 
-def test_load_derived_parallels_missing_base_dir_fails_loudly(tmp_path):
+def test_load_derived_parallels_missing_tables_fails_loudly(tmp_path):
+    db = tmp_path / "bare.db"
+    sqlite3.connect(db).close()
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, tmp_path / "does_not_exist")
+    _write_config(cfg)
 
-    with pytest.raises(SystemExit, match="does not exist"):
-        export.load_derived_parallels(config_path=cfg)
+    with pytest.raises(SystemExit, match="derived-parallels tables"):
+        export.load_derived_parallels(_open(db), config_path=cfg)
 
 
 def test_load_derived_parallels_no_runs_fails_loudly(tmp_path):
-    base = tmp_path / "derived_parallels"
-    base.mkdir()
+    db = _make_db(tmp_path)
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
-    with pytest.raises(SystemExit, match="No derived-parallels run found"):
-        export.load_derived_parallels(config_path=cfg)
+    with pytest.raises(SystemExit, match="No derived-parallels run"):
+        export.load_derived_parallels(_open(db), config_path=cfg)
 
 
-def test_load_derived_parallels_incomplete_run_dir_is_skipped(tmp_path):
-    """A run dir missing summary.json (crashed mid-write) must not be
-    picked — it should be invisible, not silently loaded half-written."""
-    base = tmp_path / "derived_parallels"
-    run_dir = base / "2026-01-01T00-00-00Z"
-    run_dir.mkdir(parents=True)
-    (run_dir / "edges_derived.jsonl").write_text(json.dumps(_SAMPLE_ROW) + "\n")
-    # no summary.json written
+def test_load_derived_parallels_partial_run_fails_loudly(tmp_path):
+    """The smoke-run trap, now enforced: a --limit-concepts run can no
+    longer silently become the export's source (with the JSONL artifact it
+    could — a partial run in the default dir simply won the lexicographic
+    pick)."""
+    db = _make_db(tmp_path)
+    _insert_run(db, [_SAMPLE_ROW], limit_concepts=3)
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
-    with pytest.raises(SystemExit, match="No derived-parallels run found"):
-        export.load_derived_parallels(config_path=cfg)
+    with pytest.raises(SystemExit, match="PARTIAL"):
+        export.load_derived_parallels(_open(db), config_path=cfg)
 
 
 def test_load_derived_parallels_stale_fails_loudly(tmp_path):
-    base = tmp_path / "derived_parallels"
+    db = _make_db(tmp_path)
     stale_ts = (datetime.now(timezone.utc) - timedelta(days=40)).isoformat()
-    _write_run(base, "2026-01-01T00-00-00Z", [_SAMPLE_ROW], generated_at=stale_ts)
+    _insert_run(db, [_SAMPLE_ROW], generated_at=stale_ts)
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base, max_age_days=30)
+    _write_config(cfg, max_age_days=30)
 
     with pytest.raises(SystemExit, match="stale"):
-        export.load_derived_parallels(config_path=cfg)
+        export.load_derived_parallels(_open(db), config_path=cfg)
 
 
 def test_load_derived_parallels_empty_rows_fails_loudly(tmp_path):
-    base = tmp_path / "derived_parallels"
-    _write_run(base, "2026-01-01T00-00-00Z", [])
+    db = _make_db(tmp_path)
+    _insert_run(db, [])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
     with pytest.raises(SystemExit, match="zero PARALLELS"):
-        export.load_derived_parallels(config_path=cfg)
-
-
-def test_load_derived_parallels_wrong_edge_type_fails_loudly(tmp_path):
-    base = tmp_path / "derived_parallels"
-    bad = dict(_SAMPLE_ROW, edge_type="CONTRASTS")
-    _write_run(base, "2026-01-01T00-00-00Z", [bad])
-    cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
-
-    with pytest.raises(SystemExit, match="expected 'PARALLELS'"):
-        export.load_derived_parallels(config_path=cfg)
-
-
-def test_load_derived_parallels_missing_field_fails_loudly(tmp_path):
-    base = tmp_path / "derived_parallels"
-    bad = {k: v for k, v in _SAMPLE_ROW.items() if k != "weight"}
-    _write_run(base, "2026-01-01T00-00-00Z", [bad])
-    cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
-
-    with pytest.raises(SystemExit, match="missing 'weight'"):
-        export.load_derived_parallels(config_path=cfg)
+        export.load_derived_parallels(_open(db), config_path=cfg)
 
 
 def test_load_derived_parallels_missing_config_fails_loudly(tmp_path):
+    db = _make_db(tmp_path)
     with pytest.raises(SystemExit, match="not found"):
-        export.load_derived_parallels(config_path=tmp_path / "nope.toml")
+        export.load_derived_parallels(_open(db), config_path=tmp_path / "nope.toml")
 
 
 def test_load_derived_parallels_orphan_endpoint_fails_loudly(tmp_path):
     """PR #64 review finding 2: a source/target that doesn't resolve to an
     exported chunk (e.g. a re-chunk shifted ids out from under a stale
     derived run) must SystemExit, not load silently."""
-    base = tmp_path / "derived_parallels"
-    _write_run(base, "2026-01-01T00-00-00Z", [_SAMPLE_ROW])
+    db = _make_db(tmp_path)
+    _insert_run(db, [_SAMPLE_ROW])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
     with pytest.raises(SystemExit, match="do not resolve to a chunk"):
-        export.load_derived_parallels(config_path=cfg, chunk_ids={"some.other.chunk"})
+        export.load_derived_parallels(_open(db), config_path=cfg,
+                                      chunk_ids={"some.other.chunk"})
 
 
 def test_load_derived_parallels_passes_when_endpoints_resolve(tmp_path):
-    base = tmp_path / "derived_parallels"
-    _write_run(base, "2026-01-01T00-00-00Z", [_SAMPLE_ROW])
+    db = _make_db(tmp_path)
+    _insert_run(db, [_SAMPLE_ROW])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
     rows = export.load_derived_parallels(
-        config_path=cfg,
+        _open(db), config_path=cfg,
         chunk_ids={_SAMPLE_ROW["source"], _SAMPLE_ROW["target"]},
     )
     assert rows == [_SAMPLE_ROW]
@@ -214,13 +216,57 @@ def test_load_derived_parallels_no_chunk_ids_skips_orphan_check(tmp_path):
     """chunk_ids=None (the default) skips the check entirely — used by
     callers (tests, ad hoc inspection) that aren't validating against a real
     exported chunk set. main() always passes the real set in production."""
-    base = tmp_path / "derived_parallels"
-    _write_run(base, "2026-01-01T00-00-00Z", [_SAMPLE_ROW])
+    db = _make_db(tmp_path)
+    _insert_run(db, [_SAMPLE_ROW])
     cfg = tmp_path / "derived_parallels.toml"
-    _write_config(cfg, base)
+    _write_config(cfg)
 
-    rows = export.load_derived_parallels(config_path=cfg)
+    rows = export.load_derived_parallels(_open(db), config_path=cfg)
     assert rows == [_SAMPLE_ROW]
+
+
+# ── persist_run (generator side, todo:675a76f8) ────────────────────────
+
+import derive_parallels  # noqa: E402
+
+
+def test_persist_run_writes_run_and_rows(tmp_path):
+    db = _make_db(tmp_path)
+    summary = {"generated_at": datetime.now(timezone.utc).isoformat()}
+    run_id = derive_parallels.persist_run(db, [_SAMPLE_ROW], summary, None)
+    conn = sqlite3.connect(db)
+    assert conn.execute("SELECT COUNT(*) FROM derived_runs").fetchone()[0] == 1
+    rows = conn.execute(
+        "SELECT run_id, source, target, weight, annotation FROM derived_parallels"
+    ).fetchall()
+    assert rows == [(run_id, _SAMPLE_ROW["source"], _SAMPLE_ROW["target"],
+                     _SAMPLE_ROW["weight"], _SAMPLE_ROW["annotation"])]
+    conn.close()
+
+
+def test_persist_run_replaces_rows_keeps_summary_history(tmp_path):
+    db = _make_db(tmp_path)
+    ga = datetime.now(timezone.utc).isoformat()
+    derive_parallels.persist_run(db, [_SAMPLE_ROW], {"generated_at": ga}, None)
+    r2 = derive_parallels.persist_run(
+        db, [dict(_SAMPLE_ROW, source="second.chunk")], {"generated_at": ga}, 3)
+    conn = sqlite3.connect(db)
+    assert conn.execute("SELECT COUNT(*) FROM derived_runs").fetchone()[0] == 2
+    rows = conn.execute("SELECT run_id, source FROM derived_parallels").fetchall()
+    assert rows == [(r2, "second.chunk")]
+    assert conn.execute(
+        "SELECT limit_concepts FROM derived_runs WHERE run_id = ?", (r2,)
+    ).fetchone()[0] == 3
+    conn.close()
+
+
+def test_persist_run_missing_tables_fails_loudly(tmp_path):
+    db = tmp_path / "bare.db"
+    sqlite3.connect(db).close()
+    with pytest.raises(SystemExit, match="derived-parallels tables"):
+        derive_parallels.persist_run(
+            db, [_SAMPLE_ROW],
+            {"generated_at": datetime.now(timezone.utc).isoformat()}, None)
 
 
 # ── load_frozen_contrasts ───────────────────────────────────────────────

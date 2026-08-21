@@ -288,3 +288,27 @@ CREATE TABLE IF NOT EXISTS family_aliases (
 
 CREATE INDEX IF NOT EXISTS idx_family_aliases_alias
     ON family_aliases(alias);
+
+-- ── derived parallels (v3_012, todo:675a76f8) ─────────────────────────
+-- Derived-cache tables written directly by scripts/derive_parallels.py —
+-- same category as chunk_embeddings, not part of the staged_*/review flow.
+-- derived_runs keeps every run's summary; derived_parallels holds the
+-- LATEST run's edge rows only (replaced wholesale per run).
+CREATE TABLE IF NOT EXISTS derived_runs (
+    run_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    generated_at   TEXT NOT NULL,
+    limit_concepts INTEGER,            -- NULL = full run; export refuses partial runs
+    edge_rows      INTEGER NOT NULL,
+    summary_json   TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS derived_parallels (
+    run_id     INTEGER NOT NULL REFERENCES derived_runs(run_id),
+    source     TEXT NOT NULL,
+    target     TEXT NOT NULL,
+    weight     REAL NOT NULL,
+    annotation TEXT NOT NULL,
+    PRIMARY KEY (source, target)
+);
+
+CREATE INDEX IF NOT EXISTS idx_derived_parallels_target ON derived_parallels(target);
