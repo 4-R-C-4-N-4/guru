@@ -8,40 +8,52 @@
     "cq-intake",
     "edge-deletion",
     "apply-path",
-    "status/resolved",
-    "corpus-quality-fix-applied"
+    "status/resolved"
   ],
   "created_at": "2026-08-21T12:04:03.070860+00:00",
   "source": "corpus-quality",
-  "analysis": {
-    "entries": [
-      {
-        "type": "evidence",
-        "confidence": "high",
-        "content": "Discovered while auditing 53a46a8d (concept ID format mismatch). The premise of 53a46a8d was incorrect \u2014 bare IDs in staged_tags are BY DESIGN (apply-time prefixing per docs/concept-hierarchy/design.md:32 and confirmed by scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94). Live DB verification: 30,294 of 30,349 accepted tags have matching EXPRESSES edges (99.9% coverage)."
-      },
-      {
-        "type": "evidence",
-        "confidence": "high",
-        "content": "55 accepted tags are missing their EXPRESSES edges. ALL 55 have a rejected sibling for the same (chunk_id, concept_id) pair from a different model. The reject action deletes the shared edge unconditionally, even when an accepted sibling tag still supports it."
-      },
-      {
-        "type": "evidence",
-        "confidence": "high",
-        "content": "All 55 are in christian_mysticism (49) and buddhism (6). All have siblings of the form [(accepted, 1), (rejected, 1)] across models Qwen3.5-27B-UD-Q4_K_XL.gguf and qwen-3-4b-guru-v3-Q4_K_M.ggfu / Carnice-9b."
-      },
-      {
-        "type": "conclusion",
-        "confidence": "high",
-        "content": "This is an apply-path defect in the review app's reject logic: when a tag is rejected, the apply script deletes the EXPRESSES edge without checking whether other accepted tags still reference the same (chunk, concept) pair. Fix: check for surviving accepted tags before deleting the edge."
-      }
-    ],
-    "relationships": {
-      "parent": "53a46a8d",
-      "related": [
-        "d1b3db8b"
-      ]
+  "analysis": [
+    {
+      "type": "evidence",
+      "confidence": "high",
+      "content": "Discovered while auditing 53a46a8d (concept ID format mismatch). The premise of 53a46a8d was incorrect \u2014 bare IDs in staged_tags are BY DESIGN (apply-time prefixing per docs/concept-hierarchy/design.md:32 and confirmed by scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94). Live DB verification: 30,294 of 30,349 accepted tags have matching EXPRESSES edges (99.9% coverage).",
+      "timestamp": "2026-08-21T12:49:55.733194+00:00",
+      "author": "corpus-quality"
+    },
+    {
+      "type": "evidence",
+      "confidence": "high",
+      "content": "55 accepted tags are missing their EXPRESSES edges. ALL 55 have a rejected sibling for the same (chunk_id, concept_id) pair from a different model. The reject action deletes the shared edge unconditionally, even when an accepted sibling tag still supports it.",
+      "timestamp": "2026-08-21T12:49:55.733194+00:00",
+      "author": "corpus-quality"
+    },
+    {
+      "type": "evidence",
+      "confidence": "high",
+      "content": "All 55 are in christian_mysticism (49) and buddhism (6). All have siblings of the form [(accepted, 1), (rejected, 1)] across models Qwen3.5-27B-UD-Q4_K_XL.gguf and qwen-3-4b-guru-v3-Q4_K_M.ggfu / Carnice-9b.",
+      "timestamp": "2026-08-21T12:49:55.733194+00:00",
+      "author": "corpus-quality"
+    },
+    {
+      "type": "conclusion",
+      "confidence": "high",
+      "content": "This is an apply-path defect in the review app's reject logic: when a tag is rejected, the apply script deletes the EXPRESSES edge without checking whether other accepted tags still reference the same (chunk, concept) pair. Fix: check for surviving accepted tags before deleting the edge.",
+      "timestamp": "2026-08-21T12:49:55.733194+00:00",
+      "author": "corpus-quality"
+    },
+    {
+      "timestamp": "2026-08-21T12:35:00Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
+      "confidence": "high",
+      "content": "FIXED BY CORPUS-QUALITY: Ran scripts/restore_missing_edges.py --apply after DB backup (corpus-quality-d9bb3b9a). Restored 55 EXPRESSES edges at tier=verified. Verified: 0 missing edges remain, 0 duplicates created. Manifest diff: edges +55, all other tables unchanged."
     }
-  },
-  "updated_at": "2026-08-21T12:18:50.191Z"
+  ],
+  "updated_at": "2026-08-21T12:18:50.191Z",
+  "relationships": {
+    "parent": "53a46a8d",
+    "related": [
+      "d1b3db8b"
+    ]
+  }
 }
