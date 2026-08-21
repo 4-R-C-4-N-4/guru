@@ -7,14 +7,15 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:19:07.729Z",
-  "updated_at": "2026-08-20T14:55:43.522Z",
+  "updated_at": "2026-08-21T12:13:45.755Z",
   "tags": [
     "driver",
     "apparatus",
     "orphic-hymns",
     "re-chunk",
     "remap-needed",
-    "cq-intake"
+    "cq-intake",
+    "status/resolved"
   ],
   "relationships": {
     "parent": "d1b3db8b",
