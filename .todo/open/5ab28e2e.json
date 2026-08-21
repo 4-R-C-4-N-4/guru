@@ -33,10 +33,14 @@
       "author": "corpus-quality",
       "type": "evidence",
       "content": "DB-LEVEL CLEANUP \u2014 DONE BY CORPUS-QUALITY:\n- concept.sephirot_tree node deleted from DB\n- 1 verified edge retargeted to concept.sefirot_tree\n- 5 bare tags remapped: sephirot_tree \u2192 sefirot_tree\n- Alias added to concept_aliases table\n- Script: scripts/fix_5ab28e2e_db.py\n\nVerified: node gone, 0 edges reference sephirot_tree, tags remapped, alias in place.\nManifest delta: nodes -1, edges 0, tags 0.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-21T12:50:00Z",
+      "author": "corpus-quality",
+      "type": "conclusion",
       "confidence": "high",
-      "supporting_evidence": [
-        0
-      ]
+      "content": "RESOLVED. Taxonomy fix applied via PR #93 (sephirot_tree alias). DB cleanup applied via scripts/fix_5ab28e2e_db.py --apply after backup. Verified: node gone, 0 edges reference sephirot_tree, 100 tags point to sefirot_tree, alias in place. Manifest delta: nodes -1, edges 0, tags 0."
     }
   ]
 }
