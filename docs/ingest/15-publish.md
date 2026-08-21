@@ -98,6 +98,23 @@ frozen CONTRASTS snapshot — runs in `main()` before the bump and before the
 truncation, so a *refused* export costs neither a version number nor the last
 good dump.
 
+## Edge weight semantics in the dump
+
+`edges.weight` means a different thing per edge type, and consumers must not
+compare across types (todo:f6af90e8):
+
+- **PARALLELS** — the derived-parallels scorer's raw logit (negative values
+  normal); see node 16.
+- **EXPRESSES** — the MAX accepted `staged_tags.score` for the pair, an
+  integer 1–3 (the tagging model's own strength rating, kept through review).
+  Coverage is deliberately partial: rows with no surviving accepted staged
+  row — chiefly the Apr–May 2026 auto-promote residue — ship `weight NULL`,
+  and NULL means *unknown*, never zero.
+- **CONTRASTS / BELONGS_TO** — always NULL, by construction.
+
+`tier` ships as write-tool provenance only; nothing may present or rank on it
+(guru-web todo:dd034dc4 / todo:0f48f68a).
+
 ## Provenance
 
 Standing constraints, recorded here so that they survive independently of any

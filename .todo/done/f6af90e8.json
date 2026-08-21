@@ -1,0 +1,36 @@
+{
+  "id": "f6af90e8",
+  "type": "feature",
+  "state": "done",
+  "summary": "Export ships weight=NULL on EXPRESSES; persist the accepted staged_tags score (1-3) as weight",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-21T17:35:05.886Z",
+  "updated_at": "2026-08-21T17:50:48.458Z",
+  "files": [
+    {
+      "path": "scripts/export.py"
+    }
+  ],
+  "tags": [
+    "export",
+    "edges",
+    "weight",
+    "cross-repo"
+  ],
+  "work": {
+    "branch": "main",
+    "base_branch": "main",
+    "started_at": "2026-08-21T17:35:05.950Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "af41471ac68c823a4a0bb53d7b3e17fb6e0c8746",
+    "resolved_at": "2026-08-21T17:50:48.458Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_export_derived_edges.py",
+    "test_function": "test_load_edges_expresses_weight_from_accepted_staged_score",
+    "note": "EXPRESSES weight = MAX accepted staged_tags score (1-3) at export; NULL for the 10,759-row unmatched residue and all other types. Shipped distribution 1:7462/2:17458/3:5311. Also: re-derived parallels after orphic-hymns re-chunk (44,614 rows), re-pointed 2 frozen CONTRASTS endpoints (Mars .109->.064, Death .136->.086, verified vs pre-rechunk backup), deleted 1 malformed unprefixed concept_aliases row that broke the dump FK, doc'd per-type weight semantics in 15-publish.md. Corpus v60 loaded locally, guru-web golden gate 296/296."
+  }
+}

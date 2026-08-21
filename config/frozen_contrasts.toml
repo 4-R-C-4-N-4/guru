@@ -402,14 +402,18 @@ tier = "verified"
 annotation = "Both passages address the use of spiritual or mystical practices, but they take opposing stances. Passage A criticizes the use of magical formulas and spells, emphasizing rational and reverent approaches to the divine. Passage B, on the other hand, advocates for the use of specific renunciations and practices to achieve deliverance and access to the mysteries of the Light."
 
 [[edge]]
-source = "greek_mystery.orphic-hymns.109"
+# re-pointed .109 -> .064 (todo:f6af90e8): the orphic-hymns re-chunk renumbered
+# Hymn LXIV MARS; passage identity verified against the pre-rechunk backup.
+source = "greek_mystery.orphic-hymns.064"
 target = "taoism.tao-te-ching-legge.068"
 edge_type = "CONTRASTS"
 tier = "verified"
 annotation = "Both passages discuss the concept of war and conflict, but they take opposite positions. Passage A advocates for a non-confrontational, humble approach to conflict, aligning with Taoist principles, while Passage B glorifies the fierce and destructive aspects of Mars, the god of war, before advocating for peace."
 
 [[edge]]
-source = "greek_mystery.orphic-hymns.136"
+# re-pointed .136 -> .086 (todo:f6af90e8): same re-chunk; Hymn LXXXVI DEATH,
+# verified against the pre-rechunk backup.
+source = "greek_mystery.orphic-hymns.086"
 target = "hinduism.bhagavad-gita-chapter-02.002"
 edge_type = "CONTRASTS"
 tier = "verified"
