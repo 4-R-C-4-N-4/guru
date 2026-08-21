@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-09T14:19:53.014Z",
-  "updated_at": "2026-08-09T14:19:53.102Z",
+  "updated_at": "2026-08-21T16:53:23.112Z",
   "files": [
     {
       "path": "guru-web/src/lib/retriever.ts",
@@ -28,5 +28,14 @@
     "linked_commits": [
       "33f26081"
     ]
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-21T16:53:23.111Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Owner decision 2026-08-21: the tier column has always been meaningless as a confidence signal — there has never been a human in the loop ('verified' = frontier-model review, 'proposed' = local auto-promote; owner spot-checks apply gates but rarely changes anything). Resolution: option 3, minimal form — guru-web PR #129 flattens proposed to 1.0 in TIER_WEIGHTS; column kept as write-tool provenance. Measured against the guru-web golden set per owner directive: 1/29 queries changed rank (one same-work chunk swap), 296/296 golden gate green before and after. Notable side-finding: the graph leg holds only ~1% of top-K slots (5/435), so tier weighting was nearly inert regardless. Presentation de-tier (TIER: citation stamps, reader glyphs) split to guru-web todo:0f48f68a.",
+      "confidence": "high"
+    }
+  ]
 }
