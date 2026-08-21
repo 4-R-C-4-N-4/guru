@@ -1,0 +1,21 @@
+{
+  "id": "675a76f8",
+  "type": "feature",
+  "state": "open",
+  "summary": "Materialize derived parallels into guru.db (derived_runs + derived_parallels tables) replacing the JSONL run-dir artifact",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-21T17:52:17.494Z",
+  "updated_at": "2026-08-21T17:52:17.494Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "derived-parallels",
+    "export",
+    "schema"
+  ]
+}
