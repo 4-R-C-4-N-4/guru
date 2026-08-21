@@ -130,7 +130,7 @@ forgotten: **`chunk.py` output is pre-clean, so any re-chunk invalidates
 | 12 | [embed](12-embed.md) | command | `chunk_embeddings` rows |
 | 13 | ~~[propose-edges](13-propose-edges.md)~~ | **RETIRED** 2026-08-13 | superseded by 16 |
 | 14 | ~~[edge-review](14-edge-review.md)~~ | **RETIRED** 2026-08-13 | superseded by 16 |
-| 16 | [derive-parallels](16-derive-parallels.md) | command | `data/derived_parallels/<run>/edges_derived.jsonl` |
+| 16 | [derive-parallels](16-derive-parallels.md) | command | `derived_runs` + `derived_parallels` rows in guru.db |
 | 15 | [publish](15-publish.md) | user | a shipped corpus |
 
 Node 16 sits out of numeric order in this table on purpose — it runs where
