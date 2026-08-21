@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T14:19:02.516Z",
-  "updated_at": "2026-08-20T14:20:02.042Z",
+  "updated_at": "2026-08-21T12:15:21.671Z",
   "tags": [
     "apparatus",
     "flag_apparatus",
@@ -17,5 +17,14 @@
   ],
   "relationships": {
     "parent": "d1b3db8b"
-  }
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-21T12:15:21.671Z",
+      "author": "corpus-quality",
+      "type": "evidence",
+      "content": "BLIND SPOT STILL LIVE (2026-08-21): Scanned 5,110 chunks with accepted tags. Found 269 with apparatus keywords ('introduction', 'translator', 'preface', 'appendix', 'note on') in chunk bodies that flag_apparatus.py's has_surviving_tags() filter skips.\n\nAll 269 are outside orphic-hymns (already fixed by PR #87). Distribution:\n- buddhism.dhammapada-chapter-XX: ~200 chunks\n- buddhism.diamond-sutra: several chunks\n- Others: scattered\n\nSpot-check of dhammapada-chapter-01.001: body contains interleaved editorial content (translator notes, 'Dharma, though clear in its meaning, is difficult to translate') mixed with primary text. These are in-place prune candidates, not whole-chunk drops.\n\nThe has_surviving_tags() blind spot is a live process bug — apparatus with accepted tags is never flagged for cleanup.",
+      "confidence": "high"
+    }
+  ]
 }
