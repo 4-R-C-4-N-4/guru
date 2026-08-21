@@ -428,42 +428,22 @@ def load_edges(conn: sqlite3.Connection) -> list[dict]:
     return rows
 
 
-def _find_latest_run_dir(base_dir: Path) -> Path:
-    """Lexicographically-latest subdirectory of base_dir (derive_parallels.py
-    names run directories with a zero-padded UTC timestamp, so string sort
-    order is chronological order). Raises SystemExit with a clear cause if
-    there is nothing to pick from — a missing artifact must be loud, never
-    a silent zero-PARALLELS export."""
-    if not base_dir.exists():
-        raise SystemExit(
-            f"No derived-parallels artifact: {base_dir} does not exist. "
-            f"Run scripts/derive_parallels.py first."
-        )
-    candidates = sorted(
-        p for p in base_dir.iterdir()
-        if p.is_dir() and (p / "edges_derived.jsonl").exists() and (p / "summary.json").exists()
-    )
-    if not candidates:
-        raise SystemExit(
-            f"No derived-parallels run found under {base_dir} (expected "
-            f"<timestamp>/edges_derived.jsonl + summary.json). "
-            f"Run scripts/derive_parallels.py first."
-        )
-    return candidates[-1]
-
-
 def load_derived_parallels(
+    conn: sqlite3.Connection,
     config_path: Path = DERIVED_PARALLELS_CONFIG,
     *,
     chunk_ids: set[str] | None = None,
 ) -> list[dict]:
     """The sole source of PARALLELS rows in the corpus dump (todo:6da4f965).
 
-    Reads config[export].derived_dir, picks the latest run directory, and
-    refuses to proceed — loudly, via SystemExit — if the artifact is
-    missing, incomplete, older than config[export].max_age_days, or
-    (suspiciously) contains zero rows. Silence here would mean a bad export
-    quietly ships zero PARALLELS instead of failing the build.
+    Reads the latest run from guru.db's derived_runs/derived_parallels
+    tables (todo:675a76f8 — the JSONL run-directory artifact is retired)
+    and refuses to proceed — loudly, via SystemExit — if no run exists,
+    the latest run is PARTIAL (--limit-concepts; the old artifact let a
+    smoke run silently become the next export's source, this guard is why
+    the trap is gone), the run is older than config[export].max_age_days,
+    or it contains zero rows. Silence here would mean a bad export quietly
+    ships zero PARALLELS instead of failing the build.
 
     If `chunk_ids` is given (main() always passes the set of chunk ids this
     run is about to emit), every row's source/target is checked against it
@@ -479,48 +459,64 @@ def load_derived_parallels(
     export_cfg = cfg.get("export")
     if not export_cfg:
         raise SystemExit(
-            f"{config_path} has no [export] section (derived_dir, max_age_days)"
+            f"{config_path} has no [export] section (max_age_days)"
         )
-    base_dir = Path(export_cfg["derived_dir"])
-    if not base_dir.is_absolute():
-        base_dir = PROJECT_ROOT / base_dir
     max_age_days = float(export_cfg["max_age_days"])
 
-    run_dir = _find_latest_run_dir(base_dir)
-
-    with open(run_dir / "summary.json") as fp:
-        summary = json.load(fp)
-    generated_at = datetime.fromisoformat(summary["generated_at"])
+    have = {r[0] for r in conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' "
+        "AND name IN ('derived_runs', 'derived_parallels')")}
+    if have != {"derived_runs", "derived_parallels"}:
+        raise SystemExit(
+            "guru.db has no derived-parallels tables. Apply "
+            "scripts/migrations/v3_012_derived_parallels.sql, then run "
+            "scripts/derive_parallels.py."
+        )
+    latest = conn.execute(
+        "SELECT run_id, generated_at, limit_concepts, edge_rows "
+        "FROM derived_runs ORDER BY run_id DESC LIMIT 1"
+    ).fetchone()
+    if latest is None:
+        raise SystemExit(
+            "No derived-parallels run in guru.db. "
+            "Run scripts/derive_parallels.py first."
+        )
+    run_id, generated_at_s, limit_concepts, _edge_rows = latest
+    if limit_concepts is not None:
+        raise SystemExit(
+            f"Latest derived-parallels run (run_id {run_id}) is PARTIAL "
+            f"(--limit-concepts {limit_concepts}) — a smoke run, not an "
+            f"exportable graph. Run scripts/derive_parallels.py without "
+            f"--limit-concepts."
+        )
+    generated_at = datetime.fromisoformat(generated_at_s)
     age_days = (datetime.now(timezone.utc) - generated_at).total_seconds() / 86400
     if age_days > max_age_days:
         raise SystemExit(
-            f"Derived-parallels artifact at {run_dir} is stale: generated "
+            f"Derived-parallels run {run_id} is stale: generated "
             f"{age_days:.1f} days ago, max_age_days={max_age_days}. "
             f"Re-run scripts/derive_parallels.py."
         )
 
-    rows = []
-    with open(run_dir / "edges_derived.jsonl") as fp:
-        for line_no, line in enumerate(fp, start=1):
-            line = line.strip()
-            if not line:
-                continue
-            row = json.loads(line)
-            for key in ("source", "target", "edge_type", "tier", "weight", "annotation"):
-                if key not in row:
-                    raise SystemExit(
-                        f"{run_dir / 'edges_derived.jsonl'}:{line_no} missing '{key}'"
-                    )
-            if row["edge_type"] != "PARALLELS":
-                raise SystemExit(
-                    f"{run_dir / 'edges_derived.jsonl'}:{line_no} has "
-                    f"edge_type={row['edge_type']!r}, expected 'PARALLELS'"
-                )
-            rows.append(row)
+    rows = [
+        {
+            "source": r[0],
+            "target": r[1],
+            "edge_type": "PARALLELS",
+            "tier": "inferred",
+            "weight": r[2],
+            "annotation": r[3],
+        }
+        for r in conn.execute(
+            "SELECT source, target, weight, annotation FROM derived_parallels "
+            "WHERE run_id = ? ORDER BY source, target",
+            (run_id,),
+        )
+    ]
 
     if not rows:
         raise SystemExit(
-            f"Derived-parallels artifact at {run_dir} contains zero PARALLELS "
+            f"Derived-parallels run {run_id} contains zero PARALLELS "
             f"rows — refusing to export an empty PARALLELS set. If this is "
             f"genuinely expected, delete this check, don't work around it."
         )
@@ -532,7 +528,7 @@ def load_derived_parallels(
         })
         if orphans:
             raise SystemExit(
-                f"{run_dir / 'edges_derived.jsonl'}: {len(orphans)} PARALLELS "
+                f"derived_parallels run {run_id}: {len(orphans)} PARALLELS "
                 f"endpoint(s) do not resolve to a chunk in this export "
                 f"(re-chunk drift?): {orphans[:5]}"
                 f"{' ...' if len(orphans) > 5 else ''}. Re-run "
@@ -540,8 +536,8 @@ def load_derived_parallels(
             )
 
     logger.info(
-        "derived PARALLELS: %d rows from %s (generated %.1f days ago)",
-        len(rows), run_dir, age_days,
+        "derived PARALLELS: %d rows from guru.db run %d (generated %.1f days ago)",
+        len(rows), run_id, age_days,
     )
     return rows
 
@@ -984,7 +980,7 @@ def main() -> None:
     # set doubles as the orphan-endpoint check both loaders run against.
     chunks = sorted(load_chunks(conn), key=lambda r: r["id"])
     chunk_ids = {r["id"] for r in chunks}
-    derived_parallels_rows = load_derived_parallels(chunk_ids=chunk_ids)
+    derived_parallels_rows = load_derived_parallels(conn, chunk_ids=chunk_ids)
     frozen_contrasts_rows = load_frozen_contrasts(chunk_ids=chunk_ids)
 
     version = next_corpus_version(conn)

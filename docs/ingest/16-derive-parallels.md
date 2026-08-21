@@ -64,7 +64,6 @@ skipped.
 ```sh
 OMP_NUM_THREADS=8 .venv/bin/python scripts/derive_parallels.py \
     [--config config/derived_parallels.toml] [--db data/guru.db] \
-    [--out data/derived_parallels/<UTC timestamp>] \
     [--limit-concepts N] [--verbose]
 ```
 
@@ -95,18 +94,27 @@ fan-in note in Failure modes.
 
 ## Output
 
-`data/derived_parallels/<UTC timestamp>/edges_derived.jsonl` (one JSON object
-per derived edge — `source`, `target`, `edge_type='PARALLELS'`,
-`tier='inferred'`, `weight` = the partner's grade, `annotation` naming the via
-concept) plus a `summary.json` (concept/pair counts, scoring time, the
-`top_k`/`per_work_cap`/`max_fan_in` knobs the run used, and
-`fan_in_cap_edges_dropped` / `fan_in_cap_chunks_reduced` /
-`fan_in_cap_chunks_darkened` — always written, 0 when the cap dropped
-nothing).
+Two tables in `guru.db` (migration `v3_012`, todo:675a76f8 — the old
+`data/derived_parallels/<timestamp>/` JSONL run-directory artifact is
+retired):
 
-**Does not write `guru.db`.** No `derived_parallels` table exists yet —
-materializing one is a documented future step, not this node's job. The
-run-directory artifact is the interface to export, below.
+- **`derived_runs`** — one row per run, full history. `summary_json` carries
+  the run summary verbatim (concept/pair counts, scoring time, the
+  `top_k`/`per_work_cap`/`max_fan_in` knobs, and `fan_in_cap_edges_dropped` /
+  `fan_in_cap_chunks_reduced` / `fan_in_cap_chunks_darkened` — always
+  written, 0 when the cap dropped nothing); `generated_at`,
+  `limit_concepts` and `edge_rows` are promoted to columns because export's
+  guards read them.
+- **`derived_parallels`** — the **latest run's** edge rows only (`source`,
+  `target`, `weight` = the partner's grade, `annotation` naming the via
+  concept), replaced wholesale per run in one transaction. `edge_type` and
+  `tier` are not stored — every row is PARALLELS/`inferred` by construction
+  and export reconstructs them.
+
+These are derived-cache tables in the same category as `chunk_embeddings`:
+written directly by the generator, regenerable, outside the
+`staged_*`/review/apply flow — the apply-gate convention does not apply to
+them, by design.
 
 ## Gate
 
@@ -114,13 +122,15 @@ No `guru ingest status` entry exists for this node, by design (see above —
 it does not fit the per-text state machine). Treat a run as done when:
 
 ```sh
-ls -t data/derived_parallels/ | head -1                    # latest run dir
-cat "data/derived_parallels/$(ls -t data/derived_parallels/ | head -1)/summary.json"
+sqlite3 data/guru.db "SELECT run_id, generated_at, limit_concepts, edge_rows \
+    FROM derived_runs ORDER BY run_id DESC LIMIT 1;"
+sqlite3 data/guru.db "SELECT summary_json FROM derived_runs \
+    ORDER BY run_id DESC LIMIT 1;" | python3 -m json.tool
 ```
 
 reports `chunks_with_partners` and `unique_edge_rows` in the range you expect
-for the corpus's current tag coverage, `fan_in_cap_chunks_darkened` is 0, and
-the run is fresh enough for
+for the corpus's current tag coverage, `fan_in_cap_chunks_darkened` is 0,
+`limit_concepts` is NULL (a full run), and the run is fresh enough for
 `scripts/export.py` to accept it — see the hand-off below, which enforces this
 for real at hand-off time rather than leaving it a suggestion.
 
@@ -133,17 +143,17 @@ a driver or the owner runs it by hand after a batch lands. Because scoring is
 cached per `(concept, chunk)`, a re-run only pays for what actually changed —
 it is cheap to run more often than the corpus actually changes.
 
-**The export hand-off.** `scripts/export.py` does not take a run directory on
-the command line: it reads `config[export].derived_dir` (`data/derived_parallels`),
-picks the lexicographically latest subdirectory (the timestamp format sorts
-correctly), and uses that run's `edges_derived.jsonl` as the *sole* source of
-PARALLELS rows in the corpus dump — CONTRASTS comes separately from a frozen,
-curated snapshot (`config/frozen_contrasts.toml`, todo:6da4f965), not from this
-node. Export refuses — loudly, not silently — if the run directory is missing,
-`summary.json` is incomplete, or `generated_at` is older than
-`config[export].max_age_days` (default 30). There is no override flag by
-design: a stale artifact gets regenerated, not waved through. Run this node
-again, not export with a stale run, if that guard trips.
+**The export hand-off.** `scripts/export.py` reads the latest
+`derived_runs` row and its `derived_parallels` rows as the *sole* source of
+PARALLELS in the corpus dump — CONTRASTS comes separately from a frozen,
+curated snapshot (`config/frozen_contrasts.toml`, todo:6da4f965), not from
+this node. Export refuses — loudly, not silently — if the tables are missing
+(migration v3_012 not applied), no run exists, the latest run is **partial**
+(`limit_concepts` set — the smoke-run trap, now enforced), the run has zero
+rows, or `generated_at` is older than `config[export].max_age_days`
+(default 30). There is no override flag by design: a stale run gets
+regenerated, not waved through. Run this node again, not export with a stale
+run, if a guard trips.
 
 ## Failure modes
 
@@ -151,7 +161,7 @@ again, not export with a stale run, if that guard trips.
 accepted `EXPRESSES` tags — or whose only tagged (concept, chunk) pairs were
 never actually scored (scoring didn't run for them, not that it ran and
 scored low) — never enters the anchor set and gets `panels[chunk] = []`. It
-shows up in `summary.json`'s `chunks_total` but not `chunks_with_partners`.
+shows up in the run summary's `chunks_total` but not `chunks_with_partners`.
 This mirrors node 10's legitimately-tagless-chunk case
 (`plotinus-select-works-index`, 107 of 752): a low `chunks_with_partners`
 ratio is a tag-coverage signal, not a generator defect, and should send you
@@ -164,7 +174,7 @@ before the fan-in cap runs, and it stays that way precisely so it keeps
 answering the tag-coverage question above. What actually shipped is
 `chunks_in_export`, counted from the final rows. The two are equal until the
 cap darkens something — at `max_fan_in = 100` the first reads 5,054 while 353
-of those chunks have no edge in `edges_derived.jsonl` at all. When they differ
+of those chunks have no `derived_parallels` row at all. When they differ
 the run line says so explicitly, and `fan_in_cap_chunks_darkened` is the
 number to act on.
 
@@ -207,7 +217,7 @@ The v55 run surfaced a 1,178-partner panel
 (`christian_mysticism.life-and-doctrines-boehme.016`) and a second at 1,159
 (`plato-phaedrus.018`). guru-web's `LIMIT 100` read-time query (guru-web
 todo:bc084b37) hid this from the UI but did not fix it: the exported
-`edges_derived.jsonl` still carried the unbounded tail, so any other consumer
+the derived edge set still carried the unbounded tail, so any other consumer
 reading the export directly got it.
 
 `cap_fan_in()`, applied by `run()` after `build_edges()`, bounds this in the
@@ -338,18 +348,16 @@ scoring pass on content that is about to change and will be invalidated and
 re-paid for once cleaning lands. Not wrong, just wasted work — run node 07
 first.
 
-**A partial run written to the default location silently replaces the real
-one.** `export.py` selects the lexicographically-latest *complete* run
-directory under `config[export].derived_dir` — it has no notion of how much of
-the corpus a run covered. So a quick `--limit-concepts 3` sanity run, left in
-the default `data/derived_parallels/`, becomes "latest" and ships its few
-hundred PARALLELS rows in place of the full run's seventeen thousand. Nothing
-errors: the artifact is well-formed, fresh, and non-empty, so every guard in
-`load_derived_parallels()` passes. This came within one command of happening
-twice during the port. **Always send a partial run somewhere else** —
-`--out /tmp/.../smoke` — and keep the default path for runs you intend to
-ship. `summary.json`'s `concepts` and `chunks_with_partners` are the fastest
-way to tell afterwards which kind of run produced an artifact.
+**A partial run can no longer silently ship — but it does replace local
+state.** Under the retired JSONL artifact, a `--limit-concepts 3` smoke run
+left in the default directory silently became the next export's source (it
+came within one command of happening twice during the port). Since
+todo:675a76f8 that trap is enforced away: the run is recorded with
+`limit_concepts` set and `load_derived_parallels()` refuses to export it.
+What a smoke run still does is **replace `derived_parallels`' rows** — the
+table holds only the latest run — so after smoke-testing against the real
+DB, re-run without `--limit-concepts` before anything local reads the table,
+or point smoke runs at a scratch copy via `--db`.
 
 **A successful re-run proves nothing about the environment.** Once the score
 cache is warm, every pair resolves from disk, `rerank._load()` is never
@@ -392,7 +400,11 @@ PARALLELS rows (the old Pass C output) at query time, in three places. A
 local `guru query` run or a retrieval benchmark against `data/guru.db` is
 therefore reading a different, older PARALLELS set than production serves —
 silently, since both are well-formed rows. Tracked at todo:69682961 (PR #64
-review finding 9); not yet fixed.
+review finding 9, wontfix at the time). Worth revisiting now: since
+todo:675a76f8 the derived set lives in the same database
+(`derived_parallels`), so pointing those three queries at it — and then
+retiring the stale live rows — is a small change where it used to be an
+artifact-plumbing one.
 
 ## Selection methodology — how to re-derive these numbers
 
@@ -406,29 +418,35 @@ CPU-only and takes ~1 second (`38459 cached, 0 to run`), so a nine-point sweep
 costs about ten seconds. Nothing here needs the GPU — `guru/rerank.py` sets
 `CUDA_VISIBLE_DEVICES=""` before importing torch, deliberately.
 
-**Never sweep into `data/derived_parallels/`.** `scripts/export.py` picks the
-lexicographically *latest* subdirectory with no provenance check, so an
-experimental run written there silently becomes the next export's source —
-including a `--limit-concepts` smoke run. Write sweeps somewhere else.
+**Never sweep against the real `data/guru.db`.** Each run replaces
+`derived_parallels`' rows wholesale, so a sweep against the real DB leaves
+whatever threshold ran last as local state. Sweep against a scratch copy —
+every run's summary accumulates in the copy's `derived_runs`, which is all a
+sweep reads:
 
 ```sh
+cp data/guru.db /tmp/sweep.db
 # 1. baseline: cap off. Comment out max_fan_in rather than setting it to 0
 #    (0 is rejected at load; absence is the documented off switch).
 sed 's/^max_fan_in/#max_fan_in/' config/derived_parallels.toml > /tmp/nocap.toml
-.venv/bin/python scripts/derive_parallels.py --config /tmp/nocap.toml --out /tmp/sweep/nocap
+.venv/bin/python scripts/derive_parallels.py --config /tmp/nocap.toml --db /tmp/sweep.db
 
 # 2. one run per candidate threshold
 for V in 1000 750 500 400 300 200 150 100; do
   sed "s/^max_fan_in = .*/max_fan_in = $V/" config/derived_parallels.toml > /tmp/c$V.toml
-  .venv/bin/python scripts/derive_parallels.py --config /tmp/c$V.toml --out /tmp/sweep/$V
+  .venv/bin/python scripts/derive_parallels.py --config /tmp/c$V.toml --db /tmp/sweep.db
 done
+
+sqlite3 /tmp/sweep.db "SELECT run_id, json_extract(summary_json,'$.max_fan_in'), \
+    json_extract(summary_json,'$.unique_edge_rows'), \
+    json_extract(summary_json,'$.fan_in_cap_chunks_darkened') FROM derived_runs;"
 ```
 
-Read `unique_edge_rows` and `fan_in_cap_chunks_darkened` straight out of each
-`summary.json`; those two are the whole coverage story. Max degree is a
-histogram over both endpoints of `edges_derived.jsonl`.
+`unique_edge_rows` and `fan_in_cap_chunks_darkened` are the whole coverage
+story. Max degree is a histogram over both endpoints of the final run's
+`derived_parallels` rows.
 
-**The one metric that is not in `summary.json`** is the discrimination check —
+**The one metric that is not in the run summary** is the discrimination check —
 the median gap between the anchor legs of kept and dropped edges. It is what
 caught the ranking defect (todo:6310a495), and it is worth recomputing after
 *any* change to how partners are ranked, because a broken ranker looks fine on

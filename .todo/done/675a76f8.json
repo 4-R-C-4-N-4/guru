@@ -1,0 +1,35 @@
+{
+  "id": "675a76f8",
+  "type": "feature",
+  "state": "done",
+  "summary": "Materialize derived parallels into guru.db (derived_runs + derived_parallels tables) replacing the JSONL run-dir artifact",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-21T17:52:17.494Z",
+  "updated_at": "2026-08-21T17:58:59.439Z",
+  "files": [
+    {
+      "path": "scripts/derive_parallels.py"
+    }
+  ],
+  "tags": [
+    "derived-parallels",
+    "export",
+    "schema"
+  ],
+  "work": {
+    "branch": "todo/f6af90e8",
+    "base_branch": "main",
+    "started_at": "2026-08-21T17:52:17.548Z",
+    "started_by": "Hermes Agent"
+  },
+  "resolution": {
+    "commit": "d7a06e95ac9a4c3b227c4fff2f4ac780146529cb",
+    "resolved_at": "2026-08-21T17:58:59.439Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_export_derived_edges.py",
+    "test_function": "test_load_derived_parallels_partial_run_fails_loudly",
+    "note": "derived_runs (summary history) + derived_parallels (latest run's rows, replaced wholesale per run) via migration v3_012; derive_parallels.py writes them directly (chunk_embeddings-category derived cache), export reads the latest run with all old guards plus a NEW enforced partial-run refusal — the --limit-concepts smoke-run trap is gone. Sweep methodology moved to --db scratch copies. Verified: DB-backed export produces byte-identical PARALLELS to the JSONL-backed v60 dump (44,614 rows), so the 296/296 golden result carries over; 738 guru tests green. Old run dirs deleted."
+  }
+}
