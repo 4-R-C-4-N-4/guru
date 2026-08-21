@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-20T18:27:02.931Z",
-  "updated_at": "2026-08-20T18:30:13.782Z",
+  "updated_at": "2026-08-21T11:57:35.661Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -15,7 +15,8 @@
     "apparatus",
     "chunk.py",
     "mechanism",
-    "remap-needed"
+    "remap-needed",
+    "status/resolved"
   ],
   "relationships": {
     "parent": "d1b3db8b"
