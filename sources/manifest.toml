@@ -1182,6 +1182,42 @@ format = "html"
 license = "public_domain"
 notes = "Fortune's 1930 study of psychic attack, occult pathology and defence against it — Society of the Inner Light. Structure: Preface, Part 1 Types Of Psychic Attack (chs.1-8), Part 2 Differential Diagnosis (chs.9-11), Part 3 The Diagnosis Of A Psychic Attack (chs.12-14), Part 4 Methods Of Defence Against Psychic Attack (chs.15-20), Conclusion. No specific print exemplar confirmable via Global Grey (site strips publisher front matter); do not cite a specific printing beyond '1930, publisher/exemplar not confirmable via Global Grey.'"
 
+# ============================================
+# THEOSOPHICAL FOUNDATION TEXTS (sacred-texts.com/the/)
+# ============================================
+
+# H.P. Blavatsky's *The Secret Doctrine* is the foundational text of
+# 19th-century theosophy and the single most influential western
+# esoteric work of the late 1800s. It covers cosmic + human evolution
+# through successive epochs, root races, akashic records, and the
+# etheric/astral body planes. The text is Blavatsky's own commentary
+# on the "Stanzas of Dzyan" — her analysis of ancient Sanskrit,
+# Buddhist, and Zoroastrian sources. 77 HTML pages across 2 volumes
+# on sacred-texts.com.
+# VERIFIED 2026-08-22 — index page (the/sd/index.htm, HTTP 200),
+# Proem page (the/sd/sd1-0-pr.htm, HTTP 200, heading chain confirmed:
+# "The Secret Doctrine by H.P. Blavatsky -- Vol. 1" → "PROEM" →
+# "PAGES FROM A PRE-HISTORIC PERIOD"). 1888 publication, Blavatsky
+# died 1891, PD status confirmed via Gutenberg declaration + meta tag.
+# Full page inventory: sd1-0-co.htm, sd1-0-in.htm, sd1-0-pr.htm,
+# sd1-1-01..18, sd1-2-01..15, sd1-3-01..18, sd2-0-co.htm, sd2-0-pn.htm,
+# sd2-1-01..25, sd2-2-01..13, sd2-3-01..09.
+
+[[source]]
+id = "blavatsky-sd"
+tradition = "western_esoteric"
+label = "The Secret Doctrine (H.P. Blavatsky)"
+url = "https://www.sacred-texts.com/the/sd/index.htm"
+format = "html_multi"
+license = "public_domain"
+translator = "H.P. Blavatsky"
+# NOTE FOR DRIVER/04-BOILERPLATE-SURVEY: The Secret Doctrine consists of
+# Blavatsky's own commentary on the "Stanzas of Dzyan" — NOT a scholarly
+# apparatus layer. The commentary IS the primary text and must be retained.
+# Do NOT strip the commentary as "apparatus." Page markers like
+# [[Vol. 1, Page N]] are navigation aids, not cruft. See
+# docs/ingest/decisions/blavatsky-sd.md for full commentary-structure analysis.
+notes = "The Secret Doctrine (1888). Two volumes: Vol 1 = Cosmogenes (sd1-*), Vol 2 = Anthropogenesis (sd2-*). 77 HTML pages total. The text is Blavatsky's own commentary on the 'Stanzas of Dzyan' — the commentary IS the primary text, NOT apparatus to be stripped. Structure: Proem → Preface → Introduction → Part I (Seven Stanzas from the Book of Dzyan + commentaries) → Part II (Evolution of Symbolism/Symbolism in the Cosmogony) → Part III (Anthropological Series) → Vol 2 parallel structure. The commentary cites Puranas, Buddhist texts, Zoroastrian sources, Hermetic texts, and medieval Christian chronicles. Page markers [[Vol. 1, Page N]] are navigation aids. Chunking: page-as-chunk (77 pages, ~27-75KB each); OR regex-section-split on Chapter I–VII headers with Parts sub-split for Chapter IV. The commentary on the Stanzas of Dzyan is primary text — do not treat as apparatus."
 
 # ============================================
 # RENAISSANCE HERMETICISM (Bruno)
