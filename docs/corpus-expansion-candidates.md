@@ -535,6 +535,25 @@ Two Steiner works are confirmed live on **sacred-texts.com** under the Esoteric 
 - **Apparatus note:** Front matter = `khw00–khw04`; chunk from `khw05` onward.
 - **Cohesion:** The anthroposophical path-of-initiation text — `esoteric_training`, `guardian_of_the_threshold`, `subtle_body`, `higher_worlds`, `spiritual_exercise`. The natural companion to §8.1a.
 
+#### 8.1c. *An Outline of Occult Science* / *Occult Science* (1909) — **Steiner's magnum opus**
+
+- **URL:** `https://www.gutenberg.org/cache/epub/30718/pg30718-images.html` (also: `https://www.gutenberg.org/ebooks/30718`)
+- **Format:** `html` (single file, ~780 KB, 669 `<p>` elements)
+- **PD status:** ✅ "Public domain in the USA." (Gutenberg)
+- **Translator:** Maud Russell-Smythe (1909 English translation of the German *Aus der übersichtlichen Wissenschaft*)
+- **Chapter structure:** 7 chapters with sub-Parts:
+  - Chapter I. The Character of Occult Science
+  - Chapter II. The Nature of Man
+  - Chapter III. Sleep and Death
+  - Chapter IV. The Evolution of the World and Man (split into multiple Parts I–VIII+)
+  - Chapter V. Knowledge of the Higher Worlds
+  - Chapter VI. The Present and Future Evolution of the World and of Humanity
+  - Chapter VII. Details from the Domain of Occult Science (Man's Etheric Body)
+  - Footnotes (end)
+- **Acquire / chunk:** `format = "html"` → **`regex-section-split`** on `Chapter I`–`Chapter VII` headers (with `PART` sub-split for the long Chapter IV if needed). Pre-strip Gutenberg header/license/footer boilerplate.
+- **Cohesion:** **Steiner's equivalent to Blavatsky's Secret Doctrine (§8.2b)** — both cover cosmic + human evolution through successive epochs, root races, rounds, akashic records, the etheric/astral bodies, and planetary stages (Saturn, Sun, Moon, Earth). Sources `akashic_records`, `root_race`, `cosmic_evolution`, `planar_structure`, `sevenfold_cosmos`. **Highest single-value Steiner acquisition.**
+- **Note:** The German original was published 1909 as *Die aus der übersichtlichen Wissenschaft* but was renamed *Aus der übersichtlichen Wissenschaft* by Steiner in later editions. The English title "Outline of Occult Science" (1909-1910) or "Occult Science" (1910-1913 English editions) — this translation covers the 1909 first edition.
+
 ### 8.2 Theosophical precursors (within `western_esoteric`, extends existing holdings)
 
 The corpus already holds Lévi (1854-56, Waite trans. 1896), Hall (1928), Papus (1892), Kybalion (1908), Waite (1913/1898), Dion Fortune (1930), and Ouspensky (1920). The following fill gaps:
@@ -568,6 +587,7 @@ The corpus already holds Lévi (1854-56, Waite trans. 1896), Hall (1928), Papus 
 |---|---|---|---|---|---|
 | `steiner-theosophy` | `anthroposophy` | `sacred-texts.com/eso/theo/index.htm` | html_multi | 20 (theo00-19, chunk theo06-19) | threefold_human, reincarnation, higher_worlds |
 | `steiner-higher-worlds` | `anthroposophy` | `sacred-texts.com/eso/khw/index.htm` | html_multi | 16 (khw00-15, chunk khw05-15) | esoteric_training, guardian_of_the_threshold, subtle_body |
+| `steiner-outline-occult-science` | `anthroposophy` | `gutenberg.org/ebooks/30718` | html | 7 chapters + Parts | root_race, akashic_records, cosmic_evolution, etheric_body |
 | `blavatsky-isis-unveiled` | `western_esoteric` | `sacred-texts.com/the/iu/index.htm` | html_multi | 27 (iu000-014, iu100-111) | sevenfold_cosmos, theosophical_society |
 | `blavatsky-secret-doctrine` | `western_esoteric` | `sacred-texts.com/the/sd/index.htm` | html_multi | 103 (sd1-*) | root_race, akashic_records, cosmic_evolution |
 | `swedenborg-heaven-hell` | `western_esoteric` | `sacred-texts.com/swd/hh/index.htm` | html_multi | 50-para chunks | afterlife, correspondence_theory |
@@ -688,4 +708,3 @@ No modern Japanese new religions (Tenrikyo, Soka Gakkai, etc.) were found on sac
 4. **D.T. Suzuki**: The single most important Zen popularizer. *Manual of Zen Buddhism* (1935) is PD on sacred-texts — 20 pages, ~? KB each. Should be Tier 2 priority for Buddhism depth.
 
 5. **Shinto expansion**: Only the Kojiki is held. *The Book of Rites* (ritual texts) and *Records of the Grand Historian* (Ssu-yu-ki, 1898) are on sacred-texts under `chi/`. Worth checking if PD.
-```
