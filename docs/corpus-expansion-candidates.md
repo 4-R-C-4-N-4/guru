@@ -541,26 +541,26 @@ The corpus already holds Lévi (1854-56, Waite trans. 1896), Hall (1928), Papus 
 
 #### 8.2a. Helena Blavatsky — *Isis Unveiled* (1877)
 
-- **URL:** Gutenberg #68705 (Vol 1) + #75871 (Vol 2)
-  - `https://www.gutenberg.org/ebooks/68705` and `https://www.gutenberg.org/ebooks/75871`
-- **Format:** `html` (single-file per volume)
+- **URL:** `https://www.sacred-texts.com/the/iu/index.htm` — chapters `iu000.htm`–`iu014.htm` (Part One: Science) and `iu100.htm`–`iu111.htm` (Part Two: Religion)
+- **Format:** `html_multi`
 - **PD status:** ✅ 1877, US PD
-- **Notes:** The founding text of the 1875 Theosophical Society. Direct source for `sevenfold_cosmos`, spiritual hierarchies, theosophy↔eastern-parallels. Two volumes → two source_ids, regex-section-split on chapter headers.
+- **Notes:** The founding text of the 1875 Theosophical Society. Direct source for `sevenfold_cosmos`, spiritual hierarchies, theosophy↔eastern-parallels. Part One = 15 chapters, Part Two = 12 chapters (note: Part II Chapter IV is `iu103.htm`, Chapter V is `iu104.htm` — numbering skips in the index). Two parts could be two source_ids or split on the Part boundary.
 
 #### 8.2b. Helena Blavatsky — *The Secret Doctrine* (1888)
 
-- **URL:** Gutenberg #54824 (Vol 1) + #54488 (Vol 2) + #56880 (Vol 3) + #61626 (Vol 4)
-  - `https://www.gutenberg.org/ebooks/54824` and others
-- **Format:** `html` (single-file per volume)
+- **URL:** `https://www.sacred-texts.com/the/sd/index.htm` — also on Gutenberg #54824 (Vol 1) + #54488 (Vol 2) + #56880 (Vol 3) + #61626 (Vol 4)
+  - `https://www.sacred-texts.com/the/sd/index.htm` (preferred — native html_multi, already page-split into 103 pages: sd1-00..05, sd1-1-01..18, sd1-2-01..15, sd1-3-01..18, sd2-0-*, sd2-1-01..25, sd2-2-01..14, sd2-3-01..09)
+  - Or Gutenberg 4-volume single-file HTML as fallback
+- **Format:** `html_multi` (sacred-texts) preferred; `html` (Gutenberg) as fallback
 - **PD status:** ✅ 1888, US PD
-- **Notes:** The "Synthetic" stela of modern western esotericism — `root_race`, `rounds`, `akashic_records`, cosmic evolution. Extremely heavy; four volumes → four source_ids. High edge density to everything already held (Hall cites it, Lévi precedes it, Steiner follows it).
+- **Notes:** The "Synthetic" stela of modern western esotericism — `root_race`, `rounds`, `akashic_records`, cosmic evolution. sachtexts version is html_multi with clean chapter-per-page structure — preferred over Gutenberg's massive single-file HTML. Four conceptual volumes (Vol 1 = Stanzas, Vol 2 = Scientific Letters, etc.) map to the sd1/sd2 prefix pattern on sacred-texts.
 
 #### 8.2c. Swedenborg — *Heaven and Hell* (1758, tr. Ager 1900)
 
 - **URL:** `https://www.sacred-texts.com/swd/hh/index.htm` (sacred-texts.com has a full Swedenborg section)
 - **Format:** `html_multi` (sacred-texts splits into 50-paragraph files)
 - **PD status:** ✅ 1758 original, 1900 translation
-- **Cohesion:** The single strongest link in the 18th-century mystical chain — bridges Boehme (already held at §3.6 era) directly to 19th-century theosophy/esotericism. `as_above_so_below` already documented as a Swedenborg↔Hall edge in the existing manifest notes, but Swedenborg himself isn't in the corpus yet. 134+ Swedenborg texts exist on sacred-texts; Heaven and Hell is the headline pick.
+- **Cohesion:** The single strongest link in the 18th-century mystical chain — bridges Boehme (already held at §3.6 era) directly to 19th-century theosophy/esotericism. 134+ Swedenborg texts exist on sacred-texts; Heaven and Hell is the headline pick.
 
 ### 8.3 Summary table
 
@@ -568,9 +568,9 @@ The corpus already holds Lévi (1854-56, Waite trans. 1896), Hall (1928), Papus 
 |---|---|---|---|---|---|
 | `steiner-theosophy` | `anthroposophy` | `sacred-texts.com/eso/theo/index.htm` | html_multi | 20 (theo00-19, chunk theo06-19) | threefold_human, reincarnation, higher_worlds |
 | `steiner-higher-worlds` | `anthroposophy` | `sacred-texts.com/eso/khw/index.htm` | html_multi | 16 (khw00-15, chunk khw05-15) | esoteric_training, guardian_of_the_threshold, subtle_body |
-| `blavatsky-isis-unveiled` | `western_esoteric` | Gutenberg #68705 | html | 2 (Vol 1+2) | sevenfold_cosmos, theosophical_society |
-| `blavatsky-secret-doctrine` | `western_esoteric` | Gutenberg #54824 et al. | html | 4 (Vol 1-4) | root_race, akashic_records, cosmic_evolution |
-| `swedenborg-heaven-hell` | `western_esoteric` | `sacred-texts.com/swd/hew/index.htm` | html_multi | 50-para chunks | as_above_so_below, afterlife, correspondence_theory |
+| `blavatsky-isis-unveiled` | `western_esoteric` | `sacred-texts.com/the/iu/index.htm` | html_multi | 27 (iu000-014, iu100-111) | sevenfold_cosmos, theosophical_society |
+| `blavatsky-secret-doctrine` | `western_esoteric` | `sacred-texts.com/the/sd/index.htm` | html_multi | 103 (sd1-*) | root_race, akashic_records, cosmic_evolution |
+| `swedenborg-heaven-hell` | `western_esoteric` | `sacred-texts.com/swd/hh/index.htm` | html_multi | 50-para chunks | afterlife, correspondence_theory |
 
 ### 8.4 Notes on "previous generation" sourcing
 
