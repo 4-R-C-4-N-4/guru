@@ -131,12 +131,25 @@ def reject_tag(conn: sqlite3.Connection, row: dict) -> None:
     by anything downstream of `edges`. The DELETE is a no-op if no edge
     exists (e.g. the row wasn't auto-promoted), so this is safe to call
     on any reject regardless of prior auto-promote state.
+
+    The delete is skipped when another ACCEPTED tag still supports the
+    same (chunk_id, concept_id) under a different model/prompt_version:
+    the edge is shared provenance and a reject of one model's row does
+    not retract what a human already verified on the sibling (todo:d9bb3b9a).
     """
     concept_node_id = f"concept.{row['concept_id']}"
-    conn.execute(
-        "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
-        (row["chunk_id"], concept_node_id),
-    )
+    sibling_accepted = conn.execute(
+        """SELECT 1 FROM staged_tags
+               WHERE chunk_id = ? AND concept_id = ?
+                 AND status = 'accepted' AND id != ?
+               LIMIT 1""",
+        (row["chunk_id"], row["concept_id"], row["id"]),
+    ).fetchone()
+    if sibling_accepted is None:
+        conn.execute(
+            "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
+            (row["chunk_id"], concept_node_id),
+        )
     conn.execute(
         "UPDATE staged_tags SET status='rejected', reviewed_by=?, reviewed_at=? WHERE id=?",
         (REVIEWER, now_iso(), row["id"]),

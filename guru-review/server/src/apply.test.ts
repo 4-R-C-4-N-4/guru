@@ -136,6 +136,60 @@ describe('reassign provenance (todo:a8bb7213)', () => {
   });
 });
 
+describe('reject with an accepted sibling (todo:d9bb3b9a)', () => {
+  function addEdge(chunkId: string, conceptId: string): void {
+    handles.rw
+      .prepare(
+        "INSERT INTO edges(source_id, target_id, type, tier, justification) " +
+          "VALUES (?, ?, 'EXPRESSES', 'verified', 'human-curated')",
+      )
+      .run(chunkId, `concept.${conceptId}`);
+  }
+
+  function edgeCount(chunkId: string, conceptId: string): number {
+    const row = handles.rw
+      .prepare(
+        "SELECT COUNT(*) AS n FROM edges WHERE source_id = ? AND target_id = ? AND type = 'EXPRESSES'",
+      )
+      .get(chunkId, `concept.${conceptId}`) as { n: number };
+    return row.n;
+  }
+
+  it('does not retract the shared edge while an accepted sibling stands', () => {
+    // Two models proposed the same (chunk, concept); the sibling was accepted.
+    // Distinct models: same-provenance pending duplicates are barred by the
+    // partial unique index, exactly like production.
+    handles.rw
+      .prepare(
+        "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) " +
+          "VALUES (?, ?, 2, 'qwen-3-4b-guru-v3', 'v1')",
+      )
+      .run('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+    const donor = addTag('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='accepted' WHERE model = ?")
+      .run('qwen-3-4b-guru-v3');
+    addEdge('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+
+    queue(donor, 'reject');
+    buildApply(handles.rw, handles.stmts)();
+
+    expect(tag(donor).status).toBe('rejected');
+    expect(edgeCount('hinduism.yoga-sutras-book-01.015', 'inner_silence')).toBe(1);
+  });
+
+  it('still retracts when no accepted sibling survives', () => {
+    const donor = addTag('hinduism.yoga-sutras-book-01.015', 'aparigraha');
+    addEdge('hinduism.yoga-sutras-book-01.015', 'aparigraha');
+
+    queue(donor, 'reject');
+    buildApply(handles.rw, handles.stmts)();
+
+    expect(tag(donor).status).toBe('rejected');
+    expect(edgeCount('hinduism.yoga-sutras-book-01.015', 'aparigraha')).toBe(0);
+  });
+});
+
 describe('queue drain order', () => {
   // selectQueuedActions is ORDER BY id ASC and buildApply iterates it
   // directly, so the queue applies in insertion order. The DESC ordering in

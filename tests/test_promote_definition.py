@@ -264,6 +264,85 @@ def test_reject_tag_does_not_touch_other_edges(conn: sqlite3.Connection) -> None
     ]
 
 
+# ── reject_tag with an accepted sibling (todo:d9bb3b9a) ────────────────
+
+
+def test_reject_with_accepted_sibling_keeps_shared_edge(conn: sqlite3.Connection) -> None:
+    """Two models proposed the same (chunk, concept); one row was accepted.
+    Rejecting the other model's pending row must NOT retract the verified
+    edge — it is shared provenance, still supported by the accepted sibling
+    (todo:d9bb3b9a: 55 live edges were orphaned this way)."""
+    row = _seed_staged_tag(conn, model="Qwen3.5-27B-UD-Q4_K_XL.gguf")
+    sibling_id = _seed_staged_tag(
+        conn, model="qwen-3-4b-guru-v3-Q4_K_M.gguf"
+    )["id"]
+    conn.execute(
+        "UPDATE staged_tags SET status='accepted' WHERE id=?", (sibling_id,)
+    )
+    conn.execute("INSERT INTO nodes(id,type,label) VALUES('concept.gnosis','concept','Gnosis')")
+    conn.execute(
+        "INSERT INTO edges(source_id,target_id,type,tier,justification) VALUES "
+        "(?, 'concept.gnosis', 'EXPRESSES', 'verified', 'human-curated')",
+        (row["chunk_id"],),
+    )
+
+    reject_tag(conn, row)
+
+    edge = conn.execute(
+        "SELECT * FROM edges WHERE source_id=? AND target_id='concept.gnosis'",
+        (row["chunk_id"],),
+    ).fetchone()
+    assert edge is not None, "shared edge must survive while an accepted sibling stands"
+    assert edge["tier"] == "verified"
+    status = conn.execute(
+        "SELECT status FROM staged_tags WHERE id=?", (row["id"],)
+    ).fetchone()
+    assert status["status"] == "rejected"
+
+
+def test_reject_after_sibling_accepted_still_retracts_when_none_left(
+    conn: sqlite3.Connection,
+) -> None:
+    """The guard is scoped to surviving accepted siblings only. With no
+    accepted sibling, the reject retracts the edge as before."""
+    row = _seed_staged_tag(conn)
+    conn.execute("INSERT INTO nodes(id,type,label) VALUES('concept.gnosis','concept','Gnosis')")
+    conn.execute(
+        "INSERT INTO edges(source_id,target_id,type,tier,justification) VALUES "
+        "(?, 'concept.gnosis', 'EXPRESSES', 'proposed', 'x')",
+        (row["chunk_id"],),
+    )
+
+    reject_tag(conn, row)
+
+    edge = conn.execute(
+        "SELECT * FROM edges WHERE source_id=? AND target_id='concept.gnosis'",
+        (row["chunk_id"],),
+    ).fetchone()
+    assert edge is None
+
+
+def test_reject_ignores_non_accepted_siblings(conn: sqlite3.Connection) -> None:
+    """A rejected or reassigned sibling does not keep the edge alive."""
+    row = _seed_staged_tag(conn, model="model-a")
+    sibling_id = _seed_staged_tag(conn, model="model-b")["id"]
+    conn.execute("UPDATE staged_tags SET status='rejected' WHERE id=?", (sibling_id,))
+    conn.execute("INSERT INTO nodes(id,type,label) VALUES('concept.gnosis','concept','Gnosis')")
+    conn.execute(
+        "INSERT INTO edges(source_id,target_id,type,tier,justification) VALUES "
+        "(?, 'concept.gnosis', 'EXPRESSES', 'proposed', 'x')",
+        (row["chunk_id"],),
+    )
+
+    reject_tag(conn, row)
+
+    edge = conn.execute(
+        "SELECT * FROM edges WHERE source_id=? AND target_id='concept.gnosis'",
+        (row["chunk_id"],),
+    ).fetchone()
+    assert edge is None, "only ACCEPTED siblings protect the shared edge"
+
+
 # ── reassign_tag ───────────────────────────────────────────────────────
 
 
