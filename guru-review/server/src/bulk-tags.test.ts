@@ -133,6 +133,23 @@ describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
     expect(res.status).toBe(200);
     expect(res.body.queued).toBe(1);
     expect(res.body.unknown_ids).toEqual([999999]);
+    // Per-item map distinguishes queued from unknown (driver acceptance
+    // criteria: unknown_ids ≠ skipped — they are different failure shapes).
+    expect(res.body.results[good]).toBe('queued');
+    expect(res.body.results[999999]).toBe('unknown');
+  });
+
+  it('distinguishes already-queued replays (skipped) from unknown ids', async () => {
+    const id = addTag(8);
+    await postBulk([{ target_id: id, action: 'accept', client_action_id: 'dist-1', reviewer: 'r' }]);
+    const replay = await postBulk([
+      { target_id: id, action: 'accept', client_action_id: 'dist-1', reviewer: 'r' },
+      { target_id: 888888, action: 'reject', client_action_id: 'dist-2', reviewer: 'r' },
+    ]);
+    expect(replay.body.skipped).toBe(1);
+    expect(replay.body.unknown_ids).toEqual([888888]);
+    expect(replay.body.results[id]).toBe('skipped');
+    expect(replay.body.results[888888]).toBe('unknown');
   });
 
   it('counts invalid items as skipped with per-item errors', async () => {
