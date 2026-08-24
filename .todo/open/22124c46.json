@@ -7,7 +7,7 @@
     "type": "agent"
   },
   "created_at": "2026-08-24T11:28:46.464Z",
-  "updated_at": "2026-08-24T11:28:46.529Z",
+  "updated_at": "2026-08-24T11:30:00.189Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/chunks.ts"
@@ -18,5 +18,6 @@
     "api",
     "bulk-review",
     "guru-dev"
-  ]
+  ],
+  "description": "During the blavatsky-sd staged_tags review loop (~11k verdicts queued via individual POST /api/tags/:id/action calls from a scripted client), a client-side bug silently dropped ~863 verdicts across five batches. The API returned success for every POST it received, so the drift was invisible until the review cursor stopped matching; recovery required re-parsing the client's working scripts.\n\nRequested changes (priority order):\n\n1. Bulk endpoint — POST /api/tags/bulk accepting [{target_id, action}] (optionally reviewer + batched client_action_ids), returning {queued, skipped, unknown_ids}. Eliminates per-tag HTTP loops and lets client and server counts reconcile in one response.\n\n2. Per-chunk coverage in GET /api/chunks — report pending_total vs queued per chunk so an under-queued batch is visible on the very next fetch instead of surfacing only as cursor drift batches later.\n\n3. Reconciliation field in responses — include remaining_pending_in_text (or by-chunk coverage) in action POST responses and/or GET /api/apply/preview, making completeness checkable by comparison rather than by reconstructing intent from client-side files.\n\n4. Documented pattern for scripted bulk review — recommend a JSONL working file ({target_id, action, why}) as source of truth, uploaded by a simple reader script, rather than constructing payloads inline in code where dropped lines are silent."
 }
