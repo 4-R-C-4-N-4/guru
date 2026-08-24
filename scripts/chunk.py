@@ -115,7 +115,7 @@ def _apply_pre_strip(content: str, patterns: list[str]) -> str:
     before strategy dispatch so the body that gets chunked is the actual
     text. DOTALL so multi-line patterns work."""
     for pat in patterns:
-        content = re.sub(pat, "", content, flags=re.DOTALL)
+        content = re.sub(pat, "", content, flags=re.DOTALL | re.MULTILINE)
     return content.strip()
 
 

@@ -19,7 +19,7 @@ number_source = "filename"
 #      paragraph at paragraph end -- verified on 6 sampled content pages.
 pre_strip_patterns = [
     "^Back to Esoteric Sacred Texts\\s+Back to Sacred Texts Main Index",
-    "^\\s*Next Section Contents\\s*$",
+    "\\s*Next Section Contents\\s*$",
 ]
 
 # Inline [[Vol. N, Page X]] page markers are NOT stripped -- retained per the
