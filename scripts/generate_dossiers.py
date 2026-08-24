@@ -46,6 +46,11 @@ MAX_ATTEMPTS = 3
 # ("Hall", "Ouspensky", "Taylor") when the name appears nowhere in the input;
 # v3 bans naming the author/translator/annotator unless the input names them.
 L1_TPL = "l1-v3"
+# Compression retry template (todo:b1c8be4c fix 1): on a length-band overrun,
+# _attempt feeds the model its own summary back through this instead of
+# re-rolling the generation prompt. Keep-all-claims compress; the granularity
+# loss is an explicit decision rather than a statistical side effect.
+COMPRESS_TPL = "compress-v1"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
@@ -268,12 +273,33 @@ class Generator:
                 logger.warning(f"provider busy — sleeping {e.retry_after:.0f}s ({e})")
                 time.sleep(e.retry_after)
 
-    def _attempt(self, system, prompt, validate):
+    def _attempt(self, system, prompt, validate, compress_to: int | None = None):
+        """Generate with contract-reject retry; on length overrun, compress.
+
+        Fresh retries treat length as a statistical re-roll — same prompt +
+        same temperature mostly reproduces the overrun (observed c12:
+        28/192 spans log-skipped after 3 identical re-rolls). So after the
+        first reject of a LENGTH band, the loop switches to the compression
+        path (todo:b1c8be4c fix 1): feed the model its own overrunning
+        output back with a keep-all-claims compress instruction. That is
+        one cheap deterministic call whose granularity loss is an explicit
+        decision, not a re-roll that usually lands in-band by dropping
+        detail. Attempt shape becomes: generate -> compress -> give up.
+
+        compress_to: target token budget for the compression pass; required
+        for the compress path — validators without a prose budget (structure,
+        fields) never trigger it.
+        """
         last = None
         blocked = 0
-        for i in range(MAX_ATTEMPTS):
+        compressed_from = None
+        for i in range(MAX_ATTEMPTS + (1 if compress_to else 0)):
             try:
-                raw = self._llm(system, prompt)
+                if compressed_from is not None:
+                    raw = self._llm(system, render(
+                        COMPRESS_TPL, budget=str(compress_to), summary=compressed_from))
+                else:
+                    raw = self._llm(system, prompt)
             except ContentBlocked as e:
                 blocked += 1
                 logger.warning(f"  content-blocked (attempt {i + 1}): {e}")
@@ -284,10 +310,27 @@ class Generator:
                     return None
                 continue
             try:
-                return validate(raw)
+                out = validate(raw)
+                if compressed_from is not None and logger.isEnabledFor(logging.INFO):
+                    n = count_tokens(compressed_from)
+                    logger.info(f"  compressed {n} -> in-band tokens")
+                return out
             except ValueError as e:
                 last = e
                 logger.warning(f"  contract reject (attempt {i + 1}): {e}")
+                # Switch to compression on the first length-band overrun;
+                # other rejects keep the corrective-feedback retry.
+                if compress_to is not None and "outside sanity band" in str(e) \
+                        and compressed_from is None:
+                    compressed_from = raw.strip()
+                    logger.info(f"  overrun — compressing to ~{compress_to} instead of regenerating")
+                    continue
+                if compressed_from is not None:
+                    # Compression already ran and still violates the contract:
+                    # give up rather than loop. Attempt shape stays
+                    # generate -> compress -> give up.
+                    logger.error(f"  compressed output also rejected: {e}")
+                    return None
                 prompt = prompt + f"\n\nYour previous output was rejected: {e}. Follow the OUTPUT contract exactly."
         logger.error(f"  giving up after {MAX_ATTEMPTS} attempts: {last}")
         return None
@@ -332,7 +375,8 @@ class Generator:
             prompt = render(L1_TPL, section_span=wp["label"], work_label=wp["label"],
                             budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
-                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
+                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
+                                 compress_to=budget)
             if body:
                 self._insert_summary(sid, wp, None if len(set(s["text_id"] for s in wp["spans"])) > 1
                                      else wp["spans"][0]["text_id"], 2, None, chunk_ids, None, body, L1_TPL)
@@ -347,7 +391,8 @@ class Generator:
             prompt = render(L1_TPL, section_span=s["label"], work_label=wp["label"],
                             budget=budget) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
-                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
+                                 lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
+                                 compress_to=budget)
             if body:
                 self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
                                      s["chunk_ids"], None, body, L1_TPL)
@@ -384,7 +429,7 @@ class Generator:
         joined = "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in l1s)
         prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
         body = self._attempt(self._preamble(wp), prompt,
-                             lambda r: _v_prose(r, 200, 350, joined))
+                             lambda r: _v_prose(r, 200, 350, joined), compress_to=275)
         if body:
             text_ids = {r["text_id"] for r in l1s}
             self._insert_summary(sid, wp, text_ids.pop() if len(text_ids) == 1 else None,
@@ -562,7 +607,8 @@ def respin(gen: "Generator", summary_id: str, feedback: str = "") -> bool:
     prompt = (render(L1_TPL, section_span=label, work_label=target_wp["label"],
                      budget=budget) + addendum + "\n\n---\nINPUT:\n\n" + src)
     body = gen._attempt(gen._preamble(target_wp), prompt,
-                        lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src))
+                        lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
+                        compress_to=budget)
     if body is None:
         return False
     gen._insert_summary(summary_id, target_wp, text_id, level,
