@@ -1,0 +1,36 @@
+{
+  "id": "ec154882",
+  "type": "chore",
+  "state": "done",
+  "summary": "Docs: JSONL working-file convention for scripted bulk review (node 11 failure modes)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T11:32:16.973Z",
+  "updated_at": "2026-08-24T11:47:38.658Z",
+  "files": [
+    {
+      "path": "docs/ingest/11-tag-review.md"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "docs",
+    "bulk-review"
+  ],
+  "relationships": {
+    "parent": "37dd43de"
+  },
+  "work": {
+    "branch": "todo/37dd43de",
+    "base_branch": "main",
+    "started_at": "2026-08-24T11:46:45.685Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "03c2971a913dfe414d79c690179f8d1b0094e636",
+    "resolved_at": "2026-08-24T11:47:38.658Z",
+    "resolved_by": "unknown",
+    "note": "Failure-modes entry documents the blavatsky-sd incident and the JSONL working-file convention with the three reconciliation surfaces."
+  }
+}
