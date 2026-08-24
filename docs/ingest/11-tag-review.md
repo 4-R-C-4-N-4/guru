@@ -202,6 +202,30 @@ memberships. Don't debug against the dry-run summary; query
 score-1 pools to 90% on densely on-concept curated runs, and 0% on apparatus
 chunks. The rate is an outcome.
 
+**Building the bulk payload in code.** During the blavatsky-sd review loop
+(todo:37dd43de), a scripted driver built ~11k verdicts in Python and POSTed
+them one at a time; a client-side bug (reasoning lines comment-converted
+inside a dict literal) silently dropped ~863 of them across five batches.
+Every per-tag call returned success — the API can only vouch for what it
+received — and the drift surfaced only when the cursor stopped matching,
+hours later. The convention that prevents this class of failure:
+
+1. **Write the verdicts to a JSONL working file first** (one
+   `{target_id, action, client_action_id, reviewer}` object per line). The
+   file, not an in-memory dict, is the source of truth: it survives the
+   session, it can be counted with `wc -l`, and it can be re-uploaded after
+   a crash without re-deriving anything.
+2. **Upload with a dumb reader** — read line, POST, nothing else. No
+   transformation between file and payload; any judgement happens at
+   file-authoring time where it can be inspected.
+3. **Reconcile counts against the server, not your intent.**
+   `POST /api/tags/bulk` returns `{queued, skipped, unknown_ids}`; compare
+   `queued` against `wc -l` on the file. `GET /api/chunks` now carries a
+   `by_chunk` map (`pending_total` vs `queued` per chunk) so an
+   under-queued batch is visible on the next fetch; `GET /api/apply/preview`
+   carries `remaining_pending_total` / `remaining_pending_in_text` for the
+   same check at text granularity.
+
 ## Provenance
 
 Rubric extracted from the `guru-review-tags` skill (calibrated against a

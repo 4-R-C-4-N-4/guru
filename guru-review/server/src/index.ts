@@ -43,7 +43,7 @@ async function main(): Promise<void> {
   app.use('/api', textsRouter(ro));
   app.use('/api', conceptsRouter(ro));
   app.use('/api', chunksRouter(ro, body));
-  app.use('/api', tagsRouter(stmts));
+  app.use('/api', tagsRouter(stmts, rw));
   app.use('/api', edgesRouter(ro, stmts, body));
   app.use('/api', cleanupsRouter(ro, stmts));
   app.use('/api', queueRouter(ro, stmts));

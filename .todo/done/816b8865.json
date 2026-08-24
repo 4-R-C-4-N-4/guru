@@ -1,0 +1,38 @@
+{
+  "id": "816b8865",
+  "type": "feature",
+  "state": "done",
+  "summary": "Reconciliation counts: remaining_pending_in_text in action/preview responses",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T11:32:16.926Z",
+  "updated_at": "2026-08-24T11:46:37.296Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/queue.ts"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "api",
+    "reconciliation"
+  ],
+  "relationships": {
+    "parent": "37dd43de"
+  },
+  "work": {
+    "branch": "todo/37dd43de",
+    "base_branch": "main",
+    "started_at": "2026-08-24T11:44:54.922Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "692a1a69fba109394ae823e0129ccac30d3d4a91",
+    "resolved_at": "2026-08-24T11:46:37.296Z",
+    "resolved_by": "unknown",
+    "test_file": "guru-review/server/src/bulk-tags.test.ts",
+    "test_function": "GET /api/apply/preview remaining_pending reconciliation (todo:816b8865) > reports remaining pending tags overall and per text, excluding queued ones",
+    "note": "Preview now returns remaining_pending_total + remaining_pending_in_text (pending staged tags not in the unapplied queue), so a dropped-verdict batch is a comparison, not archaeology."
+  }
+}
