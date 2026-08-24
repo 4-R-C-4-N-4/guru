@@ -1,0 +1,186 @@
+// POST /api/tags/bulk (todo:ee0b6136) — batched queue endpoint. Runs the
+// real router over a temp DB via a minimal in-process express harness so
+// the tests exercise actual SQL, zod schemas, transaction wrapper and
+// idempotency behaviour — no new test dependencies.
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+import Database from 'better-sqlite3';
+import express from 'express';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import type { Server } from 'node:http';
+
+import { tagsRouter } from './routes/tags.js';
+import { openDb } from './db.js';
+
+let dir: string;
+let handles: ReturnType<typeof openDb>;
+let server: Server;
+let baseUrl: string;
+
+const LIVE_SCHEMA = `
+CREATE TABLE nodes (
+  id TEXT PRIMARY KEY, type TEXT, label TEXT, tradition_id TEXT,
+  definition TEXT, metadata_json TEXT);
+CREATE TABLE edges (
+  source_id TEXT, target_id TEXT, type TEXT, tier TEXT, justification TEXT,
+  PRIMARY KEY (source_id, target_id, type));
+CREATE TABLE staged_tags (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, chunk_id TEXT, concept_id TEXT,
+  score INTEGER DEFAULT 2, justification TEXT, is_new_concept INTEGER DEFAULT 0,
+  new_concept_def TEXT, status TEXT DEFAULT 'pending', reviewed_by TEXT,
+  reviewed_at TEXT, model TEXT, prompt_version TEXT);
+CREATE TABLE staged_edges (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, source_chunk TEXT, target_chunk TEXT,
+  edge_type TEXT, confidence REAL, justification TEXT,
+  status TEXT DEFAULT 'pending', tier TEXT, reviewed_by TEXT, reviewed_at TEXT);
+CREATE TABLE staged_cleanups (
+  id INTEGER PRIMARY KEY, chunk_id TEXT, words_preserved INTEGER,
+  signal_score REAL, status TEXT DEFAULT 'pending', reviewed_by TEXT,
+  reviewed_at TEXT, cleaned_body TEXT);
+CREATE TABLE staged_concepts (id INTEGER PRIMARY KEY);
+CREATE TABLE chunk_embeddings (chunk_id TEXT PRIMARY KEY);
+CREATE TABLE tagging_progress (chunk_id TEXT PRIMARY KEY);
+CREATE TABLE _export_state (id INTEGER PRIMARY KEY);
+`;
+
+beforeEach(async () => {
+  dir = mkdtempSync(join(tmpdir(), 'guru-bulk-'));
+  const path = join(dir, 'test.db');
+  const seed = new Database(path);
+  seed.exec(LIVE_SCHEMA);
+  seed.close();
+  handles = openDb({ db_path: path } as Parameters<typeof openDb>[0]);
+  const app = express();
+  app.use(express.json());
+  app.use('/api', tagsRouter(handles.stmts, handles.rw));
+  await new Promise<void>((resolve) => {
+    server = app.listen(0, '127.0.0.1', () => resolve());
+  });
+  const addr = server.address();
+  const port = typeof addr === 'object' && addr !== null ? addr.port : 0;
+  baseUrl = `http://127.0.0.1:${port}`;
+});
+
+afterEach(async () => {
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+  handles.ro.close();
+  handles.rw.close();
+  rmSync(dir, { recursive: true, force: true });
+});
+
+function addTag(n: number): number {
+  const info = handles.rw
+    .prepare(
+      "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) " +
+        "VALUES (?, ?, 2, 'qwen-3-4b-guru', 'v1')",
+    )
+    .run(`hinduism.yoga-sutras-book-01.${String(n).padStart(3, '0')}`, 'concept_under_test');
+  return Number(info.lastInsertRowid);
+}
+
+async function postBulk(items: unknown): Promise<{ status: number; body: any }> {
+  const res = await fetch(`${baseUrl}/api/tags/bulk`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(items),
+  });
+  return { status: res.status, body: await res.json() };
+}
+
+function queuedAction(targetId: number): { action: string; applied_at: string | null } {
+  return handles.rw
+    .prepare(
+      "SELECT action, applied_at FROM review_actions WHERE target_table='staged_tags' AND target_id = ?",
+    )
+    .get(targetId) as { action: string; applied_at: string | null };
+}
+
+describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
+  it('queues every valid item in one call and reports counts', async () => {
+    const ids = [addTag(1), addTag(2), addTag(3)];
+    const res = await postBulk(
+      ids.map((id, i) => ({
+        target_id: id,
+        action: i === 0 ? 'accept' : 'reject',
+        client_action_id: `bulk-${i}`,
+        reviewer: 'driver-test',
+      })),
+    );
+
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ ok: true, queued: 3, skipped: 0, unknown_ids: [] });
+    expect(queuedAction(ids[0]).action).toBe('accept');
+    expect(queuedAction(ids[2]).action).toBe('reject');
+    // Queue-only: nothing is applied by this endpoint.
+    expect(queuedAction(ids[0]).applied_at).toBeNull();
+  });
+
+  it('reports unknown ids without failing the batch', async () => {
+    const good = addTag(4);
+    const res = await postBulk([
+      { target_id: good, action: 'accept', client_action_id: 'b-good', reviewer: 'r' },
+      { target_id: 999999, action: 'accept', client_action_id: 'b-bad', reviewer: 'r' },
+    ]);
+
+    expect(res.status).toBe(200);
+    expect(res.body.queued).toBe(1);
+    expect(res.body.unknown_ids).toEqual([999999]);
+  });
+
+  it('counts invalid items as skipped with per-item errors', async () => {
+    const good = addTag(5);
+    const res = await postBulk([
+      { target_id: good, action: 'accept', client_action_id: 'b-ok', reviewer: 'r' },
+      { target_id: good, action: 'reassign', client_action_id: 'b-no-target', reviewer: 'r' },
+      'not-an-object',
+    ]);
+
+    expect(res.status).toBe(200);
+    expect(res.body.queued).toBe(1);
+    expect(res.body.skipped).toBeGreaterThanOrEqual(2);
+  });
+
+  it('is idempotent on client_action_id replay — counted as skipped, not queued', async () => {
+    const id = addTag(6);
+    const item = { target_id: id, action: 'accept', client_action_id: 'same-cid', reviewer: 'r' };
+
+    const first = await postBulk([item]);
+    expect(first.body.queued).toBe(1);
+
+    const replay = await postBulk([item]);
+    expect(replay.status).toBe(200);
+    expect(replay.body.queued).toBe(0);
+    expect(replay.body.skipped).toBe(1);
+
+    // Exactly one review_actions row for that cid.
+    const n = handles.rw
+      .prepare("SELECT COUNT(*) AS n FROM review_actions WHERE client_action_id='same-cid'")
+      .get() as { n: number };
+    expect(n.n).toBe(1);
+  });
+
+  it('rejects non-array bodies and empty batches', async () => {
+    expect((await postBulk({})).status).toBe(400);
+    expect((await postBulk([])).status).toBe(400);
+  });
+
+  it('reports unexpected DB errors per-item instead of failing the batch', async () => {
+    // Force a per-item DB failure: drop review_actions so every insert
+    // throws inside queueOne's guard.
+    const a = addTag(7);
+    handles.rw.exec('DROP TABLE review_actions');
+    const res = await postBulk([
+      { target_id: a, action: 'accept', client_action_id: 'x-1', reviewer: 'r' },
+    ]);
+    expect(res.status).toBe(200);
+    expect(res.body.queued).toBe(0);
+    expect(res.body.errored_items).toHaveLength(1);
+    // staged row untouched by the failed queueing.
+    const n = handles.rw
+      .prepare('SELECT COUNT(*) AS n FROM staged_tags WHERE id=?')
+      .get(a) as { n: number };
+    expect(n.n).toBe(1);
+  });
+});
