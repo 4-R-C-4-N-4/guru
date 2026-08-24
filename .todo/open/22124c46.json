@@ -1,0 +1,22 @@
+{
+  "id": "22124c46",
+  "type": "bug",
+  "state": "open",
+  "summary": "guru-review: bulk tag-action endpoint + per-chunk coverage to prevent silent under-queueing",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T11:28:46.464Z",
+  "updated_at": "2026-08-24T11:28:46.529Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/chunks.ts"
+    }
+  ],
+  "tags": [
+    "review-app",
+    "api",
+    "bulk-review",
+    "guru-dev"
+  ]
+}
