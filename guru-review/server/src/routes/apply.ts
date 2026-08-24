@@ -35,6 +35,32 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
          GROUP BY target_table`,
       )
       .all() as { target_table: 'staged_tags' | 'staged_edges' | 'staged_cleanups'; n: number }[];
+
+    // Reconciliation (todo:816b8865): remaining pending staged tags NOT in
+    // the queue, overall and per text. A bulk pass that dropped verdicts
+    // shows up here as a non-zero remainder instead of as cursor drift.
+    const remaining = ro
+      .prepare(
+        `SELECT COUNT(*) AS n FROM staged_tags st
+         WHERE st.status = 'pending'
+           AND NOT EXISTS (SELECT 1 FROM review_actions ra
+             WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags'
+               AND ra.applied_at IS NULL)`,
+      )
+      .get() as { n: number };
+    const remaining_by_text = ro
+      .prepare(
+        `SELECT json_extract(n.metadata_json, '$.text_id') AS text_id, COUNT(*) AS n
+         FROM staged_tags st
+         JOIN nodes n ON n.id = st.chunk_id
+         WHERE st.status = 'pending'
+           AND NOT EXISTS (SELECT 1 FROM review_actions ra
+             WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags'
+               AND ra.applied_at IS NULL)
+         GROUP BY text_id ORDER BY n DESC`,
+      )
+      .all() as Array<{ text_id: string | null; n: number }>;
+
     res.json({
       total_queued: total,
       by_action,
@@ -42,6 +68,8 @@ export function applyRouter(rw: Database.Database, ro: Database.Database, stmts:
       affected_staged_tags: affected.find((a) => a.target_table === 'staged_tags')?.n ?? 0,
       affected_staged_edges: affected.find((a) => a.target_table === 'staged_edges')?.n ?? 0,
       affected_staged_cleanups: affected.find((a) => a.target_table === 'staged_cleanups')?.n ?? 0,
+      remaining_pending_in_text: remaining_by_text,
+      remaining_pending_total: remaining.n,
     });
   });
 
