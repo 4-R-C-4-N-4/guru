@@ -170,11 +170,37 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     const next_cursor =
       outerRows.length === limit && last ? encodeCursor({ trad: last.tradition_id, chunk: last.chunk_id }) : null;
 
+    // Per-chunk coverage (todo:a8037ed0): pending_total is ALL pending tags
+    // on the chunk regardless of score/queued state; queued counts unapplied
+    // review_actions against it. A chunk where queued < pending_total has
+    // under-queued verdicts — visible on the very next fetch instead of
+    // surfacing as cursor drift at the end of a bulk pass.
+    let by_chunk: Record<string, { pending_total: number; queued: number }> = {};
+    if (outerRows.length > 0) {
+      const ph = outerRows.map(() => '?').join(',');
+      const covRows = ro
+        .prepare(
+          `SELECT n.id AS chunk_id,
+                  (SELECT COUNT(*) FROM staged_tags st2
+                    WHERE st2.chunk_id = n.id AND st2.status = 'pending') AS pending_total,
+                  (SELECT COUNT(*) FROM review_actions ra
+                    JOIN staged_tags st3 ON st3.id = ra.target_id
+                    WHERE st3.chunk_id = n.id AND ra.target_table = 'staged_tags'
+                      AND ra.applied_at IS NULL) AS queued
+           FROM nodes n WHERE n.id IN (${ph})`,
+        )
+        .all(...outerRows.map((r) => r.chunk_id)) as Array<{ chunk_id: string; pending_total: number; queued: number }>;
+      by_chunk = Object.fromEntries(
+        covRows.map((c) => [c.chunk_id, { pending_total: c.pending_total, queued: c.queued }]),
+      );
+    }
+
     res.json({
       chunks,
       next_cursor,
       pending_chunks_in_filter: cached.pending_chunks_in_filter,
       pending_tags_in_filter: cached.pending_tags_in_filter,
+      by_chunk,
     });
   });
 

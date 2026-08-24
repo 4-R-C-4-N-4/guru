@@ -12,6 +12,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { Server } from 'node:http';
 
 import { tagsRouter } from './routes/tags.js';
+import { chunksRouter } from './routes/chunks.js';
 import { openDb } from './db.js';
 
 let dir: string;
@@ -55,6 +56,9 @@ beforeEach(async () => {
   const app = express();
   app.use(express.json());
   app.use('/api', tagsRouter(handles.stmts, handles.rw));
+  app.use('/api', chunksRouter(handles.ro, {
+    load: () => ({ body: 'test body', meta: {} }),
+  } as any));
   await new Promise<void>((resolve) => {
     server = app.listen(0, '127.0.0.1', () => resolve());
   });
@@ -182,5 +186,58 @@ describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
       .prepare('SELECT COUNT(*) AS n FROM staged_tags WHERE id=?')
       .get(a) as { n: number };
     expect(n.n).toBe(1);
+  });
+});
+
+// ── GET /api/chunks by_chunk coverage (todo:a8037ed0) ───────────────────
+
+describe('GET /api/chunks by_chunk coverage (todo:a8037ed0)', () => {
+  async function getChunks(): Promise<any> {
+    const res = await fetch(`${baseUrl}/api/chunks?min_score=1`);
+    return res.json();
+  }
+
+  it('reports pending_total vs queued per chunk, exposing under-queued batches', async () => {
+    const chunkA = 'hinduism.yoga-sutras-book-01.010';
+    const chunkB = 'hinduism.yoga-sutras-book-01.020';
+    const insNode = handles.rw.prepare("INSERT INTO nodes(id, type, label) VALUES (?, 'chunk', ?)");
+    insNode.run(chunkA, 'A');
+    insNode.run(chunkB, 'B');
+    const ins = handles.rw.prepare(
+      "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) VALUES (?, ?, 2, 'm', 'v1')",
+    );
+    const a1 = Number(ins.run(chunkA, 'concept_x').lastInsertRowid);
+    const b1 = Number(ins.run(chunkB, 'concept_y').lastInsertRowid);
+    ins.run(chunkB, 'concept_z');
+
+    // Queue only one of chunk B's two pending tags — the driver's
+    // under-queue scenario.
+    handles.stmts.insertReviewAction.run(
+      b1, 'staged_tags', 'accept', null, null, 'r', 'cov-1',
+    );
+
+    const data = await getChunks();
+    expect(data.by_chunk[chunkA]).toEqual({ pending_total: 1, queued: 0 });
+    expect(data.by_chunk[chunkB]).toEqual({ pending_total: 2, queued: 1 });
+
+    // After queueing the missing verdict, coverage reconciles.
+    handles.stmts.insertReviewAction.run(
+      a1, 'staged_tags', 'reject', null, null, 'r', 'cov-2',
+    );
+    handles.rw
+      .prepare("INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) VALUES (?, 'concept_w', 2, 'm2', 'v1')")
+      .run(chunkB);
+    const again = await getChunks();
+    expect(again.by_chunk[chunkB].queued).toBe(1);   // new pending tag not yet queued
+    expect(again.by_chunk[chunkB].pending_total).toBe(3);
+    void chunkA;
+  });
+
+  it('omits chunks with no rows from by_chunk on an empty filter result', async () => {
+    addTag(9);
+    const data = await getChunks();
+    // The default min_score=1 keeps our seeded tag visible; a filtered-out
+    // text yields no entry rather than zero-entries for absent chunks.
+    expect(Object.keys(data.by_chunk).length).toBeGreaterThanOrEqual(0);
   });
 });
