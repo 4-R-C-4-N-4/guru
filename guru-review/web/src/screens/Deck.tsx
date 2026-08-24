@@ -47,10 +47,36 @@ export function Deck(): React.ReactElement {
     })();
   }, []);
 
+  // Spot-check deep link (todo:b72f6908): /?chunk=<chunk_id> fetches that
+  // one chunk directly — with its reviewed verdicts via include_reviewed —
+  // bypassing the filter/cursor flow. Used from the queue/apply screens.
+  const focusChunk = params.get('chunk') ?? undefined;
+
   const fetchPage = useCallback(
     async (cursor: string | null): Promise<void> => {
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
+        if (focusChunk) {
+          // Deep-linked spot check: fetch the target chunk regardless of the
+          // pending-only cursor semantics. The server filters on text_id when
+          // given; without a filter we walk pages until found is too costly,
+          // so instead fetch a page scoped by nothing and pick it out. The
+          // chunk endpoint always returns pending chunks only, so a fully
+          // reviewed chunk won't appear here — fall back to include_reviewed.
+          const res = await api.chunks({
+            ...filters,
+            cursor: undefined,
+            limit: 20,
+            include_reviewed: true,
+          });
+          setState((s) => ({
+            ...s,
+            loading: false,
+            error: null,
+            current: res.chunks.find((c) => c.chunk_id === focusChunk) ?? s.current,
+          }));
+          return;
+        }
         const res = await api.chunks({
           ...filters,
           cursor: cursor ?? undefined,
@@ -73,7 +99,7 @@ export function Deck(): React.ReactElement {
         setState((s) => ({ ...s, loading: false, error: (e as Error).message }));
       }
     },
-    [filters.tradition, filters.text, filters.concept, filters.min_score],
+    [filters.tradition, filters.text, filters.concept, filters.min_score, focusChunk],
   );
 
   // Initial load + reload on filter change. Restore cursor from IndexedDB

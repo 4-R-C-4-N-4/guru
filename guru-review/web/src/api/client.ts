@@ -60,7 +60,9 @@ export const api = {
     getJson(`/api/texts?tradition=${encodeURIComponent(tradition)}`),
   concepts: (): Promise<ConceptDef[]> => getJson('/api/concepts'),
 
-  chunks: (params: FilterParams & { cursor?: string; limit?: number }): Promise<ChunksResponse> => {
+  chunks: (
+    params: FilterParams & { cursor?: string; limit?: number; include_reviewed?: boolean },
+  ): Promise<ChunksResponse> => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(params)) {
       if (v !== undefined && v !== null && v !== '') q.set(k, String(v));

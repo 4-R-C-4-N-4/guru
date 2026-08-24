@@ -11,6 +11,9 @@ const QuerySchema = z.object({
   min_score: z.coerce.number().int().min(0).max(3).default(1),
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(20).default(8),
+  // todo:b72f6908 — spot-check mode: also return each chunk's already-
+  // reviewed tags (accepted/rejected/reassigned) with their verdicts.
+  include_reviewed: z.coerce.boolean().default(false),
 });
 
 interface CursorShape {
@@ -56,6 +59,17 @@ interface ConceptInfo {
   definition: string | null;
 }
 
+interface ReviewedRow {
+  target_id: number;
+  chunk_id: string;
+  concept_id: string;
+  score: number;
+  justification: string | null;
+  status: string;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+}
+
 export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Router {
   const r = Router();
   const counts = new CountCache(30_000);
@@ -71,7 +85,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
       res.status(400).json({ error: parsed.error.flatten() });
       return;
     }
-    const { tradition, text, concept, min_score, cursor, limit } = parsed.data;
+    const { tradition, text, concept, min_score, cursor, limit, include_reviewed } = parsed.data;
     const cursorObj = decodeCursor(cursor);
 
     // Build outer query (chunks page) ----------------------------------
@@ -116,6 +130,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
 
     // Build inner query (tags for those chunks) ------------------------
     const chunks: ReturnType<typeof buildChunk>[] = [];
+    let reviewedByChunk: Map<string, ReviewedRow[]> = new Map();
     if (outerRows.length > 0) {
       const placeholders = outerRows.map(() => '?').join(',');
       const innerSql = `
@@ -152,9 +167,31 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
         tagsByChunk.set(t.chunk_id, arr);
       }
 
+      // Reviewed-tag surface (todo:b72f6908) — only when requested; the
+      // default response shape is unchanged.
+      if (include_reviewed) {
+        const reviewedSql = `
+          SELECT id AS target_id, chunk_id, concept_id, score, justification,
+                 status, reviewed_by, reviewed_at
+          FROM staged_tags
+          WHERE chunk_id IN (${placeholders})
+            AND status != 'pending'
+          ORDER BY chunk_id, status, id ASC
+        `;
+        const reviewedRows = ro
+          .prepare(reviewedSql)
+          .all(...outerRows.map((r) => r.chunk_id)) as ReviewedRow[];
+        reviewedByChunk = new Map();
+        for (const t of reviewedRows) {
+          const arr = reviewedByChunk.get(t.chunk_id) ?? [];
+          arr.push(t);
+          reviewedByChunk.set(t.chunk_id, arr);
+        }
+      }
+
       for (const c of outerRows) {
         const tags = tagsByChunk.get(c.chunk_id) ?? [];
-        chunks.push(buildChunk(c, tags, concepts, body));
+        chunks.push(buildChunk(c, tags, concepts, body, reviewedByChunk.get(c.chunk_id)));
       }
     }
 
@@ -212,6 +249,7 @@ function buildChunk(
   tags: InnerRow[],
   concepts: Map<string, ConceptInfo>,
   body: ChunkBodyCache,
+  reviewed?: ReviewedRow[],
 ): {
   chunk_id: string;
   tradition_id: string;
@@ -227,6 +265,16 @@ function buildChunk(
     justification: string;
     is_new_concept: boolean;
     new_concept_def: string | null;
+  }>;
+  reviewed_tags?: Array<{
+    target_id: number;
+    concept_id: string;
+    concept_label: string;
+    score: number;
+    justification: string;
+    status: string;
+    reviewed_by: string | null;
+    reviewed_at: string | null;
   }>;
 } {
   return {
@@ -248,6 +296,23 @@ function buildChunk(
         new_concept_def: t.new_concept_def,
       };
     }),
+    ...(reviewed
+      ? {
+          reviewed_tags: reviewed.map((t) => {
+            const ci = concepts.get(t.concept_id);
+            return {
+              target_id: t.target_id,
+              concept_id: t.concept_id,
+              concept_label: ci?.label ?? t.concept_id,
+              score: t.score,
+              justification: t.justification ?? '',
+              status: t.status,
+              reviewed_by: t.reviewed_by,
+              reviewed_at: t.reviewed_at,
+            };
+          }),
+        }
+      : {}),
   };
 }
 

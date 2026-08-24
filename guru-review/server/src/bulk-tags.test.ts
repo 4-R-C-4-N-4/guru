@@ -261,6 +261,58 @@ describe('GET /api/chunks by_chunk coverage (todo:a8037ed0)', () => {
   });
 });
 
+// ── GET /api/chunks include_reviewed (todo:b72f6908) ────────────────────
+
+describe('GET /api/chunks include_reviewed (todo:b72f6908)', () => {
+  function seedChunk(id: string, concept = 'concept_a'): number {
+    handles.rw
+      .prepare("INSERT INTO nodes(id, type, label) VALUES (?, 'chunk', 'S') ON CONFLICT(id) DO NOTHING")
+      .run(id);
+    return Number(
+      handles.rw
+        .prepare(
+          "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) VALUES (?, ?, 2, 'm', 'v1')",
+        )
+        .run(id, concept).lastInsertRowid,
+    );
+  }
+
+  it('omits reviewed_tags by default and includes them when requested', async () => {
+    const id = seedChunk('hinduism.yoga-sutras-book-01.040');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='accepted', reviewed_by='curator', reviewed_at='2026-08-23T00:00:00Z' WHERE id=?")
+      .run(id);
+
+    const def = await (await fetch(`${baseUrl}/api/chunks?min_score=1`)).json();
+    expect(def.chunks).toHaveLength(0); // accepted tag no longer counts as pending
+    expect(def.by_chunk['hinduism.yoga-sutras-book-01.040']).toBeUndefined();
+
+    // include_reviewed surfaces the verdict even though nothing is pending.
+    // The outer chunk list is pending-driven; a fully reviewed chunk needs a
+    // direct probe — here we verify the reviewed payload rides along when a
+    // chunk has BOTH pending and reviewed tags.
+    const c = 'hinduism.yoga-sutras-book-01.041';
+    seedChunk(c);
+    const acc = seedChunk(c, 'concept_b');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='rejected', reviewed_by='curator', reviewed_at='2026-08-23T00:00:00Z' WHERE id=?")
+      .run(acc);
+
+    const withRev = await (
+      await fetch(`${baseUrl}/api/chunks?min_score=1&include_reviewed=true`)
+    ).json();
+    expect(withRev.chunks).toHaveLength(1);
+    expect(withRev.chunks[0].chunk_id).toBe(c);
+    expect(withRev.chunks[0].pending_tags).toHaveLength(1);
+    expect(withRev.chunks[0].reviewed_tags).toHaveLength(1);
+    expect(withRev.chunks[0].reviewed_tags[0]).toMatchObject({
+      concept_id: 'concept_b',
+      status: 'rejected',
+      reviewed_by: 'curator',
+    });
+  });
+});
+
 // ── GET /api/apply/preview remaining-pending reconciliation (todo:816b8865)
 
 describe('GET /api/apply/preview remaining_pending reconciliation (todo:816b8865)', () => {

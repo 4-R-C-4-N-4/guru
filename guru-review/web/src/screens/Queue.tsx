@@ -200,9 +200,21 @@ const ACTION_COLOR: Record<string, string> = {
 function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => void }): React.ReactElement {
   const color = ACTION_COLOR[row.action] ?? 'text-zinc-300';
   const ctx = row.context;
+  // Spot-check (todo:b72f6908): tag rows link into the deck focused on that
+  // chunk so the curator can see the chunk in context before/after applying.
+  const spotCheckHref =
+    ctx.kind === 'tag'
+      ? `/?chunk=${encodeURIComponent(ctx.chunk_id)}`
+      : ctx.kind === 'cleanup' && ctx.chunk_id
+        ? `/?chunk=${encodeURIComponent(ctx.chunk_id)}`
+        : null;
   return (
     <div className="flex items-center justify-between border-b border-zinc-900 px-3 py-2 last:border-0 mono text-xs">
-      <div className="min-w-0 flex-1">
+      <a
+        {...(spotCheckHref ? { href: spotCheckHref } : {})}
+        className={`min-w-0 flex-1 ${spotCheckHref ? 'hover:text-accent' : ''}`}
+        {...(spotCheckHref ? {} : { onClick: (e) => e.preventDefault() })}
+      >
         {ctx.kind === 'tag' ? (
           <>
             <div className="truncate text-zinc-300">{ctx.section_label}</div>
@@ -231,7 +243,7 @@ function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => vo
             </div>
           </>
         )}
-      </div>
+      </a>
       <span className={`mx-3 ${color}`}>{row.action}</span>
       <button
         onClick={() => onUndo(row.client_action_id)}
