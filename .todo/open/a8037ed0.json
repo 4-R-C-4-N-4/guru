@@ -1,0 +1,24 @@
+{
+  "id": "a8037ed0",
+  "type": "feature",
+  "state": "open",
+  "summary": "Per-chunk coverage in GET /api/chunks (pending_total vs queued)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T11:32:16.885Z",
+  "updated_at": "2026-08-24T11:32:16.885Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/chunks.ts"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "api",
+    "coverage"
+  ],
+  "relationships": {
+    "parent": "37dd43de"
+  }
+}
