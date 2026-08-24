@@ -1,0 +1,37 @@
+{
+  "id": "b1c8be4c",
+  "type": "bug",
+  "state": "done",
+  "summary": "Dossier generation: length-band retries discard good summaries and drop dense spans entirely",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T23:29:45.271Z",
+  "updated_at": "2026-08-24T23:38:46.637Z",
+  "files": [
+    {
+      "path": "scripts/generate_dossiers.py"
+    }
+  ],
+  "tags": [
+    "dossiers",
+    "generation",
+    "llamacpp",
+    "guru-dev"
+  ],
+  "description": "OBSERVED (blavatsky-sd c12 L1 run, Qwen3.8-27B via llamacpp): 28 of 192 spans were log-skipped after 3 contract rejects each, all on the prose-length sanity band. Examples from the log: 859/742/815 vs [120,720] (one only 3% over), one verbatim-echo reject. Each rejection discards a COMPLETE, coherent summary and re-rolls the identical prompt — same prompt + same temp mostly reproduces the overrun, so we pay 3x compute and then lose the span entirely. Second-order cost: when a retry does land in-band, it is usually because the model dropped detail — length compliance purchased with granularity. Worst case, a span silently absent from the dossier reads as 'nothing important here.'\n\nROOT CAUSE: _attempt's retry loop treats length as pass/fail and regenerates from scratch; the budget formula min(300, max(80, span_tokens//12)) scales with span SIZE but not span DENSITY — SD commentary spans pack more distinct claims per token than verse texts, which is why they overrun.\n\nPROPOSED FIXES (priority order):\n\n1. Compression retry instead of fresh retries. On overrun, do NOT regenerate: feed the model its own summary back with a compress instruction ('compress to ~N words; keep all distinct claims; drop elaboration'). One cheap deterministic call; granularity loss becomes an explicit decision instead of a statistical re-roll. Attempt loop becomes: generate -> compress -> give up.\n\n2. Density-scaled budgets. Derive per-span budget from structural signals (section headings, paragraph count) rather than raw token count, so dense spans get honest bands instead of forcing the model to fight them.\n\n3. Stage overruns as reviewable rows, not voids. Accept overrunning summaries into staged_summaries with an overrun flag + actual length; let D3 decide per-row accept-as-is vs regenerate-with-tighter-brief. Fixes 'absence is invisible' permanently; moves the granularity judgment into the existing review gate.\n\n4. Fold path for pathological spans. Spans failing N attempts auto-degrade to sub-summarize-then-merge via the llamacpp fold machinery (input_budget > 0), preserving coverage of dense spans.\n\nPICK: 1 first (contained edit to _attempt retry loop), 3 as follow-up.",
+  "work": {
+    "branch": "todo/b1c8be4c",
+    "base_branch": "main",
+    "started_at": "2026-08-24T23:32:52.255Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "6076368d71ca9ce09ae4a99025f09df5e8e18373",
+    "resolved_at": "2026-08-24T23:38:46.637Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_dossier_compress_retry.py",
+    "test_function": "test_overrun_switches_to_compress_not_regenerate",
+    "note": "Fix 1 of 4: _attempt(compress_to=N) switches to a keep-all-claims compression pass (prompts/dossier/compress-v1.md) on the first length-band overrun instead of regenerating; compressed output is revalidated and give-up stays generate->compress->give up. Wired into L1, degenerate-L2, L2 and respin call sites. Fixes 2-4 (density budgets, staged overrun rows, fold degradation) remain open follow-ups."
+  }
+}
