@@ -13,6 +13,7 @@ import type { Server } from 'node:http';
 
 import { tagsRouter } from './routes/tags.js';
 import { chunksRouter } from './routes/chunks.js';
+import { applyRouter } from './routes/apply.js';
 import { openDb } from './db.js';
 
 let dir: string;
@@ -59,6 +60,7 @@ beforeEach(async () => {
   app.use('/api', chunksRouter(handles.ro, {
     load: () => ({ body: 'test body', meta: {} }),
   } as any));
+  app.use('/api', applyRouter(handles.rw, handles.ro, handles.stmts));
   await new Promise<void>((resolve) => {
     server = app.listen(0, '127.0.0.1', () => resolve());
   });
@@ -239,5 +241,49 @@ describe('GET /api/chunks by_chunk coverage (todo:a8037ed0)', () => {
     // The default min_score=1 keeps our seeded tag visible; a filtered-out
     // text yields no entry rather than zero-entries for absent chunks.
     expect(Object.keys(data.by_chunk).length).toBeGreaterThanOrEqual(0);
+  });
+});
+
+// ── GET /api/apply/preview remaining-pending reconciliation (todo:816b8865)
+
+describe('GET /api/apply/preview remaining_pending reconciliation (todo:816b8865)', () => {
+  async function preview(): Promise<any> {
+    const res = await fetch(`${baseUrl}/api/apply/preview`);
+    return res.json();
+  }
+
+  it('reports remaining pending tags overall and per text, excluding queued ones', async () => {
+    const insNode = handles.rw.prepare(
+      "INSERT INTO nodes(id, type, label, metadata_json) VALUES (?, 'chunk', ?, json_object('text_id','yoga-sutras-book-01'))",
+    );
+    insNode.run('hinduism.yoga-sutras-book-01.030', 'C30');
+    insNode.run('hinduism.yoga-sutras-book-01.031', 'C31');
+    handles.rw.prepare(
+      "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) VALUES (?, ?, 2, 'm', 'v1')",
+    ).run('hinduism.yoga-sutras-book-01.030', 'concept_a');
+    const queued = Number(handles.rw.prepare(
+      "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) VALUES (?, ?, 2, 'm', 'v1')",
+    ).run('hinduism.yoga-sutras-book-01.031', 'concept_b').lastInsertRowid);
+
+    // Queue one verdict — it must leave the remainder.
+    handles.stmts.insertReviewAction.run(
+      queued, 'staged_tags', 'accept', null, null, 'r', 'rec-1',
+    );
+
+    const data = await preview();
+    expect(data.remaining_pending_total).toBe(1);
+    expect(data.remaining_pending_in_text).toEqual([
+      { text_id: 'yoga-sutras-book-01', n: 1 },
+    ]);
+  });
+
+  it('reports zero remainder when every pending tag is queued or resolved', async () => {
+    const id = addTag(10);
+    handles.stmts.insertReviewAction.run(
+      id, 'staged_tags', 'reject', null, null, 'r', 'rec-2',
+    );
+    const data = await preview();
+    expect(data.remaining_pending_total).toBe(0);
+    expect(data.remaining_pending_in_text).toEqual([]);
   });
 });
