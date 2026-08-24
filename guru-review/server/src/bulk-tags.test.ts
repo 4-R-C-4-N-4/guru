@@ -133,10 +133,13 @@ describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
     expect(res.status).toBe(200);
     expect(res.body.queued).toBe(1);
     expect(res.body.unknown_ids).toEqual([999999]);
-    // Per-item map distinguishes queued from unknown (driver acceptance
-    // criteria: unknown_ids ≠ skipped — they are different failure shapes).
-    expect(res.body.results[good]).toBe('queued');
-    expect(res.body.results[999999]).toBe('unknown');
+    // Per-item results: one entry per REQUEST ROW (driver acceptance
+    // criteria; review fix — keyed by index so invalid rows and duplicated
+    // target_ids still reconcile).
+    expect(res.body.results).toEqual([
+      { index: 0, status: 'queued' },
+      { index: 1, status: 'unknown' },
+    ]);
   });
 
   it('distinguishes already-queued replays (skipped) from unknown ids', async () => {
@@ -148,8 +151,10 @@ describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
     ]);
     expect(replay.body.skipped).toBe(1);
     expect(replay.body.unknown_ids).toEqual([888888]);
-    expect(replay.body.results[id]).toBe('skipped');
-    expect(replay.body.results[888888]).toBe('unknown');
+    expect(replay.body.results).toEqual([
+      { index: 0, status: 'skipped' },
+      { index: 1, status: 'unknown' },
+    ]);
   });
 
   it('counts invalid items as skipped with per-item errors', async () => {
@@ -163,6 +168,13 @@ describe('POST /api/tags/bulk (todo:ee0b6136)', () => {
     expect(res.status).toBe(200);
     expect(res.body.queued).toBe(1);
     expect(res.body.skipped).toBeGreaterThanOrEqual(2);
+    // Review fix: every request row reconciles — including the zod-invalid
+    // one and the two rows sharing a target_id.
+    expect(res.body.results).toEqual([
+      { index: 0, status: 'queued' },
+      { index: 1, status: 'skipped' },
+      { index: 2, status: 'skipped' },
+    ]);
   });
 
   it('is idempotent on client_action_id replay — counted as skipped, not queued', async () => {
@@ -310,6 +322,49 @@ describe('GET /api/chunks include_reviewed (todo:b72f6908)', () => {
       status: 'rejected',
       reviewed_by: 'curator',
     });
+  });
+
+  it('treats include_reviewed=false as false (review fix — no boolean-string coercion)', async () => {
+    const c = 'hinduism.yoga-sutras-book-01.042';
+    seedChunk(c);
+    const acc = seedChunk(c, 'concept_b');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='rejected', reviewed_by='r', reviewed_at='x' WHERE id=?")
+      .run(acc);
+
+    const res = await (
+      await fetch(`${baseUrl}/api/chunks?min_score=1&include_reviewed=false`)
+    ).json();
+    expect(res.chunks).toHaveLength(1);
+    // z.coerce.boolean() turned "false" into true; the explicit check must not.
+    expect(res.chunks[0].reviewed_tags).toBeUndefined();
+  });
+
+  it('direct ?chunk= lookup reaches fully-reviewed chunks (review fix)', async () => {
+    const c = 'hinduism.yoga-sutras-book-01.043';
+    const t1 = seedChunk(c);
+    const t2 = seedChunk(c, 'concept_b');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='accepted', reviewed_by='r', reviewed_at='x' WHERE id IN (?, ?)")
+      .run(t1, t2);
+
+    // No pending tags left — the pending-driven list can't return it, but a
+    // direct lookup with include_reviewed must.
+    const pend = await (await fetch(`${baseUrl}/api/chunks?min_score=1`)).json();
+    expect(pend.chunks.find((x: { chunk_id: string }) => x.chunk_id === c)).toBeUndefined();
+
+    const direct = await (
+      await fetch(`${baseUrl}/api/chunks?chunk=${encodeURIComponent(c)}&include_reviewed=true`)
+    ).json();
+    expect(direct.chunks).toHaveLength(1);
+    expect(direct.chunks[0].chunk_id).toBe(c);
+    expect(direct.chunks[0].pending_tags).toHaveLength(0);
+    expect(direct.chunks[0].reviewed_tags).toHaveLength(2);
+    expect(direct.next_cursor).toBeNull();
+
+    // Miss on an unknown id → empty result, explicit not-found at the client.
+    const miss = await (await fetch(`${baseUrl}/api/chunks?chunk=nope.missing.999`)).json();
+    expect(miss.chunks).toEqual([]);
   });
 });
 

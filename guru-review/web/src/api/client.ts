@@ -61,7 +61,12 @@ export const api = {
   concepts: (): Promise<ConceptDef[]> => getJson('/api/concepts'),
 
   chunks: (
-    params: FilterParams & { cursor?: string; limit?: number; include_reviewed?: boolean },
+    params: FilterParams & {
+      cursor?: string;
+      limit?: number;
+      include_reviewed?: boolean;
+      chunk?: string;
+    },
   ): Promise<ChunksResponse> => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(params)) {

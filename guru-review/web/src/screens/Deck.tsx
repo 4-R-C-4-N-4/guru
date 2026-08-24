@@ -50,6 +50,9 @@ export function Deck(): React.ReactElement {
   // Spot-check deep link (todo:b72f6908): /?chunk=<chunk_id> fetches that
   // one chunk directly — with its reviewed verdicts via include_reviewed —
   // bypassing the filter/cursor flow. Used from the queue/apply screens.
+  // The server's ?chunk= lookup has no pending constraint, so fully-reviewed
+  // chunks are reachable; a miss surfaces as an explicit not-found state,
+  // never as a silently blank deck.
   const focusChunk = params.get('chunk') ?? undefined;
 
   const fetchPage = useCallback(
@@ -57,24 +60,23 @@ export function Deck(): React.ReactElement {
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
         if (focusChunk) {
-          // Deep-linked spot check: fetch the target chunk regardless of the
-          // pending-only cursor semantics. The server filters on text_id when
-          // given; without a filter we walk pages until found is too costly,
-          // so instead fetch a page scoped by nothing and pick it out. The
-          // chunk endpoint always returns pending chunks only, so a fully
-          // reviewed chunk won't appear here — fall back to include_reviewed.
           const res = await api.chunks({
             ...filters,
+            chunk: focusChunk,
             cursor: undefined,
-            limit: 20,
+            limit: 1,
             include_reviewed: true,
           });
-          setState((s) => ({
-            ...s,
-            loading: false,
-            error: null,
-            current: res.chunks.find((c) => c.chunk_id === focusChunk) ?? s.current,
-          }));
+          const hit = res.chunks.find((c) => c.chunk_id === focusChunk);
+          setState((s) =>
+            hit
+              ? { ...s, loading: false, error: null, current: hit, queue: [], cursor: null }
+              : {
+                  ...s,
+                  loading: false,
+                  error: `chunk ${focusChunk} not found`,
+                },
+          );
           return;
         }
         const res = await api.chunks({

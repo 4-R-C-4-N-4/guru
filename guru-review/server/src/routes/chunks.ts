@@ -13,7 +13,16 @@ const QuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(20).default(8),
   // todo:b72f6908 — spot-check mode: also return each chunk's already-
   // reviewed tags (accepted/rejected/reassigned) with their verdicts.
-  include_reviewed: z.coerce.boolean().default(false),
+  // Explicit 'true'/'1' only: z.coerce.boolean() would turn the string
+  // "false" into true, silently enabling reviewed mode on include_reviewed=false.
+  include_reviewed: z
+    .string()
+    .optional()
+    .transform((v) => v === 'true' || v === '1'),
+  // todo:b72f6908 review fix — direct chunk lookup: selects exactly this
+  // chunk regardless of pending state, so spot-checks reach chunks whose
+  // tags are all reviewed (the deep-link case from the queue screen).
+  chunk: z.string().optional(),
 });
 
 interface CursorShape {
@@ -85,30 +94,38 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
       res.status(400).json({ error: parsed.error.flatten() });
       return;
     }
-    const { tradition, text, concept, min_score, cursor, limit, include_reviewed } = parsed.data;
+    const { tradition, text, concept, min_score, cursor, limit, include_reviewed, chunk } =
+      parsed.data;
     const cursorObj = decodeCursor(cursor);
 
     // Build outer query (chunks page) ----------------------------------
-    const outerWhere: string[] = [
-      "st.status = 'pending'",
-      'st.score >= ?',
-      "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
-    ];
-    const outerParams: unknown[] = [min_score];
+    // Direct chunk lookup (todo:b72f6908 review fix): ?chunk=<id> selects
+    // exactly that chunk with NO pending-status constraint — this is the
+    // spot-check path, and its whole point is reaching chunks whose tags
+    // are all already reviewed. min_score/cursor/filters don't apply.
+    const directLookup = chunk ?? null;
+    const outerWhere: string[] = directLookup
+      ? ['n.id = ?', "EXISTS (SELECT 1 FROM staged_tags st WHERE st.chunk_id = n.id)"]
+      : [
+          "st.status = 'pending'",
+          'st.score >= ?',
+          "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
+        ];
+    const outerParams: unknown[] = directLookup ? [directLookup] : [min_score];
 
-    if (tradition) {
+    if (!directLookup && tradition) {
       outerWhere.push('n.tradition_id = ?');
       outerParams.push(tradition);
     }
-    if (text) {
+    if (!directLookup && text) {
       outerWhere.push("json_extract(n.metadata_json, '$.text_id') = ?");
       outerParams.push(text);
     }
-    if (concept) {
+    if (!directLookup && concept) {
       outerWhere.push('st.concept_id = ?');
       outerParams.push(concept);
     }
-    if (cursorObj) {
+    if (!directLookup && cursorObj) {
       outerWhere.push('(n.tradition_id, n.id) > (?, ?)');
       outerParams.push(cursorObj.trad, cursorObj.chunk);
     }
@@ -205,11 +222,16 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
 
     const last = outerRows[outerRows.length - 1];
     const next_cursor =
-      outerRows.length === limit && last ? encodeCursor({ trad: last.tradition_id, chunk: last.chunk_id }) : null;
+      !directLookup && outerRows.length === limit && last
+        ? encodeCursor({ trad: last.tradition_id, chunk: last.chunk_id })
+        : null;
 
     // Per-chunk coverage (todo:a8037ed0): pending_total is ALL pending tags
-    // on the chunk regardless of score/queued state; queued counts unapplied
-    // review_actions against it. A chunk where queued < pending_total has
+    // on the chunk regardless of score/queued state; queued counts DISTINCT
+    // staged tags with an unapplied action (review fix, todo:b72f6908 — the
+    // review_actions table is unique on client_action_id, not target_id, so
+    // counting rows would double-count a tag queued twice and could push
+    // queued above pending_total). A chunk where queued < pending_total has
     // under-queued verdicts — visible on the very next fetch instead of
     // surfacing as cursor drift at the end of a bulk pass.
     let by_chunk: Record<string, { pending_total: number; queued: number }> = {};
@@ -220,7 +242,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           `SELECT n.id AS chunk_id,
                   (SELECT COUNT(*) FROM staged_tags st2
                     WHERE st2.chunk_id = n.id AND st2.status = 'pending') AS pending_total,
-                  (SELECT COUNT(*) FROM review_actions ra
+                  (SELECT COUNT(DISTINCT ra.target_id) FROM review_actions ra
                     JOIN staged_tags st3 ON st3.id = ra.target_id
                     WHERE st3.chunk_id = n.id AND ra.target_table = 'staged_tags'
                       AND ra.applied_at IS NULL) AS queued
