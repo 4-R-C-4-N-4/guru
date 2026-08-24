@@ -1,13 +1,13 @@
 {
   "id": "37dd43de",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Bulk-review hardening: POST /api/tags/bulk, per-chunk coverage, remaining-pending reconciliation",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-24T11:28:15.928Z",
-  "updated_at": "2026-08-24T11:32:16.973Z",
+  "updated_at": "2026-08-24T11:47:47.778Z",
   "files": [
     {
       "path": "guru-review/server/src/routes/tags.ts"
@@ -27,5 +27,11 @@
       "816b8865",
       "ec154882"
     ]
+  },
+  "resolution": {
+    "commit": "5e11515e64523bcb1368ed2344b27409257833ee",
+    "resolved_at": "2026-08-24T11:47:47.778Z",
+    "resolved_by": "unknown",
+    "note": "All four children complete: bulk endpoint (ee0b6136), per-chunk coverage (a8037ed0), reconciliation counts (816b8865), docs convention (ec154882). Queue-only throughout; apply gate untouched."
   }
 }
