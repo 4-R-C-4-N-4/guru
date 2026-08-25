@@ -17,8 +17,8 @@ but for staged_edges (PARALLELS / CONTRASTS proposals from
 scripts/propose_edges.py).
 
 Tier rule: every promoted row lands at tier='proposed'. The 'verified'
-tier is reserved for human-reviewed edges (CLI scripts/review_edges.py +
-the web edge-review path) — this script never writes verified.
+tier is reserved for human-reviewed edges (the edge-review path, now
+retired with Pass C) — this script never writes verified.
 
 Default invocation is dry-run with summary; --apply commits inside a
 transaction. Rows with edge_type IN ('surface_only','unrelated') are

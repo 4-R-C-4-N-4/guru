@@ -129,7 +129,7 @@ function buildFilterClause(f: Filters): { where: string[]; params: unknown[] } {
     params.push(f.edge_type);
   }
   // Tradition filters are symmetric: tradition_a and tradition_b can each
-  // match either side of the edge. Mirrors review_edges.py.
+  // match either side of the edge.
   if (f.tradition_a && f.tradition_b) {
     where.push(
       '((na.tradition_id = ? AND nb.tradition_id = ?) OR (na.tradition_id = ? AND nb.tradition_id = ?))',

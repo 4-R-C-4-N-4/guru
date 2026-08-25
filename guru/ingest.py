@@ -583,10 +583,12 @@ NODES: list[Node] = [
 
     Node("11-tag-review", "Curate the staged tags", "gate",
          _p_tag_review,
-         command="python3 scripts/review_tags.py --text {id}",
+         command="python3 scripts/view_staged_tags.py --text {id}",
          contract="prompts/ingest/tag-review.md",
-         notes=["A driver may queue accept / reject / reassign decisions. "
-                "Applying them is the user's call, always.",
+         notes=["view_staged_tags.py is read-only — it shows what is pending. "
+                "Queue accept / reject / reassign decisions through the "
+                "guru-review web app (the guru-review-tags skill drives it); "
+                "applying them is the user's call, always.",
                 "Model ids differ by tagger: 4B batches are 70xxx, 27B are "
                 "71xxx. A mistyped id is silently rejected, so check the "
                 "accepted count matches what you intended."]),
