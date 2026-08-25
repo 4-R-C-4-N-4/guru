@@ -109,6 +109,19 @@ bumped stage without deciding which behaviour you want.
 log-skip. The node stays ungenerated and a later run retries it. A skipped node
 is not an error, but it also will not fix itself unless you re-run.
 
+**Reading a length overrun as a re-roll (todo:b1c8be4c).** Until 2026-08-24,
+`_attempt` treated the prose length band as pass/fail and regenerated from
+scratch on reject — same prompt + same temperature mostly reproduces the
+overrun, so a dense span paid 3x compute and was then dropped entirely
+(blavatsky-sd c12: 28/192 spans log-skipped this way, one only 3% over band).
+Worse, when a fresh retry did land in-band it usually did so by dropping
+detail: length compliance purchased with granularity. The loop now compresses:
+on the first length-band overrun the model's own overrunning summary is fed
+back through `prompts/dossier/compress-v1.md` with a keep-all-claims
+instruction — one cheap deterministic call whose granularity loss is an
+explicit decision. Attempt shape is generate → compress → give up; scaffold /
+echo / other rejects keep the corrective-feedback retry unchanged.
+
 ## Provenance
 
 `scripts/generate_dossiers.py` (G5); design §1.3.1 on accepted-only upstream

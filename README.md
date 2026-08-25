@@ -130,21 +130,26 @@ OMP_NUM_THREADS=8 .venv/bin/python scripts/derive_parallels.py
 
 ---
 
-## Review CLIs
+## Reviewing staged tags
 
-Stage 3 produces staged tags that need human review before they are promoted
-to the live graph; the tool below is an interactive terminal UI for that.
-(Cross-tradition edge proposals — Pass C — are retired; PARALLELS are derived
-at node 16 instead, with no review step.)
+Stage 3 produces staged tags that need human review before they are promoted to
+the live graph. Queuing accept / reject / reassign decisions and applying them
+is done through the **guru-review web app** (its HTTP API; the `guru-review-tags`
+skill drives it). The terminal tool below is **read-only** — it shows what is
+pending so you can read the chunk bodies, but it never writes.
 
-### `python scripts/review_tags.py` — Concept tag review
+(Cross-tradition edge proposals — Pass C — are retired; PARALLELS are derived at
+node 16 instead, with no review step, so there is no edge-review CLI.)
 
-Reviews LLM-proposed concept tags (chunk → concept associations) from `staged_tags`.
-Accepted tags with score ≥ 2 are promoted to live `EXPRESSES` edges in `guru.db`.
+### `python scripts/view_staged_tags.py` — view pending concept tags
+
+Lists LLM-proposed concept tags (chunk → concept associations) from `staged_tags`
+with full context — chunk body, concept, primary family, definition, score, and
+the tagger's justification.
 
 ```
-$ python scripts/review_tags.py [--tradition gnosticism] [--text gospel-of-thomas]
-                                 [--concept gnosis_direct_knowledge] [--min-score 2]
+$ python scripts/view_staged_tags.py [--tradition gnosticism] [--text gospel-of-thomas]
+                                     [--concept gnosis_direct_knowledge] [--min-score 2]
 
 ======================================================================
 CHUNK:   gnosticism.gospel-of-thomas.001
@@ -160,47 +165,9 @@ SCORE:   3/3
 LLM:     Logion 1 directly equates finding the interpretation with
          escaping death — salvation through knowledge.
 ----------------------------------------------------------------------
-Action [a/r/s/c/q]:
 ```
 
-Keys: **a** accept → promotes to live EXPRESSES edge | **r** reject | **s** skip | **c** reassign to different concept | **q** quit
-
----
-
-### `python scripts/review_edges.py` — Cross-tradition edge review
-
-> **Pass C is retired (2026-08-13, todo:c3f479ff).** PARALLELS are now derived,
-> not proposed and reviewed: `scripts/derive_parallels.py` grades chunks against
-> their applied EXPRESSES concepts with a thin cross-encoder and ranks each
-> chunk's cross-tradition partners off those grades — no LLM call and no review
-> queue. See [`docs/ingest/16-derive-parallels.md`](docs/ingest/16-derive-parallels.md)
-> for the mechanism and its selection methodology. This reviewer still serves
-> the frozen CONTRASTS set and the `staged_edges` backlog; it no longer
-> produces the corpus's PARALLELS supply.
-
-Reviews LLM-proposed cross-tradition relationships from `staged_edges`.
-Accepted edges are promoted to the live `edges` table in `guru.db`.
-
-```
-$ python scripts/review_edges.py [--edge-type PARALLELS] [--min-confidence 0.7]
-                                  [--tradition-a gnosticism] [--tradition-b jewish_mysticism]
-
-======================================================================
-EDGE:   PARALLELS  (conf=0.85)
-LLM:    Both passages describe divine light as immanent throughout
-        creation — Thomas places it within wood and stone; Sefer
-        Yetzirah places it in every direction through the Sefirot.
-----------------------------------------------------------------------
-A: Gnosticism | Gospel of Thomas    B: Jewish Mysticism | Sefer Yetzirah
-It is I who am the light which      He carved and created His World in
-is above them all. Split a piece    Thirty-Two Wondrous Ways of Wisdom...
-of wood, and I am there...          Ten SEFIROT BELIMAH — their visage
-                                    is as the look of lightning...
-----------------------------------------------------------------------
-Action [a/p/r/c/s/q]:
-```
-
-Keys: **a** accept as verified | **p** accept as proposed | **r** reject | **c** reclassify edge type | **s** skip | **q** quit
+Queue accept / reject / reassign decisions in the guru-review web app, not here.
 
 ---
 
