@@ -1,8 +1,8 @@
 // Apply transaction — drains review_actions queue into staged_tags or
-// staged_edges + edges + nodes, dispatching on target_table. Mirrors
-// scripts/review_tags.py and scripts/review_edges.py editorial-overlay
-// helpers. The parity harness at tests/parity/ asserts row-content
-// equivalence between this and the CLI for the same fixture decisions.
+// staged_edges + edges + nodes, dispatching on target_table. This is the
+// sole editorial-overlay apply path: the review_tags.py / review_edges.py
+// CLIs it once mirrored are gone, and scripts/view_staged_tags.py is now
+// read-only. Curation writes go through this queue + apply only.
 import type Database from 'better-sqlite3';
 import type { PreparedStmts } from './db.js';
 

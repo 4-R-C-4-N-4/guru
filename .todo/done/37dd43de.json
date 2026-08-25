@@ -1,0 +1,37 @@
+{
+  "id": "37dd43de",
+  "type": "feature",
+  "state": "done",
+  "summary": "Bulk-review hardening: POST /api/tags/bulk, per-chunk coverage, remaining-pending reconciliation",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-24T11:28:15.928Z",
+  "updated_at": "2026-08-24T11:47:47.778Z",
+  "files": [
+    {
+      "path": "guru-review/server/src/routes/tags.ts"
+    }
+  ],
+  "tags": [
+    "guru-review",
+    "api",
+    "bulk-review",
+    "driver-request"
+  ],
+  "description": "Driver report from the blavatsky-sd tag-review loop (~11k verdicts queued via individual POST /api/tags/:id/action calls from Python). A client-side bug (reasoning lines comment-converted inside a dict literal) silently dropped ~863 verdicts across five batches; the API reported success each time and nothing surfaced the drift until the cursor stopped matching.\n\nRequested changes, priority order:\n1. POST /api/tags/bulk accepting [{target_id, action}], returning {queued, skipped, unknown_ids} — kills per-tag HTTP loops and makes client/server counts reconcile in one response.\n2. Per-chunk coverage in GET /api/chunks (pending_total vs queued per chunk) so an under-queued batch is visible on the next fetch.\n3. Include remaining_pending_in_text (or by_chunk coverage) in action responses and/or /api/apply/preview so reconciliation is a comparison, not archaeology.\n4. Docs note recommending a JSONL working file as source of truth for scripted bulk review, uploaded by a dumb reader, rather than building the payload in code.",
+  "relationships": {
+    "children": [
+      "ee0b6136",
+      "a8037ed0",
+      "816b8865",
+      "ec154882"
+    ]
+  },
+  "resolution": {
+    "commit": "5e11515e64523bcb1368ed2344b27409257833ee",
+    "resolved_at": "2026-08-24T11:47:47.778Z",
+    "resolved_by": "unknown",
+    "note": "All four children complete: bulk endpoint (ee0b6136), per-chunk coverage (a8037ed0), reconciliation counts (816b8865), docs convention (ec154882). Queue-only throughout; apply gate untouched."
+  }
+}

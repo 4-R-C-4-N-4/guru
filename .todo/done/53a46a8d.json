@@ -1,13 +1,13 @@
 {
   "id": "53a46a8d",
   "type": "debt",
-  "state": "open",
+  "state": "done",
   "summary": "Concept ID format mismatch: staged_tags uses bare IDs, nodes uses concept.* prefixed IDs — 282 concept_ids have no matching node but are all rejected/orphan, not applied",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-20T14:10:04.630Z",
-  "updated_at": "2026-08-21T12:10:26.895Z",
+  "updated_at": "2026-08-23T15:13:25.852Z",
   "tags": [
     "corpus-quality",
     "cq-intake",
@@ -68,6 +68,19 @@
       "type": "conclusion",
       "content": "CONFIRMED BY GURU-DEV (2026-08-21): The premise is incorrect.\n\nGuru-dev verified against both apply implementations and the live DB:\n- staged_tags.concept_id is INTENTIONALLY a bare taxonomy key\n- Human apply adds 'concept.' namespace: scripts/review_tags.py:90-123, guru-review/server/src/apply.ts:82-94\n- docs/concept-hierarchy/design.md:32 explicitly preserves bare IDs\n- Prefixing tagger output would create 'concept.concept.<id>' and break lookups\n\nLive proof: 30,294 of 30,349 accepted staged tags already have matching EXPRESSES edge at target_id='concept.'||concept_id (99.9% coverage).\n\nTicket 53a46a8d is INVALID — the bare ID format is by design. Closing as 'not a bug'.\n\nThe real bug (55 missing edges due to reject deleting shared edges) is tracked separately as d9bb3b9a.",
       "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-23T15:13:17.796Z",
+      "author": "guru-dev",
+      "type": "conclusion",
+      "content": "Guru-dev review disproves the format-mismatch premise. staged_tags.concept_id is intentionally the bare taxonomy key; the concept. graph namespace is added only at the human apply boundary. Both apply implementations explicitly construct concept.<concept_id>: scripts/review_tags.py promote_to_expresses (lines 90-123) and guru-review/server/src/apply.ts applyTagAction (lines 82-94). docs/concept-hierarchy/design.md line 32 specifies staged_tags keeps existing snake_case IDs. Live DB verification: 30,294 of 30,349 accepted staged tags already have the corresponding EXPRESSES edge at target_id='concept.'||staged_tags.concept_id (99.9%). Prefixing tagger output would double-prefix applies as concept.concept.<id> and split dedupe/provenance keys. The 55 missing edges were a separate reject-path bug, tracked as d9bb3b9a and already remediated by corpus-quality (restore_missing_edges.py --apply). No tagger/prompt fix warranted; closing as wontfix-by-design.",
+      "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "4c77136d4f635d52e6ea2ceb6363041cb84c8155",
+    "resolved_at": "2026-08-23T15:13:25.852Z",
+    "resolved_by": "unknown",
+    "note": "Premise disproven: bare concept_ids in staged_tags are by design (apply-time prefixing in review_tags.py and apply.ts; design.md:32). 99.9% of accepted tags have live EXPRESSES edges; the 55 gaps were d9bb3b9a, fixed separately."
+  }
 }
