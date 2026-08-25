@@ -1,0 +1,64 @@
+{
+  "id": "6d141319",
+  "type": "feature",
+  "state": "done",
+  "summary": "Dossier generation: fold-path degradation for spans that fail generate+compress (fix 4 of b1c8be4c)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-25T09:29:46.009Z",
+  "updated_at": "2026-08-25T10:16:18.231Z",
+  "files": [
+    {
+      "path": "scripts/generate_dossiers.py"
+    },
+    {
+      "path": "scripts/build_dossiers.py",
+      "commit": "e6c5d1ed63d091d6dc161d4ebd707ad7f584c875",
+      "note": "reuse: load_text_chunks + _budget_pack for sub-batch splitting"
+    }
+  ],
+  "tags": [
+    "dossiers",
+    "generation",
+    "llamacpp",
+    "fold",
+    "guru-dev",
+    "no-dm"
+  ],
+  "description": "FOLLOW-UP to b1c8be4c (fix 1 compression retry, merged as PR #117). Live evidence from blavatsky-sd c12 L1 pass 3: of the original ~28 length-band failures, fix 1 recovered 6 via compression; the remaining ~25 spans hard-fail with 'compressed output also rejected' — the compressor itself returns 1000+ tokens against a [120,720] band. These are SD's densest Kabbalistic commentary spans; a single call genuinely cannot hold them in-band while keeping every distinct claim. Leaving them unstaged means the book's densest sections are silently thinner in the dossier.\n\nPROPOSAL (b1c8be4c fix 4): fold-path degradation for pathological spans.\n\nWhen a span fails generate->compress (the terminal state of _attempt), instead of returning None:\n  1. Split the span's chunk bodies at paragraph boundaries into N sub-batches sized for a comfortable single-call band.\n  2. L1-summarize each sub-batch (existing l1-v3 template + contract).\n  3. Feed the sub-summaries through a merge pass (compress-v1.md's keep-all-claims instruction fits) to produce the final in-band span summary.\n  4. Stage under the normal summary_id/prompt_version with a provenance marker that the row was fold-derived (e.g. prompt_version suffix '-folded' or a metadata note), so D3 reviewers can see it took the degraded path.\n\nDesign notes:\n- The llamacpp fold machinery already exists for INPUT overflow (input_budget > 0 map-reduce); this reuses the same shape but triggered by OUTPUT overrun, not input size — so it must live in _attempt's give-up path, not the provider layer.\n- Sub-batch count should be derived from how far past the band the compressed output landed (e.g. ceil(compressed_tokens / budget)) rather than a fixed N.\n- Cap degradation depth at one level: if the merged output still violates the band, give up and log-skip as today. No recursive folding.\n\nSCOPE GUARD: this is generate-path only. It does NOT touch the apply gate, staged-row shapes beyond an optional provenance marker, or any promotion path.\n\nPICKED over fixes 2/3 for now because it recovers coverage of the hardest material without waiting on budget-model redesign (fix 2) or schema changes (fix 3). Fixes 2 and 3 remain open.",
+  "analysis": [
+    {
+      "timestamp": "2026-08-25T09:43:03.710Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Checked against the live c12 DB (blavatsky-sd, provider llamacpp, input_budget=0 per config/dossiers.toml): 167/192 L1 spans staged, 25 missing — the give-up spans this ticket targets. All 25 have >=2 chunks (range 2-6: page-48-part-3=2 chunks/2960 tok, page-66=6 chunks/8500 tok, most are 4); none is a single-chunk span. Separately, the ticket's claim that 'the llamacpp fold machinery already exists for INPUT overflow' does not hold as stated: build_dossiers.py:297-304 computes fold_batches at plan time, but generate_dossiers.py's stage_l2 (419-437) never reads it, and c12 itself runs with input_budget=0, so no fold/map-reduce path has ever executed in this project. docs/dossiers/D2-generate.md:92-95 documents this as a known gap ('zero fold rows, and there should be'). Treat the fold-degradation feature as new code to write, not existing code to wire up.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-08-25T09:43:15.046Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Concrete design fixes so this stays dev-straightforward, no bespoke splitter:\n\n1) SPLITTING: reuse build_dossiers.py's existing chunk-boundary packer instead of writing a paragraph splitter. load_text_chunks(tradition, text_id) gives per-chunk token counts for the failing span's chunk_ids; _budget_pack(text_id, label, chunks, sub_target, synthetic=True) (build_dossiers.py:209-229) is the SAME greedy packer plan_text_spans already uses to build spans from chunks — it returns ready-made sub-Spans with labels/chunk_ids. Every one of the live 25 stragglers has >=2 chunks (see evidence entry), so this always has a valid split point today. If a future span ever has exactly 1 chunk, skip the fold and give up as today — matches the existing 'one degradation level, no recursion' guardrail, no new failure mode to design for.\n\n2) SUB-BATCH COUNT: reuse the ceil formula already in the codebase (build_dossiers.py:302, 'folds = -(-est // input_budget)') applied to the overrun instead of inventing a new heuristic: n = ceil(compressed_tokens / compress_to). sub_target = span_token_count / n feeds directly into _budget_pack.\n\n3) PROVENANCE MARKER: use the prompt_version suffix '{L1_TPL}-folded' (not a metadata note) — a note is invisible to review_dossiers.py's --prompt-version sampling filter (review_dossiers.py:205-211), while a suffix slots into the existing -manual convention cleanly (_accepted_l1s already ranks -manual over any other pv; folded rows are just ordinary candidates ranked by id). REQUIRED companion fix: _summary_exists (generate_dossiers.py:209-212) matches the exact (summary_id, model, prompt_version) tuple, so a folded row under 'l1-v3-folded' will NOT satisfy the check for 'l1-v3' — without a second exists-check against the -folded pv at the stage_l1 skip site, every re-run repeats the full generate->compress->fold sequence for an already-folded span. Add that second check. Also make explicit in the handoff: the D3 re-sweep of stragglers must pass --prompt-version l1-v3-folded — the standard l1-v3 sweep will not surface these rows.\n\n4) MERGE PASS: compress-v1.md is worded for one summary ('the summary below') — for N sub-summaries, concatenate them (one per line or labeled 'Part n') into the {summary} slot; keep-all-claims applies unchanged. No new template needed.\n\nNet: three reused primitives (load_text_chunks, _budget_pack, the existing ceil-count formula) plus the existing -manual prompt_version convention. No new splitting algorithm, and it scales the same way plan-time span splitting already scales across every work/tradition.",
+      "confidence": "high",
+      "supporting_evidence": [
+        0
+      ]
+    }
+  ],
+  "relationships": {},
+  "work": {
+    "branch": "feat/blavatsky",
+    "base_branch": "main",
+    "started_at": "2026-08-25T10:03:08.087Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "a1ddd38f03b2b5bb5839bd3358ce7882941a9a62",
+    "resolved_at": "2026-08-25T10:16:18.231Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_dossier_fold_degradation.py",
+    "test_function": "test_fold_triggers_and_stages_folded_pv",
+    "note": "Fold path implemented per analysis conclusion: stage_l1 falls through to _fold_l1 on terminal generate->compress failure; reuses load_text_chunks + _budget_pack (no new splitter), n=ceil(span_tokens/budget) sub-batches, one merge pass through compress-v1, staged under l1-v3-folded; companion skip-check against the -folded pv so re-runs don't refold; single-chunk spans and still-overrunning merges give up as before (one degradation level). D2-generate.md Failure modes updated. NOTE for handoff: D3 straggler re-sweeps must pass --prompt-version l1-v3-folded."
+  }
+}
