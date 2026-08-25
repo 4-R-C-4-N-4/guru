@@ -20,7 +20,8 @@ Per docs/concept-hierarchy/design.md §7 (todo:0a25044c, parent 10512e6a).
 Notes on the data model (design.md §5, §7):
   - Concept nodes are stored in `nodes` with id `concept.<cid>`; membership and
     concept-alias rows reference that id, not the bare TOML key.
-  - Concept node upsert mirrors promote_to_expresses (review_tags.py): it
+  - Concept node upsert mirrors the review web app's apply path
+    (guru-review/server/src/apply.ts): it
     COALESCEs the definition so an existing (possibly hand-curated) definition
     is preserved — definition drift is a deliberate manual operation (§15). The
     upsert exists so a TOML concept that no chunk has tagged yet still gets a

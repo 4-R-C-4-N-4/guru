@@ -11,15 +11,17 @@ them.
 
 ## Action
 
-Terminal UI:
+Queue decisions through the review web app's HTTP API — this is what the
+`guru-review-tags` skill drives, and it is the only path that writes.
+
+To read what is pending from the terminal (read-only, queues nothing):
 
 ```sh
-python3 scripts/review_tags.py --text <source-id> [--min-score 2]
+python3 scripts/view_staged_tags.py --text <source-id> [--min-score 2]
 ```
 
-Or the review web app's HTTP API, which is what the `guru-review-tags` skill
-drives. Either way the judgement criteria are the contract's, and they are the
-same criteria in both.
+Either way the judgement criteria are the contract's, and they are the same
+criteria in both.
 
 Queue `accept` / `reject` / `reassign` / `skip`. Never call `/api/apply`.
 
