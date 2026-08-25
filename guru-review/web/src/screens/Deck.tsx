@@ -105,7 +105,9 @@ export function Deck(): React.ReactElement {
   );
 
   // Initial load + reload on filter change. Restore cursor from IndexedDB
-  // if the user has reviewed this filter before.
+  // if the user has reviewed this filter before. Skipped in focus mode:
+  // the saved cursor is irrelevant to a single-chunk spot-check, and the
+  // "Resuming" banner would be misleading (todo:b72f6908 review).
   const [resumed, setResumed] = useState(false);
   useEffect(() => {
     setState({
@@ -119,11 +121,11 @@ export function Deck(): React.ReactElement {
     });
     setResumed(false);
     void (async () => {
-      const saved = await getCursor(filters);
+      const saved = focusChunk ? null : await getCursor(filters);
       if (saved) setResumed(true);
       void fetchPage(saved);
     })();
-  }, [filters.tradition, filters.text, filters.concept, filters.min_score, fetchPage]);
+  }, [filters.tradition, filters.text, filters.concept, filters.min_score, fetchPage, focusChunk]);
 
   // Persist cursor on every successful page load (after the first one).
   useEffect(() => {

@@ -105,7 +105,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     // are all already reviewed. min_score/cursor/filters don't apply.
     const directLookup = chunk ?? null;
     const outerWhere: string[] = directLookup
-      ? ['n.id = ?', "EXISTS (SELECT 1 FROM staged_tags st WHERE st.chunk_id = n.id)"]
+      ? ['n.id = ?']
       : [
           "st.status = 'pending'",
           'st.score >= ?',
@@ -147,10 +147,24 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
 
     // Build inner query (tags for those chunks) ------------------------
     const chunks: ReturnType<typeof buildChunk>[] = [];
-    let reviewedByChunk: Map<string, ReviewedRow[]> = new Map();
+    const reviewedByChunk: Map<string, ReviewedRow[]> = new Map();
     if (outerRows.length > 0) {
       const placeholders = outerRows.map(() => '?').join(',');
-      const innerSql = `
+      // Direct lookup (todo:b72f6908 review): show the chunk's tags as they
+      // actually stand — pending AND queued-but-unapplied, no min_score —
+      // because the queue row the curator clicked IS a staged_tag that is
+      // still status='pending' with an unapplied action. Filtering either
+      // out would hide exactly the tag they came to inspect.
+      const innerSql = directLookup
+        ? `
+        SELECT id AS target_id, chunk_id, concept_id, score, justification,
+               is_new_concept, new_concept_def
+        FROM staged_tags
+        WHERE chunk_id IN (${placeholders})
+          AND status = 'pending'
+        ORDER BY chunk_id, score DESC, id ASC
+      `
+        : `
         SELECT id AS target_id, chunk_id, concept_id, score, justification,
                is_new_concept, new_concept_def
         FROM staged_tags
@@ -165,7 +179,9 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           )
         ORDER BY chunk_id, score DESC, id ASC
       `;
-      const innerParams = [...outerRows.map((r) => r.chunk_id), min_score];
+      const innerParams = directLookup
+        ? [...outerRows.map((r) => r.chunk_id)]
+        : [...outerRows.map((r) => r.chunk_id), min_score];
       const innerRows = ro.prepare(innerSql).all(...innerParams) as InnerRow[];
 
       const concepts = new Map<string, ConceptInfo>();
@@ -198,7 +214,6 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
         const reviewedRows = ro
           .prepare(reviewedSql)
           .all(...outerRows.map((r) => r.chunk_id)) as ReviewedRow[];
-        reviewedByChunk = new Map();
         for (const t of reviewedRows) {
           const arr = reviewedByChunk.get(t.chunk_id) ?? [];
           arr.push(t);

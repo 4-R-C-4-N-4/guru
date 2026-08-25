@@ -202,16 +202,18 @@ function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => vo
   const ctx = row.context;
   // Spot-check (todo:b72f6908): tag rows link into the deck focused on that
   // chunk so the curator can see the chunk in context before/after applying.
-  const spotCheckTo =
-    ctx.kind === 'tag'
-      ? `/?chunk=${encodeURIComponent(ctx.chunk_id)}`
-      : ctx.kind === 'cleanup' && ctx.chunk_id
-        ? `/?chunk=${encodeURIComponent(ctx.chunk_id)}`
-        : null;
+  // Existing search params are carried through so the curator's filter
+  // context is still in the URL when they navigate back to the deck.
+  const spotCheckTo = (() => {
+    if (ctx.kind !== 'tag' && !(ctx.kind === 'cleanup' && ctx.chunk_id)) return null;
+    const sp = new URLSearchParams(window.location.search);
+    sp.set('chunk', ctx.chunk_id);
+    return `/?${sp.toString()}`;
+  })();
   return (
     <div className="flex items-center justify-between border-b border-zinc-900 px-3 py-2 last:border-0 mono text-xs">
       {/* Link (not <a>) — stays inside the SPA so queuedByChunk / retry
-          queue state and active filters survive the navigation. */}
+          queue state survive the navigation. */}
       {spotCheckTo ? (
         <Link to={spotCheckTo} className="min-w-0 flex-1 hover:text-accent">
           <ActionRowContent ctx={ctx} row={row} />

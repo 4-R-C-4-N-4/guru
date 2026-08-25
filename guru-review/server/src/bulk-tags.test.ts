@@ -366,6 +366,44 @@ describe('GET /api/chunks include_reviewed (todo:b72f6908)', () => {
     const miss = await (await fetch(`${baseUrl}/api/chunks?chunk=nope.missing.999`)).json();
     expect(miss.chunks).toEqual([]);
   });
+
+  it('direct lookup shows QUEUED-but-unapplied tags and ignores min_score (review round 2)', async () => {
+    // The queue row a curator clicks is a staged_tag that is still
+    // status='pending' with an unapplied review_action. The standard inner
+    // query excludes exactly that tag; the spot-check view must not.
+    const c = 'hinduism.yoga-sutras-book-01.044';
+    handles.rw
+      .prepare("INSERT INTO nodes(id, type, label) VALUES (?, 'chunk', 'S')")
+      .run(c);
+    const queuedId = Number(
+      handles.rw
+        .prepare("INSERT INTO staged_tags(chunk_id, concept_id, score) VALUES (?, 'concept_q', 3)")
+        .run(c).lastInsertRowid,
+    );
+    const lowScoreId = Number(
+      handles.rw
+        .prepare("INSERT INTO staged_tags(chunk_id, concept_id, score) VALUES (?, 'concept_low', 0)")
+        .run(c).lastInsertRowid,
+    );
+    handles.stmts.insertReviewAction.run(
+      queuedId, 'staged_tags', 'accept', null, null, 'r', 'rl2-1',
+    );
+
+    // Standard list: both invisible (queued excluded by the action filter;
+    // score-0 below min_score=1).
+    const std = await (await fetch(`${baseUrl}/api/chunks?min_score=1`)).json();
+    const stdChunk = std.chunks.find((x: { chunk_id: string }) => x.chunk_id === c);
+    expect(stdChunk?.pending_tags ?? []).toHaveLength(0);
+
+    // Direct lookup: BOTH visible.
+    const direct = await (
+      await fetch(`${baseUrl}/api/chunks?chunk=${encodeURIComponent(c)}&include_reviewed=true`)
+    ).json();
+    expect(direct.chunks).toHaveLength(1);
+    const ids = direct.chunks[0].pending_tags.map((t: { target_id: number }) => t.target_id);
+    expect(ids).toContain(queuedId);   // the tag the queue row represents
+    expect(ids).toContain(lowScoreId); // min_score not applied
+  });
 });
 
 // ── GET /api/apply/preview remaining-pending reconciliation (todo:816b8865)
