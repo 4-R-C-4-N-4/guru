@@ -112,7 +112,11 @@ def test_no_compress_budget_keeps_legacy_loop():
 
 
 def test_compress_template_exists_and_carries_placeholders():
+    # todo:58612368 — the template is word-denominated now; the token budget
+    # is converted at render time via budget_words().
     tpl = (PROJECT_ROOT / "prompts" / "dossier" / "compress-v1.md").read_text()
-    assert "{budget}" in tpl and "{summary}" in tpl
-    rendered = gd.render(gd.COMPRESS_TPL, budget="150", summary="SUMMARY TEXT")
+    assert "{budget_words}" in tpl and "{summary}" in tpl
+    rendered = gd.render(gd.COMPRESS_TPL, budget_words=gd.budget_words(210),
+                         summary="SUMMARY TEXT")
     assert "SUMMARY TEXT" in rendered and "150" in rendered
+    assert "tokens" not in rendered

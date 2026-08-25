@@ -87,7 +87,7 @@ FIELD_OF_STAGE = {
 # ── template rendering (plain token replacement; templates contain JSON braces
 #    so str.format is unusable) ────────────────────────────────────────────────
 
-def render(name: str, **vals: str) -> str:
+def render(name: str, **vals) -> str:
     tpl = (PROMPTS_DIR / f"{name}.md").read_text()
     for k, v in vals.items():
         tpl = tpl.replace("{" + k + "}", str(v))
@@ -95,6 +95,17 @@ def render(name: str, **vals: str) -> str:
         unresolved = re.findall(r"\{[a-z_]+\}", tpl.split("OUTPUT")[0])
         raise ValueError(f"template {name}: unresolved placeholders {unresolved}")
     return tpl
+
+
+def budget_words(tokens: int) -> int:
+    """Convert a token budget into the word-denominated budget the prompt
+    states (todo:58612368). Local models cannot self-count tokens — asked
+    for "124 tokens" Qwen3.8-27B produced ~2.5x over and burned reasoning
+    on token arithmetic — but they handle word budgets fine. Measured
+    density on this corpus: ~1.41 tokens/word, so words = tokens / 1.4.
+    Validation keeps counting cl100k tokens; only the prompt unit changes.
+    """
+    return max(60, round(tokens / 1.4))
 
 
 # ── corpus helpers ────────────────────────────────────────────────────────────
@@ -302,9 +313,11 @@ class Generator:
         compressed_from = None
         for i in range(MAX_ATTEMPTS + (1 if compress_to else 0)):
             try:
-                if compressed_from is not None:
+                if compressed_from is not None and compress_to is not None:
                     raw = self._llm(system, render(
-                        COMPRESS_TPL, budget=str(compress_to), summary=compressed_from))
+                        COMPRESS_TPL,
+                        budget_words=budget_words(compress_to),
+                        summary=compressed_from))
                 else:
                     raw = self._llm(system, prompt)
             except ContentBlocked as e:
@@ -380,7 +393,7 @@ class Generator:
             budget = min(350, max(200, tok // 12))
             src = _chunk_bodies(chunk_ids)
             prompt = render(L1_TPL, section_span=wp["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
+                            budget_words=budget_words(budget)) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                                  compress_to=budget)
@@ -401,7 +414,7 @@ class Generator:
             budget = min(300, max(80, s["token_count"] // 12))
             src = _chunk_bodies(s["chunk_ids"])
             prompt = render(L1_TPL, section_span=s["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
+                            budget_words=budget_words(budget)) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                                  compress_to=budget)
@@ -448,7 +461,8 @@ class Generator:
             sub_src = _chunk_bodies(sp.chunk_ids)
             sub_budget = min(300, max(80, sp.token_count // 12))
             sub_prompt = render(L1_TPL, section_span=sp.label,
-                                work_label=wp["label"], budget=sub_budget) \
+                                work_label=wp["label"],
+                                budget_words=budget_words(sub_budget)) \
                 + "\n\n---\nINPUT:\n\n" + sub_src
             body = self._attempt(preamble, sub_prompt,
                                  lambda r: _v_prose(r, int(sub_budget * 0.8),
@@ -461,7 +475,7 @@ class Generator:
 
         merged = self._attempt(
             preamble,
-            render(COMPRESS_TPL, budget=str(budget),
+            render(COMPRESS_TPL, budget_words=budget_words(budget),
                    summary="\n\n".join(sub_summaries)),
             lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2),
                                "\n\n".join(sub_summaries)))
@@ -680,7 +694,8 @@ def respin(gen: "Generator", summary_id: str, feedback: str = "") -> bool:
 
     src = _chunk_bodies(chunk_ids)
     prompt = (render(L1_TPL, section_span=label, work_label=target_wp["label"],
-                     budget=budget) + addendum + "\n\n---\nINPUT:\n\n" + src)
+                     budget_words=budget_words(budget)) + addendum
+              + "\n\n---\nINPUT:\n\n" + src)
     body = gen._attempt(gen._preamble(target_wp), prompt,
                         lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                         compress_to=budget)

@@ -50,6 +50,18 @@ that an L2 exists.
 
 ## Failure modes
 
+**Stating prompt budgets in tokens.** Local models cannot self-count tokens
+(todo:58612368): asked for "124 tokens (±20%)", Qwen3.8-27B produced ~2.5x
+over — and in one truncated run burned the whole budget inside
+`reasoning_content` doing token arithmetic and never emitted content at all.
+The same model complies with a word budget ("at most 90 words" → 53 words).
+All live prose templates (`l1-v3`, `l2-v2`, `compress-v1`, `fold-v1`) are
+therefore **word-denominated**: `generate_dossiers.budget_words()` converts
+the token budget at render time as `max(60, round(tokens / 1.4))` (measured
+corpus density ~1.41 tokens/word). The length validator still counts cl100k
+tokens unchanged, so the band itself is unaffected. Frontier providers never
+showed this failure mode — they estimate their own output length well.
+
 **Generating L2 before reviewing L1.** Upstream inputs are **accepted rows
 only**. An L2 whose L1s are all still `pending` has nothing to read and
 produces nothing. The DAG is a real dependency, and D3 sits inside it rather
