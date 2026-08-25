@@ -27,7 +27,7 @@ from guru.corpus import resolve_chunk_path  # noqa: E402
 DEFAULT_DB = PROJECT_ROOT / "data" / "guru.db"
 
 
-def load_chunk_body(db_path: Path, chunk_id: str) -> str:
+def load_chunk_body(chunk_id: str) -> str:
     """Load chunk body from corpus file given chunk node id."""
     chunk_file = resolve_chunk_path(chunk_id)
     if chunk_file is None:
@@ -93,9 +93,15 @@ def view_tags(
     concept_filter: str | None,
     min_score: int,
 ) -> None:
-    conn = sqlite3.connect(str(db_path))
+    # Read-only by contract: this tool must never write. Open the DB in ro
+    # mode so a future regression physically cannot, and so it fails loudly
+    # on a locked DB instead of blocking.
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
 
+    # Mirror the web review surface (guru-review chunks.ts): exclude rows that
+    # already have an unapplied decision queued via the app, so the viewer and
+    # the web tool show the same pending set and don't invite double-review.
     sql = """
         SELECT st.id, st.chunk_id, n.label, st.concept_id,
                st.score, st.justification, st.is_new_concept, st.new_concept_def,
@@ -104,6 +110,12 @@ def view_tags(
         JOIN nodes n ON n.id = st.chunk_id
         WHERE st.status = 'pending'
           AND st.score >= ?
+          AND NOT EXISTS (
+              SELECT 1 FROM review_actions ra
+               WHERE ra.target_id = st.id
+                 AND ra.target_table = 'staged_tags'
+                 AND ra.applied_at IS NULL
+          )
     """
     params: list = [min_score]
 
@@ -132,7 +144,7 @@ def view_tags(
         row = dict(row)
         concept_def = get_concept_def(conn, row["concept_id"])
         family = get_concept_family(conn, row["concept_id"])
-        body = load_chunk_body(db_path, row["chunk_id"])
+        body = load_chunk_body(row["chunk_id"])
         print_tag_row(row, concept_def, body, family)
 
     conn.close()
