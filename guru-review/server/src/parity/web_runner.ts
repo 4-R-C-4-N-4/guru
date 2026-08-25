@@ -69,6 +69,13 @@ const stmts = {
   deleteEdge: rw.prepare(
     'DELETE FROM edges WHERE source_id = ? AND target_id = ? AND type = ?',
   ),
+  // todo:d9bb3b9a — mirror db.ts: the reject/reassign paths in apply.ts
+  // consult this before retracting a shared EXPRESSES edge. Without it the
+  // hand-rolled map hands buildApply an undefined stmt and the harness
+  // throws the moment it drains a tag reject/reassign fixture.
+  hasAcceptedSiblingTag: rw.prepare(
+    "SELECT 1 FROM staged_tags WHERE chunk_id = ? AND concept_id = ? AND status = 'accepted' AND id != ? LIMIT 1",
+  ),
   updateStagedTagStatus: rw.prepare(
     'UPDATE staged_tags SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?',
   ),

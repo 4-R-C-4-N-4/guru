@@ -124,13 +124,14 @@ def promote_to_expresses(conn: sqlite3.Connection,
 
 
 def reject_tag(conn: sqlite3.Connection, row: dict) -> None:
-    """Reject a staged_tag and retract any auto-promoted edge.
+    """Reject a staged_tag and retract the EXPRESSES edge it fed, unless a
+    sibling still supports it.
 
-    Without the DELETE the rejected row's auto-promoted edge would stay
-    live in production — the curator's reject would be silently ignored
-    by anything downstream of `edges`. The DELETE is a no-op if no edge
-    exists (e.g. the row wasn't auto-promoted), so this is safe to call
-    on any reject regardless of prior auto-promote state.
+    Without the DELETE the rejected row's edge would stay live in
+    production — the curator's reject would be silently ignored by
+    anything downstream of `edges`. The DELETE is itself a no-op when no
+    edge exists (e.g. a row that was never accepted), so it never removes
+    more than the one edge this (chunk, concept) pair fed.
 
     The delete is skipped when another ACCEPTED tag still supports the
     same (chunk_id, concept_id) under a different model/prompt_version:
@@ -159,13 +160,15 @@ def reject_tag(conn: sqlite3.Connection, row: dict) -> None:
 def reassign_tag(conn: sqlite3.Connection, row: dict, new_concept_id: str) -> None:
     """Reassign a staged_tag to a different concept_id.
 
-    Retracts any auto-promoted edge for the *original* (chunk, concept)
-    pair, marks the donor 'reassigned', and spawns a new pending staged_tag
-    for the corrected concept (carrying provenance forward so the partial
-    UNIQUE on (chunk, concept, model, prompt_version) works correctly and
-    any future fine-tune export filter is clean). The new concept's edge
-    will materialize on the next auto-promote run if the spawned row
-    qualifies.
+    Retracts the EXPRESSES edge for the *original* (chunk, concept) pair —
+    unless an accepted sibling tag still supports it (the same shared-
+    provenance guard as reject, todo:d9bb3b9a) — marks the donor
+    'reassigned', and spawns a new pending staged_tag for the corrected
+    concept (carrying provenance forward so the partial UNIQUE on
+    (chunk, concept, model, prompt_version) works correctly and any future
+    fine-tune export filter is clean). The spawned row's edge materializes
+    only when a curator later accepts it — auto_promote.py was deleted in
+    todo:68028d8f, so there is no unattended promotion path.
 
     The donor keeps its original concept_id. This used to overwrite it with
     the target, which stored the target twice — the spawned row already
@@ -177,10 +180,18 @@ def reassign_tag(conn: sqlite3.Connection, row: dict, new_concept_id: str) -> No
     and its retained concept_id cannot collide.
     """
     original_concept_node_id = f"concept.{row['concept_id']}"
-    conn.execute(
-        "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
-        (row["chunk_id"], original_concept_node_id),
-    )
+    sibling_accepted = conn.execute(
+        """SELECT 1 FROM staged_tags
+               WHERE chunk_id = ? AND concept_id = ?
+                 AND status = 'accepted' AND id != ?
+               LIMIT 1""",
+        (row["chunk_id"], row["concept_id"], row["id"]),
+    ).fetchone()
+    if sibling_accepted is None:
+        conn.execute(
+            "DELETE FROM edges WHERE source_id=? AND target_id=? AND type='EXPRESSES'",
+            (row["chunk_id"], original_concept_node_id),
+        )
     conn.execute(
         "UPDATE staged_tags SET status='reassigned', "
         "reviewed_by=?, reviewed_at=? WHERE id=?",

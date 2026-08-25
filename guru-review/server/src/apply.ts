@@ -110,7 +110,15 @@ function applyTagAction(
       if (!q.reassign_to) {
         throw new Error(`reassign action ${q.id} missing reassign_to`);
       }
-      stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      // todo:d9bb3b9a — same shared-provenance guard as reject: retracting
+      // the donor's (chunk, concept) edge must not clobber a verified edge
+      // that an accepted sibling tag (different model) still supports.
+      const sibling = stmts.hasAcceptedSiblingTag.get(
+        tag.chunk_id, tag.concept_id, tag.id,
+      );
+      if (sibling === undefined) {
+        stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      }
       stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
       // The donor keeps its original concept_id. Overwriting it with the
       // target (the old updateStagedTagConcept call) stored the target twice
