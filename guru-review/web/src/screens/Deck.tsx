@@ -47,10 +47,38 @@ export function Deck(): React.ReactElement {
     })();
   }, []);
 
+  // Spot-check deep link (todo:b72f6908): /?chunk=<chunk_id> fetches that
+  // one chunk directly — with its reviewed verdicts via include_reviewed —
+  // bypassing the filter/cursor flow. Used from the queue/apply screens.
+  // The server's ?chunk= lookup has no pending constraint, so fully-reviewed
+  // chunks are reachable; a miss surfaces as an explicit not-found state,
+  // never as a silently blank deck.
+  const focusChunk = params.get('chunk') ?? undefined;
+
   const fetchPage = useCallback(
     async (cursor: string | null): Promise<void> => {
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
+        if (focusChunk) {
+          const res = await api.chunks({
+            ...filters,
+            chunk: focusChunk,
+            cursor: undefined,
+            limit: 1,
+            include_reviewed: true,
+          });
+          const hit = res.chunks.find((c) => c.chunk_id === focusChunk);
+          setState((s) =>
+            hit
+              ? { ...s, loading: false, error: null, current: hit, queue: [], cursor: null }
+              : {
+                  ...s,
+                  loading: false,
+                  error: `chunk ${focusChunk} not found`,
+                },
+          );
+          return;
+        }
         const res = await api.chunks({
           ...filters,
           cursor: cursor ?? undefined,
@@ -73,11 +101,13 @@ export function Deck(): React.ReactElement {
         setState((s) => ({ ...s, loading: false, error: (e as Error).message }));
       }
     },
-    [filters.tradition, filters.text, filters.concept, filters.min_score],
+    [filters.tradition, filters.text, filters.concept, filters.min_score, focusChunk],
   );
 
   // Initial load + reload on filter change. Restore cursor from IndexedDB
-  // if the user has reviewed this filter before.
+  // if the user has reviewed this filter before. Skipped in focus mode:
+  // the saved cursor is irrelevant to a single-chunk spot-check, and the
+  // "Resuming" banner would be misleading (todo:b72f6908 review).
   const [resumed, setResumed] = useState(false);
   useEffect(() => {
     setState({
@@ -91,11 +121,11 @@ export function Deck(): React.ReactElement {
     });
     setResumed(false);
     void (async () => {
-      const saved = await getCursor(filters);
+      const saved = focusChunk ? null : await getCursor(filters);
       if (saved) setResumed(true);
       void fetchPage(saved);
     })();
-  }, [filters.tradition, filters.text, filters.concept, filters.min_score, fetchPage]);
+  }, [filters.tradition, filters.text, filters.concept, filters.min_score, fetchPage, focusChunk]);
 
   // Persist cursor on every successful page load (after the first one).
   useEffect(() => {

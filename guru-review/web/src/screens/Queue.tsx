@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FixedSizeList as VList } from 'react-window';
 import { api, newClientActionId } from '../api/client';
 import type { ApplyPreview, QueueRow } from '../api/types';
@@ -200,38 +200,29 @@ const ACTION_COLOR: Record<string, string> = {
 function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => void }): React.ReactElement {
   const color = ACTION_COLOR[row.action] ?? 'text-zinc-300';
   const ctx = row.context;
+  // Spot-check (todo:b72f6908): tag rows link into the deck focused on that
+  // chunk so the curator can see the chunk in context before/after applying.
+  // Existing search params are carried through so the curator's filter
+  // context is still in the URL when they navigate back to the deck.
+  const spotCheckTo = (() => {
+    if (ctx.kind !== 'tag' && !(ctx.kind === 'cleanup' && ctx.chunk_id)) return null;
+    const sp = new URLSearchParams(window.location.search);
+    sp.set('chunk', ctx.chunk_id);
+    return `/?${sp.toString()}`;
+  })();
   return (
     <div className="flex items-center justify-between border-b border-zinc-900 px-3 py-2 last:border-0 mono text-xs">
-      <div className="min-w-0 flex-1">
-        {ctx.kind === 'tag' ? (
-          <>
-            <div className="truncate text-zinc-300">{ctx.section_label}</div>
-            <div className="truncate text-zinc-500">
-              {ctx.concept_id}
-              {row.action === 'reassign' && row.reassign_to && <span> → {row.reassign_to}</span>}
-            </div>
-          </>
-        ) : ctx.kind === 'cleanup' ? (
-          <>
-            <div className="truncate text-zinc-300">{ctx.section_label ?? ctx.chunk_id}</div>
-            <div className="truncate text-zinc-500">
-              rewrite · wrap {ctx.signal_score?.toFixed(2)}
-              {!ctx.words_preserved && <span className="text-rose-400"> · drifted</span>}
-              {row.action === 'reclassify' && <span> → apparatus</span>}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="truncate text-zinc-300">
-              {ctx.edge_type} · {ctx.a.tradition_id}↔{ctx.b.tradition_id}
-            </div>
-            <div className="truncate text-zinc-500">
-              {ctx.a.section_label} ↔ {ctx.b.section_label}
-              {row.action === 'reclassify' && row.reclassify_to && <span> → {row.reclassify_to}</span>}
-            </div>
-          </>
-        )}
-      </div>
+      {/* Link (not <a>) — stays inside the SPA so queuedByChunk / retry
+          queue state survive the navigation. */}
+      {spotCheckTo ? (
+        <Link to={spotCheckTo} className="min-w-0 flex-1 hover:text-accent">
+          <ActionRowContent ctx={ctx} row={row} />
+        </Link>
+      ) : (
+        <div className="min-w-0 flex-1">
+          <ActionRowContent ctx={ctx} row={row} />
+        </div>
+      )}
       <span className={`mx-3 ${color}`}>{row.action}</span>
       <button
         onClick={() => onUndo(row.client_action_id)}
@@ -240,5 +231,46 @@ function ActionRow({ row, onUndo }: { row: QueueRow; onUndo: (cid: string) => vo
         undo
       </button>
     </div>
+  );
+}
+
+function ActionRowContent({
+  ctx,
+  row,
+}: {
+  ctx: QueueRow['context'];
+  row: QueueRow;
+}): React.ReactElement {
+  return (
+    <>
+      {ctx.kind === 'tag' ? (
+        <>
+          <div className="truncate text-zinc-300">{ctx.section_label}</div>
+          <div className="truncate text-zinc-500">
+            {ctx.concept_id}
+            {row.action === 'reassign' && row.reassign_to && <span> → {row.reassign_to}</span>}
+          </div>
+        </>
+      ) : ctx.kind === 'cleanup' ? (
+        <>
+          <div className="truncate text-zinc-300">{ctx.section_label ?? ctx.chunk_id}</div>
+          <div className="truncate text-zinc-500">
+            rewrite · wrap {ctx.signal_score?.toFixed(2)}
+            {!ctx.words_preserved && <span className="text-rose-400"> · drifted</span>}
+            {row.action === 'reclassify' && <span> → apparatus</span>}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="truncate text-zinc-300">
+            {ctx.edge_type} · {ctx.a.tradition_id}↔{ctx.b.tradition_id}
+          </div>
+          <div className="truncate text-zinc-500">
+            {ctx.a.section_label} ↔ {ctx.b.section_label}
+            {row.action === 'reclassify' && row.reclassify_to && <span> → {row.reclassify_to}</span>}
+          </div>
+        </>
+      )}
+    </>
   );
 }

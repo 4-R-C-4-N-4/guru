@@ -153,10 +153,14 @@ export function tagsRouter(stmts: PreparedStmts, rw: Database.Database): Router 
     const unknown_ids: number[] = [];
     const invalid_items: Array<{ index: number; error: unknown }> = [];
     const errored_items: Array<{ index: number; error: string }> = [];
-    // Per-item result map (todo:37dd43de review): target_id -> outcome, so a
-    // client reconciles every request row against the server in one object
-    // instead of trusting an aggregate count.
-    const results: Record<number, 'queued' | 'skipped' | 'unknown' | 'error'> = {};
+
+    // Per-item result map (todo:37dd43de review): request index -> outcome,
+    // so a client reconciles EVERY request row against the server in one
+    // array — including zod-invalid rows, which have no target_id to key by.
+    // Keying by target_id (the original shape) lost invalid rows entirely and
+    // collapsed distinct rows sharing a target_id to one entry.
+    type ItemStatus = 'queued' | 'skipped' | 'unknown' | 'error';
+    const results: Array<{ index: number; status: ItemStatus }> = [];
 
     const prevalidated = items.map((item, index) => ({
       item: BulkItemSchema.safeParse(item),
@@ -167,6 +171,7 @@ export function tagsRouter(stmts: PreparedStmts, rw: Database.Database): Router 
       for (const { item, index } of prevalidated) {
         if (!item.success) {
           skipped++;
+          results.push({ index, status: 'skipped' });
           invalid_items.push({ index, error: item.error.flatten() });
           continue;
         }
@@ -177,24 +182,24 @@ export function tagsRouter(stmts: PreparedStmts, rw: Database.Database): Router 
         switch (outcome.status) {
           case 'queued':
             queued++;
-            results[item.data.target_id] = 'queued';
+            results.push({ index, status: 'queued' });
             break;
           case 'idempotent':
             skipped++;
-            results[item.data.target_id] = 'skipped';
+            results.push({ index, status: 'skipped' });
             break;
           case 'unknown':
             unknown_ids.push(item.data.target_id);
-            results[item.data.target_id] = 'unknown';
+            results.push({ index, status: 'unknown' });
             break;
           case 'invalid':
             skipped++;
+            results.push({ index, status: 'skipped' });
             invalid_items.push({ index, error: outcome.error });
-            results[item.data.target_id] = 'skipped';
             break;
           case 'error':
+            results.push({ index, status: 'error' });
             errored_items.push({ index, error: outcome.error });
-            results[item.data.target_id] = 'error';
             break;
         }
       }
@@ -212,7 +217,7 @@ export function tagsRouter(stmts: PreparedStmts, rw: Database.Database): Router 
       queued,
       skipped,
       unknown_ids,
-      results,   // target_id -> queued | skipped | unknown | error (per-item)
+      results,   // per request row: {index, status: queued|skipped|unknown|error}
       ...(invalid_items.length > 0 ? { invalid_items } : {}),
       ...(errored_items.length > 0 ? { errored_items } : {}),
     });

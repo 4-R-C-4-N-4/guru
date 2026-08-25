@@ -11,6 +11,18 @@ const QuerySchema = z.object({
   min_score: z.coerce.number().int().min(0).max(3).default(1),
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(20).default(8),
+  // todo:b72f6908 — spot-check mode: also return each chunk's already-
+  // reviewed tags (accepted/rejected/reassigned) with their verdicts.
+  // Explicit 'true'/'1' only: z.coerce.boolean() would turn the string
+  // "false" into true, silently enabling reviewed mode on include_reviewed=false.
+  include_reviewed: z
+    .string()
+    .optional()
+    .transform((v) => v === 'true' || v === '1'),
+  // todo:b72f6908 review fix — direct chunk lookup: selects exactly this
+  // chunk regardless of pending state, so spot-checks reach chunks whose
+  // tags are all reviewed (the deep-link case from the queue screen).
+  chunk: z.string().optional(),
 });
 
 interface CursorShape {
@@ -56,6 +68,17 @@ interface ConceptInfo {
   definition: string | null;
 }
 
+interface ReviewedRow {
+  target_id: number;
+  chunk_id: string;
+  concept_id: string;
+  score: number;
+  justification: string | null;
+  status: string;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+}
+
 export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Router {
   const r = Router();
   const counts = new CountCache(30_000);
@@ -71,30 +94,38 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
       res.status(400).json({ error: parsed.error.flatten() });
       return;
     }
-    const { tradition, text, concept, min_score, cursor, limit } = parsed.data;
+    const { tradition, text, concept, min_score, cursor, limit, include_reviewed, chunk } =
+      parsed.data;
     const cursorObj = decodeCursor(cursor);
 
     // Build outer query (chunks page) ----------------------------------
-    const outerWhere: string[] = [
-      "st.status = 'pending'",
-      'st.score >= ?',
-      "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
-    ];
-    const outerParams: unknown[] = [min_score];
+    // Direct chunk lookup (todo:b72f6908 review fix): ?chunk=<id> selects
+    // exactly that chunk with NO pending-status constraint — this is the
+    // spot-check path, and its whole point is reaching chunks whose tags
+    // are all already reviewed. min_score/cursor/filters don't apply.
+    const directLookup = chunk ?? null;
+    const outerWhere: string[] = directLookup
+      ? ['n.id = ?']
+      : [
+          "st.status = 'pending'",
+          'st.score >= ?',
+          "NOT EXISTS (SELECT 1 FROM review_actions ra WHERE ra.target_id = st.id AND ra.target_table = 'staged_tags' AND ra.applied_at IS NULL)",
+        ];
+    const outerParams: unknown[] = directLookup ? [directLookup] : [min_score];
 
-    if (tradition) {
+    if (!directLookup && tradition) {
       outerWhere.push('n.tradition_id = ?');
       outerParams.push(tradition);
     }
-    if (text) {
+    if (!directLookup && text) {
       outerWhere.push("json_extract(n.metadata_json, '$.text_id') = ?");
       outerParams.push(text);
     }
-    if (concept) {
+    if (!directLookup && concept) {
       outerWhere.push('st.concept_id = ?');
       outerParams.push(concept);
     }
-    if (cursorObj) {
+    if (!directLookup && cursorObj) {
       outerWhere.push('(n.tradition_id, n.id) > (?, ?)');
       outerParams.push(cursorObj.trad, cursorObj.chunk);
     }
@@ -116,9 +147,24 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
 
     // Build inner query (tags for those chunks) ------------------------
     const chunks: ReturnType<typeof buildChunk>[] = [];
+    const reviewedByChunk: Map<string, ReviewedRow[]> = new Map();
     if (outerRows.length > 0) {
       const placeholders = outerRows.map(() => '?').join(',');
-      const innerSql = `
+      // Direct lookup (todo:b72f6908 review): show the chunk's tags as they
+      // actually stand — pending AND queued-but-unapplied, no min_score —
+      // because the queue row the curator clicked IS a staged_tag that is
+      // still status='pending' with an unapplied action. Filtering either
+      // out would hide exactly the tag they came to inspect.
+      const innerSql = directLookup
+        ? `
+        SELECT id AS target_id, chunk_id, concept_id, score, justification,
+               is_new_concept, new_concept_def
+        FROM staged_tags
+        WHERE chunk_id IN (${placeholders})
+          AND status = 'pending'
+        ORDER BY chunk_id, score DESC, id ASC
+      `
+        : `
         SELECT id AS target_id, chunk_id, concept_id, score, justification,
                is_new_concept, new_concept_def
         FROM staged_tags
@@ -133,7 +179,9 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           )
         ORDER BY chunk_id, score DESC, id ASC
       `;
-      const innerParams = [...outerRows.map((r) => r.chunk_id), min_score];
+      const innerParams = directLookup
+        ? [...outerRows.map((r) => r.chunk_id)]
+        : [...outerRows.map((r) => r.chunk_id), min_score];
       const innerRows = ro.prepare(innerSql).all(...innerParams) as InnerRow[];
 
       const concepts = new Map<string, ConceptInfo>();
@@ -152,9 +200,30 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
         tagsByChunk.set(t.chunk_id, arr);
       }
 
+      // Reviewed-tag surface (todo:b72f6908) — only when requested; the
+      // default response shape is unchanged.
+      if (include_reviewed) {
+        const reviewedSql = `
+          SELECT id AS target_id, chunk_id, concept_id, score, justification,
+                 status, reviewed_by, reviewed_at
+          FROM staged_tags
+          WHERE chunk_id IN (${placeholders})
+            AND status != 'pending'
+          ORDER BY chunk_id, status, id ASC
+        `;
+        const reviewedRows = ro
+          .prepare(reviewedSql)
+          .all(...outerRows.map((r) => r.chunk_id)) as ReviewedRow[];
+        for (const t of reviewedRows) {
+          const arr = reviewedByChunk.get(t.chunk_id) ?? [];
+          arr.push(t);
+          reviewedByChunk.set(t.chunk_id, arr);
+        }
+      }
+
       for (const c of outerRows) {
         const tags = tagsByChunk.get(c.chunk_id) ?? [];
-        chunks.push(buildChunk(c, tags, concepts, body));
+        chunks.push(buildChunk(c, tags, concepts, body, reviewedByChunk.get(c.chunk_id)));
       }
     }
 
@@ -168,11 +237,16 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
 
     const last = outerRows[outerRows.length - 1];
     const next_cursor =
-      outerRows.length === limit && last ? encodeCursor({ trad: last.tradition_id, chunk: last.chunk_id }) : null;
+      !directLookup && outerRows.length === limit && last
+        ? encodeCursor({ trad: last.tradition_id, chunk: last.chunk_id })
+        : null;
 
     // Per-chunk coverage (todo:a8037ed0): pending_total is ALL pending tags
-    // on the chunk regardless of score/queued state; queued counts unapplied
-    // review_actions against it. A chunk where queued < pending_total has
+    // on the chunk regardless of score/queued state; queued counts DISTINCT
+    // staged tags with an unapplied action (review fix, todo:b72f6908 — the
+    // review_actions table is unique on client_action_id, not target_id, so
+    // counting rows would double-count a tag queued twice and could push
+    // queued above pending_total). A chunk where queued < pending_total has
     // under-queued verdicts — visible on the very next fetch instead of
     // surfacing as cursor drift at the end of a bulk pass.
     let by_chunk: Record<string, { pending_total: number; queued: number }> = {};
@@ -183,7 +257,7 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
           `SELECT n.id AS chunk_id,
                   (SELECT COUNT(*) FROM staged_tags st2
                     WHERE st2.chunk_id = n.id AND st2.status = 'pending') AS pending_total,
-                  (SELECT COUNT(*) FROM review_actions ra
+                  (SELECT COUNT(DISTINCT ra.target_id) FROM review_actions ra
                     JOIN staged_tags st3 ON st3.id = ra.target_id
                     WHERE st3.chunk_id = n.id AND ra.target_table = 'staged_tags'
                       AND ra.applied_at IS NULL) AS queued
@@ -212,6 +286,7 @@ function buildChunk(
   tags: InnerRow[],
   concepts: Map<string, ConceptInfo>,
   body: ChunkBodyCache,
+  reviewed?: ReviewedRow[],
 ): {
   chunk_id: string;
   tradition_id: string;
@@ -227,6 +302,16 @@ function buildChunk(
     justification: string;
     is_new_concept: boolean;
     new_concept_def: string | null;
+  }>;
+  reviewed_tags?: Array<{
+    target_id: number;
+    concept_id: string;
+    concept_label: string;
+    score: number;
+    justification: string;
+    status: string;
+    reviewed_by: string | null;
+    reviewed_at: string | null;
   }>;
 } {
   return {
@@ -248,6 +333,23 @@ function buildChunk(
         new_concept_def: t.new_concept_def,
       };
     }),
+    ...(reviewed
+      ? {
+          reviewed_tags: reviewed.map((t) => {
+            const ci = concepts.get(t.concept_id);
+            return {
+              target_id: t.target_id,
+              concept_id: t.concept_id,
+              concept_label: ci?.label ?? t.concept_id,
+              score: t.score,
+              justification: t.justification ?? '',
+              status: t.status,
+              reviewed_by: t.reviewed_by,
+              reviewed_at: t.reviewed_at,
+            };
+          }),
+        }
+      : {}),
   };
 }
 
