@@ -104,6 +104,26 @@ fix (the `l1-v2 → l1-v3` bump turned a 1-row fix for
 the rejection note back as a corrective addendum. After a bump, never run the
 bumped stage without deciding which behaviour you want.
 
+**Assuming fold degradation is input-budget machinery.** It is not (todo:
+6d141319). The OUTPUT-overrun fold path lives in generate_dossiers.py's
+`_fold_l1`: when a span's generate → compress sequence fails outright (the
+compressor still returns far more than the band — seen on blavatsky-sd c12,
+25 dense Kabbalistic spans), stage_l1 falls through to it. It re-packs the
+span at chunk boundaries via build_dossiers' `_budget_pack` (n =
+ceil(span_tokens / budget)), L1-summarizes each part, merges once through
+compress-v1, and stages under **`l1-v3-folded`**. Consequences:
+
+- a folded row does NOT satisfy the plain `l1-v3` skip check or the standard
+  review sweep — D3 straggler re-sweeps must pass
+  `--prompt-version l1-v3-folded` explicitly;
+- the stage_l1 skip check probes both versions, so re-runs do not refold;
+- one degradation level only: if the merged output still violates the band,
+  the span gives up as before. Single-chunk spans never fold (no split point).
+
+The plan-time `fold_batches` count (input_budget > 0) remains a separate,
+still-unwired mechanism; this path is triggered by output overrun regardless
+of input_budget.
+
 **Reading a parse failure as a hard stop.** Contract validation follows the
 `tag_concepts.parse_tags` pattern: reject-and-retry up to a limit, then
 log-skip. The node stays ungenerated and a later run retries it. A skipped node

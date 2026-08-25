@@ -51,6 +51,13 @@ L1_TPL = "l1-v3"
 # re-rolling the generation prompt. Keep-all-claims compress; the granularity
 # loss is an explicit decision rather than a statistical side effect.
 COMPRESS_TPL = "compress-v1"
+# todo:6d141319 — provenance marker for L1 rows that took the fold-degradation
+# path (generate -> compress -> STILL overrunning -> split + merge). A suffix,
+# not a metadata note: review_dossiers.py's --prompt-version sampling filter
+# sees it, matching the existing '-manual' convention. NOTE: these rows do NOT
+# satisfy the plain l1-v3 skip check or review sweep — D3 straggler re-sweeps
+# must pass --prompt-version l1-v3-folded explicitly.
+FOLDED_SUFFIX = "-folded"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
@@ -384,7 +391,12 @@ class Generator:
             return
         for s in wp["spans"]:
             sid = f"sum:{s['text_id']}:{s['slug']}"
-            if _summary_exists(self.conn, sid, model, L1_TPL):
+            # Companion fix (todo:6d141319): a folded row under
+            # '{L1_TPL}-folded' does NOT satisfy the plain-l1-v3 exists check —
+            # without this second probe, every re-run repeats the full
+            # generate->compress->fold sequence for an already-folded span.
+            if _summary_exists(self.conn, sid, model, L1_TPL) \
+                    or _summary_exists(self.conn, sid, model, L1_TPL + FOLDED_SUFFIX):
                 continue
             budget = min(300, max(80, s["token_count"] // 12))
             src = _chunk_bodies(s["chunk_ids"])
@@ -397,6 +409,69 @@ class Generator:
                 self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
                                      s["chunk_ids"], None, body, L1_TPL)
                 logger.info(f"  [l1] {sid}")
+                continue
+            # generate -> compress failed outright (todo:6d141319): try the
+            # fold path once before leaving the span unstaged.
+            self._fold_l1(wp, s, sid)
+
+    def _fold_l1(self, wp, s, sid) -> bool:
+        """Fold-path degradation for spans whose generate->compress still
+        overruns the band (todo:6d141319). Split at chunk boundaries into N
+        sub-batches (N = ceil(overrun / budget)), L1 each, then one merge pass
+        through compress-v1's keep-all-claims instruction. Stages under
+        '{L1_TPL}-folded' so D3 can see the degraded provenance. One level of
+        degradation only: if the merged output still violates the band, give
+        up exactly as before — no recursion."""
+        from build_dossiers import load_text_chunks, _budget_pack  # noqa: PLC0415
+
+        model = self.cfg["model"]
+        folded_pv = L1_TPL + FOLDED_SUFFIX
+        if _summary_exists(self.conn, sid, model, folded_pv):
+            return True  # already folded — do not repeat generate->compress->fold
+        if len(s["chunk_ids"]) < 2:
+            return False  # no split point; give up as today
+
+        # Sub-batch count from how far past the band the compressed output
+        # landed. The overrun magnitude is not returned by _attempt, so use the
+        # span's own density instead — the same ceil formula plan-time folds
+        # use (build_dossiers.py), applied to span tokens over the budget the
+        # failed single call was given.
+        budget = min(300, max(80, s["token_count"] // 12))
+        chunks = [c for c in load_text_chunks(wp["tradition"], s["text_id"])
+                  if c.id in set(s["chunk_ids"])]
+        n = -(-s["token_count"] // budget)  # ceil
+        sub_target = s["token_count"] // n
+        subs = _budget_pack(s["text_id"], s["label"], chunks, sub_target, synthetic=True)
+        preamble = self._preamble(wp)
+        sub_summaries = []
+        for i, sp in enumerate(subs, 1):
+            sub_src = _chunk_bodies(sp.chunk_ids)
+            sub_budget = min(300, max(80, sp.token_count // 12))
+            sub_prompt = render(L1_TPL, section_span=sp.label,
+                                work_label=wp["label"], budget=sub_budget) \
+                + "\n\n---\nINPUT:\n\n" + sub_src
+            body = self._attempt(preamble, sub_prompt,
+                                 lambda r: _v_prose(r, int(sub_budget * 0.8),
+                                                    int(sub_budget * 1.2), sub_src),
+                                 compress_to=sub_budget)
+            if body is None:
+                logger.error(f"  fold: sub-batch {i}/{len(subs)} failed — giving up for {sid}")
+                return False
+            sub_summaries.append(f"Part {i}:\n{body}")
+
+        merged = self._attempt(
+            preamble,
+            render(COMPRESS_TPL, budget=str(budget),
+                   summary="\n\n".join(sub_summaries)),
+            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2),
+                               "\n\n".join(sub_summaries)))
+        if merged is None:
+            logger.error(f"  fold: merged output also rejected — giving up for {sid}")
+            return False
+        self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
+                             s["chunk_ids"], None, merged, folded_pv)
+        logger.info(f"  [l1/folded {len(subs)} parts] {sid}")
+        return True
 
     def stage_structure(self, wp):
         if wp["degenerate"]:
