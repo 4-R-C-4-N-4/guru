@@ -425,3 +425,55 @@ def test_reassign_tag_does_not_touch_unrelated_edges(conn: sqlite3.Connection) -
         ).fetchall()
     ]
     assert surviving_targets == ["concept.gnosis"]
+
+
+# ── reassign_tag with an accepted sibling (todo:d9bb3b9a) ──────────────
+
+
+def test_reassign_with_accepted_sibling_keeps_shared_edge(conn: sqlite3.Connection) -> None:
+    """The donor's original-concept edge is shared provenance: if an accepted
+    sibling from another model still supports the same (chunk, concept),
+    reassigning this row must NOT retract that verified edge — the identical
+    orphaning hazard the reject guard closes (todo:d9bb3b9a)."""
+    row = _seed_staged_tag(conn, concept_id="archon", model="model-a")
+    sibling_id = _seed_staged_tag(conn, concept_id="archon", model="model-b")["id"]
+    conn.execute("UPDATE staged_tags SET status='accepted' WHERE id=?", (sibling_id,))
+    conn.execute("INSERT INTO nodes(id,type,label) VALUES('concept.archon','concept','Archon')")
+    conn.execute(
+        "INSERT INTO edges(source_id,target_id,type,tier,justification) VALUES "
+        "(?, 'concept.archon', 'EXPRESSES', 'verified', 'human-curated')",
+        (row["chunk_id"],),
+    )
+
+    reassign_tag(conn, row, "demiurge")
+
+    edge = conn.execute(
+        "SELECT * FROM edges WHERE source_id=? AND target_id='concept.archon'",
+        (row["chunk_id"],),
+    ).fetchone()
+    assert edge is not None, "shared edge must survive while an accepted sibling stands"
+    assert edge["tier"] == "verified"
+    status = conn.execute(
+        "SELECT status FROM staged_tags WHERE id=?", (row["id"],)
+    ).fetchone()
+    assert status["status"] == "reassigned"
+
+
+def test_reassign_still_retracts_donor_edge_when_no_sibling(conn: sqlite3.Connection) -> None:
+    """With no accepted sibling, reassign retracts the original-concept edge
+    exactly as before the guard."""
+    row = _seed_staged_tag(conn, concept_id="archon")
+    conn.execute("INSERT INTO nodes(id,type,label) VALUES('concept.archon','concept','Archon')")
+    conn.execute(
+        "INSERT INTO edges(source_id,target_id,type,tier,justification) VALUES "
+        "(?, 'concept.archon', 'EXPRESSES', 'proposed', 'x')",
+        (row["chunk_id"],),
+    )
+
+    reassign_tag(conn, row, "demiurge")
+
+    edge = conn.execute(
+        "SELECT * FROM edges WHERE source_id=? AND target_id='concept.archon'",
+        (row["chunk_id"],),
+    ).fetchone()
+    assert edge is None

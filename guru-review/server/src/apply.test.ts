@@ -188,6 +188,39 @@ describe('reject with an accepted sibling (todo:d9bb3b9a)', () => {
     expect(tag(donor).status).toBe('rejected');
     expect(edgeCount('hinduism.yoga-sutras-book-01.015', 'aparigraha')).toBe(0);
   });
+
+  it('reassign does not retract the shared edge while an accepted sibling stands', () => {
+    // Same shared-provenance hazard as reject: the donor's original edge is
+    // still verified by an accepted sibling from a different model.
+    handles.rw
+      .prepare(
+        "INSERT INTO staged_tags(chunk_id, concept_id, score, model, prompt_version) " +
+          "VALUES (?, ?, 2, 'qwen-3-4b-guru-v3', 'v1')",
+      )
+      .run('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+    const donor = addTag('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+    handles.rw
+      .prepare("UPDATE staged_tags SET status='accepted' WHERE model = ?")
+      .run('qwen-3-4b-guru-v3');
+    addEdge('hinduism.yoga-sutras-book-01.015', 'inner_silence');
+
+    queue(donor, 'reassign', 'divine_emanation');
+    buildApply(handles.rw, handles.stmts)();
+
+    expect(tag(donor).status).toBe('reassigned');
+    expect(edgeCount('hinduism.yoga-sutras-book-01.015', 'inner_silence')).toBe(1);
+  });
+
+  it('reassign still retracts the donor edge when no accepted sibling survives', () => {
+    const donor = addTag('hinduism.yoga-sutras-book-01.015', 'aparigraha');
+    addEdge('hinduism.yoga-sutras-book-01.015', 'aparigraha');
+
+    queue(donor, 'reassign', 'divine_emanation');
+    buildApply(handles.rw, handles.stmts)();
+
+    expect(tag(donor).status).toBe('reassigned');
+    expect(edgeCount('hinduism.yoga-sutras-book-01.015', 'aparigraha')).toBe(0);
+  });
 });
 
 describe('queue drain order', () => {
