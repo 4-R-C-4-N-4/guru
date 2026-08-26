@@ -77,6 +77,21 @@ FOLDED_SUFFIX = "-folded"
 # all stale to the version-keyed skip check.
 STRUCT_TPL = "structure-v5"
 L2_TPL = "l2-v2"
+# todo:64c54b6c — volume/part L2s; D3 --prompt-version sampling sees the suffix
+# the same way it sees l1-v3-folded. The FINAL work L2 stays plain l2-v2 at
+# sum:{work_id} so promote/export's exactly-one-L2 invariant is unchanged.
+L2_PART_SUFFIX = "-part"
+# Conservative join budget vs llama.cpp CTX_SIZE=24576. Leaves room for the
+# preamble + template. Hierarchical L2 fires strictly above this; small works
+# keep the naive single join. Tests monkeypatch this down.
+L2_INPUT_BUDGET = 16_000
+# Natural internal structure for The Secret Doctrine (source_url /sd1- vs /sd2-).
+# Span-plan labels are "Page N" and c12 interleaves volumes — do NOT cluster
+# by consecutive plan order.
+VOL_KEYS = {
+    "vol-1": "Vol 1 Cosmogenesis",
+    "vol-2": "Vol 2 Anthropogenesis",
+}
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
     "structure": "structure_entry", "summary": "summary", "context": "context",
@@ -259,12 +274,83 @@ def _accepted_l1s(conn, work_id, span_order: dict | None = None) -> list[sqlite3
 
 
 def _accepted_l2(conn, work_id) -> sqlite3.Row | None:
-    # manual rows outrank any template generation — same preference as
-    # _accepted_l1s and the promoter, so fields derive from the L2 that ships
+    # Pin to the FINAL work L2. Hierarchical volume/part rows are also
+    # level=2 (todo:64c54b6c); a bare work_id+level query would hand
+    # summary/context the wrong body. Manual rows on sum:{work_id} still
+    # outrank any template generation — same preference as _accepted_l1s
+    # and the promoter.
+    sid = f"sum:{work_id}"
     return conn.execute(
-        "SELECT * FROM staged_summaries WHERE work_id=? AND level=2 AND status='accepted'"
+        "SELECT * FROM staged_summaries WHERE summary_id=? AND level=2 AND status='accepted'"
         " ORDER BY (prompt_version LIKE '%-manual') DESC, id DESC LIMIT 1",
-        (work_id,)).fetchone()
+        (sid,)).fetchone()
+
+
+def _join_summaries(rows) -> str:
+    return "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in rows)
+
+
+def _pack_summary_rows(rows, budget: int) -> list[list]:
+    """Pack consecutive summary rows so each join stays ≤ budget tokens."""
+    batches: list[list] = []
+    cur: list = []
+    for r in rows:
+        trial = cur + [r]
+        if cur and count_tokens(_join_summaries(trial)) > budget:
+            batches.append(cur)
+            cur = [r]
+        else:
+            cur = trial
+    if cur:
+        batches.append(cur)
+    return batches
+
+
+def _chunk_source_url(cid: str) -> str:
+    try:
+        trad, text, num = cid.rsplit(".", 2)
+        path = CORPUS_DIR / trad / text / "chunks" / f"{num}.toml"
+        if not path.exists():
+            return ""
+        with open(path, "rb") as f:
+            d = tomllib.load(f)
+        return d.get("chunk", {}).get("source_url", "") or ""
+    except (ValueError, OSError, tomllib.TOMLDecodeError, KeyError):
+        return ""
+
+
+def _structure_key(wp, l1_row) -> str:
+    """Volume identity from chunk source_url, not span-plan order."""
+    from collections import Counter
+    span = next((s for s in wp["spans"] if s["label"] == l1_row["section_span"]), None)
+    if span is None:
+        return "work"
+    keys = []
+    for cid in span["chunk_ids"]:
+        url = _chunk_source_url(cid)
+        if "/sd1-" in url:
+            keys.append("vol-1")
+        elif "/sd2-" in url:
+            keys.append("vol-2")
+    if not keys:
+        return "work"
+    return Counter(keys).most_common(1)[0][0]
+
+
+def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
+    order: list[str] = []
+    buckets: dict[str, list] = {}
+    for r in l1s:
+        key = _structure_key(wp, r)
+        if key not in buckets:
+            order.append(key)
+            buckets[key] = []
+        buckets[key].append(r)
+    out = []
+    for k in order:
+        label = VOL_KEYS.get(k, wp["label"])
+        out.append((k, label, buckets[k]))
+    return out
 
 
 # ── the generator ─────────────────────────────────────────────────────────────
@@ -515,15 +601,110 @@ class Generator:
         if len(l1s) < len(wp["spans"]):
             logger.info(f"  [l2] {wp['work_id']}: {len(l1s)}/{len(wp['spans'])} L1s accepted — deferred")
             return
-        joined = "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in l1s)
+        joined = _join_summaries(l1s)
+        if count_tokens(joined) <= L2_INPUT_BUDGET:
+            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2):
+                logger.info(f"  [l2] {sid}")
+            return
+        # Hierarchical: natural structure first (blavatsky volumes), then
+        # budget-pack inside a part that still overflows. Bottom-up in this
+        # one stage call — parts are pending, not D3-gated, or the stream
+        # re-blocks. Upstream L1s remain the only accepted-row dependency.
+        parts = _partition_l1s(wp, l1s)
+        child_sids = []
+        if len(parts) == 1 and parts[0][0] == "work":
+            child_sids = self._l2_budget_tree(wp, "work", wp["label"], l1s)
+        else:
+            for key, label, rows in parts:
+                part_sid = f"sum:{wp['work_id']}:{key}"
+                part_pv = L2_TPL + L2_PART_SUFFIX
+                if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
+                    if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                        if self._stage_l2_from(wp, part_sid, label, rows, part_pv, level=2):
+                            logger.info(f"  [l2/part] {part_sid}")
+                else:
+                    inner = self._l2_budget_tree(wp, key, label, rows)
+                    if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                        inner_rows = self._rows_by_ids(inner)
+                        if inner_rows and self._stage_l2_from(
+                                wp, part_sid, label, inner_rows, part_pv, level=2):
+                            logger.info(f"  [l2/part] {part_sid}")
+                if _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                    child_sids.append(part_sid)
+        if not child_sids:
+            return
+        part_rows = self._rows_by_ids(child_sids)
+        if not part_rows:
+            return
+        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2):
+            logger.info(f"  [l2] {sid} from {len(part_rows)} parts")
+
+    def _rows_by_ids(self, sids: list[str]) -> list[sqlite3.Row]:
+        out = []
+        for sid in sids:
+            r = self.conn.execute(
+                "SELECT * FROM staged_summaries WHERE summary_id=? AND model=?"
+                " AND status IN ('pending','accepted') ORDER BY id DESC LIMIT 1",
+                (sid, self.cfg["model"])).fetchone()
+            if r is not None:
+                out.append(r)
+        return out
+
+    def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level: int) -> bool:
+        joined = _join_summaries(src_rows)
+        n = count_tokens(joined)
+        if n > L2_INPUT_BUDGET:
+            logger.error(f"  [l2] refusing over-budget join ({n} tokens) for {sid}")
+            return False
+        if _summary_exists(self.conn, sid, self.cfg["model"], pv):
+            return True
         prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
         body = self._attempt(self._preamble(wp), prompt,
                              lambda r: _v_prose(r, 200, 350, joined), compress_to=275)
-        if body:
-            text_ids = {r["text_id"] for r in l1s}
-            self._insert_summary(sid, wp, text_ids.pop() if len(text_ids) == 1 else None,
-                                 2, None, None, [r["summary_id"] for r in l1s], body, L2_TPL)
-            logger.info(f"  [l2] {sid}")
+        if not body:
+            return False
+        text_ids = {r["text_id"] for r in src_rows if r["text_id"]}
+        self._insert_summary(sid, wp, text_ids.pop() if len(text_ids) == 1 else None,
+                             level, span, None, [r["summary_id"] for r in src_rows], body, pv)
+        return True
+
+    def _l2_budget_tree(self, wp, key: str, label: str, rows) -> list[str]:
+        """Pack over-budget consecutive rows into level-0 folds; return child ids."""
+        batches = _pack_summary_rows(rows, L2_INPUT_BUDGET)
+        if len(batches) == 1:
+            # Single row still over budget — generate from it anyway is forbidden;
+            # refuse rather than 400 the server. A lone L1 this large is a planner bug.
+            if count_tokens(_join_summaries(batches[0])) > L2_INPUT_BUDGET:
+                logger.error(f"  [l2] single pack still over budget for {wp['work_id']}/{key}")
+                return []
+            return [r["summary_id"] for r in batches[0]]
+        sids = []
+        for i, batch in enumerate(batches, 1):
+            fold_sid = f"fold:{wp['work_id']}:{key}:{i}"
+            if not _summary_exists(self.conn, fold_sid, self.cfg["model"], "fold-v1"):
+                if self._stage_fold(wp, fold_sid, label, batch):
+                    logger.info(f"  [l2/fold] {fold_sid}")
+            sids.append(fold_sid)
+        return sids
+
+    def _stage_fold(self, wp, sid, label, src_rows) -> bool:
+        joined = _join_summaries(src_rows)
+        n = count_tokens(joined)
+        if n > L2_INPUT_BUDGET:
+            logger.error(f"  [l2] refusing over-budget fold join ({n} tokens) for {sid}")
+            return False
+        first = src_rows[0]["section_span"] or ""
+        last = src_rows[-1]["section_span"] or ""
+        prompt = render("fold-v1", work_label=wp["label"], span_first=first,
+                        span_last=last, budget_words=budget_words(275)) \
+            + "\n\n---\nINPUT:\n\n" + joined
+        body = self._attempt(self._preamble(wp), prompt,
+                             lambda r: _v_prose(r, 200, 350, joined), compress_to=275)
+        if not body:
+            return False
+        self._insert_summary(sid, wp, None, 0, label, None,
+                             [r["summary_id"] for r in src_rows], body, "fold-v1")
+        return True
 
     def _dossier_field(self, wp, stage, template, build_input, validate):
         field = FIELD_OF_STAGE[stage]

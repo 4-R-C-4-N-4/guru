@@ -32,8 +32,10 @@ pending and accepted rows block the skip check.
 
 ## Output
 
-- `staged_summaries` — level 1 per span, level 2 per work, level 0 folds only
-  under a small-context provider
+- `staged_summaries` — level 1 per span, one final level-2 per work
+  (`sum:{work_id}`); large-span works also stage volume/part L2s
+  (`l2-v2-part`) and level-0 inner packs (`fold-v1`) that are never
+  promoted. Level-0 folds under `input_budget>0` remain a separate path.
 - `staged_dossier_fields` — `structure_entry` per span, plus `summary`,
   `context`, `key_figures`, `key_terms`, `reading_notes` per work
 
@@ -135,6 +137,38 @@ compress-v1, and stages under **`l1-v3-folded`**. Consequences:
 The plan-time `fold_batches` count (input_budget > 0) remains a separate,
 still-unwired mechanism; this path is triggered by output overrun regardless
 of input_budget.
+
+**Joining every accepted L1 into one L2 prompt (todo:64c54b6c).**
+`stage_l2` used to join all accepted L1s with a double newline. blavatsky-sd c12: 192 L1s
+= 101,517 cl100k tokens vs llama.cpp CTX_SIZE=24576 → HTTP 400. Bigger ctx
+does not fix this (101k still will not fit) and subsample/compress of L1s
+loses the work's internal structure. Hierarchical L2:
+
+- If the joined L1s fit `L2_INPUT_BUDGET` (16k, room for preamble vs 24k
+  ctx), keep the naive single L2 at `sum:{work_id}` / `l2-v2`. Small works
+  are unchanged.
+- Otherwise partition by the work's *natural* structure, not consecutive
+  span-plan order. For The Secret Doctrine, volume identity is the chunk
+  `source_url` (`/sd1-` Cosmogenesis vs `/sd2-` Anthropogenesis). Span
+  labels are `Page N` and the c12 plan interleaves volumes — packing in
+  plan order would mix them.
+- Each volume gets an intermediate level-2 row (`sum:{work_id}:vol-1` /
+  `vol-2`, `prompt_version=l2-v2-part`, `section_span` = the volume label)
+  so D3 sees the tree. The final L2 at `sum:{work_id}` / `l2-v2` synthesizes
+  those parts. Promote/export still require exactly that one final id.
+- A volume whose own L1 join still exceeds the budget is packed into
+  level-0 `fold:{work_id}:{key}:{n}` rows (`fold-v1`); those are scaffolding
+  (never promoted, never exported). `_stage_l2_from` refuses any join over
+  budget rather than 400 the server.
+- Generation is bottom-up in one `stage_l2` call. Parts are not D3-gated
+  before the synthesis — that would re-block the stream. Upstream L1s
+  remain the only accepted-row dependency.
+- `_accepted_l2` is pinned to `summary_id = sum:{work_id}`. A
+  `WHERE work_id=? AND level=2` query would pick a volume L2 once those
+  rows exist; `review_dossiers.py` show for summary/context uses the same
+  helper. D3 straggler re-sweeps of parts must pass
+  `--prompt-version l2-v2-part` (and `--prompt-version fold-v1` for inner
+  packs), matching the `l1-v3-folded` convention.
 
 **Reading a parse failure as a hard stop.** Contract validation follows the
 `tag_concepts.parse_tags` pattern: reject-and-retry up to a limit, then
