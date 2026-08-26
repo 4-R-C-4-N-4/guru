@@ -1,4 +1,4 @@
-Compress the summary below to at most {budget} tokens.
+Compress the summary below to at most {budget_words} words.
 
 Rules:
 - Keep EVERY distinct claim, event, figure, and term the summary names.

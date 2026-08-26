@@ -708,3 +708,25 @@ No modern Japanese new religions (Tenrikyo, Soka Gakkai, etc.) were found on sac
 4. **D.T. Suzuki**: The single most important Zen popularizer. *Manual of Zen Buddhism* (1935) is PD on sacred-texts — 20 pages, ~? KB each. Should be Tier 2 priority for Buddhism depth.
 
 5. **Shinto expansion**: Only the Kojiki is held. *The Book of Rites* (ritual texts) and *Records of the Grand Historian* (Ssu-yu-ki, 1898) are on sacred-texts under `chi/`. Worth checking if PD.
+
+---
+
+## 10. Discovered PD source: The Substance of the Archons (NHC II,4)
+
+*Added 2026-08-26 during sourcing for a public-domain Hypostasis of the Archons.*
+
+**Problem.** The two translations of this text on gnosis.org are both under copyright:
+- `Hypostas-Barnstone.html` — © Willis Barnstone & Marvin Meyer, 2003 (explicitly licensed, retains all rights).
+- `hypostas.html` — Bentley Layton, part of the *Coptic Gnostic Library* (Brill, 1989); gnosis.org footer states "E. J. Brill has asserted copyright on texts published by the Coptic Gnostic Library Project."
+
+The earlychristianwritings.com mirror is the same Layton translation with the same copyright constraints.
+
+**Found PD source.** `https://www.luminescence-llc.net/the-substance-of-the-archons`
+
+A **new English translation committed to the public domain** by **Samuel Zinner** (edited by Mark M. Mattison), via the Other Gospels / LUMINESCENCE project. The page states explicitly: *"The following translation has been committed to the public domain and may be freely copied and used, changed or unchanged, for any purpose."* This is the same legal basis already used for the `apocryphon-of-john` source in this corpus (Zinner-Mattison PD dedication).
+
+**Caveat — othergospels.com version is NOT PD.** The parallel page at `othergospels.com/archons/` carries an additional notice: *"The rendering of the above scripture was made possible by Willis Barnstone, who has graciously provided exclusive permission to present it here. All rights... are reserved by the author."* That Barnstone-mediated version is copyrighted; the luminescence-llc.net version is the pure PD Zinner translation. **Verify the URL before acquiring.**
+
+**Structure (single page, HTML).** The translator's intro cites four consulted editions; the main text is divided into 10 `h2`-tagged sections (Samael's Sin → Adam → Garden/Eve → Serpent → Children → Flood → Norea raped by archons → Angel Eleleth → Origin of the Blind God → Norea's Final Questions / Epilogue). A `Notes` section with 9 footnotes follows — this is apparatus, strip at chunk time. Inline Coptic page-number links ([86]–[97] to ccdl.claremont.edu) are scholarly apparatus; bracketed `[...]` lacunae and `(parenthetical)` insertions are faithful to the Coptic witness and **retained**.
+
+**Relevance.** Backs `archons`, `demiurge` (Yaldabaoth), `fall_of_sophia`, `emanation_hierarchy`, `pleroma` — already in the taxonomy via apocryphon-of-john. Strongly complementary to the existing apocryphon-of-john ingest; sits as NHC II,4 immediately after the Secret Book of John (NHC II,1) and before On the Origin of the World (NHC II,5). Full vetting recorded in `docs/ingest/decisions/substance-of-archons.md`.

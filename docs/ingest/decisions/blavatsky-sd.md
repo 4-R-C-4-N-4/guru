@@ -102,3 +102,29 @@ Rationale:
 - The 99 raw files include sd-01 (Vol-2 TOC) and sd-99 (Vol-1 TOC) plus one
   file that may be a duplicate/misordered crawl capture — TODO confirm file
   inventory is exactly 99 pages and in order before node 06.
+
+## Dossier campaign c12 (2026-08-25)
+
+- D1: campaign bumped c10 -> c11 -> c12. c11 froze the plan with blavatsky-sd
+  (192 spans, ~1.0M tokens) under claude-code; claude hit its session limit 36
+  L1s in, and per V9 a provider/model change is a new campaign — c12 re-planned
+  identical spans under llamacpp (Qwen3.8-27B via run-qwen-generate.sh).
+  The 36 claude L1 rows were deleted (all pending, superseded provenance).
+
+- Root cause of the length-overrun epidemic (todo:58612368): prompt budgets
+  were denominated in TOKENS, which Qwen3.8 cannot self-count (A/B: "124
+  tokens" -> 313+ tokens of content; "90 words" -> compliant). Fix: budgets
+  rendered as words at tokens/1.4. After the fix, contract rejects collapsed
+  from systematic (~28 spans failing 3 attempts each) to rare exceptions.
+
+- Final L1 coverage: 190/192 spans staged under l1-v3 / l1-v3-folded.
+  Two spans remain unstaged after generate->compress->fold all exhausted:
+  Page 79 (part 2) [5,988 tok] and Page 86 (part 2) [5,866 tok]. Both are
+  dense Kabbalistic commentary; even sub-batch summaries overran their bands
+  and one span tripped repeated verbatim-echo rejects. Recorded as a known
+  gap rather than blocking D3; revisit if budget models change (fixes 2/3 of
+  b1c8be4c remain open).
+
+- Pipeline enhancements landed during this campaign (guru-dev): bulk tag
+  review endpoint (#115), compression retry on overrun (#117), fold-path
+  degradation (6d141319), word-denominated budgets (58612368).
