@@ -50,6 +50,18 @@ that an L2 exists.
 
 ## Failure modes
 
+**Stating prompt budgets in tokens.** Local models cannot self-count tokens
+(todo:58612368): asked for "124 tokens (±20%)", Qwen3.8-27B produced ~2.5x
+over — and in one truncated run burned the whole budget inside
+`reasoning_content` doing token arithmetic and never emitted content at all.
+The same model complies with a word budget ("at most 90 words" → 53 words).
+All live prose templates (`l1-v3`, `l2-v2`, `compress-v1`, `fold-v1`) are
+therefore **word-denominated**: `generate_dossiers.budget_words()` converts
+the token budget at render time as `max(60, round(tokens / 1.4))` (measured
+corpus density ~1.41 tokens/word). The length validator still counts cl100k
+tokens unchanged, so the band itself is unaffected. Frontier providers never
+showed this failure mode — they estimate their own output length well.
+
 **Generating L2 before reviewing L1.** Upstream inputs are **accepted rows
 only**. An L2 whose L1s are all still `pending` has nothing to read and
 produces nothing. The DAG is a real dependency, and D3 sits inside it rather
@@ -104,6 +116,26 @@ fix (the `l1-v2 → l1-v3` bump turned a 1-row fix for
 the rejection note back as a corrective addendum. After a bump, never run the
 bumped stage without deciding which behaviour you want.
 
+**Assuming fold degradation is input-budget machinery.** It is not (todo:
+6d141319). The OUTPUT-overrun fold path lives in generate_dossiers.py's
+`_fold_l1`: when a span's generate → compress sequence fails outright (the
+compressor still returns far more than the band — seen on blavatsky-sd c12,
+25 dense Kabbalistic spans), stage_l1 falls through to it. It re-packs the
+span at chunk boundaries via build_dossiers' `_budget_pack` (n =
+ceil(span_tokens / budget)), L1-summarizes each part, merges once through
+compress-v1, and stages under **`l1-v3-folded`**. Consequences:
+
+- a folded row does NOT satisfy the plain `l1-v3` skip check or the standard
+  review sweep — D3 straggler re-sweeps must pass
+  `--prompt-version l1-v3-folded` explicitly;
+- the stage_l1 skip check probes both versions, so re-runs do not refold;
+- one degradation level only: if the merged output still violates the band,
+  the span gives up as before. Single-chunk spans never fold (no split point).
+
+The plan-time `fold_batches` count (input_budget > 0) remains a separate,
+still-unwired mechanism; this path is triggered by output overrun regardless
+of input_budget.
+
 **Reading a parse failure as a hard stop.** Contract validation follows the
 `tag_concepts.parse_tags` pattern: reject-and-retry up to a limit, then
 log-skip. The node stays ungenerated and a later run retries it. A skipped node
@@ -121,6 +153,19 @@ back through `prompts/dossier/compress-v1.md` with a keep-all-claims
 instruction — one cheap deterministic call whose granularity loss is an
 explicit decision. Attempt shape is generate → compress → give up; scaffold /
 echo / other rejects keep the corrective-feedback retry unchanged.
+
+**Flat fold merge: one call cannot be both 17:1 and keep-all-claims
+(todo:0a81a956).** The c12 tail proved the leaf stage sound and the merge
+stage broken: Page 79/86 part 2 (~6k tokens) folded ~20 leaves cleanly, then
+one flat compress call took ~5,000 tokens of Part 1..Part 20 down to a
+300-token band. Outcomes were merge-at-777 (8% over) or verbatim-echo escape
+— copying the source is the model's way out of an impossible squeeze. The
+merge is now a bounded TREE: clusters of ≤`BRANCH_FACTOR` (5), intermediate
+keep-all-claims merges at proportional budgets (`min(300, max(80,
+target×len(cluster)))`), repeated while count exceeds the factor; depth =
+ceil(log₅(n_leaves)), so ~20 leaves is two levels. Provenance stays
+`l1-v3-folded` at any depth — D3 sees one flag, not a tree — and give-up
+semantics are unchanged: any single merge call failing aborts the span.
 
 ## Provenance
 

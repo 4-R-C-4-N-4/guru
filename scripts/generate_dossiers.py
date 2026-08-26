@@ -51,6 +51,18 @@ L1_TPL = "l1-v3"
 # re-rolling the generation prompt. Keep-all-claims compress; the granularity
 # loss is an explicit decision rather than a statistical side effect.
 COMPRESS_TPL = "compress-v1"
+# Hierarchical fold branching factor (todo:0a81a956): max summaries merged in
+# ONE compress call during _fold_l1's merge tree. Keeps per-call compression
+# ~5:1 instead of n_leaves:1 (the flat 20-to-1 that failed Page 79/86 part 2).
+# Module constant, not config — tune once with evidence if ever needed.
+BRANCH_FACTOR = 5
+# todo:6d141319 — provenance marker for L1 rows that took the fold-degradation
+# path (generate -> compress -> STILL overrunning -> split + merge). A suffix,
+# not a metadata note: review_dossiers.py's --prompt-version sampling filter
+# sees it, matching the existing '-manual' convention. NOTE: these rows do NOT
+# satisfy the plain l1-v3 skip check or review sweep — D3 straggler re-sweeps
+# must pass --prompt-version l1-v3-folded explicitly.
+FOLDED_SUFFIX = "-folded"
 # structure/l2 bumped v1 -> v2 after phase-A review (2026-07-06): structure
 # failures clustered on compression-distortion (blended assignments, loosened
 # conditions); l2 failures on skipped members and world-knowledge injection.
@@ -80,7 +92,7 @@ FIELD_OF_STAGE = {
 # ── template rendering (plain token replacement; templates contain JSON braces
 #    so str.format is unusable) ────────────────────────────────────────────────
 
-def render(name: str, **vals: str) -> str:
+def render(name: str, **vals) -> str:
     tpl = (PROMPTS_DIR / f"{name}.md").read_text()
     for k, v in vals.items():
         tpl = tpl.replace("{" + k + "}", str(v))
@@ -88,6 +100,17 @@ def render(name: str, **vals: str) -> str:
         unresolved = re.findall(r"\{[a-z_]+\}", tpl.split("OUTPUT")[0])
         raise ValueError(f"template {name}: unresolved placeholders {unresolved}")
     return tpl
+
+
+def budget_words(tokens: int) -> int:
+    """Convert a token budget into the word-denominated budget the prompt
+    states (todo:58612368). Local models cannot self-count tokens — asked
+    for "124 tokens" Qwen3.8-27B produced ~2.5x over and burned reasoning
+    on token arithmetic — but they handle word budgets fine. Measured
+    density on this corpus: ~1.41 tokens/word, so words = tokens / 1.4.
+    Validation keeps counting cl100k tokens; only the prompt unit changes.
+    """
+    return max(60, round(tokens / 1.4))
 
 
 # ── corpus helpers ────────────────────────────────────────────────────────────
@@ -295,9 +318,11 @@ class Generator:
         compressed_from = None
         for i in range(MAX_ATTEMPTS + (1 if compress_to else 0)):
             try:
-                if compressed_from is not None:
+                if compressed_from is not None and compress_to is not None:
                     raw = self._llm(system, render(
-                        COMPRESS_TPL, budget=str(compress_to), summary=compressed_from))
+                        COMPRESS_TPL,
+                        budget_words=budget_words(compress_to),
+                        summary=compressed_from))
                 else:
                     raw = self._llm(system, prompt)
             except ContentBlocked as e:
@@ -373,7 +398,7 @@ class Generator:
             budget = min(350, max(200, tok // 12))
             src = _chunk_bodies(chunk_ids)
             prompt = render(L1_TPL, section_span=wp["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
+                            budget_words=budget_words(budget)) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                                  compress_to=budget)
@@ -384,12 +409,17 @@ class Generator:
             return
         for s in wp["spans"]:
             sid = f"sum:{s['text_id']}:{s['slug']}"
-            if _summary_exists(self.conn, sid, model, L1_TPL):
+            # Companion fix (todo:6d141319): a folded row under
+            # '{L1_TPL}-folded' does NOT satisfy the plain-l1-v3 exists check —
+            # without this second probe, every re-run repeats the full
+            # generate->compress->fold sequence for an already-folded span.
+            if _summary_exists(self.conn, sid, model, L1_TPL) \
+                    or _summary_exists(self.conn, sid, model, L1_TPL + FOLDED_SUFFIX):
                 continue
             budget = min(300, max(80, s["token_count"] // 12))
             src = _chunk_bodies(s["chunk_ids"])
             prompt = render(L1_TPL, section_span=s["label"], work_label=wp["label"],
-                            budget=budget) + "\n\n---\nINPUT:\n\n" + src
+                            budget_words=budget_words(budget)) + "\n\n---\nINPUT:\n\n" + src
             body = self._attempt(self._preamble(wp), prompt,
                                  lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                                  compress_to=budget)
@@ -397,6 +427,102 @@ class Generator:
                 self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
                                      s["chunk_ids"], None, body, L1_TPL)
                 logger.info(f"  [l1] {sid}")
+                continue
+            # generate -> compress failed outright (todo:6d141319): try the
+            # fold path once before leaving the span unstaged.
+            self._fold_l1(wp, s, sid)
+
+    def _fold_l1(self, wp, s, sid) -> bool:
+        """Fold-path degradation for spans whose generate->compress still
+        overruns the band (todo:6d141319). Split at chunk boundaries into N
+        sub-batches (N = ceil(overrun / budget)), L1 each, then MERGE. The
+        merge is a bounded TREE, not a flat 20-to-1 call (todo:0a81a956):
+        leaves are grouped into clusters of <=BRANCH_FACTOR and each cluster
+        gets an intermediate keep-all-claims merge at a proportional budget,
+        repeating while more than BRANCH_FACTOR summaries remain. Depth is
+        bounded by ceil(log_BRANCH_FACTOR(n_leaves)) — for ~20 leaves, two
+        merge levels — so per-call compression stays in the comfortable
+        ~4-6:1 range instead of the 17:1 that produced merge-at-777 or
+        verbatim-echo escapes on Page 79/86 part 2. Stages under
+        '{L1_TPL}-folded' regardless of depth so D3 sees one flag, not a
+        tree. Give-up semantics unchanged: any single call exhausting its
+        attempts aborts the span."""
+        from build_dossiers import load_text_chunks, _budget_pack  # noqa: PLC0415
+
+        model = self.cfg["model"]
+        folded_pv = L1_TPL + FOLDED_SUFFIX
+        if _summary_exists(self.conn, sid, model, folded_pv):
+            return True  # already folded — do not repeat generate->compress->fold
+        if len(s["chunk_ids"]) < 2:
+            return False  # no split point; give up as today
+
+        # Sub-batch count from how far past the band the compressed output
+        # landed. The overrun magnitude is not returned by _attempt, so use the
+        # span's own density instead — the same ceil formula plan-time folds
+        # use (build_dossiers.py), applied to span tokens over the budget the
+        # failed single call was given.
+        budget = min(300, max(80, s["token_count"] // 12))
+        chunks = [c for c in load_text_chunks(wp["tradition"], s["text_id"])
+                  if c.id in set(s["chunk_ids"])]
+        n = -(-s["token_count"] // budget)  # ceil
+        sub_target = s["token_count"] // n
+        subs = _budget_pack(s["text_id"], s["label"], chunks, sub_target, synthetic=True)
+        preamble = self._preamble(wp)
+        sub_summaries = []
+        for i, sp in enumerate(subs, 1):
+            sub_src = _chunk_bodies(sp.chunk_ids)
+            sub_budget = min(300, max(80, sp.token_count // 12))
+            sub_prompt = render(L1_TPL, section_span=sp.label,
+                                work_label=wp["label"],
+                                budget_words=budget_words(sub_budget)) \
+                + "\n\n---\nINPUT:\n\n" + sub_src
+            body = self._attempt(preamble, sub_prompt,
+                                 lambda r: _v_prose(r, int(sub_budget * 0.8),
+                                                    int(sub_budget * 1.2), sub_src),
+                                 compress_to=sub_budget)
+            if body is None:
+                logger.error(f"  fold: sub-batch {i}/{len(subs)} failed — giving up for {sid}")
+                return False
+            sub_summaries.append(f"Part {i}:\n{body}")
+
+        # Hierarchical merge (todo:0a81a956). Each level compresses at most
+        # BRANCH_FACTOR summaries into one at a proportional budget, so every
+        # call's compression ratio stays ~BRANCH_FACTOR:1 instead of the
+        # n_leaves*sub_budget/budget squeeze that broke the flat merge.
+        def _merge_level(texts: list[str], target: int) -> str | None:
+            while len(texts) > BRANCH_FACTOR:
+                merged_texts = []
+                for ci in range(0, len(texts), BRANCH_FACTOR):
+                    cluster = texts[ci:ci + BRANCH_FACTOR]
+                    cluster_budget = min(300, max(80, target * len(cluster)))
+                    joined = "\n\n".join(cluster)
+                    out = self._attempt(
+                        preamble,
+                        render(COMPRESS_TPL, budget_words=budget_words(cluster_budget),
+                               summary=joined),
+                        lambda r, lo=int(cluster_budget * 0.8), hi=int(cluster_budget * 1.2), src=joined:
+                            _v_prose(r, lo, hi, src),
+                        compress_to=cluster_budget)
+                    if out is None:
+                        return None
+                    merged_texts.append(out)
+                texts = merged_texts
+            # Final merge: <=BRANCH_FACTOR summaries into the span budget.
+            joined = "\n\n".join(texts)
+            return self._attempt(
+                preamble,
+                render(COMPRESS_TPL, budget_words=budget_words(budget), summary=joined),
+                lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), joined),
+                compress_to=budget)
+
+        merged = _merge_level(sub_summaries, budget)
+        if merged is None:
+            logger.error(f"  fold: a merge pass failed — giving up for {sid}")
+            return False
+        self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
+                             s["chunk_ids"], None, merged, folded_pv)
+        logger.info(f"  [l1/folded {len(subs)} parts] {sid}")
+        return True
 
     def stage_structure(self, wp):
         if wp["degenerate"]:
@@ -605,7 +731,8 @@ def respin(gen: "Generator", summary_id: str, feedback: str = "") -> bool:
 
     src = _chunk_bodies(chunk_ids)
     prompt = (render(L1_TPL, section_span=label, work_label=target_wp["label"],
-                     budget=budget) + addendum + "\n\n---\nINPUT:\n\n" + src)
+                     budget_words=budget_words(budget)) + addendum
+              + "\n\n---\nINPUT:\n\n" + src)
     body = gen._attempt(gen._preamble(target_wp), prompt,
                         lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), src),
                         compress_to=budget)

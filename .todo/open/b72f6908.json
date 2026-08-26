@@ -1,0 +1,18 @@
+{
+  "id": "b72f6908",
+  "type": "feature",
+  "state": "open",
+  "summary": "Apply screen: click into a card to open the chunk view with its reviewed tags",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-24T12:09:25.194Z",
+  "updated_at": "2026-08-24T12:09:38.019Z",
+  "tags": [
+    "guru-review",
+    "web",
+    "ux",
+    "spot-check"
+  ],
+  "description": "From the apply screen (POST /api/apply preview + confirm UI), the curator wants to click into a card and navigate to the chunk view showing that chunk's reviewed tags — for spot-checking verdicts before/after an apply.\n\nAcceptance shape:\n- Applied/preview cards are clickable and link to the chunk deck view for that chunk_id.\n- The chunk view shows the chunk's tags WITH their review outcomes (accepted/rejected/reassigned status, reviewer, timestamp), not just pending ones.\n- May need a read-side API addition if GET /api/chunks only surfaces pending tags today."
+}

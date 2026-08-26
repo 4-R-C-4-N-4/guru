@@ -1,0 +1,35 @@
+[chunking]
+# page-as-chunk: each raw file is one page (99 pages total, ~77 KB max = sd-02
+# Vol-1 Introduction). Node-04 survey sampled 12 pages across the range; raw
+# token counts range 2,816 (sd-01 TOC) to 17,277 (sd-02). max_tokens=1500 keeps
+# chunks in the embedding-friendly 1,000-1,500 token range: small pages (sd-01,
+# sd-04) stay whole or split once; large pages (sd-02, sd-03, sd-53) subsplit
+# into 8-12 chunks. Estimated total ~250-350 chunks across 99 pages.
+strategy = "page-as-chunk"
+section_label_format = "Page {n}"
+max_tokens = 1500
+number_source = "filename"
+
+# Pre-strips (node-04 survey, two paragraph-anchored patterns, both low risk,
+# neither drops a chunk):
+#   1. Leading nav line on the two TOC pages only (sd-01, sd-99): a single
+#      paragraph "Back to Esoteric Sacred Texts Back to Sacred Texts Main Index"
+#      at paragraph start -- never appears mid-content.
+#   2. Trailing "Next Section Contents" nav line on content pages: a single
+#      paragraph at paragraph end -- verified on 6 sampled content pages.
+pre_strip_patterns = [
+    "^Back to Esoteric Sacred Texts\\s+Back to Sacred Texts Main Index",
+    "\\s*Next Section Contents\\s*$",
+]
+
+# Inline [[Vol. N, Page X]] page markers are NOT stripped -- retained per the
+# decision doc's "retain page markers" note (they double as citation anchors, and
+# the contract forbids stripping bare p. NN-style references). Blavatsky's
+# commentary IS the primary text -- nothing is stripped as apparatus.
+# No drop_before_marker / drop_chunk_patterns: no separable whole-chunk apparatus
+# block to drop; sd-01 (Vol-2 TOC) and sd-99 (Vol-1 Contents) are genuine TOC
+# listings (not apparatus) -- kept.
+[metadata]
+tradition = "western_esoteric"
+text_name = "The Secret Doctrine"
+sections_format = "page"

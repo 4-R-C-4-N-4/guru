@@ -1,0 +1,38 @@
+{
+  "id": "58612368",
+  "type": "bug",
+  "state": "done",
+  "summary": "Dossier generation: length overruns caused by token-denominated budgets Qwen can't self-count — denominate prompts in words",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-25T19:43:50.065Z",
+  "updated_at": "2026-08-25T20:51:23.230Z",
+  "files": [
+    {
+      "path": "scripts/generate_dossiers.py"
+    }
+  ],
+  "tags": [
+    "dossiers",
+    "generation",
+    "prompts",
+    "guru-dev",
+    "no-dm"
+  ],
+  "description": "ROOT CAUSE FOUND for the c12 L1 overrun epidemic (b1c8be4c fix 1 recovered only 6/28; fold path 6d141319 recovered 1/24 — the rest failed even after compression).\n\nEVIDENCE (direct A/B against Qwen3.8-27B on :8080, same input, temp 0.6):\n- Prompt: 'summary of exactly 124 tokens (+/-20%)' -> model produced 313+ tokens of content, ~2.5x over. In a truncated run it burned the whole budget INSIDE reasoning_content doing token-count arithmetic ('the acceptable range is 99 to 149 tokens... Let me think about how tokens work') and never emitted content.\n- Same prompt rephrased 'at most 90 words' -> 53 words (~70 tokens), comfortably compliant.\n\nThe model cannot self-count tokens but handles word budgets fine. Our templates denominate in tokens: l1-v3 says 'Write a summary of {budget} tokens (±20%)'; compress-v1 says 'Compress ... to at most {budget} tokens.' So every budget is systematically overrun ~2-3x, the validator (correctly counting cl100k) rejects, and we built compression/fold machinery to fight a unit mismatch.\n\nMeasured ratio on this corpus: 40 staged L1s average 1.41 tokens/word (median 1.39).\n\nFIX: denominate prompt budgets in WORDS, converting at plan/render time: words = round(tokens / 1.4). Sites:\n- prompts/dossier/l1-v3.md + l2-v2 + compress-v1: change wording from '{budget} tokens' to '{budget_words} words'\n- generate_dossiers.py render calls: pass budget_words = max(60, round(budget / 1.4)) alongside or instead of the token budget; validator keeps counting cl100k tokens (unchanged, it is correct).\n- Same treatment for any other prose templates with token-denominated budgets.\n\nEXPECTED EFFECT: overruns should collapse to the genuinely-dense tail; compression retries become rare; fold path rarely triggers. The band itself stays honest because validation is unchanged.\n\nNOTE: this also explains why claude-code did NOT show this failure mode at scale — frontier models estimate their own output length far better. The bug only bites local models hard.",
+  "work": {
+    "branch": "feat/blavatsky",
+    "base_branch": "main",
+    "started_at": "2026-08-25T20:28:52.665Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "070899fa322531e5e910ba4a81578f609a9b715d",
+    "resolved_at": "2026-08-25T20:51:23.230Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_dossier_budget_words.py",
+    "test_function": "test_budget_words_conversion",
+    "note": "Live prose templates (l1-v3, l2-v2, compress-v1, fold-v1) now state budgets in words; generate_dossiers.budget_words() converts tokens/1.4 at render time with a 60-word floor. Validators still count cl100k tokens — the band is unchanged."
+  }
+}

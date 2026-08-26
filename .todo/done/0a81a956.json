@@ -1,0 +1,42 @@
+{
+  "id": "0a81a956",
+  "type": "bug",
+  "state": "done",
+  "summary": "Dossier generation: hierarchical fold for deep spans — flat 20-to-1 merge is the residual failure (amends 6d141319)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-26T01:13:13.166Z",
+  "updated_at": "2026-08-26T01:39:35.345Z",
+  "files": [
+    {
+      "path": "scripts/generate_dossiers.py",
+      "lines": [
+        462,
+        474
+      ]
+    }
+  ],
+  "tags": [
+    "dossiers",
+    "generation",
+    "fold",
+    "guru-dev",
+    "no-dm"
+  ],
+  "description": "EVIDENCE (blavatsky-sd c12, spans Page 79 part 2 [5,988 tok] and Page 86 part 2 [5,866 tok], the only two L1 gaps at 190/192):\n\n_fold_l1 splits these into ~20 sub-batches and L1s each one successfully — the leaf stage works. The failure is the FLAT MERGE: one call receives all ~20 sub-summaries (~5,000 tokens of 'Part 1..Part 20') with compress-v1's 'keep EVERY distinct claim' instruction and a 300-token band. That is a ~17:1 single-call compression under a contradictory pair of demands. Observed outcomes: merge lands at 777 vs [120,720] (8% over — so close), or the model escapes into verbatim-echo of the source (copying Blavatsky's text is its way out of the squeeze). Both spans gave up through generate->compress->fold.\n\nROOT CAUSE: the fold tree is only one level deep. Compression ratio per call should stay in the comfortable ~4-6:1 range; 17:1 is beyond what keep-all-claims allows.\n\nFIX — hierarchical fold (bounded tree, not recursion):\n\n1. After leaf sub-summaries are built, if len(sub_summaries) > BRANCH_FACTOR (propose 5):\n   group leaves into clusters of <=5 and run an INTERMEDIATE merge pass per cluster\n   (same compress-v1 keep-all-claims template, budget = cluster_leaves * budget).\n2. Repeat on intermediates while count > BRANCH_FACTOR. Depth is bounded by the math:\n   depth = ceil(log_BRANCH_FACTOR(n_leaves)) — for 20 leaves, two merge levels. Not unbounded recursion.\n3. Final merge over <=BRANCH_FACTOR intermediate summaries produces the in-band span summary.\n4. Provenance stays l1-v3-folded regardless of depth — D3 sees one flag, not a tree.\n5. Give-up semantics unchanged: any single call exhausting its own attempts aborts that span, logged as today.\n\nSCOPE GUARDS:\n- Generate-path only; no gate/promotion changes; staged-row shape unchanged (prompt_version l1-v3-folded already carries the degraded flag).\n- Only triggers from _fold_l1's terminal state; normal spans never enter it.\n- BRANCH_FACTOR as a module constant, not config — tune once with evidence if ever needed.\n\nTESTS: hierarchical grouping math (20 leaves -> 4 clusters -> 1 final); deep-span fold stages under l1-v3-folded; cluster merge failure aborts span; provenance stable across depths.\n\nNOTE: same shape as plan-time fold_batches (input-budget map-reduce) but triggered by OUTPUT overrun — worth unifying later, not in this change.",
+  "work": {
+    "branch": "todo/0a81a956",
+    "base_branch": "main",
+    "started_at": "2026-08-26T01:15:46.332Z",
+    "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "65d40fe7aa1de4043b33fbb90a59b8d1fc85ba51",
+    "resolved_at": "2026-08-26T01:39:35.345Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_dossier_hierarchical_fold.py",
+    "test_function": "test_grouping_math_20_leaves_two_levels",
+    "note": "Bounded fold tree: leaves cluster into groups of <=BRANCH_FACTOR=5, intermediate keep-all-claims merges at proportional budgets repeat while count > factor, final merge <=factor inputs. Depth ceil(log5(n_leaves)); provenance l1-v3-folded at any depth; give-up semantics unchanged."
+  }
+}
