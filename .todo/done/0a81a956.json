@@ -1,13 +1,13 @@
 {
   "id": "0a81a956",
   "type": "bug",
-  "state": "active",
+  "state": "done",
   "summary": "Dossier generation: hierarchical fold for deep spans — flat 20-to-1 merge is the residual failure (amends 6d141319)",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-08-26T01:13:13.166Z",
-  "updated_at": "2026-08-26T01:15:46.332Z",
+  "updated_at": "2026-08-26T01:39:35.345Z",
   "files": [
     {
       "path": "scripts/generate_dossiers.py",
@@ -30,5 +30,13 @@
     "base_branch": "main",
     "started_at": "2026-08-26T01:15:46.332Z",
     "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "65d40fe7aa1de4043b33fbb90a59b8d1fc85ba51",
+    "resolved_at": "2026-08-26T01:39:35.345Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_dossier_hierarchical_fold.py",
+    "test_function": "test_grouping_math_20_leaves_two_levels",
+    "note": "Bounded fold tree: leaves cluster into groups of <=BRANCH_FACTOR=5, intermediate keep-all-claims merges at proportional budgets repeat while count > factor, final merge <=factor inputs. Depth ceil(log5(n_leaves)); provenance l1-v3-folded at any depth; give-up semantics unchanged."
   }
 }
