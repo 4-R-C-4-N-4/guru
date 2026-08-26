@@ -479,6 +479,23 @@ def test_derived_parallels_orphan_free_after_apply(conn):
         assert not target.startswith(OLD_PREFIX)
 
 
+def test_derived_parallels_both_endpoints_blavatsky(conn):
+    """A row where source AND target are both blavatsky chunks: both columns
+    move, verified independently (no double-count / PK-collision abort)."""
+    conn.execute(
+        "INSERT INTO derived_parallels(run_id, source, target, weight, annotation) "
+        "VALUES(1, ?, ?, 0.8, 'ann')",
+        (f"{OLD_PREFIX}001", f"{OLD_PREFIX}003"),
+    )
+    conn.commit()
+    result = _apply(conn)
+    assert result["status"] == "applied"
+    row = conn.execute(
+        "SELECT source, target FROM derived_parallels WHERE weight=0.8"
+    ).fetchone()
+    assert row == (f"{NEW_PREFIX}001", f"{NEW_PREFIX}003")
+
+
 def test_json_rewrite_does_not_smash_unrelated_text():
     raw = json.dumps({
         "child_chunk_ids": [f"{OLD_PREFIX}001", "western_esoteric.kybalion.001"],
