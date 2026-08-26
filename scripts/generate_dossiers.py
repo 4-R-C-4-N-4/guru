@@ -51,6 +51,11 @@ L1_TPL = "l1-v3"
 # re-rolling the generation prompt. Keep-all-claims compress; the granularity
 # loss is an explicit decision rather than a statistical side effect.
 COMPRESS_TPL = "compress-v1"
+# Hierarchical fold branching factor (todo:0a81a956): max summaries merged in
+# ONE compress call during _fold_l1's merge tree. Keeps per-call compression
+# ~5:1 instead of n_leaves:1 (the flat 20-to-1 that failed Page 79/86 part 2).
+# Module constant, not config — tune once with evidence if ever needed.
+BRANCH_FACTOR = 5
 # todo:6d141319 — provenance marker for L1 rows that took the fold-degradation
 # path (generate -> compress -> STILL overrunning -> split + merge). A suffix,
 # not a metadata note: review_dossiers.py's --prompt-version sampling filter
@@ -417,11 +422,18 @@ class Generator:
     def _fold_l1(self, wp, s, sid) -> bool:
         """Fold-path degradation for spans whose generate->compress still
         overruns the band (todo:6d141319). Split at chunk boundaries into N
-        sub-batches (N = ceil(overrun / budget)), L1 each, then one merge pass
-        through compress-v1's keep-all-claims instruction. Stages under
-        '{L1_TPL}-folded' so D3 can see the degraded provenance. One level of
-        degradation only: if the merged output still violates the band, give
-        up exactly as before — no recursion."""
+        sub-batches (N = ceil(overrun / budget)), L1 each, then MERGE. The
+        merge is a bounded TREE, not a flat 20-to-1 call (todo:0a81a956):
+        leaves are grouped into clusters of <=BRANCH_FACTOR and each cluster
+        gets an intermediate keep-all-claims merge at a proportional budget,
+        repeating while more than BRANCH_FACTOR summaries remain. Depth is
+        bounded by ceil(log_BRANCH_FACTOR(n_leaves)) — for ~20 leaves, two
+        merge levels — so per-call compression stays in the comfortable
+        ~4-6:1 range instead of the 17:1 that produced merge-at-777 or
+        verbatim-echo escapes on Page 79/86 part 2. Stages under
+        '{L1_TPL}-folded' regardless of depth so D3 sees one flag, not a
+        tree. Give-up semantics unchanged: any single call exhausting its
+        attempts aborts the span."""
         from build_dossiers import load_text_chunks, _budget_pack  # noqa: PLC0415
 
         model = self.cfg["model"]
@@ -459,14 +471,38 @@ class Generator:
                 return False
             sub_summaries.append(f"Part {i}:\n{body}")
 
-        merged = self._attempt(
-            preamble,
-            render(COMPRESS_TPL, budget=str(budget),
-                   summary="\n\n".join(sub_summaries)),
-            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2),
-                               "\n\n".join(sub_summaries)))
+        # Hierarchical merge (todo:0a81a956). Each level compresses at most
+        # BRANCH_FACTOR summaries into one at a proportional budget, so every
+        # call's compression ratio stays ~BRANCH_FACTOR:1 instead of the
+        # n_leaves*sub_budget/budget squeeze that broke the flat merge.
+        def _merge_level(texts: list[str], target: int) -> str | None:
+            while len(texts) > BRANCH_FACTOR:
+                merged_texts = []
+                for ci in range(0, len(texts), BRANCH_FACTOR):
+                    cluster = texts[ci:ci + BRANCH_FACTOR]
+                    cluster_budget = min(300, max(80, target * len(cluster)))
+                    joined = "\n\n".join(cluster)
+                    out = self._attempt(
+                        preamble,
+                        render(COMPRESS_TPL, budget=str(cluster_budget), summary=joined),
+                        lambda r, lo=int(cluster_budget * 0.8), hi=int(cluster_budget * 1.2), src=joined:
+                            _v_prose(r, lo, hi, src),
+                        compress_to=cluster_budget)
+                    if out is None:
+                        return None
+                    merged_texts.append(out)
+                texts = merged_texts
+            # Final merge: <=BRANCH_FACTOR summaries into the span budget.
+            joined = "\n\n".join(texts)
+            return self._attempt(
+                preamble,
+                render(COMPRESS_TPL, budget=str(budget), summary=joined),
+                lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), joined),
+                compress_to=budget)
+
+        merged = _merge_level(sub_summaries, budget)
         if merged is None:
-            logger.error(f"  fold: merged output also rejected — giving up for {sid}")
+            logger.error(f"  fold: a merge pass failed — giving up for {sid}")
             return False
         self._insert_summary(sid, wp, s["text_id"], 1, s["label"],
                              s["chunk_ids"], None, merged, folded_pv)

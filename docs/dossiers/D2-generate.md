@@ -142,6 +142,19 @@ instruction — one cheap deterministic call whose granularity loss is an
 explicit decision. Attempt shape is generate → compress → give up; scaffold /
 echo / other rejects keep the corrective-feedback retry unchanged.
 
+**Flat fold merge: one call cannot be both 17:1 and keep-all-claims
+(todo:0a81a956).** The c12 tail proved the leaf stage sound and the merge
+stage broken: Page 79/86 part 2 (~6k tokens) folded ~20 leaves cleanly, then
+one flat compress call took ~5,000 tokens of Part 1..Part 20 down to a
+300-token band. Outcomes were merge-at-777 (8% over) or verbatim-echo escape
+— copying the source is the model's way out of an impossible squeeze. The
+merge is now a bounded TREE: clusters of ≤`BRANCH_FACTOR` (5), intermediate
+keep-all-claims merges at proportional budgets (`min(300, max(80,
+target×len(cluster)))`), repeated while count exceeds the factor; depth =
+ceil(log₅(n_leaves)), so ~20 leaves is two levels. Provenance stays
+`l1-v3-folded` at any depth — D3 sees one flag, not a tree — and give-up
+semantics are unchanged: any single merge call failing aborts the span.
+
 ## Provenance
 
 `scripts/generate_dossiers.py` (G5); design §1.3.1 on accepted-only upstream
