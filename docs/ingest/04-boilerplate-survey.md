@@ -1,6 +1,6 @@
 # 04 — boilerplate-survey
 
-**Kind:** judgement · **Contract:** [`prompts/ingest/boilerplate-survey.md`](../../prompts/ingest/boilerplate-survey.md)
+**Kind:** judgement · **Contract:** [`prompts/ingest/boilerplate-survey.md`](../../prompts/ingest/boilerplate-survey.md) · **Ledger:** `docs/ingest/decisions/blavatsky-sd.md` (2026-08-22)
 
 Decide what in the raw file is the archive's packaging and what is the text.
 Produces a strip plan; node 07 executes it.

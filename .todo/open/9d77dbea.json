@@ -1,0 +1,25 @@
+{
+  "id": "9d77dbea",
+  "type": "feature",
+  "state": "open",
+  "summary": "Ingest blavatsky-sd",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-08-22T19:04:48.619Z",
+  "updated_at": "2026-08-22T19:05:03.849Z",
+  "relationships": {
+    "children": [
+      "694efb97"
+    ]
+  },
+  "analysis": [
+    {
+      "timestamp": "2026-08-22T19:05:03.849Z",
+      "author": "explorer",
+      "type": "conclusion",
+      "content": "Nodes 01-03 complete for blavatsky-sd. Key driver note: The Secret Doctrine's commentary on the Stanzas of Dzyan IS the primary text — NOT apparatus to strip. Blavatsky quotes the Dzyan verses (ALL CAPS stanzas) then provides her own commentary citing Puranas, Buddhist texts, Zoroastrian sources. The [[Vol. N, Page M]] markers are inline navigation aids. Full analysis in docs/ingest/decisions/blavatsky-sd.md.",
+      "confidence": "high"
+    }
+  ]
+}
