@@ -25,6 +25,7 @@ export interface PreparedStmts {
   ensureConceptNode: Database.Statement;
   upsertEdge: Database.Statement;          // generic — type passed at runtime
   deleteEdge: Database.Statement;          // generic — type passed at runtime
+  hasAcceptedSiblingTag: Database.Statement; // todo:d9bb3b9a reject guard
   updateStagedTagStatus: Database.Statement;
   insertReassignedTag: Database.Statement;
   updateStagedEdgeStatus: Database.Statement;
@@ -137,6 +138,15 @@ function prepareStatements(ro: Database.Database, rw: Database.Database): Prepar
     deleteEdge: rw.prepare(`
       DELETE FROM edges
       WHERE source_id = ? AND target_id = ? AND type = ?
+    `),
+
+    // todo:d9bb3b9a — does another ACCEPTED tag still support this
+    // (chunk, concept) under a different provenance? If so a reject of
+    // one model's row must not retract the shared verified edge.
+    hasAcceptedSiblingTag: rw.prepare(`
+      SELECT 1 FROM staged_tags
+      WHERE chunk_id = ? AND concept_id = ? AND status = 'accepted' AND id != ?
+      LIMIT 1
     `),
 
     updateStagedTagStatus: rw.prepare(`

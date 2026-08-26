@@ -9,9 +9,8 @@
 #
 # What it does:
 #   1. Confirms current canary counts against ~/guru-backups manifest.
-#   2. Runs the parity harness; refuses if it fails.
-#   3. Takes a fresh snapshot labeled pre-first-web-apply.
-#   4. Confirms guru-review/server/config.json has dry_run:false (or warns).
+#   2. Takes a fresh snapshot labeled pre-first-web-apply.
+#   3. Confirms guru-review/server/config.json has dry_run:false (or warns).
 
 set -euo pipefail
 
@@ -26,7 +25,7 @@ warn() { echo "  ${YELLOW}!${RESET} $1"; }
 echo "=== guru-review preflight ==="
 
 # 1. Canary --------------------------------------------------------------------
-echo "[1/4] canary check"
+echo "[1/3] canary check"
 DB="$PROJECT_ROOT/data/guru.db"
 [ -f "$DB" ] || fail "live DB not found at $DB"
 TOTAL=$(sqlite3 "$DB" "SELECT COUNT(*) FROM staged_tags")
@@ -47,18 +46,8 @@ else
   fi
 fi
 
-# 2. Parity harness ------------------------------------------------------------
-echo "[2/4] parity harness"
-if bash "$PROJECT_ROOT/tests/parity/orchestrator.sh" > /tmp/parity.log 2>&1; then
-  ok "parity harness green"
-else
-  echo "----- /tmp/parity.log -----" >&2
-  tail -30 /tmp/parity.log >&2
-  fail "parity harness failed — refuse to proceed"
-fi
-
-# 3. Pre-first-web-apply snapshot ---------------------------------------------
-echo "[3/4] pre-first-web-apply snapshot"
+# 2. Pre-first-web-apply snapshot ---------------------------------------------
+echo "[2/3] pre-first-web-apply snapshot"
 mkdir -p "$HOME/guru-backups"
 TS=$(date -u +%Y%m%dT%H%M%SZ)
 SNAP="$HOME/guru-backups/guru-${TS}-pre-first-web-apply.db"
@@ -81,8 +70,8 @@ cat > "$SNAP.manifest.json" <<EOF
 EOF
 ok "manifest written"
 
-# 4. Config check --------------------------------------------------------------
-echo "[4/4] server config"
+# 3. Config check --------------------------------------------------------------
+echo "[3/3] server config"
 CFG="$PROJECT_ROOT/guru-review/server/config.json"
 if [ -f "$CFG" ]; then
   DRY_RUN=$(python3 -c "import json,sys; print(json.load(open('$CFG'))['dry_run'])" 2>/dev/null || echo "?")

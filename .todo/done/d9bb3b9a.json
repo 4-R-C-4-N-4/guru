@@ -1,7 +1,7 @@
 {
   "id": "d9bb3b9a",
   "type": "bug",
-  "state": "active",
+  "state": "done",
   "summary": "Reject action deletes shared EXPRESSES edge, orphaning accepted sibling tags",
   "tags": [
     "corpus-quality",
@@ -49,7 +49,7 @@
       "content": "FIXED BY CORPUS-QUALITY: Ran scripts/restore_missing_edges.py --apply after DB backup (corpus-quality-d9bb3b9a). Restored 55 EXPRESSES edges at tier=verified. Verified: 0 missing edges remain, 0 duplicates created. Manifest diff: edges +55, all other tables unchanged."
     }
   ],
-  "updated_at": "2026-08-23T15:14:55.179Z",
+  "updated_at": "2026-08-25T11:05:21.000Z",
   "relationships": {
     "parent": "53a46a8d",
     "related": [
@@ -57,9 +57,17 @@
     ]
   },
   "work": {
-    "branch": "feat/blavatsky",
+    "branch": "todo/d9bb3b9a",
     "base_branch": "main",
-    "started_at": "2026-08-23T15:14:55.179Z",
+    "started_at": "2026-08-23T15:15:04.329Z",
     "started_by": "guru-dev"
+  },
+  "resolution": {
+    "commit": "771744c25c3d73d9a8415dfc289cab5aefdf5eee",
+    "resolved_at": "2026-08-23T15:20:37.873Z",
+    "resolved_by": "unknown",
+    "test_file": "guru-review/server/src/apply.test.ts",
+    "test_function": "reject with an accepted sibling (todo:d9bb3b9a) > does not retract the shared edge while an accepted sibling stands",
+    "note": "Both apply paths (review_tags.py reject_tag, web apply.ts) now check for a surviving accepted sibling before deleting the shared EXPRESSES edge. Data repair of the 55 orphaned edges was already applied by corpus-quality (restore_missing_edges.py, backup corpus-quality-d9bb3b9a). Updated 2026-08-25: merging origin/main (PR #118) deleted review_tags.py and tests/test_promote_definition.py along with the whole standalone review CLI in favor of the web API — apply.test.ts is now the sole surviving proof of this contract."
   }
 }

@@ -1,8 +1,8 @@
 // Apply transaction — drains review_actions queue into staged_tags or
-// staged_edges + edges + nodes, dispatching on target_table. Mirrors
-// scripts/review_tags.py and scripts/review_edges.py editorial-overlay
-// helpers. The parity harness at tests/parity/ asserts row-content
-// equivalence between this and the CLI for the same fixture decisions.
+// staged_edges + edges + nodes, dispatching on target_table. This is the
+// sole editorial-overlay apply path: the review_tags.py / review_edges.py
+// CLIs it once mirrored are gone, and scripts/view_staged_tags.py is now
+// read-only. Curation writes go through this queue + apply only.
 import type Database from 'better-sqlite3';
 import type { PreparedStmts } from './db.js';
 
@@ -94,7 +94,15 @@ function applyTagAction(
       break;
     }
     case 'reject': {
-      stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      // todo:d9bb3b9a — the edge is shared provenance: if another ACCEPTED
+      // tag supports the same (chunk, concept) under a different model, a
+      // reject of this row must NOT retract what a human already verified.
+      const sibling = stmts.hasAcceptedSiblingTag.get(
+        tag.chunk_id, tag.concept_id, tag.id,
+      );
+      if (sibling === undefined) {
+        stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      }
       stmts.updateStagedTagStatus.run('rejected', q.reviewer, nowIso(), tag.id);
       break;
     }
@@ -102,7 +110,15 @@ function applyTagAction(
       if (!q.reassign_to) {
         throw new Error(`reassign action ${q.id} missing reassign_to`);
       }
-      stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      // todo:d9bb3b9a — same shared-provenance guard as reject: retracting
+      // the donor's (chunk, concept) edge must not clobber a verified edge
+      // that an accepted sibling tag (different model) still supports.
+      const sibling = stmts.hasAcceptedSiblingTag.get(
+        tag.chunk_id, tag.concept_id, tag.id,
+      );
+      if (sibling === undefined) {
+        stmts.deleteEdge.run(tag.chunk_id, `concept.${tag.concept_id}`, 'EXPRESSES');
+      }
       stmts.updateStagedTagStatus.run('reassigned', q.reviewer, nowIso(), tag.id);
       // The donor keeps its original concept_id. Overwriting it with the
       // target (the old updateStagedTagConcept call) stored the target twice

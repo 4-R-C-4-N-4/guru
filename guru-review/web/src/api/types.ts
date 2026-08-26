@@ -9,6 +9,17 @@ export interface PendingTag {
   new_concept_def: string | null;
 }
 
+export interface ReviewedTag {
+  target_id: number;
+  concept_id: string;
+  concept_label: string;
+  score: 0 | 1 | 2 | 3;
+  justification: string;
+  status: 'accepted' | 'rejected' | 'reassigned';
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+}
+
 export interface Chunk {
   chunk_id: string;
   tradition_id: string;
@@ -16,6 +27,9 @@ export interface Chunk {
   text_id: string | null;
   body: string;
   pending_tags: PendingTag[];
+  // Present only when the request passed include_reviewed=true
+  // (todo:b72f6908 spot-check mode).
+  reviewed_tags?: ReviewedTag[];
 }
 
 export interface ChunksResponse {

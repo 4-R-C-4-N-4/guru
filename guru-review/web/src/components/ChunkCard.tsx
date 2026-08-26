@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Chunk, ActionKind } from '../api/types';
 import { TagRow, type TagAction } from './TagRow';
 import { ChunkActions } from './ChunkActions';
+import { ScoreBadge } from './ScoreBadge';
 
 interface Props {
   chunk: Chunk;
@@ -72,6 +73,36 @@ export function ChunkCard({
       </div>
 
       <ChunkActions remaining={remaining} onBatch={onChunkBatch} />
+
+      {/* Reviewed verdicts (todo:b72f6908) — spot-check surface, present only
+          when the chunk was fetched with include_reviewed=true. */}
+      {chunk.reviewed_tags && chunk.reviewed_tags.length > 0 && (
+        <details className="rounded border border-zinc-800 bg-zinc-900/50">
+          <summary className="cursor-pointer px-3 py-2 mono text-xs text-zinc-400 hover:bg-zinc-900">
+            reviewed ({chunk.reviewed_tags.length})
+          </summary>
+          <div className="space-y-1 px-3 pb-2">
+            {chunk.reviewed_tags.map((t) => (
+              <div key={t.target_id} className="flex items-baseline gap-2 mono text-xs">
+                <span
+                  className={
+                    t.status === 'accepted'
+                      ? 'text-emerald-400'
+                      : t.status === 'rejected'
+                        ? 'text-rose-400'
+                        : 'text-amber-400'
+                  }
+                >
+                  {t.status}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-zinc-300">{t.concept_label}</span>
+                <ScoreBadge score={t.score} />
+                {t.reviewed_by && <span className="text-zinc-600">by {t.reviewed_by}</span>}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
 
       {allDone && (
         <button
