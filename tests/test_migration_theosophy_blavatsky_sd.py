@@ -124,6 +124,13 @@ CREATE TABLE work_dossiers (
     themes_json TEXT NOT NULL DEFAULT '[]',
     generated_by TEXT NOT NULL DEFAULT 'test'
 );
+CREATE TABLE derived_parallels (
+    run_id     INTEGER NOT NULL,
+    source     TEXT NOT NULL,
+    target     TEXT NOT NULL,
+    weight     REAL NOT NULL,
+    annotation TEXT
+);
 """
 
 
@@ -244,6 +251,16 @@ def _seed(conn: sqlite3.Connection, *, theosophy_exists: bool = False) -> None:
         "VALUES('blavatsky-sd', 'sum', 'ctx', ?)",
         (structure,),
     )
+    # derived_parallels: one blavatsky→kybalion row (source moves), one
+    # kybalion→blavatsky row (target moves), one unrelated row (untouched).
+    conn.executemany(
+        "INSERT INTO derived_parallels(run_id, source, target, weight, annotation) "
+        "VALUES(1, ?, ?, 0.9, 'ann')",
+        [
+            (f"{OLD_PREFIX}001", "western_esoteric.kybalion.001"),
+            ("western_esoteric.kybalion.001", f"{OLD_PREFIX}002"),
+        ],
+    )
     conn.commit()
 
 
@@ -281,6 +298,7 @@ def _snapshot(conn: sqlite3.Connection) -> dict:
         "ss": list(conn.execute("SELECT child_chunk_ids FROM staged_summaries")),
         "sn": list(conn.execute("SELECT child_chunk_ids, tradition FROM summary_nodes")),
         "wd": list(conn.execute("SELECT structure_json FROM work_dossiers")),
+        "dp": list(conn.execute("SELECT source, target FROM derived_parallels ORDER BY source, target")),
     }
 
 
@@ -389,6 +407,19 @@ def test_apply_rewrites_only_blavatsky(conn):
     assert structure[0]["chunk_ids"] == [f"{NEW_PREFIX}001", f"{NEW_PREFIX}002"]
     assert OLD_PREFIX in structure[0]["note"]  # non-id field mentioning prefix
 
+    # derived_parallels chunk-id endpoints move; unrelated endpoints stay.
+    dp = list(conn.execute("SELECT source, target FROM derived_parallels ORDER BY source, target"))
+    assert dp == [
+        (f"{NEW_PREFIX}001", "western_esoteric.kybalion.001"),
+        ("western_esoteric.kybalion.001", f"{NEW_PREFIX}002"),
+    ]
+
+    # BELONGS_TO retarget is accounted for in the audit, not just left to a
+    # visual scan of the edges table.
+    assert result["before"]["belongs_old_tradition"] == 3
+    assert result["after"]["belongs_new_tradition"] == 3
+    assert result["after"]["belongs_old_tradition"] == 0
+
 
 def test_foreign_key_check_empty(conn):
     _apply(conn)
@@ -422,6 +453,30 @@ def test_collision_aborts(conn):
     assert conn.execute(
         "SELECT COUNT(*) FROM nodes WHERE id=?", (f"{OLD_PREFIX}001",)
     ).fetchone()[0] == 1
+
+
+def test_belongs_to_retarget_guard_aborts(conn, monkeypatch):
+    """If the BELONGS_TO retarget is skipped, the audit guard must abort —
+    a mistargeted edge (blavatsky chunk still → western_esoteric) can't pass
+    silently. Simulate the regression by no-oping the retarget helper."""
+    monkeypatch.setattr(migration, "_retarget_belongs_to", lambda con: None)
+    with pytest.raises(migration.MigrationAbort, match="BELONGS_TO"):
+        _apply(conn)
+    # rolled back: old chunk nodes still present
+    assert conn.execute(
+        "SELECT COUNT(*) FROM nodes WHERE id=?", (f"{OLD_PREFIX}001",)
+    ).fetchone()[0] == 1
+
+
+def test_derived_parallels_orphan_free_after_apply(conn):
+    """No derived_parallels endpoint keeps the old prefix (export.py would
+    SystemExit on such an orphan)."""
+    _apply(conn)
+    rows = list(conn.execute("SELECT source, target FROM derived_parallels"))
+    assert rows, "seed should have derived_parallels rows"
+    for source, target in rows:
+        assert not source.startswith(OLD_PREFIX)
+        assert not target.startswith(OLD_PREFIX)
 
 
 def test_json_rewrite_does_not_smash_unrelated_text():

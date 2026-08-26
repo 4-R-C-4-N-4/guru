@@ -34,6 +34,12 @@ Failure modes (worth reading twice before --apply):
     every table.
   * nodes.metadata_json.text_id stays 'blavatsky-sd'.
   * Never rewrite other western_esoteric.* texts.
+  * derived_parallels.source/.target hold chunk ids with no FK, so
+    foreign_key_check can't catch a stale row and export.py's
+    load_derived_parallels() raises SystemExit on any orphan. This migration
+    rewrites those ids so the current run stays valid, but the parallels run
+    is still semantically stale (the cross-tradition partition changed) —
+    re-run node 16 (docs/ingest/16-derive-parallels.md) after --apply.
 
 Tracked source changes (this PR, not this script):
   sources/manifest.toml tradition, chunking/theosophy/blavatsky-sd.toml.
@@ -58,8 +64,10 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 from guru.paths import CORPUS_DIR, DEFAULT_DB  # noqa: E402
+from graph_bootstrap import tradition_label  # noqa: E402
 
 OLD_TRADITION = "western_esoteric"
 NEW_TRADITION = "theosophy"
@@ -78,6 +86,12 @@ OPTIONAL_ID_COLUMNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("staged_cleanups", ("chunk_id",)),
     ("staged_concepts", ("motivating_chunk",)),
     ("edge_progress", ("chunk_id",)),
+    # derived_parallels.source/.target are chunk ids (no FK, so
+    # foreign_key_check won't catch a stale row; export.py's
+    # load_derived_parallels() raises SystemExit on any orphan). Rewrite them
+    # here so the current run's rows stay valid; still re-run node 16 after
+    # --apply — the cross-tradition partition changed and the run is stale.
+    ("derived_parallels", ("source", "target")),
 )
 
 
@@ -199,7 +213,10 @@ def ensure_theosophy_node(con: sqlite3.Connection) -> bool:
     if row is not None:
         return False
     cols = _columns(con, "nodes")
-    label = NEW_TRADITION.replace("_", " ").title()
+    # Reuse the single tradition-label formula (LABEL_OVERRIDES + title-case
+    # fallback) so a future override can't silently diverge from the label
+    # this one-shot migration bakes into the DB.
+    label = tradition_label(NEW_TRADITION)
     fields = ["id", "type", "label"]
     values: list[Any] = [NEW_TRADITION, "tradition", label]
     if "tradition_id" in cols:
@@ -291,6 +308,20 @@ def _rewrite_work_dossiers(con: sqlite3.Connection) -> int:
     return n
 
 
+def _retarget_belongs_to(con: sqlite3.Connection) -> None:
+    """Point blavatsky chunks' BELONGS_TO at the new tradition.
+
+    Runs after the source_id prefix rewrite, so sources are already NEW_GLOB.
+    target_id is the bare tradition id (not a chunk id), so the endpoint
+    rewrite never touched it — this is the only thing that moves it.
+    """
+    con.execute(
+        "UPDATE edges SET target_id=? WHERE type='BELONGS_TO' "
+        "AND source_id LIKE ? AND target_id=?",
+        (NEW_TRADITION, NEW_GLOB, OLD_TRADITION),
+    )
+
+
 def apply_swap(con: sqlite3.Connection) -> dict[str, Any]:
     """Run the rewrite inside an already-open connection (FK off)."""
     tables = _tables(con)
@@ -338,11 +369,7 @@ def apply_swap(con: sqlite3.Connection) -> dict[str, Any]:
     # Edges: rewrite endpoints, then retarget BELONGS_TO for these chunks only.
     _rewrite_column(con, "edges", "source_id")
     _rewrite_column(con, "edges", "target_id")
-    con.execute(
-        "UPDATE edges SET target_id=? WHERE type='BELONGS_TO' "
-        "AND source_id LIKE ? AND target_id=?",
-        (NEW_TRADITION, NEW_GLOB, OLD_TRADITION),
-    )
+    _retarget_belongs_to(con)
 
     for table, columns in OPTIONAL_ID_COLUMNS:
         if table not in tables:
@@ -400,6 +427,27 @@ def apply_swap(con: sqlite3.Connection) -> dict[str, Any]:
         raise MigrationAbort(
             f"edges target rewrite mismatch: {after.get('edges_tgt_new')} "
             f"!= {expected_tgt}"
+        )
+    # BELONGS_TO retarget: target_id is the bare tradition id, so the endpoint
+    # id-prefix rewrite never touches it — only the explicit UPDATE above does.
+    # Verify every blavatsky chunk moved to the new tradition and none is left
+    # pointing at western_esoteric, so a mistargeted edge can't pass silently.
+    stale_belongs = _count(
+        con,
+        "SELECT COUNT(*) FROM edges WHERE type='BELONGS_TO' "
+        "AND source_id LIKE ? AND target_id=?",
+        (NEW_GLOB, OLD_TRADITION),
+    )
+    if stale_belongs:
+        raise MigrationAbort(
+            f"{stale_belongs} blavatsky BELONGS_TO edge(s) still target "
+            f"{OLD_TRADITION}"
+        )
+    if after.get("belongs_new_tradition", 0) != before.get("belongs_old_tradition", 0):
+        raise MigrationAbort(
+            f"BELONGS_TO retarget mismatch: "
+            f"{after.get('belongs_new_tradition')} != before "
+            f"{before.get('belongs_old_tradition')}"
         )
     for table, columns in OPTIONAL_ID_COLUMNS:
         for col in columns:
