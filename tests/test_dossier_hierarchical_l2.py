@@ -295,6 +295,28 @@ def test_partition_failure_aborts_final(db, monkeypatch):
     assert "sum:w" not in ids     # but the final work L2 was refused
 
 
+def test_load_partition_rules_degrades_on_bad_config(tmp_path):
+    """Malformed config must degrade to {} with a warning, never crash the
+    import (PARTITION_RULES loads at module top level)."""
+    missing = tmp_path / "nope.toml"
+    assert gd._load_partition_rules(missing) == {}          # OSError → {}
+
+    bad_scalar = tmp_path / "bad_scalar.toml"
+    bad_scalar.write_text('partition = "x"\n')              # not a table
+    assert gd._load_partition_rules(bad_scalar) == {}
+
+    bad_vols = tmp_path / "bad_vols.toml"
+    bad_vols.write_text('[partition.w]\nvolumes = "x"\n')   # volumes not a list
+    assert gd._load_partition_rules(bad_vols) == {}
+
+    partial = tmp_path / "partial.toml"
+    partial.write_text(
+        '[partition.w]\nvolumes = [{ key = "v1" }, '        # missing url_match
+        '{ key = "v2", url_match = "/b-" }]\n')
+    assert gd._load_partition_rules(partial) == {
+        "w": [{"key": "v2", "url_match": "/b-"}]}
+
+
 def test_pack_summary_rows_matches_naive_join(monkeypatch):
     """Finding 3: the O(n) running-sum pack produces the same batches the old
     re-tokenize-the-whole-join loop did, and never overflows the budget."""

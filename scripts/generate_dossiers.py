@@ -95,18 +95,30 @@ def _load_partition_rules(path: Path = CONFIG_PATH) -> dict:
     budget-order packing. Adding a multi-volume work is a config edit, not a
     code change. Tests monkeypatch this dict directly.
 
-    Shape: {work_id: [{"key","label","url_match"}, ...]}. Rule order is the
-    volume emission order for parts whose plan labels interleave.
+    Shape: {work_id: [{"key","label","url_match"}, ...]}. Rule order does NOT
+    drive part emission order — _partition_l1s emits volumes in first-
+    appearance (span-plan) order and consults these rules only for key
+    matching and labels.
+
+    Runs at import; every malformed shape degrades to {} with a warning rather
+    than crashing the module import or silently mispartitioning.
     """
     try:
         with open(path, "rb") as f:
             raw = tomllib.load(f).get("partition", {})
-    except (OSError, tomllib.TOMLDecodeError):
+    except (OSError, tomllib.TOMLDecodeError) as e:
+        logger.warning(
+            f"partition rules unreadable ({path}): {e} — works needing "
+            "structure-aware L2 fall back to span-plan-order packing")
+        return {}
+    if not isinstance(raw, dict):
+        logger.warning(f"[partition] in {path} is not a table — ignoring")
         return {}
     rules: dict[str, list] = {}
     for work_id, spec in raw.items():
-        vols = [v for v in spec.get("volumes", [])
-                if v.get("key") and v.get("url_match")]
+        vols = spec.get("volumes", []) if isinstance(spec, dict) else []
+        vols = [v for v in vols
+                if isinstance(v, dict) and v.get("key") and v.get("url_match")]
         if vols:
             rules[work_id] = vols
     return rules
