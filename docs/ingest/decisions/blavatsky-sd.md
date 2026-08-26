@@ -128,3 +128,31 @@ Rationale:
 - Pipeline enhancements landed during this campaign (guru-dev): bulk tag
   review endpoint (#115), compression retry on overrun (#117), fold-path
   degradation (6d141319), word-denominated budgets (58612368).
+
+## Tradition swap → `theosophy` (todo:4ea3dcc5, 2026-08-26)
+
+USER DECISION: move `blavatsky-sd` out of `western_esoteric` into a new
+tradition `theosophy`. Blavatsky is the theosophical root; Steiner's Occult
+Science (planned) should ingest into `theosophy` from node 01, not into
+`western_esoteric` / a later remap.
+
+Tracked source: `sources/manifest.toml` `tradition = "theosophy"`;
+`chunking/theosophy/blavatsky-sd.toml`. Corpus TOMLs
+(`corpus/western_esoteric/blavatsky-sd/` → `corpus/theosophy/blavatsky-sd/`,
+rewriting each chunk `id` / `tradition`) may be untracked on feat/blavatsky —
+use
+`python3 scripts/migrations/theosophy_blavatsky_sd_tradition_swap.py --rewrite-corpus`
+(default dry-run) rather than committing 727 large files.
+
+DB rewrite: same script, default `--dry-run`. `--apply` is gated on the
+blavatsky-sd dossier stream being **parked** — do not race in-flight D2–D6
+generation against the shared gitignored `data/guru.db`. Do not run
+`scripts/backup_db.sh` against the live shared DB from a feature worktree
+unless the operator explicitly intends a snapshot of that file.
+
+Chunk ids embed the tradition prefix:
+`western_esoteric.blavatsky-sd.NNN` → `theosophy.blavatsky-sd.NNN`.
+`nodes.metadata_json.text_id` stays `blavatsky-sd`. Tradition label falls
+back to `id.replace('_',' ').title()` → `Theosophy` (no LABEL_OVERRIDES
+entry). See the migration script docstring for JSON `child_chunk_ids`,
+BELONGS_TO retarget scope (blavatsky chunks only), and FK-disable notes.
