@@ -260,7 +260,7 @@ def test_fold_failure_aborts_tree_no_partial_final(db, monkeypatch):
         _l1(db, i, cid, words=40)
 
     class FoldFails(FakeGen):
-        def _stage_fold(self, wp, sid, label, src_rows):
+        def _stage_fold(self, wp, sid, label, src_rows, echo_src):
             return False
 
     gen = FoldFails([PART_OK], db)  # only vol-2's part call reaches the LLM
@@ -281,10 +281,11 @@ def test_partition_failure_aborts_final(db, monkeypatch):
         _l1(db, i, cid, words=40)
 
     class Vol2Fails(FakeGen):
-        def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level):
+        def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level, echo_src):
             if sid.endswith(":vol-2"):
                 return False
-            return super()._stage_l2_from(wp, sid, span, src_rows, pv, level=level)
+            return super()._stage_l2_from(wp, sid, span, src_rows, pv,
+                                          level=level, echo_src=echo_src)
 
     gen = Vol2Fails([PART_OK], db)  # vol-1 part succeeds; vol-2 forced to fail
     gen.stage_l2(_wp("x.t.001", "x.t.002", "x.t.003", "x.t.004"))
