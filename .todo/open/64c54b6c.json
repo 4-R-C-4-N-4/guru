@@ -1,0 +1,29 @@
+{
+  "id": "64c54b6c",
+  "type": "bug",
+  "state": "open",
+  "summary": "Dossier generation: L2 stage overflows context for large-span works — needs hierarchical L2 (blavatsky-sd 192 spans = 101k tokens)",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-08-26T17:18:15.622Z",
+  "updated_at": "2026-08-26T17:18:27.061Z",
+  "files": [
+    {
+      "path": "scripts/generate_dossiers.py",
+      "lines": [
+        508,
+        526
+      ]
+    }
+  ],
+  "tags": [
+    "dossiers",
+    "generation",
+    "l2",
+    "fold",
+    "guru-dev",
+    "no-dm"
+  ],
+  "description": "OBSERVED (blavatsky-sd c12, 2026-08-26): stage_l2 crashed with HTTP 400 from the llama.cpp generate server after structure completed 192/192.\n\nROOT CAUSE: stage_l2 naively joins ALL accepted L1 summaries into a single prompt ('\\n\\n'.join over [section_span] body). blavatsky-sd has 192 accepted L1s totaling 101,517 tokens (measured with count_tokens cl100k). The generate server's CTX_SIZE=24576 — 4x overflow → server 400s on the request.\n\nThe template was designed for works with ~30-70 spans; 192 spans breaks the naive join. This is the same size problem the fold machinery (6d141319/0a81a956) solved for L1, but stage_l2 has no fold path.\n\nFIX DIRECTION (pick one, or a combination):\n1. Hierarchical L2: split accepted L1s into clusters (e.g. by volume part: Vol1 Cosmogenesis ~96 spans, Vol2 Anthropogenesis ~96), generate an intermediate L2 per cluster, then a final L2 over the intermediates. Mirrors the L1 fold tree; provenance suffix e.g. l2-v2-folded or a part-suffix.\n2. Context-aware input reduction: subsample/compress L1s to fit ctx (loses detail — worse than fold).\n3. Bigger server ctx (restart with CTX_SIZE=65536+) — still won't fit 101k; also raises KV memory on the 3090.\n\nRECOMMEND: option 1 (hierarchical), reusing _budget_pack-style splitting at the summary level (child_summary_ids already supports nesting: L2 rows carry child_summary_ids referencing L1s — an intermediate tier between L1 and final L2 fits the existing schema).\n\nSCOPE: generate-path only; no gate/promotion changes. D3 review of the L2 (level-2 rows) must be able to see provenance of any hierarchical path.\n\nNOTE: this blocks ALL large-span works under local generation, not just blavatsky-sd. Any work whose summed L1s exceed ~20k tokens needs the hierarchical L2. The plan-time fold (input_budget > 0) may already address this for llamacpp — check why stage_l2 didn't route through it before implementing."
+}
