@@ -117,11 +117,21 @@ def _url_for(cid: str) -> str:
     return ""
 
 
+_TEST_VOLUMES = [
+    {"key": "vol-1", "label": "Vol 1 Cosmogenesis", "url_match": "/sd1-"},
+    {"key": "vol-2", "label": "Vol 2 Anthropogenesis", "url_match": "/sd2-"},
+]
+
+
 def patch_common(monkeypatch, budget: int = 100):
     monkeypatch.setattr(gd, "L2_INPUT_BUDGET", budget)
     monkeypatch.setattr(gd, "count_tokens", _tok)
     monkeypatch.setattr(gd, "_v_prose", _fake_v_prose)
     monkeypatch.setattr(gd, "_chunk_source_url", _url_for)
+    # Volume rules now live in config/dossiers.toml keyed by work_id; the
+    # fixtures use work_id "w", so register a matching rule (todo:64c54b6c
+    # review — work-specific substrings no longer hardcoded in the module).
+    monkeypatch.setattr(gd, "PARTITION_RULES", {"w": _TEST_VOLUMES})
 
 
 def _wp(*cids: str) -> dict:
@@ -237,3 +247,61 @@ def test_stage_l2_defers_when_l1s_incomplete(db, monkeypatch):
     assert gen.calls == 0
     assert db.execute(
         "SELECT COUNT(*) FROM staged_summaries WHERE level=2").fetchone()[0] == 0
+
+
+def test_fold_failure_aborts_tree_no_partial_final(db, monkeypatch):
+    """Finding 1: a failed inner fold must not be silently dropped. The volume
+    part is not staged and no final sum:{work_id} is synthesized — the L1
+    content of the failed batch never vanishes into a partial summary."""
+    patch_common(monkeypatch, budget=100)
+    # vol-1: three over-budget L1s → needs folds (which we force to fail);
+    # vol-2: one L1 → direct part.
+    for i, cid in enumerate(("x.t.001", "x.t.003", "x.t.005", "x.t.002"), 1):
+        _l1(db, i, cid, words=40)
+
+    class FoldFails(FakeGen):
+        def _stage_fold(self, wp, sid, label, src_rows):
+            return False
+
+    gen = FoldFails([PART_OK], db)  # only vol-2's part call reaches the LLM
+    gen.stage_l2(_wp("x.t.001", "x.t.003", "x.t.005", "x.t.002"))
+    ids = {r["summary_id"] for r in db.execute(
+        "SELECT summary_id FROM staged_summaries WHERE level!=1")}
+    assert "sum:w" not in ids            # final synthesis refused
+    assert "sum:w:vol-1" not in ids      # the folded volume never landed
+    assert not any(i.startswith("fold:") for i in ids)  # nothing folded
+
+
+def test_partition_failure_aborts_final(db, monkeypatch):
+    """Finding 2: if any volume part fails, the final L2 must not be synthesized
+    from the survivors — an incomplete sum:{work_id} would be made permanent by
+    the exists-guard on re-run."""
+    patch_common(monkeypatch, budget=100)
+    for i, cid in enumerate(("x.t.001", "x.t.002", "x.t.003", "x.t.004"), 1):
+        _l1(db, i, cid, words=40)
+
+    class Vol2Fails(FakeGen):
+        def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level):
+            if sid.endswith(":vol-2"):
+                return False
+            return super()._stage_l2_from(wp, sid, span, src_rows, pv, level=level)
+
+    gen = Vol2Fails([PART_OK], db)  # vol-1 part succeeds; vol-2 forced to fail
+    gen.stage_l2(_wp("x.t.001", "x.t.002", "x.t.003", "x.t.004"))
+    ids = {r["summary_id"] for r in db.execute(
+        "SELECT summary_id FROM staged_summaries WHERE level!=1")}
+    assert "sum:w:vol-1" in ids   # the surviving volume did stage
+    assert "sum:w:vol-2" not in ids
+    assert "sum:w" not in ids     # but the final work L2 was refused
+
+
+def test_pack_summary_rows_matches_naive_join(monkeypatch):
+    """Finding 3: the O(n) running-sum pack produces the same batches the old
+    re-tokenize-the-whole-join loop did, and never overflows the budget."""
+    monkeypatch.setattr(gd, "count_tokens", _tok)
+    rows = [{"section_span": f"S{i}", "body": _body(40)} for i in range(7)]
+    batches = gd._pack_summary_rows(rows, budget=100)
+    # 41 tokens/row incl. separator → 2 rows (82) fit, 3 (123) do not.
+    assert [len(b) for b in batches] == [2, 2, 2, 1]
+    for b in batches:
+        assert _tok(gd._join_summaries(b)) <= 100

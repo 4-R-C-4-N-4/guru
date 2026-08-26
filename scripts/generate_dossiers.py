@@ -85,13 +85,37 @@ L2_PART_SUFFIX = "-part"
 # preamble + template. Hierarchical L2 fires strictly above this; small works
 # keep the naive single join. Tests monkeypatch this down.
 L2_INPUT_BUDGET = 16_000
-# Natural internal structure for The Secret Doctrine (source_url /sd1- vs /sd2-).
-# Span-plan labels are "Page N" and c12 interleaves volumes — do NOT cluster
-# by consecutive plan order.
-VOL_KEYS = {
-    "vol-1": "Vol 1 Cosmogenesis",
-    "vol-2": "Vol 2 Anthropogenesis",
-}
+CONFIG_PATH = PROJECT_ROOT / "config" / "dossiers.toml"
+
+
+def _load_partition_rules(path: Path = CONFIG_PATH) -> dict:
+    """Per-work internal structure for hierarchical L2, from config rather than
+    hardcoded here (todo:64c54b6c review). Each rule maps a volume key to a
+    label and a source_url substring; a work with no rule falls back to
+    budget-order packing. Adding a multi-volume work is a config edit, not a
+    code change. Tests monkeypatch this dict directly.
+
+    Shape: {work_id: [{"key","label","url_match"}, ...]}. Rule order is the
+    volume emission order for parts whose plan labels interleave.
+    """
+    try:
+        with open(path, "rb") as f:
+            raw = tomllib.load(f).get("partition", {})
+    except (OSError, tomllib.TOMLDecodeError):
+        return {}
+    rules: dict[str, list] = {}
+    for work_id, spec in raw.items():
+        vols = [v for v in spec.get("volumes", [])
+                if v.get("key") and v.get("url_match")]
+        if vols:
+            rules[work_id] = vols
+    return rules
+
+
+# Natural internal structure per work (e.g. The Secret Doctrine: source_url
+# /sd1- Cosmogenesis vs /sd2- Anthropogenesis). Span-plan labels are "Page N"
+# and c12 interleaves volumes — clustering is by source_url, NOT plan order.
+PARTITION_RULES = _load_partition_rules()
 STAGES = ["l1", "structure", "l2", "summary", "context", "figures", "terms", "notes"]
 FIELD_OF_STAGE = {
     "structure": "structure_entry", "summary": "summary", "context": "context",
@@ -291,16 +315,25 @@ def _join_summaries(rows) -> str:
 
 
 def _pack_summary_rows(rows, budget: int) -> list[list]:
-    """Pack consecutive summary rows so each join stays ≤ budget tokens."""
+    """Pack consecutive summary rows so each join stays ≤ budget tokens.
+
+    O(n): each row's formatted cost is tokenized once and accumulated with a
+    running integer sum — the build_dossiers._budget_pack pattern — rather than
+    re-joining and re-tokenizing the whole growing batch per row (O(n²)). Each
+    cost includes the "\\n\\n" join separator, so the per-batch sum is an upper
+    bound on count_tokens(_join_summaries(batch)) (tokenization is subadditive
+    across the separator); packs therefore never overflow the budget that
+    _stage_fold / _stage_l2_from re-check on the real join."""
     batches: list[list] = []
     cur: list = []
+    tok = 0
     for r in rows:
-        trial = cur + [r]
-        if cur and count_tokens(_join_summaries(trial)) > budget:
+        cost = count_tokens(f"[{r['section_span']}] {r['body']}\n\n")
+        if cur and tok + cost > budget:
             batches.append(cur)
-            cur = [r]
-        else:
-            cur = trial
+            cur, tok = [], 0
+        cur.append(r)
+        tok += cost
     if cur:
         batches.append(cur)
     return batches
@@ -320,24 +353,29 @@ def _chunk_source_url(cid: str) -> str:
 
 
 def _structure_key(wp, l1_row) -> str:
-    """Volume identity from chunk source_url, not span-plan order."""
+    """Volume identity from chunk source_url, not span-plan order. The
+    url_match rules are per-work config (PARTITION_RULES); a work with no rule
+    has no natural partition and every row keys to "work"."""
     from collections import Counter
+    rules = PARTITION_RULES.get(wp["work_id"])
+    if not rules:
+        return "work"
     span = next((s for s in wp["spans"] if s["label"] == l1_row["section_span"]), None)
     if span is None:
         return "work"
     keys = []
     for cid in span["chunk_ids"]:
         url = _chunk_source_url(cid)
-        if "/sd1-" in url:
-            keys.append("vol-1")
-        elif "/sd2-" in url:
-            keys.append("vol-2")
+        key = next((r["key"] for r in rules if r["url_match"] in url), None)
+        if key is not None:
+            keys.append(key)
     if not keys:
         return "work"
     return Counter(keys).most_common(1)[0][0]
 
 
 def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
+    labels = {r["key"]: r["label"] for r in PARTITION_RULES.get(wp["work_id"], [])}
     order: list[str] = []
     buckets: dict[str, list] = {}
     for r in l1s:
@@ -348,7 +386,7 @@ def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
         buckets[key].append(r)
     out = []
     for k in order:
-        label = VOL_KEYS.get(k, wp["label"])
+        label = labels.get(k, wp["label"])
         out.append((k, label, buckets[k]))
     return out
 
@@ -611,30 +649,43 @@ class Generator:
         # one stage call — parts are pending, not D3-gated, or the stream
         # re-blocks. Upstream L1s remain the only accepted-row dependency.
         parts = _partition_l1s(wp, l1s)
-        child_sids = []
         if len(parts) == 1 and parts[0][0] == "work":
+            # No natural partition — one budget-packed fold tree feeds the
+            # final L2. _l2_budget_tree returns [] if any fold failed, so a
+            # partial tree never synthesizes.
             child_sids = self._l2_budget_tree(wp, "work", wp["label"], l1s)
+            if not child_sids:
+                return
         else:
+            child_sids = []
             for key, label, rows in parts:
                 part_sid = f"sum:{wp['work_id']}:{key}"
                 part_pv = L2_TPL + L2_PART_SUFFIX
-                if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
-                    if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                    if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
                         if self._stage_l2_from(wp, part_sid, label, rows, part_pv, level=2):
                             logger.info(f"  [l2/part] {part_sid}")
-                else:
-                    inner = self._l2_budget_tree(wp, key, label, rows)
-                    if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
-                        inner_rows = self._rows_by_ids(inner)
+                    else:
+                        inner_rows = self._rows_by_ids(
+                            self._l2_budget_tree(wp, key, label, rows))
                         if inner_rows and self._stage_l2_from(
                                 wp, part_sid, label, inner_rows, part_pv, level=2):
                             logger.info(f"  [l2/part] {part_sid}")
                 if _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
                     child_sids.append(part_sid)
-        if not child_sids:
-            return
+            # Every volume must land before the final synthesis. A missing part
+            # would otherwise be baked into an incomplete sum:{work_id} that the
+            # _summary_exists guard then makes permanent. Refuse and re-run.
+            if len(child_sids) != len(parts):
+                logger.error(
+                    f"  [l2] {sid}: {len(child_sids)}/{len(parts)} volume parts "
+                    "staged — refusing incomplete final synthesis (re-run to retry)")
+                return
         part_rows = self._rows_by_ids(child_sids)
-        if not part_rows:
+        if len(part_rows) != len(child_sids):
+            logger.error(
+                f"  [l2] {sid}: resolved {len(part_rows)}/{len(child_sids)} child "
+                "rows — refusing incomplete final synthesis (re-run to retry)")
             return
         if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2):
             logger.info(f"  [l2] {sid} from {len(part_rows)} parts")
@@ -681,10 +732,21 @@ class Generator:
         sids = []
         for i, batch in enumerate(batches, 1):
             fold_sid = f"fold:{wp['work_id']}:{key}:{i}"
-            if not _summary_exists(self.conn, fold_sid, self.cfg["model"], "fold-v1"):
-                if self._stage_fold(wp, fold_sid, label, batch):
-                    logger.info(f"  [l2/fold] {fold_sid}")
-            sids.append(fold_sid)
+            if _summary_exists(self.conn, fold_sid, self.cfg["model"], "fold-v1"):
+                sids.append(fold_sid)
+                continue
+            if self._stage_fold(wp, fold_sid, label, batch):
+                logger.info(f"  [l2/fold] {fold_sid}")
+                sids.append(fold_sid)
+                continue
+            # Fold failed — inserting nothing. Do NOT append its id: a gap here
+            # would be silently dropped by _rows_by_ids and the part L2 would be
+            # synthesized without this batch's content. Abandon the whole tree
+            # so the caller refuses synthesis and a re-run retries.
+            logger.error(
+                f"  [l2] fold {fold_sid} failed — {wp['work_id']}/{key} "
+                "incomplete, abandoning this tree (re-run to retry)")
+            return []
         return sids
 
     def _stage_fold(self, wp, sid, label, src_rows) -> bool:
