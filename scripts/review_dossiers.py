@@ -94,7 +94,8 @@ def _stage_input(conn, table, row) -> str:
             sids = json.loads(row["child_summary_ids"])
             qs = ",".join("?" for _ in sids)
             rs = conn.execute(f"SELECT summary_id, section_span, body FROM staged_summaries"
-                              f" WHERE summary_id IN ({qs}) AND status='accepted'", sids).fetchall()
+                              f" WHERE summary_id IN ({qs})"
+                              f" AND status IN ('pending','accepted')", sids).fetchall()
             # preserve the generator's input order (child_summary_ids is stored
             # in plan order; an unordered IN-query scrambles remediated rows)
             by_sid = {r["summary_id"]: r for r in rs}
@@ -112,10 +113,9 @@ def _stage_input(conn, table, row) -> str:
                          (row["work_id"], row["section_span"])).fetchone()
         return r["body"] if r else "(accepted L1 not found)"
     if field in ("summary", "context"):
-        from generate_dossiers import _manifest_notes
+        from generate_dossiers import _accepted_l2, _manifest_notes
         from works import load_works
-        l2 = conn.execute("SELECT body FROM staged_summaries WHERE work_id=? AND level=2"
-                          " AND status='accepted' ORDER BY id DESC LIMIT 1", (row["work_id"],)).fetchone()
+        l2 = _accepted_l2(conn, row["work_id"])
         work = load_works()[row["work_id"]]
         notes = _manifest_notes(work.members)
         # the generator also passes translator metadata + a tradition-labelled
