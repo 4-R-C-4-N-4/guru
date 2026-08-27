@@ -18,12 +18,14 @@ structure. Only --stage l1 (and degenerate-work l2) reads primary chunks.
 
 from __future__ import annotations
 
+import functools
 import json
 import logging
 import re
 import sqlite3
 import time
 import tomllib
+from collections import Counter
 from pathlib import Path
 
 from llm import call_llm, parse_json_response, ProviderBusy, ContentBlocked
@@ -176,10 +178,24 @@ def _lazy_ground(fn):
     return get
 
 
-def _load_chunk_toml(cid: str) -> dict:
+@functools.lru_cache(maxsize=4096)
+def _load_chunk_toml_cached(corpus_dir: str, cid: str) -> dict:
     trad, text, num = cid.rsplit(".", 2)
-    with open(CORPUS_DIR / trad / text / "chunks" / f"{num}.toml", "rb") as f:
+    with open(Path(corpus_dir) / trad / text / "chunks" / f"{num}.toml", "rb") as f:
         return tomllib.load(f)
+
+
+def _load_chunk_toml(cid: str) -> dict:
+    # Memoized on (CORPUS_DIR, cid): a hierarchical L2 grounds each volume part
+    # against that volume's chunks and then the final synthesis against the whole
+    # work's chunks (todo:84c46b2f), so without this every part chunk is re-opened
+    # and re-parsed a second time for the final ground. Chunk TOMLs are immutable
+    # during a run and every caller only reads the dict, never mutates it. CORPUS_DIR
+    # is part of the key so a test monkeypatching it to a fresh tmp_path never reads
+    # a stale body, and lru_cache does not memoize the raise — a missing/malformed
+    # chunk still re-surfaces on every call (strict L1) or is re-skipped (best-effort
+    # echo ground).
+    return _load_chunk_toml_cached(str(CORPUS_DIR), cid)
 
 
 def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
@@ -441,16 +457,13 @@ def _chunk_source_url(cid: str) -> str:
     return d.get("chunk", {}).get("source_url", "") or ""
 
 
-def _structure_key(wp, l1_row) -> str:
-    """Volume identity from chunk source_url, not span-plan order. The
-    url_match rules are per-work config (PARTITION_RULES); a work with no rule
-    has no natural partition and every row keys to "work"."""
-    from collections import Counter
-    rules = PARTITION_RULES.get(wp["work_id"])
-    if not rules:
-        return "work"
-    span = next((s for s in wp["spans"] if s["label"] == l1_row["section_span"]), None)
-    if span is None:
+def _structure_key(rules, span) -> str:
+    """Volume identity from chunk source_url, not span-plan order. `rules` is the
+    work's PARTITION_RULES entry (falsy → no natural partition, everything keys
+    to "work"); `span` is the plan span for the L1 row (None → "work"). Callers
+    resolve `rules`/`span` once per work so partitioning stays O(spans + rows)
+    rather than rescanning wp["spans"] per row."""
+    if not rules or span is None:
         return "work"
     keys = []
     for cid in span["chunk_ids"]:
@@ -464,15 +477,27 @@ def _structure_key(wp, l1_row) -> str:
 
 
 def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
-    labels = {r["key"]: r["label"] for r in PARTITION_RULES.get(wp["work_id"], [])}
+    rules = PARTITION_RULES.get(wp["work_id"])
+    spans_by_label = {s["label"]: s for s in wp["spans"]}
+    labels = {r["key"]: r["label"] for r in (rules or [])}
     order: list[str] = []
     buckets: dict[str, list] = {}
     for r in l1s:
-        key = _structure_key(wp, r)
+        key = _structure_key(rules, spans_by_label.get(r["section_span"]))
         if key not in buckets:
             order.append(key)
             buckets[key] = []
         buckets[key].append(r)
+    if len(order) > 1 and "work" in buckets:
+        # Spans whose chunks match no url_match rule collapse to a spurious
+        # "work" bucket that is then staged as an extra volume part alongside
+        # the real ones (front-matter / index chunks are the usual cause). The
+        # rule set has no "attach unmatched spans to the preceding volume"
+        # option, so surface it for the owner instead of baking an undeclared
+        # third "volume" into the final synthesis silently.
+        logger.warning(
+            f"  [l2] {wp['work_id']}: {len(buckets['work'])} L1(s) matched no volume "
+            "rule — staging them as a separate 'work' part; check PARTITION_RULES")
     out = []
     for k in order:
         label = labels.get(k, wp["label"])

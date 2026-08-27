@@ -55,8 +55,15 @@ def _table(rid: str) -> tuple[str, int]:
 def cmd_sample(conn, args):
     cfg_k = args.k
     if args.level:
+        # Level 2 holds the final work L2 (summary_id='sum:'||work_id) AND the
+        # never-promoted hierarchical volume-part rows ('sum:'||work_id||':'||key,
+        # prompt_version l2-v2-part). promote_dossiers.py only ships the final
+        # work L2, so pin the review sample to it — same disambiguation the
+        # generator applies in _accepted_l2 — or part rows dilute the review
+        # budget and scramble the template-defect clustering the pass exists to do.
         rows = conn.execute(
-            "SELECT * FROM staged_summaries WHERE level=? AND status='pending'", (args.level,)).fetchall()
+            "SELECT * FROM staged_summaries WHERE level=? AND status='pending'"
+            " AND (level<>2 OR summary_id='sum:'||work_id)", (args.level,)).fetchall()
         keyfn = lambda r: r["work_id"].split(".")[0]
     else:
         rows = conn.execute(

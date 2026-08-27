@@ -228,11 +228,21 @@ export function chunksRouter(ro: Database.Database, body: ChunkBodyCache): Route
     }
 
     // Counts (cached) --------------------------------------------------
-    const countKey = CountCache.keyFor({ tradition, text, concept, min_score });
-    let cached = counts.get<{ pending_chunks_in_filter: number; pending_tags_in_filter: number }>(countKey);
-    if (!cached) {
-      cached = computeCounts(ro, { tradition, text, concept, min_score });
-      counts.set(countKey, cached);
+    // Direct chunk lookup ignores tradition/text/concept in the outer query, so
+    // the filter aggregation would be global totals the Deck focus path never
+    // reads — and its first uncached hit pays for a full-corpus scan. Skip it
+    // entirely and report zero for the single-chunk spot-check.
+    let cached: { pending_chunks_in_filter: number; pending_tags_in_filter: number };
+    if (directLookup) {
+      cached = { pending_chunks_in_filter: 0, pending_tags_in_filter: 0 };
+    } else {
+      const countKey = CountCache.keyFor({ tradition, text, concept, min_score });
+      cached = counts.get<{ pending_chunks_in_filter: number; pending_tags_in_filter: number }>(countKey) ??
+        (() => {
+          const c = computeCounts(ro, { tradition, text, concept, min_score });
+          counts.set(countKey, c);
+          return c;
+        })();
     }
 
     const last = outerRows[outerRows.length - 1];
