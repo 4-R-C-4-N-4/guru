@@ -184,6 +184,7 @@ def _load_chunk_toml(cid: str) -> dict:
 
 def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
     parts = []
+    skipped = []
     for cid in chunk_ids:
         try:
             body = clean_body(_load_chunk_toml(cid)["content"]["body"])  # residual layer, §1.2
@@ -197,8 +198,16 @@ def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
             if strict:
                 raise
             logger.debug(f"  echo-ground: skipping unreadable chunk {cid}: {e}")
+            skipped.append(cid)
             continue
         parts.append(body)
+    if skipped:
+        # Partial ground is a silent guard degradation (a raw echo hiding in
+        # one of these chunks won't be caught) — worth more than DEBUG even
+        # though it isn't fatal, so a batch run's logs show reduced coverage
+        # rather than only a per-chunk line easy to scroll past.
+        logger.warning(f"  echo-ground: {len(skipped)}/{len(chunk_ids)} chunks unreadable, "
+                       f"guard coverage reduced: {skipped}")
     return "\n\n".join(parts)
 
 
@@ -298,10 +307,12 @@ def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
         # source == "": the caller asked for an echo check but the ground
         # came back empty — no chunk ids, no span match, or every source
         # chunk unreadable (_chunk_bodies(strict=False)) — rather than "no
-        # echo check requested" (source is None). The backstop is silently a
-        # no-op here — surface it so a corpus/db mismatch doesn't quietly
-        # disable the raw-passage guard.
-        logger.warning("echo guard skipped: ground text empty for this call")
+        # echo check requested" (source is None). This stages the output with
+        # NO verbatim-echo protection at all (fail-open, todo:84c46b2f review):
+        # ERROR, not WARNING, so a batch run's logs can't bury a work that's
+        # generating ungrounded.
+        logger.error("echo guard skipped: ground text empty for this call — "
+                     "staging with NO verbatim-echo protection")
     _v_no_scaffold(body, prose=True)
     return body
 
@@ -659,8 +670,10 @@ class Generator:
         subs = _budget_pack(s["text_id"], s["label"], chunks, sub_target, synthetic=True)
         preamble = self._preamble(wp)
         sub_summaries = []
+        sub_grounds = []
         for i, sp in enumerate(subs, 1):
             sub_src = _chunk_bodies(sp.chunk_ids)
+            sub_grounds.append(sub_src)
             sub_budget = min(300, max(80, sp.token_count // 12))
             sub_prompt = render(L1_TPL, section_span=sp.label,
                                 work_label=wp["label"],
@@ -678,11 +691,13 @@ class Generator:
         # Echo vs the span's raw chunk bodies, not the sub-summary join
         # (todo:84c46b2f) — same rationale as the L2 stages: reusing a
         # grounded sub-summary clause in the merge is legitimate synthesis,
-        # only a raw-passage echo is a GROUND failure. strict=False to match:
-        # this is best-effort ground for a guard, not a hard input dependency
-        # — a malformed/orphan chunk here must degrade the guard, not crash a
-        # fold that already produced 4 good sub-summaries.
-        merge_ground = _chunk_bodies(s["chunk_ids"], strict=False)
+        # only a raw-passage echo is a GROUND failure. Reuses the sub_src
+        # strings each sub-batch already read above instead of re-opening
+        # every chunk TOML for the span a second time — the subs partition
+        # s["chunk_ids"] exactly, and each sub_src read was strict (a failure
+        # there would already have given up above), so this concatenation is
+        # guaranteed complete and non-empty.
+        merge_ground = "\n\n".join(sub_grounds)
         merged = self._attempt(
             preamble,
             render(COMPRESS_TPL, budget_words=budget_words(budget),

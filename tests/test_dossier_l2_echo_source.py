@@ -254,17 +254,60 @@ def test_chunk_bodies_is_best_effort_when_non_strict(tmp_path, monkeypatch):
         gd._chunk_bodies(["x.t.004"])          # readable, missing content/body
 
 
+def test_chunk_bodies_warns_on_partial_skip_not_just_debug(tmp_path, monkeypatch, caplog):
+    """A partially-unreadable ground (some chunks skipped, others fine) is a
+    silent guard-coverage reduction — a raw echo in one of the skipped chunks
+    goes undetected — so it must surface above DEBUG, not just a per-chunk
+    debug line easy to scroll past."""
+    monkeypatch.setattr(gd, "CORPUS_DIR", tmp_path)
+    monkeypatch.setattr(gd, "clean_body", lambda s: s)
+
+    def _chunk(cid: str, text: str):
+        trad, doc, num = cid.rsplit(".", 2)
+        d = tmp_path / trad / doc / "chunks"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{num}.toml").write_text(text)
+
+    _chunk("x.t.001", '[content]\nbody = "good body text"\n')
+
+    with caplog.at_level("WARNING"):
+        result = gd._chunk_bodies(["x.t.001", "x.t.002"], strict=False)
+    assert result == "good body text"
+    warnings = [r for r in caplog.records if r.levelname == "WARNING"]
+    assert any("1/2" in r.message and "x.t.002" in r.message for r in warnings)
+
+
+def test_chunk_bodies_no_warning_when_nothing_skipped(tmp_path, monkeypatch, caplog):
+    monkeypatch.setattr(gd, "CORPUS_DIR", tmp_path)
+    monkeypatch.setattr(gd, "clean_body", lambda s: s)
+
+    def _chunk(cid: str, text: str):
+        trad, doc, num = cid.rsplit(".", 2)
+        d = tmp_path / trad / doc / "chunks"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{num}.toml").write_text(text)
+
+    _chunk("x.t.001", '[content]\nbody = "good body text"\n')
+
+    with caplog.at_level("WARNING"):
+        gd._chunk_bodies(["x.t.001"], strict=False)
+    assert not any(r.levelname == "WARNING" for r in caplog.records)
+
+
 def test_v_prose_warns_when_echo_ground_is_empty(caplog):
     """source="" (every chunk under this call's ground was unreadable) must
-    log a warning rather than silently behave as 'no echo check requested' —
-    the caller still gets its prose back, but the disabled backstop is
-    surfaced instead of failing open in silence."""
+    log at ERROR — this is a fail-open with NO echo protection at all, not a
+    minor note — rather than silently behave as 'no echo check requested'.
+    The caller still gets its prose back (fail-open by design, todo:84c46b2f
+    review: failing closed here broke unrelated hierarchy tests whose
+    fixtures never mock chunk data), but the disabled backstop must be loud."""
     body = "Across the vast doctrine this synthesis surveys " + " ".join(
         f"detail{i}" for i in range(50))
     with caplog.at_level("WARNING"):
         result = gd._v_prose(body, 10, 400, "")
     assert result == body
-    assert any("echo guard skipped" in r.message for r in caplog.records)
+    errors = [r for r in caplog.records if r.levelname == "ERROR"]
+    assert any("echo guard skipped" in r.message for r in errors)
 
 
 def test_v_prose_no_warning_when_echo_check_not_requested(caplog):

@@ -236,6 +236,28 @@ def test_fold_merge_still_rejects_a_genuine_raw_chunk_echo(db, monkeypatch):
     assert db.execute("SELECT COUNT(*) FROM staged_summaries").fetchone()[0] == 0
 
 
+def test_fold_merge_reuses_sub_reads_instead_of_re_reading_chunks(db, monkeypatch):
+    """merge_ground must be built by concatenating the sub_src strings each
+    sub-batch already read, not by re-opening every chunk TOML for the span a
+    second time (todo:84c46b2f review) — _chunk_bodies should be called
+    exactly once per sub-batch (4), never a 5th time for the merge."""
+    monkeypatch.setattr(bd, "load_text_chunks",
+                        lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
+                                                    f"p{i}") for i in range(1, 5)])
+    calls = []
+
+    def counting_chunk_bodies(ids, **_):
+        calls.append(tuple(ids))
+        return "Chunk ground text with no overlap at all in this passage."
+
+    monkeypatch.setattr(gd, "_chunk_bodies", counting_chunk_bodies)
+    sub_body = _bump(SUB_CLAUSE, filler_n=80)
+    merged = _bump(SUB_CLAUSE, filler_n=220)
+    gen = FakeGen([sub_body, sub_body, sub_body, sub_body, merged], db)
+    assert gen._fold_l1(WP, SPAN, sid_of(SPAN)) is True
+    assert len(calls) == 4          # one per sub-batch, no extra merge-time read
+
+
 def test_stage_l1_falls_through_to_fold_when_attempt_returns_none(db, monkeypatch):
     """stage_l1 wiring: outer generate->compress fails → _fold_l1 runs and
     stages the folded row."""
