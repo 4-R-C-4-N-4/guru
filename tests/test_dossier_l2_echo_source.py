@@ -252,3 +252,27 @@ def test_chunk_bodies_is_best_effort_when_non_strict(tmp_path, monkeypatch):
         gd._chunk_bodies(["x.t.002"])          # missing file
     with pytest.raises(KeyError):
         gd._chunk_bodies(["x.t.004"])          # readable, missing content/body
+
+
+def test_v_prose_warns_when_echo_ground_is_empty(caplog):
+    """source="" (every chunk under this call's ground was unreadable) must
+    log a warning rather than silently behave as 'no echo check requested' —
+    the caller still gets its prose back, but the disabled backstop is
+    surfaced instead of failing open in silence."""
+    body = "Across the vast doctrine this synthesis surveys " + " ".join(
+        f"detail{i}" for i in range(50))
+    with caplog.at_level("WARNING"):
+        result = gd._v_prose(body, 10, 400, "")
+    assert result == body
+    assert any("echo guard skipped" in r.message for r in caplog.records)
+
+
+def test_v_prose_no_warning_when_echo_check_not_requested(caplog):
+    """source=None (the default) is a genuine 'no echo check' call site, not a
+    degraded one — no warning should fire."""
+    body = "Across the vast doctrine this synthesis surveys " + " ".join(
+        f"detail{i}" for i in range(50))
+    with caplog.at_level("WARNING"):
+        result = gd._v_prose(body, 10, 400, None)
+    assert result == body
+    assert not any("echo guard skipped" in r.message for r in caplog.records)

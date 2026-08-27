@@ -161,13 +161,17 @@ def budget_words(tokens: int) -> int:
 
 # ── corpus helpers ────────────────────────────────────────────────────────────
 
+def _load_chunk_toml(cid: str) -> dict:
+    trad, text, num = cid.rsplit(".", 2)
+    with open(CORPUS_DIR / trad / text / "chunks" / f"{num}.toml", "rb") as f:
+        return tomllib.load(f)
+
+
 def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
     parts = []
     for cid in chunk_ids:
         try:
-            trad, text, num = cid.rsplit(".", 2)
-            d = tomllib.load(open(CORPUS_DIR / trad / text / "chunks" / f"{num}.toml", "rb"))
-            body = clean_body(d["content"]["body"])  # residual layer, §1.2
+            body = clean_body(_load_chunk_toml(cid)["content"]["body"])  # residual layer, §1.2
         except (OSError, ValueError, KeyError) as e:
             # strict (L1 generation): a missing/malformed chunk is a real bug —
             # surface it. Non-strict (L2 echo-ground, todo:84c46b2f): the raw
@@ -275,6 +279,12 @@ def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
         for i in starts:
             if " ".join(words[i:i + 15]) in src:
                 raise ValueError("verbatim echo of input (15-word shingle match)")
+    elif source is not None:
+        # source == "": every chunk under this call's ground was unreadable
+        # (_chunk_bodies(strict=False)) rather than "no echo check requested"
+        # (source is None). The backstop is silently a no-op here — surface it
+        # so a corpus/db mismatch doesn't quietly disable the raw-passage guard.
+        logger.warning("echo guard skipped: ground text unavailable (all source chunks unreadable)")
     _v_no_scaffold(body, prose=True)
     return body
 
@@ -397,15 +407,10 @@ def _pack_summary_rows(rows, budget: int) -> list[list]:
 
 def _chunk_source_url(cid: str) -> str:
     try:
-        trad, text, num = cid.rsplit(".", 2)
-        path = CORPUS_DIR / trad / text / "chunks" / f"{num}.toml"
-        if not path.exists():
-            return ""
-        with open(path, "rb") as f:
-            d = tomllib.load(f)
-        return d.get("chunk", {}).get("source_url", "") or ""
-    except (ValueError, OSError, tomllib.TOMLDecodeError, KeyError):
+        d = _load_chunk_toml(cid)
+    except (OSError, ValueError):
         return ""
+    return d.get("chunk", {}).get("source_url", "") or ""
 
 
 def _structure_key(wp, l1_row) -> str:
@@ -653,12 +658,16 @@ class Generator:
                 return False
             sub_summaries.append(f"Part {i}:\n{body}")
 
+        # Echo vs the span's raw chunk bodies, not the sub-summary join
+        # (todo:84c46b2f) — same rationale as the L2 stages: reusing a
+        # grounded sub-summary clause in the merge is legitimate synthesis,
+        # only a raw-passage echo is a GROUND failure.
+        merge_ground = _chunk_bodies(s["chunk_ids"])
         merged = self._attempt(
             preamble,
             render(COMPRESS_TPL, budget_words=budget_words(budget),
                    summary="\n\n".join(sub_summaries)),
-            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2),
-                               "\n\n".join(sub_summaries)))
+            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), merge_ground))
         if merged is None:
             logger.error(f"  fold: merged output also rejected — giving up for {sid}")
             return False
@@ -700,11 +709,13 @@ class Generator:
         # passage echoed into the output, not a grounded clause reused from an
         # input summary. Each stage grounds against the chunks under the rows it
         # actually synthesizes — the whole work here and for the final synthesis
-        # over volume L2s, one volume for a part, one batch for a fold.
-        work_ground = _span_chunk_bodies(wp, l1s)
+        # over volume L2s, one volume for a part, one batch for a fold. Computed
+        # lazily (not up front) so a run that returns before reaching a use site
+        # (deferred parts, an abandoned fold tree) skips the disk read entirely.
         joined = _join_summaries(l1s)
         if count_tokens(joined) <= L2_INPUT_BUDGET:
-            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2, echo_src=work_ground):
+            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2,
+                                   echo_src=_span_chunk_bodies(wp, l1s)):
                 logger.info(f"  [l2] {sid}")
             return
         # Hierarchical: natural structure first (blavatsky volumes), then
@@ -724,9 +735,11 @@ class Generator:
             for key, label, rows in parts:
                 part_sid = f"sum:{wp['work_id']}:{key}"
                 part_pv = L2_TPL + L2_PART_SUFFIX
-                # Ground a volume's synthesis against that volume's chunks only.
-                part_ground = _span_chunk_bodies(wp, rows)
                 if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
+                    # Ground a volume's synthesis against that volume's chunks
+                    # only — read lazily, only once we know this part isn't
+                    # already staged.
+                    part_ground = _span_chunk_bodies(wp, rows)
                     if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
                         if self._stage_l2_from(wp, part_sid, label, rows, part_pv,
                                                level=2, echo_src=part_ground):
@@ -756,7 +769,8 @@ class Generator:
             return
         # The final synthesis spans every volume, so it grounds against the
         # whole work's chunks (its input part L2s have no chunk provenance).
-        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2, echo_src=work_ground):
+        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2,
+                               echo_src=_span_chunk_bodies(wp, l1s)):
             logger.info(f"  [l2] {sid} from {len(part_rows)} parts")
 
     def _rows_by_ids(self, sids: list[str]) -> list[sqlite3.Row]:
