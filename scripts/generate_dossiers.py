@@ -167,23 +167,25 @@ def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
         try:
             trad, text, num = cid.rsplit(".", 2)
             d = tomllib.load(open(CORPUS_DIR / trad / text / "chunks" / f"{num}.toml", "rb"))
-        except (OSError, ValueError) as e:
+            body = clean_body(d["content"]["body"])  # residual layer, §1.2
+        except (OSError, ValueError, KeyError) as e:
             # strict (L1 generation): a missing/malformed chunk is a real bug —
             # surface it. Non-strict (L2 echo-ground, todo:84c46b2f): the raw
             # bodies are a best-effort backstop, and guru.db is shared across
-            # branches while corpus/ is not, so an orphan chunk id must not
-            # crash the synthesis stage — skip it.
+            # branches while corpus/ is not, so an orphan or malformed chunk
+            # (absent file, bad TOML, or a readable file missing content/body)
+            # must not crash the synthesis stage — skip it.
             if strict:
                 raise
             logger.debug(f"  echo-ground: skipping unreadable chunk {cid}: {e}")
             continue
-        parts.append(clean_body(d["content"]["body"]))  # residual layer, §1.2
+        parts.append(body)
     return "\n\n".join(parts)
 
 
-def _work_chunk_bodies(l1_rows) -> str:
-    """Raw GROUND text under a work's accepted L1s — the echo source for every
-    L2 summary-of-summaries stage (todo:84c46b2f).
+def _span_chunk_bodies(wp, l1_rows) -> str:
+    """Raw GROUND text under the given L1 rows — the echo source for an L2
+    summary-of-summaries stage (todo:84c46b2f).
 
     The 15-word shingle guard in _v_prose exists to catch a content-filter
     dodge: a "summary" that copies a raw chunk passage verbatim instead of
@@ -193,14 +195,19 @@ def _work_chunk_bodies(l1_rows) -> str:
     SUMMARIES rejects legitimate reuse of a grounded L1/L2 clause — it made the
     final blavatsky-sd L2 ungeneratable by the standard path. Comparing against
     the raw chunk bodies instead keeps the raw-passage backstop while allowing
-    summary-clause reuse. Best-effort: an L1 with no child_chunk_ids (e.g. a
-    manual row) or an orphan chunk simply contributes nothing to the ground."""
+    summary-clause reuse.
+
+    Ids come from the plan's spans (`section_span` on an L1 row is its span
+    label, the same join used at _partition_l1s), not the rows' stored
+    child_chunk_ids: a manual L1 with no recorded provenance still contributes
+    its span's chunks, and there is no JSON round-trip. Scope the ground to the
+    ROWS the call actually synthesizes (one volume's L1s, not the whole work)
+    so a per-part synthesis is never rejected for a 15-word run that only
+    appears in a sibling volume it was never given."""
+    span_chunks = {s["label"]: s["chunk_ids"] for s in wp["spans"]}
     seen, ids = set(), []
     for r in l1_rows:
-        raw = r["child_chunk_ids"]
-        if not raw:
-            continue
-        for cid in json.loads(raw):
+        for cid in span_chunks.get(r["section_span"], ()):
             if cid not in seen:
                 seen.add(cid)
                 ids.append(cid)
@@ -691,11 +698,13 @@ class Generator:
         # Raw chunk bodies are the echo source for every summary-of-summaries
         # stage below (todo:84c46b2f): the shingle guard must reject a raw
         # passage echoed into the output, not a grounded clause reused from an
-        # input summary. Computed once per work and threaded through.
-        echo_src = _work_chunk_bodies(l1s)
+        # input summary. Each stage grounds against the chunks under the rows it
+        # actually synthesizes — the whole work here and for the final synthesis
+        # over volume L2s, one volume for a part, one batch for a fold.
+        work_ground = _span_chunk_bodies(wp, l1s)
         joined = _join_summaries(l1s)
         if count_tokens(joined) <= L2_INPUT_BUDGET:
-            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2, echo_src=echo_src):
+            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2, echo_src=work_ground):
                 logger.info(f"  [l2] {sid}")
             return
         # Hierarchical: natural structure first (blavatsky volumes), then
@@ -707,7 +716,7 @@ class Generator:
             # No natural partition — one budget-packed fold tree feeds the
             # final L2. _l2_budget_tree returns [] if any fold failed, so a
             # partial tree never synthesizes.
-            child_sids = self._l2_budget_tree(wp, "work", wp["label"], l1s, echo_src)
+            child_sids = self._l2_budget_tree(wp, "work", wp["label"], l1s)
             if not child_sids:
                 return
         else:
@@ -715,17 +724,19 @@ class Generator:
             for key, label, rows in parts:
                 part_sid = f"sum:{wp['work_id']}:{key}"
                 part_pv = L2_TPL + L2_PART_SUFFIX
+                # Ground a volume's synthesis against that volume's chunks only.
+                part_ground = _span_chunk_bodies(wp, rows)
                 if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
                     if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
                         if self._stage_l2_from(wp, part_sid, label, rows, part_pv,
-                                               level=2, echo_src=echo_src):
+                                               level=2, echo_src=part_ground):
                             logger.info(f"  [l2/part] {part_sid}")
                     else:
                         inner_rows = self._rows_by_ids(
-                            self._l2_budget_tree(wp, key, label, rows, echo_src))
+                            self._l2_budget_tree(wp, key, label, rows))
                         if inner_rows and self._stage_l2_from(
                                 wp, part_sid, label, inner_rows, part_pv,
-                                level=2, echo_src=echo_src):
+                                level=2, echo_src=part_ground):
                             logger.info(f"  [l2/part] {part_sid}")
                 if _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
                     child_sids.append(part_sid)
@@ -743,7 +754,9 @@ class Generator:
                 f"  [l2] {sid}: resolved {len(part_rows)}/{len(child_sids)} child "
                 "rows — refusing incomplete final synthesis (re-run to retry)")
             return
-        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2, echo_src=echo_src):
+        # The final synthesis spans every volume, so it grounds against the
+        # whole work's chunks (its input part L2s have no chunk provenance).
+        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2, echo_src=work_ground):
             logger.info(f"  [l2] {sid} from {len(part_rows)} parts")
 
     def _rows_by_ids(self, sids: list[str]) -> list[sqlite3.Row]:
@@ -766,9 +779,9 @@ class Generator:
         if _summary_exists(self.conn, sid, self.cfg["model"], pv):
             return True
         prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
-        # echo_src is the work's raw chunk bodies, not `joined`: reusing a
-        # grounded clause from an input summary is legitimate synthesis, only a
-        # raw-passage echo is a GROUND failure (todo:84c46b2f).
+        # echo_src is the raw chunk bodies under these rows, not `joined`:
+        # reusing a grounded clause from an input summary is legitimate
+        # synthesis, only a raw-passage echo is a GROUND failure (todo:84c46b2f).
         body = self._attempt(self._preamble(wp), prompt,
                              lambda r: _v_prose(r, 200, 350, echo_src), compress_to=275)
         if not body:
@@ -778,7 +791,7 @@ class Generator:
                              level, span, None, [r["summary_id"] for r in src_rows], body, pv)
         return True
 
-    def _l2_budget_tree(self, wp, key: str, label: str, rows, echo_src: str) -> list[str]:
+    def _l2_budget_tree(self, wp, key: str, label: str, rows) -> list[str]:
         """Pack over-budget consecutive rows into level-0 folds; return child ids."""
         batches = _pack_summary_rows(rows, L2_INPUT_BUDGET)
         if len(batches) == 1:
@@ -794,7 +807,8 @@ class Generator:
             if _summary_exists(self.conn, fold_sid, self.cfg["model"], "fold-v1"):
                 sids.append(fold_sid)
                 continue
-            if self._stage_fold(wp, fold_sid, label, batch, echo_src):
+            # A fold grounds against only its own batch's chunks (todo:84c46b2f).
+            if self._stage_fold(wp, fold_sid, label, batch, _span_chunk_bodies(wp, batch)):
                 logger.info(f"  [l2/fold] {fold_sid}")
                 sids.append(fold_sid)
                 continue
