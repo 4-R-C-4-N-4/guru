@@ -276,3 +276,40 @@ def test_v_prose_no_warning_when_echo_check_not_requested(caplog):
         result = gd._v_prose(body, 10, 400, None)
     assert result == body
     assert not any("echo guard skipped" in r.message for r in caplog.records)
+
+
+def test_lazy_ground_defers_and_caches():
+    """_lazy_ground must not call its producer until first .get(), and must
+    call it at most once even across repeated .get()s (the retry-loop case:
+    _stage_l2_from/_stage_fold invoke echo_src() once per attempt)."""
+    calls = []
+
+    def producer():
+        calls.append(1)
+        return "the ground text"
+
+    thunk = gd._lazy_ground(producer)
+    assert calls == []                 # not called at wrap time
+    assert thunk() == "the ground text"
+    assert thunk() == "the ground text"
+    assert thunk() == "the ground text"
+    assert len(calls) == 1             # only ever read once
+
+
+def test_stage_l2_from_over_budget_refusal_never_reads_the_ground(db, monkeypatch):
+    """An echo_src producer wrapped in _lazy_ground must not run at all when
+    _stage_l2_from refuses before ever consulting it (the over-budget early
+    return) — the disk read this guards against must not happen."""
+    monkeypatch.setattr(gd, "count_tokens", _tok)
+    monkeypatch.setattr(gd, "L2_INPUT_BUDGET", 5)  # anything will overflow this
+
+    def boom():
+        raise AssertionError("echo ground was read despite the over-budget refusal")
+
+    _l1(db, 1, "x.t.001", body="A first volume summary far past the tiny budget.")
+    gen = FakeGen([], db)
+    ok = gen._stage_l2_from(_wp("x.t.001"), "sum:w", None,
+                            [db.execute("SELECT * FROM staged_summaries").fetchone()],
+                            "l2-v2", level=2, echo_src=gd._lazy_ground(boom))
+    assert ok is False
+    assert gen.calls == 0

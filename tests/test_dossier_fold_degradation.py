@@ -89,7 +89,7 @@ def patch_corpus(monkeypatch):
                         lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
                                                     f"p{i}") for i in range(1, 5)])
     # keep _budget_pack REAL — it is a primitive under reuse
-    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids: "body text " * 50)
+    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids, **_: "body text " * 50)
     # Deterministic stand-in for the prose contract: word-count band only.
     # The real _v_prose depends on the tokenizer, which makes canned fixtures
     # brittle; the machinery under test only needs a band and an echo source.
@@ -202,7 +202,7 @@ def patch_corpus_with_raw_ground(monkeypatch, raw_ground: str):
     monkeypatch.setattr(bd, "load_text_chunks",
                         lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
                                                     f"p{i}") for i in range(1, 5)])
-    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids: raw_ground)
+    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids, **_: raw_ground)
     # real _v_prose (not the fake word-count stand-in) so the shingle guard
     # actually runs against the ground text this test cares about
 
