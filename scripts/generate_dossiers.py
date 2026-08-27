@@ -479,7 +479,10 @@ def _structure_key(rules, span) -> str:
 def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
     rules = PARTITION_RULES.get(wp["work_id"])
     spans_by_label = {s["label"]: s for s in wp["spans"]}
-    labels = {r["key"]: r["label"] for r in (rules or [])}
+    # `label` is optional in a volume rule (only key + url_match are required by
+    # _load_partition_rules); guard the dereference so a label-less volume falls
+    # back to wp["label"] via labels.get below instead of KeyError-ing.
+    labels = {r["key"]: r["label"] for r in (rules or []) if r.get("label")}
     order: list[str] = []
     buckets: dict[str, list] = {}
     for r in l1s:
@@ -775,7 +778,8 @@ class Generator:
         joined = _join_summaries(l1s)
         if count_tokens(joined) <= L2_INPUT_BUDGET:
             if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2,
-                                   echo_src=_lazy_ground(lambda: _span_chunk_bodies(wp, l1s))):
+                                   echo_src=_lazy_ground(lambda: _span_chunk_bodies(wp, l1s)),
+                                   joined=joined):
                 logger.info(f"  [l2] {sid}")
             return
         # Hierarchical: natural structure first (blavatsky volumes), then
@@ -800,9 +804,10 @@ class Generator:
                     # only — deferred until (and unless) a validator actually
                     # runs, so an over-budget refusal below never pays for it.
                     part_ground = _lazy_ground(lambda rows=rows: _span_chunk_bodies(wp, rows))
-                    if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
+                    part_joined = _join_summaries(rows)
+                    if count_tokens(part_joined) <= L2_INPUT_BUDGET:
                         if self._stage_l2_from(wp, part_sid, label, rows, part_pv,
-                                               level=2, echo_src=part_ground):
+                                               level=2, echo_src=part_ground, joined=part_joined):
                             logger.info(f"  [l2/part] {part_sid}")
                     else:
                         inner_rows = self._rows_by_ids(
@@ -844,13 +849,19 @@ class Generator:
                 out.append(r)
         return out
 
-    def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level: int, echo_src) -> bool:
+    def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level: int, echo_src,
+                       joined: str | None = None) -> bool:
         """echo_src: a zero-arg callable (see `_lazy_ground`) producing the raw
         chunk bodies under these rows, not `joined` — reusing a grounded
         clause from an input summary is legitimate synthesis, only a
         raw-passage echo is a GROUND failure (todo:84c46b2f). Deferred so the
-        early returns below never pay for a ground that goes unused."""
-        joined = _join_summaries(src_rows)
+        early returns below never pay for a ground that goes unused.
+
+        joined: the caller's already-built `_join_summaries(src_rows)`, passed
+        in when it computed the same string to make the flat-vs-hierarchical
+        budget decision — avoids re-joining and re-tokenizing it here."""
+        if joined is None:
+            joined = _join_summaries(src_rows)
         n = count_tokens(joined)
         if n > L2_INPUT_BUDGET:
             logger.error(f"  [l2] refusing over-budget join ({n} tokens) for {sid}")
