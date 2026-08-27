@@ -18,12 +18,14 @@ structure. Only --stage l1 (and degenerate-work l2) reads primary chunks.
 
 from __future__ import annotations
 
+import functools
 import json
 import logging
 import re
 import sqlite3
 import time
 import tomllib
+from collections import Counter
 from pathlib import Path
 
 from llm import call_llm, parse_json_response, ProviderBusy, ContentBlocked
@@ -161,13 +163,99 @@ def budget_words(tokens: int) -> int:
 
 # ── corpus helpers ────────────────────────────────────────────────────────────
 
-def _chunk_bodies(chunk_ids: list[str]) -> str:
+def _lazy_ground(fn):
+    """Defer a ground-text producer until first consulted, then cache the
+    result (todo:84c46b2f follow-up). `_stage_l2_from`/`_stage_fold` may
+    return before ever using `echo_src` (over-budget refusal, an already
+    -staged summary); wrapping the producer means that early return costs
+    nothing, while the retry loop around `_attempt` still reads/joins the
+    raw chunks only once, not on every attempt."""
+    cache = []
+    def get() -> str:
+        if not cache:
+            cache.append(fn())
+        return cache[0]
+    return get
+
+
+@functools.lru_cache(maxsize=4096)
+def _load_chunk_toml_cached(corpus_dir: str, cid: str) -> dict:
+    trad, text, num = cid.rsplit(".", 2)
+    with open(Path(corpus_dir) / trad / text / "chunks" / f"{num}.toml", "rb") as f:
+        return tomllib.load(f)
+
+
+def _load_chunk_toml(cid: str) -> dict:
+    # Memoized on (CORPUS_DIR, cid): a hierarchical L2 grounds each volume part
+    # against that volume's chunks and then the final synthesis against the whole
+    # work's chunks (todo:84c46b2f), so without this every part chunk is re-opened
+    # and re-parsed a second time for the final ground. Chunk TOMLs are immutable
+    # during a run and every caller only reads the dict, never mutates it. CORPUS_DIR
+    # is part of the key so a test monkeypatching it to a fresh tmp_path never reads
+    # a stale body, and lru_cache does not memoize the raise — a missing/malformed
+    # chunk still re-surfaces on every call (strict L1) or is re-skipped (best-effort
+    # echo ground).
+    return _load_chunk_toml_cached(str(CORPUS_DIR), cid)
+
+
+def _chunk_bodies(chunk_ids: list[str], *, strict: bool = True) -> str:
     parts = []
+    skipped = []
     for cid in chunk_ids:
-        trad, text, num = cid.rsplit(".", 2)
-        d = tomllib.load(open(CORPUS_DIR / trad / text / "chunks" / f"{num}.toml", "rb"))
-        parts.append(clean_body(d["content"]["body"]))  # residual layer, §1.2
+        try:
+            body = clean_body(_load_chunk_toml(cid)["content"]["body"])  # residual layer, §1.2
+        except (OSError, ValueError, KeyError) as e:
+            # strict (L1 generation): a missing/malformed chunk is a real bug —
+            # surface it. Non-strict (L2 echo-ground, todo:84c46b2f): the raw
+            # bodies are a best-effort backstop, and guru.db is shared across
+            # branches while corpus/ is not, so an orphan or malformed chunk
+            # (absent file, bad TOML, or a readable file missing content/body)
+            # must not crash the synthesis stage — skip it.
+            if strict:
+                raise
+            logger.debug(f"  echo-ground: skipping unreadable chunk {cid}: {e}")
+            skipped.append(cid)
+            continue
+        parts.append(body)
+    if skipped:
+        # Partial ground is a silent guard degradation (a raw echo hiding in
+        # one of these chunks won't be caught) — worth more than DEBUG even
+        # though it isn't fatal, so a batch run's logs show reduced coverage
+        # rather than only a per-chunk line easy to scroll past.
+        logger.warning(f"  echo-ground: {len(skipped)}/{len(chunk_ids)} chunks unreadable, "
+                       f"guard coverage reduced: {skipped}")
     return "\n\n".join(parts)
+
+
+def _span_chunk_bodies(wp, l1_rows) -> str:
+    """Raw GROUND text under the given L1 rows — the echo source for an L2
+    summary-of-summaries stage (todo:84c46b2f).
+
+    The 15-word shingle guard in _v_prose exists to catch a content-filter
+    dodge: a "summary" that copies a raw chunk passage verbatim instead of
+    transforming it. That failure can only happen at L1, where the stage input
+    IS the raw chunks. At L2 the input is other summaries (already grounded,
+    condensed prose), so echo-checking the synthesis against the JOINED
+    SUMMARIES rejects legitimate reuse of a grounded L1/L2 clause — it made the
+    final blavatsky-sd L2 ungeneratable by the standard path. Comparing against
+    the raw chunk bodies instead keeps the raw-passage backstop while allowing
+    summary-clause reuse.
+
+    Ids come from the plan's spans (`section_span` on an L1 row is its span
+    label, the same join used at _partition_l1s), not the rows' stored
+    child_chunk_ids: a manual L1 with no recorded provenance still contributes
+    its span's chunks, and there is no JSON round-trip. Scope the ground to the
+    ROWS the call actually synthesizes (one volume's L1s, not the whole work)
+    so a per-part synthesis is never rejected for a 15-word run that only
+    appears in a sibling volume it was never given."""
+    span_chunks = {s["label"]: s["chunk_ids"] for s in wp["spans"]}
+    seen, ids = set(), []
+    for r in l1_rows:
+        for cid in span_chunks.get(r["section_span"], ()):
+            if cid not in seen:
+                seen.add(cid)
+                ids.append(cid)
+    return _chunk_bodies(ids, strict=False)
 
 
 def _display_meta(tradition_dir: str, text_id: str) -> dict:
@@ -231,6 +319,16 @@ def _v_prose(raw: str, lo: int, hi: int, source: str | None = None) -> str:
         for i in starts:
             if " ".join(words[i:i + 15]) in src:
                 raise ValueError("verbatim echo of input (15-word shingle match)")
+    elif source is not None:
+        # source == "": the caller asked for an echo check but the ground
+        # came back empty — no chunk ids, no span match, or every source
+        # chunk unreadable (_chunk_bodies(strict=False)) — rather than "no
+        # echo check requested" (source is None). This stages the output with
+        # NO verbatim-echo protection at all (fail-open, todo:84c46b2f review):
+        # ERROR, not WARNING, so a batch run's logs can't bury a work that's
+        # generating ungrounded.
+        logger.error("echo guard skipped: ground text empty for this call — "
+                     "staging with NO verbatim-echo protection")
     _v_no_scaffold(body, prose=True)
     return body
 
@@ -353,27 +451,19 @@ def _pack_summary_rows(rows, budget: int) -> list[list]:
 
 def _chunk_source_url(cid: str) -> str:
     try:
-        trad, text, num = cid.rsplit(".", 2)
-        path = CORPUS_DIR / trad / text / "chunks" / f"{num}.toml"
-        if not path.exists():
-            return ""
-        with open(path, "rb") as f:
-            d = tomllib.load(f)
-        return d.get("chunk", {}).get("source_url", "") or ""
-    except (ValueError, OSError, tomllib.TOMLDecodeError, KeyError):
+        d = _load_chunk_toml(cid)
+    except (OSError, ValueError):
         return ""
+    return d.get("chunk", {}).get("source_url", "") or ""
 
 
-def _structure_key(wp, l1_row) -> str:
-    """Volume identity from chunk source_url, not span-plan order. The
-    url_match rules are per-work config (PARTITION_RULES); a work with no rule
-    has no natural partition and every row keys to "work"."""
-    from collections import Counter
-    rules = PARTITION_RULES.get(wp["work_id"])
-    if not rules:
-        return "work"
-    span = next((s for s in wp["spans"] if s["label"] == l1_row["section_span"]), None)
-    if span is None:
+def _structure_key(rules, span) -> str:
+    """Volume identity from chunk source_url, not span-plan order. `rules` is the
+    work's PARTITION_RULES entry (falsy → no natural partition, everything keys
+    to "work"); `span` is the plan span for the L1 row (None → "work"). Callers
+    resolve `rules`/`span` once per work so partitioning stays O(spans + rows)
+    rather than rescanning wp["spans"] per row."""
+    if not rules or span is None:
         return "work"
     keys = []
     for cid in span["chunk_ids"]:
@@ -387,15 +477,30 @@ def _structure_key(wp, l1_row) -> str:
 
 
 def _partition_l1s(wp, l1s) -> list[tuple[str, str, list]]:
-    labels = {r["key"]: r["label"] for r in PARTITION_RULES.get(wp["work_id"], [])}
+    rules = PARTITION_RULES.get(wp["work_id"])
+    spans_by_label = {s["label"]: s for s in wp["spans"]}
+    # `label` is optional in a volume rule (only key + url_match are required by
+    # _load_partition_rules); guard the dereference so a label-less volume falls
+    # back to wp["label"] via labels.get below instead of KeyError-ing.
+    labels = {r["key"]: r["label"] for r in (rules or []) if r.get("label")}
     order: list[str] = []
     buckets: dict[str, list] = {}
     for r in l1s:
-        key = _structure_key(wp, r)
+        key = _structure_key(rules, spans_by_label.get(r["section_span"]))
         if key not in buckets:
             order.append(key)
             buckets[key] = []
         buckets[key].append(r)
+    if len(order) > 1 and "work" in buckets:
+        # Spans whose chunks match no url_match rule collapse to a spurious
+        # "work" bucket that is then staged as an extra volume part alongside
+        # the real ones (front-matter / index chunks are the usual cause). The
+        # rule set has no "attach unmatched spans to the preceding volume"
+        # option, so surface it for the owner instead of baking an undeclared
+        # third "volume" into the final synthesis silently.
+        logger.warning(
+            f"  [l2] {wp['work_id']}: {len(buckets['work'])} L1(s) matched no volume "
+            "rule — staging them as a separate 'work' part; check PARTITION_RULES")
     out = []
     for k in order:
         label = labels.get(k, wp["label"])
@@ -593,8 +698,10 @@ class Generator:
         subs = _budget_pack(s["text_id"], s["label"], chunks, sub_target, synthetic=True)
         preamble = self._preamble(wp)
         sub_summaries = []
+        sub_grounds = []
         for i, sp in enumerate(subs, 1):
             sub_src = _chunk_bodies(sp.chunk_ids)
+            sub_grounds.append(sub_src)
             sub_budget = min(300, max(80, sp.token_count // 12))
             sub_prompt = render(L1_TPL, section_span=sp.label,
                                 work_label=wp["label"],
@@ -609,12 +716,21 @@ class Generator:
                 return False
             sub_summaries.append(f"Part {i}:\n{body}")
 
+        # Echo vs the span's raw chunk bodies, not the sub-summary join
+        # (todo:84c46b2f) — same rationale as the L2 stages: reusing a
+        # grounded sub-summary clause in the merge is legitimate synthesis,
+        # only a raw-passage echo is a GROUND failure. Reuses the sub_src
+        # strings each sub-batch already read above instead of re-opening
+        # every chunk TOML for the span a second time — the subs partition
+        # s["chunk_ids"] exactly, and each sub_src read was strict (a failure
+        # there would already have given up above), so this concatenation is
+        # guaranteed complete and non-empty.
+        merge_ground = "\n\n".join(sub_grounds)
         merged = self._attempt(
             preamble,
             render(COMPRESS_TPL, budget_words=budget_words(budget),
                    summary="\n\n".join(sub_summaries)),
-            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2),
-                               "\n\n".join(sub_summaries)))
+            lambda r: _v_prose(r, int(budget * 0.8), int(budget * 1.2), merge_ground))
         if merged is None:
             logger.error(f"  fold: merged output also rejected — giving up for {sid}")
             return False
@@ -651,9 +767,19 @@ class Generator:
         if len(l1s) < len(wp["spans"]):
             logger.info(f"  [l2] {wp['work_id']}: {len(l1s)}/{len(wp['spans'])} L1s accepted — deferred")
             return
+        # Raw chunk bodies are the echo source for every summary-of-summaries
+        # stage below (todo:84c46b2f): the shingle guard must reject a raw
+        # passage echoed into the output, not a grounded clause reused from an
+        # input summary. Each stage grounds against the chunks under the rows it
+        # actually synthesizes — the whole work here and for the final synthesis
+        # over volume L2s, one volume for a part, one batch for a fold. Wrapped
+        # in _lazy_ground so a call that returns before ever consulting it
+        # (over-budget refusal, already staged) skips the disk read entirely.
         joined = _join_summaries(l1s)
         if count_tokens(joined) <= L2_INPUT_BUDGET:
-            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2):
+            if self._stage_l2_from(wp, sid, None, l1s, L2_TPL, level=2,
+                                   echo_src=_lazy_ground(lambda: _span_chunk_bodies(wp, l1s)),
+                                   joined=joined):
                 logger.info(f"  [l2] {sid}")
             return
         # Hierarchical: natural structure first (blavatsky volumes), then
@@ -674,14 +800,21 @@ class Generator:
                 part_sid = f"sum:{wp['work_id']}:{key}"
                 part_pv = L2_TPL + L2_PART_SUFFIX
                 if not _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
-                    if count_tokens(_join_summaries(rows)) <= L2_INPUT_BUDGET:
-                        if self._stage_l2_from(wp, part_sid, label, rows, part_pv, level=2):
+                    # Ground a volume's synthesis against that volume's chunks
+                    # only — deferred until (and unless) a validator actually
+                    # runs, so an over-budget refusal below never pays for it.
+                    part_ground = _lazy_ground(lambda rows=rows: _span_chunk_bodies(wp, rows))
+                    part_joined = _join_summaries(rows)
+                    if count_tokens(part_joined) <= L2_INPUT_BUDGET:
+                        if self._stage_l2_from(wp, part_sid, label, rows, part_pv,
+                                               level=2, echo_src=part_ground, joined=part_joined):
                             logger.info(f"  [l2/part] {part_sid}")
                     else:
                         inner_rows = self._rows_by_ids(
                             self._l2_budget_tree(wp, key, label, rows))
                         if inner_rows and self._stage_l2_from(
-                                wp, part_sid, label, inner_rows, part_pv, level=2):
+                                wp, part_sid, label, inner_rows, part_pv,
+                                level=2, echo_src=part_ground):
                             logger.info(f"  [l2/part] {part_sid}")
                 if _summary_exists(self.conn, part_sid, self.cfg["model"], part_pv):
                     child_sids.append(part_sid)
@@ -699,7 +832,10 @@ class Generator:
                 f"  [l2] {sid}: resolved {len(part_rows)}/{len(child_sids)} child "
                 "rows — refusing incomplete final synthesis (re-run to retry)")
             return
-        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2):
+        # The final synthesis spans every volume, so it grounds against the
+        # whole work's chunks (its input part L2s have no chunk provenance).
+        if self._stage_l2_from(wp, sid, None, part_rows, L2_TPL, level=2,
+                               echo_src=_lazy_ground(lambda: _span_chunk_bodies(wp, l1s))):
             logger.info(f"  [l2] {sid} from {len(part_rows)} parts")
 
     def _rows_by_ids(self, sids: list[str]) -> list[sqlite3.Row]:
@@ -713,8 +849,19 @@ class Generator:
                 out.append(r)
         return out
 
-    def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level: int) -> bool:
-        joined = _join_summaries(src_rows)
+    def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level: int, echo_src,
+                       joined: str | None = None) -> bool:
+        """echo_src: a zero-arg callable (see `_lazy_ground`) producing the raw
+        chunk bodies under these rows, not `joined` — reusing a grounded
+        clause from an input summary is legitimate synthesis, only a
+        raw-passage echo is a GROUND failure (todo:84c46b2f). Deferred so the
+        early returns below never pay for a ground that goes unused.
+
+        joined: the caller's already-built `_join_summaries(src_rows)`, passed
+        in when it computed the same string to make the flat-vs-hierarchical
+        budget decision — avoids re-joining and re-tokenizing it here."""
+        if joined is None:
+            joined = _join_summaries(src_rows)
         n = count_tokens(joined)
         if n > L2_INPUT_BUDGET:
             logger.error(f"  [l2] refusing over-budget join ({n} tokens) for {sid}")
@@ -723,7 +870,7 @@ class Generator:
             return True
         prompt = render(L2_TPL, work_label=wp["label"]) + "\n\n---\nINPUT:\n\n" + joined
         body = self._attempt(self._preamble(wp), prompt,
-                             lambda r: _v_prose(r, 200, 350, joined), compress_to=275)
+                             lambda r: _v_prose(r, 200, 350, echo_src()), compress_to=275)
         if not body:
             return False
         text_ids = {r["text_id"] for r in src_rows if r["text_id"]}
@@ -747,7 +894,9 @@ class Generator:
             if _summary_exists(self.conn, fold_sid, self.cfg["model"], "fold-v1"):
                 sids.append(fold_sid)
                 continue
-            if self._stage_fold(wp, fold_sid, label, batch):
+            # A fold grounds against only its own batch's chunks (todo:84c46b2f).
+            if self._stage_fold(wp, fold_sid, label, batch,
+                               _lazy_ground(lambda batch=batch: _span_chunk_bodies(wp, batch))):
                 logger.info(f"  [l2/fold] {fold_sid}")
                 sids.append(fold_sid)
                 continue
@@ -761,7 +910,9 @@ class Generator:
             return []
         return sids
 
-    def _stage_fold(self, wp, sid, label, src_rows) -> bool:
+    def _stage_fold(self, wp, sid, label, src_rows, echo_src) -> bool:
+        """echo_src: a zero-arg callable (see `_lazy_ground`) — same deferred
+        raw-chunk-ground contract as `_stage_l2_from`."""
         joined = _join_summaries(src_rows)
         n = count_tokens(joined)
         if n > L2_INPUT_BUDGET:
@@ -772,8 +923,9 @@ class Generator:
         prompt = render("fold-v1", work_label=wp["label"], span_first=first,
                         span_last=last, budget_words=budget_words(275)) \
             + "\n\n---\nINPUT:\n\n" + joined
+        # Echo vs raw chunk bodies, not the summary join (todo:84c46b2f).
         body = self._attempt(self._preamble(wp), prompt,
-                             lambda r: _v_prose(r, 200, 350, joined), compress_to=275)
+                             lambda r: _v_prose(r, 200, 350, echo_src()), compress_to=275)
         if not body:
             return False
         self._insert_summary(sid, wp, None, 0, label, None,

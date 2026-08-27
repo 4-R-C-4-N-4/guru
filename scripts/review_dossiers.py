@@ -55,8 +55,15 @@ def _table(rid: str) -> tuple[str, int]:
 def cmd_sample(conn, args):
     cfg_k = args.k
     if args.level:
+        # Level 2 holds the final work L2 (summary_id='sum:'||work_id) AND the
+        # never-promoted hierarchical volume-part rows ('sum:'||work_id||':'||key,
+        # prompt_version l2-v2-part). promote_dossiers.py only ships the final
+        # work L2, so pin the review sample to it — same disambiguation the
+        # generator applies in _accepted_l2 — or part rows dilute the review
+        # budget and scramble the template-defect clustering the pass exists to do.
         rows = conn.execute(
-            "SELECT * FROM staged_summaries WHERE level=? AND status='pending'", (args.level,)).fetchall()
+            "SELECT * FROM staged_summaries WHERE level=? AND status='pending'"
+            " AND (level<>2 OR summary_id='sum:'||work_id)", (args.level,)).fetchall()
         keyfn = lambda r: r["work_id"].split(".")[0]
     else:
         rows = conn.execute(
@@ -95,9 +102,13 @@ def _stage_input(conn, table, row) -> str:
             qs = ",".join("?" for _ in sids)
             rs = conn.execute(f"SELECT summary_id, section_span, body FROM staged_summaries"
                               f" WHERE summary_id IN ({qs})"
-                              f" AND status IN ('pending','accepted')", sids).fetchall()
+                              f" AND status IN ('pending','accepted') ORDER BY id", sids).fetchall()
             # preserve the generator's input order (child_summary_ids is stored
-            # in plan order; an unordered IN-query scrambles remediated rows)
+            # in plan order; an unordered IN-query scrambles remediated rows).
+            # ORDER BY id + last-write-wins keeps the latest generation per
+            # summary_id — the same row _rows_by_ids (id DESC LIMIT 1) fed the
+            # generator — so a regenerated sid shows its current body, not a
+            # nondeterministically-picked superseded one.
             by_sid = {r["summary_id"]: r for r in rs}
             ordered = [by_sid[sid] for sid in sids if sid in by_sid]
             return "\n\n".join(f"[{r['section_span']}] {r['body']}" for r in ordered)

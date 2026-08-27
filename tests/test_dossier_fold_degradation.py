@@ -89,7 +89,7 @@ def patch_corpus(monkeypatch):
                         lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
                                                     f"p{i}") for i in range(1, 5)])
     # keep _budget_pack REAL — it is a primitive under reuse
-    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids: "body text " * 50)
+    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids, **_: "body text " * 50)
     # Deterministic stand-in for the prose contract: word-count band only.
     # The real _v_prose depends on the tokenizer, which makes canned fixtures
     # brittle; the machinery under test only needs a band and an echo source.
@@ -178,6 +178,84 @@ def test_stage_l1_skips_already_folded_span_on_rerun(db):
     gen = FakeGen([], db)
     gen.stage_l1(wp)
     assert gen.calls == 0  # skipped entirely — no regeneration of either kind
+
+
+# A 15-word run that appears in every sub-summary — legitimate reuse in the
+# merge, since it never appears in the raw chunk ground below.
+SUB_CLAUSE = ("returns through veiled correspondences to the same primordial "
+             "source of all creation before circling back")
+# A 15-word run that appears in the raw chunk ground — a genuine echo the
+# merge step must still reject regardless of its source.
+RAW_CLAUSE = ("verily the ancient tablet declares that the hidden fire sleeps "
+             "beneath the sevenfold mountain until the appointed hour arrives")
+
+
+def _bump(clause: str, filler_n: int) -> str:
+    # 7-word capitalised lead so `clause` lands at word index 7 — one of the
+    # shingle guard's stride-7 check windows.
+    lead = "Sub summary prose that surveys the section"
+    tail = " ".join(f"detail{i}" for i in range(filler_n))
+    return f"{lead} {clause} {tail}"
+
+
+def patch_corpus_with_raw_ground(monkeypatch, raw_ground: str):
+    monkeypatch.setattr(bd, "load_text_chunks",
+                        lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
+                                                    f"p{i}") for i in range(1, 5)])
+    monkeypatch.setattr(gd, "_chunk_bodies", lambda ids, **_: raw_ground)
+    # real _v_prose (not the fake word-count stand-in) so the shingle guard
+    # actually runs against the ground text this test cares about
+
+
+def test_fold_merge_accepts_reuse_of_a_sub_summary_clause(db, monkeypatch):
+    """The merge pass (todo:84c46b2f follow-up) echo-checks against the span's
+    raw chunk bodies, not the joined sub-summaries: a clause repeated across
+    the 4 canned sub-summaries — which would echo-match the OLD join-based
+    ground — is legitimate synthesis reuse and must be accepted when it does
+    not appear in the raw chunk ground."""
+    raw_ground = "Chunk ground text with no overlap at all in this passage."
+    patch_corpus_with_raw_ground(monkeypatch, raw_ground)
+    sub_body = _bump(SUB_CLAUSE, filler_n=80)
+    merged = _bump(SUB_CLAUSE, filler_n=220)
+    gen = FakeGen([sub_body, sub_body, sub_body, sub_body, merged], db)
+    assert gen._fold_l1(WP, SPAN, sid_of(SPAN)) is True
+    assert gen.inserted == [(sid_of(SPAN), "l1-v3-folded")]
+
+
+def test_fold_merge_still_rejects_a_genuine_raw_chunk_echo(db, monkeypatch):
+    """The guard's original intent survives: a merged output that echoes a raw
+    chunk passage verbatim is still caught, even though it never appeared in
+    any sub-summary the merge was given."""
+    raw_ground = "Chunk ground opens here. " + RAW_CLAUSE + " and the chunk ends."
+    patch_corpus_with_raw_ground(monkeypatch, raw_ground)
+    sub_body = _bump(SUB_CLAUSE, filler_n=80)
+    merged_echo = _bump(RAW_CLAUSE, filler_n=220)
+    gen = FakeGen([sub_body, sub_body, sub_body, sub_body,
+                   merged_echo, merged_echo, merged_echo], db)
+    assert gen._fold_l1(WP, SPAN, sid_of(SPAN)) is False
+    assert db.execute("SELECT COUNT(*) FROM staged_summaries").fetchone()[0] == 0
+
+
+def test_fold_merge_reuses_sub_reads_instead_of_re_reading_chunks(db, monkeypatch):
+    """merge_ground must be built by concatenating the sub_src strings each
+    sub-batch already read, not by re-opening every chunk TOML for the span a
+    second time (todo:84c46b2f review) — _chunk_bodies should be called
+    exactly once per sub-batch (4), never a 5th time for the merge."""
+    monkeypatch.setattr(bd, "load_text_chunks",
+                        lambda trad, tid: [bd.Chunk(f"x.t.{i:03d}", None, 1200,
+                                                    f"p{i}") for i in range(1, 5)])
+    calls = []
+
+    def counting_chunk_bodies(ids, **_):
+        calls.append(tuple(ids))
+        return "Chunk ground text with no overlap at all in this passage."
+
+    monkeypatch.setattr(gd, "_chunk_bodies", counting_chunk_bodies)
+    sub_body = _bump(SUB_CLAUSE, filler_n=80)
+    merged = _bump(SUB_CLAUSE, filler_n=220)
+    gen = FakeGen([sub_body, sub_body, sub_body, sub_body, merged], db)
+    assert gen._fold_l1(WP, SPAN, sid_of(SPAN)) is True
+    assert len(calls) == 4          # one per sub-batch, no extra merge-time read
 
 
 def test_stage_l1_falls_through_to_fold_when_attempt_returns_none(db, monkeypatch):

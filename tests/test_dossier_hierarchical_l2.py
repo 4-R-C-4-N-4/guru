@@ -260,7 +260,7 @@ def test_fold_failure_aborts_tree_no_partial_final(db, monkeypatch):
         _l1(db, i, cid, words=40)
 
     class FoldFails(FakeGen):
-        def _stage_fold(self, wp, sid, label, src_rows):
+        def _stage_fold(self, wp, sid, label, src_rows, echo_src):
             return False
 
     gen = FoldFails([PART_OK], db)  # only vol-2's part call reaches the LLM
@@ -281,10 +281,11 @@ def test_partition_failure_aborts_final(db, monkeypatch):
         _l1(db, i, cid, words=40)
 
     class Vol2Fails(FakeGen):
-        def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level):
+        def _stage_l2_from(self, wp, sid, span, src_rows, pv, *, level, echo_src, joined=None):
             if sid.endswith(":vol-2"):
                 return False
-            return super()._stage_l2_from(wp, sid, span, src_rows, pv, level=level)
+            return super()._stage_l2_from(wp, sid, span, src_rows, pv,
+                                          level=level, echo_src=echo_src, joined=joined)
 
     gen = Vol2Fails([PART_OK], db)  # vol-1 part succeeds; vol-2 forced to fail
     gen.stage_l2(_wp("x.t.001", "x.t.002", "x.t.003", "x.t.004"))
@@ -293,6 +294,20 @@ def test_partition_failure_aborts_final(db, monkeypatch):
     assert "sum:w:vol-1" in ids   # the surviving volume did stage
     assert "sum:w:vol-2" not in ids
     assert "sum:w" not in ids     # but the final work L2 was refused
+
+
+def test_partition_tolerates_volume_without_label(monkeypatch):
+    """`label` is optional in a volume rule — _load_partition_rules only
+    requires key + url_match (see test_load_partition_rules_degrades_on_bad_config,
+    which keeps a label-less volume). _partition_l1s must fall back to the work
+    label for such a volume rather than KeyError-ing mid-generation."""
+    monkeypatch.setattr(gd, "_chunk_source_url", _url_for)
+    monkeypatch.setattr(gd, "PARTITION_RULES",
+                        {"w": [{"key": "vol-1", "url_match": "/sd1-"}]})  # no label
+    wp = _wp("x.t.001", "x.t.003")  # both source_url /sd1- → all key to vol-1
+    l1s = [{"section_span": "S1"}, {"section_span": "S2"}]
+    parts = gd._partition_l1s(wp, l1s)
+    assert [(k, label) for k, label, _ in parts] == [("vol-1", "Work W")]
 
 
 def test_load_partition_rules_degrades_on_bad_config(tmp_path):
