@@ -410,3 +410,19 @@ psychopomp_journey = ["psychopomp"]
 anamnesis = ["recollection"]
 watchers_descent = ["nephilim"]
 alchemical_work = ["alchemy", "magnum opus"]
+
+# — seeker-vocabulary gaps surfaced by the golden-set retrieval review
+#   (todo:697f9e58). Each: a DISTINCTIVE term absent from the concept label,
+#   routing to a well-tagged concept. Deliberately conservative — generic tokens
+#   ("mind", "divine", "one", "word") are omitted because the per-word matcher
+#   would over-fire them. Terms whose word already sits in the label are skipped
+#   (self-match). NOTE: this pass cannot help wu_wei (concept has 0 EXPRESSES
+#   edges — a tagging gap, not an alias gap) or "nous"→Corpus-Hermeticum
+#   (that text expresses logos, not mentalism); see the ticket.
+mentalism = ["nous", "universal mind"]
+correspondence = ["as above so below"]
+numerical_mysticism = ["gematria", "isopsephy"]
+world_tree_axis = ["axis mundi"]
+opposites_transcended = ["coincidentia oppositorum"]
+evil_as_privation = ["privatio boni"]
+spirit_conjuration = ["evocation"]
