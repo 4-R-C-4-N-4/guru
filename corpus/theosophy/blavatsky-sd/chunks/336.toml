@@ -1,0 +1,15 @@
+[chunk]
+id = "theosophy.blavatsky-sd.336"
+tradition = "theosophy"
+text_name = "The Secret Doctrine"
+section = "Page 50 (part 6)"
+translator = ""
+source_url = "https://www.sacred-texts.com/the/sd/sd2-0-pn.htm"
+token_count = 117
+
+[content]
+body = "Suffice, then, to us the strong probability that a people, now unknown to history, lived during the Miocene period of modern science, at a time when Greenland was an almost tropical land.\n\n------- N OTE.\n\nThe reader is requested to bear in mind that the first and the following sections are not strictly consecutive in order of time.\n\nIn the first Section the Stanzas which form the skeleton of the exposition are given, and certain important points commented upon and explained.\n\nIn the subsequent sections various additional details are gathered, and a fuller explanation of the subject is attempted."
+
+[annotations]
+concepts = []
+related_chunks = []
