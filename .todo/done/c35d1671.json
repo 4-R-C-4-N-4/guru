@@ -1,13 +1,13 @@
 {
   "id": "c35d1671",
   "type": "bug",
-  "state": "open",
+  "state": "done",
   "summary": "blavatsky-sd corpus never materialized under corpus/theosophy/ — DB migrated to theosophy but tradition swap never landed on main; graph_bootstrap rebuild would drop all 727 chunks",
   "source": {
     "type": "human"
   },
   "created_at": "2026-09-02T00:32:55.456Z",
-  "updated_at": "2026-09-02T00:33:29.967Z",
+  "updated_at": "2026-09-02T00:38:03.173Z",
   "files": [
     {
       "path": "sources/manifest.toml",
@@ -45,5 +45,13 @@
       "content": "Root cause: the theosophy tradition swap (feat/blavatsky) was applied to the live DB but never merged to main, and its materialized corpus/theosophy/blavatsky-sd/ was never pushed (origin has 0 of these files; local feat/blavatsky has metadata.toml + 727 chunk toml with ids exactly matching the live DB). RISK: a graph_bootstrap rebuild drops all 727 blavatsky chunks. FIX: land onto main the exact corpus/theosophy/blavatsky-sd/ from feat/blavatsky + swap manifest tradition to theosophy + move chunking config to chunking/theosophy/blavatsky-sd.toml. This reconciles git with the already-live DB; rebuild becomes idempotent and lossless.",
       "confidence": "high"
     }
-  ]
+  ],
+  "resolution": {
+    "commit": "678ccbc1",
+    "resolved_at": "2026-09-02T00:38:03.173Z",
+    "resolved_by": "unknown",
+    "test_file": "tests/test_manifest_corpus_materialized.py",
+    "test_function": "test_blavatsky_sd_materialized",
+    "note": "Materialized corpus/theosophy/blavatsky-sd/ (727 chunks + metadata) with ids exactly matching the live DB; swapped manifest tradition to theosophy; moved chunking config to chunking/theosophy/. Verified graph_bootstrap rebuild is idempotent/lossless on a DB copy (0 corpus-only, 0 db-only ids)."
+  }
 }
