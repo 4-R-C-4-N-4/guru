@@ -1,0 +1,49 @@
+{
+  "id": "c35d1671",
+  "type": "bug",
+  "state": "open",
+  "summary": "blavatsky-sd corpus never materialized under corpus/theosophy/ — DB migrated to theosophy but tradition swap never landed on main; graph_bootstrap rebuild would drop all 727 chunks",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-02T00:32:55.456Z",
+  "updated_at": "2026-09-02T00:33:29.967Z",
+  "files": [
+    {
+      "path": "sources/manifest.toml",
+      "lines": [
+        1207,
+        1208
+      ]
+    }
+  ],
+  "tags": [
+    "corpus",
+    "blavatsky",
+    "tradition-migration",
+    "rebuild-safety"
+  ],
+  "analysis": [
+    {
+      "timestamp": "2026-09-02T00:33:29.892Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Live data/guru.db: 727 chunk nodes theosophy.blavatsky-sd.001..727 + theosophy tradition node (DB migration cd699484 / todo-4ea3dcc5 was applied to the live DB). main: manifest tradition=western_esoteric, chunking config at chunking/western_esoteric/blavatsky-sd.toml, and ZERO corpus toml for blavatsky-sd. corpus/ is git-tracked (6261 files) and is the source of truth graph_bootstrap.py walks.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-09-02T00:33:29.926Z",
+      "author": "Hermes Agent",
+      "type": "evidence",
+      "content": "Chunk BODIES are not in the DB: nodes stores only id/type/label/tradition_id/metadata_json; body lives solely in corpus toml [content].body. So the DB alone cannot regenerate corpus toml; a re-chunk from raw would drift chunk boundaries/ids away from the 727 live nodes, orphaning embeddings/tags/edges. Fix must recover the EXACT toml that seeded the DB, not re-chunk.",
+      "confidence": "high"
+    },
+    {
+      "timestamp": "2026-09-02T00:33:29.967Z",
+      "author": "Hermes Agent",
+      "type": "conclusion",
+      "content": "Root cause: the theosophy tradition swap (feat/blavatsky) was applied to the live DB but never merged to main, and its materialized corpus/theosophy/blavatsky-sd/ was never pushed (origin has 0 of these files; local feat/blavatsky has metadata.toml + 727 chunk toml with ids exactly matching the live DB). RISK: a graph_bootstrap rebuild drops all 727 blavatsky chunks. FIX: land onto main the exact corpus/theosophy/blavatsky-sd/ from feat/blavatsky + swap manifest tradition to theosophy + move chunking config to chunking/theosophy/blavatsky-sd.toml. This reconciles git with the already-live DB; rebuild becomes idempotent and lossless.",
+      "confidence": "high"
+    }
+  ]
+}
