@@ -245,7 +245,7 @@ def load_works_rows() -> list[dict]:
     """All 52 works (grouped + singletons) from the works layer."""
     from works import load_works
     return [{"id": w.id, "tradition": w.tradition, "label": w.label,
-             "members": list(w.members)}
+             "members": list(w.members), "kind": w.kind}
             for w in sorted(load_works().values(), key=lambda x: x.id)]
 
 
@@ -688,10 +688,10 @@ def emit_copies(
     emit_copy_end(f)
 
     # works — before texts (texts.work_id FK)
-    emit_copy_start(f, schema, "works", ["id", "tradition", "label", "member_text_ids"])
+    emit_copy_start(f, schema, "works", ["id", "tradition", "label", "member_text_ids", "kind"])
     for r in load_works_rows():
         f.write(f"{copy_esc(r['id'])}\t{copy_esc(r['tradition'])}\t"
-                f"{copy_esc(r['label'])}\t{copy_esc_array(r['members'])}\n")
+                f"{copy_esc(r['label'])}\t{copy_esc_array(r['members'])}\t{copy_esc(r['kind'])}\n")
     emit_copy_end(f)
 
     # texts

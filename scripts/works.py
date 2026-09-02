@@ -25,6 +25,7 @@ class Work:
     tradition: str          # tradition *directory* name (chunk-id prefix)
     members: tuple[str, ...]  # text_ids in reading order
     grouped: bool           # False for implicit singletons
+    kind: str = "primary"   # "primary" root text | "synthesis" survey (works.toml `synthesis`)
 
 
 def _corpus_texts() -> dict[str, tuple[str, str]]:
@@ -46,7 +47,13 @@ def load_works(works_toml: Path = WORKS_TOML) -> dict[str, Work]:
     works: dict[str, Work] = {}
     claimed: dict[str, str] = {}
 
-    declared = tomllib.load(open(works_toml, "rb")).get("work", [])
+    data = tomllib.load(open(works_toml, "rb"))
+    declared = data.get("work", [])
+    # Work kind (todo:9445cd73): only synthesis works are listed; everything else
+    # defaults to "primary". Keys on work_id, so it applies to grouped works and
+    # implicit singletons alike.
+    synthesis_ids = set(data.get("synthesis", []))
+    kind_of = lambda wid: "synthesis" if wid in synthesis_ids else "primary"
     for w in declared:
         wid = w["id"]
         members = tuple(w["members"])
@@ -61,14 +68,19 @@ def load_works(works_toml: Path = WORKS_TOML) -> dict[str, Work]:
             raise ValueError(f"work {wid}: members span traditions {sorted(trads)}")
         if (declared_trad := w["tradition"]) not in trads:
             raise ValueError(f"work {wid}: declared tradition {declared_trad!r} != members' {trads.pop()!r}")
-        works[wid] = Work(wid, w["label"], declared_trad, members, grouped=True)
+        works[wid] = Work(wid, w["label"], declared_trad, members, grouped=True, kind=kind_of(wid))
 
     for text_id, (trad, name) in texts.items():
         if text_id in claimed:
             continue
         if text_id in works:
             raise ValueError(f"singleton {text_id} collides with a declared work id")
-        works[text_id] = Work(text_id, name, trad, (text_id,), grouped=False)
+        works[text_id] = Work(text_id, name, trad, (text_id,), grouped=False, kind=kind_of(text_id))
+
+    # A synthesis id that names no work is a typo — fail loudly rather than
+    # silently classify nothing (todo:9445cd73).
+    if unknown := (synthesis_ids - works.keys()):
+        raise ValueError(f"works.toml synthesis: unknown work id(s) {sorted(unknown)}")
 
     return works
 

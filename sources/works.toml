@@ -4,6 +4,28 @@
 # work with work_id = text_id. Pure mapping — no text/chunk ids change.
 # Members are in reading order. Every work must be single-tradition.
 
+# ── Work kind: primary vs synthesis (todo:9445cd73) ──────────────────────
+# `kind` classifies a work as a PRIMARY root text or a modern SYNTHESIS/secondary
+# survey. It drives guru-web's retrieval primary floor (docs/retrieval §8.1a): a
+# relevant primary crowded out of top-15 is promoted by yielding a synthesis work's
+# redundant slot — no score change, synthesis never dropped. Default is `primary`;
+# only synthesis works are listed here (work_ids; covers grouped and singleton
+# works alike). Classify at manifest-entry against the dossier (docs/ingest/02).
+# Reviewed 2026-09-02 from work_dossiers: each below calls itself a synthesis,
+# encyclopedic survey, compilation, or secondary exposition. renaissance_hermeticism
+# (Agrippa/Paracelsus/Bruno) is deliberately KEPT primary — early-modern root texts.
+synthesis = [
+    "blavatsky-sd",                    # theosophy — "a synthesis of Science, Religion, and Philosophy"
+    "secret-teachings-of-all-ages",    # western_esoteric — "encyclopedic survey of Western esotericism"
+    "kybalion",                        # western_esoteric — "a synthesis of Hermetic Teachings" / compilation
+    "book-of-ceremonial-magic",        # western_esoteric — Waite's "synthesis of the grimoire tradition"
+    "transcendental-magic",            # western_esoteric — Lévi's 19th-c. systematic treatise
+    "tarot-of-the-bohemians",          # western_esoteric — Papus, modern occult treatise
+    "tertium-organum",                 # western_esoteric — Ouspensky, modern esoteric synthesis
+    "psychic-self-defence",            # western_esoteric — Fortune 1930, modern occult study
+    "life-and-doctrines-boehme",       # christian_mysticism — secondary EXPOSITION of Boehme (tradition-proxy misses this one)
+]
+
 [[work]]
 id = "agrippa-natural-magic"
 label = "Occult Philosophy, Book I: Natural Magic (Agrippa)"
