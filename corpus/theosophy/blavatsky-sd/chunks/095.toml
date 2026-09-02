@@ -1,0 +1,15 @@
+[chunk]
+id = "theosophy.blavatsky-sd.095"
+tradition = "theosophy"
+text_name = "The Secret Doctrine"
+section = "Page 12 (part 9)"
+translator = ""
+source_url = "https://www.sacred-texts.com/the/sd/sd1-1-09.htm"
+token_count = 94
+
+[content]
+body = "The \"Lemuro-Atlantean\" was a highly civilized race, and if one accepts tradition, which is better history than the speculative fiction which now passes under that name, he was higher than we are with all our sciences and the degraded civilization of the day: at any rate, the Lemuro-Atlantean of the closing Third Race was so.\n\nAnd now we may return to the Stanzas.\n\n------- [[This page continued in next section]]"
+
+[annotations]
+concepts = []
+related_chunks = []

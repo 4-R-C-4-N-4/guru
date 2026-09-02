@@ -1,0 +1,7 @@
+tradition = "theosophy"
+text_id = "blavatsky-sd"
+text_name = "The Secret Doctrine"
+translator = ""
+source_url = "https://www.sacred-texts.com/the/sd/sd2-0-co.htm"
+sections_format = "page"
+chunk_count = 727
