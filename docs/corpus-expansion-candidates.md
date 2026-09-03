@@ -707,7 +707,67 @@ No modern Japanese new religions (Tenrikyo, Soka Gakkai, etc.) were found on sac
 
 4. **D.T. Suzuki**: The single most important Zen popularizer. *Manual of Zen Buddhism* (1935) is PD on sacred-texts — 20 pages, ~? KB each. Should be Tier 2 priority for Buddhism depth.
 
-5. **Shinto expansion**: Only the Kojiki is held. *The Book of Rites* (ritual texts) and *Records of the Grand Historian* (Ssu-yu-ki, 1898) are on sacred-texts under `chi/`. Worth checking if PD.
+5. **Shinto expansion**: Only the Kojiki is held (Section I: Beginning of Heaven and Earth, ~4.5KB). The Kojiki is hosted in **two editions** on the new sacred-texts.com: `book/shi-kojiki` (Chamberlain 1919) and `book/the-kojiki-2` (trans. anon.). Both have the full Section I–CLXX sections (the kami age is Sections I–XX), but the only section currently in the corpus is Section I (kj008.htm). A fuller Shinto animism acquisition would require either the full Kojiki (189 sections via `shi/kj/kj001–189.htm`) or the **Nihongi** (Nihon Shoki / "Chronicles of Japan", 4 volumes `nihon0–3.htm`), which parallel the Kojiki with expanded kami genealogies. **Neither is yet in the manifest.**
+
+---
+
+## 10. Shinto animism: full-kami sources (explored 2026-08-22)
+
+User requested coverage of texts that "talk about how everything has a spirit" — the Shinto kami worldview. The existing corpus has only 1 Shinto source (Kojiki §1, 4.5KB). Three animism-relevant candidates found, all on the legacy sacred-texts.com URL space (now JS-rendered but text-content still extractable in the HTML source):
+
+### 10.1 Kojiki — Full (189 sections, `shi/kj/kj001–189.htm`) — **highest value**
+
+- **Edition:** Basil Hall Chamberlain, 1919 (same translator as the existing corpus entry). US-PD.
+- **Structure:** The full Kojiki is 189 pages on sacred-texts:
+  - `kj001–kj007`: Intro, Translation, Preface, "Record of Ancient Matters"
+  - `kj008–kj035`: **Sections I–XXVIII** — the kami age (cosmogony → deity genealogies → island formation → Eight-Span-Sword dynasty)
+  - `kj036–kj189`: **Sections XXIX–CLXXX** — imperial line (Yamato-den, 5 emperors)
+  - `kj188–kj189`: Appendices (Chronology, etc.)
+- **Animism content:** Sections I (beginnings), II (Seven Divine Generations), XVI (the "Door of the Heavenly Rock-Dwelling" — Amaterasu hiding in a cave, kami gathering), XVIII (Eight-Forked Serpent) are the core kami/animism passages. The text is suffused with the concept that **kami** (spirits/deities) inhabit natural features: rocks, trees, mountains, waterfalls, the sun, the moon.
+- **Format:** Individual pages, ~10–80KB each. **Old-style href links are NOT present** in the new JS-rendered index — the page-index listing must use a manifest URL list or the `/book/the-kojiki-2/read/page-index` endpoint.
+- **Note:** Section XIV is numbered "XIV" in the index but "kjv14" in some URLs — verify before ingest.
+
+### 10.2 Nihongi (Nihon Shoki / Chronicles of Japan) — 4 volumes (`shi/nihon0–3.htm`)
+
+- **Edition:** William George Aston (1896, 1897), trans. of Shoku Nihongi. Two editions on sacred-texts:
+  - `shi/nihon0.htm`: Part 1 — "Age of the kami" (co-smogenesis, chaotic egg, Heaven-Earth separation, "divine beings produced between them")
+  - `shi/nihon1.htm`: Part 2 — Imperial line
+  - `shi/nihon2.htm`: Part 3 — Later imperial history
+  - `shr/nihon3.htm`: Part 4 — Later rulers (Koryo/Pekche/Silla relations)
+- **Animism content:** Part 1's kami age is parallel to the Kojiki but more elaborate — more kami names, more localized spirit-concepts. The Nihongi describes kami as **yorishiro** (vessels/invitations for the divine), the concept that kami *descend* (kudasu) into the material world.
+- **Format:** 4 large single-file pages, each ~300–370KB. `format = "html"` → `paragraph-group` chunking.
+- **Note:** `nihon0.htm` redirects via 301 to the new domain. Content is in the HTML source.
+
+### 10.3 In Ghostly Japan — Lafcadio Hearn (1900) — **best pure-animism coverage**
+
+- **URL:** `https://sacred-texts.com/shi/igj/index.htm` → 17 chapter pages (`igj01.htm`–`igj17.htm` on legacy format, or `/book/in-ghostly-japan/read/<chapter>` on the new site)
+- **Chapters (legacy titles):**
+  1. Gleanings in Buddha-Fields (Buddhist, but sets the supernatural tone)
+  2. In Ghostly Japan (introductory essays)
+  3. Lafcadio Hearn's Japan (cultural context)
+  4. The Dream of a Summer Day (Banchō Sarayashiki ghost story)
+  5. The Incident of the Aoyagi Forehead
+  6. Ingwa Banashi (hungry ghost tales — directly about spirits unable to move on)
+  7. A Story of Divination (Supernatural divination)
+  8. Silkworms (Buddhist parable)
+  9. The Tengu (mountain kami/goblins — **direct kami content**)
+  10. The Fox (kitsune — shapeshifting spirit fox)
+  11. The Story of the Otui Wife
+  12. At Yaidzu (mountain spirits, kami)
+  13. Footprints of the Buddha
+  14. The Pied Beauty of the Bushi
+  15. A Passional Karma (Buddhist karmic ghost story)
+  16. The Pottage and the Beef
+  17. Odagoki (miscellaneous supernatural)
+- **Animism content:** Chapters on **Tengu** (mountain kami), **kitsune** (fox spirits), **ingwa** (hungry ghosts), and **ghosts** (revenant spirits) are the most relevant. Hearn writes from the perspective of an outsider documenting Japanese spirit-belief, but the spirits/kami are described as real forces in the world.
+- **Note:** Hearn is Irish/Greek-British writing about Japan — **outsider voice**. This is documentation of belief, not insider expression. Flag as "outsider" per the §0.2 editorial principle, but lighter — Hearn had deep respect for Japanese culture and lived in Japan for years (unlike the colonial-framed texts cut in §0.2).
+- **Format:** 17 pages, ~12–25KB each. `format = "html_multi"` → `page-as-chunk` per chapter.
+
+### Recommendation
+
+1. **Kojiki full** (§10.1) — the core Shinto source. Sections I–XX cover kami creation and early theological material. Skip Sections XXI+ (imperial history) — not animism.
+2. **Nihongi Part 1** (§10.2) — parallel kami-age myth, slightly different register. Worth having both for cross-comparison.
+3. **In Ghostly Japan** (§10.3) — the most explicitly "everything has a spirit" text. Tengu, kitsune, ingwa, and ghost stories all treat non-human entities as real spiritual agents.
 
 ---
 
