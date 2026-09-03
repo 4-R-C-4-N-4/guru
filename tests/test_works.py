@@ -7,7 +7,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 import pytest
-from works import WORKS_TOML, Work, load_works, work_of, _corpus_texts
+from works import (WORKS_TOML, Work, load_works, work_of, _corpus_texts,
+                   WorksConfigError, WORK_KINDS, PRIMARY, SYNTHESIS)
 
 
 @pytest.fixture(scope="module")
@@ -86,4 +87,41 @@ def test_validation_rejects_cross_tradition(tmp_path):
         'members = ["diamond-sutra", "kalevala"]\n'
     )
     with pytest.raises(ValueError, match="span traditions"):
+        load_works(bad)
+
+
+# ── work kind: primary vs synthesis (todo:9445cd73) ──────────────────────
+
+def test_kind_defaults_primary_and_marks_declared_synthesis(works):
+    # everything defaults to primary; the works.toml `synthesis` list is honored,
+    # covering singletons (blavatsky-sd) and, per classification, secondary
+    # expositions in a non-esoteric tradition (life-and-doctrines-boehme).
+    assert works["pistis-sophia"].kind == PRIMARY
+    assert works["agrippa-natural-magic"].kind == PRIMARY   # early-modern root text, not synthesis
+    assert works["blavatsky-sd"].kind == SYNTHESIS
+    assert works["life-and-doctrines-boehme"].kind == SYNTHESIS
+    assert all(w.kind in WORK_KINDS for w in works.values())
+
+
+def test_synthesis_list_applies_to_a_singleton(tmp_path):
+    good = tmp_path / "works.toml"
+    good.write_text('synthesis = ["diamond-sutra"]\n')  # a real text id (singleton here)
+    w = load_works(good)
+    assert w["diamond-sutra"].kind == SYNTHESIS
+    assert w["kalevala"].kind == PRIMARY  # untouched text id → default primary
+
+
+def test_unknown_synthesis_id_raises_worksconfigerror(tmp_path):
+    bad = tmp_path / "works.toml"
+    bad.write_text('synthesis = ["no-such-work"]\n')
+    with pytest.raises(WorksConfigError, match="unknown work id"):
+        load_works(bad)
+    # NOT a ValueError subclass — so guru/dossier.py build_ctx can't swallow it.
+    assert not issubclass(WorksConfigError, ValueError)
+
+
+def test_synthesis_must_be_a_list(tmp_path):
+    bad = tmp_path / "works.toml"
+    bad.write_text('synthesis = "kybalion"\n')  # bare string, not a list
+    with pytest.raises(WorksConfigError, match="must be a list"):
         load_works(bad)

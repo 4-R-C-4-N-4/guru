@@ -180,6 +180,8 @@ CREATE TABLE works (
     member_text_ids TEXT[] NOT NULL,
     -- primary root text vs modern synthesis/secondary survey (todo:9445cd73).
     -- Drives guru-web's retrieval primary floor (docs/retrieval §8.1a).
+    -- The allowed values mirror WORK_KINDS in scripts/works.py (SQL can't import
+    -- it) — keep the two in sync.
     kind            TEXT NOT NULL DEFAULT 'primary' CHECK (kind IN ('primary', 'synthesis'))
 );
 

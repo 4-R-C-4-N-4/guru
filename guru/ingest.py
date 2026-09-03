@@ -483,10 +483,15 @@ NODES: list[Node] = [
     Node("02-manifest-entry", "Add the [[source]] block", "command",
          _p_manifest,
          command="edit sources/manifest.toml",
-         gate="python3 scripts/acquire.py --dry-run --only {id}",
+         gate="python3 scripts/acquire.py --dry-run --only {id} && python3 scripts/works.py",
          notes=["Carry the vetting evidence into a comment on the entry — "
                 "what was checked, when, what the heading chain said. The "
-                "pistis-sophia block is the model."]),
+                "pistis-sophia block is the model.",
+                "Classify the work kind (primary vs synthesis): a synthesis work "
+                "MUST be added to `synthesis` in sources/works.toml. The gate's "
+                "`works.py` run validates that layer (a malformed or unknown "
+                "synthesis id fails here), so a mistyped classification is caught "
+                "at this node rather than silently defaulting to primary."]),
 
     Node("03-acquire", "Download the raw text", "command",
          _p_acquire,

@@ -54,7 +54,8 @@ CONTRASTS_SNAPSHOT = PROJECT_ROOT / "config" / "frozen_contrasts.toml"
 # ── canonical v2 pinning ──────────────────────────────────────────────
 # Bump SCHEMA_VERSION when schema/corpus-schema.sql changes; guru-web's
 # EXPECTED_SCHEMA_VERSION must advance in the same deploy.
-SCHEMA_VERSION = 4
+# v5 (todo:9445cd73): works.kind column added.
+SCHEMA_VERSION = 5
 EMBEDDING_MODEL = "ollama/nomic-embed-text"
 EMBEDDING_DIM = 768
 

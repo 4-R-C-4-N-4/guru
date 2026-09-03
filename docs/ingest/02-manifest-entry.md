@@ -56,13 +56,15 @@ only**, its work_id appended to `synthesis` in `sources/works.toml`.
 ## Gate
 
 ```sh
-python3 scripts/acquire.py --dry-run --only <source-id>
-# works layer resolves and every `synthesis` id names a real work (raises otherwise):
-python3 -c "import sys; sys.path.insert(0,'scripts'); from works import load_works; load_works()"
+python3 scripts/acquire.py --dry-run --only <source-id> && python3 scripts/works.py
 ```
 
-Resolves the entry and picks a downloader without fetching; the second command
-validates the kind classification.
+This is exactly the gate `python3 -m guru ingest status <id>` runs for this node.
+The first command resolves the manifest entry and picks a downloader without
+fetching; `python3 scripts/works.py` materializes the works layer and **fails if
+the kind classification is malformed** — a mistyped or unknown `synthesis` id
+raises rather than silently defaulting the work to `primary`. (It is CWD-robust —
+paths resolve from the script, so it runs from any directory.)
 
 ## Failure modes
 
