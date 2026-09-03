@@ -17,6 +17,20 @@ PROJECT_ROOT = Path(__file__).parent.parent
 CORPUS_DIR = PROJECT_ROOT / "corpus"
 WORKS_TOML = PROJECT_ROOT / "sources" / "works.toml"
 
+# Valid work kinds (todo:9445cd73). The SQL CHECK in schema/corpus-schema.sql
+# mirrors this list (SQL can't import it) — keep the two in sync.
+WORK_KINDS = ("primary", "synthesis")
+PRIMARY, SYNTHESIS = WORK_KINDS
+
+
+class WorksConfigError(Exception):
+    """A works.toml configuration error (malformed/unknown `synthesis` entry).
+
+    Deliberately NOT a ValueError: callers that catch ValueError to mean "work
+    not found" (guru/dossier.py `build_ctx`) would otherwise silently mask a
+    corpus-wide parse failure as a per-work "not a known work" for every work_id.
+    """
+
 
 @dataclass(frozen=True)
 class Work:
@@ -25,6 +39,7 @@ class Work:
     tradition: str          # tradition *directory* name (chunk-id prefix)
     members: tuple[str, ...]  # text_ids in reading order
     grouped: bool           # False for implicit singletons
+    kind: str = PRIMARY     # PRIMARY root text | SYNTHESIS survey (works.toml `synthesis`)
 
 
 def _corpus_texts() -> dict[str, tuple[str, str]]:
@@ -46,7 +61,17 @@ def load_works(works_toml: Path = WORKS_TOML) -> dict[str, Work]:
     works: dict[str, Work] = {}
     claimed: dict[str, str] = {}
 
-    declared = tomllib.load(open(works_toml, "rb")).get("work", [])
+    data = tomllib.load(open(works_toml, "rb"))
+    declared = data.get("work", [])
+    # Work kind (todo:9445cd73): only synthesis works are listed; everything else
+    # defaults to "primary". Keys on work_id, so it applies to grouped works and
+    # implicit singletons alike.
+    syn_raw = data.get("synthesis", [])
+    if not isinstance(syn_raw, list):
+        raise WorksConfigError(
+            f"works.toml: 'synthesis' must be a list of work ids, got {type(syn_raw).__name__}")
+    synthesis_ids = set(syn_raw)
+    kind_of = lambda wid: SYNTHESIS if wid in synthesis_ids else PRIMARY
     for w in declared:
         wid = w["id"]
         members = tuple(w["members"])
@@ -61,14 +86,22 @@ def load_works(works_toml: Path = WORKS_TOML) -> dict[str, Work]:
             raise ValueError(f"work {wid}: members span traditions {sorted(trads)}")
         if (declared_trad := w["tradition"]) not in trads:
             raise ValueError(f"work {wid}: declared tradition {declared_trad!r} != members' {trads.pop()!r}")
-        works[wid] = Work(wid, w["label"], declared_trad, members, grouped=True)
+        works[wid] = Work(wid, w["label"], declared_trad, members, grouped=True, kind=kind_of(wid))
 
     for text_id, (trad, name) in texts.items():
         if text_id in claimed:
             continue
         if text_id in works:
             raise ValueError(f"singleton {text_id} collides with a declared work id")
-        works[text_id] = Work(text_id, name, trad, (text_id,), grouped=False)
+        works[text_id] = Work(text_id, name, trad, (text_id,), grouped=False, kind=kind_of(text_id))
+
+    # A synthesis id that names no work is a typo — fail loudly rather than
+    # silently classify nothing (todo:9445cd73). Runs here, not earlier, because the
+    # full work id set (declared + implicit singletons) only exists once both loops
+    # above have materialized it. WorksConfigError (not ValueError) so build_ctx
+    # can't mask it.
+    if unknown := (synthesis_ids - works.keys()):
+        raise WorksConfigError(f"works.toml synthesis: unknown work id(s) {sorted(unknown)}")
 
     return works
 
@@ -76,3 +109,14 @@ def load_works(works_toml: Path = WORKS_TOML) -> dict[str, Work]:
 def work_of(works: dict[str, Work]) -> dict[str, str]:
     """text_id -> work_id over the full map."""
     return {m: w.id for w in works.values() for m in w.members}
+
+
+if __name__ == "__main__":
+    # Ingest gate for docs/ingest/02-manifest-entry.md (todo:9445cd73,fb522ee1):
+    # materialize the works layer, which raises on any works.toml misconfiguration
+    # — a malformed or unknown `synthesis` id (WorksConfigError), an unknown member,
+    # or a cross-tradition group. CWD-independent: WORKS_TOML/corpus resolve from
+    # __file__, so `python3 scripts/works.py` validates from any directory.
+    _w = load_works()
+    _syn = sorted(k for k, v in _w.items() if v.kind == SYNTHESIS)
+    print(f"works layer OK — {len(_w)} works, {len(_syn)} synthesis: {', '.join(_syn)}")

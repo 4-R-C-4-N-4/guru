@@ -108,6 +108,6 @@ def test_prefix_ddl_alter_and_comment():
     assert "COMMENT ON COLUMN corpus_new.concepts.family_id" in out
 
 
-def test_schema_version_is_4():
-    # v4 (2026-07-04): document-knowledge layer (works, work_dossiers, summary_nodes)
-    assert export.SCHEMA_VERSION == 4
+def test_schema_version_is_5():
+    # v5 (todo:9445cd73): works.kind column (primary vs synthesis)
+    assert export.SCHEMA_VERSION == 5
