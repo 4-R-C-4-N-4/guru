@@ -1,0 +1,15 @@
+{
+  "id": "92e23071",
+  "type": "chore",
+  "state": "open",
+  "summary": "Verify cross-tradition training signal, hand off to rellm v5 retrain",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-09-05T13:49:24.574Z",
+  "updated_at": "2026-09-05T13:49:24.739Z",
+  "relationships": {
+    "parent": "7b1d7388"
+  },
+  "description": "After the owner applies the queued decisions, confirm the 12 target concepts now carry older-tradition ACCEPTED staged_tags (was 0/44 cross-tradition for v4). Re-run the rellm denylist-export coverage check to show non-zero older-tradition rows for these concepts. Document the handoff: v5 retrain is rellm work (fresh snapshot + export via the landed denylist + same v4 recipe/config), updating rellm docs/qwen-3-4b-guru-v4-findings.md handoff section. DONE: verification query output showing cross-tradition rows present; handoff note written. Needs child 3 applied by owner."
+}
