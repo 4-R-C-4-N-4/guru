@@ -1,0 +1,20 @@
+{
+  "id": "a08fe227",
+  "type": "chore",
+  "state": "done",
+  "summary": "Assemble retrieval-targeted candidate chunk set for the 12 cross-tradition concepts",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-09-05T13:49:24.453Z",
+  "updated_at": "2026-09-05T15:02:28.372Z",
+  "relationships": {
+    "parent": "7b1d7388"
+  },
+  "description": "For each of the 12 target concepts, retrieve candidate chunks from OLDER traditions by definition-embedding over chunk_embeddings (fallback: lexical FTS over data/lexical-fts.db on the concept's signature language). Exclude the new corpus (theosophy/western_esoteric/gnosticism). Dedup to a union chunk-ids file. DONE: committed candidate manifest (concept->chunk_ids, JSONL per todo:ec154882) + deduped union chunk-ids file (~400-600 chunks) + per-concept/per-tradition counts; false-friend-prone hits flagged for the 27B step to filter (e.g. 'shells' matching seashells, not qliphoth).",
+  "resolution": {
+    "commit": "7e789b96",
+    "resolved_at": "2026-09-05T15:02:28.372Z",
+    "resolved_by": "unknown"
+  }
+}
