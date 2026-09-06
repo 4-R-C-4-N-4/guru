@@ -1,0 +1,20 @@
+{
+  "id": "577a88b7",
+  "type": "chore",
+  "state": "done",
+  "summary": "Run Qwen3.8-27B adjudication pass over the candidate chunks",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-09-05T13:49:24.489Z",
+  "updated_at": "2026-09-06T12:06:11.641Z",
+  "relationships": {
+    "parent": "7b1d7388"
+  },
+  "description": "Run scripts/tag_concepts.py on child-1's chunk-ids file (read_chunk_ids_file / chunk_ids path), --model Qwen3.8-27B-UD-Q4_K_XL.gguf, full 154 taxonomy, think-on (per guru-27b-tagging-thinking-on: launch via scripts/serve-llama.sh + run-*.sh, never edit them). Launch via ~/.local/bin/agent-run on the 3090 (ANNOUNCE GPU; llm stop after; single card). Writes staged_tags(pending). DONE: staged_tags rows present for all candidate chunks under the 27B teacher signature; run logged (agent-run); accept-count sanity-checked (teacher 71xxx ids, per guru-qbatch-verify-accept-count); NO auto-promote. Needs child 1's chunk-ids file.",
+  "resolution": {
+    "commit": "618a2a3c58b4f2f999db5cc13a3283aa2a085db2",
+    "resolved_at": "2026-09-06T12:06:11.641Z",
+    "resolved_by": "unknown"
+  }
+}
