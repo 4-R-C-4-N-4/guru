@@ -1,0 +1,20 @@
+{
+  "id": "34a846d5",
+  "type": "chore",
+  "state": "done",
+  "summary": "Curate to the target-concept delta and queue via /guru-review-tags",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-09-05T13:49:24.533Z",
+  "updated_at": "2026-09-06T12:06:11.721Z",
+  "relationships": {
+    "parent": "7b1d7388"
+  },
+  "description": "Filter the 27B proposals to the 12 target concepts on older-tradition chunks; reject lexical false-friends (seashells != qliphoth, etc.). Queue accept/reject via the guru-review HTTP API, queue-only (owner keeps the apply gate, per no-autopromote-tags-edges). DONE: accept/reject decisions queued and per-cell counts verified, unapplied. Needs child 2's staged rows.",
+  "resolution": {
+    "commit": "617f00f7acb8dddc4c757ab2edad2ea6d3e64beb",
+    "resolved_at": "2026-09-06T12:06:11.721Z",
+    "resolved_by": "unknown"
+  }
+}
