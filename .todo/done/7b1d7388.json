@@ -1,13 +1,13 @@
 {
   "id": "7b1d7388",
   "type": "feature",
-  "state": "open",
+  "state": "done",
   "summary": "Targeted 27B backfill: seed cross-tradition training data for tagger v5",
   "source": {
     "type": "agent"
   },
   "created_at": "2026-09-05T13:49:24.373Z",
-  "updated_at": "2026-09-05T13:49:24.574Z",
+  "updated_at": "2026-09-06T12:06:24.594Z",
   "description": "v4 cannot backfill the 44 drift-added concepts onto older traditions: all had 0 cross-tradition training rows (100% theosophy/western_esoteric/gnosticism). Fix: rerun Qwen3.8-27B on retrieval-targeted candidate chunks for the ~12 genuinely cross-tradition concepts (trinity, stellar_determinism, divine_immanence, initiation, divination, esoteric_lineage, exorcism, gender, spirit_conjuration, incarnation, qliphoth, talisman_magic), full 154-taxonomy, filter to fires, queue via /guru-review-tags (owner apply gate). Applied tags become v5 training positives. New-corpus-native psychism concepts (psychic_attack, etheric_projection, occult_police, aura, thought_form, etc.) EXCLUDED - no ancient home. Evidence: incarnation x Gita 27B=3/base=0/v4=0, in rellm docs/qwen-3-4b-guru-v4-findings.md.",
   "relationships": {
     "children": [
@@ -16,5 +16,11 @@
       "34a846d5",
       "92e23071"
     ]
+  },
+  "resolution": {
+    "commit": "e0a37b6233b1e68a1ff356f75c136976a11509ee",
+    "resolved_at": "2026-09-06T12:06:24.594Z",
+    "resolved_by": "unknown",
+    "note": "v5 cross-tradition backfill complete through verification. All 4 children done: candidate assembly (a08fe227), 27B tagging pass (577a88b7), review+queue (34a846d5), verify+handoff (92e23071). Node 4 PASS — all 12 target concepts now carry non-zero older-tradition live EXPRESSES rows (incarnation 0→19 incl. hinduism). Owner applied. Remaining v5 retrain is rellm-side (owner GPU call); handoff note in rellm docs/qwen-3-4b-guru-v4-findings.md."
   }
 }
