@@ -7,11 +7,11 @@
     "type": "agent"
   },
   "created_at": "2026-09-21T22:58:57.233Z",
-  "updated_at": "2026-09-21T23:03:04.105Z",
+  "updated_at": "2026-09-21T23:09:57.572Z",
   "tags": [
     "biblical-ingest"
   ],
-  "description": "Add the complete ASV (American Standard Version, 1901) text of Genesis (all 50 ch), the Gospel of John, and Revelation to the guru corpus as three primary singleton works under a new 'biblical' tradition. Source: openbibleinfo/American-Standard-Version-Bible (USX w/ paragraphs + footnotes, public domain). TWO streams: ingest (docs/ingest/ nodes 01-16, per text) then Pass D (docs/dossiers/ nodes D1-D6, per work) — Pass D forces a campaign bump c7->c8. Source-ids: genesis-asv, gospel-of-john-asv, revelation-asv. Genesis is ingested COMPLETE and tagged fully; the 12-50 lineage noise is culled at the node-11 REVIEW gate (not hand-pruned at tagging), keeping anything worthwhile. Plan STOPS at every user gate: node 11 tag-review (queue-only), D3/D4 dossier gates, and the terminal node 15 publish + D6 export (user ships). Never auto-promote, never publish, never touch prod. Downstream/out-of-scope (guru-web): the new tradition needs an authorship-era assignment for the retrieval era-dampen lever.",
+  "description": "",
   "relationships": {
     "children": [
       "e602d07c",

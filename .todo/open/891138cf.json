@@ -7,7 +7,7 @@
     "type": "human"
   },
   "created_at": "2026-09-21T22:58:58.001Z",
-  "updated_at": "2026-09-21T23:03:03.833Z",
+  "updated_at": "2026-09-21T23:09:57.491Z",
   "tags": [
     "biblical-ingest",
     "user-gate"
@@ -15,5 +15,5 @@
   "relationships": {
     "parent": "defc90d7"
   },
-  "description": "Pass D (docs/dossiers/) stream — the document-knowledge layer. UNIT IS THE WORK: the three books are singleton works (work_id == text_id), each gets its own dossier + summary tree. HARD DEP: D1 requires every member text through ingest node 07 (ticket 41526ce1). Node D1 (plan-freeze): adding works to the frozen corpus forces a CAMPAIGN BUMP — current campaign is c7 (complete, 64/64); this is c8. Use the campaign-bump contract; re-plan whole (never partial), prior works' span ids carry forward. Node D2 (generate): provider=claude-code (fable-driven, input_budget=0, no folds) -> staged_summaries + staged_dossier_fields for the three works. DONE: span-plan-c8.json frozen incl. the 3 works; staged summary/dossier rows generated for each."
+  "description": "Pass D (docs/dossiers/) stream — the document-knowledge layer. UNIT IS THE WORK: the three books are singleton works (work_id == text_id), each gets its own dossier + summary tree. HARD DEP: D1 requires every member text through ingest node 07 (ticket 41526ce1). Node D1 (plan-freeze): adding works to the frozen corpus forces a CAMPAIGN BUMP — current campaign is c10; this is c11. Use the campaign-bump contract; re-plan whole (never partial), prior works' span ids carry forward. Node D2 (generate): provider is a campaign parameter set in config/dossiers.toml — DEFAULT is 'claude-code' / model 'claude-opus-4-8' (input_budget=0, no folds); ALTERNATIVE is 'llamacpp' on the 3090 with a local model (set input_budget 6000-8000, activates folds/map-reduce; GPU announce+permission per run). PROVIDER CHOICE PENDING USER. Produces staged_summaries + staged_dossier_fields for the three works. DONE: span-plan-c11 frozen incl. the 3 works; staged summary/dossier rows generated for each under the chosen provider."
 }
