@@ -1,0 +1,18 @@
+{
+  "id": "e97c22c5",
+  "type": "chore",
+  "state": "open",
+  "summary": "04-05 boilerplate survey + shared scripture chunk-config (chapter:verse labels)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.464Z",
+  "updated_at": "2026-09-21T22:58:57.504Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Nodes 04 (boilerplate-survey) + 05 (chunk-config) — the highest-leverage judgement. Design ONE shared scripture chunk strategy reused across all three books whose section labels read as chapter:verse (how a reader cites scripture from a printed edition). Decide paragraph-group (pericope, using USX paragraph marks) vs regex-section-split on verse markers; write chunking/biblical/{id}.toml for each. Any residual apparatus stripped via pre_strip_patterns. Record the reasoning in docs/ingest/decisions/{id}.md (why the chosen strategy, why alternatives rejected). DONE: 'python3 scripts/chunk.py --dry-run --only <id>' prints chapter:verse-style labels for each; decision doc written and marked done in ledger ('guru ingest done <id> 05-chunk-config')."
+}

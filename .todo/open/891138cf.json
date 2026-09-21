@@ -1,0 +1,19 @@
+{
+  "id": "891138cf",
+  "type": "chore",
+  "state": "open",
+  "summary": "15 publish — USER gate; hand back with ready-summary",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:58.001Z",
+  "updated_at": "2026-09-21T22:58:58.045Z",
+  "tags": [
+    "biblical-ingest",
+    "user-gate"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Node 15 (publish) — USER node, NOT executed by the driver. Do not sync corpus or touch prod VPS. Terminate the plan here: summarize what is staged and ready, confirm all upstream nodes [x], and hand the publish decision to the user. Restate the downstream guru-web follow-up (out of scope here): assign the 'biblical' tradition an authorship-era for the retrieval era-dampen lever."
+}

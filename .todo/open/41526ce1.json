@@ -1,0 +1,18 @@
+{
+  "id": "41526ce1",
+  "type": "chore",
+  "state": "open",
+  "summary": "06-08 chunk + clean-bodies + readability gate (all three)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.540Z",
+  "updated_at": "2026-09-21T22:58:57.577Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Nodes 06 (chunk) -> 07 (clean-bodies, run clean_bodies.py --apply --text after chunk) -> 08 (readability-gate). Produce corpus/biblical/{id}/ for each book, clean bodies, pass/decide readability. Verify emitted chunk SEQUENCE against the source's own numbering (the node-05 gap check), not just the total; add a row to tests/test_enumerated_text_counts.py if the strategy numbers units. DONE: corpus dirs populated, clean_bodies applied, readability decided, counts verified; nodes 06-08 [x] for each."
+}

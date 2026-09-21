@@ -1,0 +1,29 @@
+{
+  "id": "defc90d7",
+  "type": "feature",
+  "state": "open",
+  "summary": "Ingest ASV Genesis, John, Revelation under new 'biblical' tradition",
+  "source": {
+    "type": "agent"
+  },
+  "created_at": "2026-09-21T22:58:57.233Z",
+  "updated_at": "2026-09-21T22:58:58.001Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "description": "Add the complete ASV (American Standard Version, 1901) text of Genesis (all 50 ch), the Gospel of John, and Revelation to the guru corpus as three primary works under a new 'biblical' tradition. Source: openbibleinfo/American-Standard-Version-Bible (USX w/ paragraphs + footnotes, public domain). Follow the docs/ingest/ workbook node-by-node via 'python3 -m guru ingest status <id>'. Source-ids: genesis-asv, gospel-of-john-asv, revelation-asv. Plan STOPS at the user gates: node 11 (tag-review) is queue-only, node 15 (publish) is the user's. Never auto-promote tags/edges, never publish, never touch prod. Downstream/out-of-scope (guru-web): the new tradition needs an authorship-era assignment for the retrieval era-dampen lever.",
+  "relationships": {
+    "children": [
+      "e602d07c",
+      "0bb5076e",
+      "e97c22c5",
+      "41526ce1",
+      "43bd0caf",
+      "d41b5bfd",
+      "66e8f727",
+      "ccc92dc1",
+      "1b8ccf31",
+      "891138cf"
+    ]
+  }
+}
