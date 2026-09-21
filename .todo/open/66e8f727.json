@@ -7,7 +7,7 @@
     "type": "human"
   },
   "created_at": "2026-09-21T22:58:57.763Z",
-  "updated_at": "2026-09-21T22:58:57.807Z",
+  "updated_at": "2026-09-21T23:03:03.763Z",
   "tags": [
     "biblical-ingest",
     "gate"
@@ -15,5 +15,5 @@
   "relationships": {
     "parent": "defc90d7"
   },
-  "description": "Node 11 (tag-review) — GATE. Drive via the guru-review-tags skill: queue accept/reject/reassign decisions through the HTTP API ONLY. NEVER apply. Terminate this ticket by handing the queued backlog to the user for the apply gate. DONE: review decisions queued for all three books; user notified that the apply gate is theirs."
+  "description": "Node 11 (tag-review) — GATE. Drive via the guru-review-tags skill: queue accept/reject/reassign through the HTTP API ONLY, NEVER apply. This is where Genesis 12-50 noise is controlled: reject the low-value genealogy/lineage tags but KEEP anything worthwhile that surfaced from those chapters (the whole reason we tagged them fully at node 10). Record the 12-50 tagging-noise policy in docs/ingest/decisions/genesis-asv.md. Terminate by handing the queued backlog to the user for the apply gate. DONE: review decisions queued for all three; 12-50 low-value tags rejected, worthwhile kept; user notified the apply gate is theirs."
 }

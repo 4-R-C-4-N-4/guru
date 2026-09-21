@@ -1,0 +1,19 @@
+{
+  "id": "c5902ad2",
+  "type": "chore",
+  "state": "open",
+  "summary": "D5 Pass D: embed summaries",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T23:03:03.946Z",
+  "updated_at": "2026-09-21T23:03:03.988Z",
+  "tags": [
+    "biblical-ingest",
+    "dossiers"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Node D5 (embed). Generate summary_embeddings for the promoted dossier/summary nodes of the three works. DONE: summary_embeddings present; D5 [x] for each work."
+}

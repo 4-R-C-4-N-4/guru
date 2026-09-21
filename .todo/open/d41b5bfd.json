@@ -2,12 +2,12 @@
   "id": "d41b5bfd",
   "type": "chore",
   "state": "open",
-  "summary": "10 tag-concepts (GPU) — Genesis 12-50 deliberately under-tagged",
+  "summary": "10 tag-concepts (GPU) — tag all three books fully, no manual pruning",
   "source": {
     "type": "human"
   },
   "created_at": "2026-09-21T22:58:57.688Z",
-  "updated_at": "2026-09-21T22:58:57.728Z",
+  "updated_at": "2026-09-21T23:03:03.729Z",
   "tags": [
     "biblical-ingest",
     "gpu"
@@ -15,5 +15,5 @@
   "relationships": {
     "parent": "defc90d7"
   },
-  "description": "Node 10 (tag-concepts). Needs a llama.cpp server (GPU) — ANNOUNCE GPU use and get per-run permission before starting; 'llm stop' when done. Produce staged_tags for all three. Genesis is ingested COMPLETE but chapters 12-50 (patriarchal-narrative lineage) are deliberately held to minimal tagging to keep graph noise down; 1-11 tagged normally. Record the tagging-density decision in docs/ingest/decisions/genesis-asv.md. DONE: staged_tags rows exist for each book; Genesis 12-50 under-tagged per decision; qbatch accept counts verified."
+  "description": "Node 10 (tag-concepts). Needs a llama.cpp server (GPU) — ANNOUNCE GPU use and get per-run permission before starting; 'llm stop' when done. Tag all three books at normal density, INCLUDING Genesis 12-50 — do NOT hand-prune the lineage/patriarchal narrative here. Manual under-tagging pre-judges what's worthless; instead we tag fully so anything worthwhile in 12-50 still surfaces, and cull the noise at the node-11 review gate. DONE: staged_tags rows exist for each book (Genesis all 50 ch tagged normally); qbatch accept counts verified against intended."
 }
