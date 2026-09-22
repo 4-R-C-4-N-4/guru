@@ -63,7 +63,16 @@ def split(text: str, config: dict) -> list[Chunk]:
                 Optional keys: section_label_format (default "{n}"),
                                max_tokens (default 800),
                                group_size (default 1),
+                               group_by ("count" default | "tokens"),
                                section_enrichment (dict mapping ranges to labels)
+
+                group_by="tokens" packs consecutive sections greedily up to
+                max_tokens instead of a fixed group_size, always breaking on a
+                section boundary, and labels each chunk by its first-last range
+                (e.g. verse ranges "1:1-1:11"). Added for verse-addressed
+                scripture, where the citation unit is the verse but the retrieval
+                unit is a ceiling-sized run of them. See
+                docs/ingest/decisions/genesis-asv.md.
 
     Returns:
         List of Chunk objects (token_count=0; fill with tokens.count_tokens() after).
@@ -71,6 +80,8 @@ def split(text: str, config: dict) -> list[Chunk]:
     pattern = config["pattern"]
     label_fmt = config.get("section_label_format", "{n}")
     group_size = int(config.get("group_size", 1))
+    group_by = config.get("group_by", "count")
+    max_tokens = int(config.get("max_tokens", 800))
     enrichment = config.get("section_enrichment", {})
     enrichment_ranges = _parse_enrichment(enrichment) if enrichment else []
 
@@ -91,29 +102,50 @@ def split(text: str, config: dict) -> list[Chunk]:
         if body:
             sections.append((label_raw, body))
 
-    # Bundle consecutive sections into groups
-    chunks: list[Chunk] = []
-    for i in range(0, len(sections), group_size):
-        group = sections[i: i + group_size]
-        if not group:
-            continue
-
-        # Section label: use first section's label (or range if group_size > 1)
+    def _make_chunk(group: list[tuple[str, str]]) -> Chunk:
+        """Build a Chunk from a group of (label, body) sections, labelled by
+        the first-last range when the group spans more than one section."""
         first_label = group[0][0]
-        if group_size > 1 and len(group) > 1:
-            last_label = group[-1][0]
-            raw_label = f"{first_label}-{last_label}"
+        if len(group) > 1:
+            raw_label = f"{first_label}-{group[-1][0]}"
         else:
             raw_label = first_label
-
         if enrichment_ranges:
             formatted_label = _apply_enrichment(raw_label, label_fmt, enrichment_ranges)
         else:
             formatted_label = label_fmt.format(n=raw_label, heading=raw_label)
-
         body = "\n\n".join(b for _, b in group)
+        return Chunk(section_label=formatted_label, body=body)
 
-        chunks.append(Chunk(section_label=formatted_label, body=body))
+    chunks: list[Chunk] = []
+
+    if group_by == "tokens":
+        # Greedy pack sections up to max_tokens, always breaking on a section
+        # boundary (a single over-budget section becomes its own chunk and is
+        # sub-split downstream by the orchestrator).
+        try:
+            from tokens import count_tokens
+        except ImportError:
+            def count_tokens(t):
+                return len(t) // 4
+
+        current: list[tuple[str, str]] = []
+        current_tokens = 0
+        for label, body in sections:
+            btok = count_tokens(body)
+            if current and current_tokens + btok > max_tokens:
+                chunks.append(_make_chunk(current))
+                current, current_tokens = [], 0
+            current.append((label, body))
+            current_tokens += btok
+        if current:
+            chunks.append(_make_chunk(current))
+    else:
+        # Fixed-count bundling (default, backward-compatible).
+        for i in range(0, len(sections), group_size):
+            group = sections[i: i + group_size]
+            if group:
+                chunks.append(_make_chunk(group))
 
     return chunks
 
