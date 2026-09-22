@@ -1,0 +1,15 @@
+[chunk]
+id = "biblical.revelation-asv.022"
+tradition = "biblical"
+text_name = "The Revelation of John (American Standard Version, 1901)"
+section = "22:9-22:21"
+translator = "American Standard Version (1901)"
+source_url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/66-REV.usx"
+token_count = 503
+
+[content]
+body = "[22:9] And he saith unto me, See thou do it not: I am a fellow-servant with thee and with thy brethren the prophets, and with them that keep the words of this book: worship God.\n\n[22:10] And he saith unto me, Seal not up the words of the prophecy of this book; for the time is at hand.\n\n[22:11] He that is unrighteous, let him do unrighteousness still: and he that is filthy, let him be made filthy still: and he that is righteous, let him do righteousness still: and he that is holy, let him be made holy still.\n\n[22:12] Behold, I come quickly; and my reward is with me, to render to each man according as his work is.\n\n[22:13] I am the Alpha and the Omega, the first and the last, the beginning and the end.\n\n[22:14] Blessed are they that wash their robes, that they may have the right to come to the tree of life, and may enter in by the gates into the city.\n\n[22:15] Without are the dogs, and the sorcerers, and the fornicators, and the murderers, and the idolaters, and every one that loveth and maketh a lie.\n\n[22:16] I Jesus have sent mine angel to testify unto you these things for the churches. I am the root and the offspring of David, the bright, the morning star.\n\n[22:17] And the Spirit and the bride say, Come. And he that heareth, let him say, Come. And he that is athirst, let him come: he that will, let him take the water of life freely.\n\n[22:18] I testify unto every man that heareth the words of the prophecy of this book, If any man shall add unto them, God shall add unto him the plagues which are written in this book:\n\n[22:19] and if any man shall take away from the words of the book of this prophecy, God shall take away his part from the tree of life, and out of the holy city, which are written in this book.\n\n[22:20] He who testifieth these things saith, Yea: I come quickly. Amen: come, Lord Jesus.\n\n[22:21] The grace of the Lord Jesus be with the saints. Amen."
+
+[annotations]
+concepts = []
+related_chunks = []

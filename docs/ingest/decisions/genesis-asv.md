@@ -106,6 +106,19 @@ equivalent citation-integrity guard for range-grouped scripture is verse tiling
 
 ---
 
+## 08 — readability-gate · 2026-09-21 · claude
+
+**Verdict: pass** (all three books). Means 6.1–8.3 / 100, and the sole dominant
+signal is `brackets`. That signal is the deliberate `[C:V]` verse markers we
+retain in the body (see node 05), not editorial noise. This is the case the
+contract calibrates for: the Gilgamesh tablets score 8–14 on `brackets` and are
+clean. Our absolute scores are *below* that, everything else is near-zero, and
+the contract says to bias toward `pass` on anything read as apparatus. The
+markers are also a feature at display time — a scripture reader sees verse
+numbers. No fix, no escalate.
+
+---
+
 ## 10–11 — tagging density · 2026-09-21 · owner + claude
 
 Genesis is ingested **complete** (all 50 chapters). Chapters 12–50 are the
