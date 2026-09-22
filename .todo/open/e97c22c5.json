@@ -7,12 +7,12 @@
     "type": "human"
   },
   "created_at": "2026-09-21T22:58:57.464Z",
-  "updated_at": "2026-09-21T22:58:57.504Z",
+  "updated_at": "2026-09-22T00:14:07.141Z",
   "tags": [
     "biblical-ingest"
   ],
   "relationships": {
     "parent": "defc90d7"
   },
-  "description": "Nodes 04 (boilerplate-survey) + 05 (chunk-config) — the highest-leverage judgement. Design ONE shared scripture chunk strategy reused across all three books whose section labels read as chapter:verse (how a reader cites scripture from a printed edition). Decide paragraph-group (pericope, using USX paragraph marks) vs regex-section-split on verse markers; write chunking/biblical/{id}.toml for each. Any residual apparatus stripped via pre_strip_patterns. Record the reasoning in docs/ingest/decisions/{id}.md (why the chosen strategy, why alternatives rejected). DONE: 'python3 scripts/chunk.py --dry-run --only <id>' prints chapter:verse-style labels for each; decision doc written and marked done in ledger ('guru ingest done <id> 05-chunk-config')."
+  "description": "Nodes 04 (boilerplate-survey) + 05 (chunk-config) — the highest-leverage judgement. STRATEGY DECIDED: 'paragraph-group' with max_tokens=800 (the corpus-standard ceiling — 420/421 configs use 800), where the grouped unit is the VERSE. Pack consecutive verses into a chunk up to the 800-token ceiling, ALWAYS breaking on a verse boundary (never mid-verse), and label each chunk by the chapter:verse RANGE it spans (e.g. genesis-asv '1:1-11', a chapter-crossing group '1:29-2:3'). This gives coherent ~800-tok retrieval units while every boundary is a real verse boundary and citations resolve to a verse range. Shared config reused across all three books: chunking/biblical/{id}.toml. Residual apparatus stripped via pre_strip_patterns. Record reasoning in docs/ingest/decisions/{id}.md (why verse-atomic-to-ceiling over pure-pericope and over verse-per-chunk). DONE: 'python3 scripts/chunk.py --dry-run --only <id>' prints chapter:verse-range labels for each with NO mid-verse splits; decision doc written; node marked done in ledger."
 }
