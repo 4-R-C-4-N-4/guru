@@ -73,7 +73,21 @@
 # skip/upstream checks unchanged. orphic-hymns itself is invalidated: its c8
 # spans (13, including 6 front-matter spans) are gone; c10 plans fresh
 # hymn-only spans over the 86-chunk corpus.
-campaign_id = "c10"
+# c11 = c10 with a CORPUS change AND a PROVIDER change. Corpus: three biblical
+# works added — genesis-asv, gospel-of-john-asv, revelation-asv (ASV 1901, the
+# new `biblical` tradition; branch feat/biblical-tradition). New span totals →
+# new campaign per V9, never a partial re-plan. This re-plan also reconciles the
+# pre-existing blavatsky-sd FREEZE VIOLATION (its live c8-line dossier was absent
+# from the c10 plan): c11 folds blavatsky-sd back into the plan; whether its span
+# ids carry forward is checked at drift. Provider: switched to `llamacpp` (local
+# Qwen3.8 on the 3090) for the three biblical works — owner's call, generated on
+# the GPU rather than the claude-code subscription. Per V9 a provider change is a
+# new campaign anyway; the 68 prior works carry forward on their existing staged
+# rows (model column is the provenance line), so only the biblical works generate
+# under llamacpp. input_budget set (>0) to the local-campaign band, activating
+# folds/figures-terms map-reduce for any work whose L1 set exceeds it (the small
+# biblical books likely stay under).
+campaign_id = "c11"
 
 # "claude-code" — headless Claude Code on the subscription (default).
 # "llamacpp"   — llama.cpp on the 3090 (V7 applies; set input_budget below).
@@ -82,11 +96,11 @@ campaign_id = "c10"
 # PROVIDERS[provider], so an unrecognised value raises KeyError at the first
 # call rather than failing at config load. There is no "local" provider; that
 # was this comment's prior wording, never a valid value.
-provider = "claude-code"
+provider = "llamacpp"
 
 # Recorded verbatim in staged rows' `model`. Always pinned explicitly —
 # never rely on a session default.
-model = "claude-opus-4-8"
+model = "Qwen3.8-27B-UD-Q4_K_XL.gguf"
 
 # Reader-facing span size (TOC granularity + L1 review size), in pipeline
 # tokens. Provider-INDEPENDENT: does not change when the backend does,
@@ -96,7 +110,7 @@ span_target = 6000
 # Max tokens per generation call. 0 = effectively unbounded (claude-code).
 # Local campaigns set 6000-8000; folds and figures/terms map-reduce activate
 # only when this is > 0 and a work's L1 set exceeds it.
-input_budget = 0
+input_budget = 8000
 
 # Rubric sample size per field for the review loop (§1.3.4): works sampled
 # stratified by tradition and size; structure entries sampled per-span.
