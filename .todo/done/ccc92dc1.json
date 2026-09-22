@@ -1,0 +1,23 @@
+{
+  "id": "ccc92dc1",
+  "type": "chore",
+  "state": "done",
+  "summary": "12 embed (all three)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.844Z",
+  "updated_at": "2026-09-22T04:48:40.746Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Node 12 (embed). Generate chunk_embeddings rows for genesis-asv, gospel-of-john-asv, revelation-asv. DONE: chunk_embeddings present for each; node 12 [x].",
+  "resolution": {
+    "commit": "bb0c136ad24e069d5ce728de0a2fe40a62f5ceef",
+    "resolved_at": "2026-09-22T04:48:40.746Z",
+    "resolved_by": "unknown"
+  }
+}
