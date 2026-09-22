@@ -135,3 +135,37 @@ the correct place to hold down graph noise without discarding real signal.
 **Primary cosmogony edge targets already in the corpus** (why 1–11 earns full
 tagging): `enuma-elish` (Genesis 1), `apocryphon-of-john` (Genesis 1–11 gnostic
 rewrite), `enoch-charles-1917` (Genesis 6, the Watchers).
+
+### Node-11 review outcome (2026-09-22, four sonnet subagents, queue-only)
+
+All 1,316 tags reviewed (0 applied — user's gate). **685 accept / 631 reject**
+(~52%), 0 reassign, 0 skip, **0 `is_new_concept`** (the 27B stayed within the
+existing ~44-concept taxonomy — no biblical taxonomy expansion this pass). Per
+book: Genesis 224A/176R, John 251A/292R, Revelation 210A/163R.
+
+**Recurring tagger mismatch patterns on `biblical.*`** — worth pre-empting on the
+next biblical ingest (Psalms, etc.):
+- `separation_from_source` / `return_to_source` — conflated with literal
+  exile-and-return narrative (Jacob, Israel-in-Egypt). Reject unless the body is
+  doing the Gnostic/Plotinian metaphysical fall-from-origin doctrine.
+- `divine_immanence` — fired on "God was *with* [a person]" (providence/
+  companionship idiom), not cosmic immanence-in-all-things. Reject.
+- `theosis_deification` / `mystical_union` (ego-merger) / `return_to_source` —
+  fired on Christian resurrection/covenant/reward theology, which is not the
+  ontological-deification / soul-return doctrine the concepts name. Reject.
+- `covenant` — fired on human–human pacts (Jacob–Laban, Shechem). concept_def is
+  divine–human; the human treaties were mostly rejected (a couple accepted where
+  explicit "made a covenant" + oath ritual).
+- `numerical_mysticism` — **noise on Genesis genealogies (reject), but genuinely
+  legit on Revelation** (7s/12s/144000/666). Tradition-agnostic word/number
+  presence ≠ concept presence; judged per-book.
+- `hidden_sayings`, `invisible_world`, `anthropomorphism`, `living_god`,
+  `emanation_hierarchy`, `pneumatic_elect` — all content-dependent; accepted only
+  where the body substantively articulates the pattern (e.g. `invisible_world`
+  rejected on Genesis's visible/eating angels, accepted at Jacob's Ladder;
+  `pneumatic_elect` rejected throughout John — its election language is binary,
+  not the Gnostic tripartite structure).
+
+Cross-tradition hits (biblical text expressing Hermetic/Neoplatonic/Gnostic/
+Zoroastrian-coined concepts) were kept as signal, never rejected on tradition
+grounds — that is the point of the corpus.
