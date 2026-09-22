@@ -1,0 +1,23 @@
+{
+  "id": "43bd0caf",
+  "type": "chore",
+  "state": "done",
+  "summary": "09 graph-bootstrap (all three)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.611Z",
+  "updated_at": "2026-09-22T01:32:37.939Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Node 09 (graph-bootstrap). Materialize chunk nodes in guru.db for genesis-asv, gospel-of-john-asv, revelation-asv. DONE: node counts present in guru.db; node 09 [x] for each.",
+  "resolution": {
+    "commit": "9d8025ffa3e3ccc4bb6011b6a912e3aaa065d7d0",
+    "resolved_at": "2026-09-22T01:32:37.939Z",
+    "resolved_by": "unknown"
+  }
+}
