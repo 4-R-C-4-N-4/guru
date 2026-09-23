@@ -36,6 +36,7 @@ FORMAT_DISPATCH: dict[str, str] = {
     "html_multi": "sacred_texts",
     "sefaria_api": "sefaria",
     "access_to_insight": "access_to_insight",
+    "usx": "usx",
 }
 
 # Domain → downloader module. Checked BEFORE FORMAT_DISPATCH so a host with a

@@ -1,0 +1,7 @@
+tradition = "biblical"
+text_id = "gospel-of-john-asv"
+text_name = "The Gospel According to John (American Standard Version, 1901)"
+translator = "American Standard Version (1901)"
+source_url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/43-JHN.usx"
+sections_format = "verse"
+chunk_count = 37

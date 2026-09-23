@@ -1,0 +1,26 @@
+{
+  "id": "e602d07c",
+  "type": "chore",
+  "state": "done",
+  "summary": "01-02 vet ASV source + add 3 manifest entries (biblical tradition, primary)",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.316Z",
+  "updated_at": "2026-09-22T01:22:47.026Z",
+  "tags": [
+    "biblical-ingest"
+  ],
+  "relationships": {
+    "parent": "defc90d7",
+    "linked_commits": [
+      "91164f75"
+    ]
+  },
+  "description": "Nodes 01 (source-vetting) + 02 (manifest-entry). Add genesis-asv, gospel-of-john-asv, revelation-asv to sources/manifest.toml under tradition='biblical', all kind=primary (scripture, NOT synthesis -> do NOT add to works.toml synthesis list). Carry vetting evidence in a comment block per entry (pistis-sophia entry is the model): openbibleinfo USX, public domain, translator='ASV committee 1901'. No downloader exists for GitHub USX -> use the apocryphon-of-john shape (format with no downloader; raw produced by a dedicated extract script, wired in c2). Also register 'biblical' wherever tradition values are consumed (verify no controlled-vocab/validation breakage). DONE: 'python3 scripts/acquire.py --dry-run --only <id>' resolves for each + 'python3 scripts/works.py' passes with all three classified primary.",
+  "resolution": {
+    "commit": "ce020ef2313553e60cef28676e7d6522171d2d23",
+    "resolved_at": "2026-09-22T01:22:34.447Z",
+    "resolved_by": "unknown"
+  }
+}

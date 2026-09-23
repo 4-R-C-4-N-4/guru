@@ -1,0 +1,21 @@
+# The Revelation of John (American Standard Version, 1901) — verse-atomic chunking.
+# Raw (scripts/downloaders/usx.py) emits one "[C:V] <verse text>" block per verse.
+# Strategy: regex-section-split with group_by="tokens" — pack consecutive verses
+# up to the 800-token corpus ceiling, break ONLY on a verse boundary, and label
+# each chunk by the verse RANGE it spans (e.g. "1:1-1:11"). The [C:V] marker is
+# a zero-width lookahead: group(1) captures the verse for the label while the
+# marker stays in the body, so verse numbers remain readable inside a multi-verse
+# chunk. Single-quoted TOML literal — no backslash doubling. See
+# docs/ingest/decisions/revelation-asv.md.
+[chunking]
+strategy = "regex-section-split"
+pattern = '(?=^\[(\d+:\d+)\])'
+group_by = "tokens"
+max_tokens = 800
+section_label_format = "{n}"
+
+[metadata]
+tradition = "biblical"
+text_name = "The Revelation of John (American Standard Version, 1901)"
+translator = "American Standard Version (1901)"
+sections_format = "verse"

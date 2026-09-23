@@ -1,0 +1,15 @@
+{
+  "id": "9ba6de94",
+  "type": "investigation",
+  "state": "open",
+  "summary": "Bench dossier-gen temperature for dense scripture spans",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-23T00:11:45.327Z",
+  "updated_at": "2026-09-23T00:11:45.400Z",
+  "tags": [
+    "dossiers"
+  ],
+  "description": "Owner idea (2026-09-22): local Qwen3.8 dossier generation at temp 0.6 overruns the L1 sanity band [120,720 tok] on the densest ~5400-token/7-chunk spans (Genesis 24-27/31-36/44-49, John 1-5/5-8, Revelation 1-8), and compress-v1 (keep-all-claims) can't rescue it → fold echo → span stages nothing. c8 grid-search (temp 0.6 wins) was on other content; dense verse-spans may want a different temp. Bench temp {0.4,0.5,0.6,0.7} on these known-failing spans; also weigh fixing compress-v1's keep-all-claims contradiction (open bug b1c8be4c). Context: docs/dossiers/decisions/biblical-asv.md. These 3 works shipped with hand-authored manual rows for the stragglers."
+}

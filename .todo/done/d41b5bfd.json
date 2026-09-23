@@ -1,0 +1,24 @@
+{
+  "id": "d41b5bfd",
+  "type": "chore",
+  "state": "done",
+  "summary": "10 tag-concepts (GPU, 27B teacher) — net-new tradition, tag all three fully",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T22:58:57.688Z",
+  "updated_at": "2026-09-22T04:47:58.621Z",
+  "tags": [
+    "biblical-ingest",
+    "gpu"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Node 10 (tag-concepts). MODEL: 27B teacher (scripts/run-qwen3.8-tagger.sh on the 3090), NOT the 4B — owner standard: a net-new tradition/concept territory gets the 27B regardless of text size, because the 4B fine-tune can only propose concepts from its training snapshot and would silently miss (or mis-assign) biblical concepts. Consequence: single-instance (the 4B --parallel path does not apply), slower, and it reads the live taxonomy in-prompt so it may propose NEW biblical taxonomy concepts (taxonomy expansion) — those land in the node-11 queue like any tag. IDs are 71xxx (27B), not 70xxx. Thinking ON (serve-llama.sh routes reasoning_content). Tag all three books at normal density INCLUDING Genesis 12-50 — no hand-pruning; noise culled at node 11. ANNOUNCE GPU + llm stop when done; launch the run via ~/.local/bin/agent-run. DONE: staged_tags (71xxx) for each book; Genesis all 50 ch tagged; qbatch accept counts verified.",
+  "resolution": {
+    "commit": "0b69648bb43a2c5e73e238777b35761fb0c56062",
+    "resolved_at": "2026-09-22T04:47:58.621Z",
+    "resolved_by": "unknown"
+  }
+}

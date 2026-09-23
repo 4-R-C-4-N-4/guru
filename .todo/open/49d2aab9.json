@@ -1,0 +1,19 @@
+{
+  "id": "49d2aab9",
+  "type": "chore",
+  "state": "open",
+  "summary": "15 + D6: publish corpus + export dossiers — USER gates, terminate plan",
+  "source": {
+    "type": "human"
+  },
+  "created_at": "2026-09-21T23:03:04.024Z",
+  "updated_at": "2026-09-21T23:03:04.071Z",
+  "tags": [
+    "biblical-ingest",
+    "user-gate"
+  ],
+  "relationships": {
+    "parent": "defc90d7"
+  },
+  "description": "Terminal hand-off. Two USER-owned ship steps, NOT executed by the driver — no corpus sync, no prod VPS touch: ingest node 15 (publish) ships the chunks; Pass D node D6 (export) ships the dossier layer. Summarize what is staged and ready across both streams, confirm all upstream nodes [x] and 'guru dossier drift' is clean, then hand both ship decisions to the user. Restate downstream guru-web follow-up (out of scope): assign the 'biblical' tradition an authorship-era for the retrieval era-dampen lever."
+}

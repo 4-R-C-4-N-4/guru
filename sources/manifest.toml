@@ -4891,3 +4891,50 @@ format = "html"
 license = "public_domain"
 translator = "Charles Johnston"
 notes = "Book IV — spiritual consciousness — liberation, the nature of the seer, and the return to pure being. Sutras are numbered headings ('1. OM: Here follows Instruction in Union.') with Johnston's commentary as following prose; a chunk is sutra + commentary."
+
+# ============================================
+# BIBLICAL — ASV 1901 (openbibleinfo, public domain)
+# ============================================
+# VERIFIED 2026-09-21 — openbibleinfo/American-Standard-Version-Bible,
+# `usx-english-only/` tree. LICENSE.md: the ASV (1901) text is public domain and
+# the english-only files carry it WITHOUT alignment markup, so NONE of the CC-BY
+# SBL/MACULA components in the `-aligned/` trees are present (do not use those).
+# Raw USX confirmed live (HTTP 200) at raw.githubusercontent.com/.../master/
+# usx-english-only/: 01-GEN.usx (352KB), 43-JHN.usx (199KB), 66-REV.usx (126KB).
+# USX 3.0: <verse sid="BOOK C:V"/>…<verse eid/> milestones bound verse bodies;
+# <note> = translator/textual apparatus (stripped at extraction); <char
+# style="add"> = ASV translator additions (kept). Extractor: scripts/downloaders/
+# usx.py (format="usx") emits one "[C:V] text" verse per unit for verse-atomic
+# chunking (node 05: regex-section-split on the [C:V] marker, grouped to the
+# 800-token ceiling, labelled by verse range). All three are PRIMARY works
+# (scripture) under the new `biblical` tradition. See docs/ingest/decisions/.
+
+[[source]]
+id = "genesis-asv"
+tradition = "biblical"
+label = "Genesis (American Standard Version, 1901)"
+url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/01-GEN.usx"
+format = "usx"
+license = "public_domain"
+translator = "American Standard Version (1901)"
+notes = "Complete book: 50 chapters, 1533 verses (expected). Ingested complete; the 12-50 patriarchal-narrative lineage is tagged fully at node 10, and its low-value tags are culled at the node-11 review gate (never hand-pruned at tagging) so anything worthwhile from those chapters still surfaces. Primary genesis<->cosmogony edge targets already in corpus: enuma-elish (Gen 1), apocryphon-of-john (Gen 1-11), enoch-charles-1917 (Gen 6 Watchers). See docs/ingest/decisions/genesis-asv.md."
+
+[[source]]
+id = "gospel-of-john-asv"
+tradition = "biblical"
+label = "The Gospel According to John (American Standard Version, 1901)"
+url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/43-JHN.usx"
+format = "usx"
+license = "public_domain"
+translator = "American Standard Version (1901)"
+notes = "Complete book: 21 chapters. ASV extracts to 878 verses, NOT 879 — the ASV is a critical text that relegates John 5:4 (the angel troubling the water) to the margin, so no 5:4 verse milestone exists in the USX; the pericope adulterae (7:53-8:11) IS present. The 878/one-gap is expected, not extraction damage — confirm at the node-05 sequence check. The Logos prologue (1:1-18) is the primary edge target against Plotinus/Enneads and the Hermetica. See docs/ingest/decisions/gospel-of-john-asv.md."
+
+[[source]]
+id = "revelation-asv"
+tradition = "biblical"
+label = "The Revelation of John (American Standard Version, 1901)"
+url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/66-REV.usx"
+format = "usx"
+license = "public_domain"
+translator = "American Standard Version (1901)"
+notes = "Complete book: 22 chapters, 404 verses (expected). Dense apocalyptic symbol throughout — high-yield across the whole book; the 'omega' anchor to Genesis's 'alpha'. Apocalyptic counterpart material already in corpus is thinner (enoch-charles-1917, the Zoroastrian books). See docs/ingest/decisions/revelation-asv.md."

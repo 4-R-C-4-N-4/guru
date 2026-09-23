@@ -1,0 +1,15 @@
+[chunk]
+id = "biblical.gospel-of-john-asv.037"
+tradition = "biblical"
+text_name = "The Gospel According to John (American Standard Version, 1901)"
+section = "21:25"
+translator = "American Standard Version (1901)"
+source_url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/43-JHN.usx"
+token_count = 43
+
+[content]
+body = "[21:25] And there are also many other things which Jesus did, the which if they should be written every one, I suppose that even the world itself would not contain the books that should be written."
+
+[annotations]
+concepts = []
+related_chunks = []

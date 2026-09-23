@@ -1,0 +1,15 @@
+[chunk]
+id = "biblical.genesis-asv.073"
+tradition = "biblical"
+text_name = "Genesis (American Standard Version, 1901)"
+section = "50:20-50:26"
+translator = "American Standard Version (1901)"
+source_url = "https://raw.githubusercontent.com/openbibleinfo/American-Standard-Version-Bible/master/usx-english-only/01-GEN.usx"
+token_count = 256
+
+[content]
+body = "[50:20] And as for you, ye meant evil against me; but God meant it for good, to bring to pass, as it is this day, to save much people alive.\n\n[50:21] Now therefore fear ye not: I will nourish you, and your little ones. And he comforted them, and spake kindly unto them.\n\n[50:22] And Joseph dwelt in Egypt, he, and his father’s house: and Joseph lived a hundred and ten years.\n\n[50:23] And Joseph saw Ephraim’s children of the third generation: the children also of Machir the son of Manasseh were born upon Joseph’s knees.\n\n[50:24] And Joseph said unto his brethren, I die; but God will surely visit you, and bring you up out of this land unto the land which he sware to Abraham, to Isaac, and to Jacob.\n\n[50:25] And Joseph took an oath of the children of Israel, saying, God will surely visit you, and ye shall carry up my bones from hence.\n\n[50:26] So Joseph died, being a hundred and ten years old: and they embalmed him, and he was put in a coffin in Egypt."
+
+[annotations]
+concepts = []
+related_chunks = []
